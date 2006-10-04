@@ -202,7 +202,7 @@
 			name				multiplayer_title
 			style				WINDOW_STYLE_EMPTY
 			rect				350 147 240 24
-			text				@OJP_MENUS_OJP_BASIC
+			text				@OJP_MENUS_OJP_ENHANCED
 			font				2
 			textscale			1
 			textaligny			0

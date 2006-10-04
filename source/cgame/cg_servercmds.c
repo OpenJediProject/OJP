@@ -6,7 +6,8 @@
 
 #include "cg_local.h"
 //[SVN]
-#include "../../ojpbasic/ui/menudef.h"
+//rearraigned repository to make it easier to initially compile.
+#include "../../ojpenhanced/ui/menudef.h"
 //#include "../../ui/menudef.h"
 //[/SVN]
 #if !defined(CL_LIGHT_H_INC)
@@ -27,6 +28,10 @@ CG_ParseScores
 
 =================
 */
+//[ExpSys]
+//racc - the number of arguements for each player in the score update.  I had to boost this to add the skill point updates.
+#define SCOREUPDATEARGS		15
+//[/ExpSys]
 static void CG_ParseScores( void ) {
 	int		i, powerups, readScores;
 
@@ -51,6 +56,25 @@ static void CG_ParseScores( void ) {
 	memset( cg.scores, 0, sizeof( cg.scores ) );
 	for ( i = 0 ; i < readScores ; i++ ) {
 		//
+		//[ExpSys]
+		//added skill points as an item on the scoreboard
+		cg.scores[i].client = atoi( CG_Argv( i * SCOREUPDATEARGS + 4 ) );
+		cg.scores[i].score = atoi( CG_Argv( i * SCOREUPDATEARGS + 5 ) );
+		cg.scores[i].ping = atoi( CG_Argv( i * SCOREUPDATEARGS + 6 ) );
+		cg.scores[i].time = atoi( CG_Argv( i * SCOREUPDATEARGS + 7 ) );
+		cg.scores[i].scoreFlags = atoi( CG_Argv( i * SCOREUPDATEARGS + 8 ) );
+		powerups = atoi( CG_Argv( i * SCOREUPDATEARGS + 9 ) );
+		cg.scores[i].accuracy = atoi(CG_Argv(i * SCOREUPDATEARGS + 10));
+		cg.scores[i].impressiveCount = atoi(CG_Argv(i * SCOREUPDATEARGS + 11));
+		cg.scores[i].excellentCount = atoi(CG_Argv(i * SCOREUPDATEARGS + 12));
+		cg.scores[i].guantletCount = atoi(CG_Argv(i * SCOREUPDATEARGS + 13));
+		cg.scores[i].defendCount = atoi(CG_Argv(i * SCOREUPDATEARGS + 14));
+		cg.scores[i].assistCount = atoi(CG_Argv(i * SCOREUPDATEARGS + 15));
+		cg.scores[i].perfect = atoi(CG_Argv(i * SCOREUPDATEARGS + 16));
+		cg.scores[i].captures = atoi(CG_Argv(i * SCOREUPDATEARGS + 17));
+		cg.scores[i].skill = atoi(CG_Argv(i * SCOREUPDATEARGS + 18));
+
+		/* basejka code
 		cg.scores[i].client = atoi( CG_Argv( i * 14 + 4 ) );
 		cg.scores[i].score = atoi( CG_Argv( i * 14 + 5 ) );
 		cg.scores[i].ping = atoi( CG_Argv( i * 14 + 6 ) );
@@ -65,6 +89,8 @@ static void CG_ParseScores( void ) {
 		cg.scores[i].assistCount = atoi(CG_Argv(i * 14 + 15));
 		cg.scores[i].perfect = atoi(CG_Argv(i * 14 + 16));
 		cg.scores[i].captures = atoi(CG_Argv(i * 14 + 17));
+		*/
+		//[/ExpSys]
 
 		if ( cg.scores[i].client < 0 || cg.scores[i].client >= MAX_CLIENTS ) {
 			cg.scores[i].client = 0;

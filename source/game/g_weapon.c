@@ -18,32 +18,60 @@ static	vec3_t	muzzle;
 
 // Bryar Pistol
 //--------
-#define BRYAR_PISTOL_VEL			1600
-#define BRYAR_PISTOL_DAMAGE			10
+//[WeaponSys]
+//spread for the bryar pistol.
+#define BRYAR_SPREAD				0.5f
+//Used to be 1600.  It's crazy-fast, and looks much better than it did before!
+#define BRYAR_PISTOL_VEL			4000
+//Pistol damage used to be 10.  Very piddly, all things considered.  We all know what blasters are SUPPOSED to do.
+#define BRYAR_PISTOL_DAMAGE			97
+//#define BRYAR_PISTOL_VEL			1600
+//#define BRYAR_PISTOL_DAMAGE			10
+//[/WeaponSys]
 #define BRYAR_CHARGE_UNIT			200.0f	// bryar charging gives us one more unit every 200ms--if you change this, you'll have to do the same in bg_pmove
 #define BRYAR_ALT_SIZE				1.0f
 
 // E11 Blaster
 //---------
+//racc - alt-fire spread
 #define BLASTER_SPREAD				1.6f//1.2f
-#define BLASTER_VELOCITY			2300
-#define BLASTER_DAMAGE				20
+//[WeaponSys]
+//racc - primary fire spread
+#define BLASTER_SPREAD2				0.7f//1.2f
+#define BLASTER_VELOCITY			4000  //Used to be 2300.  Again, way too slow.  You can almost outrun them.
+//Better gun, better stopping power.  Kills in two hits if you don't have full shields.
+#define BLASTER_DAMAGE				125
+//#define BLASTER_VELOCITY			2300
+//#define BLASTER_DAMAGE				20
+//[/WeaponSys]
 
 // Tenloss Disruptor
 //----------
-#define DISRUPTOR_MAIN_DAMAGE			30 //40
-#define DISRUPTOR_MAIN_DAMAGE_SIEGE		50
+//[WeaponSys]
+#define DISRUPTOR_MAIN_DAMAGE			179 //was 30
+#define DISRUPTOR_MAIN_DAMAGE_SIEGE		90 //was 50
+//#define DISRUPTOR_MAIN_DAMAGE			30 //40
+//#define DISRUPTOR_MAIN_DAMAGE_SIEGE		50
+//[/WeaponSys]
 #define DISRUPTOR_NPC_MAIN_DAMAGE_CUT	0.25f
 
-#define DISRUPTOR_ALT_DAMAGE			100 //125
+//[WeaponSys]
+//was 100.  Way I see it, a sniper rifle should be just that.  One shot kills, unless the Jedi does a dodge.  I'll leave that in more capable hands.
+#define DISRUPTOR_ALT_DAMAGE			200
+//#define DISRUPTOR_ALT_DAMAGE			100 //125
+//[/WeaponSys]
 #define DISRUPTOR_NPC_ALT_DAMAGE_CUT	0.2f
 #define DISRUPTOR_ALT_TRACES			3		// can go through a max of 3 damageable(sp?) entities
 #define DISRUPTOR_CHARGE_UNIT			50.0f	// distruptor charging gives us one more unit every 50ms--if you change this, you'll have to do the same in bg_pmove
 
 // Wookiee Bowcaster
 //----------
-#define	BOWCASTER_DAMAGE			50
-#define	BOWCASTER_VELOCITY			1300
+//[WeaponSys]
+#define	BOWCASTER_DAMAGE			80  //was 50
+#define	BOWCASTER_VELOCITY			4000 //was 1300
+//#define	BOWCASTER_DAMAGE			50
+//#define	BOWCASTER_VELOCITY			1300
+//[/WeaponSys]
 #define BOWCASTER_SPLASH_DAMAGE		0
 #define BOWCASTER_SPLASH_RADIUS		0
 #define BOWCASTER_SIZE				2
@@ -55,11 +83,18 @@ static	vec3_t	muzzle;
 // Heavy Repeater
 //----------
 #define REPEATER_SPREAD				1.4f
-#define	REPEATER_DAMAGE				14
-#define	REPEATER_VELOCITY			1600
+//[WeaponSys]
+#define	REPEATER_DAMAGE				30  //was 14
+#define	REPEATER_VELOCITY			4000 //was 1600
+//#define	REPEATER_DAMAGE				14
+//#define	REPEATER_VELOCITY			1600
+//[/WeaponSys]
 
 #define REPEATER_ALT_SIZE				3	// half of bbox size
-#define	REPEATER_ALT_DAMAGE				60
+//[WeaponSys]
+#define	REPEATER_ALT_DAMAGE				120 //was 60.  You've seen the explosion.  You think anyone's going to survive a direct hit?
+//#define	REPEATER_ALT_DAMAGE				60
+//[/WeaponSys]
 #define REPEATER_ALT_SPLASH_DAMAGE		60
 #define REPEATER_ALT_SPLASH_RADIUS		128
 #define REPEATER_ALT_SPLASH_RAD_SIEGE	80
@@ -68,7 +103,10 @@ static	vec3_t	muzzle;
 // DEMP2
 //----------
 #define	DEMP2_DAMAGE				35
-#define	DEMP2_VELOCITY				1800
+//[WeaponSys]
+#define	DEMP2_VELOCITY				4000
+//#define	DEMP2_VELOCITY				1800
+//[/WeaponSys]
 #define	DEMP2_SIZE					2		// half of bbox size
 
 #define DEMP2_ALT_DAMAGE			8 //12		// does 12, 36, 84 at each of the 3 charge levels.
@@ -90,10 +128,16 @@ static	vec3_t	muzzle;
 
 // Personal Rocket Launcher
 //---------
-#define	ROCKET_VELOCITY				900
-#define	ROCKET_DAMAGE				100
-#define	ROCKET_SPLASH_DAMAGE		100
-#define	ROCKET_SPLASH_RADIUS		160
+//[WeaponSys]
+#define	ROCKET_VELOCITY				3500  //was 900...  and again, could be outrun, just about.
+//#define	ROCKET_VELOCITY				900
+#define	ROCKET_DAMAGE				250
+#define	ROCKET_SPLASH_DAMAGE		250
+#define	ROCKET_SPLASH_RADIUS		210
+//#define	ROCKET_DAMAGE				100
+//#define	ROCKET_SPLASH_DAMAGE		100
+//#define	ROCKET_SPLASH_RADIUS		160
+//[/WeaponSys]
 #define ROCKET_SIZE					3
 #define ROCKET_ALT_THINK_TIME		100
 
@@ -241,10 +285,22 @@ BRYAR PISTOL
 static void WP_FireBryarPistol( gentity_t *ent, qboolean altFire )
 //---------------------------------------------------------
 {
+	//[WeaponSys]
+	vec3_t	dir, angs;
+	gentity_t	*missile;
+	//[/WeaponSys]
 	int damage = BRYAR_PISTOL_DAMAGE;
 	int count;
 
-	gentity_t	*missile = CreateMissile( muzzle, forward, BRYAR_PISTOL_VEL, 10000, ent, altFire );
+	//[WeaponSys]
+	//try to set up the spread code, but so far it's a pain in the butt.  Won't go.
+	vectoangles( forward, angs );
+	angs[PITCH] += crandom() * BRYAR_SPREAD;
+	angs[YAW]	+= crandom() * BRYAR_SPREAD;
+	AngleVectors( angs, dir, NULL, NULL );
+	missile = CreateMissile( muzzle, dir, BRYAR_PISTOL_VEL, 10000, ent, altFire );
+	//gentity_t	*missile = CreateMissile( muzzle, forward, BRYAR_PISTOL_VEL, 10000, ent, altFire );
+	//[/WeaponSys]
 
 	missile->classname = "bryar_proj";
 	missile->s.weapon = WP_BRYAR_PISTOL;
@@ -370,7 +426,10 @@ void WP_FireBlasterMissile( gentity_t *ent, vec3_t start, vec3_t dir, qboolean a
 
 	if (ent->s.eType == ET_NPC)
 	{ //animent
-		damage = 10;
+		//[WeaponSys]
+		damage = 90;
+		//damage = 10;
+		//[/WeaponSys]
 	}
 
 	missile = CreateMissile( start, dir, velocity, 10000, ent, altFire );
@@ -468,6 +527,13 @@ static void WP_FireBlaster( gentity_t *ent, qboolean altFire )
 		angs[PITCH] += crandom() * BLASTER_SPREAD;
 		angs[YAW]	+= crandom() * BLASTER_SPREAD;
 	}
+	//[WeaponSys] 
+	else
+	{//adding the primary fire inaccuracy.  It's slight enough that it won't affect at closer ranges, but it keeps folks on their toes, since they can't snipe from across the levels anymore.                                                       
+		angs[PITCH] += crandom() * BLASTER_SPREAD2;
+		angs[YAW]	+= crandom() * BLASTER_SPREAD2;
+	}
+	//[/WeaponSys]
 
 	AngleVectors( angs, dir, NULL, NULL );
 
@@ -486,6 +552,12 @@ DISRUPTOR
 
 ======================================================================
 */
+//[DodgeSys]
+extern qboolean G_DoDodge( gentity_t *self, gentity_t *shooter, vec3_t dmgOrigin, int hitLoc, int * dmg, int mod );
+extern int OJP_SaberBlockCost(gentity_t *defender, gentity_t *attacker, vec3_t hitLoc);
+extern int OJP_SaberCanBlock(gentity_t *self, gentity_t *atk, qboolean checkBBoxBlock, vec3_t point, int rSaberNum, int rBladeNum);
+extern void WP_SaberBlockNonRandom( gentity_t *self, vec3_t hitloc, qboolean missileBlock );
+//[/DodgeSys]
 //---------------------------------------------------------
 static void WP_DisruptorMainFire( gentity_t *ent )
 //---------------------------------------------------------
@@ -554,6 +626,49 @@ static void WP_DisruptorMainFire( gentity_t *ent )
 			continue;
 		}
 
+		//[BoltBlockSys]
+		//players can block or dodge disruptor shots.
+		if(OJP_SaberCanBlock(traceEnt, ent, qfalse, tr.endpos, -1, -1) )
+		{//saber can be used to block the shot.
+
+			//broadcast shot blocked effect
+			gentity_t *te = NULL;
+
+			tent = G_TempEntity( tr.endpos, EV_DISRUPTOR_MAIN_SHOT );
+			VectorCopy( muzzle, tent->s.origin2 );
+			tent->s.eventParm = ent->s.number;
+
+			te = G_TempEntity( tr.endpos, EV_SABER_BLOCK );
+			VectorCopy(tr.endpos, te->s.origin);
+			VectorCopy(tr.plane.normal, te->s.angles);
+			if (!te->s.angles[0] && !te->s.angles[1] && !te->s.angles[2])
+			{
+				te->s.angles[1] = 1;
+			}
+			te->s.eventParm = 0;
+			te->s.weapon = 0;//saberNum
+			te->s.legsAnim = 0;//bladeNum
+
+			//reduce DP cost of the block
+			//[ExpSys]
+			G_DodgeDrain(traceEnt, ent, OJP_SaberBlockCost(traceEnt, ent, tr.endpos));
+			//traceEnt->client->ps.stats[STAT_DODGE] -= OJP_SaberBlockCost(traceEnt, ent, tr.endpos);
+			//[/ExpSys]
+
+			//force player into a projective block move.
+			WP_SaberBlockNonRandom(traceEnt, tr.endpos, qtrue);
+			return;
+		}
+		//[/BoltBlockSys]
+		//[DodgeSys]
+		else if(G_DoDodge(traceEnt, ent, tr.endpos, -1, &damage, MOD_DISRUPTOR))
+		{//player physically dodged the damage.  Act like we didn't hit him.
+			VectorCopy( tr.endpos, start );
+			ignore = tr.entityNum;
+			traces++;
+			continue;
+		}
+		/* basejka block/dodge code...redundent with dodgesys code in place.
 		if ( Jedi_DodgeEvasion( traceEnt, ent, &tr, G_GetHitLocation(traceEnt, tr.endpos) ) )
 		{//act like we didn't even hit him
 			VectorCopy( tr.endpos, start );
@@ -585,6 +700,8 @@ static void WP_DisruptorMainFire( gentity_t *ent )
 				return;
 			}
 		}
+		*/
+		//[/DodgeSys]
 		else if ( (traceEnt->flags&FL_SHIELDED) )
 		{//stopped cold
 			return;
@@ -765,6 +882,50 @@ void WP_DisruptorAltFire( gentity_t *ent )
 			continue;
 		}
 
+		//[BoltBlockSys]
+		//players can block or dodge disruptor shots.
+		if(OJP_SaberCanBlock(traceEnt, ent, qfalse, tr.endpos, -1, -1) )
+		{//saber can be used to block the shot.
+
+			//broadcast the shot block effect
+			gentity_t *te = NULL;
+
+			tent = G_TempEntity( tr.endpos, EV_DISRUPTOR_SNIPER_SHOT );
+			VectorCopy( muzzle, tent->s.origin2 );
+			tent->s.shouldtarget = fullCharge;
+			tent->s.eventParm = ent->s.number;
+
+			te = G_TempEntity( tr.endpos, EV_SABER_BLOCK );
+			VectorCopy(tr.endpos, te->s.origin);
+			VectorCopy(tr.plane.normal, te->s.angles);
+			if (!te->s.angles[0] && !te->s.angles[1] && !te->s.angles[2])
+			{
+				te->s.angles[1] = 1;
+			}
+			te->s.eventParm = 0;
+			te->s.weapon = 0;//saberNum
+			te->s.legsAnim = 0;//bladeNum
+
+			//reduce DP cost of the block
+			//[ExpSys]
+			G_DodgeDrain(traceEnt, ent, OJP_SaberBlockCost(traceEnt, ent, tr.endpos));
+			//traceEnt->client->ps.stats[STAT_DODGE] -= OJP_SaberBlockCost(traceEnt, ent, tr.endpos);
+			//[/ExpSys]
+
+			//force player into a projective block move.
+			WP_SaberBlockNonRandom(traceEnt, tr.endpos, qtrue);
+			return;
+		}
+		//[/BoltBlockSys]
+		//[DodgeSys]
+		else if(G_DoDodge(traceEnt, ent, tr.endpos, -1, &damage, MOD_DISRUPTOR))
+		{//player physically dodged the damage.  Act like we didn't hit him.
+			skip = tr.entityNum;
+			VectorCopy(tr.endpos, start);
+			continue;
+		}
+
+		/* basejka block/dodge code...redundent with dodgesys code in place.
 		if (Jedi_DodgeEvasion(traceEnt, ent, &tr, G_GetHitLocation(traceEnt, tr.endpos)))
 		{
 			skip = tr.entityNum;
@@ -796,6 +957,8 @@ void WP_DisruptorAltFire( gentity_t *ent )
 				return;
 			}
 		}
+		*/
+		//[/DodgeSys]
 
 		// always render a shot beam, doing this the old way because I don't much feel like overriding the effect.
 		tent = G_TempEntity( tr.endpos, EV_DISRUPTOR_SNIPER_SHOT );

@@ -805,6 +805,11 @@ int Team_TouchOurFlag( gentity_t *ent, gentity_t *other, int team ) {
 	// other gets another 10 frag bonus
 	AddScore(other, ent->r.currentOrigin, CTF_CAPTURE_BONUS);
 
+	//[ExpSys]
+	//give player a exp boost for capturing the flag.
+	AddSkill(other, 10);
+	//[/ExpSys]
+
 	Team_CaptureFlagSound( ent, team );
 
 	// Ok, let's do the player loop, hand out the bonuses

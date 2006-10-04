@@ -1,0 +1,100 @@
+repeatDelay				114
+
+Particle
+{
+	name				Flare Core
+
+	life				30
+
+	alpha
+	{
+		start			0.6 0.8
+	}
+
+	size
+	{
+		start			10
+	}
+
+	shaders
+	[
+		gfx/effects/sabers/Flare02
+	]
+}
+
+Particle
+{
+	name				Flare Stream Additive
+
+	life				30
+
+	rgb
+	{
+		start			0.9882 0.9765 0.4863
+	}
+
+	alpha
+	{
+		start			0.2
+	}
+
+	size
+	{
+		start			40
+	}
+
+	shaders
+	[
+		gfx/effects/sabers/Flare03
+	]
+}
+
+Particle
+{
+	name				Flare Additive
+
+	life				30
+
+	rgb
+	{
+		start			0.9882 0.7059 0.3216 0.9882 0.7529 0.4392
+		end				0.9961 0.9922 0.8392
+	}
+
+	alpha
+	{
+		start			0.6
+	}
+
+	size
+	{
+		start			50
+	}
+
+	shaders
+	[
+		gfx/effects/sabers/Flare02
+	]
+}
+
+Particle
+{
+	name				Flare Stream core
+
+	life				30
+
+	alpha
+	{
+		start			0.1 0.2
+	}
+
+	size
+	{
+		start			13 15
+	}
+
+	shaders
+	[
+		gfx/effects/sabers/Flare03
+	]
+}

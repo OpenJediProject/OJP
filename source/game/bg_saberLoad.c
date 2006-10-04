@@ -122,6 +122,27 @@ stringID_table_t SaberMoveTable[] =
 	ENUM2STRING(LS_DUAL_FB),
 	ENUM2STRING(LS_DUAL_LR),
 	ENUM2STRING(LS_HILT_BASH),
+	//[SaberLockSys]
+	//added the returns to the string list to allow me to see these LS strings in my debug messages
+	ENUM2STRING(LS_R_TL2BR),
+	ENUM2STRING(LS_R_L2R),
+	ENUM2STRING(LS_R_BL2TR),
+	ENUM2STRING(LS_R_BR2TL),
+	ENUM2STRING(LS_R_R2L),
+	ENUM2STRING(LS_R_TR2BL),
+	ENUM2STRING(LS_R_T2B),
+	//[/SaberLockSys]
+
+	//[SaberSys]
+	//Bounces
+	ENUM2STRING(LS_B1_BR),
+	ENUM2STRING(LS_B1__R),
+	ENUM2STRING(LS_B1_TR),
+	ENUM2STRING(LS_B1_T_),
+	ENUM2STRING(LS_B1_TL),
+	ENUM2STRING(LS_B1__L),
+	ENUM2STRING(LS_B1_BL),
+	//[/SaberSys]
 	"",	-1
 };
 
@@ -212,6 +233,7 @@ saber_styles_t TranslateSaberStyle( const char *name )
 	return SS_NONE;
 }
 
+//[RACC] - Determines if this saber blade is using the .sab's first or second blade style.
 qboolean WP_SaberBladeUseSecondBladeStyle( saberInfo_t *saber, int bladeNum )
 {
 	if ( saber )

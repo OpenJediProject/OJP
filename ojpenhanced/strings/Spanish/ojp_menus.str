@@ -13,6 +13,17 @@ VERSION             "1"
 CONFIG              "W:\bin\stringed.cfg"
 FILENOTES           "OJP menu strings"
 
+//[ExpSys]
+REFERENCE	    STARTINGSKILLPOINTS
+LANG_ENGLISH	    "#same"
+
+REFERENCE	    MAXSKILLPOINTS
+LANG_ENGLISH	    "#same"
+
+REFERENCE	    SKILL
+LANG_ENGLISH	    "#same"
+//[/ExpSys]
+
 //[OLDGAMETYPES]
 REFERENCE           JEDIMASTER
 LANG_ENGLISH        "Jedi Master"

@@ -224,8 +224,6 @@
 				F5B88BBF066ECC5600A08EB6,
 				F5B88BC0066ECC5600A08EB6,
 				F5B88BC2066ECC9C00A08EB6,
-				56AF856707DA09960036A794,
-				56AF856B07DA09B00036A794,
 			);
 			isa = PBXSourcesBuildPhase;
 			runOnlyForDeploymentPostprocessing = 0;
@@ -281,7 +279,6 @@
 		08FB77AFFE84173DC02AAC07 = {
 			children = (
 				F5C126490341580101A80169,
-				56AF856607DA09960036A794,
 				F5C126480341580101A80169,
 				F5C126470341580101A80169,
 				F5C126360341580101A80169,
@@ -363,46 +360,6 @@
 //192
 //193
 //194
-//560
-//561
-//562
-//563
-//564
-		56AF856607DA09960036A794 = {
-			fileEncoding = 30;
-			isa = PBXFileReference;
-			lastKnownFileType = sourcecode.c.c;
-			name = cg_camera.c;
-			path = cgame/cg_camera.c;
-			refType = 4;
-			sourceTree = "<group>";
-		};
-		56AF856707DA09960036A794 = {
-			fileRef = 56AF856607DA09960036A794;
-			isa = PBXBuildFile;
-			settings = {
-			};
-		};
-		56AF856A07DA09B00036A794 = {
-			fileEncoding = 30;
-			isa = PBXFileReference;
-			lastKnownFileType = sourcecode.c.c;
-			name = bg_weaponsdat.c;
-			path = game/bg_weaponsdat.c;
-			refType = 4;
-			sourceTree = "<group>";
-		};
-		56AF856B07DA09B00036A794 = {
-			fileRef = 56AF856A07DA09B00036A794;
-			isa = PBXBuildFile;
-			settings = {
-			};
-		};
-//560
-//561
-//562
-//563
-//564
 //F50
 //F51
 //F52
@@ -1040,7 +997,6 @@
 		};
 		F5C12684034158F301A80169 = {
 			children = (
-				56AF856A07DA09B00036A794,
 				F5B88BB5066ECC2700A08EB6,
 				F5B88BB3066ECC2700A08EB6,
 				F5B88BB4066ECC2700A08EB6,

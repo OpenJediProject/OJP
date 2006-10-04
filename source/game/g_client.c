@@ -2346,7 +2346,7 @@ void ClientUserinfoChanged( int clientNum ) {
 	{
 		client->pers.ojpClientPlugIn = qfalse;
 	}
-	else if(!strcmp(CURRENT_OJPBASIC_CLIENTVERSION, s))
+	else if(!strcmp(CURRENT_OJPENHANCED_CLIENTVERSION, s))
 	{
 		client->pers.ojpClientPlugIn = qtrue;
 	}
@@ -2564,6 +2564,20 @@ char *ClientConnect( int clientNum, qboolean firstTime, qboolean isBot ) {
 	te = G_TempEntity( vec3_origin, EV_CLIENTJOIN );
 	te->r.svFlags |= SVF_BROADCAST;
 	te->s.eventParm = clientNum;
+
+	//[ExpSys]
+	//set the player's starting skill points
+	if(g_minForceRank.integer < 0)
+	{//don't allow illegal starting point values
+		G_Printf("g_minForceRank less than zero.  Defaulting to 0.\n");
+		trap_Cvar_Set("g_minForceRank", "0");
+		ent->client->sess.skillPoints = 0;
+	}
+	else
+	{
+		ent->client->sess.skillPoints = g_minForceRank.integer;
+	}
+	//[/ExpSys]
 
 	// for statistics
 //	client->areabits = areabits;
@@ -2903,6 +2917,9 @@ void G_BreakArm(gentity_t *ent, int arm)
 qboolean BG_SaberStanceAnim( int anim );
 qboolean PM_RunningAnim( int anim );
 #include "../namespace_end.h"
+//[SaberLockSys]
+extern stringID_table_t animTable [MAX_ANIMATIONS+1];
+//[/SaberLockSys]
 void G_UpdateClientAnims(gentity_t *self, float animSpeedScale)
 {
 	static int f;
@@ -2988,7 +3005,10 @@ tryTorso:
 
 		f = torsoAnim;
 
-		BG_SaberStartTransAnim(self->s.number, self->client->ps.fd.saberAnimLevel, self->client->ps.weapon, f, &animSpeedScale, self->client->ps.brokenLimbs);
+		//[FatigueSys]
+		BG_SaberStartTransAnim(self->s.number, self->client->ps.fd.saberAnimLevel, self->client->ps.weapon, f, &animSpeedScale, self->client->ps.brokenLimbs, self->client->ps.userInt3);
+		//BG_SaberStartTransAnim(self->s.number, self->client->ps.fd.saberAnimLevel, self->client->ps.weapon, f, &animSpeedScale, self->client->ps.brokenLimbs);
+		//[/FatigueSys]
 
 		animSpeed = 50.0f / bgAllAnims[self->localAnimIndex].anims[f].frameLerp;
 		lAnimSpeedScale = (animSpeed *= animSpeedScale);
@@ -3021,6 +3041,10 @@ tryTorso:
 		self->client->torsoLastFlip = self->client->ps.torsoFlip;
 		
 		setTorso = qtrue;
+		
+		//[SaberLockSys]
+		//G_Printf("%i: %i: Server Started Torso Animation %s\n", level.time, self->s.number, GetStringForID(animTable, torsoAnim) );
+		//[/SaberLockSys]
 	}
 
 	if (setTorso &&
@@ -3288,17 +3312,31 @@ void ClientSpawn(gentity_t *ent) {
 			{
 				ent->client->sess.saberLevel = SS_FAST;
 			}
+			//[SaberSys]
+			//Revised to handle the hidden styles.
+			else if (ent->client->sess.saberLevel > SS_TAVION)
+			{
+				ent->client->sess.saberLevel = SS_TAVION;
+			}
+			/*
 			else if (ent->client->sess.saberLevel > SS_STRONG)
 			{
 				ent->client->sess.saberLevel = SS_STRONG;
 			}
+			*/
+			//[/SaberSys]
 			ent->client->ps.fd.saberAnimLevelBase = ent->client->ps.fd.saberAnimLevel = ent->client->ps.fd.saberDrawAnimLevel = ent->client->sess.saberLevel;
 
+			//[SaberSys]
+			//don't want this anymore since we have more styles than saber offense powers at the moment with the hidden styles.
+			/*
 			if (g_gametype.integer != GT_SIEGE &&
 				ent->client->ps.fd.saberAnimLevel > ent->client->ps.fd.forcePowerLevel[FP_SABER_OFFENSE])
 			{
 				ent->client->ps.fd.saberAnimLevelBase = ent->client->ps.fd.saberAnimLevel = ent->client->ps.fd.saberDrawAnimLevel = ent->client->sess.saberLevel = ent->client->ps.fd.forcePowerLevel[FP_SABER_OFFENSE];
 			}
+			*/
+			//[/SaberSys]
 		}
 		if ( g_gametype.integer != GT_SIEGE )
 		{
@@ -3324,7 +3362,7 @@ void ClientSpawn(gentity_t *ent) {
 		&& ent->client->ps.fd.saberAnimLevel != SS_DUAL) 
 	{//TABBots randomly switch styles on respawn if not using a staff or dual
 		ent->client->ps.fd.saberAnimLevel = ent->client->ps.fd.saberDrawAnimLevel 
-			= ent->client->sess.saberLevel = Q_irand(SS_FAST, SS_STRONG);
+			= ent->client->sess.saberLevel = Q_irand(SS_FAST, SS_TAVION);
 	}
 	//[/TABBots]
 
@@ -3337,17 +3375,31 @@ void ClientSpawn(gentity_t *ent) {
 		{
 			ent->client->sess.saberLevel = SS_FAST;
 		}
+		//[SaberSys]
+		//Revised to handle the hidden styles
+		else if (ent->client->sess.saberLevel > SS_TAVION)
+		{
+			ent->client->sess.saberLevel = SS_TAVION;
+		}
+		/*
 		else if (ent->client->sess.saberLevel > SS_STRONG)
 		{
 			ent->client->sess.saberLevel = SS_STRONG;
 		}
+		*/
+		//[/SaberSys]
 		ent->client->ps.fd.saberAnimLevel = ent->client->ps.fd.saberDrawAnimLevel = ent->client->sess.saberLevel;
 
+		//[SaberSys]
+		//don't want this anymore since we have more styles than saber offense powers at the moment with the hidden styles.
+		/*
 		if (g_gametype.integer != GT_SIEGE &&
 			ent->client->ps.fd.saberAnimLevel > ent->client->ps.fd.forcePowerLevel[FP_SABER_OFFENSE])
 		{
 			ent->client->ps.fd.saberAnimLevel = ent->client->ps.fd.saberDrawAnimLevel = ent->client->sess.saberLevel = ent->client->ps.fd.forcePowerLevel[FP_SABER_OFFENSE];
 		}
+		*/
+		//[/SaberSys]
 	}
 
 	// find a spawn point
@@ -3523,6 +3575,7 @@ void ClientSpawn(gentity_t *ent) {
 
 	client->siegeClass = savedSiegeIndex;
 
+
 	l = 0;
 	while (l < MAX_SABERS)
 	{
@@ -3615,6 +3668,14 @@ void ClientSpawn(gentity_t *ent) {
 	{
 		wDisable = g_weaponDisable.integer;
 	}
+
+	//[MELEE]
+	//Give everyone fists as long as they aren't disabled.
+	if (!wDisable || !(wDisable & (1 << WP_MELEE)))
+	{
+		client->ps.stats[STAT_WEAPONS] |= (1 << WP_MELEE);
+	}
+	//[/MELEE]
 
 
 	//racc - set weapons for everything except siege
@@ -3752,6 +3813,11 @@ void ClientSpawn(gentity_t *ent) {
 			else
 			{ //if you don't have saber attack rank then you don't get a saber
 				client->ps.stats[STAT_WEAPONS] |= (1 << WP_MELEE);
+
+				//[ExpSys]
+				//racc - give the non-saber users some guns
+				client->ps.stats[STAT_WEAPONS] |= (1 << WP_BLASTER);
+				//[/ExpSys]
 			}
 
 			//[CoOp]
@@ -3797,6 +3863,22 @@ void ClientSpawn(gentity_t *ent) {
 			}
 		}
 
+		//[MOREWEAPOPTIONS]
+		if( wDisable == WP_ALLDISABLED )
+		{//some joker disabled all the weapons.  Give everyone Melee
+			client->ps.stats[STAT_WEAPONS] |= (1 << WP_MELEE);
+			G_Printf( "ERROR:  The game doesn't like it when you disable ALL the weapons.\nReenabling Melee.\n");
+			if (g_gametype.integer == GT_DUEL || g_gametype.integer == GT_POWERDUEL)
+			{
+				trap_Cvar_Set( "g_duelWeaponDisable", va("%i", WP_MELEEONLY) );
+			}
+			else
+			{
+				trap_Cvar_Set( "g_weaponDisable", va("%i", WP_MELEEONLY) );
+		//[/MOREWEAPOPTIONS]
+			}
+		}
+	
 		if (g_gametype.integer == GT_JEDIMASTER)
 		{
 			client->ps.stats[STAT_WEAPONS] &= ~(1 << WP_SABER);
@@ -3906,7 +3988,17 @@ void ClientSpawn(gentity_t *ent) {
 	}
 	else
 	{
+		//[ExpSys]
+		if (client->ps.fd.forcePowerLevel[FP_SABER_OFFENSE])
+		{
 		client->ps.stats[STAT_HOLDABLE_ITEMS] = 0;
+		}
+		else
+		{ //if you don't have saber attack rank then you don't get a saber
+			client->ps.stats[STAT_HOLDABLE_ITEMS] = (1 << HI_JETPACK);
+		}
+		//client->ps.stats[STAT_HOLDABLE_ITEMS] = 0;
+		//[/ExpSys]
 		client->ps.stats[STAT_HOLDABLE_ITEM] = 0;
 	}
 
@@ -3936,7 +4028,18 @@ void ClientSpawn(gentity_t *ent) {
 // nmckenzie: DESERT_SIEGE... or well, siege generally.  This was over-writing the max value, which was NOT good for siege.
 	if ( inSiegeWithClass == qfalse )
 	{
+		//[ExpSys]
+		if (client->ps.fd.forcePowerLevel[FP_SABER_OFFENSE])
+		{//default blaster ammo level.
 		client->ps.ammo[AMMO_BLASTER] = 100; //ammoData[AMMO_BLASTER].max; //100 seems fair.
+
+		}
+		else
+		{//non-saber users get max blaster ammo outside of siege.
+			client->ps.ammo[AMMO_BLASTER] = ammoData[AMMO_BLASTER].max;
+		}
+		//client->ps.ammo[AMMO_BLASTER] = 100; //ammoData[AMMO_BLASTER].max; //100 seems fair.
+		//[/ExpSys]
 	}
 //	client->ps.ammo[AMMO_POWERCELL] = ammoData[AMMO_POWERCELL].max;
 //	client->ps.ammo[AMMO_FORCE] = ammoData[AMMO_FORCE].max;
@@ -4039,6 +4142,11 @@ void ClientSpawn(gentity_t *ent) {
 	{
 		client->ps.stats[STAT_ARMOR] = client->ps.stats[STAT_MAX_HEALTH] * 0.25;
 	}
+
+	//[DodgeSys]
+	//Init dodge stat.
+	client->ps.stats[STAT_DODGE] = DODGE_MAX;
+	//[/DodgeSys]
 
 	G_SetOrigin( ent, spawn_origin );
 	VectorCopy( spawn_origin, client->ps.origin );

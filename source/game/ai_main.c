@@ -12,7 +12,12 @@
 #include "q_shared.h"
 #include "botlib.h"		//bot lib interface
 #include "be_aas.h"
-#include "be_ea.h"
+
+//[SaberSys]
+//I think this isn't defined correctly.
+#include "../game/be_ea.h"
+//#include "be_ea.h"
+//[/SaberSys]
 #include "be_ai_char.h"
 #include "be_ai_chat.h"
 #include "be_ai_gen.h"
@@ -59,6 +64,12 @@ extern int imperial_attackers;
 //[AotCAI]
 extern vmCvar_t bot_cpu_usage;
 //[/AotCAI]
+
+//[SaberSys]
+//RAFIXME - Part of hack to prevent bots from being stupid and doing fakes all the time
+extern qboolean PM_SaberInStart( int move );
+extern qboolean PM_SaberInTransition( int move );
+//[/SaberSys]
 
 boteventtracker_t gBotEventTracker[MAX_CLIENTS];
 
@@ -578,6 +589,11 @@ void BotInputToUserCommand(bot_input_t *bi, usercmd_t *ucmd, int delta_angles[3]
 	if (bi->actionflags & ACTION_RESPAWN) ucmd->buttons = BUTTON_ATTACK;
 	if (bi->actionflags & ACTION_ATTACK) ucmd->buttons |= BUTTON_ATTACK;
 	if (bi->actionflags & ACTION_ALT_ATTACK) ucmd->buttons |= BUTTON_ALT_ATTACK;
+
+	//[SaberSys]
+	if (bi->actionflags & ACTION_SABERTHROW) ucmd->buttons |= BUTTON_SABERTHROW;
+	//[/SaberSys]
+
 //	if (bi->actionflags & ACTION_TALK) ucmd->buttons |= BUTTON_TALK;
 	if (bi->actionflags & ACTION_GESTURE) ucmd->buttons |= BUTTON_GESTURE;
 	if (bi->actionflags & ACTION_USE) ucmd->buttons |= BUTTON_USE_HOLDABLE;
@@ -768,6 +784,23 @@ void BotUpdateInput(bot_state_t *bs, int time, int elapsed_time) {
 		}
 	}
 	//[/AotCAI]
+
+	//[SaberSys]
+	if (bs->doSaberThrow)
+	{
+		bi.actionflags |= ACTION_SABERTHROW;
+	}
+	
+	//RAFIXME - Hack to prevent the bots from using fakes all the time
+	if(1)
+	{
+		int curmove = g_entities[bs->client].client->ps.saberMove;
+		if( PM_SaberInStart( curmove ) || PM_SaberInTransition( curmove ) )
+		{
+			bi.actionflags |= ACTION_ATTACK;
+		}
+	}
+	//[/SaberSys]
 
 	//[TABBot]
 	if(bs->doWalk)
@@ -2040,6 +2073,9 @@ int PassStandardEnemyChecks(bot_state_t *bs, gentity_t *en)
 	//UNIQUEFIXME - What's with the weird saber checking?
 	if ( (bs->settings.botType == BOT_AOTC || bs->settings.botType == BOT_HYBRID)
 		&& en->s.weapon == WP_SABER
+		//[NewGameTypes][EnhancedImpliment]
+		/*&& g_gametype.integer != GT_SCENARIO &&*/
+		//[/NewGameTypes]
 		&& ((en->client->ps.saberHolstered >= 2 && en->client->saber[0].numBlades >= 2)
 		|| (en->client->ps.saberHolstered >= 2 && en->client->saber[1].type)
 		|| (en->client->ps.saberHolstered && !en->client->saber[1].type 
@@ -6228,6 +6264,19 @@ int KeepPrimFromFiring(bot_state_t *bs)
 //doing secondary weapon fire
 int AltFiring(bot_state_t *bs)
 {
+	//[SaberSys]
+		if (bs->cur_ps.weaponstate != WEAPON_CHARGING_ALT &&
+			(bs->doAltAttack || bs->doSaberThrow))
+	{
+		return 1;
+	}
+
+	if (bs->cur_ps.weaponstate == WEAPON_CHARGING_ALT &&
+		!(bs->doAltAttack || bs->doSaberThrow))
+	{
+		return 1;
+	}
+	/*
 	if (bs->cur_ps.weaponstate != WEAPON_CHARGING_ALT &&
 		bs->doAltAttack)
 	{
@@ -6239,6 +6288,8 @@ int AltFiring(bot_state_t *bs)
 	{
 		return 1;
 	}
+	*/
+	//[/SaberSys]
 
 	return 0;
 }
@@ -6246,6 +6297,21 @@ int AltFiring(bot_state_t *bs)
 //should we keep our alt from firing?
 int KeepAltFromFiring(bot_state_t *bs)
 {
+	
+	//[SaberSys]
+	if (bs->cur_ps.weaponstate != WEAPON_CHARGING_ALT &&
+		(bs->doAltAttack || bs->doSaberThrow))
+	{
+		bs->doAltAttack = 0;
+		bs->doSaberThrow = 0;
+	}
+
+	if (bs->cur_ps.weaponstate == WEAPON_CHARGING_ALT &&
+		!(bs->doAltAttack || bs->doSaberThrow))
+	{
+		bs->doAltAttack = 1;
+	}
+	/*
 	if (bs->cur_ps.weaponstate != WEAPON_CHARGING_ALT &&
 		bs->doAltAttack)
 	{
@@ -6257,6 +6323,8 @@ int KeepAltFromFiring(bot_state_t *bs)
 	{
 		bs->doAltAttack = 1;
 	}
+	*/
+	//[/SaberSys]
 
 	return 0;
 }
@@ -6892,6 +6960,9 @@ void StandardBotAI(bot_state_t *bs, float thinktime)
 
 	bs->doAttack = 0;
 	bs->doAltAttack = 0;
+	//[SaberSys]
+	bs->doSaberThrow = 0;
+	//[/SaberSys]
 	//reset the attack states
 
 	if (bs->isSquadLeader)
@@ -7245,6 +7316,9 @@ void StandardBotAI(bot_state_t *bs, float thinktime)
 
 				bs->doAttack = 0;
 				bs->doAltAttack = 0;
+				//[SaberSys]
+				bs->doSaberThrow = 0;
+				//[/SaberSys]
 				bs->botChallengingTime = level.time + 100;
 				bs->beStill = level.time + 100;
 			}
@@ -7804,13 +7878,21 @@ void StandardBotAI(bot_state_t *bs, float thinktime)
 				bs->frame_Enemy_Len < BOT_SABER_THROW_RANGE &&
 				bs->cur_ps.fd.saberAnimLevel != SS_STAFF)
 			{
-				bs->doAltAttack = 1;
+				//[SaberSys]
+				bs->doSaberThrow = 1;
+				bs->doAltAttack = 0;
+				//bs->doAltAttack = 1;
+				//[/SaberSys]
 				bs->doAttack = 0;
 			}
 			//RACC - Maintain saber throw
 			else if (bs->cur_ps.saberInFlight && bs->frame_Enemy_Len > 300 && bs->frame_Enemy_Len < BOT_SABER_THROW_RANGE)
 			{
-				bs->doAltAttack = 1;
+				//[SaberSys]
+				bs->doSaberThrow = 1;
+				bs->doAltAttack = 0;
+				//bs->doAltAttack = 1;
+				//[/SaberSys]
 				bs->doAttack = 0;
 			}
 		}
@@ -7911,7 +7993,10 @@ void StandardBotAI(bot_state_t *bs, float thinktime)
 	}
 	//RACC - Ok, we can't see our enemy at the moment, and we didn't just plant a mine/detpack, so try to plant some mines/bombs to get them.
 	else if (bs->currentEnemy && bs->lastVisibleEnemyIndex == bs->currentEnemy->s.number && !bs->frame_Enemy_Vis && bs->plantTime < level.time &&
-		!bs->doAttack && !bs->doAltAttack)
+		//[SaberSys]
+		!bs->doAttack && !bs->doAltAttack && !bs->doSaberThrow)
+		//!bs->doAttack && !bs->doAltAttack)
+		//[/SaberSys]
 	{
 		VectorSubtract(bs->origin, bs->hereWhenSpotted, a);
 
@@ -8274,6 +8359,9 @@ void StandardBotAI(bot_state_t *bs, float thinktime)
 	{
 		bs->doAttack = 0;
 		bs->doAltAttack = 0;
+		//[SaberSys]
+		bs->doSaberThrow = 0;
+		//[/SaberSys]
 	}
 
 	if (bs->cur_ps.weapon == WP_SABER &&

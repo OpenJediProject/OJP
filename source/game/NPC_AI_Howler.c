@@ -247,7 +247,10 @@ void Howler_Move( qboolean visible )
 //---------------------------------------------------------
 //replaced with SP version
 extern qboolean PM_InKnockDown( playerState_t *ps );
-extern void G_Knockdown( gentity_t *victim );
+//[KnockdownSys]
+extern void G_Knockdown( gentity_t *self, gentity_t *attacker, const vec3_t pushDir, float strength, qboolean breakSaberLock );
+//extern void G_Knockdown( gentity_t *victim );
+//[/KnockdownSys]
 static void Howler_TryDamage( int damage, qboolean tongue, qboolean knockdown )
 {
 	vec3_t	start, end, dir;
@@ -297,9 +300,10 @@ static void Howler_TryDamage( int damage, qboolean tongue, qboolean knockdown )
 			G_Damage( victim, NPC, NPC, dir, tr.endpos, damage, DAMAGE_NO_KNOCKBACK, MOD_MELEE );
 			if ( knockdown && victim->health > 0 )
 			{//victim still alive
-				//RACC - only changed this until we fix up knockdowns
-				G_Knockdown(victim);
-				//G_Knockdown( victim, NPC, NPC->client->ps.velocity, 500, qfalse );
+				//[KnockdownSys]
+				G_Knockdown( victim, NPC, NPC->client->ps.velocity, 500, qfalse );
+				//G_Knockdown(victim);
+				//[/KnockdownSys]
 			}
 		}
 	}
@@ -412,7 +416,7 @@ static void Howler_Howl( void )
 						ent->client->ps.weaponTime = ent->client->ps.torsoTimer;
 					}
 				}
-				/*
+				/*  racc - commented out of SP code?
 				else if ( distSq < halfRadSquared 
 					&& radiusEnts[i]->client->ps.groundEntityNum != ENTITYNUM_NONE 
 					&& !Q_irand( 0, 10 ) )//FIXME: base on skill

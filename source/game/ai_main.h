@@ -404,6 +404,8 @@ typedef struct bot_state_s
 	int					saberDefending;
 	//RACC - Time between saberDefending toggling. 
 	int					saberDefendDecideTime;
+	//RACC - It looks like this is used for debouncing backing up during saber combat.
+	//TABBots use this to debounce saber attack fakes.
 	int					saberBFTime;
 	int					saberBTime;
 	int					saberSTime;
@@ -434,6 +436,10 @@ typedef struct bot_state_s
 	int					forceMove_Right;
 	int					forceMove_Up;
 	//end rww
+
+	//[SaberSys]
+	qboolean			doSaberThrow;
+	//[/SaberSys]
 
 	//[TABBot]
 	//bot's wp route path

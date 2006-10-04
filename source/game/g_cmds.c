@@ -4,7 +4,8 @@
 #include "bg_saga.h"
 
 //[SVN]
-#include "../../ojpbasic/ui/menudef.h"
+//rearraigned repository to make it easier to initially compile.
+#include "../../ojpenhanced/ui/menudef.h"
 //#include "../../ui/menudef.h"			// for the voice chats
 //[/SVN]
 
@@ -80,7 +81,10 @@ void DeathmatchScoreboardMessage( gentity_t *ent ) {
 		perfect = ( cl->ps.persistant[PERS_RANK] == 0 && cl->ps.persistant[PERS_KILLED] == 0 ) ? 1 : 0;
 
 		Com_sprintf (entry, sizeof(entry),
-			" %i %i %i %i %i %i %i %i %i %i %i %i %i %i", level.sortedClients[i],
+			//[ExpSys]
+			" %i %i %i %i %i %i %i %i %i %i %i %i %i %i %i", level.sortedClients[i],
+			//" %i %i %i %i %i %i %i %i %i %i %i %i %i %i", level.sortedClients[i],
+			//[/ExpSys]
 			cl->ps.persistant[PERS_SCORE], ping, (level.time - cl->pers.enterTime)/60000,
 			scoreFlags, g_entities[level.sortedClients[i]].s.powerups, accuracy, 
 			cl->ps.persistant[PERS_IMPRESSIVE_COUNT],
@@ -89,7 +93,11 @@ void DeathmatchScoreboardMessage( gentity_t *ent ) {
 			cl->ps.persistant[PERS_DEFEND_COUNT], 
 			cl->ps.persistant[PERS_ASSIST_COUNT], 
 			perfect,
-			cl->ps.persistant[PERS_CAPTURES]);
+			//[ExpSys]
+			cl->ps.persistant[PERS_CAPTURES],
+			//cl->ps.persistant[PERS_CAPTURES]);
+			(int) cl->sess.skillPoints);
+			//[/ExpSys]
 		j = strlen(entry);
 		if (stringlength + j > 1022)
 			break;
@@ -2997,10 +3005,20 @@ void Cmd_ToggleSaber_f(gentity_t *ent)
 
 	if (ent->client->ps.saberInFlight)
 	{
+		//[SaberThrowSys]
+		if(!ent->client->ps.saberEntityNum)
+		{//our saber is dead, Try pulling it back.
+			ent->client->ps.forceHandExtend = HANDEXTEND_SABERPULL;
+			ent->client->ps.forceHandExtendTime = level.time + 300;			
+		}
+		//Can't use the Force to turn off the saber in midair anymore 
+		/* basejka code
 		if (ent->client->ps.saberEntityNum)
 		{ //turn it off in midair
 			saberKnockDown(&g_entities[ent->client->ps.saberEntityNum], ent, ent);
 		}
+		*/
+		//[/SaberThrowSys]
 		return;
 	}
 
@@ -3095,7 +3113,11 @@ void Cmd_SaberAttackCycle_f(gentity_t *ent)
 	{ //no cycling for akimbo
 		if ( WP_SaberCanTurnOffSomeBlades( &ent->client->saber[1] ) )
 		{//can turn second saber off 
-			if ( ent->client->ps.saberHolstered == 1 )
+			//[SaberThrowSys]
+			//can't toggle the other saber while the other saber is in flight.
+			if ( ent->client->ps.saberHolstered == 1 && !ent->client->ps.saberInFlight)
+			//if ( ent->client->ps.saberHolstered == 1 )
+			//[/SaberThrowSys]
 			{//have one holstered
 				//unholster it
 				G_Sound(ent, CHAN_AUTO, ent->client->saber[1].soundOn);
@@ -3234,7 +3256,12 @@ void Cmd_SaberAttackCycle_f(gentity_t *ent)
 	else
 	{
 		selectLevel++;
-		if ( selectLevel > ent->client->ps.fd.forcePowerLevel[FP_SABER_OFFENSE] )
+		//[HiddenStances]
+		if ( selectLevel > ent->client->ps.fd.forcePowerLevel[FP_SABER_OFFENSE] 
+		&& ent->client->ps.fd.forcePowerLevel[FP_SABER_OFFENSE] < FORCE_LEVEL_3
+			|| selectLevel > SS_TAVION)
+		//if ( selectLevel > ent->client->ps.fd.forcePowerLevel[FP_SABER_OFFENSE] )
+		//[/HiddenStances]
 		{
 			selectLevel = FORCE_LEVEL_1;
 		}
@@ -3513,6 +3540,37 @@ void Cmd_DebugSetSaberMove_f(gentity_t *self)
 
 	Com_Printf("Anim for move: %s\n", animTable[saberMoveData[self->client->ps.saberMove].animToUse].name);
 }
+
+
+//[SaberSys]
+void Cmd_DebugSetSaberBlock_f(gentity_t *self)
+{//This is a simple debugging function for debugging the saberblocked code.
+	int argNum = trap_Argc();
+	char arg[MAX_STRING_CHARS];
+
+	if (argNum < 2)
+	{
+		return;
+	}
+
+	trap_Argv( 1, arg, sizeof( arg ) );
+
+	if (!arg[0])
+	{
+		return;
+	}
+
+	//self->client->ps.saberMove = atoi(arg);
+	//self->client->ps.saberBlocked = BLOCKED_BOUNCE_MOVE;
+	self->client->ps.saberBlocked = atoi(arg);
+
+	if (self->client->ps.saberBlocked > BLOCKED_TOP_PROJ)
+	{
+		self->client->ps.saberBlocked = BLOCKED_TOP_PROJ;
+	}
+}
+//[/SaberSys]
+
 
 void Cmd_DebugSetBodyAnim_f(gentity_t *self, int flags)
 {
@@ -4166,6 +4224,12 @@ void ClientCommand( int clientNum ) {
 		}
 	}
 #endif
+	//[MELEE]
+	else if (Q_stricmp(cmd, "togglesaber") == 0)
+	{
+		Cmd_ToggleSaber_f(ent);
+	}
+	/* racc - This cheat code isn't used anymore.
 	else if (Q_stricmp(cmd, "thedestroyer") == 0 && CheatsOk( ent ) && ent && ent->client && ent->client->ps.saberHolstered && ent->client->ps.weapon == WP_SABER)
 	{
 		Cmd_ToggleSaber_f(ent);
@@ -4174,6 +4238,7 @@ void ClientCommand( int clientNum ) {
 		{
 		}
 	}
+	*/
 	//begin bot debug cmds
 	else if (Q_stricmp(cmd, "debugBMove_Forward") == 0 && CheatsOk(ent))
 	{
@@ -4246,6 +4311,13 @@ void ClientCommand( int clientNum ) {
 	{
 		Cmd_DebugSetSaberMove_f(ent);
 	}
+	//[SaberSys]
+	//This command forces the player into a given saberblocked state which is determined by the inputed numberical value.
+	else if (Q_stricmp(cmd, "debugSetSaberBlock") == 0)
+	{
+		Cmd_DebugSetSaberBlock_f(ent);
+	}
+	//[/SaberSys]
 	else if (Q_stricmp(cmd, "debugSetBodyAnim") == 0)
 	{
 		Cmd_DebugSetBodyAnim_f(ent, SETANIM_FLAG_OVERRIDE|SETANIM_FLAG_HOLD);

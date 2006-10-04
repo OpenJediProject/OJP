@@ -7,7 +7,8 @@
 #include "keycodes.h"
 
 //[SVN]
-#include "../../ojpbasic/ui/menudef.h"
+//rearraigned repository to make it easier to initially compile.
+#include "../../ojpenhanced/ui/menudef.h"
 //#include "../../ui/menudef.h"
 //[/SVN]
 

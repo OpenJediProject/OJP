@@ -10,7 +10,7 @@
 #define	SEF_EVENTS		(SEF_HITENEMY|SEF_HITOBJECT|SEF_HITWALL|SEF_PARRIED|SEF_DEFLECTED|SEF_BLOCKED)
 #define	SEF_LOCKED		0x40	//Sabers locked with someone else
 #define	SEF_INWATER		0x80	//Saber is in water
-#define	SEF_LOCK_WON	0x100	//Won a saberLock
+#define	SEF_LOCK_WON	0x100	//Won a saberLock //racc - only used by NPCs to determine post lock behavior.
 //saberEntityState
 #define SES_LEAVING		1
 #define SES_HOVERING	1//2

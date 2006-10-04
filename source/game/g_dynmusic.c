@@ -506,6 +506,36 @@ void G_DynamicMusicUpdate( void )
 					battle++;
 				}
 			}
+
+			/* not used since danger doesn't do anything.
+			if ( level.dmState == DM_EXPLORE )
+			{//only do these visibility checks if you're still in exploration mode
+				if ( !InFront( ent->currentOrigin, player->currentOrigin, player->client->ps.viewangles, 0.0f) )
+				{//not in front
+					continue;
+				}
+
+				if ( !LOScalced )
+				{
+					clearLOS = G_ClearLOS( player, player->client->renderInfo.eyePoint, ent );
+				}
+				if ( !clearLOS ) 
+				{//can't see them directly
+					continue;
+				}
+			}
+
+			if ( ent->health <= 0 )
+			{//dead
+				if ( !ent->client || level.time - ent->s.time > 10000 )
+				{//corpse has been dead for more than 10 seconds
+					//FIXME: coming across corpses should cause danger sounds too?
+					continue;
+				}
+			}
+			//we see enemies and/or corpses
+			danger++;
+			*/
 		}
 
 		if ( !battle )
@@ -518,8 +548,26 @@ void G_DynamicMusicUpdate( void )
 			{//FIXME: maybe tripwires and other FIXED things need their own sound, some kind of danger/caution theme
 				if ( G_CheckForDanger( player, alert ) )
 				{//found danger near by
+					//danger++;
 					battle = 1;
 				}
+				/* not used since danger doesn't do anything.
+				else if ( level.alertEvents[alert].owner && (level.alertEvents[alert].owner == player->enemy || (level.alertEvents[alert].owner->client && level.alertEvents[alert].owner->client->playerTeam == player->client->enemyTeam) ) )
+				{//NPC on enemy team of player made some noise
+					switch ( level.alertEvents[alert].level )
+					{
+					case AEL_DISCOVERED:
+						dangerNear = qtrue;
+						break;
+					case AEL_SUSPICIOUS:
+						suspicious = qtrue;
+						break;
+					case AEL_MINOR:
+						//distraction = qtrue;
+						break;
+					}
+				}
+				*/
 			}
 		}
 	}
@@ -527,10 +575,50 @@ void G_DynamicMusicUpdate( void )
 	if ( battle )
 	{
 		SetDMSState(DM_ACTION);
+		/* old SP code
+		//battle - this can interrupt level.dmDebounceTime of lower intensity levels
+		//play battle
+		if ( level.dmState != DM_ACTION )
+		{
+			gi.SetConfigstring( CS_DYNAMIC_MUSIC_STATE, "action" );
+		}
+		level.dmState = DM_ACTION;
+		if ( battle > 5 )
+		{
+			//level.dmDebounceTime = level.time + 8000;//don't change again for 5 seconds
+		}
+		else
+		{
+			//level.dmDebounceTime = level.time + 3000 + 1000*battle;
+		}
+		*/
 	}
 	else 
 	{//switch to explore
 		SetDMSState(DM_EXPLORE);
+		/* old SP code
+		if ( level.dmDebounceTime > level.time )
+		{//not ready to switch yet
+			return;
+		}
+		else
+		{//at least 1 second (for beats)
+			//level.dmDebounceTime = level.time + 1000;//FIXME: define beat time?
+		}
+
+		{//still nothing dangerous going on
+			if ( level.dmState != DM_EXPLORE )
+			{//just went to explore, hold it for a couple seconds at least
+				//level.dmDebounceTime = level.time + 2000;
+				gi.SetConfigstring( CS_DYNAMIC_MUSIC_STATE, "explore" );
+			}
+			level.dmState = DM_EXPLORE;
+			//FIXME: look for interest points and play "mysterious" music instead of exploration?
+			//FIXME: suspicious and distraction sounds should play some cue or change music in a subtle way?
+			//play exploration
+		}
+		//FIXME: when do we go to silence?
+		*/
 	}
 
 	if(DMSData.dmState != DMSData.olddmState)
@@ -543,7 +631,7 @@ void G_DynamicMusicUpdate( void )
 //set the dynamic music system's desired state
 void SetDMSState( int DMSState )
 {
-	if(DMSData.valid && DMSData.olddmState != DMSState)
+	if(DMSData.valid)
 	{
 		DMSData.dmState = DMSState;
 		DMSData.dmDebounceTime = -1;

@@ -1074,6 +1074,113 @@ void ClientEvents( gentity_t *ent, int oldEventSequence ) {
 
 }
 
+
+//[KnockdownSys][SPPortComplete]
+void G_ThrownDeathAnimForDeathAnim( gentity_t *hitEnt, vec3_t impactPoint )
+{//racc - sets an alternate "being thrown" death animation based on current death animation.
+	int anim = -1;
+	if ( !hitEnt || !hitEnt->client )
+	{
+		return;
+	}
+	switch ( hitEnt->client->ps.legsAnim )
+	{
+	case BOTH_DEATH9://fall to knees, fall over
+	case BOTH_DEATH10://fall to knees, fall over
+	case BOTH_DEATH11://fall to knees, fall over
+	case BOTH_DEATH13://stumble back, fall over
+	case BOTH_DEATH17://jerky fall to knees, fall over
+	case BOTH_DEATH18://grab gut, fall to knees, fall over
+	case BOTH_DEATH19://grab gut, fall to knees, fall over
+	case BOTH_DEATH20://grab shoulder, fall forward
+	case BOTH_DEATH21://grab shoulder, fall forward
+	case BOTH_DEATH3://knee collapse, twist & fall forward
+	case BOTH_DEATH7://knee collapse, twist & fall forward
+		{
+			float dot;
+			vec3_t dir2Impact, fwdAngles, facing;
+			VectorSubtract( impactPoint, hitEnt->r.currentOrigin, dir2Impact );
+			dir2Impact[2] = 0;
+			VectorNormalize( dir2Impact );
+			VectorSet( fwdAngles, 0, hitEnt->client->ps.viewangles[YAW], 0 );
+			AngleVectors( fwdAngles, facing, NULL, NULL );
+			dot = DotProduct( facing, dir2Impact );//-1 = hit in front, 0 = hit on side, 1 = hit in back
+			if ( dot > 0.5f )
+			{//kicked in chest, fly backward
+				switch ( Q_irand( 0, 4 ) )
+				{//FIXME: don't start at beginning of anim?
+				case 0:
+					anim = BOTH_DEATH1;//thrown backwards
+					break;
+				case 1:
+					anim = BOTH_DEATH2;//fall backwards
+					break;
+				case 2:
+					anim = BOTH_DEATH15;//roll over backwards
+					break;
+				case 3:
+					anim = BOTH_DEATH22;//fast fall back
+					break;
+				case 4:
+					anim = BOTH_DEATH23;//fast fall back
+					break;
+				}
+			}
+			else if ( dot < -0.5f )
+			{//kicked in back, fly forward
+				switch ( Q_irand( 0, 5 ) )
+				{//FIXME: don't start at beginning of anim?
+				case 0:
+					anim = BOTH_DEATH14;
+					break;
+				case 1:
+					anim = BOTH_DEATH24;
+					break;
+				case 2:
+					anim = BOTH_DEATH25;
+					break;
+				case 3:
+					anim = BOTH_DEATH4;//thrown forwards
+					break;
+				case 4:
+					anim = BOTH_DEATH5;//thrown forwards
+					break;
+				case 5:
+					anim = BOTH_DEATH16;//thrown forwards
+					break;
+				}
+			}
+			else
+			{//hit on side, spin
+				switch ( Q_irand( 0, 2 ) )
+				{//FIXME: don't start at beginning of anim?
+				case 0:
+					anim = BOTH_DEATH12;
+					break;
+				case 1:
+					anim = BOTH_DEATH14;
+					break;
+				case 2:
+					anim = BOTH_DEATH15;
+					break;
+				case 3:
+					anim = BOTH_DEATH6;
+					break;
+				case 4:
+					anim = BOTH_DEATH8;
+					break;
+				}
+			}
+		}
+		break;
+	}
+	if ( anim != -1 )
+	{
+		NPC_SetAnim( hitEnt, SETANIM_BOTH, anim, SETANIM_FLAG_OVERRIDE|SETANIM_FLAG_HOLD );
+	}
+}
+//[/SPPortComplete][/KnockdownSys]
+
 /*
 ==============
 SendPendingPredictableEvents
@@ -2003,6 +2110,10 @@ extern vmCvar_t	g_playerDuelShield; // MJN - Duel Shield
 extern vmCvar_t g_duelStats;	// MJN - Duel Stats
 extern vmCvar_t g_logDuelStats;
 //[/DuelSys]
+//[SaberLockSys]
+extern qboolean SabBeh_ButtonforSaberLock(gentity_t* self);
+extern void G_RollBalance(gentity_t *self, gentity_t *inflictor, qboolean forceMishap);
+//[/SaberLockSys]
 void ClientThink_real( gentity_t *ent ) {
 	gclient_t	*client;
 	pmove_t		pm;
@@ -2099,6 +2210,8 @@ void ClientThink_real( gentity_t *ent ) {
 		}
 		else if (client->saber[0].model[0] && client->saber[1].model[0])
 		{ //with two sabs always use akimbo style
+			//[SaberThrowSys]
+			/* //racc - Removed to add ability for dual saber users to continue to use their second sabers if they throw or drop their first one.
 			if ( client->ps.saberHolstered == 1 )
 			{//one saber should be off, adjust saberAnimLevel accordinly
 				client->ps.fd.saberAnimLevelBase = SS_DUAL;
@@ -2106,6 +2219,8 @@ void ClientThink_real( gentity_t *ent ) {
 				client->ps.fd.saberDrawAnimLevel = client->ps.fd.saberAnimLevel;
 			}
 			else
+			*/
+			//[/SaberThrowSys]
 			{
 				if ( !WP_SaberStyleValidForSaber( &client->saber[0], &client->saber[1], client->ps.saberHolstered, client->ps.fd.saberAnimLevel ) )
 				{//only use dual style if the style we're trying to use isn't valid
@@ -2634,11 +2749,14 @@ void ClientThink_real( gentity_t *ent ) {
 				&& ent->client->ps.saberHolstered 
 				&& ent->client->ps.duelTime )
 			{
-				ent->client->ps.saberHolstered = 0;
-
-				if (ent->client->saber[0].soundOn)
-				{
-					G_Sound(ent, CHAN_AUTO, ent->client->saber[0].soundOn);
+				if(!ent->client->ps.saberHolstered){
+					if (ent->client->saber[0].soundOff){
+						G_Sound(ent, CHAN_AUTO, ent->client->saber[0].soundOff);
+					}	
+					if (ent->client->saber[1].soundOff){
+						G_Sound(ent, CHAN_AUTO, ent->client->saber[1].soundOff);
+					}
+					ent->client->ps.saberHolstered = 2;
 				}
 				if (ent->client->saber[1].soundOn)
 				{
@@ -3269,7 +3387,7 @@ void ClientThink_real( gentity_t *ent ) {
 	pm.entSize = sizeof(gentity_t);
 
 	if (ent->client->ps.saberLockTime > level.time)
-	{
+	{//racc - handle saberlocks
 		gentity_t *blockOpp = &g_entities[ent->client->ps.saberLockEnemy];
 
 		if (blockOpp && blockOpp->inuse && blockOpp->client)
@@ -3285,14 +3403,41 @@ void ClientThink_real( gentity_t *ent ) {
 
 		if ( ent->client->ps.saberLockHitCheckTime < level.time )
 		{//have moved to next frame since last lock push
-			ent->client->ps.saberLockHitCheckTime = level.time;//so we don't push more than once per server frame
-			if ( ( ent->client->buttons & BUTTON_ATTACK ) && ! ( ent->client->oldbuttons & BUTTON_ATTACK ) )
+			//[SaberLockSys]
+			//racc - tweaked this to slow down the speed at which the saber locks advance.  I'm not sure I like this or not yet.
+			ent->client->ps.saberLockHitCheckTime = level.time + 25;
+			//ent->client->ps.saberLockHitCheckTime = level.time;//so we don't push more than once per server frame
+			
+			//saber locks now use direction and button presses instead of just tapping the attack button.
+			if( ent->client->ps.userInt3 & (1 << FLAG_LOCKWINNER) )
+			//if(SabBeh_ButtonforSaberLock(ent))
+			//if ( ( ent->client->buttons & BUTTON_ATTACK ) && ! ( ent->client->oldbuttons & BUTTON_ATTACK ) )
+			//[/SaberLockSys]
 			{
 				if ( ent->client->ps.saberLockHitIncrementTime < level.time )
 				{//have moved to next frame since last saberlock attack button press
 					int lockHits = 0;
 					ent->client->ps.saberLockHitIncrementTime = level.time;//so we don't register an attack key press more than once per server frame
 					//NOTE: FP_SABER_OFFENSE level already taken into account in PM_SaberLocked
+					//[SaberLockSys]
+					//making the saber locks fair with all styles.
+					/* racc - removed saberlock opposition and randomness.
+					if(blockOpp && SabBeh_ButtonforSaberLock(blockOpp))
+					{//opponent is opposing the our saberlock
+						if ( g_saberLockRandomNess.integer > 0 )
+						{
+							lockHits = Q_irand( 0, g_saberLockRandomNess.integer );
+						}
+					}
+					else
+					*/
+					{//advance unopposed
+						lockHits = 1;
+					}
+
+					ent->client->ps.saberLockHits += lockHits;
+
+					/* racc - style based ability in saberlocks = stupid in Enhanced
 					if ( (ent->client->ps.fd.forcePowersActive&(1<<FP_RAGE)) )
 					{//raging: push harder
 						lockHits = 1+ent->client->ps.fd.forcePowerLevel[FP_RAGE];
@@ -3337,6 +3482,8 @@ void ClientThink_real( gentity_t *ent ) {
 							ent->client->ps.saberLockHits = 0;
 						}
 					}
+					*/
+					//[/SaberLockSys]
 				}
 			}
 			if ( ent->client->ps.saberLockHits > 0 )
@@ -3433,13 +3580,26 @@ void ClientThink_real( gentity_t *ent ) {
 	}
 
 	if (pm.checkDuelLoss)
-	{
+	{//racc - we owned someone in a saber duel, but didn't super break from the saberlock.  Check for death blow conditions. 
+		//[SaberLockSys]
+		//racc - losing a saberlock with checkDuelLoss set results in the loser mishaping.
+		if (pm.checkDuelLoss > 0 && (pm.checkDuelLoss <= MAX_CLIENTS || (pm.checkDuelLoss < (MAX_GENTITIES-1) && g_entities[pm.checkDuelLoss-1].s.eType == ET_NPC) ) )
+		{
+			gentity_t *clientLost = &g_entities[pm.checkDuelLoss-1];
+
+			if (clientLost && clientLost->inuse && clientLost->client)
+			{
+				G_RollBalance(clientLost, ent, qtrue);
+			}
+		}
+
+		/* racc - don't use the basejka instant death check.  I don't like it.
 		if (pm.checkDuelLoss > 0 && (pm.checkDuelLoss <= MAX_CLIENTS || (pm.checkDuelLoss < (MAX_GENTITIES-1) && g_entities[pm.checkDuelLoss-1].s.eType == ET_NPC) ) )
 		{
 			gentity_t *clientLost = &g_entities[pm.checkDuelLoss-1];
 
 			if (clientLost && clientLost->inuse && clientLost->client && Q_irand(0, 40) > clientLost->health)
-			{
+			{//racc - instant death!
 				vec3_t attDir;
 				VectorSubtract(ent->client->ps.origin, clientLost->client->ps.origin, attDir);
 				VectorNormalize(attDir);
@@ -3465,6 +3625,8 @@ void ClientThink_real( gentity_t *ent ) {
 				saberCheckKnockdown_DuelLoss(&g_entities[clientLost->client->ps.saberEntityNum], clientLost, ent);
 			}
 		}
+		*/
+		//[/SaberLockSys]
 
 		pm.checkDuelLoss = 0;
 	}
@@ -3496,7 +3658,14 @@ void ClientThink_real( gentity_t *ent ) {
 		(pm.cmd.generic_cmd != ent->client->lastGenCmd || ent->client->lastGenCmdTime < level.time))
 	{
 		ent->client->lastGenCmd = pm.cmd.generic_cmd;
-		if (pm.cmd.generic_cmd != GENCMD_FORCE_THROW &&
+		//[SaberSys]
+		if (pm.cmd.generic_cmd == GENCMD_SABERATTACKCYCLE)
+		{//saber style toggling debounces debounces faster than normal debouncable commands.
+			ent->client->lastGenCmdTime = level.time + 100;
+		}
+		else if (pm.cmd.generic_cmd != GENCMD_FORCE_THROW &&
+		//if (pm.cmd.generic_cmd != GENCMD_FORCE_THROW &&
+		//[/SaberSys]
 			pm.cmd.generic_cmd != GENCMD_FORCE_PULL)
 		{ //these are the only two where you wouldn't care about a delay between
 			ent->client->lastGenCmdTime = level.time + 300; //default 100ms debounce between issuing the same command.

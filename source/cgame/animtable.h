@@ -1730,6 +1730,21 @@ stringID_table_t animTable [MAX_ANIMATIONS+1] =
 	//New anim as per Jarrod's request
 	ENUM2STRING(LEGS_TURN180),
 
+		//[LedgeGrab]
+	ENUM2STRING(BOTH_LEDGE_GRAB), //grabbing ledge
+	ENUM2STRING(BOTH_LEDGE_HOLD), //Idle ledge hold frame
+	ENUM2STRING(BOTH_LEDGE_LEFT), //Ledge shimmy left
+	ENUM2STRING(BOTH_LEDGE_RIGHT), //Ledge shimmy right
+	ENUM2STRING(BOTH_LEDGE_MERCPULL), //Ledge merc pull up
+	//[/LedgeGrab]
+
+	//[SaberSys]
+	//dedicated stance animations for the hidden styles
+	ENUM2STRING(BOTH_SABERTAVION_STANCE),
+	ENUM2STRING(BOTH_SABERDESANN_STANCE),
+	//[/SaberSys]
+	
+
 	//======================================================
 	//cinematic anims
 	//======================================================

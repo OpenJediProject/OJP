@@ -9,7 +9,8 @@
 
 // for the voice chats
 //[SVN]
-#include "../../ojpbasic/ui/menudef.h"
+//rearraigned repository to make it easier to initially compile.
+#include "../../ojpenhanced/ui/menudef.h"
 //#include "../../ui/menudef.h"
 //[/SVN]
 
@@ -1602,6 +1603,9 @@ An entity has an event value
 also called by CG_CheckPlayerstateEvents
 ==============
 */
+//[SaberLockSys]
+extern float ShortestLineSegBewteen2LineSegs( vec3_t start1, vec3_t end1, vec3_t start2, vec3_t end2, vec3_t close_pnt1, vec3_t close_pnt2 );
+//[/SaberLockSys]
 #define	DEBUGNAME(x) if(cg_debugEvents.integer){CG_Printf(x"\n");}
 extern void CG_ChatBox_AddString(char *chatStr); //cg_draw.c
 void CG_EntityEvent( centity_t *cent, vec3_t position ) {
@@ -1823,9 +1827,135 @@ void CG_EntityEvent( centity_t *cent, vec3_t position ) {
 		break;
 	}
 
+	//[SaberLockSys]
+	//new saberlock clash effects
+	case EV_SABERLOCK:
+	{
+		//entity is in saberlock, render blade lock and sound effects
+		centity_t *enemy;
+		clientInfo_t *enemyClient = NULL;
+		clientInfo_t *client = NULL;
+
+		if(es->eventParm < 0 && es->eventParm >= ENTITYNUM_WORLD)
+		{//invalid entity number.  This is possible with limited bits of eventParm
+			break;
+		}
+
+		enemy = &cg_entities[es->eventParm];
+
+		if(!enemy || !enemy->ghoul2 || !cent || !cent->ghoul2)
+		{//no enemy data, can't do our visual effects.
+			break;
+		}
+
+		if(es->number != cg.snap->ps.clientNum  //not the client
+			&& (es->eventParm == cg.snap->ps.clientNum //other lock player is the client
+				|| es->eventParm < es->number) )  //other player has lower entity number.
+		{//don't render the effects twice.
+			break;
+		}
+
+		//set client
+		if ( cg_entities[es->number].currentState.eType == ET_NPC )
+		{
+			client = cg_entities[es->number].npcClient;
+		}
+		else if ( es->number < MAX_CLIENTS )
+		{
+			client = &cgs.clientinfo[es->number];
+		}
+
+		if ( cg_entities[es->eventParm].currentState.eType == ET_NPC )
+		{
+			enemyClient = cg_entities[es->eventParm].npcClient;
+		}
+		else if ( es->number < MAX_CLIENTS )
+		{
+			enemyClient = &cgs.clientinfo[es->eventParm];
+		}
+
+		if ( client && client->infoValid && enemyClient && enemyClient->infoValid )
+		{
+			vec3_t		ourBase, ourTip, theirBase, theirTip;
+			mdxaBone_t	boltMatrix;
+			vec3_t		flashPoint, temp;
+			qboolean	cullPass = qfalse;
+			qhandle_t	blockSound = trap_S_RegisterSound(va( "sound/weapons/saber/saberblock%d.wav", Q_irand(6, 9) ));
+
+			//get our blade
+			trap_G2API_GetBoltMatrix(cent->ghoul2, 1, 0, &boltMatrix, cent->lerpAngles, cent->lerpOrigin, 
+				cg.time, cgs.gameModels, cent->modelScale);
+			BG_GiveMeVectorFromMatrix(&boltMatrix, ORIGIN, ourBase);
+			BG_GiveMeVectorFromMatrix(&boltMatrix, NEGATIVE_Y, temp);
+			VectorMA(ourBase, client->saber[0].blade[0].length, temp, ourTip);
+
+			//get their blade.
+			trap_G2API_GetBoltMatrix(enemy->ghoul2, 1, 0, &boltMatrix, enemy->lerpAngles, enemy->lerpOrigin,
+				cg.time, cgs.gameModels, enemy->modelScale);
+			BG_GiveMeVectorFromMatrix(&boltMatrix, ORIGIN, theirBase);
+			BG_GiveMeVectorFromMatrix(&boltMatrix, NEGATIVE_Y, temp);
+			VectorMA(theirBase, client->saber[0].blade[0].length, temp, theirTip);
+
+			ShortestLineSegBewteen2LineSegs(ourBase, ourTip, theirBase, theirTip, flashPoint, temp);
+
+			/*
+			ShortestLineSegBewteen2LineSegs( client->saber[0].blade[0].trail.base, 
+				client->saber[0].blade[0].trail.tip, 
+				enemyClient->saber[0].blade[0].trail.base, 
+				enemyClient->saber[0].blade[0].trail.tip, flashPoint, tempPoint);
+			*/
+
+			if (cg.mInRMG)
+			{
+				trace_t tr;
+				vec3_t vecSub;
+
+				VectorSubtract(cg.refdef.vieworg, flashPoint, vecSub);
+
+				if (VectorLength(vecSub) < 5000)
+				{
+					CG_Trace(&tr, cg.refdef.vieworg, NULL, NULL, flashPoint, ENTITYNUM_NONE, CONTENTS_TERRAIN|CONTENTS_SOLID);
+
+					if (tr.fraction == 1.0 || tr.entityNum < MAX_CLIENTS)
+					{
+						cullPass = qtrue;
+					}
+				}
+			}
+			else
+			{
+				cullPass = qtrue;
+			}
+
+			if (cullPass)
+			{
+				vec3_t fxDir;
+
+				//angle setup
+				VectorCopy(vec3_origin, fxDir);
+				if (!fxDir[0] && !fxDir[1] && !fxDir[2])
+				{
+					fxDir[1] = 1;
+				}
+
+				if(client->saberLockSoundDebounce < cg.time)
+				{
+					trap_S_StartSound(flashPoint, es->number, CHAN_AUTO, blockSound );
+					client->saberLockSoundDebounce = cg.time + 200;
+				}
+
+				trap_FX_PlayEffectID( cgs.effects.mSaberFriction, flashPoint, fxDir, -1, -1 );
+			}
+		}
+	}
+		break;
+
+	/* replaced with EV_SABERLOCK
 	case EV_JUMP_PAD:
 		DEBUGNAME("EV_JUMP_PAD");
 		break;
+	*/
+	//[/SaberLockSys]
 
 	case EV_GHOUL2_MARK:
 		DEBUGNAME("EV_GHOUL2_MARK");
@@ -2195,7 +2325,11 @@ void CG_EntityEvent( centity_t *cent, vec3_t position ) {
 				}
 
 				//Show the player their force selection bar in case picking the holocron up changed the current selection
-				if (index != FP_SABER_OFFENSE && index != FP_SABER_DEFENSE && index != FP_SABERTHROW &&
+				//[SaberSys]
+				//Added Saber Throw to the HUD menu.
+				if (index != FP_SABER_OFFENSE && index != FP_SABER_DEFENSE &&
+				//if (index != FP_SABER_OFFENSE && index != FP_SABER_DEFENSE && index != FP_SABERTHROW &&
+				//[/SaberSys]
 					index != FP_LEVITATION &&
 					es->number == cg.snap->ps.clientNum &&
 					(index == cg.snap->ps.fd.forcePowerSelected || !(cg.snap->ps.fd.forcePowersActive & (1 << cg.snap->ps.fd.forcePowerSelected))))
@@ -2614,7 +2748,10 @@ void CG_EntityEvent( centity_t *cent, vec3_t position ) {
 				qboolean cullPass = qfalse;
 				int			blockFXID = cgs.effects.mSaberBlock;
 				qhandle_t	blockSound = trap_S_RegisterSound(va( "sound/weapons/saber/saberblock%d.wav", Q_irand(1, 9) ));
-				qboolean	noFlare = qfalse;
+				//[NewSaberEffects]
+				//removing the screen flare of the old clash effects
+				//qboolean	noFlare = qfalse;
+				//[/NewSaberEffects]
 
 				if ( es->otherEntityNum2 >= 0
 					&& es->otherEntityNum2 < ENTITYNUM_NONE )
@@ -2654,10 +2791,15 @@ void CG_EntityEvent( centity_t *cent, vec3_t position ) {
 								blockSound = client->saber[saberNum].blockSound[Q_irand(0,2)];
 							}
 						}
+						//[NewSaberEffects]
+						//removing the screen flare of the old clash effects
+						/*
 						if ( (client->saber[saberNum].saberFlags2&SFL2_NO_CLASH_FLARE) )
 						{
 							noFlare = qtrue;
 						}
+						*/
+						//[/NewSaberEffects]
 					}
 				}
 				if (cg.mInRMG)
@@ -2694,11 +2836,16 @@ void CG_EntityEvent( centity_t *cent, vec3_t position ) {
 					trap_S_StartSound(es->origin, es->number, CHAN_AUTO, blockSound );
 					trap_FX_PlayEffectID( blockFXID, es->origin, fxDir, -1, -1 );
 
+					//[NewSaberEffects]
+					//removing the screen flare of the old clash effects
+					/*
 					if ( !noFlare )
 					{
 						cg_saberFlashTime = cg.time-50;
 						VectorCopy( es->origin, cg_saberFlashPos );
 					}
+					*/
+					//[/NewSaberEffects]
 				}
 			}
 			else

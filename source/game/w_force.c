@@ -13,6 +13,12 @@ extern void NPC_UseResponse( gentity_t *self, gentity_t *user, qboolean useWhenD
 //NEEDED FOR MIND-TRICK on NPCS=========================================================
 extern void Jedi_Decloak( gentity_t *self );
 
+//[FatigueSys]
+extern qboolean BG_SaberAttacking( playerState_t *ps );
+extern qboolean BG_SaberInTransitionAny( int move );
+extern qboolean GAME_INLINE WalkCheck( gentity_t * self );
+//[/FatigueSys]
+
 extern vmCvar_t		g_saberRestrictForce;
 
 #include "../namespace_begin.h"
@@ -153,7 +159,10 @@ void WP_InitForcePowers( gentity_t *ent )
 {
 	int i;
 	int i_r;
-	int maxRank = g_maxForceRank.integer;
+	//[ExpSys]
+	int maxRank = ent->client->sess.skillPoints;
+	//int maxRank = g_maxForceRank.integer;
+	//[/ExpSys]
 	qboolean warnClient = qfalse;
 	qboolean warnClientLimit = qfalse;
 	char userinfo[MAX_INFO_STRING];
@@ -162,6 +171,10 @@ void WP_InitForcePowers( gentity_t *ent )
 	int lastFPKnown = -1;
 	qboolean didEvent = qfalse;
 
+
+	//[ExpSys]
+	//skill points are experience based.
+	/* basejka code
 	if (!maxRank)
 	{ //if server has no max rank, default to max (50)
 		maxRank = FORCE_MASTERY_JEDI_MASTER;
@@ -171,6 +184,19 @@ void WP_InitForcePowers( gentity_t *ent )
 		maxRank = FORCE_MASTERY_JEDI_MASTER;
 		trap_Cvar_Set( "g_maxForceRank", va("%i", maxRank) );
 	}
+
+	//[ForceSys]
+	if(g_gametype.integer == GT_POWERDUEL && ent->client->sess.duelTeam == DUELTEAM_DOUBLE)
+	{//double saberers have a lower force rank than the sole dueler while in power duel.
+		maxRank--;
+		if(maxRank < FORCE_MASTERY_UNINITIATED)
+		{//don't have lower than the minimum force power
+			maxRank = FORCE_MASTERY_UNINITIATED;
+		}
+	}
+	//[/ForceSys]
+	*/
+	//[/ExpSys]
 
 	/*
 	if (g_forcePowerDisable.integer)
@@ -187,11 +213,16 @@ void WP_InitForcePowers( gentity_t *ent )
 
 	ent->client->ps.fd.saberAnimLevel = ent->client->sess.saberLevel;
 
+	//[SaberSys]
+	//racc - I'm not sure what this is for, but it's causing players to lose their stance if it's one of the hidden ones.
+	/*
 	if (ent->client->ps.fd.saberAnimLevel < FORCE_LEVEL_1 ||
 		ent->client->ps.fd.saberAnimLevel > FORCE_LEVEL_3)
 	{
 		ent->client->ps.fd.saberAnimLevel = FORCE_LEVEL_1;
 	}
+	*/
+	//[/SaberSys]
 
 	if (!speedLoopSound)
 	{ //so that the client configstring is already modified with this when we need it
@@ -295,6 +326,7 @@ void WP_InitForcePowers( gentity_t *ent )
 	}
 	//[/CoOp]
 
+	//racc - actually all the NPC should have dumped out of here earlier than this.
 	if (ent->s.eType == ET_NPC && ent->s.number >= MAX_CLIENTS)
 	{ //rwwFIXMEFIXME: Temp
 		strcpy(userinfo, "forcepowers\\7-1-333003000313003120");
@@ -611,7 +643,11 @@ void WP_SpawnInitForcePowers( gentity_t *ent )
 {
 	int i = 0;
 
+	//[SaberSys]
+	//new balancing system uses 7 as the default.
+	//ent->client->ps.saberAttackChainCount = 7;
 	ent->client->ps.saberAttackChainCount = 0;
+	//[/SaberSys]
 
 	i = 0;
 
@@ -753,6 +789,11 @@ void WP_SpawnInitForcePowers( gentity_t *ent )
 extern qboolean BG_InKnockDown( int anim ); //bg_pmove.c
 #include "../namespace_end.h"
 
+//[ForceSys]
+extern qboolean PM_SaberInBrokenParry( int move );
+extern qboolean BG_InSlowBounce(playerState_t *ps);
+extern qboolean BG_InKnockDownOnGround( playerState_t *ps );
+//[/ForceSys]
 int ForcePowerUsableOn(gentity_t *attacker, gentity_t *other, forcePowers_t forcePower)
 {
 	if (other && other->client && BG_HasYsalamiri(g_gametype.integer, &other->client->ps))
@@ -790,12 +831,29 @@ int ForcePowerUsableOn(gentity_t *attacker, gentity_t *other, forcePowers_t forc
 			}
 			return 0;
 		}
+		//[ForceSys]
+		//only initially allow gripping on other players if they're stunned/heavy slow bounced 
+		//or don't have approprate levels of absorb/grip to block it.
+		else if (other && other->client //humanoid
+			&& other->client->ps.fd.forceGripBeingGripped < level.time //not already being gripped
+			&& (other->client->ps.fd.forcePowerLevel[FP_GRIP] >= attacker->client->ps.fd.forcePowerLevel[FP_GRIP] //has >= grip skill
+				|| other->client->ps.fd.forcePowerLevel[FP_ABSORB] >= attacker->client->ps.fd.forcePowerLevel[FP_GRIP]) //has >= absorb skill
+			&& !PM_SaberInBrokenParry(other->client->ps.saberMove) //not stunned
+			&& !(BG_InSlowBounce(&other->client->ps) && other->client->ps.userInt3 & (1 << FLAG_OLDSLOWBOUNCE)) //not heavy slow bounced
+			&& !BG_InKnockDownOnGround(&other->client->ps)) //not getting knocked down.
+		{//target is able to use the force to block us.  Can't even try.
+			return 0;
+		}
+
+		/* basejka code
 		else if (other && other->client &&
 			other->client->ps.weapon == WP_SABER &&
 			BG_SaberInSpecial(other->client->ps.saberMove))
 		{ //don't grip person while they are in a special or some really bad things can happen.
 			return 0;
 		}
+		*/
+		//[/ForceSys]
 	}
 
 	if (other && other->client &&
@@ -997,7 +1055,8 @@ qboolean WP_ForcePowerUsable( gentity_t *self, forcePowers_t forcePower )
 }
 
 int WP_AbsorbConversion(gentity_t *attacked, int atdAbsLevel, gentity_t *attacker, int atPower, int atPowerLevel, int atForceSpent)
-{
+{//racc - performs force absorb check, returns power difference between the attacker's power level and the defender's power level.
+	//returns -1 if absorb didn't happen.  This function also handles the actual force absorb energy gain for the defender.
 	int getLevel = 0;
 	int addTot = 0;
 	gentity_t *abSound;
@@ -1840,7 +1899,7 @@ void ForceLightning( gentity_t *self )
 		return;
 	}
 	if ( self->client->ps.fd.forcePower < 25 || !WP_ForcePowerUsable( self, FP_LIGHTNING ) )
-	{
+	{//racc - can't use this power while low on force or can't use this power now.
 		return;
 	}
 	if ( self->client->ps.fd.forcePowerDebounce[FP_LIGHTNING] > level.time )
@@ -1868,8 +1927,119 @@ void ForceLightning( gentity_t *self )
 	WP_ForcePowerStart( self, FP_LIGHTNING, 500 );
 }
 
+
+//[ForceSys]
+#define DODGE_SABERBLOCKLIGHTNING	1 //the DP cost to block lightning
+qboolean OJP_SaberBlockLightning(gentity_t *attacker, gentity_t *defender, vec3_t impactPoint, int damage)
+{//defender is attempting to use their saber to block lightning.  Try to do it.
+	int dpBlockCost;
+	qboolean saberLightBlock = qtrue;
+	int abilityDef;
+
+	if(!defender || !defender->client || !attacker || !attacker->client)
+	{//bad infor state
+		return qfalse;
+	}
+
+	if( !(defender->client->ps.fd.forcePowersKnown & (1 << FP_LIGHTNING)) 
+		&& !(defender->client->ps.fd.forcePowersKnown & (1 << FP_ABSORB)) )
+	{//don't have lightning or absorb, can't block it.
+		return qfalse;
+	}
+
+	//determine ability difference
+	abilityDef = attacker->client->ps.fd.forcePowerLevel[FP_LIGHTNING] - defender->client->ps.fd.forcePowerLevel[FP_LIGHTNING];
+
+	if(abilityDef > attacker->client->ps.fd.forcePowerLevel[FP_LIGHTNING] - defender->client->ps.fd.forcePowerLevel[FP_ABSORB])
+	{//defender's absorb ability is stronger than their lightning ability, use that instead.
+		abilityDef = attacker->client->ps.fd.forcePowerLevel[FP_LIGHTNING] - defender->client->ps.fd.forcePowerLevel[FP_ABSORB];
+	}
+	
+	if(abilityDef >= 2)
+	{//defender is largely weaker than the attacker (2 levels)
+		if(!WalkCheck(defender) || defender->client->ps.groundEntityNum == ENTITYNUM_NONE)
+		{//can't block lightning while running or in mid-air
+			return qfalse;
+		}
+	}
+	else if(abilityDef >= 1)
+	{//defender is slightly weaker than their attacker
+		if(defender->client->ps.groundEntityNum == ENTITYNUM_NONE)
+		{
+			return qfalse;
+		}
+	}
+
+ 	if(PM_SaberInBrokenParry(defender->client->ps.saberMove))
+	{//can't block while stunned
+		return qfalse;
+	}
+
+	if(BG_InSlowBounce(&defender->client->ps) && defender->client->ps.userInt3 & (1 << FLAG_OLDSLOWBOUNCE))
+	{//can't block lightning while in the heavier slow bounces.
+		return qfalse;
+	}
+
+	if( defender->client->ps.saberAttackChainCount >= MISHAPLEVEL_HEAVY )
+	{//can't block if we're too off balance.
+		return qfalse;
+	}
+
+	if(defender->client->ps.weapon != WP_SABER  //not using saber
+		|| defender->client->ps.saberHolstered == 2 //sabers off
+		|| defender->client->ps.saberInFlight)  //saber not here
+	{//saber not currently in use or available, attempt to use our hands instead.
+		saberLightBlock = qfalse;
+	}
+
+	if(!InFront(attacker->client->ps.origin, defender->client->ps.origin, defender->client->ps.viewangles, 0.0f)
+		&& (defender->client->ps.stats[STAT_DODGE] < DODGE_CRITICALLEVEL //too low on DP
+			|| !saberLightBlock) ) //can't block behind us while hand blocking.
+	{//not facing the lightning attacker and low on DP!
+		return qfalse;
+	}
+
+	//determine the cost to block the lightning
+	dpBlockCost = damage;
+
+	//check to see if we have enough DP
+	if(defender->client->ps.stats[STAT_DODGE] < dpBlockCost)
+	{
+		return qfalse;
+	}
+
+	if(saberLightBlock)
+	{
+		//ok, we can do it.  Hold up the saber to block it.
+		defender->client->ps.saberBlocked = BLOCKED_TOP;
+	}
+	else
+	{//use our hand to block the lightning
+		defender->client->ps.forceHandExtend = HANDEXTEND_FORCE_HOLD;
+		defender->client->ps.forceHandExtendTime = level.time + 500;
+	}
+
+	//charge us some DP as well.
+	//[ExpSys]
+	G_DodgeDrain(defender, attacker, dpBlockCost);
+	//defender->client->ps.stats[STAT_DODGE] -= dpBlockCost;
+	//[/ExpSys]
+
+	return qtrue;
+
+}
+//[/ForceSys]
+
+//[ForceSys]
+extern void G_Knockdown( gentity_t *self, gentity_t *attacker, const vec3_t pushDir, float strength, qboolean breakSaberLock );
+//[/ForceSys]
 void ForceLightningDamage( gentity_t *self, gentity_t *traceEnt, vec3_t dir, vec3_t impactPoint )
 {
+	//[ForceSys]
+	//the target saber blocked the lightning
+	qboolean saberBlocked = qfalse;
+	//[/ForceSys]
+
 	self->client->dangerTime = level.time;
 	self->client->ps.eFlags &= ~EF_INVULNERABLE;
 	self->client->invulnerableTimer = 0;
@@ -1896,8 +2066,11 @@ void ForceLightningDamage( gentity_t *self, gentity_t *traceEnt, vec3_t dir, vec
 			}
 			if (ForcePowerUsableOn(self, traceEnt, FP_LIGHTNING))
 			{
-				int	dmg = Q_irand(1,2); //Q_irand( 1, 3 );
+				//[ForceSys]
+				int	dmg = 1;
+				//int	dmg = Q_irand(1,2); //Q_irand( 1, 3 );
 				
+				/* removed the absorb code stuff.
 				int modPowerLevel = -1;
 				
 				if (traceEnt->client)
@@ -1923,6 +2096,8 @@ void ForceLightningDamage( gentity_t *self, gentity_t *traceEnt, vec3_t dir, vec
 						traceEnt->client->noLightningTime = level.time + 100;
 					}
 				}
+				*/
+				//[/ForceSys]
 
 				if ( self->client->ps.weapon == WP_MELEE
 					&& self->client->ps.fd.forcePowerLevel[FP_LIGHTNING] > FORCE_LEVEL_2 )
@@ -1931,10 +2106,22 @@ void ForceLightningDamage( gentity_t *self, gentity_t *traceEnt, vec3_t dir, vec
 					dmg *= 2;
 				}
 
-				if (dmg)
+				//[ForceSys]
+				//saberers can now block lightning using their sabers
+				saberBlocked = OJP_SaberBlockLightning(self, traceEnt, impactPoint, dmg);
+
+				if (dmg && !saberBlocked)
+				//if (dmg)
+				//[/ForceSys]
 				{
 					//rww - Shields can now absorb lightning too.
 					G_Damage( traceEnt, self, self, dir, impactPoint, dmg, 0, MOD_FORCE_DARK );
+					
+					//[ForceSys]
+					//lightning also blasts the target back.
+					G_Throw(traceEnt, dir, dmg*7);
+					G_Knockdown(traceEnt, self, dir, 300, qtrue);
+					//[/ForceSys]
 				}
 				if ( traceEnt->client )
 				{
@@ -1943,7 +2130,11 @@ void ForceLightningDamage( gentity_t *self, gentity_t *traceEnt, vec3_t dir, vec
 						G_Sound( traceEnt, CHAN_BODY, G_SoundIndex( va("sound/weapons/force/lightninghit%i", Q_irand(1, 3) )) );
 					}
 
-					if (traceEnt->client->ps.electrifyTime < (level.time + 400))
+					//[ForceSys]
+					//don't do the electrical effect unless we didn't block with the saber.
+					if (traceEnt->client->ps.electrifyTime < (level.time + 400) && !saberBlocked)
+					//if (traceEnt->client->ps.electrifyTime < (level.time + 400))
+					//[/ForceSys]
 					{ //only update every 400ms to reduce bandwidth usage (as it is passing a 32-bit time value)
 						traceEnt->client->ps.electrifyTime = level.time + 800;
 					}
@@ -2961,19 +3152,37 @@ void GEntity_UseFunc( gentity_t *self, gentity_t *other, gentity_t *activator )
 	GlobalUse(self, other, activator);
 }
 
+
 qboolean CanCounterThrow(gentity_t *self, gentity_t *thrower, qboolean pull)
 {
 	int powerUse = 0;
+	//[ForceSys]
+	int abilityDef;
+	//[/ForceSys]
 
 	if (self->client->ps.forceHandExtend != HANDEXTEND_NONE)
 	{
 		return 0;
 	}
 
+	//[ForceSys]
+	if(PM_SaberInBrokenParry(self->client->ps.saberMove))
+	{//can't block pushes while stunned
+		return 0;
+	}
+
+	if(BG_InSlowBounce(&self->client->ps) && self->client->ps.userInt3 & (1 << FLAG_OLDSLOWBOUNCE))
+	{//can't block push while in the heavier slow bounces.
+		return 0;
+	}
+
+	/*
 	if (self->client->ps.weaponTime > 0)
 	{
 		return 0;
 	}
+	*/
+	//[/ForceSys]
 
 	if ( self->health <= 0 )
 	{
@@ -2985,12 +3194,27 @@ qboolean CanCounterThrow(gentity_t *self, gentity_t *thrower, qboolean pull)
 		return 0;
 	}
 
+	//[ForceSys]
+	/*
 	if (self->client->ps.weaponstate == WEAPON_CHARGING ||
 		self->client->ps.weaponstate == WEAPON_CHARGING_ALT)
 	{ //don't autodefend when charging a weapon
 		return 0;
 	}
+	*/
+	
+	if(!InFront(thrower->client->ps.origin, self->client->ps.origin, self->client->ps.viewangles, 0.0f) 
+		&& self->client->ps.stats[STAT_DODGE] < DODGE_CRITICALLEVEL)
+	{//not facing the attacker and low on DP!
+		return qfalse;
+	}
 
+	if( self->client->ps.saberAttackChainCount >= MISHAPLEVEL_HEAVY )
+	{//can't block if we're too off balance.
+		return qfalse;
+	}
+
+	/* replaced with general arc check similar to the counter lightning stuff
 	if (g_gametype.integer == GT_SIEGE &&
 		pull &&
 		thrower && thrower->client)
@@ -3008,6 +3232,8 @@ qboolean CanCounterThrow(gentity_t *self, gentity_t *thrower, qboolean pull)
 			return 0;
 		}
 	}
+	*/
+	//[/ForceSys]
 
 	if (pull)
 	{
@@ -3018,15 +3244,39 @@ qboolean CanCounterThrow(gentity_t *self, gentity_t *thrower, qboolean pull)
 		powerUse = FP_PUSH;
 	}
 
+	//[ForceSys]
+	//determine ability difference
+	abilityDef = thrower->client->ps.fd.forcePowerLevel[powerUse] - self->client->ps.fd.forcePowerLevel[powerUse];
+
+	if(abilityDef >= 2)
+	{//defender is largely weaker than the attacker (2 levels)
+		if(!WalkCheck(self) || self->client->ps.groundEntityNum == ENTITYNUM_NONE)
+		{//can't block push/pull while running or in mid-air
+			return qfalse;
+		}
+	}
+	else if(abilityDef >= 1)
+	{//defender is slightly weaker than their attacker
+		if(self->client->ps.groundEntityNum == ENTITYNUM_NONE)
+		{
+			return qfalse;
+		}
+	}
+	//[/ForceSys]
+
 	if ( !WP_ForcePowerUsable( self, powerUse ) )
 	{
 		return 0;
 	}
 
+	//[ForceSys]
+	/* racc - we want to be able to block push in mid-air
 	if (self->client->ps.groundEntityNum == ENTITYNUM_NONE)
 	{ //you cannot counter a push/pull if you're in the air
 		return 0;
 	}
+	*/
+	//[/ForceSys]
 
 	return 1;
 }
@@ -3139,7 +3389,10 @@ void ForceThrow( gentity_t *self, qboolean pull )
 	vec3_t		pushDir;
 	vec3_t		thispush_org;
 	vec3_t		tfrom, tto, fwd, a;
-	float		knockback = pull?0:200;
+	//[ForceSys]
+	//NUAM in the basejka code?
+	//float		knockback = pull?0:200;
+	//[/ForceSys]
 	int			powerUse = 0;
 
 	visionArc = 0;
@@ -3604,7 +3857,10 @@ void ForceThrow( gentity_t *self, qboolean pull )
 
 			if ( push_list[x]->client )
 			{//FIXME: make enemy jedi able to hunker down and resist this?
-				int otherPushPower = push_list[x]->client->ps.fd.forcePowerLevel[powerUse];
+				//[ForceSys]
+				qboolean wasWallGrabbing = qfalse;
+				//int otherPushPower = push_list[x]->client->ps.fd.forcePowerLevel[powerUse];
+				//[/ForceSys]
 				qboolean canPullWeapon = qtrue;
 				float dirLen = 0;
 
@@ -3613,15 +3869,22 @@ void ForceThrow( gentity_t *self, qboolean pull )
 					if ( (push_list[x]->client->ps.pm_flags&PMF_STUCK_TO_WALL) )
 					{//no resistance if stuck to wall
 						//push/pull them off the wall
-						otherPushPower = 0;
+						//[ForceSys]
+						wasWallGrabbing = qtrue;
+						//otherPushPower = 0;
+						//[/ForceSys]
 						G_LetGoOfWall( push_list[x] );
 					}
 				}
 
-				knockback = pull?0:200;
+				//[ForceSys]
+				//knockback = pull?0:200;
+				//[/ForceSys]
 
 				pushPowerMod = pushPower;
 
+				//[ForceSys]
+				/* racc - let the counter throw function handle this
 				if (push_list[x]->client->pers.cmd.forwardmove ||
 					push_list[x]->client->pers.cmd.rightmove)
 				{ //if you are moving, you get one less level of defense
@@ -3632,9 +3895,13 @@ void ForceThrow( gentity_t *self, qboolean pull )
 						otherPushPower = 0;
 					}
 				}
+				*/
 
-				if (otherPushPower && CanCounterThrow(push_list[x], self, pull))
-				{
+				//switched to more logical wasWallGrabbing toggle.
+				if (!wasWallGrabbing && CanCounterThrow(push_list[x], self, pull))
+				//if (otherPushPower && CanCounterThrow(push_list[x], self, pull))
+				//[/ForceSys]
+				{//racc - player blocked the throw.
 					if ( pull )
 					{
 						G_Sound( push_list[x], CHAN_BODY, G_SoundIndex( "sound/weapons/force/pull.wav" ) );
@@ -3647,6 +3914,7 @@ void ForceThrow( gentity_t *self, qboolean pull )
 						push_list[x]->client->ps.forceHandExtend = HANDEXTEND_FORCEPUSH;
 						push_list[x]->client->ps.forceHandExtendTime = level.time + 1000;
 					}
+					//racc - add the force push glow to the defender
 					push_list[x]->client->ps.powerups[PW_DISINT_4] = push_list[x]->client->ps.forceHandExtendTime + 200;
 
 					if (pull)
@@ -3660,6 +3928,11 @@ void ForceThrow( gentity_t *self, qboolean pull )
 
 					//Make a counter-throw effect
 
+					//[ForceSys]
+					//racc - countering a throw now automatically prevents push back.
+					continue;
+
+					/* basejka method
 					if (otherPushPower >= modPowerLevel)
 					{
 						pushPowerMod = 0;
@@ -3687,6 +3960,8 @@ void ForceThrow( gentity_t *self, qboolean pull )
 							pushPowerMod = 0;
 						}
 					}
+					*/
+					//[/ForceSys]
 				}
 
 				//shove them
@@ -3696,6 +3971,9 @@ void ForceThrow( gentity_t *self, qboolean pull )
 
 					if (push_list[x]->client && VectorLength(pushDir) <= 256)
 					{
+						//[ForceSys]
+
+						/* don't randomize the weapon pull thingy
 						int randfact = 0;
 
 						if (modPowerLevel == FORCE_LEVEL_1)
@@ -3710,9 +3988,12 @@ void ForceThrow( gentity_t *self, qboolean pull )
 						{
 							randfact = 10;
 						}
+						*/
 
-						if (!OnSameTeam(self, push_list[x]) && Q_irand(1, 10) <= randfact && canPullWeapon)
-						{
+						if (!OnSameTeam(self, push_list[x]) && canPullWeapon)
+						//if (!OnSameTeam(self, push_list[x]) && Q_irand(1, 10) <= randfact && canPullWeapon)
+						//[/ForceSys]
+						{//racc - pull the weapon out of the player's hand.
 							vec3_t uorg, vecnorm;
 
 							VectorCopy(self->client->ps.origin, uorg);
@@ -3730,8 +4011,11 @@ void ForceThrow( gentity_t *self, qboolean pull )
 					VectorSubtract( thispush_org, self->client->ps.origin, pushDir );
 				}
 
+				//[ForceSys]
+				/* racc - converted this stuff to be push strength based
 				if ((modPowerLevel > otherPushPower || push_list[x]->client->ps.m_iVehicleNum) && push_list[x]->client)
 				{
+
 					if (modPowerLevel == FORCE_LEVEL_3 &&
 						push_list[x]->client->ps.forceHandExtend != HANDEXTEND_KNOCKDOWN)
 					{
@@ -3760,6 +4044,8 @@ void ForceThrow( gentity_t *self, qboolean pull )
 						}
 					}
 				}
+				*/
+				//[/ForceSys]
 
 				if (!dirLen)
 				{
@@ -3775,7 +4061,10 @@ void ForceThrow( gentity_t *self, qboolean pull )
 					{ //force the enemy to stop gripping me if I managed to push him
 						if (push_list[x]->client->ps.fd.forceGripEntityNum == self->s.number)
 						{
-							if (modPowerLevel >= push_list[x]->client->ps.fd.forcePowerLevel[FP_GRIP])
+							//[ForceSys]
+							//always allow a push to disable a grip move.
+							//if (modPowerLevel >= push_list[x]->client->ps.fd.forcePowerLevel[FP_GRIP])
+							//[/ForceSys]
 							{ //only break the grip if our push/pull level is >= their grip level
 								WP_ForcePowerStop(push_list[x], FP_GRIP);
 								self->client->ps.fd.forceGripBeingGripped = 0;
@@ -3798,6 +4087,26 @@ void ForceThrow( gentity_t *self, qboolean pull )
 					{
 						pushPowerMod = 16;
 					}
+
+					//[ForceSys]
+					if (pushPowerMod > 250)
+					{//got pushed hard, get knockdowned or knocked off a animals or speeders if riding one.
+						if (push_list[x]->client->ps.m_iVehicleNum)
+						{ //a player on a vehicle
+							gentity_t *vehEnt = &g_entities[push_list[x]->client->ps.m_iVehicleNum];
+							if (vehEnt->inuse && vehEnt->client && vehEnt->m_pVehicle)
+							{
+								if (vehEnt->m_pVehicle->m_pVehicleInfo->type == VH_SPEEDER ||
+									vehEnt->m_pVehicle->m_pVehicleInfo->type == VH_ANIMAL)
+								{ //push the guy off
+									vehEnt->m_pVehicle->m_pVehicleInfo->Eject(vehEnt->m_pVehicle, (bgEntity_t *)push_list[x], qfalse);
+								}
+							}
+						}
+
+						G_Knockdown(push_list[x], self, pushDir, 300, qtrue);
+					}
+					//[/ForceSys]
 
 					//fullbody push effect
 					push_list[x]->client->pushEffectTime = level.time + 600;
@@ -4201,7 +4510,7 @@ void DoGripAction(gentity_t *self, forcePowers_t forcePower)
 		gripEnt->client->otherKillerMOD = MOD_UNKNOWN;
 		gripEnt->client->otherKillerVehWeapon = 0;
 		gripEnt->client->otherKillerWeaponType = WP_NONE;
-		//[Asteroids]
+		//[/Asteroids]
 
 		gripEnt->client->ps.forceGripChangeMovetype = PM_FLOAT;
 
@@ -4555,10 +4864,34 @@ static void WP_ForcePowerRun( gentity_t *self, forcePowers_t forcePower, usercmd
 		{
 			WP_ForcePowerStop( self, forcePower );
 		}
-		else
+		//[ForceSys]
+		//replaced drain with force lightning for the moment because drain is WAY over powered when 
+		//used in the new saber system.
+		//[BugFix27]
+		//added server debouncer to make the lightning damage consistant even with different sv_fps settings.
+		else if( LightningDebounceTime == level.time //someone already advanced the timer this frame
+			|| (level.time - LightningDebounceTime >= LIGHTNINGDEBOUNCE) )
+		//else
+		//[/BugFix27]
 		{
+			ForceShootLightning( self );
+			BG_ForcePowerDrain( &self->client->ps, forcePower, 0 );
+
+			//show the drain lightning effect
+			self->client->ps.activeForcePass = self->client->ps.fd.forcePowerLevel[FP_DRAIN] + FORCE_LEVEL_3;
+
+			//[BugFix27]
+			//update the lightning shot debouncer
+			LightningDebounceTime = level.time;
+			//[/BugFix27]
+		}
+		/* basejka code
+		else
+		{	
 			ForceShootDrain( self );
 		}
+		*/
+		//[/ForceSys]
 		break;
 	case FP_LIGHTNING:
 		if (self->client->ps.forceHandExtend != HANDEXTEND_FORCE_HOLD)
@@ -5233,11 +5566,54 @@ qboolean G_SpecialRollGetup(gentity_t *self)
 extern qboolean DrivingCloakableVehicle(gentity_t *self);
 extern void G_ToggleVehicleCloak(playerState_t *ps);
 //[/CloakingVehicles]
+
+
+//[FatigueSys]
+static GAME_INLINE qboolean MeditateCheck( gentity_t * self )
+{		
+	int	anim;
+
+	if ( self->client->saber[0].meditateAnim != -1 )
+	{
+		anim = self->client->saber[0].meditateAnim;
+	}
+	else if ( self->client->saber[1].model 
+			&& self->client->saber[1].model[0]
+			&& self->client->saber[1].meditateAnim != -1 )
+	{
+		anim = self->client->saber[1].meditateAnim;
+	}
+	else
+	{
+		anim = BOTH_MEDITATE;
+	}
+
+	//we don't use a HANDEXTEND_TAUNT check anymore since 
+	//it's not always consistantly on during a meditate taunt.
+	if( self->client->ps.torsoAnim == anim && self->client->ps.torsoTimer <= 100)
+	{
+		return qtrue;
+	}
+	
+	return qfalse;
+}
+//[/FatigueSys]
+
+
+//[FatigueSys]
+extern qboolean PM_SaberInBrokenParry( int move );
+extern qboolean PM_InKnockDown( playerState_t *ps );
+//[/FatigueSys]
 void WP_ForcePowersUpdate( gentity_t *self, usercmd_t *ucmd )
 {
 	qboolean	usingForce = qfalse;
 	int			i, holo, holoregen;
 	int			prepower = 0;
+
+	//[FatigueSys]
+	int			FatigueTime;
+	//[/FatigueSys]
+
 	//see if any force powers are running
 	if ( !self )
 	{
@@ -5270,7 +5646,7 @@ void WP_ForcePowersUpdate( gentity_t *self, usercmd_t *ucmd )
 	*/
 	//The stance in relation to power level is no longer applicable with the crazy new akimbo/staff stances.
 	if (!self->client->ps.fd.saberAnimLevel)
-	{
+	{//racc - don't ever have SS_NONE?
 		self->client->ps.fd.saberAnimLevel = FORCE_LEVEL_1;
 	}
 
@@ -5296,6 +5672,15 @@ void WP_ForcePowersUpdate( gentity_t *self, usercmd_t *ucmd )
 	{ //bad
 		self->client->ps.fd.forcePowerSelected = 0;
 	}
+
+	//Fatigued state check.  This is used because not all current deduction sources of FP check to 
+	//see if popping the flag is nessicary or not.
+	if(self->client->ps.fd.forcePower <= (self->client->ps.fd.forcePowerMax * FATIGUEDTHRESHHOLD))
+	{//Pop the Fatigued flag
+		self->client->ps.userInt3 |= ( 1 << FLAG_FATIGUED );
+	}
+	//[/FatigueSys]
+
 
 	if ( ((self->client->sess.selectedFP != self->client->ps.fd.forcePowerSelected) ||
 		(self->client->sess.saberLevel != self->client->ps.fd.saberAnimLevel)) &&
@@ -5397,6 +5782,12 @@ void WP_ForcePowersUpdate( gentity_t *self, usercmd_t *ucmd )
 				self->client->ps.forceHandExtend = HANDEXTEND_WEAPONREADY;
 			}
 		}
+		//[DodgeSys]
+		else if(self->client->ps.forceHandExtend == HANDEXTEND_DODGE)
+		{//don't do the HANDEXTEND_WEAPONREADY since it screws up our saber block code.
+			self->client->ps.forceHandExtend = HANDEXTEND_NONE;
+		}
+		//[/DodgeSys]
 		else
 		{
 			self->client->ps.forceHandExtend = HANDEXTEND_WEAPONREADY;
@@ -5730,8 +6121,20 @@ void WP_ForcePowersUpdate( gentity_t *self, usercmd_t *ucmd )
 	}
 	if ( !self->client->ps.fd.forcePowersActive || self->client->ps.fd.forcePowersActive == (1 << FP_DRAIN) )
 	{//when not using the force, regenerate at 1 point per half second
-		if ( !self->client->ps.saberInFlight && self->client->ps.fd.forcePowerRegenDebounceTime < level.time &&
-			(self->client->ps.weapon != WP_SABER || !BG_SaberInSpecial(self->client->ps.saberMove)) )
+		//[SaberThrowSys]
+		//Saber is going to be gone alot more, better be able to regen without it.
+		if (self->client->ps.fd.forcePowerRegenDebounceTime < level.time &&
+		//if ( !self->client->ps.saberInFlight && self->client->ps.fd.forcePowerRegenDebounceTime < level.time &&
+		//[/SaberThrowSys]
+			//[FatigueSys]
+			//Don't regen force while attacking with the saber.
+			(self->client->ps.weapon != WP_SABER || !BG_SaberInSpecial(self->client->ps.saberMove)) &&
+			!BG_SaberAttacking(&self->client->ps) && !BG_SaberInTransitionAny(self->client->ps.saberMove)
+			//Don't regen while running
+			&& WalkCheck(self)
+			&& self->client->ps.groundEntityNum != ENTITYNUM_NONE)  //can't regen while in the air.
+			//(self->client->ps.weapon != WP_SABER || !BG_SaberInSpecial(self->client->ps.saberMove)) )
+			//[/FatigueSys]
 		{
 			if (g_gametype.integer != GT_HOLOCRON || g_MaxHolocronCarry.value)
 			{
@@ -5774,15 +6177,24 @@ void WP_ForcePowersUpdate( gentity_t *self, usercmd_t *ucmd )
 				WP_ForcePowerRegenerate(self, holoregen);
 			}
 
+
 			if (g_gametype.integer == GT_SIEGE)
 			{
+				//[FatigueSys]
+				//removing the siege regen restriction for players carrying an objective since FP is now used for more 
+				//than just Force Powers.
+				/*
 				if (self->client->holdingObjectiveItem &&
 					g_entities[self->client->holdingObjectiveItem].inuse &&
 					g_entities[self->client->holdingObjectiveItem].genericValue15)
 				{ //1 point per 7 seconds.. super slow
 					self->client->ps.fd.forcePowerRegenDebounceTime = level.time + 7000;
 				}
-				else if (self->client->siegeClass != -1 &&
+				*/
+
+				if (self->client->siegeClass != -1 &&
+				//else if (self->client->siegeClass != -1 &&
+				//[/FatigueSys]
 					(bgSiegeClasses[self->client->siegeClass].classflags & (1<<CFL_FASTFORCEREGEN)))
 				{ //if this is siege and our player class has the fast force regen ability, then recharge with 1/5th the usual delay
 					self->client->ps.fd.forcePowerRegenDebounceTime = level.time + (g_forceRegenTime.integer*0.2);
@@ -5798,21 +6210,103 @@ void WP_ForcePowersUpdate( gentity_t *self, usercmd_t *ucmd )
 				{
 					if ( g_duel_fraglimit.integer )
 					{
-						self->client->ps.fd.forcePowerRegenDebounceTime = level.time + (g_forceRegenTime.integer*
+						//[FatigueSys]
+						FatigueTime = (g_forceRegenTime.integer*
 							(0.6 + (.3 * (float)self->client->sess.wins / (float)g_duel_fraglimit.integer)));
+						//self->client->ps.fd.forcePowerRegenDebounceTime = level.time + (g_forceRegenTime.integer*
+						//	(0.6 + (.3 * (float)self->client->sess.wins / (float)g_duel_fraglimit.integer)));
+						//[/FatigueSys]
 					}
 					else
 					{
-						self->client->ps.fd.forcePowerRegenDebounceTime = level.time + (g_forceRegenTime.integer*0.7);
+						//[FatigueSys]
+						FatigueTime = (g_forceRegenTime.integer*0.7);
+						//self->client->ps.fd.forcePowerRegenDebounceTime = level.time + (g_forceRegenTime.integer*0.7);
+						//[/FatigueSys]
 					}
 				}
 				else
 				{
-					self->client->ps.fd.forcePowerRegenDebounceTime = level.time + g_forceRegenTime.integer;
+					//[FatigueSys]
+					FatigueTime = g_forceRegenTime.integer;
+					//self->client->ps.fd.forcePowerRegenDebounceTime = level.time + g_forceRegenTime.integer;
+					//[/FatigueSys]
 				}
+
+				//[FatigueSys]
+				if(MeditateCheck(self))
+				{//more regen rate while meditating
+					self->client->ps.fd.forcePowerRegenDebounceTime = level.time + (FatigueTime/4);
+
+					//[Test]
+					//simple debugging messages for determining if the meditation regen is working.
+					if(d_test.integer != -1 && self->client->ps.clientNum == d_test.integer)
+					{
+						trap_SendServerCommand( d_test.integer, va("print \"%i: Meditation FP Regen. Next RegenTime: %i\n\"", d_test.integer, FatigueTime/3 ) );
+					}
+					//[/Test]
+				}
+				else
+				{//standard regen
+					self->client->ps.fd.forcePowerRegenDebounceTime = level.time + FatigueTime;
+					//[Test]
+					//simple debugging messages for determining if the meditation regen is working.
+					if(d_test.integer != -1 && self->client->ps.clientNum == d_test.integer)
+					{
+						trap_SendServerCommand( d_test.integer, va("print \"%i: Normal FP Regen. Next RegenTime: %i\n\"", d_test.integer, FatigueTime ) );
+					}
+					//[/Test]
+				}
+				//[/FatigueSys]
 			}
+
+			//[FatigueSys]
+			if( self->client->ps.fd.forcePower > (self->client->ps.fd.forcePowerMax * FATIGUEDTHRESHHOLD) )
+			{//You gained some FP back.  Cancel the Fatigue status.
+				self->client->ps.userInt3 &= ~( 1 << FLAG_FATIGUED );
+			}
+			//[/FatigueSys]
 		}
 	}
+
+	//[DodgeSys]
+	if(self->client->DodgeDebounce < level.time  
+		&& !BG_InSlowBounce(&self->client->ps) && !PM_SaberInBrokenParry(self->client->ps.saberMove)
+		&& !PM_InKnockDown(&self->client->ps) && self->client->ps.forceHandExtend != HANDEXTEND_DODGE
+		&& self->client->ps.groundEntityNum != ENTITYNUM_NONE)  //can't regen while in the air.
+	{
+		if((self->client->ps.fd.forcePower > (self->client->ps.fd.forcePowerMax * FATIGUEDTHRESHHOLD)+1)
+			&& self->client->ps.stats[STAT_DODGE] < DODGE_MAX)
+		{//you have enough fatigue to transfer to Dodge
+			if(DODGE_MAX - self->client->ps.stats[STAT_DODGE] < DODGE_FATIGUE)
+			{
+				self->client->ps.stats[STAT_DODGE] = DODGE_MAX;
+			}
+			else
+			{
+				self->client->ps.stats[STAT_DODGE] += DODGE_FATIGUE;
+			}
+			self->client->ps.fd.forcePower--;
+		}
+		
+		self->client->DodgeDebounce = level.time + g_dodgeRegenTime.integer;
+	}
+	//[/DodgeSys]
+
+	//[SaberSys]
+	if(self->client->MishapDebounce < level.time  
+		&& !BG_InSlowBounce(&self->client->ps) && !PM_SaberInBrokenParry(self->client->ps.saberMove)
+		&& !PM_InKnockDown(&self->client->ps) && self->client->ps.forceHandExtend != HANDEXTEND_DODGE
+		&& self->client->ps.groundEntityNum != ENTITYNUM_NONE)  //can't regen while in the air.
+	{
+		if(self->client->ps.saberAttackChainCount > 0)
+		{
+			self->client->ps.saberAttackChainCount--;
+		}
+		
+		self->client->MishapDebounce = level.time + g_mishapRegenTime.integer;
+	}
+	//[/SaberSys]
 
 powersetcheck:
 

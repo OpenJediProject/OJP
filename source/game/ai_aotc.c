@@ -5437,7 +5437,7 @@ void ScenarioBotAI(bot_state_t *bs, float thinktime)
 	}
 #endif
 
-*/
+
 /*	{// Bots should use vehicles in scenario... So...
 		int i = 0;
 		gentity_t *vehicle = NULL;
@@ -5476,8 +5476,7 @@ void ScenarioBotAI(bot_state_t *bs, float thinktime)
 			}
 			return;
 		}
-	}
-*/
+	}*/
 /*
 
 	if (!bs->lastDeadTime)
@@ -5746,7 +5745,7 @@ void ScenarioBotAI(bot_state_t *bs, float thinktime)
 			return;
 		}
 	}
-	*//*if (BotSelectMelee(bs))
+	/*if (BotSelectMelee(bs))
 	{
 		return;
 	}*/
@@ -5848,7 +5847,7 @@ void ScenarioBotAI(bot_state_t *bs, float thinktime)
 	}
 
 	if (bs->enemySeenTime < level.time || !bs->frame_Enemy_Vis || !bs->currentEnemy ||
-		(bs->currentEnemy *//*&& bs->cur_ps.weapon == WP_SABER))
+		(bs->currentEnemy /*&& bs->cur_ps.weapon == WP_SABER))
 	{
 		enemy = ScanForEnemies(bs);
 
@@ -6188,7 +6187,7 @@ void ScenarioBotAI(bot_state_t *bs, float thinktime)
 			VectorCopy(bs->goalAngles, b_angle);
 	
 			AngleVectors(b_angle, fwd, NULL, NULL);
-*/
+
 			/*if (bs->BOTjumpState <= JS_WAITING // Not in a jump right now.
 				&& CheckFall_By_Vectors(bs->cur_ps.origin, fwd, &g_entities[bs->entitynum]) == qtrue) // We're gonna fall!!!
 			{
@@ -6569,7 +6568,7 @@ void ScenarioBotAI(bot_state_t *bs, float thinktime)
 			}
 		}
 	}
-*/
+
 /*	if (doingFallback && bs->currentEnemy
 		&& g_entities[bs->entitynum].client->ps.weapon != WP_SABER) //just stand and fire if we have no idea where we are
 	{
@@ -6928,7 +6927,7 @@ void ScenarioBotAI(bot_state_t *bs, float thinktime)
 	{
 		trap_EA_Crouch(bs->client);
 	}
-*/
+
 	/*if ( bs->dangerousObject && bs->dangerousObject->inuse && bs->dangerousObject->health > 0 &&
 		bs->dangerousObject->takedamage && (!bs->frame_Enemy_Vis || !bs->currentEnemy) &&
 		(BotGetWeaponRange(bs) == BWEAPONRANGE_MID || BotGetWeaponRange(bs) == BWEAPONRANGE_LONG) &&

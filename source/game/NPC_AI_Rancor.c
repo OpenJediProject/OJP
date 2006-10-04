@@ -130,8 +130,10 @@ void Rancor_Move( qboolean visible )
 }
 
 //---------------------------------------------------------
-//extern void G_Knockdown( gentity_t *self, gentity_t *attacker, const vec3_t pushDir, float strength, qboolean breakSaberLock );
-extern void G_Knockdown( gentity_t *victim );
+//[KnockdownSys]
+extern void G_Knockdown( gentity_t *self, gentity_t *attacker, const vec3_t pushDir, float strength, qboolean breakSaberLock );
+//extern void G_Knockdown( gentity_t *victim );
+//[/KnockdownSys]
 extern void G_Dismember( gentity_t *ent, gentity_t *enemy, vec3_t point, int limbType, float limbRollBase, float limbPitchBase, int deathAnim, qboolean postDeath );
 //extern qboolean G_DoDismemberment( gentity_t *self, vec3_t point, int mod, int damage, int hitLoc, qboolean force );
 extern float NPC_EntRangeFromBolt( gentity_t *targEnt, int boltIndex );
@@ -297,7 +299,11 @@ void Rancor_Swing( qboolean tryGrab )
 					G_Throw( radiusEnt, pushDir, 250 );
 					if ( radiusEnt->health > 0 )
 					{//do pain on enemy
-						G_Knockdown( radiusEnt );//, NPC, pushDir, 100, qtrue );
+						//[KnockdownSys]
+						//reenabled multi-direction knockdowns.
+						G_Knockdown( radiusEnt, NPC, pushDir, 100, qtrue );
+						//G_Knockdown( radiusEnt );//, NPC, pushDir, 100, qtrue );
+						//[/KnockdownSys]
 					}
 				}
 			}
@@ -363,7 +369,11 @@ void Rancor_Smash( void )
 				if ( distSq < halfRadSquared 
 					|| radiusEnt->client->ps.groundEntityNum != ENTITYNUM_NONE )
 				{//within range of my fist or withing ground-shaking range and not in the air
-					G_Knockdown( radiusEnt );//, NPC, vec3_origin, 100, qtrue );
+					//[KnockdownSys]
+					//ported multi-direction knockdowns from SP.
+					G_Knockdown( radiusEnt, NPC, vec3_origin, 100, qtrue );
+					//G_Knockdown( radiusEnt );//, NPC, vec3_origin, 100, qtrue );
+					//[/KnockdownSys]
 				}
 			}
 		}

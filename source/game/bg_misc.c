@@ -178,7 +178,11 @@ int forceMasteryPoints[NUM_FORCE_MASTERY_LEVELS] =
 int bgForcePowerCost[NUM_FORCE_POWERS][NUM_FORCE_POWER_LEVELS] = //0 == neutral
 {
 	{	0,	2,	4,	6	},	// Heal			// FP_HEAL
-	{	0,	0,	2,	6	},	// Jump			//FP_LEVITATION,//hold/duration
+	//[ExpSys]
+	//we want jump to cost something as well.
+	{	0,	2,	4,	6	},	// Jump			//FP_LEVITATION,//hold/duration
+	//{	0,	0,	2,	6	},	// Jump			//FP_LEVITATION,//hold/duration
+	//[/ExpSys]
 	{	0,	2,	4,	6	},	// Speed		//FP_SPEED,//duration
 	{	0,	1,	3,	6	},	// Push			//FP_PUSH,//hold/duration
 	{	0,	1,	3,	6	},	// Pull			//FP_PULL,//hold/duration
@@ -438,6 +442,11 @@ it based on the supposed rank and spit it into powerOut, returning true if it wa
 to begin with and false if not.
 fpDisabled is actually only expected (needed) from the server, because the ui disables
 force power selection anyway when force powers are disabled on the server.
+
+//racc
+powerOut - The forcepowers string that we're checking.
+maxRank - The current force mastery level.  In Enhanced, this is the current skill point total for this player.
+freeSaber - Players get the saber combat skill for free.
 ================
 */
 qboolean BG_LegalizedForcePowers(char *powerOut, int maxRank, qboolean freeSaber, int teamForce, int gametype, int fpDisabled)
@@ -469,11 +478,13 @@ qboolean BG_LegalizedForcePowers(char *powerOut, int maxRank, qboolean freeSaber
 	//first of all, print the max rank into the string as the rank
 	strcpy(powerOut, va("%i-", maxRank));
 
+	//racc - skip over the maxRank in the string and the following '-'
 	while (i < 128 && powerBuf[i] && powerBuf[i] != '-')
 	{
 		i++;
 	}
 	i++;
+	//racc - read the force side part of powerBuf into the readBuf.
 	while (i < 128 && powerBuf[i] && powerBuf[i] != '-')
 	{
 		readBuf[c] = powerBuf[i];
@@ -514,13 +525,20 @@ qboolean BG_LegalizedForcePowers(char *powerOut, int maxRank, qboolean freeSaber
 		i++;
 	}
 
+	//[ExpSys]
 	//final_Powers now contains all the stuff from the string
 	//Set the maximum allowed points used based on the max rank level, and count the points actually used.
-	allowedPoints = forceMasteryPoints[maxRank];
+	allowedPoints = maxRank;
+	//allowedPoints = forceMasteryPoints[maxRank];
+	//[/ExpSys]
 
+	//racc - check to see if this power is approprate for your force side or if it's been disabled.
 	i = 0;
 	while (i < NUM_FORCE_POWERS)
 	{ //if this power doesn't match the side we're on, then 0 it now.
+		//[ForceSys]
+		//allowing players to use players from both sides of the force now.
+		/*
 		if (final_Powers[i] &&
 			forcePowerDarkLight[i] &&
 			forcePowerDarkLight[i] != final_Side)
@@ -528,6 +546,8 @@ qboolean BG_LegalizedForcePowers(char *powerOut, int maxRank, qboolean freeSaber
 			final_Powers[i] = 0;
 			//This is only likely to happen with g_forceBasedTeams. Let it slide.
 		}
+		*/
+		//[/ForceSys]
 
 		if ( final_Powers[i] &&
 			(fpDisabled & (1 << i)) )
@@ -544,6 +564,7 @@ qboolean BG_LegalizedForcePowers(char *powerOut, int maxRank, qboolean freeSaber
 		final_Powers[FP_TEAM_FORCE] = 0;
 	}
 
+	//racc - calculate the total cost of our current selection of force powers.
 	usedPoints = 0;
 	i = 0;
 	while (i < NUM_FORCE_POWERS)
@@ -557,8 +578,11 @@ qboolean BG_LegalizedForcePowers(char *powerOut, int maxRank, qboolean freeSaber
 			usedPoints += bgForcePowerCost[i][countDown]; //[fp index][fp level]
 			//if this is jump, or we have a free saber and it's offense or defense, take the level back down on level 1
 			if ( countDown == 1 &&
-				((i == FP_LEVITATION) ||
-				 (i == FP_SABER_OFFENSE && freeSaber) ||
+				//[ExpSys]
+				((i == FP_SABER_OFFENSE && freeSaber) ||
+				//((i == FP_LEVITATION) ||
+				// (i == FP_SABER_OFFENSE && freeSaber) ||
+				//[/ExpSys]
 				 (i == FP_SABER_DEFENSE && freeSaber)) )
 			{
 				usedPoints -= bgForcePowerCost[i][countDown];
@@ -600,6 +624,7 @@ qboolean BG_LegalizedForcePowers(char *powerOut, int maxRank, qboolean freeSaber
 							whichOne = FP_SABER_DEFENSE; //if no throw, drain defense
 						}
 
+						//reduce either Saber Defense or Saberthrow to zero or until we have enough points.
 						while (final_Powers[whichOne] > 0 && usedPoints > allowedPoints)
 						{
 							if ( final_Powers[whichOne] > 1 ||
@@ -620,10 +645,14 @@ qboolean BG_LegalizedForcePowers(char *powerOut, int maxRank, qboolean freeSaber
 						while (final_Powers[c] > 0 && usedPoints > allowedPoints)
 						{
 							if ( final_Powers[c] > 1 ||
-								((c != FP_LEVITATION) &&
-								(c != FP_SABER_OFFENSE || !freeSaber) &&
+								//[ExpSys]
+								//Force Jump level 1 no longer free.
+								((c != FP_SABER_OFFENSE || !freeSaber) &&
+								//((c != FP_LEVITATION) &&
+								//(c != FP_SABER_OFFENSE || !freeSaber) &&
+								//[/ExpSys]
 								(c != FP_SABER_DEFENSE || !freeSaber)) )
-							{
+							{//racc - don't reduce Force Jump/Saber Offense or Defense below level 1 because they're "free". 
 								usedPoints -= bgForcePowerCost[c][final_Powers[c]];
 								final_Powers[c]--;
 							}
@@ -654,8 +683,11 @@ qboolean BG_LegalizedForcePowers(char *powerOut, int maxRank, qboolean freeSaber
 			while (i < NUM_FORCE_POWERS)
 			{
 				final_Powers[i] = 0;
-				if (i == FP_LEVITATION ||
-					(i == FP_SABER_OFFENSE && freeSaber) ||
+				//[ExpSys]
+				if((i == FP_SABER_OFFENSE && freeSaber) ||
+				//if (i == FP_LEVITATION ||
+				//	(i == FP_SABER_OFFENSE && freeSaber) ||
+				//[/ExpSys]
 					(i == FP_SABER_DEFENSE && freeSaber))
 				{
 					final_Powers[i] = 1;
@@ -677,10 +709,14 @@ qboolean BG_LegalizedForcePowers(char *powerOut, int maxRank, qboolean freeSaber
 			final_Powers[FP_SABER_DEFENSE] = 1;
 		}
 	}
+	//[ExpSys]
+	/*
 	if (final_Powers[FP_LEVITATION] < 1)
 	{
 		final_Powers[FP_LEVITATION] = 1;
 	}
+	*/
+	//[/ExpSys]
 
 	i = 0;
 	while (i < NUM_FORCE_POWERS)
@@ -695,11 +731,15 @@ qboolean BG_LegalizedForcePowers(char *powerOut, int maxRank, qboolean freeSaber
 	if (fpDisabled)
 	{ //If we specifically have attack or def disabled, force them up to level 3. It's the way
 	  //things work for the case of all powers disabled.
+		//[ExpSys]
+		/*
 	  //If jump is disabled, down-cap it to level 1. Otherwise don't do a thing.
 		if (fpDisabled & (1 << FP_LEVITATION))
 		{
 			final_Powers[FP_LEVITATION] = 1;
 		}
+		*/
+		//[/ExpSys]
 		if (fpDisabled & (1 << FP_SABER_OFFENSE))
 		{
 			final_Powers[FP_SABER_OFFENSE] = 3;
@@ -710,6 +750,7 @@ qboolean BG_LegalizedForcePowers(char *powerOut, int maxRank, qboolean freeSaber
 		}
 	}
 
+	//racc - can't have saber defense or throw without saber offense.
 	if (final_Powers[FP_SABER_OFFENSE] < 1)
 	{
 		final_Powers[FP_SABER_DEFENSE] = 0;
@@ -2058,8 +2099,12 @@ void BG_CycleForce(playerState_t *ps, int direction)
 		{ //we have the force power
 			if (i != FP_LEVITATION &&
 				i != FP_SABER_OFFENSE &&
-				i != FP_SABER_DEFENSE &&
-				i != FP_SABERTHROW)
+			//[SaberSys]
+			//Making Saber Throw a selectable power.
+				i != FP_SABER_DEFENSE)
+			//	i != FP_SABER_DEFENSE &&
+			//	i != FP_SABERTHROW)
+			//[/SaberSys]
 			{ //it's selectable
 				foundnext = i;
 				break;
@@ -2487,7 +2532,11 @@ char *eventnames[] = {
 
 	"EV_FALL",
 
-	"EV_JUMP_PAD",			// boing sound at origin", jump sound on player
+	//[SaberLockSys]
+	//replaced EV_JUMP_PAD with EV_SABERLOCK
+	"EV_SABERLOCK",				// Player is in saberlock (render sound/effects)
+	//"EV_JUMP_PAD",			// boing sound at origin", jump sound on player
+	//[/SaberLockSys]
 
 	"EV_GHOUL2_MARK",			//create a projectile impact mark on something with a client-side g2 instance.
 
@@ -3004,6 +3053,10 @@ void BG_PlayerStateToEntityState( playerState_t *ps, entityState_t *s, qboolean 
 	s->loopSound = ps->loopSound;
 	s->generic1 = ps->generic1;
 
+	//[FatigueSys]
+	s->userInt3 = ps->userInt3;
+	//[/FatigueSys]
+
 	//NOT INCLUDED IN ENTITYSTATETOPLAYERSTATE:
 	s->modelindex2 = ps->weaponstate;
 	s->constantLight = ps->weaponChargeTime;
@@ -3156,6 +3209,9 @@ void BG_PlayerStateToEntityStateExtraPolate( playerState_t *ps, entityState_t *s
 	s->loopSound = ps->loopSound;
 	s->generic1 = ps->generic1;
 
+	//[FatigueSys]
+	s->userInt3 = ps->userInt3;
+	//[/FatigueSys]
 
 	//NOT INCLUDED IN ENTITYSTATETOPLAYERSTATE:
 	s->modelindex2 = ps->weaponstate;

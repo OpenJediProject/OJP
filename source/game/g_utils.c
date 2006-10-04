@@ -2223,6 +2223,9 @@ qboolean G_ExpandPointToBBox( vec3_t point, const vec3_t mins, const vec3_t maxs
 	return qtrue;
 }
 
+
+//[SaberLockSys]
+/* moved this to q_math.c so that it could be used for the new saber lock effects on the client side.
 extern qboolean G_FindClosestPointOnLineSegment( const vec3_t start, const vec3_t end, const vec3_t from, vec3_t result );
 float ShortestLineSegBewteen2LineSegs( vec3_t start1, vec3_t end1, vec3_t start2, vec3_t end2, vec3_t close_pnt1, vec3_t close_pnt2 )
 {
@@ -2327,7 +2330,7 @@ float ShortestLineSegBewteen2LineSegs( vec3_t start1, vec3_t end1, vec3_t start2
 		VectorCopy( new_pnt, close_pnt2 );
 		current_dist = new_dist;
 	}
-	*/
+	*//*
 	//test all the endpoints
 	new_dist = Distance( start1, start2 );
 	if ( new_dist < current_dist )
@@ -2401,6 +2404,9 @@ float ShortestLineSegBewteen2LineSegs( vec3_t start1, vec3_t end1, vec3_t start2
 
 	return current_dist;
 }
+*/
+//[/SaberLockSys]
+
 
 void GetAnglesForDirection( const vec3_t p1, const vec3_t p2, vec3_t out )
 {

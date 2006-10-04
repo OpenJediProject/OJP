@@ -1153,7 +1153,6 @@ void G_CheckMinimumPlayers( void ) {
 				if(g_gametype.integer < GT_TEAM)
 				{//no teams, just remove a bot.
 					G_RemoveRandomBot(-1);
-
 				}
 				else if( g_teamForceBalance.integer > 1 )
 				{//team game, determine which team to pull from.
@@ -1163,30 +1162,17 @@ void G_CheckMinimumPlayers( void ) {
 					counts[TEAM_BLUE] = TeamCount( -1, TEAM_BLUE );
 					counts[TEAM_RED] = TeamCount( -1, TEAM_RED );
 
-					if(counts[TEAM_RED] - counts[TEAM_BLUE] > 1)
+					//always remove bot from the team with the most players on it.
+					//that should always balance the teams properly, except for human/bot
+					//balancing.
+					if(counts[TEAM_RED] > counts[TEAM_BLUE])
 					{//red team has too many players
 						botRemoveTeam = TEAM_RED;
 					}
-					else if(counts[TEAM_BLUE] - counts[TEAM_RED] > 1)
+					else if(counts[TEAM_BLUE] > counts[TEAM_RED])
 					{//blue team has too many players
 						botRemoveTeam = TEAM_BLUE;
 					}
-
-					if(g_teamForceBalance.integer >= 3 && g_gametype.integer != GT_SIEGE )
-					{//check the scores 
-						if(level.teamScores[TEAM_BLUE] - OJP_PointSpread() >= level.teamScores[TEAM_RED] 
-							&& counts[TEAM_BLUE] > counts[TEAM_RED])
-						{//blue team is ahead but also has more players
-							botRemoveTeam = TEAM_BLUE;
-						}
-						else if(level.teamScores[TEAM_RED] - OJP_PointSpread() >= level.teamScores[TEAM_BLUE] 
-							&& counts[TEAM_RED] > counts[TEAM_BLUE])
-						{//red team is ahead but also has more players
-							botRemoveTeam = TEAM_RED;
-						}
-					}
-
-					//I would balance humans at this point, but you can't do that by removing bots.
 
 					if(botRemoveTeam == -1 || !G_RemoveRandomBot(botRemoveTeam))
 					{//didn't have a specific team to remove from or we couldn't remove from the team
@@ -1589,8 +1575,8 @@ static void G_AddBot( const char *name, float skill, const char *team, int delay
 
 	//[ClientPlugInDetect]
 	//set it so that the bots are assumed to have the OJP client plugin
-	//this should be CURRENT_OJPBASIC_CLIENTVERSION
-	Info_SetValueForKey( userinfo, "ojp_clientplugin", CURRENT_OJPBASIC_CLIENTVERSION );
+	//this should be CURRENT_OJPENHANCED_CLIENTVERSION
+	Info_SetValueForKey( userinfo, "ojp_clientplugin", CURRENT_OJPENHANCED_CLIENTVERSION );
 	//[/ClientPlugInDetect]
 
 	// have the server allocate a client slot
@@ -1642,11 +1628,10 @@ static void G_AddBot( const char *name, float skill, const char *team, int delay
 	// register the userinfo
 	trap_SetUserinfo( clientNum, userinfo );
 
-	//[CoOp]
-	//racc - allow bots to the friendly or enemy teams in CoOp
-	if (g_gametype.integer >= GT_SINGLE_PLAYER)
-	//if (g_gametype.integer >= GT_TEAM)
-	//[/CoOp]	
+	//[NewGameTypes][EnhancedImpliment]
+	//if (g_gametype.integer >= GT_TEAM && g_gametype.integer != GT_RPG)
+	if (g_gametype.integer >= GT_TEAM)
+	//[/NewGameTypes][EnhancedImpliment]
 	{
 		if (team && Q_stricmp(team, "red") == 0)
 		{

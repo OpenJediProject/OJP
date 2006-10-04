@@ -23,97 +23,124 @@ assetGlobalDef
 
 	//	LEFT SIDE HUD - contains the armor and health
 	//
+	//[NewHud]
 	menuDef 
 	{
 		name					"lefthud"
 		fullScreen				0						// MENU_FALSE
-		rect					0 368 112 112				// Size and position of the menu
+		rect					0 368 100 100				// Size and position of the menu
 		visible				1						// Visible on open
+		focusColor				1 1 1 1					// Focus color for text and items
+		appearanceIncrement		75						// In miliseconds
+		descX					320
+		descY					434
+		descColor				.96 .933 .40 1				// Focus color for text and items
 
 		// Metal Frame
 		itemDef 
 		{
 			name				"frame"
 			forecolor			1 1 1 1
-			background			"gfx/hud/hudleft"
-			rect				0 0 112 112				// (these positions are relative to the initial position of the menu) 
+			background			"gfx/hud/hudleft.png"
+			rect				0 -20 120 120			// (these positions are relative to the initial position of the menu) 
 												// X pos, Y pos, char size, char height
 		}		
-
-
-		// Health tics
-		itemDef 
-		{
-			name				health_tic1
-			background			"gfx/hud/health_tic_1"
-			forecolor			1 1 1 1
-			rect				20 24 28 28			// (these positions are relative to the initial position of the menu) 
-												// X pos, Y pos, graphic size, graphic height
-		}		
-
-		itemDef 
-		{
-			name				health_tic2
-			background			"gfx/hud/health_tic_2"
-			forecolor			1 1 1 1
-			rect				38 33 28 28			// (these positions are relative to the initial position of the menu) 
-												// X pos, Y pos, graphic size, graphic height
-		}		
-
-		itemDef 
-		{
-			name				health_tic3
-			background			"gfx/hud/health_tic_3"
-			forecolor			1 1 1 1
-			rect				52 47 28 28			// (these positions are relative to the initial position of the menu) 
-												// X pos, Y pos, graphic size, graphic height
-		}		
-
-		itemDef 
-		{
-			name				health_tic4
-			background			"gfx/hud/health_tic_4"
-			forecolor			1 1 1 1
-			rect				60 65 28 28			// (these positions are relative to the initial position of the menu) 
-												// X pos, Y pos, graphic size, graphic height
-		}		
-
+		
 		// Armor tics
 		itemDef 
 		{
-			name				armor_tic1
-			background			"gfx/hud/armor_tic_1"
+			name				"armor_tic1"
+			background			"gfx/hud/armor_tic8.png"
 			forecolor			1 1 1 1
-			rect				9 -6 56 56			// (these positions are relative to the initial position of the menu) 
+			rect				50 22 37 42			// (these positions are relative to the initial position of the menu) 
+												// X pos, Y pos, graphic size, graphic height
+		}
+		
+				itemDef 
+		{
+			name				"armor_tic2"
+			background			"gfx/hud/armor_tic7.png"
+			forecolor			1 1 1 1
+			rect				50 22 37 42			// (these positions are relative to the initial position of the menu) 
+												// X pos, Y pos, graphic size, graphic height
+		}
+		
+				itemDef 
+		{
+			name				"armor_tic3"
+			background			"gfx/hud/armor_tic6.png"
+			forecolor			1 1 1 1
+			rect				50 22 37 42			// (these positions are relative to the initial position of the menu) 
+												// X pos, Y pos, graphic size, graphic height
+		}
+		
+				itemDef 
+		{
+			name				"armor_tic4"
+			background			"gfx/hud/armor_tic5.png"
+			forecolor			1 1 1 1
+			rect				50 22 37 42			// (these positions are relative to the initial position of the menu) 
+												// X pos, Y pos, graphic size, graphic height
+		}
+		
+				itemDef 
+		{
+			name				"armor_tic5"
+			background			"gfx/hud/armor_tic4.png"
+			forecolor			1 1 1 1
+			rect				50 22 37 42			// (these positions are relative to the initial position of the menu) 
+												// X pos, Y pos, graphic size, graphic height
+		}
+		
+				itemDef 
+		{
+			name				"armor_tic6"
+			background			"gfx/hud/armor_tic3.png"
+			forecolor			1 1 1 1
+			rect				50 22 37 42			// (these positions are relative to the initial position of the menu) 
+												// X pos, Y pos, graphic size, graphic height
+		}
+		
+				itemDef 
+		{
+			name				"armor_tic7"
+			background			"gfx/hud/armor_tic2.png"
+			forecolor			1 1 1 1
+			rect				50 22 37 42			// (these positions are relative to the initial position of the menu) 
+												// X pos, Y pos, graphic size, graphic height
+		}
+		
+				itemDef 
+		{
+			name				"armor_tic8"
+			background			"gfx/hud/armor_tic1.png"
+			forecolor			1 1 1 1
+			rect				50 22 37 42			// (these positions are relative to the initial position of the menu) 
+												// X pos, Y pos, graphic size, graphic height
+		}
+		
+		//Armor tics shell
+		itemDef
+	{
+		name					"armorshell"
+		background		"gfx/hud/armorshell.png"
+		forecolor			1 1 1 1
+		rect					50 22 37 42	
+	}
+
+
+
+		// Health tic
+		itemDef 
+		{
+			name				"health_tic1"
+			background			"gfx/hud/healthtic.tga"
+			forecolor			1 1 1 1
+			rect				56.5 34 24 17			// (these positions are relative to the initial position of the menu) 
 												// X pos, Y pos, graphic size, graphic height
 		}		
 
-		itemDef 
-		{
-			name				armor_tic2
-			background			"gfx/hud/armor_tic_2"
-			forecolor			1 1 1 1
-			rect				34 3 56 56			// (these positions are relative to the initial position of the menu) 
-												// X pos, Y pos, graphic size, graphic height
-		}		
 
-		itemDef 
-		{
-			name				armor_tic3
-			background			"gfx/hud/armor_tic_3"
-			forecolor			1 1 1 1
-			rect				54 24 56 56			// (these positions are relative to the initial position of the menu) 
-												// X pos, Y pos, graphic size, graphic height
-		}		
-
-		itemDef 
-		{
-			name				armor_tic4
-			background			"gfx/hud/armor_tic_4"
-			forecolor			1 1 1 1
-			rect				63 48 56 56			// (these positions are relative to the initial position of the menu) 
-												// X pos, Y pos, graphic size, graphic height
-		}		
 
 		// Scan line
 //		itemDef 
@@ -132,8 +159,8 @@ assetGlobalDef
 		{
 			name				armoramount
 			group				none
-			forecolor			0.0 .613 .097 1
-			rect				85 98 6 12				// (these positions are relative to the initial position of the menu) 
+			forecolor			0.0 .813 .097 1
+			rect				78 75 4 8				// (these positions are relative to the initial position of the menu) 
 												// X pos, Y pos, char size, char height
 			visible			1
 		}		
@@ -144,7 +171,7 @@ assetGlobalDef
 			name				healthamount
 			group				none
 			forecolor			.835 .015 .015 1
-			rect				59 98 6 12				// (these positions are relative to the initial position of the menu) 
+			rect				42 75 4 8				// (these positions are relative to the initial position of the menu) 
 												// X pos, Y pos, char size, char height
 		}		
 
@@ -183,7 +210,7 @@ assetGlobalDef
 	{
 		name					"righthud"
 		fullScreen				0						// MENU_FALSE
-		rect					640 368 -112 112				// Size and position of the menu
+		rect					640 368 -100 100				// Size and position of the menu
 		visible				1						// Visible on open
 		focusColor				1 1 1 1					// Focus color for text and items
 		appearanceIncrement		75						// In miliseconds
@@ -202,15 +229,16 @@ assetGlobalDef
 //												// X pos, Y pos, char size, char height
 //		}		
 
-		// Metal Frame
+		// Right Metal Frame
 		itemDef 
 		{
 			name				"frame"
 			forecolor			1 1 1 1
-			background			"gfx/hud/hudleft"
-			rect				0 0 -112 112			// (these positions are relative to the initial position of the menu) 
+			background			"gfx/hud/hudright.png"
+			rect				0 -20 -120 120			// (these positions are relative to the initial position of the menu) 
 												// X pos, Y pos, char size, char height
 		}		
+		
 
 
 		// Ammo tics
@@ -219,36 +247,74 @@ assetGlobalDef
 			name				ammo_tic1
 			background			"gfx/hud/ammo_tic_1"
 			forecolor			1 1 1 1
-			rect				-48  25 28 28			// (these positions are relative to the initial position of the menu) 
+			rect				-57  77.5 6.5 7			// (these positions are relative to the initial position of the menu) 
 												// X pos, Y pos, graphic size, graphic height
 		}		
 
 		itemDef 
 		{
 			name				ammo_tic2
-			background			"gfx/hud/ammo_tic_2"
+			background			"gfx/hud/ammo_tic_1"
 			forecolor			1 1 1 1
-			rect				-66  33 28 28			// (these positions are relative to the initial position of the menu) 
+			rect				-63.5  77.5  6.5 7			// (these positions are relative to the initial position of the menu) 
 												// X pos, Y pos, graphic size, graphic height
 		}		
 
 		itemDef 
 		{
 			name				ammo_tic3
-			background			"gfx/hud/ammo_tic_3"
+			background			"gfx/hud/ammo_tic_1"
 			forecolor			1 1 1 1
-			rect				-80  47 28 28			// (these positions are relative to the initial position of the menu) 
+			rect				-70  77.5 6.5 7			// (these positions are relative to the initial position of the menu) 
+												// X pos, Y pos, graphic size, graphic height
+		}		
+		
+				itemDef 
+		{
+			name				ammo_tic4
+			background			"gfx/hud/ammo_tic_1"
+			forecolor			1 1 1 1
+			rect				-76.5  77.5 6.5 7			// (these positions are relative to the initial position of the menu) 
 												// X pos, Y pos, graphic size, graphic height
 		}		
 
 		itemDef 
 		{
-			name				ammo_tic4
-			background			"gfx/hud/ammo_tic_4"
+			name				ammo_tic5
+			background			"gfx/hud/ammo_tic_1"
 			forecolor			1 1 1 1
-			rect				-88  65 28 28			// (these positions are relative to the initial position of the menu) 
+			rect				-83  77.5 6.5 7			// (these positions are relative to the initial position of the menu) 
 												// X pos, Y pos, graphic size, graphic height
 		}		
+		
+				itemDef 
+		{
+			name				ammo_tic6
+			background			"gfx/hud/ammo_tic_1"
+			forecolor			1 1 1 1
+			rect				-89.5 77.5 6.5 7			// (these positions are relative to the initial position of the menu) 
+												// X pos, Y pos, graphic size, graphic height
+		}		
+		
+				itemDef 
+		{
+			name				ammo_tic7
+			background			"gfx/hud/ammo_tic_1"
+			forecolor			1 1 1 1
+			rect				-96  77.5 6.5 7		// (these positions are relative to the initial position of the menu) 
+												// X pos, Y pos, graphic size, graphic height
+		}		
+		
+				itemDef 
+		{
+			name				ammo_tic8
+			background			"gfx/hud/ammo_tic_1"
+			forecolor			1 1 1 1
+			rect				-102.5  77.5 6.5 7			// (these positions are relative to the initial position of the menu) 
+												// X pos, Y pos, graphic size, graphic height
+		}		
+		
+		
 
 		// Force tics
 		itemDef 
@@ -256,36 +322,210 @@ assetGlobalDef
 			name				force_tic1
 			background			"gfx/hud/force_tic_1"
 			forecolor			1 1 1 1
-			rect				-65  -5 56 56			// (these positions are relative to the initial position of the menu) 
-												// X pos, Y pos, graphic size, graphic height
+			rect				-76  -3.5 15 8.55			// (these positions are relative to the initial position of the menu)
+															// X pos, Y pos, graphic size, graphic height
 		}		
 
 		itemDef 
 		{
 			name				force_tic2
-			background			"gfx/hud/force_tic_2"
+			background			"gfx/hud/force_tic_1"
 			forecolor			1 1 1 1
-			rect				-89  4 56 56			// (these positions are relative to the initial position of the menu) 
-												// X pos, Y pos, graphic size, graphic height
+			rect				-76  5.05 15 8.55			// (these positions are relative to the initial position of the menu) 
+															// X pos, Y pos, graphic size, graphic height
 		}		
 
 		itemDef 
 		{
 			name				force_tic3
-			background			"gfx/hud/force_tic_3"
+			background			"gfx/hud/force_tic_1"
 			forecolor			1 1 1 1
-			rect				-109  24 56 56			// (these positions are relative to the initial position of the menu) 
-												// X pos, Y pos, graphic size, graphic height
+			rect				-76  13.6 15 8.55			// (these positions are relative to the initial position of the menu) 
+															// X pos, Y pos, graphic size, graphic height
 		}		
 
 		itemDef 
 		{
 			name				force_tic4
-			background			"gfx/hud/force_tic_4"
+			background			"gfx/hud/force_tic_1"
 			forecolor			1 1 1 1
-			rect				-119  48 56 56			// (these positions are relative to the initial position of the menu) 
-												// X pos, Y pos, graphic size, graphic height
+			rect				-76  22.15 15 8.55			// (these positions are relative to the initial position of the menu) 
+															// X pos, Y pos, graphic size, graphic height
+		}
+		
+		itemDef 
+		{
+			name					force_tic5
+			background			"gfx/hud/force_tic_1"
+			forecolor			1 1 1 1
+			rect				-76  30.7 15 8.55			// (these positions are relative to the initial position of the menu) 
+															// X pos, Y pos, graphic size, graphic height
 		}		
+
+		itemDef 
+		{
+			name				force_tic6
+			background			"gfx/hud/force_tic_1"
+			forecolor			1 1 1 1
+			rect				-76  39.25 15 8.55			// (these positions are relative to the initial position of the menu) 
+															// X pos, Y pos, graphic size, graphic height
+		}
+		
+		itemDef 
+		{
+			name				force_tic7
+			background			"gfx/hud/force_tic_1"
+			forecolor			1 1 1 1
+			rect				-76  47.8 15 8.55			// (these positions are relative to the initial position of the menu) 
+															// X pos, Y pos, graphic size, graphic height
+		}
+		
+		itemDef 
+		{
+			name				force_tic8
+			background			"gfx/hud/force_tic_1"
+			forecolor			1 1 1 1
+			rect				-76 56.35 15 8.55			// (these positions are relative to the initial position of the menu) 
+												// X pos, Y pos, graphic size, graphic height
+		}
+
+//mishap tics
+
+itemDef
+	{
+		name		mishap_tic1
+		background		"gfx/hud/mishap_tic1.png"
+		forecolor		1 1 1 1
+		rect		-46.5 60 13.5 4.56			// (these positions are relative to the initial position of the menu) 
+												// X pos, Y pos, graphic size, graphic height
+		}
+		
+		itemDef
+	{
+		name		mishap_tic2
+		background		"gfx/hud/mishap_tic2.png"
+		forecolor		1 1 1 1
+		rect		-46.5 55.44 13.5 4.56			// (these positions are relative to the initial position of the menu) 
+												// X pos, Y pos, graphic size, graphic height
+		}
+		
+		itemDef
+	{
+		name		mishap_tic3
+		background		"gfx/hud/mishap_tic3.png"
+		forecolor		1 1 1 1
+		rect		-46.5 50.88 13.5 4.56			// (these positions are relative to the initial position of the menu) 
+												// X pos, Y pos, graphic size, graphic height
+		}
+		
+		itemDef
+	{
+		name		mishap_tic4
+		background		"gfx/hud/mishap_tic4.png"
+		forecolor		1 1 1 1
+		rect		-46.5 46.32 13.5 4.56			// (these positions are relative to the initial position of the menu) 
+												// X pos, Y pos, graphic size, graphic height
+		}
+		
+		itemDef
+	{
+		name		mishap_tic5
+		background		"gfx/hud/mishap_tic5.png"
+		forecolor		1 1 1 1
+		rect		-46.5 41.76 13.5 4.56			// (these positions are relative to the initial position of the menu) 
+												// X pos, Y pos, graphic size, graphic height
+		}
+		
+		itemDef
+	{
+		name		mishap_tic6
+		background		"gfx/hud/mishap_tic6.png"
+		forecolor		1 1 1 1
+		rect		-46.5 37.2 13.5 4.56			// (these positions are relative to the initial position of the menu) 
+												// X pos, Y pos, graphic size, graphic height
+		}
+		
+		itemDef
+	{
+		name		mishap_tic7
+		background		"gfx/hud/mishap_tic7.png"
+		forecolor		1 1 1 1
+		rect		-46.5 32.64 13.5 4.56			// (these positions are relative to the initial position of the menu) 
+												// X pos, Y pos, graphic size, graphic height
+		}
+		
+		itemDef
+	{
+		name		mishap_tic8
+		background		"gfx/hud/mishap_tic8.png"
+		forecolor		1 1 1 1
+		rect		-46.5 28.08 13.5 4.56			// (these positions are relative to the initial position of the menu) 
+												// X pos, Y pos, graphic size, graphic height
+		}
+		
+				itemDef
+	{
+		name		mishap_tic9
+		background		"gfx/hud/mishap_tic9.png"
+		forecolor		1 1 1 1
+		rect		-46.5 23.52 13.5 4.56			// (these positions are relative to the initial position of the menu) 
+												// X pos, Y pos, graphic size, graphic height
+		}
+		
+				itemDef
+	{
+		name		mishap_tic10
+		background		"gfx/hud/mishap_tic10.png"
+		forecolor		1 1 1 1
+		rect		-46.5 18.96 13.5 4.56			// (these positions are relative to the initial position of the menu) 
+												// X pos, Y pos, graphic size, graphic height
+		}
+		
+				itemDef
+	{
+		name		mishap_tic11
+		background		"gfx/hud/mishap_tic11.png"
+		forecolor		1 1 1 1
+		rect		-46.5 14.4 13.5 4.56			// (these positions are relative to the initial position of the menu) 
+												// X pos, Y pos, graphic size, graphic height
+		}
+		
+				itemDef
+	{
+		name		mishap_tic12
+		background		"gfx/hud/mishap_tic12.png"
+		forecolor		1 1 1 1
+		rect		-46.5 9.84 13.5 4.56			// (these positions are relative to the initial position of the menu) 
+												// X pos, Y pos, graphic size, graphic height
+		}
+		
+				itemDef
+	{
+		name		mishap_tic13
+		background		"gfx/hud/mishap_tic13.png"
+		forecolor		1 1 1 1
+		rect		-46.5 5.28 13.5 4.56			// (these positions are relative to the initial position of the menu) 
+												// X pos, Y pos, graphic size, graphic height
+		}
+		
+				itemDef
+	{
+		name		mishap_tic14
+		background		"gfx/hud/mishap_tic14.png"
+		forecolor		1 1 1 1
+		rect		-46.5 0.72 13.5 4.56			// (these positions are relative to the initial position of the menu) 
+												// X pos, Y pos, graphic size, graphic height
+		}
+		
+				itemDef
+	{
+		name		mishap_tic15
+		background		"gfx/hud/mishap_tic15.png"
+		forecolor		1 1 1 1
+		rect		-46.5 -3.84 13.5 4.56			// (these positions are relative to the initial position of the menu) 
+												// X pos, Y pos, graphic size, graphic height
+		}
+		
 
 
 		// Numeric counter for force
@@ -293,17 +533,26 @@ assetGlobalDef
 		{
 			name				forceamount
 			group				none
-			rect				-109 98 6 12				// (these positions are relative to the initial position of the menu) 
+			rect				-77 69 4 7				// (these positions are relative to the initial position of the menu) 
 												// X pos, Y pos, char size, char height
-			forecolor			.359 .524 .722 1
+			forecolor			.359 .3 .9 1
 		}		
+		
+		//Numeric counter for dodge
+		itemDef
+		{
+			name				dodgeamount
+			group				none
+			rect				-103 69 4 7
+			forecolor		.6 .2 .8 1
+		}
 
 		// Numeric counter for ammo
 		itemDef 
 		{
 			name				ammoamount
 			group				none
-			rect				-83 98 6 12				// (these positions are relative to the initial position of the menu) 
+			rect				-50 78 4 7				// (these positions are relative to the initial position of the menu) 
 												// X pos, Y pos, char size, char height
 			forecolor			1.0 .658 .062 1
 		}		
@@ -313,7 +562,7 @@ assetGlobalDef
 		{
 			name				ammoinfinite
 			group				none
-			rect				-75 87 6 12				// (these positions are relative to the initial position of the menu) 
+			rect				-40 66 4 7				// (these positions are relative to the initial position of the menu) 
 												// X pos, Y pos, char size, char height
 			forecolor			1.0 .658 .062 1
 		}		
@@ -325,7 +574,7 @@ assetGlobalDef
 			name				saberstyle_strong
 			background			"gfx/hud/saber_strong"
 			forecolor			1 1 1 1
-			rect				-49 24 26 26				// (these positions are relative to the initial position of the menu) 
+			rect				-126 77 120 9		// (these positions are relative to the initial position of the menu) 
 												// X pos, Y pos, char size, char height
 		}		
 
@@ -334,7 +583,7 @@ assetGlobalDef
 			name				saberstyle_medium
 			background			"gfx/hud/saber_med"
 			forecolor			1 1 1 1
-			rect				-70 43 26 26				// (these positions are relative to the initial position of the menu) 
+			rect				-125 77 120 9		// (these positions are relative to the initial position of the menu) 
 												// X pos, Y pos, char size, char height
 		}		
 
@@ -343,9 +592,32 @@ assetGlobalDef
 			name				saberstyle_fast
 			background			"gfx/hud/saber_fast"
 			forecolor			1 1 1 1
-			rect				-85 69 24 24				// (these positions are relative to the initial position of the menu) 
+			rect				-125 77 120 9		// (these positions are relative to the initial position of the menu) 
 												// X pos, Y pos, char size, char height
-		}		
+		}
+
+		//[SaberSys]
+		itemDef 
+		{
+			name				saberstyle_desann
+			background			"gfx/hud/saber_desann"
+			forecolor			1 1 1 1
+			rect				-127 77 120 9		// (these positions are relative to the initial position of the menu) 
+												// X pos, Y pos, char size, char height
+		}	
+
+		itemDef 
+		{
+			name				saberstyle_tavion
+			background			"gfx/hud/saber_tavion"
+			forecolor			1 1 1 1
+			rect				-127 77 120 9		// (these positions are relative to the initial position of the menu) 
+												// X pos, Y pos, char size, char height
+		}
+		
+
+		//[/SaberSys]
+		
 
 		// Tells current score of game
 		itemDef 
@@ -354,9 +626,93 @@ assetGlobalDef
 			forecolor			1 1 1 1
 			rect				-150 92 6 12				// (these positions are relative to the initial position of the menu) 
 												// X pos, Y pos, char size, char height
+		}	
+
+		//[DodgeSys]
+		//dodge gauge ticks
+				//Dodge Ticks
+		itemDef 
+		{
+			name				dodge_tic1
+			background			"gfx/hud/dp_tic_1"
+			forecolor			1 1 1 1
+							//-65  -5 15 9
+			rect				-102.5  -3.5 15 8.55			// (these positions are relative to the initial position of the menu) -4
+												// X pos, Y pos, graphic size, graphic height
 		}		
 
+		itemDef 
+		{
+			name				dodge_tic2
+			background			"gfx/hud/dp_tic_1"
+			forecolor			1 1 1 1
+			rect				-102.5  5.05 15 8.55			// (these positions are relative to the initial position of the menu) 
+												// X pos, Y pos, graphic size, graphic height
+		}		
+
+		itemDef 
+		{
+			name				dodge_tic3
+			background			"gfx/hud/dp_tic_1"
+			forecolor			1 1 1 1	
+			rect				-102.5  13.6 15 8.55			// (these positions are relative to the initial position of the menu) 
+												// X pos, Y pos, graphic size, graphic height
+		}		
+
+		itemDef 
+		{
+			name				dodge_tic4
+			background			"gfx/hud/dp_tic_1"
+			forecolor			1 1 1 1
+							
+			rect				-102.5  22.15 15 8.55			// (these positions are relative to the initial position of the menu) 
+												// X pos, Y pos, graphic size, graphic height
+		}
+		
+				itemDef 
+		{
+			name				dodge_tic5
+			background			"gfx/hud/dp_tic_1"
+			forecolor			1 1 1 1
+							
+			rect				-102.5  30.7 15 8.55			// (these positions are relative to the initial position of the menu) 
+												// X pos, Y pos, graphic size, graphic height
+		}
+		
+				itemDef 
+		{
+			name				dodge_tic6
+			background			"gfx/hud/dp_tic_1"
+			forecolor			1 1 1 1
+							
+			rect				-102.5  39.25 15 8.55			// (these positions are relative to the initial position of the menu) 
+												// X pos, Y pos, graphic size, graphic height
+		}
+		
+				itemDef 
+		{
+			name				dodge_tic7
+			background			"gfx/hud/dp_tic_1"
+			forecolor			1 1 1 1
+							
+			rect				-102.5  47.8 15 8.55			// (these positions are relative to the initial position of the menu) 
+												// X pos, Y pos, graphic size, graphic height
+		}
+		
+				itemDef 
+		{
+			name				dodge_tic8
+			background			"gfx/hud/dp_tic_1"
+			forecolor			1 1 1 1
+							
+			rect				-102.5  56.35 15 8.55			// (these positions are relative to the initial position of the menu) 
+												// X pos, Y pos, graphic size, graphic height
+		}
+
+		
+		//[/DodgeSys]	
 	}
+	//[/NewHud]
 
 	menuDef 
 	{
@@ -1067,3 +1423,4 @@ assetGlobalDef
 		}
 	}
 }
+

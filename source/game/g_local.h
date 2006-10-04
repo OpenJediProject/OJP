@@ -2,6 +2,7 @@
 //
 // g_local.h -- local definitions for game module
 
+//testing
 #include "q_shared.h"
 #include "bg_public.h"
 #include "bg_vehicles.h"
@@ -26,7 +27,7 @@ extern vec3_t gPainPoint;
 //==================================================================
 
 // the "gameversion" client command will print this plus compile date
-#define	GAMEVERSION	CURRENT_OJPBASIC_CLIENTVERSION
+#define	GAMEVERSION	CURRENT_OJPENHANCED_CLIENTVERSION
 
 #define BODY_QUEUE_SIZE		8
 
@@ -532,6 +533,9 @@ typedef struct {
 	int			TKCount;
 	char		IPstring[32];		// yeah, I know, could be 16, but, just in case...
 	//[Asteroids]
+	//[ExpSys]
+	float		skillPoints;		//number of skill points this player currently has.
+	//[/ExpSys]
 } clientSession_t;
 
 // playerstate mGameFlags
@@ -563,7 +567,7 @@ typedef struct {
 	//[ClientPlugInDetect]
 	//this flag shows weither or not this client is running the right version of OJP on the client side.  
 	//This is used to determine if the visual weapon events can be sent or not.
-	qboolean	ojpClientPlugIn;
+	qboolean ojpClientPlugIn;
 	//[/ClientPlugInDetect]
 } clientPersistant_t;
 
@@ -640,6 +644,18 @@ typedef struct renderInfo_s
 
 	int			boltValidityTime;
 } renderInfo_t;
+
+
+//[SaberSys]
+typedef struct 
+{
+	int EntityNum;
+	int Debounce;
+	int SaberNum;
+	int BladeNum;
+}  sabimpact_t;
+//[SaberSys]
+
 
 // this structure is cleared on each ClientSpawn(),
 // except for 'client->pers' and 'client->sess'
@@ -856,6 +872,30 @@ struct gclient_s {
 	int			lastGenCmd;
 	int			lastGenCmdTime;
 	
+	//[SaberSys]
+	vec3_t		prevviewangle;
+	int			prevviewtime;
+
+	//the SaberNum of the last enemy blade that you hit.
+	int			lastSaberCollided;
+	//the BladeNum of the last enemy blade that you hit.
+	int			lastBladeCollided;
+
+	sabimpact_t	sabimpact[MAX_SABERS][MAX_BLADES];
+
+	//racc - used to debounce saber projectile blocks.  NUAM in Enhanced since I retooled the bolt blocking system.
+	int			SaberBlockTime;
+	//[/SaberSys]
+
+	//[DodgeSys]
+	int			DodgeDebounce;
+	//[/DodgeSys]
+
+	//[SaberSys]
+	//debounce timer on the regeneration of the mishap/balance bar. 
+	int			MishapDebounce;
+	//[/SaberSys]
+
 	//[Asteroids]
 	//can't put these in playerstate, crashes game (need to change exe?)
 	int			otherKillerMOD;
@@ -872,6 +912,11 @@ struct gclient_s {
 	//sets the debounce time for sending chat messages
 	int			chatDebounceTime;  
 	//[/AdminSys][/ChatSpamProtection]
+
+	//[SaberSys]
+	//used for debouncing saber viewlock
+	int			viewLockTime;
+	//[/SaberSys]
 };
 
 //Interest points
@@ -1310,6 +1355,10 @@ void TossClientCubes( gentity_t *self );
 void ExplodeDeath( gentity_t *self );
 void G_CheckForDismemberment(gentity_t *ent, gentity_t *enemy, vec3_t point, int damage, int deathAnim, qboolean postDeath);
 extern int gGAvoidDismember;
+//[ExpSys]
+void AddSkill(gentity_t *self, float amount);
+void G_DodgeDrain(gentity_t *victim, gentity_t *attacker, int amount);
+//[/ExpSys]
 
 
 // damage flags
@@ -1708,6 +1757,9 @@ extern	vmCvar_t	g_trueJedi;
 
 extern	vmCvar_t	g_autoMapCycle;
 extern	vmCvar_t	g_dmflags;
+//[ExpSys]
+extern	vmCvar_t	g_minForceRank;
+//[/ExpSys]
 extern	vmCvar_t	g_maxForceRank;
 extern	vmCvar_t	g_forceBasedTeams;
 extern	vmCvar_t	g_privateDuel;
@@ -1725,6 +1777,10 @@ extern	vmCvar_t	g_saberLockFactor;
 extern	vmCvar_t	g_saberTraceSaberFirst;
 
 extern	vmCvar_t	d_saberKickTweak;
+
+//[SaberSys]
+extern	vmCvar_t	d_saberBodyCheck;
+//[/SaberSys]
 
 extern	vmCvar_t	d_powerDuelPrint;
 
@@ -1762,6 +1818,10 @@ extern	vmCvar_t	g_slowmoDuelEnd;
 
 extern	vmCvar_t	g_saberDamageScale;
 
+//[/SaberSys]
+extern	vmCvar_t	g_saberanimspeed;
+//[/SaberSys]
+
 extern	vmCvar_t	g_useWhileThrowing;
 
 extern	vmCvar_t	g_RMG;
@@ -1769,6 +1829,15 @@ extern	vmCvar_t	g_RMG;
 extern	vmCvar_t	g_svfps;
 
 extern	vmCvar_t	g_forceRegenTime;
+
+//[DodgeSys]
+extern	vmCvar_t	g_dodgeRegenTime;
+//[/DodgeSys]
+
+//[SaberSys]
+extern  vmCvar_t	g_mishapRegenTime;
+//[/SaberSys]
+
 extern	vmCvar_t	g_spawnInvulnerability;
 extern	vmCvar_t	g_forcePowerDisable;
 extern	vmCvar_t	g_weaponDisable;
@@ -1782,6 +1851,9 @@ extern	vmCvar_t	g_duel_fraglimit;
 extern	vmCvar_t	g_timelimit;
 extern	vmCvar_t	g_capturelimit;
 extern	vmCvar_t	d_saberInterpolate;
+//[test]
+extern	vmCvar_t	d_test;
+//[/test]
 extern	vmCvar_t	g_friendlyFire;
 extern	vmCvar_t	g_friendlySaber;
 extern	vmCvar_t	g_password;
@@ -1802,6 +1874,9 @@ extern	vmCvar_t	g_debugMove;
 extern	vmCvar_t	g_debugAlloc;
 #ifndef FINAL_BUILD
 extern	vmCvar_t	g_debugDamage;
+//[SaberSys]
+extern	vmCvar_t	g_debugviewlock;
+//[/SaberSys]
 #endif
 extern	vmCvar_t	g_debugServerSkel;
 extern	vmCvar_t	g_weaponRespawn;
@@ -1896,6 +1971,10 @@ extern vmCvar_t		g_corpseRemovalTime;
 extern vmCvar_t		ojp_clientMOTD;
 extern vmCvar_t		ojp_MOTD;
 //[/ExpandedMOTD]
+
+//[DodgeSys]
+extern vmCvar_t		ojp_allowBodyDodge;
+//[/DodgeSys]
 
 #include "../namespace_begin.h"
 

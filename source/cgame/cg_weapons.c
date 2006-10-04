@@ -1569,10 +1569,36 @@ void CG_Weapon_f( void ) {
 
 	if (num == 1 && cg.snap->ps.weapon == WP_SABER)
 	{
+		//[MELEE]
+		//Switch to melee when blade is toggled if ojp_sabermelee is on
+		if (cg.snap->ps.weaponTime < 1)
+		{
+			if(ojp_sabermelee.integer && !cg.snap->ps.saberHolstered && CG_WeaponSelectable(WP_MELEE))
+			{
+				num = WP_MELEE;
+
+				cg.weaponSelectTime = cg.time;
+				
+				if (cg.weaponSelect != num)
+				{
+					trap_S_MuteSound(cg.snap->ps.clientNum, CHAN_WEAPON);
+				}
+
+				cg.weaponSelect = num;
+			}
+			else
+			{
+				trap_SendConsoleCommand("sv_saberswitch\n");
+			}
+		}
+		
+		/*
 		if (cg.snap->ps.weaponTime < 1)
 		{
 			trap_SendConsoleCommand("sv_saberswitch\n");
 		}
+		*/
+		//[/MELEE]
 		return;
 	}
 
@@ -2623,11 +2649,16 @@ void CG_CheckPlayerG2Weapons(playerState_t *ps, centity_t *cent)
 		return;
 	}
 
+	//[SaberLockSys]
+	//racc - this was preventing a non-saber weapon from rendering when the player's saber is dropped.
+	/* basejka code
 	// should we change the gun model on this player?
 	if (cent->currentState.saberInFlight)
 	{
 		cent->ghoul2weapon = CG_G2WeaponInstance(cent, WP_SABER);
 	}
+	*/
+	//[/SaberLockSys]
 
 	if (cent->currentState.eFlags & EF_DEAD)
 	{ //no updating weapons when dead

@@ -406,7 +406,85 @@
 		*/
 		//[/MOREFORCEOPTIONS]
 
-
+		
+		//[ExpSys]
+		itemDef 
+		{
+			name				normal
+			group				grpsettings
+			type 				ITEM_TYPE_EDITFIELD
+			style				0			
+			text				@OJP_MENUS_STARTINGSKILLPOINTS
+			descText			@MENUS_FORCE_MASTERY_INFO
+			cvar 				"g_minForceRank"
+			maxchars 			10
+			maxPaintChars 		10 
+			rect 				5 170 240 20
+			textalign			ITEM_ALIGN_RIGHT
+			textalignx			165
+			textaligny			-2
+			font				2
+			textscale			.9
+			forecolor			.615 .615 .956 1
+			outlinecolor 		1 .5 .5 .5
+			backcolor 			0 0 0 0
+			border 				1
+			bordercolor 		0 0 0 0
+			visible 			1
+			action 
+			{ 
+				play 			"sound/interface/button1.wav" 
+			}
+			mouseEnter 
+			{ 
+				show			button_glow 
+				setitemrect		button_glow	0 167 260 30
+			}
+			mouseExit 
+			{ 
+				hide			button_glow 
+			}
+		}
+		
+		itemDef 
+		{
+			name				normal
+			group				grpsettings
+			type 				ITEM_TYPE_EDITFIELD
+			style				0			
+			text				@OJP_MENUS_MAXSKILLPOINTS
+			descText			@MENUS_FORCE_MASTERY_INFO
+			cvar 				"g_maxForceRank"
+			maxchars 			10
+			maxPaintChars 		10 
+			rect 				5 190 240 20
+			textalign			ITEM_ALIGN_RIGHT
+			textalignx			165
+			textaligny			0
+			font				2
+			textscale			.9
+			forecolor			.615 .615 .956 1
+			outlinecolor 		1 .5 .5 .5
+			backcolor 			0 0 0 0
+			border 				1
+			bordercolor 		0 0 0 0
+			visible 			1
+			action 
+			{ 
+				play 			"sound/interface/button1.wav" 
+			}
+			mouseEnter 
+			{ 
+				show			button_glow 
+				setitemrect		button_glow	0 187 260 30
+			}
+			mouseExit 
+			{ 
+				hide			button_glow 
+			}
+		}
+		
+		/*
 		itemDef 
 		{
 			name				normal
@@ -444,6 +522,8 @@
 				hide			button_glow 
 			}				  	  
 		}
+		*/
+		//[/ExpSys]
 
 
 //----------------------------------------------------------------------------------------------
@@ -454,7 +534,11 @@
 			name				end_game_title
 			group				none
 			text				@MENUS_ENDGAME_RULES
-      			rect				5 200 240 20
+			//[ExpSys]  
+			//shifted everything down to fit the maximum skill points item in the general rules.
+    		rect				5 220 240 20
+			//rect				5 200 240 20
+			//[/ExpSys]
 			font				3
 			textscale			0.8
 			textalign			ITEM_ALIGN_CENTER		
@@ -473,7 +557,11 @@
 			type				ITEM_TYPE_NUMERICFIELD
 			text				@MENUS_TIME_LIMIT
 			cvar				"timelimit"
-			rect				5 220 240 20 
+			//[ExpSys]  
+			//shifted everything down to fit the maximum skill points item in the general rules.
+			rect				5 240 240 20 
+			//rect				5 220 240 20 
+			//[/ExpSys]
 			textalign			ITEM_ALIGN_RIGHT
 			textalignx			165
 			textaligny			-2
@@ -490,7 +578,11 @@
 			mouseEnter 
 			{ 
 				show			button_glow 
-				setitemrect		button_glow	0 217 260 30
+				//[ExpSys]  
+				//shifted everything down to fit the maximum skill points item in the general rules.
+				setitemrect		button_glow	0 237 260 30
+				//setitemrect		button_glow	0 217 260 30
+				//[/ExpSys]
 			}
 			mouseExit 
 			{ 
@@ -516,7 +608,11 @@
 				"5" ;
 			//[/OLDGAMETYPES]  
 			}
-			rect				5 240 240 20
+			//[ExpSys]  
+			//shifted everything down to fit the maximum skill points item in the general rules.
+			rect				5 260 240 20
+			//rect				5 240 240 20
+			//[/ExpSys]
 			textalign			ITEM_ALIGN_RIGHT
 			textalignx			165
 			textaligny			-2
@@ -533,7 +629,11 @@
 			mouseEnter 
 			{ 
 				show			button_glow 
-				setitemrect		button_glow	0 237 260 30
+				//[ExpSys]  
+				//shifted everything down to fit the maximum skill points item in the general rules.
+				setitemrect		button_glow	0 257 260 30
+				//setitemrect		button_glow	0 237 260 30
+				//[/ExpSys] 
 			}
 			mouseExit 
 			{ 
@@ -558,7 +658,11 @@
 				//"5" ;
 			//[/OLDGAMETYPES]
 			}     
-			rect				5 240 240 20
+			//[ExpSys]  
+			//shifted everything down to fit the maximum skill points item in the general rules.
+			rect				5 260 240 20
+			//rect				5 240 240 20
+			//[/ExpSys]
 			textalign			ITEM_ALIGN_RIGHT
 			textalignx			165
 			textaligny			-2
@@ -575,7 +679,11 @@
 			mouseEnter 
 			{ 
 				show			button_glow 
-				setitemrect		button_glow	0 237 260 30
+				//[ExpSys]  
+				//shifted everything down to fit the maximum skill points item in the general rules.
+				setitemrect		button_glow	0 257 260 30
+				//setitemrect		button_glow	0 237 260 30
+				//[/ExpSys]
 			}
 			mouseExit 
 			{ 
@@ -608,7 +716,11 @@
 			}     
 			*/  
 			//[/OLDGAMETYPES]  
-			rect				5 240 240 20
+			//[ExpSys]  
+			//shifted everything down to fit the maximum skill points item in the general rules.
+			rect				5 260 240 20
+			//rect				5 240 240 20
+			//[/ExpSys]
 			textalign			ITEM_ALIGN_RIGHT
 			textalignx			165
 			textaligny			-2
@@ -624,14 +736,19 @@
 			mouseEnter 
 			{ 
 				show			button_glow 
-				setitemrect		button_glow	0 237 260 30
+				//[ExpSys]  
+				//shifted everything down to fit the maximum skill points item in the general rules.
+				setitemrect		button_glow	0 257 260 30
+				//setitemrect		button_glow	0 237 260 30
+				//[/ExpSys]
 			}
 			mouseExit 
 			{ 
 				hide			button_glow 
 			}				  	  
 		}
-
+	
+	
 //----------------------------------------------------------------------------------------------		
 // BOTS TITLE
 //----------------------------------------------------------------------------------------------		

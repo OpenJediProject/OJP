@@ -855,6 +855,10 @@ vmCvar_t	cg_hudFiles;
 vmCvar_t 	cg_scorePlum;
 vmCvar_t 	cg_smoothClients;
 
+//[MELEE]
+vmCvar_t	ojp_sabermelee;
+//[/MELEE]
+
 #include "../namespace_begin.h"
 vmCvar_t	pmove_fixed;
 //vmCvar_t	cg_pmove_fixed;
@@ -1094,6 +1098,11 @@ static cvarTable_t cvarTable[] = { // bk001129
 	{ &cg_scorePlum, "cg_scorePlums", "1",  CVAR_ARCHIVE},
 	{ &cg_hudFiles, "cg_hudFiles", "ui/jahud.txt", CVAR_ARCHIVE},
 	{ &cg_smoothClients, "cg_smoothClients", "1",  CVAR_ARCHIVE},
+
+	//[MELEE]
+	{ &ojp_sabermelee, "ojp_sabermelee", "0",  CVAR_ARCHIVE},
+	//[/MELEE]
+
 	{ &cg_cameraMode, "com_cameraMode", "0", CVAR_CHEAT},
 
 	{ &pmove_fixed, "pmove_fixed", "0", 0},
@@ -1134,8 +1143,8 @@ Ghoul2 Insert End
 
 	//[ClientPlugInDetect]
 	//this cvar is a dummy cvar used to determine if the client has the OJP client plug in or not.
-	//This value needs to be the same as CURRENT_OJPBASIC_CLIENTVERSION!!!!
-	{ &ojp_clientplugin, "ojp_clientplugin", CURRENT_OJPBASIC_CLIENTVERSION, CVAR_USERINFO | CVAR_ROM },
+	//This value needs to be the same as CURRENT_OJPENHANCED_CLIENTVERSION!!!!
+	{ &ojp_clientplugin, "ojp_clientplugin", CURRENT_OJPENHANCED_CLIENTVERSION, CVAR_USERINFO | CVAR_ROM },
 	//[/ClientPlugInDetect]
 
 	//[VisualWeapons]
@@ -2190,6 +2199,9 @@ static void CG_RegisterGraphics( void ) {
 	cgs.effects.mSaberBloodSparks = trap_FX_RegisterEffect("saber/blood_sparks_mp.efx");
 	cgs.effects.mSaberBloodSparksSmall = trap_FX_RegisterEffect("saber/blood_sparks_25_mp.efx");
 	cgs.effects.mSaberBloodSparksMid = trap_FX_RegisterEffect("saber/blood_sparks_50_mp.efx");
+	//[SaberLockSys]
+	cgs.effects.mSaberFriction = trap_FX_RegisterEffect("saber/saber_friction.efx");
+	//[/SaberLockSys]
 	cgs.effects.mSpawn = trap_FX_RegisterEffect("mp/spawn.efx");
 	cgs.effects.mJediSpawn = trap_FX_RegisterEffect("mp/jedispawn.efx");
 	cgs.effects.mBlasterDeflect = trap_FX_RegisterEffect("blaster/deflect.efx");

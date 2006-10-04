@@ -30,6 +30,10 @@ extern gentity_t *FindClosestHumanPlayer(vec3_t position, int enemyTeam);
 extern qboolean PM_SaberInBounce( int move );
 extern qboolean PM_SaberInReturn( int move );
 extern gitem_t	*BG_FindItemForAmmo( ammo_t ammo );
+//[SaberSys]
+extern qboolean PM_SaberInTransition( int move );
+//[/SaberSys]
+
 extern siegeClass_t *BG_GetClassOnBaseClass(const int team, const short classIndex, const short cntIndex);
 extern qboolean InFOV2( vec3_t origin, gentity_t *from, int hFOV, int vFOV );
 
@@ -2749,6 +2753,13 @@ void TAB_BotBehave_AttackMove(bot_state_t *bs)
 	{//don't attack unless you're inside your AttackDistance band and actually pointing at your enemy.  
 		//This is to prevent the bots from attackmoving with the saber @ 500 meters. :)
 		trap_EA_Attack(bs->client);
+
+		//[SaberSys]
+		if(bs->virtualWeapon == WP_SABER)
+		{//only walk while attacking with the saber.
+			bs->doWalk = qtrue;
+		}
+		//[/SaberSys]
 	}
 }
 
@@ -2968,6 +2979,8 @@ void TAB_BotBehave_AttackBasic(bot_state_t *bs, gentity_t* target)
 		BotWeapon_Detpack(bs, target);
 	}
 
+	//[SaberSys]
+	/* no katas in Enhanced
 	if(!BG_SaberInKata(bs->cur_ps.saberMove) && bs->cur_ps.fd.forcePower > 60 && 
 		bs->cur_ps.weapon == WP_SABER && dist < 128 && InFieldOfVision(bs->viewangles, 90, ang))
 	{//KATA!
@@ -2975,6 +2988,8 @@ void TAB_BotBehave_AttackBasic(bot_state_t *bs, gentity_t* target)
 		trap_EA_Alt_Attack(bs->client);
 		return;
 	}
+	*/
+	//[/SaberSys]
 
 	if(bs->meleeStrafeTime < level.time)
 	{//select a new strafing direction
@@ -3010,6 +3025,35 @@ void TAB_BotBehave_AttackBasic(bot_state_t *bs, gentity_t* target)
 	TAB_AdjustforStrafe(bs, moveDir);
 
 	if ( bs->cur_ps.weapon == bs->virtualWeapon 
+	//[SaberSys]
+	//This code allows bots to do attack fakes in addition
+	//to just selecting a standard attack swing direction.
+		&& bs->virtualWeapon == WP_SABER && InFieldOfVision(bs->viewangles, 100, ang))
+	{//we're using a lightsaber
+		if(BG_SaberInIdle(bs->cur_ps.saberMove) 
+		|| PM_SaberInBounce(bs->cur_ps.saberMove)
+		|| PM_SaberInReturn(bs->cur_ps.saberMove))
+		{//we want to attack, and we need to choose a new attack swing, pick randomly.
+			TAB_MoveforAttackQuad(bs, moveDir, Q_irand(Q_BR, Q_B));
+		}
+		else if( bs->cur_ps.userInt3 & (1 << FLAG_ATTACKFAKE)) 
+		{//successfully started an attack fake, don't do it again for a while.
+			bs->saberBFTime = level.time + Q_irand(3000, 5000); //every 3-5 secs
+		}
+		else if( bs->saberBFTime < level.time
+			&&(PM_SaberInTransition(bs->cur_ps.saberMove) 
+			|| PM_SaberInStart(bs->cur_ps.saberMove)))
+		{//we can and want to do a saber attack fake.
+			int fakeQuad = Q_irand(Q_BR, Q_B);
+			while(fakeQuad == saberMoveData[bs->cur_ps.saberMove].endQuad)
+			{//can't fake in the direction we're already trying to attack in
+				fakeQuad = Q_irand(Q_BR, Q_B);
+			}
+			//start trying to fake
+			TAB_MoveforAttackQuad(bs, moveDir, fakeQuad);
+			trap_EA_Alt_Attack(bs->client);
+		}
+	/*
 		&& bs->virtualWeapon == WP_SABER && InFieldOfVision(bs->viewangles, 100, ang)
 		&& (BG_SaberInIdle(bs->cur_ps.saberMove) 
 		|| PM_SaberInBounce(bs->cur_ps.saberMove)
@@ -3017,6 +3061,8 @@ void TAB_BotBehave_AttackBasic(bot_state_t *bs, gentity_t* target)
 	{//we're using a lightsaber, we want to attack, 
 		//and we need to choose a new attack swing, pick randomly.
 		TAB_MoveforAttackQuad(bs, moveDir, Q_irand(Q_BR, Q_B));
+	*/
+	//[/SaberSys]
 	}
 
 	if(!VectorCompare(vec3_origin, moveDir))
@@ -3030,6 +3076,13 @@ void TAB_BotBehave_AttackBasic(bot_state_t *bs, gentity_t* target)
 		|| (bs->virtualWeapon == WP_SABER && InFieldOfVision(bs->viewangles, 100, ang))) )
 	{//not switching weapons so attack
 		trap_EA_Attack(bs->client);
+
+		//[SaberSys]
+		if(bs->virtualWeapon == WP_SABER)
+		{//only walk while attacking with the saber.
+			bs->doWalk = qtrue;
+		}
+		//[/SaberSys]
 	}
 }
 
@@ -4106,6 +4159,14 @@ void TAB_StandardBotAI(bot_state_t *bs, float thinktime)
 		return;
 	}
 
+	//[LedgeGrab]
+	if(BG_InLedgeMove(bs->cur_ps.legsAnim))
+	{//we're in a ledge move, just pull up for now
+		trap_EA_MoveForward(bs->client);
+		return;
+	}
+	//[/LedgeGrab]
+
 	VectorCopy(bs->DestPosition, bs->lastDestPosition);
 
 
@@ -4262,6 +4323,18 @@ void TAB_StandardBotAI(bot_state_t *bs, float thinktime)
 		UsetheForce = qtrue;
 	}
 
+	//[SaberThrowSys]
+	//This code for Enhanced makes the AI attempt to recover their saber when it has been dropped.
+	if(bs->cur_ps.saberInFlight && !bs->cur_ps.saberEntityNum)
+	{//we've lost our saber.
+		//check to see if we can get the saber back yet.
+		if(g_entities[g_entities[bs->client].client->saberStoredIndex].s.pos.trType == TR_STATIONARY)
+		{//saber is ready to be pulled back
+			level.clients[bs->client].ps.fd.forcePowerSelected = FP_SABERTHROW;
+			UsetheForce = qtrue;
+		}
+	}
+	//[/SaberThrowSys]
 
 	if(UsetheForce)
 	{

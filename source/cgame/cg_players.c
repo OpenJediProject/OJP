@@ -49,6 +49,13 @@ char	*cg_customSoundNames[MAX_CUSTOM_SOUNDS] = {
 	"*gasp",
 	"*land1",
 	"*taunt",
+	//[SaberSys]
+	//moved these sounds in the default combat sounds so that players can make grunt sounds when
+	//stunned, slow bounced, etc.
+	"*pushed1",	//Say when force-pushed
+	"*pushed2",
+	"*pushed3",
+	//[/SaberSys]
 	NULL
 };
 
@@ -66,9 +73,15 @@ const char	*cg_customCombatSoundNames[MAX_CUSTOM_COMBAT_SOUNDS] =
 	"*confuse1",	//Say when confused
 	"*confuse2",
 	"*confuse3",
+	//[SaberSys]
+	//moved these sounds in the default combat sounds so that players can make grunt sounds when
+	//stunned, slow bounced, etc.
+	/*
 	"*pushed1",	//Say when force-pushed
 	"*pushed2",
 	"*pushed3",
+	*/
+	//[/SaberSys]
 	"*choke1",
 	"*choke2",
 	"*choke3",
@@ -4080,7 +4093,12 @@ static void CG_SetLerpFrameAnimation( centity_t *cent, clientInfo_t *ci, lerpFra
 
 		animSpeed *= animSpeedMult;
 
-		BG_SaberStartTransAnim(cent->currentState.number, cent->currentState.fireflag, cent->currentState.weapon, newAnimation, &animSpeed, cent->currentState.brokenLimbs);
+		//[FatigueSys]
+		BG_SaberStartTransAnim(cent->currentState.number, cent->currentState.fireflag, 
+			cent->currentState.weapon, newAnimation, &animSpeed, 
+			cent->currentState.brokenLimbs, cent->currentState.userInt3);
+		//BG_SaberStartTransAnim(cent->currentState.number, cent->currentState.fireflag, cent->currentState.weapon, newAnimation, &animSpeed, cent->currentState.brokenLimbs);
+		//[/FatigueSys]
 
 		if (torsoOnly)
 		{
@@ -6491,7 +6509,6 @@ void CG_ParseScriptedSaber(char *script, clientInfo_t *ci, int snum)
 		n++;
 	}
 	ci->ScriptedNum[snum] = n;
-
 }
 
 void RGB_AdjustSciptedSaberColor(clientInfo_t *ci, vec3_t color, int n)
@@ -6658,7 +6675,12 @@ static void CG_RGBForSaberColor( saber_colors_t color, vec3_t rgb, int cnum, int
 //	Com_Printf("sabercolor %i %i %i ^1%i %i\n",(int)rgb[0],(int)rgb[1],(int)rgb[2],cnum,bnum);
 }
 
-static void CG_DoSaberLight( saberInfo_t *saber , int cnum, int bnum)
+//[SaberThrowSys]
+//changed this from static so we can use it for rendering the saber blade for 
+//dropped/ballastics sabers.
+void CG_DoSaberLight( saberInfo_t *saber , int cnum, int bnum)
+//static void CG_DoSaberLight( saberInfo_t *saber , int cnum, int bnum)
+//[/SaberThrowSys]
 //[/RGBSabers]
 {
 	vec3_t		positions[MAX_BLADES*2], mid={0}, rgbs[MAX_BLADES*2], rgb={0};
@@ -6690,6 +6712,7 @@ static void CG_DoSaberLight( saberInfo_t *saber , int cnum, int bnum)
 				diameter = saber->blade[i].length*2.0f;
 			}
 			totallength += saber->blade[i].length;
+			//RAFIXME - This is actually a bug, .muzzlePoint and .muzzleDir aren't updated on the cgame side!
 			VectorMA( saber->blade[i].muzzlePoint, saber->blade[i].length, saber->blade[i].muzzleDir, positions[i] );
 			if ( !numpositions )
 			{//first blade, store middle of that as midpoint
@@ -7750,6 +7773,18 @@ CheckTrail:
 
 	saberTrail = &client->saber[saberNum].blade[bladeNum].trail;
 	saberTrail->duration = saberMoveData[cent->currentState.saberMove].trailLength;
+
+	//[SaberSys]
+	if(cent->currentState.userInt3 & (1 << FLAG_ATTACKFAKE))
+	{//attack faking, have a longer saber trail
+		saberTrail->duration *= 2;
+	}
+
+	if( cent->currentState.userInt3 & (1 << FLAG_FATIGUED) )
+	{//fatigued players have slightly shorter saber trails since they're moving slower.
+		saberTrail->duration *= .5;
+	}
+	//[/SaberSys]
 
 	trailDur = (saberTrail->duration/5.0f);
 	if (!trailDur)
@@ -10162,7 +10197,11 @@ float GetSelfTorsoAnimPoint(void)
 	float animPercentage = 0;
 
 	//Be sure to scale by the proper anim speed just as if we were going to play the animation
-	BG_SaberStartTransAnim(cg.predictedPlayerState.clientNum, cg.predictedPlayerState.fd.saberAnimLevel, cg.predictedPlayerState.weapon, cg.predictedPlayerState.torsoAnim, &animSpeedFactor, cg.predictedPlayerState.brokenLimbs);
+
+	//[FatigueSys]
+	BG_SaberStartTransAnim(cg.predictedPlayerState.clientNum, cg.predictedPlayerState.fd.saberAnimLevel, cg.predictedPlayerState.weapon, cg.predictedPlayerState.torsoAnim, &animSpeedFactor, cg.predictedPlayerState.brokenLimbs, cg_entities[cg.predictedPlayerState.clientNum].currentState.userInt3);
+	//BG_SaberStartTransAnim(cg.predictedPlayerState.clientNum, cg.predictedPlayerState.fd.saberAnimLevel, cg.predictedPlayerState.weapon, cg.predictedPlayerState.torsoAnim, &animSpeedFactor, cg.predictedPlayerState.brokenLimbs);
+	//[/FatigueSys]
 	speedDif = attackAnimLength - (attackAnimLength * animSpeedFactor);
 	attackAnimLength += speedDif;
 
@@ -11889,7 +11928,11 @@ void CG_Player( centity_t *cent ) {
 
 	g2HasWeapon = trap_G2API_HasGhoul2ModelOnIndex(&(cent->ghoul2), 1);
 
-	if (!g2HasWeapon)
+	//[SaberThrowSys]
+	//had to change this to allow for the rendering of non-saber weapons while the player's saber is out.
+	if (!g2HasWeapon && !cent->currentState.saberInFlight)
+	//if (!g2HasWeapon)
+	//[/SaberThrowSys]
 	{ //force a redup of the weapon instance onto the client instance
 		cent->ghoul2weapon = NULL;
 		cent->weapon = 0;
@@ -12018,10 +12061,15 @@ void CG_Player( centity_t *cent ) {
 	// Save the old weapon, to verify that it is or is not the same as the new weapon.
 	// rww - Make sure weapons don't get set BEFORE cent->ghoul2 is initialized or else we'll have no
 	// weapon bolted on
+	//[SaberThrowSys]
+	//had to change this to allow for the rendering of non-saber weapons while the player's saber is out.
+	/*
 	if (cent->currentState.saberInFlight)
 	{
 		cent->ghoul2weapon = CG_G2WeaponInstance(cent, WP_SABER);
 	}
+	*/
+	//[/SaberThrowSys]
 
 	if (cent->ghoul2 && 
 		(cent->currentState.eType != ET_NPC || (cent->currentState.NPC_class != CLASS_VEHICLE&&cent->currentState.NPC_class != CLASS_REMOTE&&cent->currentState.NPC_class != CLASS_SEEKER)) && //don't add weapon models to NPCs that have no bolt for them!
@@ -12093,7 +12141,11 @@ void CG_Player( centity_t *cent ) {
 	CG_VisualWeaponsUpdate(cent, ci);
 	//[/VisualWeapons]
 	
-	if (cent->saberWasInFlight && g2HasWeapon)
+	//[SaberThrowSys]
+	//changed this to make sure that the saber draw/holster sounds still work right with the ability to switch weapons while your saber is out.
+	if (cent->saberWasInFlight && g2HasWeapon && cent->ghoul2weapon == CG_G2WeaponInstance(cent, WP_SABER))
+	//if (cent->saberWasInFlight && g2HasWeapon)
+	//[/SaberThrowSys]
 	{
 		 cent->saberWasInFlight = qfalse;
 	}
@@ -12733,7 +12785,7 @@ SkipTrueView:
 	}
 
 	if ( cent->currentState.powerups & (1 << PW_DISINT_4) )
-	{
+	{//racc - do blur effect for grip or push/pull.
 		vec3_t tAng;
 		vec3_t efOrg;
 
@@ -13176,11 +13228,21 @@ stillDoSaber:
 
 		drawPlayerSaber = qtrue;
 	}
-	else if (cent->currentState.weapon == WP_SABER 
-		&& cent->currentState.saberHolstered < 2 )
+	//[SaberThrowSys]
+	//rearranged this code a little because sabers can now be returning without being active.
+	else if ( cent->currentState.weapon == WP_SABER )
+	//else if (cent->currentState.weapon == WP_SABER 
+	//	&& cent->currentState.saberHolstered < 2 )
+	//[/SaberThrowSys]
 	{
-		if ( (!cent->currentState.saberInFlight //saber not in flight
-				|| ci->saber[1].soundLoop) //???
+		//[SaberThrowSys]
+		//rearranged this code a little because sabers can now be returning without being active.
+		if( cent->currentState.saberHolstered < 2 &&
+			(!cent->currentState.saberInFlight //saber not in flight
+		//if ( (!cent->currentState.saberInFlight //saber not in flight
+		//[/SaberThrowSys]
+				|| ci->saber[1].soundLoop) //??? //racc - or we have dual sabers
+				//(since one stays in hand when tossed.)
 			&& !(cent->currentState.eFlags & EF_DEAD))//still alive
 		{//racc - do the saber blade hum.
 			vec3_t soundSpot;
@@ -13456,9 +13518,20 @@ stillDoSaber:
 
 						owndir[0] += 90;
 
+						//[SaberThrowSys]
+						if ( !(saberEnt->currentState.eFlags&EF_MISSILE_STICK) )
+						{//As long as your not stuck orient towards the player
+							VectorCopy(owndir, saberEnt->currentState.apos.trBase);
+							VectorCopy(owndir, saberEnt->lerpAngles);
+							VectorClear(saberEnt->currentState.apos.trDelta);
+						}
+
+						/* basejka code
 						VectorCopy(owndir, saberEnt->currentState.apos.trBase);
 						VectorCopy(owndir, saberEnt->lerpAngles);
 						VectorClear(saberEnt->currentState.apos.trDelta);
+						*/
+						//[/SaberThrowSys]
 					}
 				}
 
@@ -13478,6 +13551,18 @@ stillDoSaber:
 				VectorCopy(saberEnt->lerpAngles, bladeAngles);
 				bladeAngles[ROLL] = 0;
 
+				//[SaberThrowSys]
+				//racc - set blade length of first saber for rendering
+				if ( cent->currentState.saberHolstered == 0 )
+				{
+					BG_SI_SetDesiredLength(&ci->saber[0], -1, -1);
+				}
+				else
+				{
+					BG_SI_SetDesiredLength(&ci->saber[0], 0, -1);
+				}
+
+				/* basejka code
 				if ( ci->saber[0].numBlades > 1//staff
 					&& cent->currentState.saberHolstered == 1 )//extra blades off
 				{//only first blade should be on
@@ -13488,6 +13573,10 @@ stillDoSaber:
 				{
 					BG_SI_SetDesiredLength(&ci->saber[0], -1, -1);
 				}
+				*/
+				//[/SaberThrowSys]
+
+				//racc - set render for the second saber's blade as needed
 				if ( ci->saber[1].model	//dual sabers
 					&& cent->currentState.saberHolstered == 1 )//second one off
 				{
@@ -13497,7 +13586,49 @@ stillDoSaber:
 				{
 					BG_SI_SetDesiredLength(&ci->saber[1], -1, -1);
 				}
+				
+				//[SaberThrowSys]
+				if( cent->currentState.saberHolstered < 2 )
+				{//racc - saber blades are active, render them for thrown sabers.
+					//while (l < MAX_SABERS)
+					//Only want to do for the first saber actually, it's the one in flight.
+					while (l < 1)
+					{
+						if (!ci->saber[l].model[0])
+						{
+							break;
+						}
 
+						k = 0;
+						while (k < ci->saber[l].numBlades)
+						{
+							if ( //cent->currentState.fireflag == SS_STAFF&& //in saberstaff style
+								l == 0//first saber
+								&& cent->currentState.saberHolstered == 1 //extra blades should be off
+								&& k > 0 )//this is an extra blade
+							{//extra blades off
+								//don't draw them
+								CG_AddSaberBlade(cent, saberEnt, NULL, 0, 0, l, k, saberEnt->lerpOrigin, bladeAngles, qtrue, qtrue);
+							}
+							else
+							{
+								CG_AddSaberBlade(cent, saberEnt, NULL, 0, 0, l, k, saberEnt->lerpOrigin, bladeAngles, qtrue, qfalse);
+							}
+
+							k++;
+						}
+						if ( ci->saber[l].numBlades > 2 )
+						{//add a single glow for the saber based on all the blade colors combined
+							//[RGBSabers]
+							CG_DoSaberLight( &ci->saber[l], cent->currentState.clientNum, l );
+							//[/RGBSabers]
+						}
+
+						l++;
+					}
+				}
+
+				/* basejka code
 				//while (l < MAX_SABERS)
 				//Only want to do for the first saber actually, it's the one in flight.
 				while (l < 1)
@@ -13534,6 +13665,8 @@ stillDoSaber:
 
 					l++;
 				}
+				*/
+				//[/SaberThrowSys]
 
 				//Make the player's hand glow while guiding the saber
 				VectorSet( tAng, cent->turAngles[PITCH], cent->turAngles[YAW], cent->turAngles[ROLL] );
@@ -13564,6 +13697,50 @@ stillDoSaber:
 		}
 		else
 		{//saber is not in a throw.
+			//[SaberThrowSys]
+			//rearranged this code a little because sabers can now be returning without being active.
+			if( cent->currentState.saberHolstered == 2 )
+			{//all blades off
+				BG_SI_SetDesiredLength(&ci->saber[0], 0, -1);
+				BG_SI_SetDesiredLength(&ci->saber[1], 0, -1);
+			}
+			else
+			{//racc - at least some of our blades are active.
+				if ( ci->saber[0].numBlades > 1//staff
+					&& cent->currentState.saberHolstered == 1 )//extra blades off
+				{//only first blade should be on
+					BG_SI_SetDesiredLength(&ci->saber[0], 0, -1);
+					BG_SI_SetDesiredLength(&ci->saber[0], -1, 0);
+				}
+				else
+				{
+					BG_SI_SetDesiredLength(&ci->saber[0], -1, -1);
+				}
+				if ( ci->saber[1].model	//dual sabers
+					&& cent->currentState.saberHolstered == 1 )//second one off
+				{
+					//[SaberThrowSys]			
+					if(cent->currentState.saberInFlight && !cent->currentState.saberEntityNum)
+					{//if the saber has been knocked down, saberHolstered means the second saber is rendered instead of
+						//the first saber.
+						BG_SI_SetDesiredLength(&ci->saber[0], 0, -1);
+						BG_SI_SetDesiredLength(&ci->saber[1], -1, -1);
+					}
+					else
+					{
+						BG_SI_SetDesiredLength(&ci->saber[1], 0, -1);
+					}
+					//BG_SI_SetDesiredLength(&ci->saber[1], 0, -1);
+					//[/SaberThrowSys]
+					
+				}
+				else
+				{
+					BG_SI_SetDesiredLength(&ci->saber[1], -1, -1);
+				}
+			}
+
+			/* basejka code
 			if ( ci->saber[0].numBlades > 1//staff
 				&& cent->currentState.saberHolstered == 1 )//extra blades off
 			{//only first blade should be on
@@ -13583,6 +13760,8 @@ stillDoSaber:
 			{
 				BG_SI_SetDesiredLength(&ci->saber[1], -1, -1);
 			}
+			*/
+			//[/SaberThrowSys]
 		}
 
 		//If the arm the saber is in is broken, turn it off.
@@ -13598,11 +13777,17 @@ stillDoSaber:
 			BG_SI_SetDesiredLength(&ci->saber[1], 0, -1);
 		}
 
+		//[SaberThrowSys]
+		//We don't want this anymore since the new Saber Throw has a lit saber
+		//while in this state.
+		/*
 		if (!cent->currentState.saberEntityNum)
 		{
 			BG_SI_SetDesiredLength(&ci->saber[0], 0, -1);
 			//BG_SI_SetDesiredLength(&ci->saber[1], 0, -1);
 		}
+		*/
+		//[/SaberThrowSys]
 		/*
 		else
 		{
@@ -13612,6 +13797,9 @@ stillDoSaber:
 		*/
 		drawPlayerSaber = qtrue;
 	}
+	//[SaberThrowSys]
+	//rearranged this code a little because sabers can now be returning without being active.
+	/* basejka code
 	else if (cent->currentState.weapon == WP_SABER)
 	{
 		//cent->saberLength = 0;
@@ -13620,6 +13808,8 @@ stillDoSaber:
 
 		drawPlayerSaber = qtrue;
 	}
+	*/
+	//[/SaberThrowSys]
 	else
 	{
 		//cent->saberLength = 0;
@@ -13754,7 +13944,11 @@ stillDoSaber:
 		BG_SI_SetDesiredLength(&ci->saber[0], 0, -1);
 		BG_SI_SetDesiredLength(&ci->saber[1], 0, -1);
 
-		if (g2HasWeapon)
+		//[SaberThrowSys]
+		//had to change this to allow for the rendering of non-saber weapons while the player's saber is out.
+		if (g2HasWeapon && cent->ghoul2weapon == CG_G2WeaponInstance(cent, WP_SABER))
+		//if (g2HasWeapon)
+		//[/SaberThrowSys]
 		{ //and remember to kill the bolton model in case we didn't get a thrown saber update first
 			trap_G2API_RemoveGhoul2Model(&(cent->ghoul2), 1);
 			g2HasWeapon = qfalse;

@@ -991,9 +991,9 @@ int	uiHoldSkinColor=TEAM_FREE;	// Stores the skin color so that in non-team game
 
 static const serverFilter_t serverFilters[] = {
 	//[SERVERFILTERS]
-	//Show the OJP Basic filter by default.
-	{"OJP_MENUS_OJP_BASIC", "ojpbasic"},
-	{"MENUS_ALL", "" },
+	//since OJP Enhanced only works with OJP Enhanced servers, only show them.
+	{"OJP_MENUS_OJP_ENHANCED", "ojpenhanced"},
+	//{"MENUS_ALL", "" },
 	//{"MENUS_JEDI_ACADEMY", "" },
 	//[/SERVERFILTERS]
 };
@@ -2224,8 +2224,11 @@ static void UI_DrawGenericNum(rectDef_t *rect, float scale, vec4_t color, int te
 }
 
 static void UI_DrawForceMastery(rectDef_t *rect, float scale, vec4_t color, int textStyle, int val, int min, int max, int iMenuFont)
-{
+{//racc - renders the player's current force mastery level to the screen.
 	int i;
+	//[ExpSys]
+	int x;
+	//[/ExpSys]
 	char *s;
 
 	i = val;
@@ -2233,12 +2236,30 @@ static void UI_DrawForceMastery(rectDef_t *rect, float scale, vec4_t color, int 
 	{
 		i = min;
 	}
+	//[ExpSys]
+	//initialize s to make the compiler happy.  However, the below code shouldn't ever NOT set s.
+	s = (char *)UI_GetStringEdString("MP_INGAME", forceMasteryLevels[0]);
+
+	//allowing for dynamic skill point totals.  Determine rank based on the highest mastery
+	//level the player has points for.
+	for(x = NUM_FORCE_MASTERY_LEVELS-1; x >= 0; x--)
+	{
+		if(i >= forceMasteryPoints[x])
+		{//we've found the highest level mastery that we have the skill points for.
+			s = (char *)UI_GetStringEdString("MP_INGAME", forceMasteryLevels[x]);
+			break;
+		}
+	}
+
+	/* basejka code
 	if (i > max)
 	{
 		i = max;
 	}
 
 	s = (char *)UI_GetStringEdString("MP_INGAME", forceMasteryLevels[i]);
+	*/
+	//[/ExpSys]
 	Text_Paint(rect->x, rect->y, scale, color, s, 0, 0, textStyle, iMenuFont);
 }
 
@@ -2622,7 +2643,8 @@ static void UI_DrawMapCinematic(rectDef_t *rect, float scale, vec4_t color, qboo
 }
 
 static void UI_SetForceDisabled(int force)
-{
+{//racc - Disables force powers in the menus based on current force powers disabled.  
+	//This disables the individual force skill items in the menus and locks them to their desired "disabled" value.
 	int i = 0;
 
 	if (force)
@@ -2633,17 +2655,26 @@ static void UI_SetForceDisabled(int force)
 			{
 				uiForcePowersDisabled[i] = qtrue;
 
-				if (i != FP_LEVITATION && i != FP_SABER_OFFENSE && i != FP_SABER_DEFENSE)
+				//[ExpSys]
+				//don't force Force Jump on players when that power is disabled.
+				if (i != FP_SABER_OFFENSE && i != FP_SABER_DEFENSE)
+				//if (i != FP_LEVITATION && i != FP_SABER_OFFENSE && i != FP_SABER_DEFENSE)
+				//[/ExpSys]
 				{
 					uiForcePowersRank[i] = 0;
 				}
 				else
 				{
+					//[ExpSys]
+					//don't force Force Jump on players when that power is disabled.
+					/*
 					if (i == FP_LEVITATION)
 					{
 						uiForcePowersRank[i] = 1;
 					}
 					else
+					*/
+					//[/ExpSys]
 					{
 						uiForcePowersRank[i] = 3;
 					}
@@ -3193,11 +3224,24 @@ static int UI_OwnerDrawWidth(int ownerDraw, float scale) {
 		break;
     case UI_FORCE_RANK:
 		i = uiForceRank;
+		//[ExpSys]
+		//display rank based on player's current relative rank based on their current points.
+		for(findex = NUM_FORCE_MASTERY_LEVELS-1; findex >= 0; findex--)
+		{
+			if(i >= forceMasteryPoints[findex])
+			{//we've found the highest level mastery that we have the skill points for.
+				s = (char *)UI_GetStringEdString("MP_INGAME", forceMasteryLevels[findex]);
+				break;
+			}
+		}
+		/* basejka code
 		if (i < 1 || i > MAX_FORCE_RANK) {
 			i = 1;
 		}
 
 		s = (char *)UI_GetStringEdString("MP_INGAME", forceMasteryLevels[i]);
+		*/
+		//[/ExpSys]
 		break;
 	case UI_FORCE_RANK_HEAL:
 	case UI_FORCE_RANK_LEVITATION:
@@ -3386,7 +3430,7 @@ static void UI_DrawRedBlue(rectDef_t *rect, float scale, vec4_t color, int textS
 	else
 	{
 	Text_Paint(rect->x, rect->y, scale, color, (uiInfo.redBlue == 0) ? UI_GetStringEdString("MP_INGAME","RED") : UI_GetStringEdString("MP_INGAME","BLUE"), 0, 0, textStyle,iMenuFont);
-}
+	}
 	//Text_Paint(rect->x, rect->y, scale, color, (uiInfo.redBlue == 0) ? UI_GetStringEdString("MP_INGAME","RED") : UI_GetStringEdString("MP_INGAME","BLUE"), 0, 0, textStyle,iMenuFont);
 	//[/CoOp]
 }
@@ -3667,6 +3711,7 @@ static void UI_OwnerDraw(float x, float y, float w, float h, float text_x, float
     case UI_FORCE_POINTS:
       UI_DrawGenericNum(&rect, scale, color, textStyle, uiForceAvailable, 1, forceMasteryPoints[MAX_FORCE_RANK], ownerDraw,iMenuFont);
       break;
+	//racc - this shouldn't be used anymore since the experience system uses g_forceMaxRank differently.
 	case UI_FORCE_MASTERY_SET:
       UI_DrawForceMastery(&rect, scale, color, textStyle, uiForceRank, 0, MAX_FORCE_RANK, iMenuFont);
       break;
@@ -3708,7 +3753,11 @@ static void UI_OwnerDraw(float x, float y, float w, float h, float text_x, float
 
 		findex = (ownerDraw - UI_FORCE_RANK)-1;
 		//this will give us the index as long as UI_FORCE_RANK is always one below the first force rank index
-		if (uiForcePowerDarkLight[findex] && uiForceSide != uiForcePowerDarkLight[findex])
+		//[ForceSys]
+		//allow dark/light powers at the same time.
+		if (uiForcePowerDarkLight[findex])
+		//if (uiForcePowerDarkLight[findex] && uiForceSide != uiForcePowerDarkLight[findex])
+		//[/ForceSys]
 		{
 			color[0] *= 0.5;
 			color[1] *= 0.5;
@@ -4960,6 +5009,7 @@ static qboolean UI_OwnerDrawHandleKey(int ownerDraw, int flags, float *special, 
     case UI_JEDI_NONJEDI:
       return UI_JediNonJedi_HandleKey(flags, special, key, uiJediNonJedi, 0, 1, ownerDraw);
       break;
+	//racc - this shouldn't be used anymore since the experience system uses g_forceMaxRank differently.
 	case UI_FORCE_MASTERY_SET:
       return UI_ForceMaxRank_HandleKey(flags, special, key, uiForceRank, 1, MAX_FORCE_RANK, ownerDraw);
       break;

@@ -101,7 +101,11 @@ int forcePowerNeeded[NUM_FORCE_POWER_LEVELS][NUM_FORCE_POWERS] =
 		50,//FP_ABSORB,//duration
 		50,//FP_TEAM_HEAL,//instant
 		50,//FP_TEAM_FORCE,//instant
-		20,//FP_DRAIN,//hold/duration
+		//[ForceSys]
+		//drain now acts like lightning.
+		1,//FP_DRAIN,//hold/duration
+		//20,//FP_DRAIN,//hold/duration
+		//[/ForceSys]
 		20,//FP_SEE,//duration
 		0,//FP_SABER_OFFENSE,
 		2,//FP_SABER_DEFENSE,
@@ -112,8 +116,13 @@ int forcePowerNeeded[NUM_FORCE_POWER_LEVELS][NUM_FORCE_POWERS] =
 		60,//FP_HEAL,//instant
 		10,//FP_LEVITATION,//hold/duration
 		50,//FP_SPEED,//duration
-		20,//FP_PUSH,//hold/duration
-		20,//FP_PULL,//hold/duration
+		//[ForceSys]
+		//reduced the FP cost for pull/push
+		15,//FP_PUSH,//hold/duration
+		15,//FP_PULL,//hold/duration
+		//20,//FP_PUSH,//hold/duration
+		//20,//FP_PULL,//hold/duration
+		//[/ForceSys]
 		20,//FP_TELEPATHY,//instant
 		30,//FP_GRIP,//hold/duration
 		1,//FP_LIGHTNING,//hold/duration
@@ -122,7 +131,11 @@ int forcePowerNeeded[NUM_FORCE_POWER_LEVELS][NUM_FORCE_POWERS] =
 		25,//FP_ABSORB,//duration
 		33,//FP_TEAM_HEAL,//instant
 		33,//FP_TEAM_FORCE,//instant
-		20,//FP_DRAIN,//hold/duration
+		//[ForceSys]
+		//drain now acts like lightning.
+		1,//FP_DRAIN,//hold/duration
+		//20,//FP_DRAIN,//hold/duration
+		//[/ForceSys]
 		20,//FP_SEE,//duration
 		0,//FP_SABER_OFFENSE,
 		1,//FP_SABER_DEFENSE,
@@ -133,8 +146,13 @@ int forcePowerNeeded[NUM_FORCE_POWER_LEVELS][NUM_FORCE_POWERS] =
 		50,//FP_HEAL,//instant //You get 5 points of health.. for 50 force points!
 		10,//FP_LEVITATION,//hold/duration
 		50,//FP_SPEED,//duration
-		20,//FP_PUSH,//hold/duration
-		20,//FP_PULL,//hold/duration
+		//[ForceSys]
+		//reduced the FP cost for pull/push
+		10,//FP_PUSH,//hold/duration
+		10,//FP_PULL,//hold/duration
+		//20,//FP_PUSH,//hold/duration
+		//20,//FP_PULL,//hold/duration
+		//[/ForceSys]
 		20,//FP_TELEPATHY,//instant
 		60,//FP_GRIP,//hold/duration
 		1,//FP_LIGHTNING,//hold/duration
@@ -143,7 +161,11 @@ int forcePowerNeeded[NUM_FORCE_POWER_LEVELS][NUM_FORCE_POWERS] =
 		10,//FP_ABSORB,//duration
 		25,//FP_TEAM_HEAL,//instant
 		25,//FP_TEAM_FORCE,//instant
-		20,//FP_DRAIN,//hold/duration
+		//[ForceSys]
+		//drain now acts like lightning.
+		1,//FP_DRAIN,//hold/duration
+		//20,//FP_DRAIN,//hold/duration
+		//[/ForceSys]
 		20,//FP_SEE,//duration
 		0,//FP_SABER_OFFENSE,
 		0,//FP_SABER_DEFENSE,
@@ -302,15 +324,31 @@ int PM_GetSaberStance(void)
 		anim = BOTH_SABERSTAFF_STANCE;
 		break;
 	case SS_FAST:
-	case SS_TAVION:
+	//[SaberSys]
+	//hidden styles now have dedicationed stances.
+	//case SS_TAVION:
+	//[SaberSys]
 		anim = BOTH_SABERFAST_STANCE;
 		break;
 	case SS_STRONG:
 		anim = BOTH_SABERSLOW_STANCE;
 		break;
+	//[SaberSys]
+	//hidden styles now have dedicationed stances.
+	case SS_TAVION:
+		anim = BOTH_SABERTAVION_STANCE;
+		break;
+	case SS_DESANN:
+		anim = BOTH_SABERDESANN_STANCE;
+		break;
+	//[/SaberSys]
+
 	case SS_NONE:
 	case SS_MEDIUM:
-	case SS_DESANN:
+	//[SaberSys]
+	//hidden styles now have dedicationed stances.
+	//case SS_DESANN:
+	//[/SaberSys]
 	default:
 		anim = BOTH_STAND2;
 		break;
@@ -1720,6 +1758,13 @@ static float BG_ForceWallJumpStrength( void )
 
 qboolean PM_AdjustAngleForWallJump( playerState_t *ps, usercmd_t *ucmd, qboolean doMove )
 {
+	//[LedgeGrab]
+	if ( BG_InLedgeMove( ps->legsAnim ) )
+	{//Ledge movin'  Let the ledge move function handle it.
+		return qfalse;
+	}
+	//[/LedgeGrab]
+
 	if ( ( ( BG_InReboundJump( ps->legsAnim ) || BG_InReboundHold( ps->legsAnim ) )
 			&& ( BG_InReboundJump( ps->torsoAnim ) || BG_InReboundHold( ps->torsoAnim ) ) )
 		|| (pm->ps->pm_flags&PMF_STUCK_TO_WALL) )
@@ -1869,6 +1914,270 @@ qboolean PM_AdjustAngleForWallJump( playerState_t *ps, usercmd_t *ucmd, qboolean
 	return qfalse;
 }
 
+
+//[LedgeGrab]
+//The height level at which you grab ledges.  In terms of player origin
+#define LEDGEGRABMAXHEIGHT		70
+#define LEDGEGRABHEIGHT			52.4
+#define LEDGEVERTOFFSET			LEDGEGRABHEIGHT
+#define LEDGEGRABMINHEIGHT		40
+
+//max distance you can be from the ledge for ledge grabbing to work
+#define LEDGEGRABDISTANCE		40
+
+//min distance you can be from the ledge for ledge grab to work
+#define LEDGEGRABMINDISTANCE	22
+
+//distance at which the animation grabs the ledge
+#define LEDGEHOROFFSET			22.3
+
+//lets go of a ledge
+void BG_LetGoofLedge(playerState_t *ps)
+{
+	ps->pm_flags &= ~PMF_STUCK_TO_WALL;
+	ps->torsoTimer = 0;
+	ps->legsTimer = 0;
+}
+
+//[test]
+extern void trap_Cvar_VariableStringBuffer( const char *var_name, char *buffer, int bufsize );
+//[/test]
+void PM_SetVelocityforLedgeMove( playerState_t *ps, int anim )
+{
+	vec3_t fwdAngles, moveDir;
+	float animationpoint = BG_GetLegsAnimPoint(ps, pm_entSelf->localAnimIndex);
+
+	switch(anim)
+	{
+		case BOTH_LEDGE_GRAB:
+		case BOTH_LEDGE_HOLD:
+			VectorClear(ps->velocity);
+			return;
+			break;
+		case BOTH_LEDGE_LEFT:
+			if(animationpoint > .333 && animationpoint < .666)
+			{
+				VectorSet(fwdAngles, 0, pm->ps->viewangles[YAW], 0);
+				AngleVectors( fwdAngles, NULL, moveDir, NULL );
+				VectorScale(moveDir, -30, moveDir);
+				VectorCopy(moveDir, ps->velocity);
+			}
+			else
+			{
+				VectorClear(ps->velocity);
+			}
+			break;
+		case BOTH_LEDGE_RIGHT:
+			if(animationpoint > .333 && animationpoint < .666)
+			{
+				VectorSet(fwdAngles, 0, pm->ps->viewangles[YAW], 0);
+				AngleVectors( fwdAngles, NULL, moveDir, NULL );
+				VectorScale(moveDir, 30, moveDir);
+				VectorCopy(moveDir, ps->velocity);
+			}
+			else
+			{
+				VectorClear(ps->velocity);
+			}
+			break;
+		case BOTH_LEDGE_MERCPULL:
+			if(animationpoint > .8 && animationpoint < .925)
+			{
+				ps->velocity[0] = 0;
+				ps->velocity[1] = 0;
+				ps->velocity[2] = 154;
+			}
+			else if( animationpoint > .7 && animationpoint < .75 )
+			{
+				ps->velocity[0] = 0;
+				ps->velocity[1] = 0;
+				ps->velocity[2] = 26;
+			}
+			else if( animationpoint > .375 && animationpoint < .7)
+			{
+				ps->velocity[0] = 0;
+				ps->velocity[1] = 0;
+				ps->velocity[2] = 140;
+			}
+			else if( animationpoint < .375 )
+			{
+				VectorSet(fwdAngles, 0, pm->ps->viewangles[YAW], 0);
+				AngleVectors( fwdAngles, moveDir, NULL, NULL );
+				VectorScale(moveDir, 140, moveDir);
+				VectorCopy(moveDir, ps->velocity);
+			}
+			else
+			{
+				VectorClear(ps->velocity);
+			}
+			break;
+		default:
+			VectorClear(ps->velocity);
+			return;
+			break;
+	}
+}
+			
+//[LedgeGrab]
+//Switch to this animation and keep repeating this animation while updating its timers
+#define	AFLAG_PACE (SETANIM_FLAG_OVERRIDE|SETANIM_FLAG_HOLD|SETANIM_FLAG_HOLDLESS|SETANIM_FLAG_PACE)
+//[/LedgeGrab]
+
+void PM_AdjustAngleForWallGrap( playerState_t *ps, usercmd_t *ucmd )
+{
+	if(ps->pm_flags & PMF_STUCK_TO_WALL && BG_InLedgeMove( ps->legsAnim ))
+	{//still holding onto the ledge stick our view to the wall angles
+		if(ps->legsAnim != BOTH_LEDGE_MERCPULL)
+		{
+			vec3_t traceTo, traceFrom, fwd, fwdAngles;
+			trace_t	trace;
+
+			VectorSet(fwdAngles, 0, pm->ps->viewangles[YAW], 0);
+			AngleVectors(fwdAngles, fwd, NULL, NULL);
+			VectorNormalize(fwd);
+
+			VectorCopy(ps->origin, traceFrom);
+			traceFrom[2] += LEDGEGRABHEIGHT - 1;
+
+			VectorMA( traceFrom, LEDGEGRABDISTANCE, fwd, traceTo );
+
+			pm->trace( &trace, traceFrom, NULL, NULL, traceTo, ps->clientNum, MASK_SOLID );
+
+			if(trace.fraction == 1)
+			{//that's not good, we lost the ledge so let go.
+				BG_LetGoofLedge(ps);
+				return;
+			}
+
+			//lock the view viewangles
+			ps->viewangles[YAW] = vectoyaw( trace.plane.normal )+180;
+			PM_SetPMViewAngle(ps, ps->viewangles, ucmd);
+			ucmd->angles[YAW] = ANGLE2SHORT( ps->viewangles[YAW] ) - ps->delta_angles[YAW];
+		}
+		else
+		{//lock viewangles
+			PM_SetPMViewAngle(ps, ps->viewangles, ucmd);
+			ucmd->angles[YAW] = ANGLE2SHORT( ps->viewangles[YAW] ) - ps->delta_angles[YAW];
+		}
+
+		if(ps->legsTimer <= 50)
+		{//Try switching to idle
+			if(ps->legsAnim == BOTH_LEDGE_MERCPULL)
+			{//pull up done, bail.
+				ps->pm_flags &= ~PMF_STUCK_TO_WALL;
+			}
+			else
+			{
+				PM_SetAnim( SETANIM_BOTH, BOTH_LEDGE_HOLD, SETANIM_FLAG_OVERRIDE, 0 );
+				ps->torsoTimer = 500;
+				ps->legsTimer = 500;
+				//hold weapontime so people can't do attacks while in ledgegrab
+				ps->weaponTime = ps->legsTimer;
+
+			}
+		}
+		else if( ps->legsAnim == BOTH_LEDGE_HOLD)
+		{
+			if(ucmd->rightmove)
+			{//trying to move left/right
+				if(ucmd->rightmove < 0)
+				{//shimmy left
+					PM_SetAnim( SETANIM_BOTH, BOTH_LEDGE_LEFT, AFLAG_PACE, 0 );
+					//hold weapontime so people can't do attacks while in ledgegrab
+					ps->weaponTime = ps->legsTimer;				
+				}
+				else
+				{//shimmy right
+					PM_SetAnim( SETANIM_BOTH, BOTH_LEDGE_RIGHT, AFLAG_PACE, 0 );
+					//hold weapontime so people can't do attacks while in ledgegrab
+					ps->weaponTime = ps->legsTimer;
+				}
+			}
+			else if(ucmd->forwardmove < 0)
+			{//letting go
+				BG_LetGoofLedge(ps);
+			}
+			else if(ucmd->forwardmove > 0)
+			{//Pull up
+					PM_SetAnim( SETANIM_BOTH, BOTH_LEDGE_MERCPULL, SETANIM_FLAG_OVERRIDE|SETANIM_FLAG_HOLD|SETANIM_FLAG_HOLDLESS, 0 );
+					//hold weapontime so people can't do attacks while in ledgegrab
+					ps->weaponTime = ps->legsTimer;
+			}
+			else
+			{//keep holding on
+				ps->torsoTimer = 500;
+				ps->legsTimer = 500;
+				//hold weapontime so people can't do attacks while in ledgegrab
+				ps->weaponTime = ps->legsTimer;
+			}
+		}
+
+		//set movement velocity
+		PM_SetVelocityforLedgeMove(ps, ps->legsAnim);
+
+		//clear movement commands to prevent movement
+		ucmd->rightmove = 0;
+		ucmd->upmove = 0;
+		ucmd->forwardmove = 0;
+	}
+}
+//[/LedgeGrab]
+
+//[KnockdownSys]
+//[SPPortCompete]
+extern qboolean PM_InForceGetUp( playerState_t *ps );
+int PM_MinGetUpTime( playerState_t *ps );
+qboolean PM_AdjustAnglesForKnockdown( playerState_t *ps, usercmd_t *ucmd )
+{//racc - adjusts the move cmd and angles for knockdown moves.
+	if ( PM_InKnockDown( ps ) )
+	{//being knocked down or getting up, can't do anything!
+		if ( !PM_InForceGetUp( ps ) && (ps->legsTimer > PM_MinGetUpTime( ps ) 
+			//KNOCKDOWNFIXME RAFIXME - impliment G_ControlledByPlayer?
+			|| ps->clientNum >= MAX_CLIENTS
+			//racc - don't move while using the non-force powered getups
+			|| ps->legsAnim == BOTH_GETUP1
+			|| ps->legsAnim == BOTH_GETUP2
+			|| ps->legsAnim == BOTH_GETUP3
+			|| ps->legsAnim == BOTH_GETUP4
+			|| ps->legsAnim == BOTH_GETUP5) )
+			//|| (ent->s.number >= MAX_CLIENTS&&!G_ControlledByPlayer(ent)) )
+		{//can't get up yet
+			ucmd->forwardmove = 0;
+			ucmd->rightmove = 0;
+		}
+		
+		if(ps->clientNum >= MAX_CLIENTS)
+		//if ( ent->NPC ) //SP version
+		{
+			VectorClear( ps->moveDir );
+		}
+		//you can jump up out of a knockdown and you get get up into a crouch from a knockdown
+		//ucmd->upmove = 0;
+		//if ( !PM_InForceGetUp( &ent->client->ps ) || ent->client->ps.torsoAnimTimer > 800 || ent->s.weapon != WP_SABER )
+		if(ps->stats[STAT_HEALTH] > 0)
+		//if ( ent->health > 0 ) //SP version
+		{//can only attack if you've started a force-getup and are using the saber
+			ucmd->buttons = 0;
+		}
+
+		if ( !PM_InForceGetUp( ps ) )
+		{//can't turn unless in a force getup
+			//KNOCKDOWNFIXME RAFIXME - impliment viewEntity?
+			//if ( ent->client->ps.viewEntity <= 0 || ent->client->ps.viewEntity >= ENTITYNUM_WORLD )
+			{//don't clamp angles when looking through a viewEntity
+				PM_SetPMViewAngle(ps, ps->viewangles, ucmd);
+				//SetClientViewAngle( ent, ent->client->ps.viewangles ); //SP version
+			}
+			ucmd->angles[PITCH] = ANGLE2SHORT( ps->viewangles[PITCH] ) - ps->delta_angles[PITCH];
+			ucmd->angles[YAW] = ANGLE2SHORT( ps->viewangles[YAW] ) - ps->delta_angles[YAW];
+			return qtrue;
+		}
+	}
+	return qfalse;
+}
+//[/SPPortCompete]
+//[/KnockdownSys]
+
 //Set the height for when a force jump was started. If it's 0, nuge it up (slight hack to prevent holding jump over slopes)
 void PM_SetForceJumpZStart(float value)
 {
@@ -1894,11 +2203,109 @@ void PM_GrabWallForJump( int anim )
 	pm->ps->pm_flags |= PMF_STUCK_TO_WALL;
 }
 
+//[FORCE FALL]
+//[ForceDefines]
+//The FP cost of Force Fall
+#define FM_FORCEFALL			5
+
+//the velocity to which Force Fall activates and tries to slow you to.
+#define FORCEFALLVELOCITY		-500
+
+//Rate at which the player brakes
+int ForceFallBrakeRate[NUM_FORCE_POWER_LEVELS] =
+{
+	0, //Can't brake with zero Force Jump skills
+	30,
+	40,
+	50,
+};
+
+//time between Force Fall braking actions.
+#define FORCEFALLDEBOUNCE		100
+
+qboolean PM_CanForceFall()
+{	
+	return (!BG_InRoll(pm->ps, pm->ps->legsAnim) // not rolling
+		&& !PM_InKnockDown(pm->ps) // not knocked down
+		&& !BG_InDeathAnim(pm->ps->legsAnim) // not dead
+		&& !BG_SaberInSpecialAttack(pm->ps->torsoAnim) // not doing special attack
+		&& !BG_SaberInAttack(pm->ps->saberMove) // not attacking
+		&& BG_CanUseFPNow(pm->gametype, pm->ps, pm->cmd.serverTime, FP_HEAL) // can use force power
+		&& !(pm->ps->pm_flags & PMF_JUMP_HELD) // have to have released jump since last press
+		&& pm->cmd.upmove > 10 // pressing the jump button
+		&& pm->ps->velocity[2] < FORCEFALLVELOCITY // falling
+		&& pm->ps->groundEntityNum == ENTITYNUM_NONE // in the air
+		&& pm->ps->fd.forcePowerLevel[FP_LEVITATION] > FORCE_LEVEL_0 //have force jump level 1 or above
+		&& pm->ps->fd.forcePower > FM_FORCEFALL // have atleast 5 force power points
+		&& pm->waterlevel < 2 // above water level
+		&& pm->ps->gravity > 0); // not in zero-g
+}
+
+qboolean PM_InForceFall()
+{
+	int ForceManaModifier = 0;
+	int FFDebounce = pm->ps->fd.forcePowerDebounce[FP_LEVITATION] - (pm->ps->fd.forcePowerLevel[FP_LEVITATION] * 100);
+
+	// can player force fall?
+	if (PM_CanForceFall())	
+	{
+		// play special animation when player has the saber or melee
+		if (pm->ps->weapon == WP_MELEE || pm->ps->weapon == WP_SABER)
+			PM_SetAnim(SETANIM_BOTH, BOTH_FORCEINAIR1, SETANIM_FLAG_OVERRIDE | SETANIM_FLAG_HOLD, 150);
+
+		// reduce falling velocity to a safe speed at set intervals
+		//Warning: Dirty Hack ahead!
+		if (FFDebounce + FORCEFALLDEBOUNCE < pm->cmd.serverTime)
+		{
+			if (pm->ps->velocity[2] < FORCEFALLVELOCITY)
+			{
+				if( (FORCEFALLVELOCITY - pm->ps->velocity[2]) < ForceFallBrakeRate[pm->ps->fd.forcePowerLevel[FP_LEVITATION]])
+				{
+					pm->ps->velocity[2] = FORCEFALLVELOCITY;
+				}
+				else
+				{
+					pm->ps->velocity[2] += ForceFallBrakeRate[pm->ps->fd.forcePowerLevel[FP_LEVITATION]];
+				}
+			}
+		}
+
+		// creates that cool Force Speed effect
+		pm->ps->powerups[PW_SPEED] = pm->cmd.serverTime + 100;
+
+		// is it time to reduce the players force power
+		if (pm->ps->fd.forcePowerDebounce[FP_LEVITATION] < pm->cmd.serverTime)
+		{
+			// reduced the use of force power for duel and power duel matches
+			if (pm->gametype == GT_DUEL || pm->gametype == GT_POWERDUEL)
+				ForceManaModifier = -4;
+
+			// FP_LEVITATION drains force mana only when player 
+			// has an upward velocity, so I used FP_HEAL instead
+			BG_ForcePowerDrain(pm->ps, FP_HEAL, FM_FORCEFALL + ForceManaModifier); 
+
+			// removes force power at a rate of 0.1 secs * force jump level
+			pm->ps->fd.forcePowerDebounce[FP_LEVITATION] = pm->cmd.serverTime + (pm->ps->fd.forcePowerLevel[FP_LEVITATION] * 100);
+		}
+
+		// player is force falling
+		return qtrue;
+	}
+
+	// player is not force falling
+	return qfalse;
+}
+//[/FORCE FALL]
+
 /*
 =============
 PM_CheckJump
 =============
 */
+//[FatigueSys]
+extern qboolean BG_EnoughForcePowerForMove( int cost );
+extern void BG_AddFatigue( playerState_t * ps, int Fatigue);
+//[/FatigueSys]
 static qboolean PM_CheckJump( void ) 
 {
 	qboolean allowFlips = qtrue;
@@ -1921,6 +2328,14 @@ static qboolean PM_CheckJump( void )
 		return qfalse;
 	}
 
+	//[KnockdownSys]
+	//handle the new system for knockdowns
+	if(PM_InKnockDown(pm->ps))
+	{
+		return qfalse;
+	}
+	//[/KnockdownSys]
+
 	if (pm->ps->pm_type == PM_JETPACK)
 	{ //there's no actual jumping while we jetpack
 		return qfalse;
@@ -1935,6 +2350,11 @@ static qboolean PM_CheckJump( void )
 	{//in knockdown
 		return qfalse;		
 	}
+
+	//[FORCE FALL]
+	if (PM_InForceFall())
+		return qfalse;
+	//[/FORCE FALL]
 
 	if ( pm->ps->weapon == WP_SABER )
 	{
@@ -1961,7 +2381,14 @@ static qboolean PM_CheckJump( void )
 	{ //Force jump is already active.. continue draining power appropriately until we land.
 		if (pm->ps->fd.forcePowerDebounce[FP_LEVITATION] < pm->cmd.serverTime)
 		{
-			if ( pm->gametype == GT_DUEL 
+			//[FatigueSys]
+			//backflips don't constantly drain force power.
+			if( BG_InBackFlip( pm->ps->legsAnim ) )
+			{
+			}
+			else if ( pm->gametype == GT_DUEL 
+			//if ( pm->gametype == GT_DUEL 
+			//[/FatigueSys]
 				|| pm->gametype == GT_POWERDUEL )
 			{//jump takes less power
 				BG_ForcePowerDrain( pm->ps, FP_LEVITATION, 1 );
@@ -2331,7 +2758,11 @@ static qboolean PM_CheckJump( void )
 			}
 			else if ( pm->cmd.forwardmove < 0 && !(pm->cmd.buttons&BUTTON_ATTACK) )
 			{//backflip
-				if ( allowFlips )
+				//[FatigueSys]
+				//can't backflip if we don't have enough FP
+				if ( allowFlips && BG_EnoughForcePowerForMove(FATIGUE_BACKFLIP) )
+				//if ( allowFlips )
+				//[/FatigueSys]
 				{
 					vertPush = JUMP_VELOCITY;
 					anim = BOTH_FLIP_BACK1;//BG_PickAnim( BOTH_FLIP_BACK1, BOTH_FLIP_BACK3 );
@@ -2414,6 +2845,9 @@ static qboolean PM_CheckJump( void )
 						{
 							pm->ps->velocity[0] = pm->ps->velocity[1] = 0;
 							VectorMA( pm->ps->velocity, -150, fwd, pm->ps->velocity );
+							//[FatigueSys]
+							BG_AddFatigue(pm->ps, FATIGUE_BACKFLIP);
+							//[/FatigueSys]
 						}
 
 						/*
@@ -2887,6 +3321,191 @@ static qboolean PM_CheckJump( void )
 
 	return qtrue;
 }
+
+
+//[LedgeGrab]
+qboolean LedgeTrace( trace_t *trace, vec3_t dir, float *lerpup, float *lerpfwd, float *lerpyaw)
+{//scan for for a ledge in the given direction
+	vec3_t traceTo, traceFrom, wallangles;
+	VectorMA( pm->ps->origin, LEDGEGRABDISTANCE, dir, traceTo );
+	VectorCopy(pm->ps->origin, traceFrom);
+	
+	traceFrom[2] += LEDGEGRABMINHEIGHT;
+	traceTo[2] += LEDGEGRABMINHEIGHT;
+
+	pm->trace( trace, traceFrom, NULL, NULL, traceTo, pm->ps->clientNum, MASK_DEADSOLID );
+
+	if(trace->fraction < 1)
+	{//hit a wall, pop into the wall and fire down to find top of wall
+		VectorMA(trace->endpos, 0.5, dir, traceTo);
+
+		VectorCopy(traceTo, traceFrom);
+
+		traceFrom[2] += (LEDGEGRABMAXHEIGHT - LEDGEGRABMINHEIGHT);
+
+		pm->trace( trace, traceFrom, NULL, NULL, traceTo, pm->ps->clientNum, MASK_DEADSOLID );
+		
+		if(trace->fraction == 1.0 || trace->startsolid)
+		{
+		return qfalse;
+	}
+
+	}
+	/*
+	else
+	{//ok,
+		VectorCopy(traceTo, traceFrom);
+		traceFrom[2] += (LEDGEGRABMAXHEIGHT - LEDGEGRABMINHEIGHT);
+
+		pm->trace( trace, traceFrom, NULL, NULL, traceTo, pm->ps->clientNum, MASK_DEADSOLID );
+		
+		if(trace->fraction == 1.0 || trace->startsolid)
+		{
+			return qfalse;
+		}
+
+		//found something, let's try to find the top face.
+		VectorCopy( trace->endpos, traceFrom );
+		traceFrom[2]++;
+
+		pm->trace( trace, traceFrom, NULL, NULL, traceTo, pm->ps->clientNum, MASK_DEADSOLID );
+	
+	}
+	*/
+
+	//check to make sure we found a good top surface and go from there
+	vectoangles(trace->plane.normal, wallangles);
+	if(wallangles[PITCH] > -45)
+	{//no ledge or the ledge is too steep
+		return qfalse;
+	}
+	else
+	{
+		VectorCopy(trace->endpos, traceTo);
+		*lerpup = trace->endpos[2] - pm->ps->origin[2] - LEDGEVERTOFFSET;
+
+		VectorCopy(pm->ps->origin, traceFrom);
+		traceTo[2]-= 1;
+
+		traceFrom[2] = traceTo[2];
+
+		pm->trace( trace, traceFrom, NULL, NULL, traceTo, pm->ps->clientNum, MASK_DEADSOLID );
+
+		vectoangles(trace->plane.normal, wallangles);
+		if(trace->fraction == 1.0 || wallangles[PITCH] > 20 || wallangles[PITCH] < -20)
+		{//no ledge or too steep of a ledge
+			return qfalse;
+		}
+		
+		*lerpfwd = Distance(trace->endpos, traceFrom) - LEDGEHOROFFSET;
+		*lerpyaw = vectoyaw( trace->plane.normal )+180;
+		return qtrue;
+	}
+}
+
+//check for ledge grab
+void PM_CheckGrab(void)
+{
+	vec3_t checkDir, traceTo, fwdAngles; 
+	trace_t	trace;
+	float lerpup = 0;
+	float lerpfwd = 0;
+	float lerpyaw = 0;
+	qboolean skipcmdtrace = qfalse;
+
+	if(pm->ps->groundEntityNum != ENTITYNUM_NONE)
+	{//not in the air don't attempt a ledge grab
+		return;
+	}
+
+	if(BG_InLedgeMove(pm->ps->legsAnim) || pm->ps->pm_type == PM_SPECTATOR 
+		|| BG_InSpecialJump(pm->ps->legsAnim))
+	{//already on ledge, a spectator, or in a special jump
+		return;
+	}
+
+	//try looking in front of us first
+	VectorSet(fwdAngles, 0, pm->ps->viewangles[YAW], 0.0f);
+	AngleVectors( fwdAngles, checkDir, NULL, NULL );
+
+	if( !VectorCompare(pm->ps->velocity, vec3_origin) )
+	{//player is moving
+		if(LedgeTrace(&trace, checkDir, &lerpup, &lerpfwd, &lerpyaw))
+		{
+			skipcmdtrace = qtrue;
+		}
+	}
+	
+	if(!skipcmdtrace)
+	{//no luck finding a ledge to grab based on movement.  Try looking for a ledge based on where the player is
+		//TRYING to go.
+		if(!pm->cmd.rightmove && !pm->cmd.forwardmove)
+		{//no dice abort
+			return;
+		}
+		else
+		{
+			if ( pm->cmd.rightmove )
+			{
+				if ( pm->cmd.rightmove > 0 )
+				{
+					AngleVectors( fwdAngles, NULL, checkDir, NULL );
+					VectorNormalize(checkDir);
+				}
+				else if ( pm->cmd.rightmove < 0 )
+				{
+					AngleVectors( fwdAngles, NULL, checkDir, NULL );
+					VectorScale( checkDir, -1, checkDir );
+					VectorNormalize(checkDir);
+				}
+			}
+			else if ( pm->cmd.forwardmove > 0 )
+			{//already tried this direction.  
+				return;
+			}
+			else if ( pm->cmd.forwardmove < 0 )
+			{
+				AngleVectors( fwdAngles, checkDir, NULL, NULL );
+				VectorScale( checkDir, -1, checkDir );
+				VectorNormalize(checkDir);
+			}
+
+			if(!LedgeTrace(&trace, checkDir, &lerpup, &lerpfwd, &lerpyaw))
+			{//no dice
+				return;
+			}
+		}
+	}
+
+	VectorCopy(pm->ps->origin, traceTo);
+	VectorMA(pm->ps->origin, lerpfwd, checkDir, traceTo);
+	traceTo[2] += lerpup;
+
+	//check to see if we can actually latch to that position.
+	pm->trace( &trace, pm->ps->origin, pm->mins, pm->maxs, traceTo, pm->ps->clientNum, MASK_PLAYERSOLID );
+	if(trace.fraction != 1 || trace.startsolid)
+	{
+		return;
+	}
+
+	//turn to face wall
+	pm->ps->viewangles[YAW] = lerpyaw;
+	PM_SetPMViewAngle(pm->ps, pm->ps->viewangles, &pm->cmd);
+	pm->cmd.angles[YAW] = ANGLE2SHORT( pm->ps->viewangles[YAW] ) - pm->ps->delta_angles[YAW];
+
+
+	//We are clear to latch to the wall
+	pm->ps->saberHolstered = 2;
+	VectorCopy(trace.endpos, pm->ps->origin);
+	VectorCopy(vec3_origin, pm->ps->velocity);
+	PM_GrabWallForJump( BOTH_LEDGE_GRAB );
+	pm->ps->weaponTime = pm->ps->legsTimer;
+
+
+}
+//[/LedgeGrab]
+
+
 /*
 =============
 PM_CheckWaterJump
@@ -3221,6 +3840,9 @@ static void PM_AirMove( void ) {
 			PM_CheckJump();
 		}
 #endif
+	//[LedgeGrab]
+	PM_CheckGrab();
+	//[LedgeGrab]
 	}
 	PM_Friction();
 
@@ -3831,7 +4453,11 @@ static int PM_TryRoll( void )
 		}
 	}
 
-	if ((pm->ps->weapon != WP_SABER && pm->ps->weapon != WP_MELEE) ||
+	//[MoveSys]
+	//you can now roll with any weapon
+	if (//(pm->ps->weapon != WP_SABER && pm->ps->weapon != WP_MELEE) ||
+	//if (//(pm->ps->weapon != WP_SABER && pm->ps->weapon != WP_MELEE) ||
+	//[/MoveSys]
 		PM_IsRocketTrooper() ||
 		BG_HasYsalamiri(pm->gametype, pm->ps) ||
 		!BG_CanUseFPNow(pm->gametype, pm->ps, pm->cmd.serverTime, FP_LEVITATION))
@@ -4286,6 +4912,9 @@ PM_GroundTraceMissed
 The ground trace didn't hit a surface, so we are in freefall
 =============
 */
+//[KnockdownSys]
+qboolean PM_KnockDownAnimExtended( int anim );
+//[/KnockdownSys]
 //[CoOp]
 #ifdef QAGAME
 extern void NPC_RemoveBody( gentity_t *self );
@@ -4348,6 +4977,11 @@ static void PM_GroundTraceMissed( void ) {
 			pm->ps->inAirAnim = qtrue;
 		}
 	}
+	//[KnockdownSys]
+	else if ( PM_KnockDownAnimExtended( pm->ps->legsAnim ) )
+	{//no in-air anims when in knockdown anim
+	}
+	//[/KnockdownSys]
 	//[CoOp] SP Code
 	//handle NPCs falling to their deaths.
 #ifdef QAGAME
@@ -4613,7 +5247,13 @@ static void PM_GroundTrace( void ) {
 			Com_Printf("%i:kickoff\n", c_pmove);
 		}
 		// go into jump animation
-		if ( pm->cmd.forwardmove >= 0 ) {
+		//[KnockdownSys]
+		if(PM_InKnockDown( pm->ps ) )
+		{//already in a knockdown
+		}
+		else if ( pm->cmd.forwardmove >= 0 ) {
+		//if ( pm->cmd.forwardmove >= 0 ) {
+		//[/KnockdownSys]
 			PM_ForceLegsAnim( BOTH_JUMP1 );
 			pm->ps->pm_flags &= ~PMF_BACKWARDS_JUMP;
 		} else {
@@ -4836,6 +5476,9 @@ PM_CheckDuck
 Sets mins, maxs, and pm->ps->viewheight
 ==============
 */
+//[KnockdownSys]
+qboolean PM_GettingUpFromKnockDown( float standheight, float crouchheight );
+//[/KnockdownSys]
 static void PM_CheckDuck (void)
 {
 	trace_t	trace;
@@ -4931,8 +5574,33 @@ static void PM_CheckDuck (void)
 			pm->maxs[2] = pm->ps->standheight;//DEFAULT_MAXS_2;
 			pm->trace (&trace, pm->ps->origin, pm->mins, pm->maxs, pm->ps->origin, pm->ps->clientNum, pm->tracemask );
 			if (!trace.allsolid)
+			//[DodgeSys]
+			{
+				pm->ps->userInt3 &= ~(1 << FLAG_DODGEROLL);
 				pm->ps->pm_flags &= ~PMF_ROLLING;
 		}
+			//[/DodgeSys]
+		}
+		//[KnockdownSys]
+		else if ( PM_GettingUpFromKnockDown( pm->ps->standheight, pm->ps->crouchheight ) )
+		{//we're attempting to get up from a knockdown.
+			pm->ps->viewheight = pm->ps->crouchheight + STANDARD_VIEWHEIGHT_OFFSET;
+			return;
+		}
+		else if ( PM_InKnockDown( pm->ps ) )
+		{//forced crouch
+			/* COOPFIXME RAFIXME - impliment fire delay?
+			if ( pm->gent && pm->gent->client )
+			{//interrupted any potential delayed weapon fires
+				pm->gent->client->fireDelay = 0;
+			}
+			*/
+			pm->maxs[2] = pm->ps->crouchheight;
+			pm->ps->viewheight = pm->ps->crouchheight + STANDARD_VIEWHEIGHT_OFFSET;
+			pm->ps->pm_flags |= PMF_DUCKED;
+			return;
+		}
+		//[/KnockdownSys]
 		else if (pm->cmd.upmove < 0 ||
 			pm->ps->forceHandExtend == HANDEXTEND_KNOCKDOWN ||
 			pm->ps->forceHandExtend == HANDEXTEND_PRETHROWN ||
@@ -5061,19 +5729,32 @@ qboolean PM_SwimmingAnim( int anim )
 	return qfalse;
 }
 
+//[SPPortComplete]
 qboolean PM_RollingAnim( int anim )
-{
+{//racc - anim is a roll?
 	switch ( anim )
 	{
 	case BOTH_ROLL_F:			//# Roll forward
 	case BOTH_ROLL_B:			//# Roll backward
 	case BOTH_ROLL_L:			//# Roll left
 	case BOTH_ROLL_R:			//# Roll right
+	//[KnockdownSys]
+	//added the force rolling getup animations from SP code.
+	case BOTH_GETUP_BROLL_B:
+	case BOTH_GETUP_BROLL_F:
+	case BOTH_GETUP_BROLL_L:
+	case BOTH_GETUP_BROLL_R:
+	case BOTH_GETUP_FROLL_B:
+	case BOTH_GETUP_FROLL_F:
+	case BOTH_GETUP_FROLL_L:
+	case BOTH_GETUP_FROLL_R:
+	//[/KnockdownSys]
 		return qtrue;
 		break;
 	}
 	return qfalse;
 }
+//[/SPPortComplete]
 
 void PM_AnglesForSlope( const float yaw, const vec3_t slope, vec3_t angles )
 {
@@ -5318,6 +5999,11 @@ qboolean PM_AdjustStandAnimForSlope( void )
 	case BOTH_STAND2:
 	case BOTH_SABERFAST_STANCE:
 	case BOTH_SABERSLOW_STANCE:
+	//[SaberSys]
+	//dedicated stance animations for the hidden styles
+	case BOTH_SABERTAVION_STANCE:
+	case BOTH_SABERDESANN_STANCE:
+	//[/SaberSys]
 	case BOTH_CROUCH1IDLE:
 	case BOTH_CROUCH1:
 	case LEGS_LEFTUP1:			//# On a slope with left foot 4 higher than right
@@ -5453,6 +6139,11 @@ qboolean PM_AdjustStandAnimForSlope( void )
 		case BOTH_STAND2:
 		case BOTH_SABERFAST_STANCE:
 		case BOTH_SABERSLOW_STANCE:
+		//[SaberSys]
+		//dedicated stance animations for the hidden styles
+		case BOTH_SABERTAVION_STANCE:
+		case BOTH_SABERDESANN_STANCE:
+		//[/SaberSys]
 		case BOTH_CROUCH1IDLE:
 			if ( destAnim >= LEGS_LEFTUP1 && destAnim <= LEGS_LEFTUP5 )
 			{//going into left side up
@@ -5601,19 +6292,40 @@ int PM_LegsSlopeBackTransition(int desiredAnim)
 PM_Footsteps
 ===============
 */
+//[SaberSys]
+extern qboolean PM_SaberInBrokenParry( int move );
+//[/SaberSys]
 static void PM_Footsteps( void ) {
 	float		bobmove;
 	int			old;
 	qboolean	footstep;
 	int			setAnimFlags = 0;
 
-	if ( (PM_InSaberAnim( (pm->ps->legsAnim) ) && !BG_SpinningSaberAnim( (pm->ps->legsAnim) )) 
+	//[Knockdown]
+	if ( PM_InKnockDown( pm->ps ) )
+	{//don't interrupt knockdowns with footstep stuff.
+		return;
+	}
+	//[/Knockdown]
+	
+	//[SaberSys]
+	//racc - Broken parries should play full body.
+	if ( (PM_InSaberAnim( (pm->ps->legsAnim) ) 
+		&& !BG_SpinningSaberAnim(pm->ps->legsAnim) 
+		&& !PM_SaberInBrokenParry(pm->ps->saberMove) ) 
+	//if ( (PM_InSaberAnim( (pm->ps->legsAnim) ) && !BG_SpinningSaberAnim( (pm->ps->legsAnim) )) 
+	//[/SaberSys]
 		|| (pm->ps->legsAnim) == BOTH_STAND1 
 		|| (pm->ps->legsAnim) == BOTH_STAND1TO2 
 		|| (pm->ps->legsAnim) == BOTH_STAND2TO1 
 		|| (pm->ps->legsAnim) == BOTH_STAND2 
 		|| (pm->ps->legsAnim) == BOTH_SABERFAST_STANCE
 		|| (pm->ps->legsAnim) == BOTH_SABERSLOW_STANCE
+		//[SaberSys]
+		//dedicated stance animations for the hidden styles
+		|| (pm->ps->legsAnim) == BOTH_SABERTAVION_STANCE
+		|| (pm->ps->legsAnim) == BOTH_SABERDESANN_STANCE
+		//[/SaberSys]
 		|| (pm->ps->legsAnim) == BOTH_BUTTON_HOLD
 		|| (pm->ps->legsAnim) == BOTH_BUTTON_RELEASE
 		|| PM_LandingAnim( (pm->ps->legsAnim) ) 
@@ -5652,7 +6364,11 @@ static void PM_Footsteps( void ) {
 	//RACC - set idle stand if you're not moving and if your animation times 
 	//have kicked out.
 	// if not trying to move
-	else if ( !pm->cmd.forwardmove && !pm->cmd.rightmove ) {
+	//[MoveSys]
+	//added case for when we're restricted from moving (like during viewlocks)
+	else if ( (!pm->cmd.forwardmove && !pm->cmd.rightmove) || pm->ps->speed == 0 ) {
+	//else if ( !pm->cmd.forwardmove && !pm->cmd.rightmove ) {
+	//[/MoveSys]
 		if (  pm->xyspeed < 5 ) {
 			pm->ps->bobCycle = 0;	// start at beginning of cycle again
 			if ( pm->ps->clientNum >= MAX_CLIENTS &&
@@ -6161,7 +6877,11 @@ static void PM_Footsteps( void ) {
 					{
 						desiredAnim = BOTH_WALKBACK1;
 					}
-					else if ( pm->ps->saberHolstered )
+					//[SaberThrowSys]
+					//adding special case for dropped sabers during while using dual sabers. 
+					else if ( pm->ps->saberHolstered && (!pm->ps->saberInFlight || pm->ps->saberEntityNum) )
+					//else if ( pm->ps->saberHolstered )
+					//[/SaberThrowSys]
 					{
 						desiredAnim = BOTH_WALKBACK2;
 					}
@@ -6273,7 +6993,11 @@ static void PM_Footsteps( void ) {
 						{
 							desiredAnim = BOTH_WALK1;
 						}
-						else if ( pm->ps->saberHolstered )
+						//[SaberThrowSys]
+						//adding special case for dropped sabers during while using dual sabers. 
+						else if ( pm->ps->saberHolstered && (!pm->ps->saberInFlight || pm->ps->saberEntityNum) )
+						//else if ( pm->ps->saberHolstered )
+						//[/SaberThrowSys]
 						{
 							desiredAnim = BOTH_WALK2;
 						}
@@ -6560,10 +7284,46 @@ void PM_FinishWeaponChange( void ) {
 		weapon = WP_NONE;
 	}
 
+	
+	//[SaberThrowSys][test]
+	/* racc - I'm not sure this code by Keshire is needed for saber throw anymore.  Disabling for now to see.
+	if (weapon == WP_SABER)
+	{// This looks wrong if there is no saber present, so pretend we're force pulling it back
+		if (pm->ps->saberEntityNum)
+		{
+			PM_SetSaberMove(LS_DRAW);
+		}
+		else
+		{
+			PM_SetAnim(SETANIM_TORSO, BOTH_SABERPULL, SETANIM_FLAG_OVERRIDE, 100);
+		}
+	}
+	*/
+
 	if (weapon == WP_SABER)
 	{
+		//[SaberThrowSys]
+		if (!pm->ps->saberEntityNum && pm->ps->saberInFlight)
+		{//our saber is currently dropped.  Don't allow the dropped blade to be activated.
+			if ( pm->ps->fd.saberAnimLevel == SS_DUAL )
+			{//holding second saber, activate it.
+				pm->ps->saberHolstered = 1;
 		PM_SetSaberMove(LS_DRAW);
 	}
+	else
+			{//not holding any sabers, make sure all our blades are all off.
+				pm->ps->saberHolstered = 2;
+			}
+		}
+		else if(!pm->ps->saberInFlight)
+		{//have saber(s)
+			PM_SetSaberMove(LS_DRAW);
+		}
+
+		//PM_SetSaberMove(LS_DRAW);
+		//[/SaberThrowSys]
+	}
+	//[/SaberThrowSys][/test]
 	else
 	{
 		//PM_StartTorsoAnim( TORSO_RAISEWEAP1);
@@ -7394,6 +8154,26 @@ backAgain:
 	}
 }
 
+
+//[SaberSys]
+void PM_DoPunch(void)
+{
+	int desTAnim = BOTH_MELEE1;
+	if (pm->ps->torsoAnim == BOTH_MELEE1)
+	{
+		desTAnim = BOTH_MELEE2;
+	}
+	PM_SetAnim(SETANIM_TORSO, desTAnim, SETANIM_FLAG_OVERRIDE|SETANIM_FLAG_HOLD|SETANIM_FLAG_HOLDLESS, 100);
+	//PM_StartTorsoAnim( desTAnim );
+
+	if (pm->ps->torsoAnim == desTAnim)
+	{
+		pm->ps->weaponTime = pm->ps->torsoTimer;
+	}
+}
+//[/SaberSys]
+				
+
 /*
 ==============
 PM_Weapon
@@ -7630,7 +8410,20 @@ static void PM_Weapon( void )
 			}
 			else
 			{	
+				//[MELEE]
+				//Allow different animation for the headlock knockdown
+				if(pm->ps->torsoAnim == BOTH_PLAYER_PA_3_FLY &&
+					pm->ps->legsAnim == BOTH_PLAYER_PA_3_FLY)
+				{
+					desiredAnim = BOTH_PLAYER_PA_3_FLY;
+				}
+				else
+				{
 				desiredAnim = BOTH_KNOCKDOWN1;
+			}
+
+				//desiredAnim = BOTH_KNOCKDOWN1;
+				//[/MELEE]
 			}
 			break;
 		case HANDEXTEND_DUELCHALLENGE:
@@ -8253,9 +9046,14 @@ static void PM_Weapon( void )
 		//Alternate between punches and use the anim length as weapon time.
 		if (!pm->ps->m_iVehicleNum)
 		{ //if riding a vehicle don't do this stuff at all
+			//[MELEE]
+			if ((pm->cmd.buttons & BUTTON_ATTACK) &&
+			/*
 			if (pm->debugMelee &&
 				(pm->cmd.buttons & BUTTON_ATTACK) &&
+			*/
 				(pm->cmd.buttons & BUTTON_ALT_ATTACK))
+			//[/MELEE]
 			{ //ok, grapple time
 #if 0 //eh, I want to try turning the saber off, but can't do that reliably for prediction..
 				qboolean icandoit = qtrue;
@@ -8301,9 +9099,24 @@ static void PM_Weapon( void )
 	#endif
 #endif
 			}
-			else if (pm->debugMelee &&
-				(pm->cmd.buttons & BUTTON_ALT_ATTACK))
+			//[MELEE]
+			//You can do kick without debugMelee turned on
+			else if (pm->cmd.buttons & BUTTON_ALT_ATTACK)
+			//else if (pm->debugMelee &&
+			//	(pm->cmd.buttons & BUTTON_ALT_ATTACK))
+			//[/MELEE]
 			{ //kicks
+				//[MELEE]
+				//converted to a unified function
+				if(!PM_DoKick())
+				{//if got here then no move to do so put torso into leg idle or whatever
+					if (pm->ps->torsoAnim != pm->ps->legsAnim)
+					{
+						PM_SetAnim(SETANIM_BOTH, pm->ps->legsAnim, SETANIM_FLAG_OVERRIDE|SETANIM_FLAG_HOLD, 0);
+					}
+					pm->ps->weaponTime = 0;
+				}
+				/*
 				if (!BG_KickingAnim(pm->ps->torsoAnim) &&
 					!BG_KickingAnim(pm->ps->legsAnim))
 				{
@@ -8374,10 +9187,18 @@ static void PM_Weapon( void )
 					PM_SetAnim(SETANIM_BOTH, pm->ps->legsAnim, SETANIM_FLAG_OVERRIDE|SETANIM_FLAG_HOLD, 0);
 				}
 				pm->ps->weaponTime = 0;
+				*/
+				//[/MELEE]
 				return;
 			}
 			else
 			{ //just punch
+				//[Melee]
+				//turned this code into a function
+				PM_DoPunch();
+				return;
+
+				/*
 				int desTAnim = BOTH_MELEE1;
 				if (pm->ps->torsoAnim == BOTH_MELEE1)
 				{
@@ -8389,6 +9210,8 @@ static void PM_Weapon( void )
 				{
 					pm->ps->weaponTime = pm->ps->torsoTimer;
 				}
+				*/
+				//[/Melee]
 			}
 		}
 	}
@@ -8629,6 +9452,9 @@ extern qboolean in_camera;
 void PM_UpdateViewAngles( playerState_t *ps, const usercmd_t *cmd ) {
 	short		temp;
 	int		i;
+	//[SaberSys]
+	short		angle;
+	//[/SaberSys]
 
 	if ( ps->pm_type == PM_INTERMISSION || ps->pm_type == PM_SPINTERMISSION) {
 		return;		// no view changes at all
@@ -8645,6 +9471,59 @@ void PM_UpdateViewAngles( playerState_t *ps, const usercmd_t *cmd ) {
 		return;
 	}
 	//[/CoOp]
+
+	//[SaberSys]
+	if ( ps->userInt1 )
+	{//have some sort of lock in place
+		if ( ps->userInt1 & LOCK_UP )
+		{
+			temp = cmd->angles[PITCH] + ps->delta_angles[PITCH];
+			angle = ANGLE2SHORT(ps->viewangles[PITCH]);
+			
+			if ( temp < angle )
+			{//cancel out the cmd angles with the delta_angles if the resulting sum 
+				//is in the banned direction
+				ps->delta_angles[PITCH] = angle - cmd->angles[PITCH];
+			}
+		}
+
+		if ( ps->userInt1 & LOCK_DOWN )
+		{
+			temp = cmd->angles[PITCH] + ps->delta_angles[PITCH];
+			angle = ANGLE2SHORT(ps->viewangles[PITCH]);
+
+			if ( temp > angle )
+			{//cancel out the cmd angles with the delta_angles if the resulting sum 
+				//is in the banned direction
+				ps->delta_angles[PITCH] = angle - cmd->angles[PITCH];
+			}		
+		}
+
+		if ( ps->userInt1 & LOCK_RIGHT )
+		{
+			temp = cmd->angles[YAW] + ps->delta_angles[YAW];
+			angle = ANGLE2SHORT(ps->viewangles[YAW]);
+			
+			if ( temp < angle )
+			{//cancel out the cmd angles with the delta_angles if the resulting sum 
+				//is in the banned direction
+				ps->delta_angles[YAW] = angle - cmd->angles[YAW];
+			}	
+		}
+
+		if ( ps->userInt1 & LOCK_LEFT )
+		{
+			temp = cmd->angles[YAW] + ps->delta_angles[YAW];
+			angle = ANGLE2SHORT(ps->viewangles[YAW]);
+			
+			if ( temp > angle )
+			{//cancel out the cmd angles with the delta_angles if the resulting sum 
+				//is in the banned direction
+				ps->delta_angles[YAW] = angle - cmd->angles[YAW];
+			}
+		}
+	}
+	//[/SaberSys]
 
 	// circularly clamp the angles with deltas
 	for (i=0 ; i<3 ; i++) {
@@ -9024,8 +9903,24 @@ void PM_AdjustAttackStates( pmove_t *pm )
 	}
 }
 
+
+//[SPPortComplete]
 void BG_CmdForRoll( playerState_t *ps, int anim, usercmd_t *pCmd )
 {
+//[DodgeSys]
+#ifdef QAGAME
+	if(ps->userInt3 & (1 << FLAG_DODGEROLL))
+	{//remove the FLAG_DODGEROLL at the end of the rolls
+		float animationpoint = BG_GetLegsAnimPoint(ps, pm_entSelf->localAnimIndex);
+
+		if(animationpoint <= .1)
+		{
+			ps->userInt3 &= ~(1 << FLAG_DODGEROLL);
+		}
+	}
+#endif
+//[/DodgeSys]
+
 	switch ( (anim) )
 	{
 	case BOTH_ROLL_F:
@@ -9148,12 +10043,31 @@ void BG_CmdForRoll( playerState_t *ps, int anim, usercmd_t *pCmd )
 			//NOTE: speed is 400
 		}
 		break;
+	//[KnockdownSys]
+	case BOTH_LK_DL_ST_T_SB_1_L:
+		//kicked backwards
+		if ( ps->legsTimer < 3050//at least 10 frames in
+			&& ps->legsTimer > 550 )//at least 6 frames from end
+		{//move backwards
+			pCmd->forwardmove = -64;
+			pCmd->rightmove = 0;
+		}
+		else
+		{
+			pCmd->forwardmove = pCmd->rightmove = 0;
+		}
+		break;
+	//[/KnockdownSys]
 	}
 	pCmd->upmove = 0;
 }
+//[/SPPortComplete]
 
 qboolean PM_SaberInTransition( int move );
 
+//[MoveSys]
+extern qboolean BG_InSlowBounce(playerState_t *ps);
+//[/MoveSys]
 void BG_AdjustClientSpeed(playerState_t *ps, usercmd_t *cmd, int svTime)
 {//racc - this function adjusts the client's movement speed based on the situation.
 	saberInfo_t	*saber;
@@ -9173,10 +10087,23 @@ void BG_AdjustClientSpeed(playerState_t *ps, usercmd_t *cmd, int svTime)
 	//that would not be the correct predicted value.
 	ps->speed = ps->basespeed;
 
+	//[MoveSys]
+	//don't allow movement during viewlocks.
+	if (ps->userInt1)
+	{
+		ps->speed = 0;
+	}
+	//[/MoveSys]
+
+	//[DodgeSys]
+	//removed the movement restriction so gunners have a chance...
+	/*
 	if (ps->forceHandExtend == HANDEXTEND_DODGE)
 	{
 		ps->speed = 0;
 	}
+	*/
+	//[/DodgeSys]
 
 	if (ps->forceHandExtend == HANDEXTEND_KNOCKDOWN ||
 		ps->forceHandExtend == HANDEXTEND_PRETHROWN ||
@@ -9188,8 +10115,27 @@ void BG_AdjustClientSpeed(playerState_t *ps, usercmd_t *cmd, int svTime)
 
 	if ( cmd->forwardmove < 0 && !(cmd->buttons&BUTTON_WALKING) && pm->ps->groundEntityNum != ENTITYNUM_NONE )
 	{//running backwards is slower than running forwards (like SP)
+		//[MoveSys]
+		ps->speed *= 0.6;
+		//ps->speed *= 0.75;
+		//[/MoveSys]
+	}
+
+	//[MoveSys]
+	if ( cmd->forwardmove < 0 && (cmd->buttons&BUTTON_WALKING) && pm->ps->groundEntityNum != ENTITYNUM_NONE )
+	{//walking backwards also makes a player move a little slower
 		ps->speed *= 0.75;
 	}
+
+	if ( !cmd->forwardmove 
+		&& cmd->rightmove
+		&& !(cmd->buttons&BUTTON_WALKING) 
+		&& pm->ps->groundEntityNum != ENTITYNUM_NONE )
+	{//pure strafe running is slower.
+		ps->speed *= 0.6;
+	}
+	//[/MoveSys]
+
 
 	if (ps->fd.forcePowersActive & (1 << FP_GRIP))
 	{
@@ -9231,6 +10177,8 @@ void BG_AdjustClientSpeed(playerState_t *ps, usercmd_t *cmd, int svTime)
 		}
 	}
 
+	//[SaberSys]
+	/* racc - got rid of this stuff.  The running mishap penalty should get this instead.
 	if ( BG_SaberInAttack( ps->saberMove ) && cmd->forwardmove < 0 )
 	{//if running backwards while attacking, don't run as fast.
 		switch( ps->fd.saberAnimLevel )
@@ -9251,7 +10199,19 @@ void BG_AdjustClientSpeed(playerState_t *ps, usercmd_t *cmd, int svTime)
 		}
 	}
 	else if ( BG_SpinningSaberAnim( ps->legsAnim ) )
+	*/
+	if ( BG_SpinningSaberAnim( ps->legsAnim ) )
+	//[/SaberSys]
 	{
+	
+		//[MoveSys]
+		//increased the spinning animation movement speed to %75 normal.
+		ps->speed *= 0.75f;
+
+		//removed the silly speed difference exception for the Red Style.
+		/* basejka code
+		ps->speed *= 0.5f;
+		
 		if (ps->fd.saberAnimLevel == FORCE_LEVEL_3)
 		{
 			ps->speed *= 0.3f;
@@ -9260,7 +10220,12 @@ void BG_AdjustClientSpeed(playerState_t *ps, usercmd_t *cmd, int svTime)
 		{
 			ps->speed *= 0.5f;
 		}
+		*/
+		//[/MoveSys]
 	}
+	//[SaberSys]
+	//removed the silly speed difference stuff
+	/*
 	else if ( ps->weapon == WP_SABER && BG_SaberInAttack( ps->saberMove ) )
 	{//if attacking with saber while running, drop your speed
 		switch( ps->fd.saberAnimLevel )
@@ -9289,6 +10254,8 @@ void BG_AdjustClientSpeed(playerState_t *ps, usercmd_t *cmd, int svTime)
 			ps->speed *= 0.6f;
 		}
 	}
+	*/
+	//[/SaberSys]
 
 	if ( BG_InRoll( ps, ps->legsAnim ) && ps->speed > 50 )
 	{ //can't roll unless you're able to move normally
@@ -9321,6 +10288,14 @@ void BG_AdjustClientSpeed(playerState_t *ps, usercmd_t *cmd, int svTime)
 		//Automatically slow down as the roll ends.
 	}
 
+	//[MoveSys]
+	if( ((ps->userInt3 & FLAG_FATIGUED) || (ps->stats[STAT_DODGE] < DODGE_CRITICALLEVEL)) 
+		&& !(cmd->buttons&BUTTON_WALKING) && pm->ps->groundEntityNum != ENTITYNUM_NONE)
+	{//run slower when tired
+		ps->speed *= .8;
+	}
+	//[/MoveSys]
+
 	saber = BG_MySaber( ps->clientNum, 0 );
 	if ( saber 
 		&& saber->moveSpeedScale != 1.0f )
@@ -9349,7 +10324,9 @@ qboolean BG_InRollAnim( entityState_t *cent )
 }
 
 qboolean BG_InKnockDown( int anim )
-{
+{//racc - simple BG knockdown check.  
+	//Doesn't check timers or consider some of the more special knockdown 
+	//related animations.  RAFIXME - Replace this with PM_InKnockDown?
 	switch ( (anim) )
 	{
 	case BOTH_KNOCKDOWN1:
@@ -9731,17 +10708,16 @@ void BG_UpdateLookAngles( int lookingDebounceTime, vec3_t lastHeadAngles, int ti
 }
 
 //for setting visual look (headturn) angles
-//[CoOp]
-//added NPC_class input to allow for different spine handling for some of the NPCs
-static void BG_G2ClientNeckAngles( void *ghoul2, int time, const vec3_t lookAngles, vec3_t headAngles, vec3_t neckAngles, vec3_t thoracicAngles, vec3_t headClampMinAngles, vec3_t headClampMaxAngles, int NPC_class )
+//[LedgeGrab]
+static void BG_G2ClientNeckAngles( void *ghoul2, int time, const vec3_t lookAngles, vec3_t headAngles, vec3_t neckAngles, vec3_t thoracicAngles, vec3_t headClampMinAngles, vec3_t headClampMaxAngles, entityState_t *cent )
 //static void BG_G2ClientNeckAngles( void *ghoul2, int time, const vec3_t lookAngles, vec3_t headAngles, vec3_t neckAngles, vec3_t thoracicAngles, vec3_t headClampMinAngles, vec3_t headClampMaxAngles )
-//[/CoOp]
+//[/LedgeGrab]
 {
 	vec3_t	lA;
 
 	//[CoOp]
 	//ported from SP
-	if ( NPC_class == CLASS_HAZARD_TROOPER )
+	if ( cent->NPC_class == CLASS_HAZARD_TROOPER )
 	{//don't use upper bones
 		return;
 	}
@@ -9777,7 +10753,7 @@ static void BG_G2ClientNeckAngles( void *ghoul2, int time, const vec3_t lookAngl
 	}
 
 	//[CoOp]
-	if ( NPC_class == CLASS_ASSASSIN_DROID )
+	if ( cent->NPC_class == CLASS_ASSASSIN_DROID )
 	{//each bone has only 1 axis of rotation!
 		//thoracic only pitches, split with cervical
 		if ( thoracicAngles[PITCH] )
@@ -9799,7 +10775,7 @@ static void BG_G2ClientNeckAngles( void *ghoul2, int time, const vec3_t lookAngl
 		headAngles[ROLL] = 0.0f;
 		//no bones roll
 	}
-	else if ( NPC_class == CLASS_SABER_DROID )
+	else if ( cent->NPC_class == CLASS_SABER_DROID )
 	{//each bone has only 1 axis of rotation!
 		//no thoracic
 		VectorClear( thoracicAngles );
@@ -9816,7 +10792,15 @@ static void BG_G2ClientNeckAngles( void *ghoul2, int time, const vec3_t lookAngl
 	else
 	{//normal humaniod
 		//split it up between the neck and cranium
-		if ( thoracicAngles[PITCH] )
+
+		//[LedgeGrab]
+		if(BG_InLedgeMove( cent->legsAnim ))
+		{//lock arm parent bone to animation
+			thoracicAngles[PITCH] = 0;
+		}
+		else if ( thoracicAngles[PITCH] )
+		//if ( thoracicAngles[PITCH] )
+		//[/LedgeGrab]
 		{//already been set above, blend them
 			thoracicAngles[PITCH] = (thoracicAngles[PITCH] + (lA[PITCH] * 0.4)) * 0.5f;
 		}
@@ -9841,6 +10825,25 @@ static void BG_G2ClientNeckAngles( void *ghoul2, int time, const vec3_t lookAngl
 			thoracicAngles[ROLL] = lA[ROLL] * 0.1;
 		}
 
+
+		//[LedgeGrab]
+		if(BG_InLedgeMove( cent->legsAnim ))
+		{//lock the neckAngles to prevent the head from acting weird
+			VectorClear(neckAngles);
+			VectorClear(headAngles);
+		}
+		else
+		{
+			neckAngles[PITCH] = lA[PITCH] * 0.2f;
+			neckAngles[YAW] = lA[YAW] * 0.3f;
+			neckAngles[ROLL] = lA[ROLL] * 0.3f;
+	
+			headAngles[PITCH] = lA[PITCH] * 0.4;
+			headAngles[YAW] = lA[YAW] * 0.6;
+			headAngles[ROLL] = lA[ROLL] * 0.6;
+		}
+
+		/*
 		neckAngles[PITCH] = lA[PITCH] * 0.2f;
 		neckAngles[YAW] = lA[YAW] * 0.3f;
 		neckAngles[ROLL] = lA[ROLL] * 0.3f;
@@ -9848,6 +10851,8 @@ static void BG_G2ClientNeckAngles( void *ghoul2, int time, const vec3_t lookAngl
 		headAngles[PITCH] = lA[PITCH] * 0.4;
 		headAngles[YAW] = lA[YAW] * 0.6;
 		headAngles[ROLL] = lA[ROLL] * 0.6;
+		*/
+		//[/LedgeGrab]
 	}
 	//[/CoOp]
 
@@ -9859,23 +10864,23 @@ static void BG_G2ClientNeckAngles( void *ghoul2, int time, const vec3_t lookAngl
 	*/
 
 	//[CoOp]
-	if ( BG_ClassHasBadBones( NPC_class ) )
+	if ( BG_ClassHasBadBones( cent->NPC_class ) )
 	{
 		int oUp, oRt, oFwd;
-		if ( NPC_class != CLASS_RANCOR )
+		if ( cent->NPC_class != CLASS_RANCOR )
 		{//Rancor doesn't use cranium and cervical
-			BG_BoneOrientationsForClass( NPC_class, "cranium", &oUp, &oRt, &oFwd );
+			BG_BoneOrientationsForClass( cent->NPC_class, "cranium", &oUp, &oRt, &oFwd );
 			strap_G2API_SetBoneAngles( ghoul2, 0, "cranium", headAngles, BONE_ANGLES_POSTMULT, oUp, oRt, oFwd, 0, 0, time );
-			BG_BoneOrientationsForClass( NPC_class, "cervical", &oUp, &oRt, &oFwd );
+			BG_BoneOrientationsForClass( cent->NPC_class, "cervical", &oUp, &oRt, &oFwd );
 			strap_G2API_SetBoneAngles( ghoul2, 0, "cervical", neckAngles, BONE_ANGLES_POSTMULT, oUp, oRt, oFwd, 0, 0, time); 
 		}
-		if ( NPC_class != CLASS_SABER_DROID )
+		if ( cent->NPC_class != CLASS_SABER_DROID )
 		{//saber droid doesn't use thoracic
-			if ( NPC_class == CLASS_RANCOR )
+			if ( cent->NPC_class == CLASS_RANCOR )
 			{
 				thoracicAngles[YAW] = thoracicAngles[ROLL] = 0.0f;
 			}
-			BG_BoneOrientationsForClass( NPC_class, "thoracic", &oUp, &oRt, &oFwd );
+			BG_BoneOrientationsForClass( cent->NPC_class, "thoracic", &oUp, &oRt, &oFwd );
 			strap_G2API_SetBoneAngles( ghoul2, 0, "thoracic", thoracicAngles, BONE_ANGLES_POSTMULT, oUp, oRt, oFwd, 0, 0, time); 
 		}
 	}
@@ -10049,9 +11054,25 @@ static void BG_G2ClientSpineAngles( void *ghoul2, int motionBolt, vec3_t cent_le
 	}
 	else
 	{//use all 3 bones (normal humanoid models)
+		//[LedgeGrab]
+		if(BG_InLedgeMove( cent->legsAnim ))
+		{//lock spine to animation
+			thoracicAngles[PITCH] = 0;
+			llAngles[PITCH] = 0;
+			ulAngles[PITCH] = 0;
+		}
+		else
+		{
 		thoracicAngles[PITCH] = viewAngles[PITCH]*0.20f;
 		llAngles[PITCH] = viewAngles[PITCH]*0.40f;
 		ulAngles[PITCH] = viewAngles[PITCH]*0.40f;
+		}
+		/*
+		thoracicAngles[PITCH] = viewAngles[PITCH]*0.20f;
+		llAngles[PITCH] = viewAngles[PITCH]*0.40f;
+		ulAngles[PITCH] = viewAngles[PITCH]*0.40f;
+		*/
+		//[/LedgeGrab]
 
 		thoracicAngles[YAW] = viewAngles[YAW]*0.20f;
 		ulAngles[YAW] = viewAngles[YAW]*0.35f;
@@ -10522,11 +11543,11 @@ void BG_G2PlayerAngles(void *ghoul2, int motionBolt, entityState_t *cent, int ti
 
 	BG_UpdateLookAngles(lookTime, lastHeadAngles, time, lookAngles, lookSpeed, -50.0f, 50.0f, -70.0f, 70.0f, -30.0f, 30.0f);
 
-	//[CoOp]
+	//[LedgeGrab]
 	//added NPC_class input to allow for different spine handling for some of the NPCs
-	BG_G2ClientNeckAngles(ghoul2, time, lookAngles, headAngles, neckAngles, thoracicAngles, headClampMinAngles, headClampMaxAngles, cent->NPC_class);
+	BG_G2ClientNeckAngles(ghoul2, time, lookAngles, headAngles, neckAngles, thoracicAngles, headClampMinAngles, headClampMaxAngles, cent);
 	//BG_G2ClientNeckAngles(ghoul2, time, lookAngles, headAngles, neckAngles, thoracicAngles, headClampMinAngles, headClampMaxAngles);
-	//[/CoOp]
+	//[/LedgeGrab]
 
 #ifdef BONE_BASED_LEG_ANGLES
 	{
@@ -10751,6 +11772,72 @@ static ID_INLINE void PM_CmdForSaberMoves(usercmd_t *ucmd)
 		//lock their viewangles during these attacks.
 		PM_SetPMViewAngle(pm->ps, pm->ps->viewangles, ucmd);
 	}
+	//[SaberSys]
+	else if(PM_SaberInBrokenParry(pm->ps->saberMove))
+	{//you can't move while stunned.
+		
+		switch(pm->ps->torsoAnim)
+		{
+		case BOTH_H1_S1_T_:
+		case BOTH_H1_S1_TR:
+		case BOTH_H1_S1_TL:
+		case BOTH_H1_S1_BL:
+		case BOTH_H1_S1_B_:
+		case BOTH_H1_S1_BR:
+			//slight backwards stumble
+			if(BG_GetTorsoAnimPoint(pm->ps, pm_entSelf->localAnimIndex) >= .5f)
+			{//past the stumble part of the animation
+				ucmd->forwardmove = -46;
+			}
+			else
+			{
+				ucmd->forwardmove = 0;
+			}
+			break;
+
+		case BOTH_H6_S6_BL:
+			//slight back hop
+			ucmd->forwardmove = -30;
+			break;
+
+		case BOTH_H7_S7_T_:
+		case BOTH_H7_S7_TR:
+			//two small steps back
+			ucmd->forwardmove = -30;
+			break;
+			
+		default:  //don't know this one.
+			ucmd->forwardmove = 0;
+			break;
+		};
+
+		ucmd->rightmove = 0;
+		ucmd->upmove = 0;
+	}
+	//[/SaberSys]
+	//[DodgeSys]
+	else if(pm->ps->torsoAnim == BOTH_HOP_F)
+	{
+		ucmd->forwardmove = 127;
+		ucmd->rightmove = 0;
+	}
+	else if(pm->ps->torsoAnim == BOTH_HOP_R)
+	{
+		ucmd->forwardmove = 0;
+		ucmd->rightmove = 75;
+	}
+	else if(pm->ps->torsoAnim == BOTH_HOP_L)
+	{
+		ucmd->forwardmove = 0;
+		ucmd->rightmove = -75;
+	}
+	else if(pm->ps->torsoAnim == BOTH_HOP_B)
+	{
+		ucmd->forwardmove = -127;
+		ucmd->rightmove = 0;
+	}
+	//[/DodgeSys]
+
 }
 
 //constrain him based on the angles of his vehicle and the caps
@@ -11288,6 +12375,63 @@ void PM_MoveForKata(usercmd_t *ucmd)
 	}
 }
 
+
+//[SaberSys]
+void PM_MoveLock( void )
+{
+	if( pm->ps->userInt1 )
+	{
+		if ( pm->ps->userInt1 & LOCK_MOVERIGHT )
+		{
+			if (pm->cmd.rightmove > 0)
+			{
+				pm->cmd.rightmove = 0;
+			}
+		}
+
+		if ( pm->ps->userInt1 & LOCK_MOVELEFT )
+		{
+			if (pm->cmd.rightmove < 0)
+			{
+				pm->cmd.rightmove = 0;
+			}
+		}
+
+		if ( pm->ps->userInt1 & LOCK_MOVEFORWARD )
+		{ 
+			if (pm->cmd.forwardmove > 0)
+			{
+				pm->cmd.forwardmove = 0;
+			}
+		}
+
+		if ( pm->ps->userInt1 & LOCK_MOVEBACK )
+		{ 
+			if (pm->cmd.forwardmove < 0)
+			{
+				pm->cmd.forwardmove = 0;
+			}
+		}
+
+		if ( pm->ps->userInt1 & LOCK_MOVEUP )
+		{
+			if (pm->cmd.upmove > 0)
+			{
+				pm->cmd.upmove = 0;
+			}
+		}
+
+		if ( pm->ps->userInt1 & LOCK_MOVEDOWN )
+		{
+			if (pm->cmd.upmove < 0)
+			{
+				pm->cmd.upmove = 0;
+			}
+		}
+	}
+}
+//[/SaberSys]
+
 void PmoveSingle (pmove_t *pmove) {
 	qboolean stiffenedUp = qfalse;
 	float gDist = 0;
@@ -11342,6 +12486,10 @@ void PmoveSingle (pmove_t *pmove) {
 		}
 	}
 
+	//[SaberSys]
+	PM_MoveLock();
+	//[/SaberSys]
+
 	if (pm->ps->pm_type == PM_FLOAT)
 	{ //You get no control over where you go in grip movement
 		stiffenedUp = qtrue;
@@ -11362,6 +12510,15 @@ void PmoveSingle (pmove_t *pmove) {
 		pm->ps->saberMove == LS_A_FLIP_SLASH || pm->ps->saberMove == LS_A_JUMP_T__B_ ||
 		pm->ps->saberMove == LS_DUAL_LR || pm->ps->saberMove == LS_DUAL_FB)
 	{
+		//[SaberSys]
+		//tweaked this so that the flip stab move doesn't overrotate during the move and end up facing right after the move.
+		if( (pm->ps->legsAnim == BOTH_JUMPFLIPSTABDOWN &&  pm->ps->legsTimer < 1600 && pm->ps->legsTimer > 1150) 
+			|| (pm->ps->legsAnim == BOTH_JUMPFLIPSLASHDOWN1 &&  pm->ps->legsTimer < 1600 && pm->ps->legsTimer > 900) )
+		{ //flipover medium stance attack
+			pm->ps->viewangles[YAW] += pml.frametime*240.0f;
+			PM_SetPMViewAngle(pm->ps, pm->ps->viewangles, &pm->cmd);
+		}
+		/* basejka code
 		if (pm->ps->legsAnim == BOTH_JUMPFLIPSTABDOWN ||
 			pm->ps->legsAnim == BOTH_JUMPFLIPSLASHDOWN1)
 		{ //flipover medium stance attack
@@ -11371,6 +12528,8 @@ void PmoveSingle (pmove_t *pmove) {
 				PM_SetPMViewAngle(pm->ps, pm->ps->viewangles, &pm->cmd);
 			}
 		}
+		*/
+		//[/SaberSys]
 		stiffenedUp = qtrue;
 	}
 	else if ((pm->ps->legsAnim) == (BOTH_A2_STABBACK1) ||
@@ -11394,6 +12553,14 @@ void PmoveSingle (pmove_t *pmove) {
 	else if (BG_KickMove(pm->ps->saberMove) || BG_KickingAnim(pm->ps->legsAnim))
 	{
 		stiffenedUp = qtrue;
+		//[MELEE]
+		//adapted from PM_weaponlightsaber to make the kicking work with the unified PM_DoKick.
+		if ( pm->ps->legsTimer <= 0 )
+		{//done?  be immeditately ready to do an attack
+			pm->ps->saberMove = LS_READY;
+			pm->ps->weaponTime = 0;
+		}
+		//[/MELEE]
 	}
 	else if (BG_InGrappleMove(pm->ps->torsoAnim))
 	{
@@ -11498,6 +12665,12 @@ void PmoveSingle (pmove_t *pmove) {
 	{ //can't move while in a force land
 		stiffenedUp = qtrue;
 	}
+	//[SaberSys]
+	else if(BG_InSlowBounce(pm->ps))
+	{//can't move during a slow bounce
+		stiffenedUp = qtrue;
+	}
+	//[/SaberSys]
 
 	if ( pm->ps->saberMove == LS_A_LUNGE )
 	{//can't move during lunge
@@ -11729,6 +12902,12 @@ void PmoveSingle (pmove_t *pmove) {
 	PM_AdjustAngleForWallJump( pm->ps, &pm->cmd, qtrue );
 	PM_AdjustAngleForWallRunUp( pm->ps, &pm->cmd, qtrue );
 	PM_AdjustAngleForWallRun( pm->ps, &pm->cmd, qtrue );
+	//[LedgeGrab]
+	PM_AdjustAngleForWallGrap( pm->ps, &pm->cmd );
+	//[LedgeGrab]
+	//[KnockdownSys]
+	PM_AdjustAnglesForKnockdown( pm->ps, &pm->cmd );
+	//[/KnockdownSys]
 
 	if (pm->ps->saberMove == LS_A_JUMP_T__B_ || pm->ps->saberMove == LS_A_LUNGE ||
 		pm->ps->saberMove == LS_A_BACK_CR || pm->ps->saberMove == LS_A_BACK ||
@@ -12338,5 +13517,582 @@ void Pmove (pmove_t *pmove) {
 		}
 	}
 }
+
+
+//[KnockdownSys]
+int PM_MinGetUpTime( playerState_t *ps )
+{//racc - returns the animation timer level at which you're allowed to get up from a knockdown.  
+	//IE the larger this number, the faster you can get up.
+	bgEntity_t *pEnt = pm_entSelf;
+	if ( ps->legsAnim == BOTH_PLAYER_PA_3_FLY
+			|| ps->legsAnim == BOTH_LK_DL_ST_T_SB_1_L
+			|| ps->legsAnim == BOTH_RELEASED )
+	{//special cases
+		return 200;
+	}
+	else if ( pEnt->s.NPC_class == CLASS_ALORA )
+	{//alora springs up very quickly from knockdowns!
+		return 1000;
+	}
+	//CoOpFixMe RAFIXME - impliment G_ControlledByPlayer
+	else if ( ps->clientNum < MAX_CLIENTS )
+	//else if ( (ps->clientNum < MAX_CLIENTS||G_ControlledByPlayer(ent)) )
+	{//player can get up faster based on his/her force jump skill
+		int getUpTime = PLAYER_KNOCKDOWN_HOLD_EXTRA_TIME;
+		if ( ps->fd.forcePowerLevel[FP_LEVITATION] >= FORCE_LEVEL_3 )
+		{
+			return (getUpTime+400);//750
+		}
+		else if ( ps->fd.forcePowerLevel[FP_LEVITATION] == FORCE_LEVEL_2 )
+		{
+			return (getUpTime+200);//500
+		}
+		else if ( ps->fd.forcePowerLevel[FP_LEVITATION] == FORCE_LEVEL_1 )
+		{
+			return (getUpTime+100);//250
+		}
+		else
+		{
+			return getUpTime;
+		}
+	}
+	return 200;
+}
+
+
+qboolean PM_InAttackRoll( int anim )
+{//racc - anim in a melee attack roll.
+	switch ( anim )
+	{
+	case BOTH_GETUP_BROLL_B:
+	case BOTH_GETUP_BROLL_F:
+	case BOTH_GETUP_FROLL_B:
+	case BOTH_GETUP_FROLL_F:
+		return qtrue;
+	}
+	return qfalse;
+}
+
+
+qboolean PM_CheckRollSafety( int anim, float testDist ) 
+{//racc - requires PM access!  
+	//This function checks to see if there's an obstruction that would
+	//block the movement for the given roll anim.
+	vec3_t	forward, right, testPos, angles;
+	trace_t	trace;
+	int		contents = (CONTENTS_SOLID|CONTENTS_BOTCLIP);
+
+	if ( pm->ps->clientNum < MAX_CLIENTS )
+	{//player
+		contents |= CONTENTS_PLAYERCLIP;
+	}
+	else
+	{//NPC
+		contents |= CONTENTS_MONSTERCLIP;
+	}
+	if ( PM_InAttackRoll( pm->ps->legsAnim ) )
+	{//we don't care if people are in the way, we'll knock them down!
+		contents &= ~CONTENTS_BODY;
+	}
+	angles[PITCH] = angles[ROLL] = 0;
+	angles[YAW] = pm->ps->viewangles[YAW];//Add ucmd.angles[YAW]?
+	AngleVectors( angles, forward, right, NULL );
+
+	switch ( anim )
+	{
+	case BOTH_GETUP_BROLL_R:
+	case BOTH_GETUP_FROLL_R:
+		VectorMA( pm->ps->origin, testDist, right, testPos );
+		break;
+	case BOTH_GETUP_BROLL_L:
+	case BOTH_GETUP_FROLL_L:
+		VectorMA( pm->ps->origin, -testDist, right, testPos );
+		break;
+	case BOTH_GETUP_BROLL_F:
+	case BOTH_GETUP_FROLL_F:
+		VectorMA( pm->ps->origin, testDist, forward, testPos );
+		break;
+	case BOTH_GETUP_BROLL_B:
+	case BOTH_GETUP_FROLL_B:
+		VectorMA( pm->ps->origin, -testDist, forward, testPos );
+		break;
+	default://FIXME: add normal rolls?  Make generic for any forced-movement anim?
+		return qtrue;
+		break;
+	}
+
+	pm->trace( &trace, pm->ps->origin, pm->mins, pm->maxs, testPos, pm->ps->clientNum, contents );
+	if ( trace.fraction < 1.0f 
+		|| trace.allsolid
+		|| trace.startsolid )
+	{//inside something or will hit something
+		return qfalse;
+	}
+	return qtrue;
+}
+
+
+extern qboolean BG_StabDownAnim( int anim );
+qboolean PM_GoingToAttackDown( playerState_t *ps )
+{//racc - is the given ps in an animation that is about to attack the ground?
+	if ( BG_StabDownAnim( ps->torsoAnim )//stabbing downward
+		|| ps->saberMove == LS_A_LUNGE//lunge
+		|| ps->saberMove == LS_A_JUMP_T__B_//death from above
+		|| ps->saberMove == LS_A_T2B//attacking top to bottom
+		|| ps->saberMove == LS_S_T2B//starting at attack downward
+		|| (PM_SaberInTransition( ps->saberMove ) && saberMoveData[ps->saberMove].endQuad == Q_T) )//transitioning to a top to bottom attack
+	{
+		return qtrue;
+	}
+	return qfalse;
+}
+
+
+qboolean PM_LockedAnim( int anim );
+qboolean PM_CrouchGetup( float crouchheight )
+{//racc - recover from our current knockdown state into a crouch.  
+	//This should work as long as we're in a known knockdown state.
+	int	anim = -1;
+	pm->maxs[2] = crouchheight;
+	pm->ps->viewheight = crouchheight + STANDARD_VIEWHEIGHT_OFFSET;
+
+	switch ( pm->ps->legsAnim )
+	{
+	case BOTH_KNOCKDOWN1:
+	case BOTH_KNOCKDOWN2:
+	case BOTH_KNOCKDOWN4:
+	case BOTH_RELEASED:
+	case BOTH_PLAYER_PA_3_FLY:
+		anim = BOTH_GETUP_CROUCH_B1;
+		break;
+	case BOTH_KNOCKDOWN3:
+	case BOTH_KNOCKDOWN5:
+	case BOTH_LK_DL_ST_T_SB_1_L:
+		anim = BOTH_GETUP_CROUCH_F1;
+		break;
+	}
+	if ( anim == -1 )
+	{//WTF? stay down?
+		pm->ps->legsTimer = 100;//hold this anim for another 10th of a second
+		return qfalse;
+	}
+	else
+	{//get up into crouch anim
+		if ( PM_LockedAnim( pm->ps->torsoAnim ) )
+		{//need to be able to override this anim
+			pm->ps->torsoTimer = 0;
+		}
+		if ( PM_LockedAnim( pm->ps->legsAnim ) )
+		{//need to be able to override this anim
+			pm->ps->legsTimer = 0;
+		}
+		PM_SetAnim( SETANIM_BOTH, anim, SETANIM_FLAG_OVERRIDE|SETANIM_FLAG_HOLD|SETANIM_FLAG_HOLDLESS, 100 );
+		//RAFIXME - Impliment saberBounceMove?
+		pm->ps->saberMove = LS_READY;//don't finish whatever saber anim you may have been in
+		//pm->ps->saberMove = pm->ps->saberBounceMove = LS_READY;//don't finish whatever saber anim you may have been in
+		pm->ps->saberBlocked = BLOCKED_NONE;
+		return qtrue;
+	}
+}
+
+
+extern qboolean PM_LockedAnim( int anim );
+qboolean PM_CheckRollGetup( void )
+{//racc - try getting up from a knockdown by using a getup roll move.
+#ifdef QAGAME
+	gentity_t* self = &g_entities[pm->ps->clientNum];
+#endif
+	if ( pm->ps->legsAnim == BOTH_KNOCKDOWN1
+		|| pm->ps->legsAnim == BOTH_KNOCKDOWN2
+		|| pm->ps->legsAnim == BOTH_KNOCKDOWN3
+		|| pm->ps->legsAnim == BOTH_KNOCKDOWN4
+		|| pm->ps->legsAnim == BOTH_KNOCKDOWN5 
+		|| pm->ps->legsAnim == BOTH_LK_DL_ST_T_SB_1_L
+		|| pm->ps->legsAnim == BOTH_PLAYER_PA_3_FLY
+		|| pm->ps->legsAnim == BOTH_RELEASED )
+	{//lying on back or front
+		
+		if ( (pm->ps->clientNum < MAX_CLIENTS //player
+				&& !(pm->ps->userInt3 & (1 << FLAG_FATIGUED)) //can't do roll getups while fatigued.
+				&& ( pm->cmd.rightmove //pressing left or right
+					|| (pm->cmd.forwardmove &&pm->ps->fd.forcePowerLevel[FP_LEVITATION] > FORCE_LEVEL_0) ) ) //or pressing fwd/back and have force jump.
+#ifdef QAGAME
+				|| ( (pm->ps->clientNum >= MAX_CLIENTS) 
+					&& self->NPC //an NPC
+#endif
+		/* //KNOCKDOWNFIXME RAFIXME - Impliment PM_ControlledByPlayer?
+		if ( ((pm->ps->clientNum < MAX_CLIENTS||PM_ControlledByPlayer()) && ( pm->cmd.rightmove || (pm->cmd.forwardmove&&pm->ps->forcePowerLevel[FP_LEVITATION] > FORCE_LEVEL_0) ) )//player pressing left or right
+			|| ( (pm->ps->clientNum >= MAX_CLIENTS&&!PM_ControlledByPlayer()) && pm->gent->NPC//an NPC
+		*/
+#ifdef QAGAME
+					&& pm->ps->fd.forcePowerLevel[FP_LEVITATION] > FORCE_LEVEL_0//have at least force jump 1
+					&& self->enemy //I have an enemy
+					&& self->enemy->client//a client
+					&& self->enemy->enemy == self//he's mad at me!
+					&& (PM_GoingToAttackDown( &self->enemy->client->ps )||!Q_irand(0,2))//he's attacking downward! (or we just feel like doing it this time)
+					&& ((self->client&&self->client->NPC_class==CLASS_ALORA)||Q_irand( 0, RANK_CAPTAIN )<self->NPC->rank) ) //higher rank I am, more likely I am to roll away!
+#endif
+				)
+		{//roll away!
+			int anim;
+			qboolean forceGetUp = qfalse;
+			if ( pm->cmd.forwardmove > 0 )
+			{
+				if ( pm->ps->legsAnim == BOTH_KNOCKDOWN3 
+					|| pm->ps->legsAnim == BOTH_KNOCKDOWN5 
+					|| pm->ps->legsAnim == BOTH_LK_DL_ST_T_SB_1_L )
+				{
+					anim = BOTH_GETUP_FROLL_F;
+				}
+				else
+				{
+					anim = BOTH_GETUP_BROLL_F;
+				}
+				forceGetUp = qtrue;
+			}
+			else if ( pm->cmd.forwardmove < 0 )
+			{
+				if ( pm->ps->legsAnim == BOTH_KNOCKDOWN3
+					|| pm->ps->legsAnim == BOTH_KNOCKDOWN5
+					|| pm->ps->legsAnim == BOTH_LK_DL_ST_T_SB_1_L )
+				{
+					anim = BOTH_GETUP_FROLL_B;
+				}
+				else
+				{
+					anim = BOTH_GETUP_BROLL_B;
+				}
+				forceGetUp = qtrue;
+			}
+			else if ( pm->cmd.rightmove > 0 )
+			{
+				if ( pm->ps->legsAnim == BOTH_KNOCKDOWN3 
+					|| pm->ps->legsAnim == BOTH_KNOCKDOWN5
+					|| pm->ps->legsAnim == BOTH_LK_DL_ST_T_SB_1_L )
+				{
+					anim = BOTH_GETUP_FROLL_R;
+				}
+				else
+				{
+					anim = BOTH_GETUP_BROLL_R;
+				}
+			}
+			else if ( pm->cmd.rightmove < 0 )
+			{
+				if ( pm->ps->legsAnim == BOTH_KNOCKDOWN3 
+					|| pm->ps->legsAnim == BOTH_KNOCKDOWN5
+					|| pm->ps->legsAnim == BOTH_LK_DL_ST_T_SB_1_L )
+				{
+					anim = BOTH_GETUP_FROLL_L;
+				}
+				else
+				{
+					anim = BOTH_GETUP_BROLL_L;
+				}
+			}
+			else
+			{//racc - If no move, then randomly select a roll move.  This only only works for NPCs.
+				if ( pm->ps->legsAnim == BOTH_KNOCKDOWN3
+					|| pm->ps->legsAnim == BOTH_KNOCKDOWN5
+					|| pm->ps->legsAnim == BOTH_LK_DL_ST_T_SB_1_L )
+				{//on your front
+					anim = PM_irand_timesync( BOTH_GETUP_FROLL_B, BOTH_GETUP_FROLL_R );
+				}
+				else
+				{
+					anim = PM_irand_timesync( BOTH_GETUP_BROLL_B, BOTH_GETUP_BROLL_R );
+				}
+			}
+			//RAFIXME - Impliment PM_ControlledByPlayer?
+			if ( pm->ps->clientNum >= MAX_CLIENTS )
+			//if ( (pm->ps->clientNum >= MAX_CLIENTS&&!PM_ControlledByPlayer()) )
+			{//racc - NPCs do roll safety checks to make sure they can safely roll in that direction.
+				if ( !PM_CheckRollSafety( anim, 64 ) )
+				{//oops, try other one
+					if ( pm->ps->legsAnim == BOTH_KNOCKDOWN3
+						|| pm->ps->legsAnim == BOTH_KNOCKDOWN5
+						|| pm->ps->legsAnim == BOTH_LK_DL_ST_T_SB_1_L )
+					{
+						if ( anim == BOTH_GETUP_FROLL_R )
+						{
+							anim = BOTH_GETUP_FROLL_L;
+						}
+						else if ( anim == BOTH_GETUP_FROLL_F )
+						{
+							anim = BOTH_GETUP_FROLL_B;
+						}
+						else if ( anim == BOTH_GETUP_FROLL_B )
+						{
+							anim = BOTH_GETUP_FROLL_F;
+						}
+						else
+						{
+							anim = BOTH_GETUP_FROLL_L;
+						}
+						if ( !PM_CheckRollSafety( anim, 64 ) )
+						{//neither side is clear, screw it
+							return qfalse;
+						}
+					}
+					else
+					{
+						if ( anim == BOTH_GETUP_BROLL_R )
+						{
+							anim = BOTH_GETUP_BROLL_L;
+						}
+						else if ( anim == BOTH_GETUP_BROLL_F )
+						{
+							anim = BOTH_GETUP_BROLL_B;
+						}
+						else if ( anim == BOTH_GETUP_FROLL_B )
+						{
+							anim = BOTH_GETUP_BROLL_F;
+						}
+						else
+						{
+							anim = BOTH_GETUP_BROLL_L;
+						}
+						if ( !PM_CheckRollSafety( anim, 64 ) )
+						{//neither side is clear, screw it
+							return qfalse;
+						}
+					}
+				}
+			}
+			pm->cmd.rightmove = pm->cmd.forwardmove = 0;
+			if ( PM_LockedAnim( pm->ps->torsoAnim ) )
+			{//need to be able to override this anim
+				pm->ps->torsoTimer = 0;
+			}
+			if ( PM_LockedAnim( pm->ps->legsAnim ) )
+			{//need to be able to override this anim
+				pm->ps->legsTimer = 0;
+			}
+			PM_SetAnim( SETANIM_BOTH, anim, SETANIM_FLAG_OVERRIDE|SETANIM_FLAG_HOLD|SETANIM_FLAG_HOLDLESS, 100 );
+			pm->ps->weaponTime = pm->ps->torsoTimer - 300;//don't attack until near end of this anim
+			//RAFIXME - impliment saberBounceMove?
+			pm->ps->saberMove = LS_READY;//don't finish whatever saber anim you may have been in
+			//pm->ps->saberMove = pm->ps->saberBounceMove = LS_READY;//don't finish whatever saber anim you may have been in //SP Version
+			pm->ps->saberBlocked = BLOCKED_NONE;
+			if ( forceGetUp )
+			{
+#ifdef QAGAME
+				if ( self && self->client && self->client->playerTeam == NPCTEAM_ENEMY 
+					&& self->NPC && self->NPC->blockedSpeechDebounceTime < level.time
+					&& !Q_irand( 0, 1 ) )
+				{//racc - evil NPCs sometimes taunt when they use the force to jump up from a knockdown.
+					PM_AddEvent( Q_irand( EV_COMBAT1, EV_COMBAT3 ) );
+					self->NPC->blockedSpeechDebounceTime = level.time + 1000;
+				}
+				G_PreDefSound(self->client->ps.origin, PDSOUND_FORCEJUMP);
+				//G_SoundOnEnt( pm->gent, CHAN_BODY, "sound/weapons/force/jump.wav" ); //SP version
+#endif
+				//launch off ground?
+				pm->ps->weaponTime = 300;//just to make sure it's cleared
+			}
+			return qtrue;
+		}
+	}
+	return qfalse;
+}
+
+
+qboolean PM_GettingUpFromKnockDown( float standheight, float crouchheight )
+{//racc - attempt to get up from a knockdown if we can/need to.
+	bgEntity_t *pEnt = pm_entSelf;
+	int legsAnim = pm->ps->legsAnim;
+	if ( legsAnim == BOTH_KNOCKDOWN1
+		||legsAnim == BOTH_KNOCKDOWN2
+		||legsAnim == BOTH_KNOCKDOWN3 
+		||legsAnim == BOTH_KNOCKDOWN4
+		||legsAnim == BOTH_KNOCKDOWN5 
+		||legsAnim == BOTH_PLAYER_PA_3_FLY
+		||legsAnim == BOTH_LK_DL_ST_T_SB_1_L
+		||legsAnim == BOTH_RELEASED )
+	{//in a knockdown
+		int minTimeLeft = PM_MinGetUpTime( pm->ps );
+		if ( pm->ps->legsTimer <= minTimeLeft )
+		{//if only a quarter of a second left, allow roll-aways
+			if ( PM_CheckRollGetup() )
+			{//racc - decided to use a getup roll.
+				pm->cmd.rightmove = pm->cmd.forwardmove = 0;
+				return qtrue;
+			}
+		}
+#ifdef QAGAME
+		if ( TIMER_Exists( &g_entities[pm->ps->clientNum], "noGetUpStraight" ) ) 
+		{//racc - check for a npc don't-getup-right-now timer for this NPC.
+			if ( !TIMER_Done2( &g_entities[pm->ps->clientNum], "noGetUpStraight", qtrue ) )
+			{//not allowed to do straight get-ups for another few seconds
+				if ( pm->ps->legsTimer <= minTimeLeft )
+				{//hold it for a bit
+					pm->ps->legsTimer = minTimeLeft+1;
+				}
+			}
+		}
+#endif
+		if ( !pm->ps->legsTimer	 //our knockdown is over
+			|| (pm->ps->legsTimer <= minTimeLeft //or we're strong enough to get up earlier.
+				&& (pm->cmd.upmove>0 || (pEnt->s.NPC_class==CLASS_ALORA))) ) //and we're trying to get up
+		{//done with the knockdown - FIXME: somehow this is allowing an *instant* getup...???
+			//FIXME: if trying to crouch (holding button?), just get up into a crouch?
+			if ( pm->cmd.upmove < 0 )
+			{
+				return PM_CrouchGetup( crouchheight );
+			}
+			else
+			{
+				trace_t	trace;
+				// try to stand up
+				pm->maxs[2] = standheight;
+				pm->trace( &trace, pm->ps->origin, pm->mins, pm->maxs, pm->ps->origin, pm->ps->clientNum, pm->tracemask );
+				if ( !trace.allsolid )
+				{//stand up
+					int	anim = BOTH_GETUP1;
+					qboolean forceGetUp = qfalse;
+					pm->maxs[2] = standheight;
+					pm->ps->viewheight = standheight + STANDARD_VIEWHEIGHT_OFFSET;
+					//NOTE: the force power checks will stop fencers and grunts from getting up using force jump
+					switch ( pm->ps->legsAnim )
+					{
+					case BOTH_KNOCKDOWN1:
+						//RAFIXME - Impliment PM_ControlledByPlayer?
+						if ( pm->ps->fd.forcePowerLevel[FP_LEVITATION] > FORCE_LEVEL_0 //has force jump
+							&& !(pm->ps->userInt3 & (1 << FLAG_FATIGUED))  //player isn't fatigued.
+							&& ( (pm->ps->clientNum < MAX_CLIENTS && pm->cmd.upmove > 0) //is a player trying to jump
+								|| pm->ps->clientNum >= MAX_CLIENTS) ) //an NPC doesn't have to give a command to do this.
+						//if ( (pm->ps->clientNum&&pm->ps->fd.forcePowerLevel[FP_LEVITATION] > FORCE_LEVEL_0) || ((pm->ps->clientNum < MAX_CLIENTS||PM_ControlledByPlayer())&&pm->cmd.upmove>0&&pm->ps->fd.forcePowerLevel[FP_LEVITATION] > FORCE_LEVEL_0) )//FORCE_LEVEL_1) )FORCE_LEVEL_1) )
+						{
+							anim = PM_irand_timesync( BOTH_FORCE_GETUP_B1, BOTH_FORCE_GETUP_B6 );//NOTE: BOTH_FORCE_GETUP_B5 takes soe steps forward at end
+							forceGetUp = qtrue;
+						}
+						else
+						{
+							anim = BOTH_GETUP1;
+						}
+						break;
+					case BOTH_KNOCKDOWN2:
+					case BOTH_PLAYER_PA_3_FLY:
+						//RAFIXME - impliment PM_ControlledByPlayer?
+						if ( pm->ps->fd.forcePowerLevel[FP_LEVITATION] > FORCE_LEVEL_0 //has force jump
+							&& !(pm->ps->userInt3 & (1 << FLAG_FATIGUED))  //player isn't fatigued.
+							&& ( (pm->ps->clientNum < MAX_CLIENTS && pm->cmd.upmove > 0) //is a player trying to jump
+								|| pm->ps->clientNum >= MAX_CLIENTS) ) //an NPC doesn't have to give a command to do this.
+						//if ( (pm->ps->clientNum&&pm->ps->fd.forcePowerLevel[FP_LEVITATION] > FORCE_LEVEL_0) || ((pm->ps->clientNum < MAX_CLIENTS||PM_ControlledByPlayer())&&pm->cmd.upmove>0&&pm->ps->fd.forcePowerLevel[FP_LEVITATION] > FORCE_LEVEL_0) )//FORCE_LEVEL_1) )FORCE_LEVEL_1) )
+						{
+							anim = PM_irand_timesync( BOTH_FORCE_GETUP_B1, BOTH_FORCE_GETUP_B6 );//NOTE: BOTH_FORCE_GETUP_B5 takes soe steps forward at end
+							forceGetUp = qtrue;
+						}
+						else
+						{
+							anim = BOTH_GETUP2;
+						}
+						break;
+					case BOTH_KNOCKDOWN3:
+						//RAFIXME - impliment PM_ControlledByPlayer?
+						if ( pm->ps->fd.forcePowerLevel[FP_LEVITATION] > FORCE_LEVEL_0 //has force jump
+							&& !(pm->ps->userInt3 & (1 << FLAG_FATIGUED))  //player isn't fatigued.
+							&& ( (pm->ps->clientNum < MAX_CLIENTS && pm->cmd.upmove > 0) //is a player trying to jump
+								|| pm->ps->clientNum >= MAX_CLIENTS) ) //an NPC doesn't have to give a command to do this.
+						//if ( (pm->ps->clientNum&&pm->ps->fd.forcePowerLevel[FP_LEVITATION] > FORCE_LEVEL_0) || ((pm->ps->clientNum < MAX_CLIENTS||PM_ControlledByPlayer())&&pm->cmd.upmove>0&&pm->ps->fd.forcePowerLevel[FP_LEVITATION] > FORCE_LEVEL_0) )//FORCE_LEVEL_1) )
+						{
+							anim = PM_irand_timesync( BOTH_FORCE_GETUP_F1, BOTH_FORCE_GETUP_F2 );
+							forceGetUp = qtrue;
+						}
+						else
+						{
+							anim = BOTH_GETUP3;
+						}
+						break;
+					case BOTH_KNOCKDOWN4:
+					case BOTH_RELEASED:
+						//RAFIXME - impliment PM_ControlledByPlayer?
+						if ( pm->ps->fd.forcePowerLevel[FP_LEVITATION] > FORCE_LEVEL_0 //has force jump
+							&& !(pm->ps->userInt3 & (1 << FLAG_FATIGUED))  //player isn't fatigued.
+							&& ( (pm->ps->clientNum < MAX_CLIENTS && pm->cmd.upmove > 0) //is a player trying to jump
+								|| pm->ps->clientNum >= MAX_CLIENTS) ) //an NPC doesn't have to give a command to do this.
+						//if ( (pm->ps->clientNum&&pm->ps->fd.forcePowerLevel[FP_LEVITATION] > FORCE_LEVEL_0) || ((pm->ps->clientNum < MAX_CLIENTS||PM_ControlledByPlayer())&&pm->cmd.upmove>0&&pm->ps->fd.forcePowerLevel[FP_LEVITATION] > FORCE_LEVEL_0) )//FORCE_LEVEL_1) )FORCE_LEVEL_1) )
+						{
+							anim = PM_irand_timesync( BOTH_FORCE_GETUP_B1, BOTH_FORCE_GETUP_B6 );//NOTE: BOTH_FORCE_GETUP_B5 takes soe steps forward at end
+							forceGetUp = qtrue;
+						}
+						else
+						{
+							anim = BOTH_GETUP4;
+						}
+						break;
+					case BOTH_KNOCKDOWN5:
+					case BOTH_LK_DL_ST_T_SB_1_L:
+						//RAFIXME - impliment PM_ControlledByPlayer?
+						if ( pm->ps->fd.forcePowerLevel[FP_LEVITATION] > FORCE_LEVEL_0 //has force jump
+							&& !(pm->ps->userInt3 & (1 << FLAG_FATIGUED))  //player isn't fatigued.
+							&& ( (pm->ps->clientNum < MAX_CLIENTS && pm->cmd.upmove > 0) //is a player trying to jump
+								|| pm->ps->clientNum >= MAX_CLIENTS) ) //an NPC doesn't have to give a command to do this.
+						//if ( (pm->ps->clientNum&&pm->ps->fd.forcePowerLevel[FP_LEVITATION] > FORCE_LEVEL_0) || ((pm->ps->clientNum < MAX_CLIENTS||PM_ControlledByPlayer())&&pm->cmd.upmove>0&&pm->ps->fd.forcePowerLevel[FP_LEVITATION] > FORCE_LEVEL_0) )//FORCE_LEVEL_1) )FORCE_LEVEL_1) )
+						{
+							anim = PM_irand_timesync( BOTH_FORCE_GETUP_F1, BOTH_FORCE_GETUP_F2 );
+							forceGetUp = qtrue;
+						}
+						else
+						{
+							anim = BOTH_GETUP5;
+						}
+						break;
+					}
+					//Com_Printf( "getupanim = %s\n", animTable[anim].name );
+					if ( forceGetUp )
+					{//racc - using the Force to get up.
+#ifdef QAGAME
+						gentity_t *self = &g_entities[pm->ps->clientNum];
+						if ( self && self->client && self->client->playerTeam == NPCTEAM_ENEMY 
+							&& self->NPC && self->NPC->blockedSpeechDebounceTime < level.time
+							&& !Q_irand( 0, 1 ) )
+						{//racc - enemy bots talk a little smack if they
+							PM_AddEvent( Q_irand( EV_COMBAT1, EV_COMBAT3 ) );
+							self->NPC->blockedSpeechDebounceTime = level.time + 1000;
+						}
+						G_PreDefSound(self->client->ps.origin, PDSOUND_FORCEJUMP);
+						//G_SoundOnEnt( pm->gent, CHAN_BODY, "sound/weapons/force/jump.wav" ); //SP version
+#endif
+
+						//launch off ground?
+						pm->ps->weaponTime = 300;//just to make sure it's cleared
+					}
+					if ( PM_LockedAnim( pm->ps->torsoAnim ) )
+					{//need to be able to override this anim
+						pm->ps->torsoTimer = 0;
+					}
+					if ( PM_LockedAnim( pm->ps->legsAnim ) )
+					{//need to be able to override this anim
+						pm->ps->legsTimer = 0;
+					}
+					PM_SetAnim( SETANIM_BOTH, anim, SETANIM_FLAG_OVERRIDE|SETANIM_FLAG_HOLD|SETANIM_FLAG_HOLDLESS, 100 );
+					//RAFIXME - impliment saberBounceMove?
+					pm->ps->saberMove = LS_READY;//don't finish whatever saber anim you may have been in
+					//pm->ps->saberMove = pm->ps->saberBounceMove = LS_READY;//don't finish whatever saber anim you may have been in
+					pm->ps->saberBlocked = BLOCKED_NONE;
+					return qtrue;
+				}
+				else
+				{
+					return PM_CrouchGetup( crouchheight );
+				}
+			}
+		}
+		else
+		{//racc - not ready to getup yet.  Just set the movement.
+			if ( pm->ps->legsAnim == BOTH_LK_DL_ST_T_SB_1_L )
+			{//racc - apprenently this move has a special cmd for it.
+				BG_CmdForRoll( pm->ps, pm->ps->legsAnim, &pm->cmd );
+			}
+			else
+			{
+				pm->cmd.rightmove = pm->cmd.forwardmove = 0;
+			}
+		}
+	}
+	return qfalse;
+}
+//[/KnockdownSys]
 
 #include "../namespace_end.h"

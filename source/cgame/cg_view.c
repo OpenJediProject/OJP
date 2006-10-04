@@ -414,15 +414,6 @@ static void CG_ResetThirdPersonViewDamp(void)
 	cameraStiffFactor = 0.0f;
 }
 
-//[Test]
-//added prototype to get rid of compiler error in SP NAV Code branch.
-//[VS2005]
-#if defined(_WIN32) && !defined(VS2005)
-float powf ( float x, int y );
-#endif
-//[/VS2005]
-//[/Test]
-
 // This is called every frame.
 static void CG_UpdateThirdPersonTargetDamp(void)
 {
@@ -1920,7 +1911,18 @@ void CG_DrawSkyBoxPortal(const char *cstr)
 	if ( cg.predictedPlayerState.pm_type == PM_INTERMISSION )
 	{
 		// if in intermission, use a fixed value
-		fov_x = cg_fov.value;
+		//[TrueView]
+		if(!cg.renderingThirdPerson && (cg_trueguns.integer || cg.predictedPlayerState.weapon == WP_SABER
+		|| cg.predictedPlayerState.weapon == WP_MELEE) && cg_truefov.value)
+		{
+			fov_x = cg_truefov.value;
+		}
+		else
+		{
+			fov_x = cg_fov.value;
+		}
+		//fov_x = cg_fov.value;
+		//[TrueView]
 	}
 	else
 	{

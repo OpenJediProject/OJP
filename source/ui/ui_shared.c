@@ -5403,6 +5403,10 @@ static bind_t g_bindings[] =
 	{"automap_toggle",	-1,					-1,		-1,	-1},
 	{"voicechat",		-1,					-1,		-1,	-1},
 
+	//[SaberThrowSys]
+	{"+button12",		-1,					-1,		-1,	-1},
+	//[/SaberThrowSys]
+
 };
 
 

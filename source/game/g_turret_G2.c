@@ -653,7 +653,10 @@ static void turretG2_aim( gentity_t *self )
 static void turretG2_turnoff( gentity_t *self )
 //-----------------------------------------------------
 {
-	if ( self->enemy == NULL )
+	//[CoOp]
+	if ( self->enemy != NULL )
+	//if ( self->enemy == NULL )
+	//[/CoOp]
 	{
 		// we don't need to turnoff
 		return;
@@ -785,7 +788,12 @@ static qboolean turretG2_find_enemies( gentity_t *self )
 
 			if ( enemyDist < bestDist || (target->client && !foundClient))// all things equal, keep current
 			{
-				if ( self->attackDebounceTime < level.time )
+				//[CoOp]
+				//fixed problem with this code preventing the turret from firing.  
+				//We should have this happen ONLY when we didn't have an enemy previously.
+				if ( self->attackDebounceTime < level.time && !self->enemy )
+				//if ( self->attackDebounceTime < level.time )
+				//[/CoOp]
 				{
 					// We haven't fired or acquired an enemy in the last 2 seconds-start-up sound
 					if ( !(self->spawnflags&SPF_TURRETG2_TURBO) )

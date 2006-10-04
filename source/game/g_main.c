@@ -43,6 +43,9 @@ vmCvar_t	g_MaxHolocronCarry;
 vmCvar_t	g_ff_objectives;
 vmCvar_t	g_autoMapCycle;
 vmCvar_t	g_dmflags;
+//[ExpSys]
+vmCvar_t	g_minForceRank;
+//[/ExpSys]
 vmCvar_t	g_maxForceRank;
 vmCvar_t	g_forceBasedTeams;
 vmCvar_t	g_privateDuel;
@@ -61,9 +64,14 @@ vmCvar_t	g_saberTraceSaberFirst;
 
 vmCvar_t	d_saberKickTweak;
 
+//[SaberSys]
+vmCvar_t	d_saberBodyCheck;
+//[/SaberSys]
+
 vmCvar_t	d_powerDuelPrint;
 
 vmCvar_t	d_saberGhoul2Collision;
+
 vmCvar_t	g_saberBladeFaces;
 vmCvar_t	d_saberAlwaysBoxTrace;
 vmCvar_t	d_saberBoxTraceSize;
@@ -97,6 +105,10 @@ vmCvar_t	g_slowmoDuelEnd;
 
 vmCvar_t	g_saberDamageScale;
 
+//[/SaberSys]
+vmCvar_t	g_saberanimspeed;
+//[/SaberSys]
+
 vmCvar_t	g_useWhileThrowing;
 
 vmCvar_t	g_RMG;
@@ -104,6 +116,15 @@ vmCvar_t	g_RMG;
 vmCvar_t	g_svfps;
 
 vmCvar_t	g_forceRegenTime;
+
+//[DodgeSys]
+vmCvar_t	g_dodgeRegenTime;
+//[/DodgeSys]
+
+//[SaberSys]
+vmCvar_t	g_mishapRegenTime;
+//[/SaberSys]
+
 vmCvar_t	g_spawnInvulnerability;
 vmCvar_t	g_forcePowerDisable;
 vmCvar_t	g_weaponDisable;
@@ -115,6 +136,11 @@ vmCvar_t	g_duel_fraglimit;
 vmCvar_t	g_timelimit;
 vmCvar_t	g_capturelimit;
 vmCvar_t	d_saberInterpolate;
+
+//[test]
+vmCvar_t	d_test;
+//[/test]
+
 vmCvar_t	g_friendlyFire;
 vmCvar_t	g_friendlySaber;
 vmCvar_t	g_password;
@@ -139,6 +165,10 @@ vmCvar_t	g_inactivity;
 vmCvar_t	g_debugMove;
 #ifndef FINAL_BUILD
 vmCvar_t	g_debugDamage;
+//[SaberSys]
+//Debug cvar for viewlock
+vmCvar_t	g_debugviewlock;
+//[/SaberSys]
 #endif
 vmCvar_t	g_debugAlloc;
 vmCvar_t	g_debugServerSkel;
@@ -223,6 +253,17 @@ vmCvar_t		g_saberRealisticCombat;
 vmCvar_t		g_saberRestrictForce;
 vmCvar_t		d_saberSPStyleDamage;
 vmCvar_t		g_debugSaberLocks;
+
+//[SaberSys]
+#ifndef FINAL_BUILD
+vmCvar_t		g_debugsabercombat;
+#endif
+//[/SaberSys]
+
+//[DodgeSys]
+vmCvar_t		g_debugdodge;
+//[/DodgeSys]
+
 vmCvar_t		g_saberLockRandomNess;
 // nmckenzie: SABER_DAMAGE_WALLS
 vmCvar_t		g_saberWallDamageScale;
@@ -277,6 +318,10 @@ vmCvar_t		g_corpseRemovalTime;
 vmCvar_t		ojp_clientMOTD;
 vmCvar_t		ojp_MOTD;
 //[/ExpandedMOTD]
+
+//[DodgeSys]
+vmCvar_t		ojp_allowBodyDodge;
+//[/DodgeSys]
 
 //[DuelSys]
 // MJN
@@ -335,7 +380,12 @@ static cvarTable_t		gameCvarTable[] = {
 	{ &g_autoMapCycle, "g_autoMapCycle", "0", CVAR_ARCHIVE | CVAR_NORESTART, 0, qtrue },
 	{ &g_dmflags, "dmflags", "0", CVAR_SERVERINFO | CVAR_ARCHIVE, 0, qtrue  },
 	
-	{ &g_maxForceRank, "g_maxForceRank", "6", CVAR_SERVERINFO | CVAR_ARCHIVE | CVAR_LATCH, 0, qfalse  },
+	//[ExpSys]
+	//sets the initial skill points that players get.
+	{ &g_minForceRank, "g_minForceRank", "5", CVAR_ARCHIVE | CVAR_LATCH, 0, qfalse  },
+	{ &g_maxForceRank, "g_maxForceRank", "100", CVAR_ARCHIVE | CVAR_LATCH, 0, qfalse  },
+	//{ &g_maxForceRank, "g_maxForceRank", "6", CVAR_SERVERINFO | CVAR_ARCHIVE | CVAR_LATCH, 0, qfalse  },
+	//[/ExpSys]
 	{ &g_forceBasedTeams, "g_forceBasedTeams", "0", CVAR_SERVERINFO | CVAR_ARCHIVE | CVAR_LATCH, 0, qfalse  },
 	{ &g_privateDuel, "g_privateDuel", "1", CVAR_SERVERINFO | CVAR_ARCHIVE, 0, qtrue  },
 
@@ -353,9 +403,14 @@ static cvarTable_t		gameCvarTable[] = {
 
 	{ &d_saberKickTweak, "d_saberKickTweak", "1", 0, 0, qtrue  },
 
+	//[SaberSys]
+	{ &d_saberBodyCheck, "d_saberBodyCheck", "1", 0, 0, qtrue  },
+	//[/SaberSys]
+
 	{ &d_powerDuelPrint, "d_powerDuelPrint", "0", 0, qtrue },
 
 	{ &d_saberGhoul2Collision, "d_saberGhoul2Collision", "1", CVAR_CHEAT, 0, qtrue  },
+
 	{ &g_saberBladeFaces, "g_saberBladeFaces", "1", 0, 0, qtrue  },
 
 	{ &d_saberAlwaysBoxTrace, "d_saberAlwaysBoxTrace", "0", CVAR_CHEAT, 0, qtrue  },
@@ -388,13 +443,33 @@ static cvarTable_t		gameCvarTable[] = {
 	//{ &g_saberDamageScale, "g_saberDamageScale", "1", CVAR_ARCHIVE, 0, qtrue  },
 	//[/VARIOUSSERVERTWEAKS]
 
+	//[SaberSys]
+	{ &g_saberanimspeed, "g_saberanimspeed", "1", CVAR_SERVERINFO | CVAR_ARCHIVE | CVAR_SYSTEMINFO, 0, qtrue  },
+	//[/SaberSys]
+
 	{ &g_useWhileThrowing, "g_useWhileThrowing", "1", 0, 0, qtrue  },
 
 	{ &g_RMG, "RMG", "0", 0, 0, qtrue  },
 
-	{ &g_svfps, "sv_fps", "20", 0, 0, qtrue },
+	//[SaberSys]
+	//Made sv_fps a archive / serverinfo cvar.  Note:  This cvar's default is controlled by the game engine, not this code.
+	//However, the archive flag does work after the cvar is set to something other than 20.
+	{ &g_svfps, "sv_fps", "20", CVAR_SERVERINFO | CVAR_ARCHIVE, 0, qtrue },
+	//{ &g_svfps, "sv_fps", "20", 0, 0, qtrue },
+	//[/SaberSys]
 
-	{ &g_forceRegenTime, "g_forceRegenTime", "200", CVAR_SERVERINFO | CVAR_ARCHIVE, 0, qtrue  },
+	//[FatigueSys]
+	{ &g_forceRegenTime, "g_forceRegenTime", "500", CVAR_SERVERINFO | CVAR_ARCHIVE, 0, qtrue  },
+	//{ &g_forceRegenTime, "g_forceRegenTime", "200", CVAR_SERVERINFO | CVAR_ARCHIVE, 0, qtrue  },
+	//[/FatigueSys]
+
+	//[DodgeSys]
+	{ &g_dodgeRegenTime, "g_dodgeRegenTime", "1000", CVAR_SERVERINFO | CVAR_ARCHIVE, 0, qtrue  },
+	//[/DodgeSys]
+
+	//[SaberSys]
+	{ &g_mishapRegenTime, "g_mishapRegenTime", "3000", CVAR_ARCHIVE, 0, qtrue  },
+	//[/SaberSys]
 
 	{ &g_spawnInvulnerability, "g_spawnInvulnerability", "3000", CVAR_ARCHIVE, 0, qtrue  },
 
@@ -413,7 +488,16 @@ static cvarTable_t		gameCvarTable[] = {
 
 	{ &g_synchronousClients, "g_synchronousClients", "0", CVAR_SYSTEMINFO, 0, qfalse  },
 
-	{ &d_saberInterpolate, "d_saberInterpolate", "0", CVAR_CHEAT, 0, qtrue },
+	//[SaberSys]
+	//turn on Super Duper Interpolation by default
+	{ &d_saberInterpolate, "d_saberInterpolate", "2", CVAR_CHEAT, 0, qtrue },
+	//{ &d_saberInterpolate, "d_saberInterpolate", "0", CVAR_CHEAT, 0, qtrue },
+	//[/SaberSys]
+
+	//[test]
+	//testing cvar
+	{ &d_test, "d_test", "-1", 0, 0, qtrue },
+	//[/test]
 
 	{ &g_friendlyFire, "g_friendlyFire", "0", CVAR_ARCHIVE, 0, qtrue  },
 	{ &g_friendlySaber, "g_friendlySaber", "0", CVAR_ARCHIVE, 0, qtrue  },
@@ -464,6 +548,9 @@ static cvarTable_t		gameCvarTable[] = {
 	{ &g_debugMove, "g_debugMove", "0", 0, 0, qfalse },
 #ifndef FINAL_BUILD
 	{ &g_debugDamage, "g_debugDamage", "0", 0, 0, qfalse },
+	//[SaberSys]
+	{ &g_debugviewlock, "g_debugviewlock", "0", 0, 0, qfalse },
+	//[/SaberSys]
 #endif
 	{ &g_debugAlloc, "g_debugAlloc", "0", 0, 0, qfalse },
 	{ &g_debugServerSkel, "g_debugServerSkel", "0", CVAR_CHEAT, 0, qfalse },
@@ -510,12 +597,27 @@ static cvarTable_t		gameCvarTable[] = {
 
 	{ &g_saberDmgVelocityScale, "g_saberDmgVelocityScale", "0", CVAR_ARCHIVE, 0, qtrue  },
 	{ &g_saberDmgDelay_Idle, "g_saberDmgDelay_Idle", "350", CVAR_ARCHIVE, 0, qtrue  },
-	{ &g_saberDmgDelay_Wound, "g_saberDmgDelay_Wound", "0", CVAR_ARCHIVE, 0, qtrue  },
+	//[SaberSys]
+	{ &g_saberDmgDelay_Wound, "g_saberDmgDelay_Wound", "100", CVAR_ARCHIVE, 0, qtrue  },
+	//{ &g_saberDmgDelay_Wound, "g_saberDmgDelay_Wound", "0", CVAR_ARCHIVE, 0, qtrue  },
+	//[/SaberSys]
 
 #ifndef FINAL_BUILD
 	{ &g_saberDebugPrint, "g_saberDebugPrint", "0", CVAR_CHEAT, 0, qfalse  },
 #endif
 	{ &g_debugSaberLocks, "g_debugSaberLocks", "0", CVAR_CHEAT, 0, qfalse },
+
+	//[SaberSys]
+#ifndef FINAL_BUILD
+	{ &g_debugsabercombat, "g_debugsabercombat", "0", CVAR_CHEAT, 0, qtrue },
+	//1 == the attacker always drops his saber when it collides with something. 
+#endif
+	//[/SaberSys]
+
+	//[DodgeSys]
+	{ &g_debugdodge, "g_debugdodge", "0", CVAR_CHEAT, 0, qtrue },
+	//[/DodgeSys]
+
 	{ &g_saberLockRandomNess, "g_saberLockRandomNess", "2", CVAR_CHEAT, 0, qfalse },
 // nmckenzie: SABER_DAMAGE_WALLS
 	{ &g_saberWallDamageScale, "g_saberWallDamageScale", "0.4", CVAR_SERVERINFO, 0, qfalse },
@@ -546,7 +648,11 @@ static cvarTable_t		gameCvarTable[] = {
 
 	{ &g_saberRealisticCombat, "g_saberRealisticCombat", "0", CVAR_CHEAT },
 	{ &g_saberRestrictForce, "g_saberRestrictForce", "0", CVAR_CHEAT },
-	{ &d_saberSPStyleDamage, "d_saberSPStyleDamage", "1", CVAR_CHEAT },
+	//[SaberSys]
+	//Yeah, this funks up my shit.  Turning it off for now.
+	{ &d_saberSPStyleDamage, "d_saberSPStyleDamage", "0", CVAR_CHEAT },
+	//{ &d_saberSPStyleDamage, "d_saberSPStyleDamage", "1", CVAR_CHEAT },
+	//[/SaberSys]
 
 	{ &debugNoRoam, "d_noroam", "0", CVAR_CHEAT },
 	{ &debugNPCAimingBeam, "d_npcaiming", "0", CVAR_CHEAT },
@@ -645,8 +751,14 @@ static cvarTable_t		gameCvarTable[] = {
 	{ &ojp_clientMOTD, "ojp_clientMOTD", "", CVAR_ARCHIVE, 0, qfalse },
 	//This message of the day is printed in the center of a player's screen when they first join a server if they AREN'T
 	//running the right version of OJP.
-	{ &ojp_MOTD, "ojp_MOTD", "This server is running OJP Basic.  To get the full experience of OJP Basic, get the mod from ojp.jediknight.net", CVAR_ARCHIVE, 0, qfalse },
+	{ &ojp_MOTD, "ojp_MOTD", "This server is running OJP Enhanced.  Your game WILL CRASH unless you run the mod. You can get it from ojp.jediknight.net", CVAR_ARCHIVE, 0, qfalse },
 	//[/ExpandedMOTD]	
+
+	//[DodgeSys]
+	//toggles the use of Body Dodges, which are matrix-like moves that make the players 
+	//evade damage in exchange for DP.
+	{ &ojp_allowBodyDodge, "ojp_allowBodyDodge", "1", CVAR_SERVERINFO|CVAR_ARCHIVE, 0, qtrue },
+	//[/DodgeSys]
 };
 
 // bk001129 - made static to avoid aliasing
@@ -2955,6 +3067,13 @@ void CheckExitRules( void ) {
 		}
 	}
 	*/
+	//[CoOp]
+	//coop mode never exits until someone touches the level end
+	if(g_gametype.integer == GT_SINGLE_PLAYER)
+	{
+		return;
+	}
+	//[/CoOp]
 
 	// check for sudden death
 	if (g_gametype.integer != GT_SIEGE)
@@ -4279,6 +4398,15 @@ void G_RunFrame( int levelTime ) {
 			G_RunMover( ent );
 			continue;
 		}
+
+		//[Test]
+		//something is causing clients to be disconnected/not in use between the beginning 
+		//and here.  Added this additional check so that we don't give weird problems downstream.
+		if(!ent->inuse)
+		{
+			continue;
+		}
+		//[/Test]
 
 		if ( i < MAX_CLIENTS ) 
 		{

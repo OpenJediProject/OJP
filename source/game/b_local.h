@@ -183,6 +183,7 @@ extern qboolean InVisrange ( gentity_t *ent );
 //[CoOp]
 //[SuperDindon]
 extern float G_GroundDistance( gentity_t *self );
+//[/SuperDindon]
 //[/CoOp]
 
 //NPC_sounds

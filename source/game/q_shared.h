@@ -11,6 +11,11 @@
 
 #define MAX_TEAMNAME 32
 
+//[SaberLockSys]
+//moved here to support ShortestLineSegBewteen2LineSegs
+#define Q3_INFINITE			16777216 
+//[/SaberLockSys]
+
 #include "../qcommon/disablewarnings.h"
 
 #include "teams.h" //npc team stuff
@@ -684,10 +689,10 @@ typedef struct
 	float		lengthMax;
 	float		lengthOld;
 	float		desiredLength;
-	vec3_t		muzzlePoint;
-	vec3_t		muzzlePointOld;
-	vec3_t		muzzleDir;
-	vec3_t		muzzleDirOld;
+	vec3_t		muzzlePoint;		//racc - not updated on cgame side.		
+	vec3_t		muzzlePointOld;		//racc - not updated on cgame side.	
+	vec3_t		muzzleDir;			//racc - not updated on cgame side.	
+	vec3_t		muzzleDirOld;		//racc - not updated on cgame side.	
 	saberTrail_t	trail;
 	int			hitWallDebounceTime;
 	int			storageTime;
@@ -2420,6 +2425,7 @@ typedef struct playerState_s {
 	int			duelTime;
 	qboolean	duelInProgress;
 
+	//racc - this isn't used anymore in Enhanced thanks to the new saber system.
 	int			saberAttackChainCount;
 
 	int			saberHolstered;
@@ -2570,6 +2576,34 @@ typedef struct siegePers_s
 //[RACC] - +button11
 //+force_drain
 
+//[SaberSys]
+//[SaberDefines]
+//new button defines.
+#define	BUTTON_SABERTHROW		4096		//+button12
+#define	BUTTON_14				8192		//+button13
+#define	BUTTON_15				16384		//+button14
+//NOTE: As far as I've been able to test, the buttons seen below don't work because they 
+//aren't set to command buttons in the engine.
+#define	BUTTON_16				32768
+#define	BUTTON_17				65536	//seems to trigger after landing on some and then randomly after that.
+#define	BUTTON_18				131072
+#define	BUTTON_19				262144
+#define	BUTTON_20				524288
+#define	BUTTON_21				1048576
+#define	BUTTON_22				2097152
+#define	BUTTON_23				4194304
+#define	BUTTON_24				8388608
+#define	BUTTON_25				16777216
+#define	BUTTON_26				33554432
+#define	BUTTON_27				67108864
+#define	BUTTON_28				134217728
+#define	BUTTON_29				268435456
+#define	BUTTON_30				536870912
+#define	BUTTON_31				1073741824
+#define	BUTTON_32				2147483648
+//[/SaberDefines]
+//[/SaberSys]
+
 // Here's an interesting bit.  The bots in TA used buttons to do additional gestures.
 // I ripped them out because I didn't want too many buttons given the fact that I was already adding some for JK2.
 // We can always add some back in if we want though.
@@ -2585,6 +2619,62 @@ typedef struct siegePers_s
 
 #define	MOVE_RUN			120			// if forwardmove or rightmove are >= MOVE_RUN,
 										// then BUTTON_WALKING should be set
+
+//[SaberSys]
+//playerstate userint1
+//Bitmasks for view locking
+#define	LOCK_RIGHT			1
+#define	LOCK_LEFT			2
+#define LOCK_UP				4
+#define LOCK_DOWN			8
+
+//Bitmasks for move locking
+#define LOCK_MOVERIGHT		16
+#define LOCK_MOVELEFT		32
+#define LOCK_MOVEFORWARD	64
+#define LOCK_MOVEBACK		128
+#define LOCK_MOVEUP			256
+#define LOCK_MOVEDOWN		512
+//[/SaberSys]
+
+//[FatigueSys]
+//entitystate/playerstate userint3
+
+//Flag bits in bit number form
+//use "(1 << flag)"
+
+//Fatigued Flag.
+#define	FLAG_FATIGUED		1
+
+//Dodge low flag
+#define FLAG_DODGEROLL		2
+
+//indicates that the current attack/transition is
+//part of a fake.  This makes the attack much stronger
+//forbreaking thru other attacks and blocks.
+#define FLAG_ATTACKFAKE		3
+//[/FatigueSys]
+
+//[SaberSys]
+//This flag indicates that the player should have a slower than usual bounce since they just avoided a mishap by
+//having enough FP/DP.
+#define FLAG_SLOWBOUNCE		4
+//This flag indicates at the player is going into a older, more vulnerable slow bounce animations
+//this must be used in conjunction with the FLAG_SLOWBOUNCE to work right.
+#define FLAG_OLDSLOWBOUNCE	5
+
+//this flag indicates that this player is supposed to win the current saberlock.
+#define FLAG_LOCKWINNER		6
+
+
+//[SaberDefines]
+//scaler to the walkspeed
+#define WALKSPEED			1.75//1.35
+//[/SaberDefines]
+//[/SaberSys]
+
+
+
 
 typedef enum
 {

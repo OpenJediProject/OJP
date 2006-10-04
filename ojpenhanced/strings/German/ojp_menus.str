@@ -13,6 +13,27 @@ VERSION             "1"
 CONFIG              "W:\bin\stringed.cfg"
 FILENOTES           "OJP menu strings"
 
+//[ExpSys]
+REFERENCE	    STARTINGSKILLPOINTS
+LANG_ENGLISH	    "#same"
+
+REFERENCE	    MAXSKILLPOINTS
+LANG_ENGLISH	    "#same"
+
+REFERENCE	    SKILL
+LANG_ENGLISH	    "#same"
+//[/ExpSys]
+
+//[SaberThrowSys]
+REFERENCE	    FORCE_SABERTHROW
+LANG_ENGLISH	    "Saber Throw:"
+LANG_GERMAN         "Schwertwurf:"
+ 
+REFERENCE	    USES_FORCE_SABERTHROW_ABILITY
+LANG_ENGLISH	    "Uses Force Saber Throw ability."
+LANG_GERMAN         "Benutze Lichtschwertwurf."
+//[/SaberThrowSys]
+
 //[OLDGAMETYPES]
 REFERENCE           JEDIMASTER
 LANG_ENGLISH        "Jedi Master"

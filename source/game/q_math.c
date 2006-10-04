@@ -1678,6 +1678,244 @@ float G_PointDistFromLineSegment( const vec3_t start, const vec3_t end, const ve
 	return Distance( intersection, from );
 }
 
+
+//[SaberLockSys]
+// racc - This function works, but I decided to use ShortestLineSegBewteen2LineSegs 
+//since it was already used in the code.
+
+//whored from http://geometryalgorithms.com/Archive/algorithm_0106/algorithm_0106.htm#dist3D_Segment_to_Segment()
+#define SMALL_NUM  0.00000001 // anything that avoids division overflow
+void G_FindClosestPointBetweenLineSegments( vec3_t start1, vec3_t end1, vec3_t start2, vec3_t end2, vec3_t closestPoint)
+{
+	vec3_t u, v, w;
+	float a, b, c, d, e, D;
+	float    sc;
+	VectorSubtract(end1, start1, u);
+	VectorSubtract(end2, start2, v);
+	VectorSubtract(start1, start2, w);
+
+	/*
+    Vector   u = L1.P1 - L1.P0;
+    Vector   v = L2.P1 - L2.P0;
+    Vector   w = L1.P0 - L2.P0;
+	*/
+	a = DotProduct(u,u);        // always >= 0
+    b = DotProduct(u,v);
+    c = DotProduct(v,v);        // always >= 0
+    d = DotProduct(u,w);
+    e = DotProduct(v,w);
+    D = a*c - b*b;       // always >= 0
+   
+
+    // compute the line parameters of the two closest points
+    if (D < SMALL_NUM) {         // the lines are almost parallel
+        sc = 0.0;
+        //tc = (b>c ? d/b : e/c);   // use the largest denominator
+    }
+    else {
+        sc = (b*e - c*d) / D;
+        //tc = (a*e - b*d) / D;
+    }
+
+    // get the difference of the two closest points
+    //Vector   dP = w + (sc * u) - (tc * v);  // = L1(sc) - L2(tc)
+
+	//return norm(dP);   // return the closest distance
+
+	if(sc < 0)
+	{//past the start point on segment
+		VectorCopy(start1, closestPoint);
+	}
+	else if(sc > 1)
+	{//past the start point on the segment
+		VectorCopy(end1, closestPoint);
+	}
+
+	//somewhere inbetween
+	VectorMA(start1, sc, u, closestPoint);
+}
+
+
+float ShortestLineSegBewteen2LineSegs( vec3_t start1, vec3_t end1, vec3_t start2, vec3_t end2, vec3_t close_pnt1, vec3_t close_pnt2 )
+{//racc - finds the shorts line between two line segments.  I moved this to q_math.c to make it available for the saber lock effects on the cgame side.
+	float	current_dist, new_dist;
+	vec3_t	new_pnt;
+	//start1, end1 : the first segment
+	//start2, end2 : the second segment
+
+	//output, one point on each segment, the closest two points on the segments.
+
+	//compute some temporaries:
+	//vec start_dif = start2 - start1
+	vec3_t	start_dif;
+	vec3_t	v1;
+	vec3_t	v2;
+	float v1v1, v2v2, v1v2;
+	float denom;
+
+	VectorSubtract( start2, start1, start_dif );
+	//vec v1 = end1 - start1
+	VectorSubtract( end1, start1, v1 );
+	//vec v2 = end2 - start2
+	VectorSubtract( end2, start2, v2 );
+	//
+	v1v1 = DotProduct( v1, v1 );
+	v2v2 = DotProduct( v2, v2 );
+	v1v2 = DotProduct( v1, v2 );
+
+	//the main computation
+
+	denom = (v1v2 * v1v2) - (v1v1 * v2v2);
+
+	//if denom is small, then skip all this and jump to the section marked below
+	if ( fabs(denom) > 0.001f )
+	{
+		float s = -( (v2v2*DotProduct( v1, start_dif )) - (v1v2*DotProduct( v2, start_dif )) ) / denom;
+		float t = ( (v1v1*DotProduct( v2, start_dif )) - (v1v2*DotProduct( v1, start_dif )) ) / denom;
+		qboolean done = qtrue;
+
+		if ( s < 0 )
+		{
+			done = qfalse;
+			s = 0;// and see note below
+		}
+
+		if ( s > 1 ) 
+		{
+			done = qfalse;
+			s = 1;// and see note below
+		}
+
+		if ( t < 0 ) 
+		{
+			done = qfalse;
+			t = 0;// and see note below
+		}
+
+		if ( t > 1 ) 
+		{
+			done = qfalse;
+			t = 1;// and see note below
+		}
+
+		//vec close_pnt1 = start1 + s * v1
+		VectorMA( start1, s, v1, close_pnt1 );
+		//vec close_pnt2 = start2 + t * v2
+		VectorMA( start2, t, v2, close_pnt2 );
+
+		current_dist = Distance( close_pnt1, close_pnt2 );
+		//now, if none of those if's fired, you are done. 
+		if ( done )
+		{
+			return current_dist;
+		}
+		//If they did fire, then we need to do some additional tests.
+
+		//What we are gonna do is see if we can find a shorter distance than the above
+		//involving the endpoints.
+	}
+	else
+	{
+		//******start here for paralell lines with current_dist = infinity****
+		current_dist = Q3_INFINITE;
+	}
+
+	//test 2 close_pnts first
+	/*
+	G_FindClosestPointOnLineSegment( start1, end1, close_pnt2, new_pnt );
+	new_dist = Distance( close_pnt2, new_pnt );
+	if ( new_dist < current_dist )
+	{//then update close_pnt1 close_pnt2 and current_dist
+		VectorCopy( new_pnt, close_pnt1 );
+		VectorCopy( close_pnt2, close_pnt2 );
+		current_dist = new_dist;
+	}
+
+	G_FindClosestPointOnLineSegment( start2, end2, close_pnt1, new_pnt );
+	new_dist = Distance( close_pnt1, new_pnt );
+	if ( new_dist < current_dist )
+	{//then update close_pnt1 close_pnt2 and current_dist
+		VectorCopy( close_pnt1, close_pnt1 );
+		VectorCopy( new_pnt, close_pnt2 );
+		current_dist = new_dist;
+	}
+	*/
+	//test all the endpoints
+	new_dist = Distance( start1, start2 );
+	if ( new_dist < current_dist )
+	{//then update close_pnt1 close_pnt2 and current_dist
+		VectorCopy( start1, close_pnt1 );
+		VectorCopy( start2, close_pnt2 );
+		current_dist = new_dist;
+	}
+
+	new_dist = Distance( start1, end2 );
+	if ( new_dist < current_dist )
+	{//then update close_pnt1 close_pnt2 and current_dist
+		VectorCopy( start1, close_pnt1 );
+		VectorCopy( end2, close_pnt2 );
+		current_dist = new_dist;
+	}
+
+	new_dist = Distance( end1, start2 );
+	if ( new_dist < current_dist )
+	{//then update close_pnt1 close_pnt2 and current_dist
+		VectorCopy( end1, close_pnt1 );
+		VectorCopy( start2, close_pnt2 );
+		current_dist = new_dist;
+	}
+
+	new_dist = Distance( end1, end2 );
+	if ( new_dist < current_dist )
+	{//then update close_pnt1 close_pnt2 and current_dist
+		VectorCopy( end1, close_pnt1 );
+		VectorCopy( end2, close_pnt2 );
+		current_dist = new_dist;
+	}
+
+	//Then we have 4 more point / segment tests
+
+	G_FindClosestPointOnLineSegment( start2, end2, start1, new_pnt );
+	new_dist = Distance( start1, new_pnt );
+	if ( new_dist < current_dist )
+	{//then update close_pnt1 close_pnt2 and current_dist
+		VectorCopy( start1, close_pnt1 );
+		VectorCopy( new_pnt, close_pnt2 );
+		current_dist = new_dist;
+	}
+
+	G_FindClosestPointOnLineSegment( start2, end2, end1, new_pnt );
+	new_dist = Distance( end1, new_pnt );
+	if ( new_dist < current_dist )
+	{//then update close_pnt1 close_pnt2 and current_dist
+		VectorCopy( end1, close_pnt1 );
+		VectorCopy( new_pnt, close_pnt2 );
+		current_dist = new_dist;
+	}
+
+	G_FindClosestPointOnLineSegment( start1, end1, start2, new_pnt );
+	new_dist = Distance( start2, new_pnt );
+	if ( new_dist < current_dist )
+	{//then update close_pnt1 close_pnt2 and current_dist
+		VectorCopy( new_pnt, close_pnt1 );
+		VectorCopy( start2, close_pnt2 );
+		current_dist = new_dist;
+	}
+
+	G_FindClosestPointOnLineSegment( start1, end1, end2, new_pnt );
+	new_dist = Distance( end2, new_pnt );
+	if ( new_dist < current_dist )
+	{//then update close_pnt1 close_pnt2 and current_dist
+		VectorCopy( new_pnt, close_pnt1 );
+		VectorCopy( end2, close_pnt2 );
+		current_dist = new_dist;
+	}
+
+	return current_dist;
+}
+//[/SaberLockSys]
+
+
 //[AotCAI]
 float VectorDistance(vec3_t v1, vec3_t v2)
 {//returns the distance between the two points.

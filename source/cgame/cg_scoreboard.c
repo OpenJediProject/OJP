@@ -36,9 +36,18 @@
 
 #define SB_RATING_WIDTH	    0 // (6 * BIGCHAR_WIDTH)
 #define SB_NAME_X			(SB_SCORELINE_X)
+//[ExpSys]
+#define SB_SCORE_X			(SB_SCORELINE_X + .45 * SB_SCORELINE_WIDTH)
+#define SB_PING_X			(SB_SCORELINE_X + .60 * SB_SCORELINE_WIDTH)
+#define SB_TIME_X			(SB_SCORELINE_X + .75 * SB_SCORELINE_WIDTH)
+#define SB_SKILL_X			(SB_SCORELINE_X + .90 * SB_SCORELINE_WIDTH)
+
+/* basejka values
 #define SB_SCORE_X			(SB_SCORELINE_X + .55 * SB_SCORELINE_WIDTH)
 #define SB_PING_X			(SB_SCORELINE_X + .70 * SB_SCORELINE_WIDTH)
 #define SB_TIME_X			(SB_SCORELINE_X + .85 * SB_SCORELINE_WIDTH)
+*/
+//[/ExpSys]
 
 // The new and improved score board
 //
@@ -209,12 +218,24 @@ static void CG_DrawClientScore( int y, score_t *score, float *color, float fade,
 
 		CG_Text_Paint (SB_PING_X, y, 1.0f * scale, colorWhite, va("%i", score->ping),0, 0, ITEM_TEXTSTYLE_OUTLINED, FONT_SMALL );	
 		CG_Text_Paint (SB_TIME_X, y, 1.0f * scale, colorWhite, va("%i", score->time),0, 0, ITEM_TEXTSTYLE_OUTLINED, FONT_SMALL );		
+		//[ExpSys]
+		if(cgs.gametype != GT_SIEGE)
+		{
+			CG_Text_Paint (SB_SKILL_X, y, 1.0f * scale, colorWhite, va("%i", score->skill),0, 0, ITEM_TEXTSTYLE_OUTLINED, FONT_SMALL );	
+		}
+		//[/ExpSys]
 	}
 	else
 	{
 		CG_Text_Paint (SB_SCORE_X, y, 1.0f * scale, colorWhite, "-",0, 0, ITEM_TEXTSTYLE_OUTLINED, FONT_SMALL );
 		CG_Text_Paint (SB_PING_X, y, 1.0f * scale, colorWhite, "-",0, 0, ITEM_TEXTSTYLE_OUTLINED, FONT_SMALL );	
 		CG_Text_Paint (SB_TIME_X, y, 1.0f * scale, colorWhite, "-",0, 0, ITEM_TEXTSTYLE_OUTLINED, FONT_SMALL );
+		//[ExpSys]
+		if(cgs.gametype != GT_SIEGE)
+		{
+			CG_Text_Paint (SB_SKILL_X, y, 1.0f * scale, colorWhite, "-",0, 0, ITEM_TEXTSTYLE_OUTLINED, FONT_SMALL );
+		}
+		//[/ExpSys]
 	}
 
 	// add the "ready" marker for intermission exiting
@@ -505,6 +526,12 @@ qboolean CG_DrawOldScoreboard( void ) {
 	}
 	CG_Text_Paint ( SB_PING_X, y, 1.0f, colorWhite, CG_GetStringEdString("MP_INGAME", "PING"), 0, 0, ITEM_TEXTSTYLE_OUTLINED, FONT_MEDIUM );
 	CG_Text_Paint ( SB_TIME_X, y, 1.0f, colorWhite, CG_GetStringEdString("MP_INGAME", "TIME"), 0, 0, ITEM_TEXTSTYLE_OUTLINED, FONT_MEDIUM );
+	//[ExpSys]
+	if(cgs.gametype != GT_SIEGE)
+	{
+		CG_Text_Paint ( SB_SKILL_X, y, 1.0f, colorWhite, CG_GetStringEdString("OJP_MENUS", "SKILL"), 0, 0, ITEM_TEXTSTYLE_OUTLINED, FONT_MEDIUM );
+	}
+	//[/ExpSys]
 
 	y = SB_TOP;
 

@@ -374,6 +374,11 @@ typedef struct {
 
 	holster_t	holsterData[MAX_HOLSTER];
 	//[/VisualWeapons]
+
+	//[SaberLockSys]
+	int				saberLockFxDebounce;  //debounces the saberlock clash efx.	
+	int				saberLockSoundDebounce;  //debounces the saberlock saber noises.
+	//[/SaberLockSys]
 	
 } clientInfo_t;
 
@@ -716,6 +721,10 @@ typedef struct {
 	int				captures;
 	qboolean	perfect;
 	int				team;
+	//[ExpSys]
+	int				skill;		//number of skill points this player currently has.
+	//[/ExpSys]
+
 } score_t;
 
 
@@ -1036,6 +1045,11 @@ typedef struct {
 	int			forceHUDTotalFlashTime;
 	int			forceHUDNextFlashTime;
 	qboolean	forceHUDActive;				// Flag to show force hud is off/on
+
+	//[DodgeSys]
+	int			dodgeHUDNextFlashTime;
+	qboolean	dodgeHUDActive;
+	//[/DodgeSys]
 
 	// development tool
 	refEntity_t		testModelEntity;
@@ -1553,6 +1567,10 @@ typedef struct
 	fxHandle_t	mSaberBloodSparks;
 	fxHandle_t	mSaberBloodSparksSmall;
 	fxHandle_t	mSaberBloodSparksMid;
+	//[SaberLockSys]
+	//saber clash effect used for saber locks.  This effect is designed to be rendered on a near frame-by-frame basis.
+	fxHandle_t  mSaberFriction;  
+	//[/SaberLockSys]
 	fxHandle_t	mSpawn;
 	fxHandle_t	mJediSpawn;
 	fxHandle_t	mBlasterDeflect;

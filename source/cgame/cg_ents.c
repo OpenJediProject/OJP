@@ -2469,6 +2469,13 @@ static void CG_DistortionTrail( centity_t *cent )
 CG_Missile
 ===============
 */
+//[SaberThrowSys]
+extern void CG_AddSaberBlade( centity_t *cent, centity_t *scent, refEntity_t *saber, 
+							 int renderfx, int modelIndex, int saberNum, int bladeNum, 
+							 vec3_t origin, vec3_t angles, qboolean fromSaber, 
+							 qboolean dontDraw);
+extern void CG_DoSaberLight( saberInfo_t *saber , int cnum, int bnum);
+//[/SaberThrowSys]
 static void CG_Missile( centity_t *cent ) {
 	refEntity_t			ent;
 	entityState_t		*s1;
@@ -2516,6 +2523,46 @@ static void CG_Missile( centity_t *cent ) {
 			{
 				trap_G2API_InitGhoul2Model(&cent->ghoul2, "models/weapons2/saber/saber_w.glm", 0, 0, 0, 0, 0);
 			}
+
+			//[SaberThrowSys]
+			//add blade bolts to saber hilt model so we can draw the saber blade on dropped/ballistic sabers
+			if(cent->ghoul2 && s1->owner != ENTITYNUM_NONE)
+			{
+				//get the our owner's information.
+				clientInfo_t	*SaberOwnerInfo = &cgs.clientinfo[s1->owner];
+				int m = 0;
+				int tagBolt;
+				char *tagName;
+
+				while (m < SaberOwnerInfo->saber[0].numBlades)
+				{
+					tagName = va("*blade%i", m+1);
+					tagBolt = trap_G2API_AddBolt(cent->ghoul2, 0, tagName);
+
+					if (tagBolt == -1)
+					{
+						if (m == 0)
+						{ //guess this is an 0ldsk3wl saber
+							tagBolt = trap_G2API_AddBolt(cent->ghoul2, 0, "*flash");
+
+							if (tagBolt == -1)
+							{
+								assert(0);
+							}
+							break;
+						}
+
+						if (tagBolt == -1)
+						{
+							assert(0);
+							break;
+						}
+					}
+
+					m++;
+				}
+			}
+			//[/SaberThrowSys]
 			return;
 		}
 		else if (s1->eFlags & EF_NODRAW)
@@ -2529,8 +2576,12 @@ static void CG_Missile( centity_t *cent ) {
 		ent.radius = cent->currentState.g2radius;
 	}
 
+	//[SaberThrowSys]
+	// not sure why the basejka code is override the lerpAngles here.  It's screwing up
+	//our ability accurately render the saber on the client.
 	// calculate the axis
-	VectorCopy( s1->angles, cent->lerpAngles);
+	//VectorCopy( s1->angles, cent->lerpAngles);
+	//[/SaberThrowSys]
 
 	if ( s1->otherEntityNum2 && s1->weapon != WP_SABER )
 	{//using an over-ridden trail effect!
@@ -2675,7 +2726,12 @@ Ghoul2 Insert End
 	}
 
 	// spin as it moves
-	if ( s1->apos.trType != TR_INTERPOLATE )
+	//[SaberThrowSys]
+	//don't apply this weird spin stuff to the sabers because they don't rotate on the 
+	//same axis.
+	if ( s1->apos.trType != TR_INTERPOLATE && s1->weapon != WP_SABER)
+	//if ( s1->apos.trType != TR_INTERPOLATE )
+	//[/SaberThrowSys]
 	{
 		// convert direction of travel into axis
 		if ( VectorNormalize2( s1->pos.trDelta, ent.axis[0] ) == 0 ) {
@@ -2713,13 +2769,68 @@ Ghoul2 Insert End
 
 	if (s1->weapon == WP_SABER)
 	{
+		//[SaberThrowSys]
+		//This code lets ballistic or dropped sabers render their saber blades.
+		vec3_t			bladeAngles;
+		int				k;
+		int				l = 0;
+
+		if(s1->owner != ENTITYNUM_NONE)
+		{//we have an owner associated with this player.
+
+			//get the our owner's information.
+			clientInfo_t	*SaberOwnInfo = &cgs.clientinfo[s1->owner];
+			centity_t		*saberOwn = &cg_entities[s1->owner];	
+
+			
+			VectorCopy(cent->lerpAngles, bladeAngles);
+			bladeAngles[ROLL] = 0;
+
+			//render the blade.  Note, we're only rendering the blades on the first saber since the first saber
+			//is the only one that can be tossed...for now.
+			if (SaberOwnInfo->saber[0].model[0])
+			{
+				k = 0;
+				while (k < SaberOwnInfo->saber[0].numBlades)
+				{
+					if ( //cent->currentState.fireflag == SS_STAFF&& //in saberstaff style
+						l == 0//first saber
+						&& saberOwn->currentState.saberHolstered == 1 //extra blades should be off
+						&& k > 0 )//this is an extra blade
+					{//extra blades off
+						//don't draw them
+						CG_AddSaberBlade(saberOwn, cent, NULL, 0, 0, 0, k, cent->lerpOrigin, bladeAngles, qtrue, qtrue);
+					}
+					else
+					{
+						CG_AddSaberBlade(saberOwn, cent, NULL, 0, 0, 0, k, cent->lerpOrigin, bladeAngles, qtrue, qfalse);
+					}
+
+					k++;
+				}
+				if ( SaberOwnInfo->saber[0].numBlades > 2 )
+				{//add a single glow for the saber based on all the blade colors combined
+					//[RGBSabers]
+					CG_DoSaberLight( &SaberOwnInfo->saber[0], saberOwn->currentState.clientNum, 0 );
+					//[/RGBSabers]
+				}
+			}
+		}
+		//[/SaberThrowSys]
+
 		ent.radius = s1->g2radius;
 	}
 
 	// add to refresh list, possibly with quad glow
 	CG_AddRefEntityWithPowerups( &ent, s1, TEAM_FREE );
 
-	if (s1->weapon == WP_SABER && cgs.gametype == GT_JEDIMASTER)
+	//[SaberThrowSys]
+	//made it so a player's dropped saber glows so it's easier to find/see.
+	if (s1->weapon == WP_SABER 
+		&& (cgs.gametype == GT_JEDIMASTER || //playing JediMaster
+		(s1->owner == cg.snap->ps.clientNum)))//or it's our saber and we've dropped it.
+	//if (s1->weapon == WP_SABER && cgs.gametype == GT_JEDIMASTER)
+	//[/SaberThrowSys]
 	{ //in jedimaster always make the saber glow when on the ground
 		vec3_t org;
 		float wv;

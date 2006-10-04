@@ -325,7 +325,10 @@ void NPC_TavionSithSword_Precache( void )
 	G_SoundIndex( "sound/weapons/scepter/recharge.wav" );
 }
 
-extern void G_Knockdown( gentity_t *victim );
+//[KnockdownSys]
+extern void G_Knockdown( gentity_t *self, gentity_t *attacker, const vec3_t pushDir, float strength, qboolean breakSaberLock );
+//extern void G_Knockdown( gentity_t *victim );
+//[/KnockdownSys]
 extern float Q_flrand(float min, float max);
 void Tavion_ScepterDamage( void )
 {//Damage code for tavion's scepter weapon.
@@ -396,9 +399,10 @@ void Tavion_ScepterDamage( void )
 						G_Throw( traceEnt, dir, Q_flrand( 50, 80 ) );
 						if ( traceEnt->health > 0 && !Q_irand( 0, 2 ) )//FIXME: base on skill!
 						{//do pain on enemy
-							//RAFIXME:  impliment multi directional knockdowns
-							G_Knockdown( traceEnt );
-							//G_Knockdown( traceEnt, NPC, dir, 300, qtrue );
+							//[KnockdownSys]
+							G_Knockdown( traceEnt, NPC, dir, 300, qtrue );
+							//G_Knockdown( traceEnt );
+							//[/KnockdownSys]
 						}
 					}
 					hit = qtrue;
@@ -532,9 +536,10 @@ void Tavion_ScepterSlam( void )
 						if ( dist < halfRad
 							|| radiusEnt->client->ps.groundEntityNum != ENTITYNUM_NONE )
 						{//within range of my fist or within ground-shaking range and not in the air
-							//RAFIXME: impliment
-							G_Knockdown( radiusEnt );
-							//G_Knockdown( radiusEnt, NPC, vec3_origin, 500, qtrue );
+							//[KnockdownSys]
+							G_Knockdown( radiusEnt, NPC, vec3_origin, 500, qtrue );
+							//G_Knockdown( radiusEnt );
+							//[/KnockdownSys]
 						}
 					}
 				}
@@ -799,7 +804,10 @@ void WP_ResistForcePush( gentity_t *self, gentity_t *pusher, qboolean noPenalty 
 	Jedi_PlayBlockedPushSound( self );
 }
 
-qboolean Boba_StopKnockdown( gentity_t *self, gentity_t *pusher, vec3_t pushDir, qboolean forceKnockdown ) //forceKnockdown = qfalse
+//[KnockdownSys]
+qboolean Boba_StopKnockdown( gentity_t *self, gentity_t *pusher, const vec3_t pushDir, qboolean forceKnockdown ) //forceKnockdown = qfalse
+//qboolean Boba_StopKnockdown( gentity_t *self, gentity_t *pusher, vec3_t pushDir, qboolean forceKnockdown ) //forceKnockdown = qfalse
+//[/KnockdownSys]
 {
 	vec3_t	pDir, fwd, right, ang;
 	float	fDot, rDot;

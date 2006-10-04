@@ -13,7 +13,7 @@ FORCE INTERFACE
 #include "ui_force.h"
 
 int uiForceSide = FORCE_LIGHTSIDE;
-int uiJediNonJedi = -1;
+int uiJediNonJedi = -1;  //racc - indicates if we're jedi or merc while in jediVsMerc mode.  -1 == unknown
 int uiForceRank = FORCE_MASTERY_JEDI_KNIGHT;
 int uiMaxRank = MAX_FORCE_RANK;
 int uiMaxPoints = 20;
@@ -288,7 +288,7 @@ void UI_SaveForceTemplate()
 // 
 extern qboolean UI_TrueJediEnabled( void );
 void UpdateForceUsed()
-{
+{//racc - updates the current force powers setup based on current powers selected.
 	int curpower, currank;
 	menuDef_t *menu;
 
@@ -296,18 +296,25 @@ void UpdateForceUsed()
 	uiForceRank = uiMaxRank;
 
 	uiForceUsed = 0;
-	uiForceAvailable = forceMasteryPoints[uiForceRank];
+	//[ExpSys]
+	uiForceAvailable = uiMaxRank;
+	//uiForceAvailable = forceMasteryPoints[uiForceRank];
+	//[/ExpSys]
 
+	//[ExpSys]
+	/* don't automatically give Force jump
 	// Make sure that we have one freebie in jump.
 	if (uiForcePowersRank[FP_LEVITATION]<1)
 	{
 		uiForcePowersRank[FP_LEVITATION]=1;
 	}
+	*/
+	//[/ExpSys]
 
 	if ( UI_TrueJediEnabled() )
 	{//true jedi mode is set
 		if ( uiJediNonJedi == -1 )
-		{
+		{//racc - we haven't determined if we're a jedi or merc yet.
 			int x = 0;
 			qboolean clear = qfalse, update = qfalse;
 			uiJediNonJedi = FORCE_NONJEDI;
@@ -433,7 +440,10 @@ void UpdateForceUsed()
 		{	// Check on this force power
 			if (uiForcePowersRank[curpower]>0)
 			{	// Do not charge the player for the one freebie in jump, or if there is one in saber.
-				if  (	(curpower == FP_LEVITATION && currank == FORCE_LEVEL_1) ||
+				//[ExpSys]
+				// don't automatically give Force jump
+				if  (	//(curpower == FP_LEVITATION && currank == FORCE_LEVEL_1) ||
+				//[/ExpSys]
 						(curpower == FP_SABER_OFFENSE && currank == FORCE_LEVEL_1 && ui_freeSaber.integer) ||
 						(curpower == FP_SABER_DEFENSE && currank == FORCE_LEVEL_1 && ui_freeSaber.integer) )
 				{
@@ -565,7 +575,10 @@ void UI_ReadLegalForce(void)
 		c++;
 	}
 	uiForceUsed = 0;
-	uiForceAvailable = forceMasteryPoints[uiForceRank];
+	//[ExpSys]
+	uiForceAvailable = uiMaxRank;
+	//uiForceAvailable = forceMasteryPoints[uiForceRank];
+	//[/ExpSys]
 	gTouchedForce = qtrue;
 
 	for (c=0;fcfString[i]&&c<NUM_FORCE_POWERS;c++,i++)
@@ -586,10 +599,14 @@ void UI_ReadLegalForce(void)
 			continue;  // skip this power
 		}
 
+		//[ForceSys]
+		/*
 		if (uiForcePowerDarkLight[c] && uiForcePowerDarkLight[c] != uiForceSide)
 		{ //Apparently the user has crafted a force config that has powers that don't fit with the config's side.
 			continue;  // skip this power
 		}
+		*/
+		//[/ForceSys]
 
 		// Accrue cost for each assigned rank for this power.
 		for (currank=FORCE_LEVEL_1;currank<=forcePowerRank;currank++)
@@ -606,10 +623,14 @@ void UI_ReadLegalForce(void)
 		}
 	}
 
+	//[ExpSys]
+	/* don't automatically give Force jump
 	if (uiForcePowersRank[FP_LEVITATION] < 1)
 	{
 		uiForcePowersRank[FP_LEVITATION]=1;
 	}
+	*/
+	//[/ExpSys]
 	if (uiForcePowersRank[FP_SABER_OFFENSE] < 1 && ui_freeSaber.integer)
 	{
 		uiForcePowersRank[FP_SABER_OFFENSE]=1;
@@ -689,11 +710,16 @@ void UI_UpdateForcePowers()
 				readBuf[1] = '\0';
 				uiForcePowersRank[i_f] = atoi(readBuf);
 
+				//[ExpSys]
+				// don't automatically give Force jump
+				/*
 				if (i_f == FP_LEVITATION &&
 					uiForcePowersRank[i_f] < 1)
 				{
 					uiForcePowersRank[i_f] = 1;
 				}
+				*/
+				//[/ExpSys]
 
 				if (i_f == FP_SABER_OFFENSE &&
 					uiForcePowersRank[i_f] < 1 &&
@@ -731,11 +757,16 @@ validitycheck:
 		i = 0;
 		while (i < NUM_FORCE_POWERS)
 		{
+			//[ExpSys]
+			/* don't automatically give levitation anymore.
 			if (i == FP_LEVITATION)
 			{
 				uiForcePowersRank[i] = 1;
 			}
 			else if (i == FP_SABER_OFFENSE && ui_freeSaber.integer)
+			*/
+			if (i == FP_SABER_OFFENSE && ui_freeSaber.integer)
+			//[/ExpSys]
 			{
 				uiForcePowersRank[i] = 1;
 			}
@@ -822,7 +853,9 @@ qboolean UI_ForceSide_HandleKey(int flags, float *special, int key, int num, int
 	if (key == A_MOUSE1 || key == A_MOUSE2 || key == A_ENTER || key == A_KP_ENTER) 
 	{
 		int i = num;
-		int x = 0;
+		//[ForceSys]
+		//int x = 0;
+		//[/ForceSys]
 
 		//update the feeder item selection, it might be different depending on side
 		Menu_SetFeederSelection(NULL, FEEDER_FORCECFG, 0, NULL);
@@ -850,6 +883,8 @@ qboolean UI_ForceSide_HandleKey(int flags, float *special, int key, int num, int
 		uiForceSide = num;
 
 		// Resetting power ranks based on if light or dark side is chosen
+		//[ForceSys]
+		/*
 		while (x < NUM_FORCE_POWERS)
 		{
 			if (uiForcePowerDarkLight[x] && uiForceSide != uiForcePowerDarkLight[x])
@@ -858,6 +893,8 @@ qboolean UI_ForceSide_HandleKey(int flags, float *special, int key, int num, int
 			}
 			x++;
 		}
+		*/
+		//[/ForceSys]
 
 		UpdateForceUsed();
 
@@ -945,7 +982,7 @@ qboolean UI_JediNonJedi_HandleKey(int flags, float *special, int key, int num, i
 }
 
 qboolean UI_ForceMaxRank_HandleKey(int flags, float *special, int key, int num, int min, int max, int type) 
-{
+{//racc - handle key presses for the Force Master Rank menu item.
   if (key == A_MOUSE1 || key == A_MOUSE2 || key == A_ENTER || key == A_KP_ENTER) 
   {
   	int i = num;
@@ -1004,11 +1041,17 @@ qboolean UI_ForcePowerRank_HandleKey(int flags, float *special, int key, int num
 		}
 
 		// If we are not on the same side as a power, or if we are not of any rank at all.
+		//[ForceSys]
+		//allow players to use powers from both sides of the Force.
+		/*
 		if (uiForcePowerDarkLight[forcepower] && uiForceSide != uiForcePowerDarkLight[forcepower])
 		{
 			return qtrue;
 		}
 		else if (forcepower == FP_SABER_DEFENSE || forcepower == FP_SABERTHROW)
+		*/
+		if (forcepower == FP_SABER_DEFENSE || forcepower == FP_SABERTHROW)
+		//[/ForceSys]
 		{	// Saberdefend and saberthrow can't be bought if there is no saberattack
 			if (uiForcePowersRank[FP_SABER_OFFENSE] < 1)
 			{
@@ -1016,10 +1059,15 @@ qboolean UI_ForcePowerRank_HandleKey(int flags, float *special, int key, int num
 			}
 		}
 
+		//[ExpSys]
+		//make it possible to set zero level for force jump
+		/*
 		if (type == UI_FORCE_RANK_LEVITATION)
 		{
 			min += 1;
 		}
+		*/
+		//[/ExpSys]
 		if (type == UI_FORCE_RANK_SABERATTACK && ui_freeSaber.integer)
 		{
 			min += 1;
@@ -1287,7 +1335,10 @@ void UI_ForceConfigHandle( int oldindex, int newindex )
 		c++;
 	}
 	uiForceUsed = 0;
-	uiForceAvailable = forceMasteryPoints[uiForceRank];
+	//[ExpSys]
+	uiForceAvailable = uiMaxRank;
+	//uiForceAvailable = forceMasteryPoints[uiForceRank];
+	//[/ExpSys]
 	gTouchedForce = qtrue;
 
 	for (c=0;fcfBuffer[i]&&c<NUM_FORCE_POWERS;c++,i++)
@@ -1308,10 +1359,14 @@ void UI_ForceConfigHandle( int oldindex, int newindex )
 			continue;  // skip this power
 		}
 
+		//[ForceSys]
+		/*
 		if (uiForcePowerDarkLight[c] && uiForcePowerDarkLight[c] != uiForceSide)
 		{ //Apparently the user has crafted a force config that has powers that don't fit with the config's side.
 			continue;  // skip this power
 		}
+		*/
+		//[/ForceSys]
 
 		// Accrue cost for each assigned rank for this power.
 		for (currank=FORCE_LEVEL_1;currank<=forcePowerRank;currank++)
@@ -1328,10 +1383,15 @@ void UI_ForceConfigHandle( int oldindex, int newindex )
 		}
 	}
 
+	//[ExpSys]
+	// don't automatically give Force jump
+	/*
 	if (uiForcePowersRank[FP_LEVITATION] < 1)
 	{
 		uiForcePowersRank[FP_LEVITATION]=1;
 	}
+	*/
+	//[/ExpSys]
 	if (uiForcePowersRank[FP_SABER_OFFENSE] < 1 && ui_freeSaber.integer)
 	{
 		uiForcePowersRank[FP_SABER_OFFENSE]=1;

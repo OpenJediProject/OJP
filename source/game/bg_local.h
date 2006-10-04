@@ -64,6 +64,11 @@ void	trap_FS_FCloseFile( fileHandle_t f );
 #include "../namespace_begin.h"
 qboolean PM_SaberInParry( int move );
 qboolean PM_SaberInKnockaway( int move );
+
+//[SaberSys]
+qboolean PM_KnockawayAnim( int anim );
+//[/SaberSys]
+
 qboolean PM_SaberInReflect( int move );
 qboolean PM_SaberInStart( int move );
 qboolean PM_InSaberAnim( int anim );
@@ -107,3 +112,7 @@ void PM_SetForceJumpZStart(float value);
 void BG_CycleInven(playerState_t *ps, int direction);
 
 #include "../namespace_end.h"
+
+//[Melee]
+qboolean PM_DoKick(void); //pm function for performing kicks
+//[/Melee]

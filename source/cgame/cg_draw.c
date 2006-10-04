@@ -39,15 +39,28 @@ char teamChat2[256];
 // The time at which you died and the time it will take for you to rejoin game.
 int cg_siegeDeathTime = 0;
 
-#define MAX_HUD_TICS 4
-const char *armorTicName[MAX_HUD_TICS] = 
+//[NewHud]
+#define MAX_OJPHUD_TICS 8
+//#define MAX_HUD_TICS 4
+
+const char *armorTicName[MAX_OJPHUD_TICS] = 
+//const char *armorTicName[MAX_HUD_TICS] = 
+//[/NewHud]
 {
 "armor_tic1", 
 "armor_tic2", 
 "armor_tic3", 
-"armor_tic4", 
+"armor_tic4",
+//[NewHud]
+"armor_tic5",
+"armor_tic6",
+"armor_tic7",
+"armor_tic8",
+//[/NewHud]
 };
 
+//[NewHud]
+/* not used in new hud
 const char *healthTicName[MAX_HUD_TICS] = 
 {
 "health_tic1", 
@@ -55,21 +68,74 @@ const char *healthTicName[MAX_HUD_TICS] =
 "health_tic3", 
 "health_tic4", 
 };
+*/
+//[/NewHud]
 
-const char *forceTicName[MAX_HUD_TICS] = 
+//[NewHud]
+const char *forceTicName[MAX_OJPHUD_TICS] = 
+//const char *forceTicName[MAX_HUD_TICS] = 
+//[/NewHud]
 {
 "force_tic1", 
 "force_tic2", 
 "force_tic3", 
-"force_tic4", 
+"force_tic4",
+//[NewHud]
+"force_tic5",
+"force_tic6",
+"force_tic7",
+"force_tic8",
+//[/NewHud]
 };
 
-const char *ammoTicName[MAX_HUD_TICS] = 
+
+//[DodgeSys]
+const char *dodgeTicName[MAX_OJPHUD_TICS] = 
+{
+"dodge_tic1", 
+"dodge_tic2", 
+"dodge_tic3", 
+"dodge_tic4",
+"dodge_tic5",
+"dodge_tic6",
+"dodge_tic7",
+"dodge_tic8",
+};
+//[/DodgeSys]
+
+//[NewHud]
+const char *ammoTicName[MAX_OJPHUD_TICS] = 
+//const char *ammoTicName[MAX_HUD_TICS] = 
 {
 "ammo_tic1", 
 "ammo_tic2", 
 "ammo_tic3", 
-"ammo_tic4", 
+"ammo_tic4",
+//[NewHud] 
+"ammo_tic5",
+"ammo_tic6",
+"ammo_tic7",
+"ammo_tic8",
+};
+
+const char *mishapTicName[] = 
+{
+"mishap_tic1", 
+"mishap_tic2", 
+"mishap_tic3", 
+"mishap_tic4", 
+"mishap_tic5",
+"mishap_tic6",
+"mishap_tic7",
+"mishap_tic8",
+"mishap_tic9",
+"mishap_tic10",
+"mishap_tic11",
+"mishap_tic12",
+"mishap_tic13",
+"mishap_tic14",
+"mishap_tic15",
+//[/NewHud]
 };
 
 char *showPowersName[] = 
@@ -616,9 +682,13 @@ void CG_DrawHealth( menuDef_t *menuHUD )
 	vec4_t			calcColor;
 	playerState_t	*ps;
 	int				healthAmt;
-	int				i,currValue,inc;
+	//[NewHud]
+	//int			i,currValue,inc;
+	//[/NewHud]
 	itemDef_t		*focusItem;
-	float percent;
+	//[NewHud]
+	//float percent;
+	//[/NewHud]
 
 	// Can we find the menu?
 	if (!menuHUD)
@@ -635,7 +705,37 @@ void CG_DrawHealth( menuDef_t *menuHUD )
 		healthAmt = ps->stats[STAT_MAX_HEALTH];
 	}
 
+	//[NewHud]
+	focusItem = Menu_FindItemByName(menuHUD, "health_tic1");
 
+	if (focusItem)	// This is bad
+	{
+		if (healthAmt <= 0)	// don't show tic
+		{
+		}
+		else
+		{
+			calcColor[0] = calcColor[1] = calcColor[2] = calcColor[3] = 1;
+
+			if (healthAmt < ps->stats[STAT_MAX_HEALTH])
+			{
+				calcColor[1] = calcColor[2] = (float) healthAmt / (float) ps->stats[STAT_MAX_HEALTH];
+			}
+
+			trap_R_SetColor( calcColor );
+
+			CG_DrawPic( 
+				focusItem->window.rect.x,
+				focusItem->window.rect.y,
+				focusItem->window.rect.w, 
+				focusItem->window.rect.h, 
+				focusItem->window.background
+				);
+		}
+	}
+
+
+	/* NAUM
 	inc = (float) ps->stats[STAT_MAX_HEALTH] / MAX_HUD_TICS;
 	currValue = healthAmt;
 
@@ -673,6 +773,8 @@ void CG_DrawHealth( menuDef_t *menuHUD )
 
 		currValue -= inc;
 	}
+	*/
+	//[/NewHud]
 
 	// Print the mueric amount
 	focusItem = Menu_FindItemByName(menuHUD, "healthamount");
@@ -717,6 +819,24 @@ void CG_DrawArmor( menuDef_t *menuHUD )
 		return;
 	}
 
+	//[NewHud]
+	//draw shield tic frame
+	focusItem = Menu_FindItemByName(menuHUD, "armorshell");
+
+	if (focusItem)
+	{
+		trap_R_SetColor(hudTintColor);
+
+		CG_DrawPic( 
+			focusItem->window.rect.x,
+			focusItem->window.rect.y,
+			focusItem->window.rect.w, 
+			focusItem->window.rect.h, 
+			focusItem->window.background
+			);
+	}
+	//[/NewHud]
+
 	armor = ps->stats[STAT_ARMOR];
 	maxArmor = ps->stats[STAT_MAX_HEALTH];
 
@@ -726,10 +846,16 @@ void CG_DrawArmor( menuDef_t *menuHUD )
 	}
 
 	currValue = armor;
-	inc = (float) maxArmor / MAX_HUD_TICS;
+	//[NewHud]
+	inc = (float) maxArmor / MAX_OJPHUD_TICS;
+	//inc = (float) maxArmor / MAX_HUD_TICS;
+	//[/NewHud]
 
 	memcpy(calcColor, hudTintColor, sizeof(vec4_t));
-	for (i=(MAX_HUD_TICS-1);i>=0;i--)
+	//[NewHud]
+	for (i=(MAX_OJPHUD_TICS-1);i>=0;i--)
+	//for (i=(MAX_HUD_TICS-1);i>=0;i--)
+	//[/NewHud]
 	{
 		focusItem = Menu_FindItemByName(menuHUD, armorTicName[i]);
 
@@ -752,7 +878,10 @@ void CG_DrawArmor( menuDef_t *menuHUD )
 
 		trap_R_SetColor( calcColor);
 
-		if ((i==(MAX_HUD_TICS-1)) && (currValue < inc))
+		//[NewHud]
+		if ((i==(MAX_OJPHUD_TICS-1)) && (currValue < inc))
+		//if ((i==(MAX_HUD_TICS-1)) && (currValue < inc))
+		//[/NewHud]
 		{
 			if (cg.HUDArmorFlag)
 			{
@@ -863,7 +992,10 @@ static void CG_DrawSaberStyle( centity_t *cent, menuDef_t *menuHUD)
 	switch ( cg.predictedPlayerState.fd.saberDrawAnimLevel )
 	{
 	case 1://FORCE_LEVEL_1:
-	case 5://FORCE_LEVEL_5://Tavion
+	//[SaberSys]
+	//Created new icon for desann's saber style.
+	//case 5://FORCE_LEVEL_5://Tavion
+	//[/SaberSys]
 
 		focusItem = Menu_FindItemByName(menuHUD, "saberstyle_fast");
 
@@ -900,7 +1032,10 @@ static void CG_DrawSaberStyle( centity_t *cent, menuDef_t *menuHUD)
 		}
 		break;
 	case 3://FORCE_LEVEL_3:
-	case 4://FORCE_LEVEL_4://Desann
+	//[SaberSys]
+	//Created new icon for desann's saber style.
+	//case 4://FORCE_LEVEL_4://Desann
+	//[/SaberSys]
 		focusItem = Menu_FindItemByName(menuHUD, "saberstyle_strong");
 
 		if (focusItem)
@@ -916,9 +1051,116 @@ static void CG_DrawSaberStyle( centity_t *cent, menuDef_t *menuHUD)
 				);
 		}
 		break;
+	//[SaberSys]
+	//Created new icon for desann's saber style.
+	case 4://FORCE_LEVEL_4://Desann
+		focusItem = Menu_FindItemByName(menuHUD, "saberstyle_desann");
+
+		if (focusItem)
+		{
+			trap_R_SetColor( hudTintColor );
+
+			CG_DrawPic( 
+				focusItem->window.rect.x,
+				focusItem->window.rect.y,
+				focusItem->window.rect.w, 
+				focusItem->window.rect.h, 
+				focusItem->window.background
+				);
+		}
+		break;
+
+	//Created new icon for desann's saber style.
+	case 5://FORCE_LEVEL_5://Tavion
+		focusItem = Menu_FindItemByName(menuHUD, "saberstyle_tavion");
+
+		if (focusItem)
+		{
+			trap_R_SetColor( hudTintColor );
+
+			CG_DrawPic( 
+				focusItem->window.rect.x,
+				focusItem->window.rect.y,
+				focusItem->window.rect.w, 
+				focusItem->window.rect.h, 
+				focusItem->window.background
+				);
+		}
+		break;
+	//[/SaberSys]
 	}
 
 }
+
+
+//[SaberSys]
+static void CG_DrawBalance( centity_t *cent, menuDef_t *menuHUD)
+{//render the balance/mishap meter.
+
+	itemDef_t		*focusItem;
+	int				i;
+
+	// Can we find the menu?
+	if (!menuHUD)
+	{
+		return;
+	}
+
+	for (i = cent->playerState->saberAttackChainCount-1; i >= 0; i--)
+	{
+		focusItem = Menu_FindItemByName(menuHUD, mishapTicName[i]);
+
+		if (focusItem)
+		{
+			CG_DrawPic( 
+					focusItem->window.rect.x,
+					focusItem->window.rect.y,
+					focusItem->window.rect.w, 
+					focusItem->window.rect.h, 
+					focusItem->window.background
+					);
+		}
+
+
+	}
+
+
+	/* bar based system, not used in new hud
+	//draw gauge
+	focusItem = Menu_FindItemByName(menuHUD, "balance_guage");
+
+	if (focusItem)
+	{
+		trap_R_SetColor( hudTintColor );
+
+		CG_DrawPic( 
+			focusItem->window.rect.x,
+			focusItem->window.rect.y,
+			focusItem->window.rect.w, 
+			focusItem->window.rect.h, 
+			focusItem->window.background
+			);
+	}
+
+	//draw current balance level.
+	focusItem = Menu_FindItemByName(menuHUD, "balance_bar");
+
+	if (focusItem)
+	{
+		trap_R_SetColor( hudTintColor );
+
+		CG_DrawPic( 
+			focusItem->window.rect.x,
+			focusItem->window.rect.y - cent->playerState->saberAttackChainCount * 5,
+			focusItem->window.rect.w, 
+			focusItem->window.rect.h, 
+			focusItem->window.background
+			);
+	}
+	*/
+}
+//[/SaberSys]
+
 
 /*
 ================
@@ -958,7 +1200,10 @@ static void CG_DrawAmmo( centity_t	*cent,menuDef_t *menuHUD)
 	if (weaponData[cent->currentState.weapon].energyPerShot == 0 &&
 		weaponData[cent->currentState.weapon].altEnergyPerShot == 0)
 	{ //just draw "infinite"
-		inc = 8 / MAX_HUD_TICS;
+		//[NewHud]
+		inc = 8 / MAX_OJPHUD_TICS;
+		//inc = 8 / MAX_HUD_TICS;
+		//[/NewHud]
 		value = 8;
 
 		focusItem = Menu_FindItemByName(menuHUD, "ammoinfinite");
@@ -977,11 +1222,17 @@ static void CG_DrawAmmo( centity_t	*cent,menuDef_t *menuHUD)
 
 			if ( (cent->currentState.eFlags & EF_DOUBLE_AMMO) )
 			{
-				inc = (float) (ammoData[weaponData[cent->currentState.weapon].ammoIndex].max*2.0f) / MAX_HUD_TICS;
+				//[NewHud]
+				inc = (float) (ammoData[weaponData[cent->currentState.weapon].ammoIndex].max*2.0f) / MAX_OJPHUD_TICS;
+				//inc = (float) (ammoData[weaponData[cent->currentState.weapon].ammoIndex].max*2.0f) / MAX_HUD_TICS;
+				//[NewHud]
 			}
 			else
 			{
-				inc = (float) ammoData[weaponData[cent->currentState.weapon].ammoIndex].max / MAX_HUD_TICS;
+				//[NewHud]
+				inc = (float) ammoData[weaponData[cent->currentState.weapon].ammoIndex].max / MAX_OJPHUD_TICS;
+				//inc = (float) ammoData[weaponData[cent->currentState.weapon].ammoIndex].max / MAX_HUD_TICS;
+				//[/NewHud]
 			}
 			value =ps->ammo[weaponData[cent->currentState.weapon].ammoIndex];
 
@@ -998,7 +1249,10 @@ static void CG_DrawAmmo( centity_t	*cent,menuDef_t *menuHUD)
 	}
 
 	// Draw tics
-	for (i=MAX_HUD_TICS-1;i>=0;i--)
+	//[NewHud]
+	for (i=MAX_OJPHUD_TICS-1;i>=0;i--)
+	//for (i=MAX_HUD_TICS-1;i>=0;i--)
+	//[/NewHud]
 	{
 		focusItem = Menu_FindItemByName(menuHUD, ammoTicName[i]);
 
@@ -1034,13 +1288,254 @@ static void CG_DrawAmmo( centity_t	*cent,menuDef_t *menuHUD)
 
 }
 
+
+//[DodgeSys]
 /*
 ================
 CG_DrawForcePower
 ================
 */
+//[NewHud]
+#define DPBAR_H			65.0f
+#define DPBAR_W			13.0f
+#define DPBAR_X			538.0f
+#define DPBAR_Y			367.0f
+//[/NewHud]
+void CG_DrawDodge( menuDef_t *menuHUD )
+{
+	//[NewHud]
+	vec4_t			aColor;
+	itemDef_t		*focusItem;
+	float			percent = ((float)cg.snap->ps.stats[STAT_DODGE]/100.0f)*DPBAR_H;
+
+	//color of the bar
+	aColor[0] = 0.0f;
+	aColor[1] = .613f;
+	aColor[2] = .097f;
+	aColor[3] = 0.8f;
+
+	// Make the hud flash by setting forceHUDTotalFlashTime above cg.time
+	if (cg.snap->ps.stats[STAT_DODGE] < DODGE_CRITICALLEVEL)
+	{
+		//color of the bar
+		aColor[0] = 1.0f;
+		aColor[1] = 0.0f;
+		aColor[2] = 0.0f;
+		aColor[3] = 0.8f;
+		if (cg.dodgeHUDNextFlashTime < cg.time)	
+		{
+			cg.dodgeHUDNextFlashTime = cg.time + 400;
+			trap_S_StartSound (NULL, 0, CHAN_LOCAL, cgs.media.noforceSound );
+
+		}
+	}
+	else	// turn HUD back on if it had just finished flashing time.
+	{
+		cg.dodgeHUDNextFlashTime = 0;
+	}
+
+	if (percent > DPBAR_H)
+	{
+		return;
+	}
+
+	if (percent < 0.1f)
+	{
+		percent = 0.1f;
+	}
+
+	//now draw the part to show how much health there is in the color specified
+	CG_FillRect(DPBAR_X, DPBAR_Y+(DPBAR_H-percent), DPBAR_W, DPBAR_H-(DPBAR_H-percent), aColor);
+
+	/* old tic-based method
+	int				i;
+	vec4_t			calcColor;
+	float			value,inc,percent;
+	itemDef_t		*focusItem;
+	qboolean		flash=qfalse;
+
+	// Can we find the menu?
+	if (!menuHUD)
+	{
+		return;
+	}
+
+	// Make the hud flash by setting forceHUDTotalFlashTime above cg.time
+	if (cg.snap->ps.stats[STAT_DODGE] < DODGE_CRITICALLEVEL)
+	{
+		flash = qtrue;
+		if (cg.dodgeHUDNextFlashTime < cg.time)	
+		{
+			cg.dodgeHUDNextFlashTime = cg.time + 400;
+			trap_S_StartSound (NULL, 0, CHAN_LOCAL, cgs.media.noforceSound );
+
+			if (cg.dodgeHUDActive)
+			{
+				cg.dodgeHUDActive = qfalse;
+			}
+			else
+			{
+				cg.dodgeHUDActive = qtrue;
+			}
+
+		}
+	}
+	else	// turn HUD back on if it had just finished flashing time.
+	{
+		cg.dodgeHUDNextFlashTime = 0;
+		cg.dodgeHUDActive = qtrue;
+	}
+
+	if (!cg.dodgeHUDActive)
+	{
+		return;
+	}
+
+	//[NewHud]
+	inc = (float)  DODGE_MAX / MAX_OJPHUD_TICS;
+	//inc = (float)  DODGE_MAX / MAX_HUD_TICS;
+	//[/NewHud]
+	value = cg.snap->ps.stats[STAT_DODGE];
+
+	//[NewHud]
+	for (i=MAX_OJPHUD_TICS-1;i>=0;i--)
+	//for (i=MAX_HUD_TICS-1;i>=0;i--)
+	//[/NewHud]
+	{
+		focusItem = Menu_FindItemByName(menuHUD, dodgeTicName[i]);
+
+		if (!focusItem)
+		{
+			continue;
+		}
+
+//		memcpy(calcColor, hudTintColor, sizeof(vec4_t));
+
+		if ( value <= 0 )	// done
+		{
+			break;
+		}
+		else if (value < inc)	// partial tic
+		{
+			if (flash)
+			{
+				memcpy(calcColor,  colorTable[CT_RED], sizeof(vec4_t));
+			}
+			else 
+			{
+				memcpy(calcColor,  colorTable[CT_WHITE], sizeof(vec4_t));
+			}
+
+			percent = value / inc;
+			calcColor[3] = percent;
+		}
+		else
+		{
+			if (flash)
+			{
+				memcpy(calcColor,  colorTable[CT_RED], sizeof(vec4_t));
+			}
+			else 
+			{
+				memcpy(calcColor,  colorTable[CT_WHITE], sizeof(vec4_t));
+			}
+		}
+
+		trap_R_SetColor( calcColor);
+
+		CG_DrawPic( 
+			focusItem->window.rect.x,
+			focusItem->window.rect.y,
+			focusItem->window.rect.w, 
+			focusItem->window.rect.h, 
+			focusItem->window.background
+			);
+
+		value -= inc;
+	}
+	*/
+	//[/NewHud]
+
+	focusItem = Menu_FindItemByName(menuHUD, "dodgeamount");
+
+	if (focusItem)
+	{
+		// Print force amount
+		trap_R_SetColor( focusItem->window.foreColor );	
+
+		CG_DrawNumField (
+			focusItem->window.rect.x, 
+			focusItem->window.rect.y, 
+			3, 
+			cg.snap->ps.stats[STAT_DODGE], 
+			focusItem->window.rect.w, 
+			focusItem->window.rect.h, 
+			NUM_FONT_SMALL,
+			qfalse);
+	}
+}
+//[/DodgeSys]
+
+
+/*
+================
+CG_DrawForcePower
+================
+*/
+//[NewHud]
+#define FPBAR_H			65.0f
+#define FPBAR_W			13.0f
+#define FPBAR_X			565.0f
+#define FPBAR_Y			367.0f
+//[/NewHud]
 void CG_DrawForcePower( menuDef_t *menuHUD )
 {
+	//[NewHud]
+	vec4_t			aColor;
+	itemDef_t		*focusItem;
+	float			percent = ((float)cg.snap->ps.fd.forcePower/100.0f)*FPBAR_H;
+
+	//color of the bar
+	aColor[0] = 0.503f;
+	aColor[1] = 0.375f;
+	aColor[2] = 0.996f;
+	aColor[3] = 0.8f;
+
+	if (cg.forceHUDTotalFlashTime > cg.time || (cg_entities[cg.snap->ps.clientNum].currentState.userInt3 &  ( 1 << FLAG_FATIGUED)))
+	//if (cg.forceHUDTotalFlashTime > cg.time )
+	//[/FatigueSys]
+	{
+		//color of the bar
+		aColor[0] = 1.0f;
+		aColor[1] = 0.0f;
+		aColor[2] = 0.0f;
+		aColor[3] = 0.8f;
+		if (cg.forceHUDNextFlashTime < cg.time)	
+		{
+			cg.forceHUDNextFlashTime = cg.time + 400;
+			trap_S_StartSound (NULL, 0, CHAN_LOCAL, cgs.media.noforceSound );
+		}
+	}
+	else	// turn HUD back on if it had just finished flashing time.
+	{
+		cg.forceHUDNextFlashTime = 0;
+	}
+
+
+	if (percent > FPBAR_H)
+	{
+		return;
+	}
+
+	if (percent < 0.1f)
+	{
+		percent = 0.1f;
+	}
+
+	//now draw the part to show how much health there is in the color specified
+	CG_FillRect(FPBAR_X, FPBAR_Y+(FPBAR_H-percent), FPBAR_W, FPBAR_H-(FPBAR_H-percent), aColor);
+
+	/* old tic-based method
 	int				i;
 	vec4_t			calcColor;
 	float			value,inc,percent;
@@ -1055,7 +1550,11 @@ void CG_DrawForcePower( menuDef_t *menuHUD )
 	}
 
 	// Make the hud flash by setting forceHUDTotalFlashTime above cg.time
-	if (cg.forceHUDTotalFlashTime > cg.time )
+	//[FatigueSys]
+	//make the hud flash when fatigued.
+	if (cg.forceHUDTotalFlashTime > cg.time || (cg_entities[cg.snap->ps.clientNum].currentState.userInt3 &  ( 1 << FLAG_FATIGUED)))
+	//if (cg.forceHUDTotalFlashTime > cg.time )
+	//[/FatigueSys]
 	{
 		flash = qtrue;
 		if (cg.forceHUDNextFlashTime < cg.time)	
@@ -1080,15 +1579,21 @@ void CG_DrawForcePower( menuDef_t *menuHUD )
 		cg.forceHUDActive = qtrue;
 	}
 
-//	if (!cg.forceHUDActive)
-//	{
-//		return;
-//	}
+	if (!cg.forceHUDActive)
+	{
+		return;
+	}
 
-	inc = (float)  maxForcePower / MAX_HUD_TICS;
+	//[NewHud]
+	inc = (float)  maxForcePower / MAX_OJPHUD_TICS;
+	//inc = (float)  maxForcePower / MAX_HUD_TICS;
+	//[/NewHud]
 	value = cg.snap->ps.fd.forcePower;
 
-	for (i=MAX_HUD_TICS-1;i>=0;i--)
+	//[NewHud]
+	for (i=MAX_OJPHUD_TICS-1;i>=0;i--)
+	//for (i=MAX_HUD_TICS-1;i>=0;i--)
+	//[/NewHud]
 	{
 		focusItem = Menu_FindItemByName(menuHUD, forceTicName[i]);
 
@@ -1141,7 +1646,9 @@ void CG_DrawForcePower( menuDef_t *menuHUD )
 
 		value -= inc;
 	}
-
+	*/
+	//[/NewHud]
+	
 	focusItem = Menu_FindItemByName(menuHUD, "forceamount");
 
 	if (focusItem)
@@ -1362,7 +1869,10 @@ void CG_DrawHUD(centity_t	*cent)
 		focusItem = Menu_FindItemByName(menuHUD, "frame");
 		if (focusItem)
 		{
-			trap_R_SetColor( hudTintColor );	
+			//[NewHud]
+			//don't the background frame!
+			//trap_R_SetColor( hudTintColor );	
+			//[/NewHud]
 			CG_DrawPic( 
 				focusItem->window.rect.x, 
 				focusItem->window.rect.y, 
@@ -1373,11 +1883,17 @@ void CG_DrawHUD(centity_t	*cent)
 		}
 
 		CG_DrawForcePower(menuHUD);
+		//[DodgeSys]
+		CG_DrawDodge(menuHUD);
+		//[/DodgeSys]
 
 		// Draw ammo tics or saber style
 		if ( cent->currentState.weapon == WP_SABER )
 		{
 			CG_DrawSaberStyle(cent,menuHUD);
+			//[SaberSys]
+			CG_DrawBalance(cent, menuHUD);
+			//[/SaberSys]
 		}
 		else
 		{
@@ -1394,10 +1910,14 @@ void CG_DrawHUD(centity_t	*cent)
 
 qboolean ForcePower_Valid(int i)
 {
+	//[SaberSys]
+	//Added Saber Throw to hud selection menu.
 	if (i == FP_LEVITATION ||
 		i == FP_SABER_OFFENSE ||
-		i == FP_SABER_DEFENSE ||
-		i == FP_SABERTHROW)
+		i == FP_SABER_DEFENSE)
+	//	i == FP_SABER_DEFENSE ||
+	//	i == FP_SABERTHROW)
+	//[/SaberSys]
 	{
 		return qfalse;
 	}

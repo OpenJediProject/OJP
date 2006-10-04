@@ -141,9 +141,9 @@
 ;
 ;eFlags2,10
 ;
-;userInt1, 1
+userInt1, 32
 ;userInt2, 1
-;userInt3, 1
+userInt3, 32
 ;userFloat1, 1
 ;userFloat2, 1
 ;userFloat3, 1

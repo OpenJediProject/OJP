@@ -73,6 +73,12 @@ struct weaponinfo_s;
 #define ACTION_WALK				0x0080000
 #define ACTION_FORCEPOWER		0x0100000
 #define ACTION_ALT_ATTACK		0x0200000
+
+//[SaberSys]
+//New bot flag for using saber throws
+#define ACTION_SABERTHROW		0x0800000
+//[/SaberSys]
+
 /*
 #define ACTION_AFFIRMATIVE		0x0100000
 #define ACTION_NEGATIVE			0x0200000

@@ -120,16 +120,6 @@ void trap_DropClient( int clientNum, const char *reason ) {
 }
 
 void trap_SendServerCommand( int clientNum, const char *text ) {
-	 
-	//[OverflowProtection]
-	//Clients will crash if there's a message longer than 1022 chars long.
-	if( strlen( text ) > 1022 ) 
-	{
-		G_LogPrintf( "%s: trap_SendServerCommand( %d, ... ) length exceeds 1022.\n", GAMEVERSION, clientNum );
-		G_LogPrintf( "%s: text [%s]\n", GAMEVERSION, text );
-		return; 
-	}
-	//[/OverflowProtection]
 	syscall( G_SEND_SERVER_COMMAND, clientNum, text );
 }
 

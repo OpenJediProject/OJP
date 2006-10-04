@@ -1958,6 +1958,96 @@ int G_PickDeathAnim( gentity_t *self, vec3_t point, int damage, int mod, int hit
 	return deathAnim;
 }
 
+
+//[SPPortComplete]
+//[KnockdownSys]
+static int G_CheckForLedge( gentity_t *self, vec3_t fallCheckDir, float checkDist );
+int G_CheckLedgeDive( gentity_t *self, float checkDist, const vec3_t checkVel, qboolean tryOpposite, qboolean tryPerp )
+{
+	//		Intelligent Ledge-Diving Deaths:
+	//		If I'm an NPC, check for nearby ledges and fall off it if possible
+	//		How should/would/could this interact with knockback if we already have some?
+	//		Ideally - apply knockback if there are no ledges or a ledge in that dir
+	//		But if there is a ledge and it's not in the dir of my knockback, fall off the ledge instead
+	vec3_t	fallForwardDir, fallRightDir;
+	vec3_t	angles;
+	float fallDist;
+	int		cliff_fall = 0;
+
+	VectorCopy(vec3_origin, angles);
+
+	if ( !self || !self->client )
+	{
+		return 0;
+	}
+
+	if ( checkVel && !VectorCompare( checkVel, vec3_origin ) )
+	{//already moving in a dir
+		angles[1] = vectoyaw( self->client->ps.velocity );
+		AngleVectors( angles, fallForwardDir, fallRightDir, NULL );
+	}
+	else
+	{//try forward first
+		angles[1] = self->client->ps.viewangles[1];
+		AngleVectors( angles, fallForwardDir, fallRightDir, NULL );
+	}
+	VectorNormalize( fallForwardDir );
+	fallDist = G_CheckForLedge( self, fallForwardDir, checkDist );
+	if ( fallDist >= 128 )
+	{
+		VectorClear( self->client->ps.velocity );
+		G_Throw( self, fallForwardDir, 85 );
+		self->client->ps.velocity[2] = 100;
+		self->client->ps.groundEntityNum = ENTITYNUM_NONE;
+	}
+	else if ( tryOpposite )
+	{
+		VectorScale( fallForwardDir, -1, fallForwardDir );
+		fallDist = G_CheckForLedge( self, fallForwardDir, checkDist );
+		if ( fallDist >= 128 )
+		{
+			VectorClear( self->client->ps.velocity );
+			G_Throw( self, fallForwardDir, 85 );
+			self->client->ps.velocity[2] = 100;
+			self->client->ps.groundEntityNum = ENTITYNUM_NONE;
+		}
+	}
+	if ( !cliff_fall && tryPerp )
+	{//try sides
+		VectorNormalize( fallRightDir );
+		fallDist = G_CheckForLedge( self, fallRightDir, checkDist );
+		if ( fallDist >= 128 )
+		{
+			VectorClear( self->client->ps.velocity );
+			G_Throw( self, fallRightDir, 85 );
+			self->client->ps.velocity[2] = 100;
+		}
+		else 
+		{
+			VectorScale( fallRightDir, -1, fallRightDir );
+			fallDist = G_CheckForLedge( self, fallRightDir, checkDist );
+			if ( fallDist >= 128 )
+			{
+				VectorClear( self->client->ps.velocity );
+				G_Throw( self, fallRightDir, 85 );
+				self->client->ps.velocity[2] = 100;
+			}
+		}
+	}
+	if ( fallDist >= 256 )
+	{
+		cliff_fall = 2;
+	}
+	else if ( fallDist >= 128 )
+	{
+		cliff_fall = 1;
+	}
+	return cliff_fall;
+}
+//[/KnockdownSys]
+//[/SPPortComplete]
+
+
 gentity_t *G_GetJediMaster(void)
 {
 	int i = 0;
@@ -2356,6 +2446,9 @@ void G_CheckForblowingup (gentity_t *ent, gentity_t *enemy, vec3_t point, int da
 //[CoOp]
 extern void BubbleShield_TurnOff(gentity_t *self);
 //[/CoOp]
+//[SaberSys]
+void AddFatigueKillBonus( gentity_t *attacker, gentity_t *victim );
+//[/SaberSys]
 void player_die( gentity_t *self, gentity_t *inflictor, gentity_t *attacker, int damage, int meansOfDeath ) {
 
 	int			anim;
@@ -2372,6 +2465,13 @@ void player_die( gentity_t *self, gentity_t *inflictor, gentity_t *attacker, int
 	qboolean	tempInflictor = qfalse;
 	int			actualMOD = meansOfDeath;
 	//[/Asteroids]
+
+	//[ExpSys]
+	if(!self->NPC && !(self->r.svFlags & SVF_BOT) )
+	{//NPCs and bots don't care about skill point updates
+		trap_SendServerCommand(self->s.number, va("nfr %i %i %i", (int) self->client->sess.skillPoints, 0, self->client->sess.sessionTeam));
+	}
+	//[/ExpSys]
 
 	if ( self->client->ps.pm_type == PM_DEAD ) {
 		return;
@@ -2951,8 +3051,11 @@ extern void RunEmplacedWeapon( gentity_t *ent, usercmd_t **ucmd );
 			{
 				if ((attacker->client && attacker->client->ps.isJediMaster) ||
 					(self->client && self->client->ps.isJediMaster))
-				{
+				{//racc - killed the JM or JM who killed someone
 					AddScore( attacker, self->r.currentOrigin, 1 );
+					//[SaberSys]
+					AddFatigueKillBonus( attacker, self );
+					//[SaberSys]
 					
 					if (self->client && self->client->ps.isJediMaster)
 					{
@@ -2973,6 +3076,9 @@ extern void RunEmplacedWeapon( gentity_t *ent, usercmd_t **ucmd );
 			else
 			{
 				AddScore( attacker, self->r.currentOrigin, 1 );
+				//[SaberSys]
+				AddFatigueKillBonus( attacker, self );
+				//[SaberSys]
 			}
 
 			if( meansOfDeath == MOD_STUN_BATON ) {
@@ -3510,6 +3616,40 @@ void G_ApplyKnockback( gentity_t *targ, vec3_t newDir, float knockback )
 		targ->client->ps.pm_flags |= PMF_TIME_KNOCKBACK;
 	}
 }
+
+
+//[KnockdownSys]
+static int G_CheckForLedge( gentity_t *self, vec3_t fallCheckDir, float checkDist )
+{//racc - this function checks to see if there is a ledge/cliff/empty in fallCheckDir @ checkDist away from the player.
+	//This also checks to see if there's a clear path between the player and the point from which the fall check is made.
+	//Returns the length of the drop.
+	vec3_t	start, end;
+	trace_t	tr;
+
+	VectorMA( self->r.currentOrigin, checkDist, fallCheckDir, end );
+	//Should have clip burshes masked out by now and have bbox resized to death size
+	trap_Trace( &tr, self->r.currentOrigin, self->r.mins, self->r.maxs, end, self->s.number, self->clipmask );
+	if ( tr.allsolid || tr.startsolid )
+	{
+		return 0;
+	}
+	VectorCopy( tr.endpos, start );
+	VectorCopy( start, end );
+	end[2] -= 256;
+
+	trap_Trace( &tr, start, self->r.mins, self->r.maxs, end, self->s.number, self->clipmask );
+	if ( tr.allsolid || tr.startsolid )
+	{
+		return 0;
+	}
+	if ( tr.fraction >= 1.0 )
+	{
+		return (start[2]-tr.endpos[2]);
+	}
+	return 0;
+}
+//[/KnockdownSys]
+
 
 /*
 ================
@@ -4935,10 +5075,139 @@ qboolean G_ThereIsAMaster(void)
 
 //[CoOp]
 extern qboolean Jedi_StopKnockdown( gentity_t *self, gentity_t *pusher, const vec3_t pushDir );
-extern qboolean Boba_StopKnockdown( gentity_t *self, gentity_t *pusher, vec3_t pushDir, qboolean forceKnockdown );
+extern qboolean Boba_StopKnockdown( gentity_t *self, gentity_t *pusher, const vec3_t pushDir, qboolean forceKnockdown );
 extern qboolean Rosh_BeingHealed( gentity_t *self );
 extern qboolean PM_LockedAnim( int anim );
+extern qboolean BG_CrouchAnim( int anim );
+extern void NPC_SetPainEvent( gentity_t *self );
+extern qboolean PM_InKnockDown( playerState_t *ps );
+extern qboolean PM_RollingAnim( int anim );
+extern qboolean BG_KnockDownAnim( int anim );
 //[/CoOp]
+//[SaberSys]
+extern void BG_ReduceMishapLevel(playerState_t *ps);
+//[/SaberSys]
+//[KnockdownSys]
+void G_Knockdown( gentity_t *self, gentity_t *attacker, const vec3_t pushDir, float strength, qboolean breakSaberLock )
+{
+	if ( !self || !self->client )
+	//removed the SP requirement for an attacker since I want G_Knockdown 
+	//to work without an attacker.
+	//if ( !self || !self->client || !attacker || !attacker->client ) 
+	{
+		return;
+	}
+
+	if ( self->client->NPC_class == CLASS_ROCKETTROOPER )
+	{
+		return;
+	}
+
+	if ( Boba_StopKnockdown( self, attacker, pushDir, qfalse ) )
+	{
+		return;
+	}
+	else if ( Jedi_StopKnockdown( self, attacker, pushDir ) )
+	{//They can sometimes backflip instead of be knocked down
+		return;
+	}
+	else if ( PM_LockedAnim( self->client->ps.legsAnim ) )
+	{//stuck doing something else
+		return;
+	}
+	else if ( Rosh_BeingHealed( self ) )
+	{
+		return;
+	}
+
+	//break out of a saberLock?
+	if ( self->client->ps.saberLockTime > level.time )
+	{
+		if ( breakSaberLock )
+		{
+			self->client->ps.saberLockTime = 0;
+			self->client->ps.saberLockEnemy = ENTITYNUM_NONE;
+		}
+		else
+		{
+			return;
+		}
+	}
+
+	if ( self->health > 0 )
+	{
+		//racc - make a pain noise whenever you're knocked down.
+		if ( self->s.number < MAX_CLIENTS )
+		{
+			NPC_SetPainEvent( self );
+		}
+		else
+		{//npc
+			NPC_Pain( self, attacker, 0 );
+			//GEntity_PainFunc( self, attacker, attacker, self->currentOrigin, 0, MOD_MELEE ); SP Version
+		}
+		
+		//racc - check to see if an NPC should get conventently kicked off a nearby cliff.
+		G_CheckLedgeDive( self, 72, pushDir, qfalse, qfalse );
+
+		if ( /*!BG_SpinningSaberAnim( self->client->ps.legsAnim )  //racc - I've removed this requirement since it's over used by staffs/duals.
+			&&*/ !BG_FlippingAnim( self->client->ps.legsAnim ) 
+			&& !PM_RollingAnim( self->client->ps.legsAnim ) 
+			&& !PM_InKnockDown( &self->client->ps ) )
+		{
+			int knockAnim = BOTH_KNOCKDOWN1;//default knockdown
+			/* racc - I've removed this since I want the players to have all possible knockdowns
+			if ( self->s.number < MAX_CLIENTS && ( strength < 300 ) )//!g_spskill->integer || 
+			{//player only knocked down if pushed *hard*
+				return;
+			}
+			else */if ( BG_CrouchAnim( self->client->ps.legsAnim ) )
+			{//crouched knockdown
+				knockAnim = BOTH_KNOCKDOWN4;
+			}
+			else
+			{//plain old knockdown
+				vec3_t pLFwd, pLAngles;
+				VectorSet(pLAngles, 0, self->client->ps.viewangles[YAW], 0);
+				AngleVectors( pLAngles, pLFwd, NULL, NULL );
+				if ( DotProduct( pLFwd, pushDir ) > 0.2f )
+				{//pushing him from behind
+					knockAnim = BOTH_KNOCKDOWN3;
+				}
+				else
+				{//pushing him from front
+					knockAnim = BOTH_KNOCKDOWN1;
+				}
+			}
+			if ( knockAnim == BOTH_KNOCKDOWN1 && strength > 150 )
+			{//push *hard*
+				knockAnim = BOTH_KNOCKDOWN2;
+			}
+			NPC_SetAnim( self, SETANIM_BOTH, knockAnim, SETANIM_FLAG_OVERRIDE|SETANIM_FLAG_HOLD );
+			if ( self->s.number >= MAX_CLIENTS )
+			{//randomize getup times
+				int addTime = Q_irand( -200, 200 );
+				self->client->ps.legsTimer += addTime;
+				self->client->ps.torsoTimer += addTime;
+			}
+			else
+			{//player holds extra long so you have more time to decide to do the quick getup
+				if ( BG_KnockDownAnim( self->client->ps.legsAnim ) )
+				{
+					self->client->ps.legsTimer += PLAYER_KNOCKDOWN_HOLD_EXTRA_TIME;
+					self->client->ps.torsoTimer += PLAYER_KNOCKDOWN_HOLD_EXTRA_TIME;
+				}
+			}
+
+			//[SaberSys]
+			//bump our MP level down.
+			BG_ReduceMishapLevel(&self->client->ps);			
+			//[/SaberSys]
+		}
+	}
+}
+
+/* basejka version
 void G_Knockdown( gentity_t *victim )
 {
 	//[CoOp]
@@ -4985,6 +5254,8 @@ void G_Knockdown( gentity_t *victim )
 		victim->client->ps.quickerGetup = qfalse;
 	}
 }
+*/
+//[/KnockdownSys]
 
 
 //[Asteroids]
@@ -6441,12 +6712,18 @@ qboolean CanDamage (gentity_t *targ, vec3_t origin) {
 G_RadiusDamage
 ============
 */
+//[DodgeSys]
+qboolean G_DoDodge( gentity_t *self, gentity_t *shooter, vec3_t impactPoint, int hitLoc, int * dmg, int mod );
+//[/DodgeSys]
 qboolean G_RadiusDamage ( vec3_t origin, gentity_t *attacker, float damage, float radius,
 					 gentity_t *ignore, gentity_t *missile, int mod) {
 	float		points, dist;
 	gentity_t	*ent;
 	int			entityList[MAX_GENTITIES];
 	int			numListedEntities;
+	//[DodgeSys]
+	int			dodgeDmg;  //damage value passed to and from the dodge code.
+	//[/DodgeSys]
 	vec3_t		mins, maxs;
 	vec3_t		v;
 	vec3_t		dir;
@@ -6512,7 +6789,14 @@ qboolean G_RadiusDamage ( vec3_t origin, gentity_t *attacker, float damage, floa
 
 		points = damage * ( 1.0 - dist / radius );
 
-		if( CanDamage (ent, origin) ) {
+		//[DodgeSys]
+		//added dodge for splash damage.
+		dodgeDmg = (int) points;
+		if( CanDamage (ent, origin) && !G_DoDodge(ent, attacker, origin, -1, &dodgeDmg, mod) ) {
+		//if( CanDamage (ent, origin) ) {
+			//we might have reduced the damage by doing a partial dodge
+			points = (float) dodgeDmg;
+		//[/DodgeSys]
 			if( LogAccuracyHit( ent, attacker ) ) {
 				hitClient = qtrue;
 			}
@@ -6566,3 +6850,75 @@ qboolean G_RadiusDamage ( vec3_t origin, gentity_t *attacker, float damage, floa
 
 	return hitClient;
 }
+
+
+//[SaberSys]
+#define DODGE_KILLBONUS 20 //the DP bonus you get for killing another player
+#define FATIGUE_KILLBONUS 20 //the FP bonus you get for killing another player
+extern void WP_ForcePowerRegenerate( gentity_t *self, int overrideAmt );
+void AddFatigueKillBonus( gentity_t *attacker, gentity_t *victim )
+{//get a small bonus for killing an enemy
+	if(!attacker || !attacker->client || !victim  || !victim->client)
+	{
+		return;
+	}
+
+	if(victim->NPC)
+	{//don't get kill bonus for axing NPCs
+		return;
+	}
+
+	//add bonus
+	WP_ForcePowerRegenerate(attacker, FATIGUE_KILLBONUS);
+	attacker->client->ps.stats[STAT_DODGE] += DODGE_KILLBONUS;
+
+	if(attacker->client->ps.stats[STAT_DODGE] > DODGE_MAX)
+	{
+		attacker->client->ps.stats[STAT_DODGE] = DODGE_MAX;
+	}
+}
+//[/SaberSys]
+
+
+//[ExpSys]
+void AddSkill(gentity_t *self, float amount)
+{//add skill points to self
+	self->client->sess.skillPoints += amount;
+
+	if(g_maxForceRank.integer < g_minForceRank.integer)
+	{//can't have a max skill point level that's less than our starting skill points.
+		G_Printf("g_maxForceRank less than g_minForceRank.  Defaulting to g_minForceRank.\n");
+		trap_Cvar_Set("g_maxForceRank", g_minForceRank.string);
+	}
+
+	if(self->client->sess.skillPoints > g_maxForceRank.integer)
+	{
+		self->client->sess.skillPoints = g_maxForceRank.integer;
+	}
+}
+
+
+void G_DodgeDrain(gentity_t *victim, gentity_t *attacker, int amount)
+{//drains DP from victim.  Also awards experience points to the attacker.
+	victim->client->ps.stats[STAT_DODGE] -= amount;
+
+	if(victim->client->ps.stats[STAT_DODGE] < 0)
+	{
+		victim->client->ps.stats[STAT_DODGE] = 0;
+	}
+
+	if(attacker && attacker->client)
+	{//attacker gets experience for causing damage.
+		if(!attacker->client->sess.skillPoints)
+		{//don't want a divide by zero error, give the player a bonus skill point for starters
+			attacker->client->sess.skillPoints = 1;
+		}
+
+		//scale skill points based on the ratio between skills
+		AddSkill(attacker, 
+			(float) amount / 50 * (victim->client->sess.skillPoints / attacker->client->sess.skillPoints)); 
+	}
+}
+//[/ExpSys]
+
+

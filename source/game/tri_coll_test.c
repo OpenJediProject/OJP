@@ -290,3 +290,5 @@ qboolean tri_tri_intersect(vec3_t V0,vec3_t V1,vec3_t V2,
   if(isect1[1]<isect2[0] || isect2[1]<isect1[0]) return qtrue;
   return qfalse;
 }
+
+

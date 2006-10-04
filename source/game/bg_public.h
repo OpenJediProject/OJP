@@ -23,7 +23,7 @@
 //This is the current keyword used to denote the current OJP Basic and Enhanced client plugins.  
 //These values should be changed whenever something is changed that would make the new clients 
 //incompatiable with previous versions of OJP Basic or Enhanced (on individual basis).
-#define CURRENT_OJPBASIC_CLIENTVERSION			"OJP Basic v0.1.2"
+#define CURRENT_OJPENHANCED_CLIENTVERSION		"OJP Enhanced v0.0.9k"
 //[/ClientPlugInDetect]
 
 #define	STEPSIZE		18
@@ -57,6 +57,63 @@
 
 #define MAX_CLIENT_SCORE_SEND 20
 
+//[DodgeSys]
+//[/DodgeDefines]
+//percentage of Dodge points remaining of the full amount required for a Partial Dodge.
+#define DODGE_PARTIAL		.5
+
+//Default amount of Maximum dodge
+#define	DODGE_MAX			100
+
+//The Fatigue (Force) Points to Dodge Points Ratio
+#define	DODGE_FATIGUE		6
+
+//The minimum damage level at which dodge works
+#define DODGE_MINDAM		20
+
+//Velocity at which you hop away from continued damage
+#define DODGE_HOP			g_speed.value	
+
+//Distance at which Dodge Saber Blocks occur
+#define	DODGE_SABDIST		200
+//[/DodgeDefines]
+//[/DodgeSys]
+
+//[FatigueSys]
+//[FatigueDefines]
+//Fatigue for backflips
+#define FATIGUE_BACKFLIP		3
+
+//Fatigue for standard melee moves
+#define FATIGUE_MELEE			1
+
+//Fatigue for standard saber attacks
+#define FATIGUE_SABERATTACK		1
+
+//Fatigue Cost for saber transition moves (spins)
+#define FATIGUE_SABERTRANS		1
+
+//percentage of max fatigue at which point your player starts acting fatigued.
+#define FATIGUEDTHRESHHOLD		.1
+
+//the fatigue caused by getting hit by a kick.
+#define FATIGUE_KICKHIT			20
+//[/FatigueDefines]
+//[/FatigueSys]
+
+//[SaberSys]
+#define MISHAPLEVEL_FULL		14  //the point at which full mishaps occur on the balance bar.
+#define MISHAPLEVEL_HEAVY		10
+#define MISHAPLEVEL_LIGHT		6
+#define MISHAPLEVEL_NONE		0
+//[/SaberSys]
+
+//[DodgeSys]
+//[DodgeDefines]
+//the level below which DP is critical (for the DP meterand desperation regen, etc)
+#define	DODGE_CRITICALLEVEL				35
+//[/DodgeDefines]
+//[/DodgeSys]
 //[BUGFIX12]
 //as part of this fix I'm giving some defines for the ghoul2 model indexes.
 #define		G2MODEL_PLAYER				0
@@ -576,6 +633,13 @@ extern	pmove_t		*pm;
 								 //before end frame
 #define SETANIM_FLAG_RESTART	4//Allow restarting the anim if playing the same one (weapon fires)
 #define SETANIM_FLAG_HOLDLESS	8//Set the new timer
+//[AnimationSys]
+//new flag to be able to restart and override without overriding the same animation.
+//this is useful for situations where you want to have the animation timer pace
+//a repeating animation
+#define SETANIM_FLAG_PACE		16//acts like a SETANIM_FLAG_RESTART but only restarts if the 
+								  //animation is over.
+//[/AnimationSys]
 
 
 // if a full pmove isn't done on the client, you can just update the angles
@@ -600,7 +664,11 @@ typedef enum {
 	STAT_ARMOR,				
 	STAT_DEAD_YAW,					// look this direction when dead (FIXME: get rid of?)
 	STAT_CLIENTS_READY,				// bit mask of clients wishing to exit the intermission (FIXME: configstring?)
-	STAT_MAX_HEALTH					// health / armor limit, changable by handicap
+	//[DodgeSys]
+	STAT_MAX_HEALTH,					// health / armor limit, changable by handicap
+	STAT_DODGE,
+	//STAT_MAX_HEALTH					// health / armor limit, changable by handicap
+	//[/DodgeSys]
 } statIndex_t;
 
 
@@ -755,7 +823,7 @@ enum {
 	//PW_DOUBLER, //rww - removed
 	//PW_AMMOREGEN, //rww - removed
 	PW_SPEEDBURST,
-	PW_DISINT_4,
+	PW_DISINT_4,	//racc - used to render the push/pull/grip glow effect on the players.
 	PW_SPEED,
 	PW_CLOAKED,
 	PW_FORCE_ENLIGHTENED_LIGHT,
@@ -851,7 +919,11 @@ typedef enum {
 
 	EV_FALL,
 
-	EV_JUMP_PAD,			// boing sound at origin, jump sound on player
+	//[SaberLockSys]
+	//replaced EV_JUMP_PAD with EV_SABERLOCK
+	EV_SABERLOCK,				// Player is in saberlock (render sound/effects)
+	//EV_JUMP_PAD,			// boing sound at origin, jump sound on player
+	//[/SaberLockSys]
 
 	EV_GHOUL2_MARK,			//create a projectile impact mark on something with a client-side g2 instance.
 
@@ -1704,6 +1776,10 @@ qboolean BG_InSaberStandAnim( int anim );
 qboolean BG_InReboundJump( int anim );
 qboolean BG_InReboundHold( int anim );
 qboolean BG_InReboundRelease( int anim );
+//[LedgeGrab]
+qboolean BG_InLedgeMove( int anim );
+qboolean In_LedgeIdle( int anim );
+//[/LedgeGrab]
 qboolean BG_InBackFlip( int anim );
 qboolean BG_DirectFlippingAnim( int anim );
 qboolean BG_SaberInAttack( int move );
@@ -1716,6 +1792,11 @@ qboolean BG_SaberInSpecialAttack( int anim );
 qboolean BG_SaberInKata( int saberMove );
 qboolean BG_InKataAnim(int anim);
 qboolean BG_KickingAnim( int anim );
+
+//[Melee]
+qboolean BG_PunchAnim( int anim );
+//[/Melee]
+
 int BG_InGrappleMove(int anim);
 int BG_BrokenParryForAttack( int move );
 int BG_BrokenParryForParry( int move );
@@ -1725,7 +1806,15 @@ qboolean BG_InDeathAnim( int anim );
 qboolean BG_InSaberLockOld( int anim );
 qboolean BG_InSaberLock( int anim );
 
-void BG_SaberStartTransAnim( int clientNum, int saberAnimLevel, int weapon, int anim, float *animSpeed, int broken );
+//[SaberSys]
+qboolean BG_InWalk( int anim );
+//[/SaberSys]
+
+//[FatigueSys]
+void BG_SaberStartTransAnim( int clientNum, int saberAnimLevel, int weapon, int anim, 
+							float *animSpeed, int broken, int fatigued );
+//void BG_SaberStartTransAnim( int clientNum, int saberAnimLevel, int weapon, int anim, float *animSpeed, int broken );
+//[/FatigueSys]
 
 void BG_ForcePowerDrain( playerState_t *ps, forcePowers_t forcePower, int overrideAmt );
 
@@ -1796,6 +1885,14 @@ extern int WeaponAttackAnim[WP_NUM_WEAPONS];
 extern int forcePowerDarkLight[NUM_FORCE_POWERS];
 
 #include "../namespace_end.h"
+
+//[KnockdownSys]
+//this is the default minimum time for a level 0 player to wait before they can attempt to get up.
+//I'm not sure what this is supposed to be in SP since I don't have the define for this.
+//note that this is in terms of the legsTimer so the higher this value, the faster the
+//player can attempt to get up.
+#define PLAYER_KNOCKDOWN_HOLD_EXTRA_TIME	0
+//[/KnockdownSys]
 
 #define ARENAS_PER_TIER		4
 #define MAX_ARENAS			1024

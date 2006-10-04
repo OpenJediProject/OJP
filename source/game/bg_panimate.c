@@ -14,6 +14,9 @@
 #include "../namespace_begin.h"
 extern sfxHandle_t trap_S_RegisterSound( const char *sample);
 extern int trap_FX_RegisterEffect( const char *file);
+//[SaberSys]
+extern void trap_Cvar_VariableStringBuffer( const char *var_name, char *buffer, int bufsize );
+//[/SaberSys]
 #include "../namespace_end.h"
 #endif
 
@@ -40,14 +43,23 @@ qboolean BG_SaberStanceAnim( int anim )
 	case BOTH_SABERSLOW_STANCE://single-saber, strong style
 	case BOTH_SABERSTAFF_STANCE://saber staff style
 	case BOTH_SABERDUAL_STANCE://dual saber style
+	//[SaberSys]
+	//dedicated stance animations for the hidden styles
+	case BOTH_SABERTAVION_STANCE:
+	case BOTH_SABERDESANN_STANCE:
+	//[/SaberSys]
 		return qtrue;
 		break;
 	}
 	return qfalse;
 }
 
+
+
+//[SPPortComplete]
+//BG clone of PM_CrouchAnim
 qboolean BG_CrouchAnim( int anim )
-{
+{//racc - checks animation to see if it's a crouch animation
 	switch ( anim )
 	{
 	case BOTH_SIT1:				//# Normal chair sit.
@@ -62,11 +74,22 @@ qboolean BG_CrouchAnim( int anim )
 	case BOTH_KNEES1:			//# Tavion on her knees
 	case BOTH_CROUCHATTACKBACK1://FIXME: not if in middle of anim?
 	case BOTH_ROLL_STAB:
+	//[CoOp]
+	//SP code port stuff
+	case BOTH_STAND_TO_KNEEL:
+	case BOTH_KNEEL_TO_STAND:
+	case BOTH_TURNCROUCH1:
+	case BOTH_CROUCH4:
+	case BOTH_KNEES2:			//# Tavion on her knees looking down
+	case BOTH_KNEES2TO1:			//# Transition of KNEES2 to KNEES1
+	//[/CoOp]
 		return qtrue;
 		break;
 	}
 	return qfalse;
 }
+//[/SPPortComplete]
+
 
 qboolean BG_InSpecialJump( int anim )
 {
@@ -140,6 +163,11 @@ qboolean BG_InSaberStandAnim( int anim )
 	case BOTH_SABERSLOW_STANCE:
 	case BOTH_SABERDUAL_STANCE:
 	case BOTH_SABERSTAFF_STANCE:
+	//[SaberSys]
+	//dedicated stance animations for the hidden styles
+	case BOTH_SABERTAVION_STANCE:
+	case BOTH_SABERDESANN_STANCE:
+	//[/SaberSys]
 		return qtrue;
 	default:
 		return qfalse;
@@ -187,6 +215,37 @@ qboolean BG_InReboundRelease( int anim )
 	}
 	return qfalse;
 }
+
+
+//[LedgeGrab]
+qboolean BG_InLedgeMove( int anim )
+{
+	switch ( anim )
+	{
+	case BOTH_LEDGE_GRAB:
+	case BOTH_LEDGE_HOLD:
+	case BOTH_LEDGE_LEFT:
+	case BOTH_LEDGE_RIGHT:
+	case BOTH_LEDGE_MERCPULL:
+		return qtrue;
+		break;
+	}
+	return qfalse;
+}
+
+qboolean In_LedgeIdle( int anim )
+{		
+	switch ( anim )
+	{
+	case BOTH_LEDGE_GRAB:
+	case BOTH_LEDGE_HOLD:
+		return qtrue;
+		break;
+	}
+	return qfalse;
+}
+//[/LedgeGrab]
+
 
 qboolean BG_InBackFlip( int anim )
 {
@@ -461,14 +520,23 @@ qboolean BG_InExtraDefenseSaberMove( int move )
 	return qfalse;
 }
 
+//[SPPortComplete]
+//BG clone of PM_FlippingAnim
 qboolean BG_FlippingAnim( int anim )
-{
+{//racc - checks anim to see if it's a flip anim. 
 	switch ( anim )
 	{
 	case BOTH_FLIP_F:			//# Flip forward
 	case BOTH_FLIP_B:			//# Flip backwards
 	case BOTH_FLIP_L:			//# Flip left
 	case BOTH_FLIP_R:			//# Flip right
+	//[CoOp]
+	//alora's moves
+	case BOTH_ALORA_FLIP_1:
+	case BOTH_ALORA_FLIP_2:
+	case BOTH_ALORA_FLIP_3:
+	case BOTH_ALORA_FLIP_B:
+	//[/CoOp]
 	case BOTH_WALL_RUN_RIGHT_FLIP:
 	case BOTH_WALL_RUN_LEFT_FLIP:
 	case BOTH_WALL_FLIP_RIGHT:
@@ -507,8 +575,10 @@ qboolean BG_FlippingAnim( int anim )
 	return qfalse;
 }
 
+
+//racc - clone of PM_SpinningSaberAnim
 qboolean BG_SpinningSaberAnim( int anim )
-{
+{//racc - is this a move where the player spins?
 	switch ( anim )
 	{
 	//level 1 - FIXME: level 1 will have *no* spins
@@ -614,6 +684,7 @@ qboolean BG_SpinningSaberAnim( int anim )
 	}
 	return qfalse;
 }
+//[/SPPortComplete]
 
 qboolean BG_SaberInSpecialAttack( int anim )
 {
@@ -673,6 +744,22 @@ qboolean BG_SaberInSpecialAttack( int anim )
 	return qfalse;
 }
 
+
+//[SaberSys]
+//Are you in a punching animation?
+qboolean BG_PunchAnim( int anim )
+{
+	switch ( anim )
+	{
+	case BOTH_MELEE1:
+	case BOTH_MELEE2:
+			return qtrue;
+			break;
+	};
+	return qfalse;
+}
+
+
 qboolean BG_KickingAnim( int anim )
 {
 	switch ( anim )
@@ -709,9 +796,15 @@ int BG_InGrappleMove(int anim)
 		return 1; //grabbing at someone
 	case BOTH_KYLE_PA_1:
 	case BOTH_KYLE_PA_2:
+	//[MELEE]
+	case BOTH_KYLE_PA_3:
+	//[/MELEE]
 		return 2; //beating the shit out of someone
 	case BOTH_PLAYER_PA_1:
 	case BOTH_PLAYER_PA_2:
+	//[MELEE]
+	case BOTH_PLAYER_PA_3:
+	//[/MELEE]
 	case BOTH_PLAYER_PA_FLY:
 		return 3; //getting the shit beaten out of you
 		break;
@@ -791,6 +884,7 @@ int BG_BrokenParryForParry( int move )
 	return LS_NONE;
 }
 
+//[RACC] - Uses ps.saberBlocked defines for inputs
 int BG_KnockawayForParry( int move )
 {
 	//FIXME: need actual anims for this
@@ -1142,6 +1236,9 @@ qboolean BG_InKnockDownOnGround( playerState_t *ps )
 	return qfalse;
 }
 
+
+//[SPPortComplete]
+//BG "clone" of PM_StabDownAnim
 qboolean BG_StabDownAnim( int anim )
 {
 	switch ( anim )
@@ -1153,6 +1250,10 @@ qboolean BG_StabDownAnim( int anim )
 	}
 	return qfalse;
 }
+//[/SPPortComplete]
+
+
+
 
 int PM_SaberBounceForAttack( int move )
 {
@@ -1183,6 +1284,45 @@ int PM_SaberBounceForAttack( int move )
 	}
 	return LS_NONE;
 }
+
+
+//[SaberSys]
+int InvertQuad(int quad)
+{//Returns the reflection quad for the given quad.
+	//This is used for setting a player's block direction based on his attacker's move's start/end quad.
+	switch(	quad )
+	{
+		case Q_B:
+			return Q_B;
+			break;
+		case Q_BR:
+			return Q_BL;
+			break;
+		case Q_R:
+			return Q_L;
+			break;
+		case Q_TR:
+			return Q_TL;
+			break;
+		case Q_T:
+			return Q_T;
+			break;
+		case Q_TL:
+			return Q_TR;
+			break;
+		case Q_L:
+			return Q_R;
+			break;
+		case Q_BL:
+			return Q_BR;
+			break;
+		default:
+			return quad;
+			break;
+	};
+}
+//[/SaberSys]
+
 
 int PM_SaberDeflectionForQuad( int quad )
 {
@@ -1216,6 +1356,11 @@ int PM_SaberDeflectionForQuad( int quad )
 	return LS_NONE;
 }
 
+
+//[FatigueSys]
+//moved to bg_saber.c
+
+/*
 qboolean PM_SaberInDeflect( int move )
 {
 	if ( move >= LS_D1_BR && move <= LS_D1_B_ )
@@ -1224,6 +1369,8 @@ qboolean PM_SaberInDeflect( int move )
 	}
 	return qfalse;
 }
+*/
+//[/FatigueSys]
 
 qboolean PM_SaberInParry( int move )
 {
@@ -1234,6 +1381,35 @@ qboolean PM_SaberInParry( int move )
 	return qfalse;
 }
 
+
+//[SaberSys]
+qboolean BG_InWalk( int anim )
+{
+	switch ( anim )
+	{
+		case BOTH_WALK1:
+		case BOTH_WALK1TALKCOMM1:
+		case BOTH_WALK2:
+		case BOTH_WALK5:
+		case BOTH_WALK6:
+		case BOTH_WALK7:
+		case BOTH_WALK_DUAL:
+		case BOTH_WALK_STAFF:
+		case BOTH_WALKBACK1:
+		case BOTH_WALKBACK2:
+		case BOTH_WALKBACK_DUAL:
+		case BOTH_WALKBACK_STAFF:
+			return qtrue;
+			break;
+
+		default:
+			return qfalse;
+			break;
+
+	};
+}
+//[/SaberSys]
+
 qboolean PM_SaberInKnockaway( int move )
 {
 	if ( move >= LS_K1_T_ && move <= LS_K1_BL )
@@ -1242,6 +1418,28 @@ qboolean PM_SaberInKnockaway( int move )
 	}
 	return qfalse;
 }
+
+
+//[SaberSys]
+qboolean PM_KnockawayAnim( int anim ) 
+{//animation based version of PM_SaberInKnockaway used for BG_SaberStartTransAnim
+	if( anim >= BOTH_K1_S1_T_ && anim <= BOTH_K1_S1_BR )
+	{//single saber
+		return qtrue;
+	}
+
+	if( anim >= BOTH_K6_S6_T_ && anim <= BOTH_K6_S6_BR )
+	{//dual saber
+		return qtrue;
+	}
+
+	if( anim >= BOTH_K7_S7_T_ && anim <= BOTH_K7_S7_BR )
+	{//staff saber
+		return qtrue;
+	}
+	return qfalse;
+}
+//[/SaberSys]
 
 qboolean PM_SaberInReflect( int move )
 {
@@ -1284,8 +1482,113 @@ qboolean PM_InSaberAnim( int anim )
 	return qfalse;
 }
 
+
+//[KnockdownSys]
+//[SPPortCompete]
+qboolean PM_InForceGetUp( playerState_t *ps )
+{//racc - Are we in a getup animation that uses the Force?
+	switch ( ps->legsAnim )
+	{
+	case BOTH_FORCE_GETUP_F1:
+	case BOTH_FORCE_GETUP_F2:
+	case BOTH_FORCE_GETUP_B1:
+	case BOTH_FORCE_GETUP_B2:
+	case BOTH_FORCE_GETUP_B3:
+	case BOTH_FORCE_GETUP_B4:
+	case BOTH_FORCE_GETUP_B5:
+	case BOTH_FORCE_GETUP_B6:
+	case BOTH_GETUP_BROLL_B:
+	case BOTH_GETUP_BROLL_F:
+	case BOTH_GETUP_BROLL_L:
+	case BOTH_GETUP_BROLL_R:
+	case BOTH_GETUP_FROLL_B:
+	case BOTH_GETUP_FROLL_F:
+	case BOTH_GETUP_FROLL_L:
+	case BOTH_GETUP_FROLL_R:
+		if ( ps->legsTimer )
+		{
+			return qtrue;
+		}
+		break;
+	}
+	return qfalse;
+}
+
+qboolean PM_InGetUp( playerState_t *ps )
+{//racc - player in getup animation.
+	switch ( ps->legsAnim )
+	{
+	case BOTH_GETUP1:
+	case BOTH_GETUP2:
+	case BOTH_GETUP3:
+	case BOTH_GETUP4:
+	case BOTH_GETUP5:
+	case BOTH_GETUP_CROUCH_F1:
+	case BOTH_GETUP_CROUCH_B1:
+	case BOTH_GETUP_BROLL_B:
+	case BOTH_GETUP_BROLL_F:
+	case BOTH_GETUP_BROLL_L:
+	case BOTH_GETUP_BROLL_R:
+	case BOTH_GETUP_FROLL_B:
+	case BOTH_GETUP_FROLL_F:
+	case BOTH_GETUP_FROLL_L:
+	case BOTH_GETUP_FROLL_R:
+		if ( ps->legsTimer )
+		{
+			return qtrue;
+		}
+		break;
+	default:
+		return PM_InForceGetUp( ps );
+		break;
+	}
+	//what the hell, redundant, but...
+	return qfalse;
+}
+//[/KnockdownSys]
+
+
 qboolean PM_InKnockDown( playerState_t *ps )
 {
+	//[KnockdownSys] 
+	//Porting in SP Code for this stuff.
+	switch ( ps->legsAnim )
+	{
+	case BOTH_KNOCKDOWN1:
+	case BOTH_KNOCKDOWN2:
+	case BOTH_KNOCKDOWN3:
+	case BOTH_KNOCKDOWN4:
+	case BOTH_KNOCKDOWN5:
+	//special anims:
+	case BOTH_RELEASED:
+		return qtrue;
+		break;
+	case BOTH_LK_DL_ST_T_SB_1_L:
+		if ( ps->legsTimer < 550 )
+		{
+			return qtrue;
+		}
+		break;
+	case BOTH_PLAYER_PA_3_FLY:
+		if ( ps->legsTimer < 300 )
+		{
+			return qtrue;
+		}
+		/*
+		else if ( ps->clientNum < MAX_CLIENTS 
+			&& ps->legsAnimTimer < 300 + PLAYER_KNOCKDOWN_HOLD_EXTRA_TIME )
+		{
+			return qtrue;
+		}
+		*/
+		break;
+	default:
+		return PM_InGetUp( ps );
+		break;
+	}
+	return qfalse;
+
+	/* basejka code
 	switch ( (ps->legsAnim) )
 	{
 	case BOTH_KNOCKDOWN1:
@@ -1293,6 +1596,9 @@ qboolean PM_InKnockDown( playerState_t *ps )
 	case BOTH_KNOCKDOWN3:
 	case BOTH_KNOCKDOWN4:
 	case BOTH_KNOCKDOWN5:
+	//[MELEE]
+	case BOTH_PLAYER_PA_3_FLY:
+	//[/MELEE]
 		return qtrue;
 		break;
 	case BOTH_GETUP1:
@@ -1322,7 +1628,11 @@ qboolean PM_InKnockDown( playerState_t *ps )
 		break;
 	}
 	return qfalse;
+	*/
+	//[/KnockdownSys]
 }
+//[/SPPortCompete]
+
 
 qboolean PM_PainAnim( int anim )
 {
@@ -1405,6 +1715,23 @@ qboolean PM_LandingAnim( int anim )
 	}
 	return qfalse;
 }
+
+//[SaberSys]
+qboolean PM_SaberReturnAnim( int anim )
+{
+	if ( (anim >= BOTH_R1_B__S1 && anim <= BOTH_R1_TR_S1) 
+		|| (anim >= BOTH_R2_B__S1 && anim <= BOTH_R2_TR_S1)
+		|| (anim >= BOTH_R3_B__S1 && anim <= BOTH_R3_TR_S1)
+		|| (anim >= BOTH_R4_B__S1 && anim <= BOTH_R4_TR_S1)
+		|| (anim >= BOTH_R5_B__S1 && anim <= BOTH_R5_TR_S1)
+		|| (anim >= BOTH_R6_B__S6 && anim <= BOTH_R6_TR_S6)
+		|| (anim >= BOTH_R7_B__S7 && anim <= BOTH_R7_TR_S7) )
+	{
+		return qtrue;
+	}
+	return qfalse;
+}
+//[/SaberSys]
 
 qboolean PM_SpinningAnim( int anim )
 {
@@ -1605,6 +1932,51 @@ qboolean BG_SaberLockBreakAnim( int anim )
 	return (BG_SuperBreakLoseAnim(anim)||BG_SuperBreakWinAnim(anim));
 }
 
+
+//[SPPortCompete]
+//[KnockdownSys]
+qboolean BG_KnockDownAnim( int anim )
+{//racc - is this a "normal" knockdown animation?
+	switch ( anim )
+	{
+	case BOTH_KNOCKDOWN1:
+	case BOTH_KNOCKDOWN2:
+	case BOTH_KNOCKDOWN3:
+	case BOTH_KNOCKDOWN4:
+	case BOTH_KNOCKDOWN5:
+		return qtrue;
+		break;
+	}
+	return qfalse;
+}
+
+
+qboolean PM_KnockDownAnimExtended( int anim )
+{//racc - check anim to see if it's one of the getting-knockdowned/have-been-knockeddown ones.  
+	//This doesn't include any of the knockdown getup animations
+	switch ( anim )
+	{
+	case BOTH_KNOCKDOWN1:
+	case BOTH_KNOCKDOWN2:
+	case BOTH_KNOCKDOWN3:
+	case BOTH_KNOCKDOWN4:
+	case BOTH_KNOCKDOWN5:
+	//special anims:
+	case BOTH_RELEASED:
+	case BOTH_LK_DL_ST_T_SB_1_L:
+	case BOTH_PLAYER_PA_3_FLY:
+		return qtrue;
+		break;
+	/*
+	default:
+		return PM_InGetUp( ps );
+		break;
+	*/
+	}
+	return qfalse;
+}
+//[/KnockdownSys]
+//[/SPPortCompete]
 
 qboolean BG_FullBodyTauntAnim( int anim )
 {
@@ -2922,8 +3294,34 @@ void PM_SetTorsoAnimTimer(int time )
 	BG_SetTorsoAnimTimer(pm->ps, time);
 }
 
-void BG_SaberStartTransAnim( int clientNum, int saberAnimLevel, int weapon, int anim, float *animSpeed, int broken )
+//[SaberLockSys]
+//racc - need this for the 
+/*
+#ifdef CGAME
+#include "../cgame/cg_local.h"
+#endif
+*/
+//[/SaberLockSys]
+
+//[SaberSys]
+qboolean BG_BounceAnim( int anim );
+qboolean PM_SaberReturnAnim( int anim );
+//[/SaberSys]
+//[FatigueSys]
+//Made it so saber moves go slower if your fatigued
+void BG_SaberStartTransAnim( int clientNum, int saberAnimLevel, int weapon, int anim, float *animSpeed, 
+							int broken, int fatigued )
+//void BG_SaberStartTransAnim( int clientNum, int saberAnimLevel, int weapon, int anim, float *animSpeed, int broken )
+//[/FatigueSys]
 {
+	//[SaberSys]
+	//I don't like having to do this every time but it's the best I can think of for now.
+	char	buf[128];
+	float	saberanimscale = 1.0;
+	trap_Cvar_VariableStringBuffer("g_saberanimspeed", buf, sizeof(buf));
+	saberanimscale = atof(buf);
+	//[/SaberSys]
+
 	if ( anim >= BOTH_A1_T__B_ && anim <= BOTH_ROLL_STAB )
 	{
 		if ( weapon == WP_SABER )
@@ -2943,6 +3341,33 @@ void BG_SaberStartTransAnim( int clientNum, int saberAnimLevel, int weapon, int 
 		}
 	}
 
+	//[SaberSys]
+	if( anim >= BOTH_A1_T__B_ && anim <= BOTH_A1_TR_BL )
+	{//slowed down the blue attacks a little.
+		*animSpeed *= .8f;
+	}
+
+	if( anim >= BOTH_S3_S1_T_ && anim <= BOTH_S3_S1_TR )
+	{//red style's windups were WAY too slow
+		*animSpeed *= 3.0f;
+	}
+
+	if( anim >= BOTH_S4_S1_T_ && anim <= BOTH_S4_S1_TR )
+	{//purple/desann's windups were too slow as well
+		*animSpeed *= 2.2f;
+	}
+
+	if( anim >= BOTH_R3_B__S1 && anim <= BOTH_R3_TR_S1 )
+	{//red returns were too slow
+		*animSpeed *= 2.5f;
+	}
+
+	if( anim >= BOTH_R4_B__S1 && anim <= BOTH_R4_TR_S1 )
+	{//red returns were too slow
+		*animSpeed *= 1.5f;
+	}
+
+	/* racc - interesting but I think it's isn't really fair.
 	if ( ( (anim) >= BOTH_T1_BR__R && 
 		(anim) <= BOTH_T1_BL_TL ) ||
 		( (anim) >= BOTH_T2_BR__R && 
@@ -2969,6 +3394,9 @@ void BG_SaberStartTransAnim( int clientNum, int saberAnimLevel, int weapon, int 
 		}
 	}
 	else if (broken && PM_InSaberAnim(anim))
+	*/
+	if (broken && PM_InSaberAnim(anim))
+	//[/SaberSys]
 	{
 		if (broken & (1<<BROKENLIMB_RARM))
 		{
@@ -2979,6 +3407,61 @@ void BG_SaberStartTransAnim( int clientNum, int saberAnimLevel, int weapon, int 
 			*animSpeed *= 0.65f;
 		}
 	}
+
+	//[SaberSys]
+	//slow down the saber speeds
+	if ( anim >= BOTH_A1_T__B_ && anim <= BOTH_ROLL_STAB  && !BG_SaberInSpecialAttack(anim) 
+		&& !PM_SaberReturnAnim(anim) && anim != BOTH_FORCEWALLRELEASE_FORWARD
+		&& anim != BOTH_FORCEWALLRUNFLIP_START && anim != BOTH_FORCEWALLRUNFLIP_END)
+	{
+		*animSpeed *= saberanimscale;
+	}
+
+	if((anim >= BOTH_H1_S1_T_ && anim <= BOTH_H1_S1_BR)
+		|| (anim >= BOTH_H6_S6_T_ && anim <= BOTH_H6_S6_BR)
+		|| (anim >= BOTH_H7_S7_T_ && anim <= BOTH_H7_S7_BR) )
+	{//slow down broken parries
+		//*animSpeed *= .5f;
+		//match broken parry speeds for balance
+		if(anim >= BOTH_H6_S6_T_ && anim <= BOTH_H6_S6_BR)
+		{//dual broken parries are 1/3 the frames of the single broken parries
+			*animSpeed *= .33f;
+		}
+		else if(anim >= BOTH_H7_S7_T_ && anim <= BOTH_H7_S7_BR)
+		{//doubles are 1/2 the frames of single broken parries
+			*animSpeed *= .5f;
+		}	
+	}
+	//[/SaberSys]
+
+	//[FatigueSys]
+	if( (fatigued & (1 << FLAG_FATIGUED)) && anim >= BOTH_A1_T__B_ && anim <= BOTH_ROLL_STAB
+		//not a wall run move
+		&& anim != BOTH_FORCEWALLRELEASE_FORWARD && anim != BOTH_FORCEWALLRUNFLIP_START 
+		&& anim != BOTH_FORCEWALLRUNFLIP_END
+		//not a overhead flip move
+		&& anim != BOTH_JUMPFLIPSTABDOWN  
+		&& anim != BOTH_JUMPFLIPSLASHDOWN1)
+	{//You're pooped.  Move slower
+		*animSpeed *= .5f;
+		//[test]
+		saberanimscale = 1;
+	}
+	//[/FatigueSys]
+
+	//[SaberSys]
+	if( (fatigued & (1 << FLAG_SLOWBOUNCE)) )
+	{//slow animation for slow bounces
+		if(BG_BounceAnim(anim))
+		{
+			*animSpeed *= .15f;
+		}
+		else if(PM_SaberReturnAnim(anim))
+		{
+			*animSpeed *= .3f;
+		}
+	}
+	//[/SaberSys]
 }
 
 /*
@@ -3006,21 +3489,46 @@ void BG_SetAnimFinal(playerState_t *ps, animation_t *animations,
 	//NOTE: Setting blendTime here breaks actual blending..
 	blendTime = 0;
 
-	BG_SaberStartTransAnim(ps->clientNum, ps->fd.saberAnimLevel, ps->weapon, anim, &editAnimSpeed, ps->brokenLimbs);
+	//[FatigueSys]
+	BG_SaberStartTransAnim(ps->clientNum, ps->fd.saberAnimLevel, ps->weapon, anim, &editAnimSpeed, ps->brokenLimbs, ps->userInt3);
+	//BG_SaberStartTransAnim(ps->clientNum, ps->fd.saberAnimLevel, ps->weapon, anim, &editAnimSpeed, ps->brokenLimbs);
+	//[/FatigueSys]
 
 	// Set torso anim
 	if (setAnimParts & SETANIM_TORSO)
 	{
 		// Don't reset if it's already running the anim
-		if( !(setAnimFlags & SETANIM_FLAG_RESTART) && (ps->torsoAnim) == anim )
+		//[AnimationSys]
+		//added SETANIM_FLAG_PACE flag
+		if( (ps->torsoAnim) == anim && !(setAnimFlags & SETANIM_FLAG_RESTART) && !(setAnimFlags & SETANIM_FLAG_PACE) )
+		//if( !(setAnimFlags & SETANIM_FLAG_RESTART) && (ps->torsoAnim) == anim )
+		//[/AnimationSys]
 		{
 			goto setAnimLegs;
 		}
 		// or if a more important anim is running
-		if( !(setAnimFlags & SETANIM_FLAG_OVERRIDE) && ((ps->torsoTimer > 0)||(ps->torsoTimer == -1)) )
+		//[AnimationSys]
+		if( ((ps->torsoTimer > 0)||(ps->torsoTimer == -1)) && 
+			( ((setAnimFlags & SETANIM_FLAG_PACE) && (ps->torsoAnim) == anim ) 
+			|| !(setAnimFlags & SETANIM_FLAG_OVERRIDE)) )
+		//if( !(setAnimFlags & SETANIM_FLAG_OVERRIDE) && ((ps->torsoTimer > 0)||(ps->torsoTimer == -1)) )
+		//[/AnimationSys]
 		{	
 			goto setAnimLegs;
 		}
+
+//[SaberLockSys]
+// racc - debug message I was using to debug the combo hit bug.
+/*
+#ifdef QAGAME
+		G_Printf("%i: %i: Started Torso Animation %s\n", level.time, ps->clientNum, GetStringForID(animTable, anim) ); 
+#endif
+
+#ifdef CGAME
+		CG_Printf("%i: %i: CG Started Torso Animation %s\n", cg.time, ps->clientNum, GetStringForID(animTable, anim) ); 
+#endif
+*/
+//[/SaberLockSys]
 
 		BG_StartTorsoAnim(ps, anim);
 
@@ -3071,15 +3579,26 @@ setAnimLegs:
 	if (setAnimParts & SETANIM_LEGS)
 	{
 		// Don't reset if it's already running the anim
-		if( !(setAnimFlags & SETANIM_FLAG_RESTART) && (ps->legsAnim) == anim )
+		//[AnimationSys]
+				//added SETANIM_FLAG_PACE flag
+		if( (ps->legsAnim) == anim && !(setAnimFlags & SETANIM_FLAG_RESTART) && !(setAnimFlags & SETANIM_FLAG_PACE) )
+		//if( !(setAnimFlags & SETANIM_FLAG_RESTART) && (ps->legsAnim) == anim )
+		//[/AnimationSys]
 		{
 			goto setAnimDone;
 		}
+
 		// or if a more important anim is running
-		if( !(setAnimFlags & SETANIM_FLAG_OVERRIDE) && ((ps->legsTimer > 0)||(ps->legsTimer == -1)) )
+		//[AnimationSys]
+		if( ((ps->legsTimer > 0)||(ps->legsTimer == -1)) && 
+			( ((setAnimFlags & SETANIM_FLAG_PACE) && (ps->legsAnim) == anim ) 
+			|| !(setAnimFlags & SETANIM_FLAG_OVERRIDE)) )
+		//if( !(setAnimFlags & SETANIM_FLAG_OVERRIDE) && ((ps->legsTimer > 0)||(ps->legsTimer == -1)) )
+
 		{	
 			goto setAnimDone;
 		}
+		//[/AnimationSys]
 
 		BG_StartLegsAnim(ps, anim);
 
@@ -3275,6 +3794,7 @@ void PM_SetAnim(int setAnimParts,int anim,int setAnimFlags, int blendTime)
 }
 
 
+//[AnimationSys]
 //[BugFix2]
 //Fixed the logic problem with the timers
 
@@ -3290,7 +3810,7 @@ float BG_GetTorsoAnimPoint(playerState_t * ps, int AnimIndex)
 	float animPercentage = 0;
 
 	//Be sure to scale by the proper anim speed just as if we were going to play the animation
-	BG_SaberStartTransAnim(ps->clientNum, ps->fd.saberAnimLevel, ps->weapon, ps->torsoAnim, &animSpeedFactor, ps->brokenLimbs);
+	BG_SaberStartTransAnim(ps->clientNum, ps->fd.saberAnimLevel, ps->weapon, ps->torsoAnim, &animSpeedFactor, ps->brokenLimbs, ps->userInt3);
 
 	if( animSpeedFactor > 0 )
 	{
@@ -3317,7 +3837,7 @@ float BG_GetLegsAnimPoint(playerState_t * ps, int AnimIndex)
 	float animPercentage = 0;
 
 	//Be sure to scale by the proper anim speed just as if we were going to play the animation
-	BG_SaberStartTransAnim(ps->clientNum, ps->fd.saberAnimLevel, ps->weapon, ps->legsAnim, &animSpeedFactor, ps->brokenLimbs);
+	BG_SaberStartTransAnim(ps->clientNum, ps->fd.saberAnimLevel, ps->weapon, ps->legsAnim, &animSpeedFactor, ps->brokenLimbs, ps->userInt3);
 
 	if( animSpeedFactor > 0 )
 	{
@@ -3334,5 +3854,35 @@ float BG_GetLegsAnimPoint(playerState_t * ps, int AnimIndex)
 	return animPercentage;
 }
 //[/BugFix2]
+//[/AnimationSys]
 
 #include "../namespace_end.h"		// End of animation utilities
+
+//[DodgeSys]
+qboolean BG_HopAnim( int anim )
+{//check to see if anim is a hop animation.
+	if( BOTH_HOP_F <= anim && anim <= BOTH_HOP_R )
+	{
+		return qtrue;
+	}
+	return qfalse;
+}
+//[/DodgeSys]
+
+//[SaberSys]
+qboolean BG_BounceAnim( int anim )
+{//check for saber bounce animation
+	if((anim >= BOTH_B1_BR___ && anim <= BOTH_B1_BL___)
+		|| (anim >= BOTH_B2_BR___ && anim <= BOTH_B2_BL___)
+		|| (anim >= BOTH_B3_BR___ && anim <= BOTH_B3_BL___)
+		|| (anim >= BOTH_B4_BR___ && anim <= BOTH_B4_BL___)
+		|| (anim >= BOTH_B5_BR___ && anim <= BOTH_B5_BL___)
+		|| (anim >= BOTH_B6_BR___ && anim <= BOTH_B6_BL___)
+		|| (anim >= BOTH_B7_BR___ && anim <= BOTH_B7_BL___))
+	{
+		return qtrue;
+	}
+
+	return qfalse;
+}
+//[/SaberSys]
