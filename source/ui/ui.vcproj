@@ -552,7 +552,7 @@
 				>
 			</File>
 			<File
-				RelativePath="..\..\ui\menudef.h"
+				RelativePath="..\..\ojpenhanced\ui\jamp\menudef.h"
 				>
 			</File>
 			<File
