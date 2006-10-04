@@ -1,0 +1,79 @@
+{
+map			"mp/duel1"
+bots			"Kyle Tavion"
+longname		"Bespin Courtyard"
+fraglimit		10
+type			"ffa team duel powerduel"
+}
+
+{
+map			"mp/duel2"
+bots			"Kyle Tavion"
+longname		"Generator Room"
+fraglimit		10
+type			"ffa team duel powerduel"
+}
+
+{
+map			"mp/duel3"
+bots			"Kyle Tavion"
+longname		"Imperial Shaft"
+fraglimit		10
+type			"ffa team duel powerduel"
+}
+
+{
+map			"mp/duel4"
+bots			"Kyle Tavion"
+longname		"Imperial Control Room"
+fraglimit		10
+type			"ffa team duel powerduel"
+}
+
+{
+map			"mp/duel5"
+bots			"Kyle Tavion"
+longname		"Taspir Landing"
+fraglimit		10
+type			"ffa team duel powerduel"
+}
+
+{
+map			"mp/duel6"
+bots			"Rosh Reborn"
+longname		"Yavin Training Area"
+fraglimit		10
+type			"ffa team duel powerduel"
+}
+
+{
+map			"mp/duel7"
+bots			"Kyle Tavion"
+longname		"Rancor Pit"
+fraglimit		10
+type			"ffa team duel powerduel"
+}
+
+{
+map			"mp/duel8"
+bots			"Kyle Tavion"
+longname		"Abandoned City"
+fraglimit		10
+type			"ffa team duel powerduel"
+}
+
+{
+map			"mp/duel9"
+bots			"Kyle Tavion"
+longname		"Hoth Canyon"
+fraglimit		10
+type			"ffa team duel powerduel"
+}
+
+{
+map			"mp/duel10"
+bots			"Kyle Tavion"
+longname		"Vjun Fuel Processing"
+fraglimit		10
+type			"ffa team duel powerduel"
+}

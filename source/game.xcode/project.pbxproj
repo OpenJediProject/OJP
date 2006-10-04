@@ -1,0 +1,2050 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 39;
+	objects = {
+		014CEA3E0018CDD111CA2923 = {
+			explicitFileType = wrapper.cfbundle;
+			isa = PBXFileReference;
+			path = jampgame.bundle;
+			refType = 3;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		014CEA3F0018CDD111CA2923 = {
+			buildSettings = {
+				COPY_PHASE_STRIP = NO;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_ENABLE_FIX_AND_CONTINUE = YES;
+				GCC_GENERATE_DEBUGGING_SYMBOLS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				OPTIMIZATION_CFLAGS = "-O0";
+				ZERO_LINK = YES;
+			};
+			isa = PBXBuildStyle;
+			name = Development;
+		};
+		014CEA400018CDD111CA2923 = {
+			buildSettings = {
+				COPY_PHASE_STRIP = YES;
+				GCC_ENABLE_FIX_AND_CONTINUE = NO;
+				ZERO_LINK = NO;
+			};
+			isa = PBXBuildStyle;
+			name = Deployment;
+		};
+//010
+//011
+//012
+//013
+//014
+//080
+//081
+//082
+//083
+//084
+		089C1669FE841209C02AAC07 = {
+			buildSettings = {
+			};
+			buildStyles = (
+				014CEA3F0018CDD111CA2923,
+				014CEA400018CDD111CA2923,
+			);
+			hasScannedForEncodings = 1;
+			isa = PBXProject;
+			mainGroup = 089C166AFE841209C02AAC07;
+			projectDirPath = "";
+			targets = (
+				089C1673FE841209C02AAC07,
+			);
+		};
+		089C166AFE841209C02AAC07 = {
+			children = (
+				F5C12684034158F301A80169,
+				089C167CFE841241C02AAC07,
+				089C1671FE841209C02AAC07,
+				19C28FB6FE9D52B211CA2CBB,
+			);
+			isa = PBXGroup;
+			name = cgame;
+			refType = 4;
+			sourceTree = "<group>";
+		};
+		089C1671FE841209C02AAC07 = {
+			children = (
+				0AA1909FFE8422F4C02AAC07,
+			);
+			isa = PBXGroup;
+			name = "External Frameworks and Libraries";
+			refType = 4;
+			sourceTree = "<group>";
+		};
+		089C1673FE841209C02AAC07 = {
+			buildPhases = (
+				089C1674FE841209C02AAC07,
+				089C1675FE841209C02AAC07,
+				089C1676FE841209C02AAC07,
+				089C1677FE841209C02AAC07,
+				089C1679FE841209C02AAC07,
+			);
+			buildSettings = {
+				FRAMEWORK_SEARCH_PATHS = "";
+				HEADER_SEARCH_PATHS = "";
+				LIBRARY_SEARCH_PATHS = "";
+				OTHER_LDFLAGS = "";
+				OTHER_REZFLAGS = "";
+				PREFIX_HEADER = MacPrefix_game.h;
+				PRODUCT_NAME = jampgame;
+				SECTORDER_FLAGS = "";
+				WARNING_CFLAGS = "-Wmost -Wno-four-char-constants -Wno-unknown-pragmas";
+				WRAPPER_EXTENSION = bundle;
+			};
+			dependencies = (
+			);
+			isa = PBXBundleTarget;
+			name = game;
+			productName = cgame;
+			productReference = 014CEA3E0018CDD111CA2923;
+			productSettingsXML = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>
+<!DOCTYPE plist PUBLIC \"-//Apple Computer//DTD PLIST 1.0//EN\" \"http://www.apple.com/DTDs/PropertyList-1.0.dtd\">
+<plist version=\"1.0\">
+<dict>
+	<key>CFBundleDevelopmentRegion</key>
+	<string>English</string>
+	<key>CFBundleExecutable</key>
+	<string>jampgame</string>
+	<key>CFBundleIconFile</key>
+	<string></string>
+	<key>CFBundleIdentifier</key>
+	<string></string>
+	<key>CFBundleInfoDictionaryVersion</key>
+	<string>6.0</string>
+	<key>CFBundleName</key>
+	<string>cgame</string>
+	<key>CFBundlePackageType</key>
+	<string>BNDL</string>
+	<key>CFBundleShortVersionString</key>
+	<string>1.03a</string>
+	<key>CFBundleSignature</key>
+	<string>JK2m</string>
+	<key>CFBundleVersion</key>
+	<string>1.03a</string>
+	<key>CFPlugInDynamicRegisterFunction</key>
+	<string></string>
+	<key>CFPlugInDynamicRegistration</key>
+	<string>NO</string>
+	<key>CFPlugInFactories</key>
+	<dict>
+		<key>00000000-0000-0000-0000-000000000000</key>
+		<string>MyFactoryFunction</string>
+	</dict>
+	<key>CFPlugInTypes</key>
+	<dict>
+		<key>00000000-0000-0000-0000-000000000000</key>
+		<array>
+			<string>00000000-0000-0000-0000-000000000000</string>
+		</array>
+	</dict>
+	<key>CFPlugInUnloadFunction</key>
+	<string></string>
+</dict>
+</plist>
+";
+		};
+		089C1674FE841209C02AAC07 = {
+			buildActionMask = 2147483647;
+			files = (
+				F5B88AE0066EC7D100A08EB6,
+			);
+			isa = PBXHeadersBuildPhase;
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		089C1675FE841209C02AAC07 = {
+			buildActionMask = 2147483647;
+			files = (
+				089C1680FE841241C02AAC07,
+			);
+			isa = PBXResourcesBuildPhase;
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		089C1676FE841209C02AAC07 = {
+			buildActionMask = 2147483647;
+			files = (
+				F5C1268D0341593B01A80169,
+				F5C1268E0341593B01A80169,
+				F5C1268F0341593B01A80169,
+				F5C126900341593B01A80169,
+				F5C126910341593B01A80169,
+				F5C126920341593B01A80169,
+				F5C126930341593B01A80169,
+				F5C126960341595F01A80169,
+				F5FC334903536B2A01A80169,
+				F5FC334A03536B2A01A80169,
+				F5FC334B03536B2A01A80169,
+				F5FC336603536BA201A80169,
+				F5FC336703536BA201A80169,
+				F5FC336803536BA201A80169,
+				F5FC336903536BA201A80169,
+				F5FC336A03536BA201A80169,
+				F5FC336B03536BA201A80169,
+				F5FC336C03536BA201A80169,
+				F5FC336D03536BA201A80169,
+				F5FC336E03536BA201A80169,
+				F5FC336F03536BA201A80169,
+				F5FC337003536BA201A80169,
+				F5FC337103536BA201A80169,
+				F5FC337203536BA201A80169,
+				F5FC337303536BA201A80169,
+				F5FC337403536BA201A80169,
+				F5FC337503536BA201A80169,
+				F5FC337603536BA201A80169,
+				F5FC337703536BA201A80169,
+				F5FC337803536BA201A80169,
+				F5FC337903536BA201A80169,
+				F5FC337A03536BA201A80169,
+				F5FC337B03536BA201A80169,
+				F5FC337C03536BA201A80169,
+				F5FC337D03536BA201A80169,
+				F5FC337E03536BA201A80169,
+				F5FC337F03536BA201A80169,
+				F5FC338103536D2B01A80169,
+				F5B88AB8066EC7AD00A08EB6,
+				F5B88ABA066EC7B700A08EB6,
+				F5B88ADC066EC7D100A08EB6,
+				F5B88ADD066EC7D100A08EB6,
+				F5B88ADE066EC7D100A08EB6,
+				F5B88ADF066EC7D100A08EB6,
+				F5B88AE1066EC7D100A08EB6,
+				F5B88AE2066EC7D100A08EB6,
+				F5B88AE3066EC7D100A08EB6,
+				F5B88AE4066EC7D100A08EB6,
+				F5B88AE5066EC7D100A08EB6,
+				F5B88AE6066EC7D100A08EB6,
+				F5B88AE7066EC7D100A08EB6,
+				F5B88AE8066EC7D100A08EB6,
+				F5B88AE9066EC7D100A08EB6,
+				F5B88AEA066EC7D100A08EB6,
+				F5B88AEB066EC7D100A08EB6,
+				F5B88AEC066EC7D100A08EB6,
+				F5B88AED066EC7D100A08EB6,
+				F5B88AEE066EC7D100A08EB6,
+				F5B88AEF066EC7D100A08EB6,
+				F5B88AF0066EC7D100A08EB6,
+				F5B88AF1066EC7D100A08EB6,
+				F5B88AF2066EC7D100A08EB6,
+				F5B88AF3066EC7D100A08EB6,
+				F5B88AF4066EC7D100A08EB6,
+				F5B88AF5066EC7D100A08EB6,
+				F5B88AF6066EC7D100A08EB6,
+				F5B88AF7066EC7D100A08EB6,
+				F5B88AF8066EC7D100A08EB6,
+				F5B88AF9066EC7D100A08EB6,
+				F5B88AFA066EC7D100A08EB6,
+				F5B88AFB066EC7D100A08EB6,
+				F5B88AFC066EC7D100A08EB6,
+				F5B88AFF066EC87500A08EB6,
+				F5B88B00066EC87500A08EB6,
+				F5B88B02066EC8AB00A08EB6,
+				F5B88B04066EC8BF00A08EB6,
+				F5B88B06066EC8CD00A08EB6,
+				F5B88B08066EC8D700A08EB6,
+				F5B88B0A066EC8F000A08EB6,
+				F5B88B0C066EC90200A08EB6,
+				F5B88B0E066EC90900A08EB6,
+				F5B88B10066EC91900A08EB6,
+				F5B88B12066EC91F00A08EB6,
+				F5B88B14066EC93300A08EB6,
+				F5B88B16066EC93C00A08EB6,
+				F5B88B18066EC94900A08EB6,
+				F5B88B1B066EC95500A08EB6,
+				F5B88B1C066EC95500A08EB6,
+				F5B88B4F066ECA6500A08EB6,
+				F5A75C0606EA01B900658374,
+				56AF84C007DA07830036A794,
+				56AF84C107DA07830036A794,
+				56AF84C207DA07830036A794,
+				56AF84C307DA07830036A794,
+				56AF84C407DA07830036A794,
+				56AF84C507DA07830036A794,
+				56AF84C607DA07830036A794,
+				56AF84C707DA07830036A794,
+				56AF84C807DA07830036A794,
+				56AF84C907DA07830036A794,
+				56AF84CA07DA07830036A794,
+				56AF84CB07DA07830036A794,
+			);
+			isa = PBXSourcesBuildPhase;
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		089C1677FE841209C02AAC07 = {
+			buildActionMask = 2147483647;
+			files = (
+				F5D461E10341868601A80169,
+			);
+			isa = PBXFrameworksBuildPhase;
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		089C1679FE841209C02AAC07 = {
+			buildActionMask = 2147483647;
+			files = (
+			);
+			isa = PBXRezBuildPhase;
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		089C167CFE841241C02AAC07 = {
+			children = (
+				089C167DFE841241C02AAC07,
+			);
+			isa = PBXGroup;
+			name = Resources;
+			refType = 4;
+			sourceTree = "<group>";
+		};
+		089C167DFE841241C02AAC07 = {
+			children = (
+				089C167EFE841241C02AAC07,
+			);
+			isa = PBXVariantGroup;
+			name = InfoPlist.strings;
+			refType = 4;
+			sourceTree = "<group>";
+		};
+		089C167EFE841241C02AAC07 = {
+			fileEncoding = 10;
+			isa = PBXFileReference;
+			lastKnownFileType = text.plist.strings;
+			name = English;
+			path = English.lproj/InfoPlist.strings;
+			refType = 4;
+			sourceTree = "<group>";
+		};
+		089C1680FE841241C02AAC07 = {
+			fileRef = 089C167DFE841241C02AAC07;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+//080
+//081
+//082
+//083
+//084
+//0A0
+//0A1
+//0A2
+//0A3
+//0A4
+		0AA1909FFE8422F4C02AAC07 = {
+			isa = PBXFileReference;
+			lastKnownFileType = wrapper.framework;
+			name = CoreFoundation.framework;
+			path = /System/Library/Frameworks/CoreFoundation.framework;
+			refType = 0;
+			sourceTree = "<absolute>";
+		};
+//0A0
+//0A1
+//0A2
+//0A3
+//0A4
+//190
+//191
+//192
+//193
+//194
+		19C28FB6FE9D52B211CA2CBB = {
+			children = (
+				014CEA3E0018CDD111CA2923,
+			);
+			isa = PBXGroup;
+			name = Products;
+			refType = 4;
+			sourceTree = "<group>";
+		};
+//190
+//191
+//192
+//193
+//194
+//560
+//561
+//562
+//563
+//564
+		56AF84B407DA07830036A794 = {
+			fileEncoding = 30;
+			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.c.c;
+			name = g_dynmusic.c;
+			path = game/g_dynmusic.c;
+			refType = 4;
+			sourceTree = "<group>";
+		};
+		56AF84B507DA07830036A794 = {
+			fileEncoding = 30;
+			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.c.c;
+			name = g_camera.c;
+			path = game/g_camera.c;
+			refType = 4;
+			sourceTree = "<group>";
+		};
+		56AF84B607DA07830036A794 = {
+			fileEncoding = 30;
+			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.c.c;
+			name = g_breakable.c;
+			path = game/g_breakable.c;
+			refType = 4;
+			sourceTree = "<group>";
+		};
+		56AF84B707DA07830036A794 = {
+			fileEncoding = 30;
+			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.c.c;
+			name = bg_weaponsdat.c;
+			path = game/bg_weaponsdat.c;
+			refType = 4;
+			sourceTree = "<group>";
+		};
+		56AF84B807DA07830036A794 = {
+			fileEncoding = 30;
+			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.c.c;
+			name = ai_tab.c;
+			path = game/ai_tab.c;
+			refType = 4;
+			sourceTree = "<group>";
+		};
+		56AF84B907DA07830036A794 = {
+			fileEncoding = 30;
+			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.c.c;
+			name = NPC_AI_SaberDroid.c;
+			path = game/NPC_AI_SaberDroid.c;
+			refType = 4;
+			sourceTree = "<group>";
+		};
+		56AF84BA07DA07830036A794 = {
+			fileEncoding = 30;
+			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.c.c;
+			name = NPC_AI_RocketTrooper.c;
+			path = game/NPC_AI_RocketTrooper.c;
+			refType = 4;
+			sourceTree = "<group>";
+		};
+		56AF84BB07DA07830036A794 = {
+			fileEncoding = 30;
+			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.c.c;
+			name = ai_hybrid.c;
+			path = game/ai_hybrid.c;
+			refType = 4;
+			sourceTree = "<group>";
+		};
+		56AF84BC07DA07830036A794 = {
+			fileEncoding = 30;
+			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.c.c;
+			name = ai_aotc.c;
+			path = game/ai_aotc.c;
+			refType = 4;
+			sourceTree = "<group>";
+		};
+		56AF84BD07DA07830036A794 = {
+			fileEncoding = 30;
+			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.c.c;
+			name = g_roff.c;
+			path = game/g_roff.c;
+			refType = 4;
+			sourceTree = "<group>";
+		};
+		56AF84BE07DA07830036A794 = {
+			fileEncoding = 30;
+			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.c.c;
+			name = NPC_Vehicle.c;
+			path = game/NPC_Vehicle.c;
+			refType = 4;
+			sourceTree = "<group>";
+		};
+		56AF84BF07DA07830036A794 = {
+			fileEncoding = 30;
+			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.c.c;
+			name = NPC_AI_AssassinDroid.c;
+			path = game/NPC_AI_AssassinDroid.c;
+			refType = 4;
+			sourceTree = "<group>";
+		};
+		56AF84C007DA07830036A794 = {
+			fileRef = 56AF84B407DA07830036A794;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		56AF84C107DA07830036A794 = {
+			fileRef = 56AF84B507DA07830036A794;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		56AF84C207DA07830036A794 = {
+			fileRef = 56AF84B607DA07830036A794;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		56AF84C307DA07830036A794 = {
+			fileRef = 56AF84B707DA07830036A794;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		56AF84C407DA07830036A794 = {
+			fileRef = 56AF84B807DA07830036A794;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		56AF84C507DA07830036A794 = {
+			fileRef = 56AF84B907DA07830036A794;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		56AF84C607DA07830036A794 = {
+			fileRef = 56AF84BA07DA07830036A794;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		56AF84C707DA07830036A794 = {
+			fileRef = 56AF84BB07DA07830036A794;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		56AF84C807DA07830036A794 = {
+			fileRef = 56AF84BC07DA07830036A794;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		56AF84C907DA07830036A794 = {
+			fileRef = 56AF84BD07DA07830036A794;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		56AF84CA07DA07830036A794 = {
+			fileRef = 56AF84BE07DA07830036A794;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		56AF84CB07DA07830036A794 = {
+			fileRef = 56AF84BF07DA07830036A794;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+//560
+//561
+//562
+//563
+//564
+//F50
+//F51
+//F52
+//F53
+//F54
+		F5A75C0506EA01B900658374 = {
+			fileEncoding = 30;
+			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.c.c;
+			name = aotctc_holocron.c;
+			path = game/aotctc_holocron.c;
+			refType = 4;
+			sourceTree = "<group>";
+		};
+		F5A75C0606EA01B900658374 = {
+			fileRef = F5A75C0506EA01B900658374;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		F5B88AB7066EC7AD00A08EB6 = {
+			fileEncoding = 30;
+			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.c.c;
+			name = AnimalNPC.c;
+			path = game/AnimalNPC.c;
+			refType = 4;
+			sourceTree = "<group>";
+		};
+		F5B88AB8066EC7AD00A08EB6 = {
+			fileRef = F5B88AB7066EC7AD00A08EB6;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		F5B88AB9066EC7B700A08EB6 = {
+			fileEncoding = 30;
+			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.c.c;
+			name = FighterNPC.c;
+			path = game/FighterNPC.c;
+			refType = 4;
+			sourceTree = "<group>";
+		};
+		F5B88ABA066EC7B700A08EB6 = {
+			fileRef = F5B88AB9066EC7B700A08EB6;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		F5B88ABB066EC7D100A08EB6 = {
+			fileEncoding = 30;
+			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.c.c;
+			name = NPC_behavior.c;
+			path = game/NPC_behavior.c;
+			refType = 4;
+			sourceTree = "<group>";
+		};
+		F5B88ABC066EC7D100A08EB6 = {
+			fileEncoding = 30;
+			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.c.c;
+			name = NPC_AI_Wampa.c;
+			path = game/NPC_AI_Wampa.c;
+			refType = 4;
+			sourceTree = "<group>";
+		};
+		F5B88ABD066EC7D100A08EB6 = {
+			fileEncoding = 30;
+			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.c.c;
+			name = NPC_AI_Default.c;
+			path = game/NPC_AI_Default.c;
+			refType = 4;
+			sourceTree = "<group>";
+		};
+		F5B88ABE066EC7D100A08EB6 = {
+			fileEncoding = 30;
+			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.c.c;
+			name = NPC_misc.c;
+			path = game/NPC_misc.c;
+			refType = 4;
+			sourceTree = "<group>";
+		};
+		F5B88ABF066EC7D100A08EB6 = {
+			fileEncoding = 30;
+			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.c.h;
+			name = npc_headers.h;
+			path = game/npc_headers.h;
+			refType = 4;
+			sourceTree = "<group>";
+		};
+		F5B88AC0066EC7D100A08EB6 = {
+			fileEncoding = 30;
+			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.c.c;
+			name = NPC_AI_Rancor.c;
+			path = game/NPC_AI_Rancor.c;
+			refType = 4;
+			sourceTree = "<group>";
+		};
+		F5B88AC1066EC7D100A08EB6 = {
+			fileEncoding = 30;
+			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.c.c;
+			name = NPC_AI_MineMonster.c;
+			path = game/NPC_AI_MineMonster.c;
+			refType = 4;
+			sourceTree = "<group>";
+		};
+		F5B88AC2066EC7D100A08EB6 = {
+			fileEncoding = 30;
+			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.c.c;
+			name = NPC_AI_Mark2.c;
+			path = game/NPC_AI_Mark2.c;
+			refType = 4;
+			sourceTree = "<group>";
+		};
+		F5B88AC3066EC7D100A08EB6 = {
+			fileEncoding = 30;
+			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.c.c;
+			name = NPC_AI_Mark1.c;
+			path = game/NPC_AI_Mark1.c;
+			refType = 4;
+			sourceTree = "<group>";
+		};
+		F5B88AC4066EC7D100A08EB6 = {
+			fileEncoding = 30;
+			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.c.c;
+			name = NPC_AI_Jedi.c;
+			path = game/NPC_AI_Jedi.c;
+			refType = 4;
+			sourceTree = "<group>";
+		};
+		F5B88AC5066EC7D100A08EB6 = {
+			fileEncoding = 30;
+			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.c.c;
+			name = NPC_AI_Interrogator.c;
+			path = game/NPC_AI_Interrogator.c;
+			refType = 4;
+			sourceTree = "<group>";
+		};
+		F5B88AC6066EC7D100A08EB6 = {
+			fileEncoding = 30;
+			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.c.c;
+			name = NPC_AI_ImperialProbe.c;
+			path = game/NPC_AI_ImperialProbe.c;
+			refType = 4;
+			sourceTree = "<group>";
+		};
+		F5B88AC7066EC7D100A08EB6 = {
+			fileEncoding = 30;
+			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.c.c;
+			name = NPC_AI_Howler.c;
+			path = game/NPC_AI_Howler.c;
+			refType = 4;
+			sourceTree = "<group>";
+		};
+		F5B88AC8066EC7D100A08EB6 = {
+			fileEncoding = 30;
+			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.c.c;
+			name = NPC_AI_Droid.c;
+			path = game/NPC_AI_Droid.c;
+			refType = 4;
+			sourceTree = "<group>";
+		};
+		F5B88AC9066EC7D100A08EB6 = {
+			fileEncoding = 30;
+			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.c.c;
+			name = NPC_AI_Sniper.c;
+			path = game/NPC_AI_Sniper.c;
+			refType = 4;
+			sourceTree = "<group>";
+		};
+		F5B88ACA066EC7D100A08EB6 = {
+			fileEncoding = 30;
+			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.c.c;
+			name = NPC_AI_Sentry.c;
+			path = game/NPC_AI_Sentry.c;
+			refType = 4;
+			sourceTree = "<group>";
+		};
+		F5B88ACB066EC7D100A08EB6 = {
+			fileEncoding = 30;
+			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.c.c;
+			name = NPC_AI_Seeker.c;
+			path = game/NPC_AI_Seeker.c;
+			refType = 4;
+			sourceTree = "<group>";
+		};
+		F5B88ACC066EC7D100A08EB6 = {
+			fileEncoding = 30;
+			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.c.c;
+			name = NPC_AI_Remote.c;
+			path = game/NPC_AI_Remote.c;
+			refType = 4;
+			sourceTree = "<group>";
+		};
+		F5B88ACD066EC7D100A08EB6 = {
+			fileEncoding = 30;
+			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.c.c;
+			name = NPC_AI_Atst.c;
+			path = game/NPC_AI_Atst.c;
+			refType = 4;
+			sourceTree = "<group>";
+		};
+		F5B88ACE066EC7D100A08EB6 = {
+			fileEncoding = 30;
+			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.c.c;
+			name = NPC_reactions.c;
+			path = game/NPC_reactions.c;
+			refType = 4;
+			sourceTree = "<group>";
+		};
+		F5B88ACF066EC7D100A08EB6 = {
+			fileEncoding = 30;
+			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.c.c;
+			name = NPC_move.c;
+			path = game/NPC_move.c;
+			refType = 4;
+			sourceTree = "<group>";
+		};
+		F5B88AD0066EC7D100A08EB6 = {
+			fileEncoding = 30;
+			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.c.c;
+			name = NPC_utils.c;
+			path = game/NPC_utils.c;
+			refType = 4;
+			sourceTree = "<group>";
+		};
+		F5B88AD1066EC7D100A08EB6 = {
+			fileEncoding = 30;
+			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.c.c;
+			name = NPC_AI_Grenadier.c;
+			path = game/NPC_AI_Grenadier.c;
+			refType = 4;
+			sourceTree = "<group>";
+		};
+		F5B88AD2066EC7D100A08EB6 = {
+			fileEncoding = 30;
+			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.c.c;
+			name = NPC_AI_GalakMech.c;
+			path = game/NPC_AI_GalakMech.c;
+			refType = 4;
+			sourceTree = "<group>";
+		};
+		F5B88AD3066EC7D100A08EB6 = {
+			fileEncoding = 30;
+			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.c.c;
+			name = NPC_stats.c;
+			path = game/NPC_stats.c;
+			refType = 4;
+			sourceTree = "<group>";
+		};
+		F5B88AD4066EC7D100A08EB6 = {
+			fileEncoding = 30;
+			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.c.c;
+			name = NPC_spawn.c;
+			path = game/NPC_spawn.c;
+			refType = 4;
+			sourceTree = "<group>";
+		};
+		F5B88AD5066EC7D100A08EB6 = {
+			fileEncoding = 30;
+			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.c.c;
+			name = NPC_sounds.c;
+			path = game/NPC_sounds.c;
+			refType = 4;
+			sourceTree = "<group>";
+		};
+		F5B88AD6066EC7D100A08EB6 = {
+			fileEncoding = 30;
+			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.c.c;
+			name = NPC_senses.c;
+			path = game/NPC_senses.c;
+			refType = 4;
+			sourceTree = "<group>";
+		};
+		F5B88AD7066EC7D100A08EB6 = {
+			fileEncoding = 30;
+			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.c.c;
+			name = NPC_AI_Utils.c;
+			path = game/NPC_AI_Utils.c;
+			refType = 4;
+			sourceTree = "<group>";
+		};
+		F5B88AD8066EC7D100A08EB6 = {
+			fileEncoding = 30;
+			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.c.c;
+			name = NPC_AI_Stormtrooper.c;
+			path = game/NPC_AI_Stormtrooper.c;
+			refType = 4;
+			sourceTree = "<group>";
+		};
+		F5B88AD9066EC7D100A08EB6 = {
+			fileEncoding = 30;
+			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.c.c;
+			name = NPC_goal.c;
+			path = game/NPC_goal.c;
+			refType = 4;
+			sourceTree = "<group>";
+		};
+		F5B88ADA066EC7D100A08EB6 = {
+			fileEncoding = 30;
+			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.c.c;
+			name = NPC_combat.c;
+			path = game/NPC_combat.c;
+			refType = 4;
+			sourceTree = "<group>";
+		};
+		F5B88ADB066EC7D100A08EB6 = {
+			fileEncoding = 30;
+			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.c.c;
+			name = NPC.c;
+			path = game/NPC.c;
+			refType = 4;
+			sourceTree = "<group>";
+		};
+		F5B88ADC066EC7D100A08EB6 = {
+			fileRef = F5B88ABB066EC7D100A08EB6;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		F5B88ADD066EC7D100A08EB6 = {
+			fileRef = F5B88ABC066EC7D100A08EB6;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		F5B88ADE066EC7D100A08EB6 = {
+			fileRef = F5B88ABD066EC7D100A08EB6;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		F5B88ADF066EC7D100A08EB6 = {
+			fileRef = F5B88ABE066EC7D100A08EB6;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		F5B88AE0066EC7D100A08EB6 = {
+			fileRef = F5B88ABF066EC7D100A08EB6;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		F5B88AE1066EC7D100A08EB6 = {
+			fileRef = F5B88AC0066EC7D100A08EB6;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		F5B88AE2066EC7D100A08EB6 = {
+			fileRef = F5B88AC1066EC7D100A08EB6;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		F5B88AE3066EC7D100A08EB6 = {
+			fileRef = F5B88AC2066EC7D100A08EB6;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		F5B88AE4066EC7D100A08EB6 = {
+			fileRef = F5B88AC3066EC7D100A08EB6;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		F5B88AE5066EC7D100A08EB6 = {
+			fileRef = F5B88AC4066EC7D100A08EB6;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		F5B88AE6066EC7D100A08EB6 = {
+			fileRef = F5B88AC5066EC7D100A08EB6;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		F5B88AE7066EC7D100A08EB6 = {
+			fileRef = F5B88AC6066EC7D100A08EB6;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		F5B88AE8066EC7D100A08EB6 = {
+			fileRef = F5B88AC7066EC7D100A08EB6;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		F5B88AE9066EC7D100A08EB6 = {
+			fileRef = F5B88AC8066EC7D100A08EB6;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		F5B88AEA066EC7D100A08EB6 = {
+			fileRef = F5B88AC9066EC7D100A08EB6;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		F5B88AEB066EC7D100A08EB6 = {
+			fileRef = F5B88ACA066EC7D100A08EB6;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		F5B88AEC066EC7D100A08EB6 = {
+			fileRef = F5B88ACB066EC7D100A08EB6;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		F5B88AED066EC7D100A08EB6 = {
+			fileRef = F5B88ACC066EC7D100A08EB6;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		F5B88AEE066EC7D100A08EB6 = {
+			fileRef = F5B88ACD066EC7D100A08EB6;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		F5B88AEF066EC7D100A08EB6 = {
+			fileRef = F5B88ACE066EC7D100A08EB6;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		F5B88AF0066EC7D100A08EB6 = {
+			fileRef = F5B88ACF066EC7D100A08EB6;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		F5B88AF1066EC7D100A08EB6 = {
+			fileRef = F5B88AD0066EC7D100A08EB6;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		F5B88AF2066EC7D100A08EB6 = {
+			fileRef = F5B88AD1066EC7D100A08EB6;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		F5B88AF3066EC7D100A08EB6 = {
+			fileRef = F5B88AD2066EC7D100A08EB6;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		F5B88AF4066EC7D100A08EB6 = {
+			fileRef = F5B88AD3066EC7D100A08EB6;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		F5B88AF5066EC7D100A08EB6 = {
+			fileRef = F5B88AD4066EC7D100A08EB6;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		F5B88AF6066EC7D100A08EB6 = {
+			fileRef = F5B88AD5066EC7D100A08EB6;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		F5B88AF7066EC7D100A08EB6 = {
+			fileRef = F5B88AD6066EC7D100A08EB6;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		F5B88AF8066EC7D100A08EB6 = {
+			fileRef = F5B88AD7066EC7D100A08EB6;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		F5B88AF9066EC7D100A08EB6 = {
+			fileRef = F5B88AD8066EC7D100A08EB6;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		F5B88AFA066EC7D100A08EB6 = {
+			fileRef = F5B88AD9066EC7D100A08EB6;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		F5B88AFB066EC7D100A08EB6 = {
+			fileRef = F5B88ADA066EC7D100A08EB6;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		F5B88AFC066EC7D100A08EB6 = {
+			fileRef = F5B88ADB066EC7D100A08EB6;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		F5B88AFD066EC87500A08EB6 = {
+			fileEncoding = 30;
+			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.c.c;
+			name = WalkerNPC.c;
+			path = game/WalkerNPC.c;
+			refType = 4;
+			sourceTree = "<group>";
+		};
+		F5B88AFE066EC87500A08EB6 = {
+			fileEncoding = 30;
+			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.c.c;
+			name = SpeederNPC.c;
+			path = game/SpeederNPC.c;
+			refType = 4;
+			sourceTree = "<group>";
+		};
+		F5B88AFF066EC87500A08EB6 = {
+			fileRef = F5B88AFD066EC87500A08EB6;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		F5B88B00066EC87500A08EB6 = {
+			fileRef = F5B88AFE066EC87500A08EB6;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		F5B88B01066EC8AB00A08EB6 = {
+			fileEncoding = 30;
+			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.c.c;
+			name = bg_g2_utils.c;
+			path = game/bg_g2_utils.c;
+			refType = 4;
+			sourceTree = "<group>";
+		};
+		F5B88B02066EC8AB00A08EB6 = {
+			fileRef = F5B88B01066EC8AB00A08EB6;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		F5B88B03066EC8BF00A08EB6 = {
+			fileEncoding = 30;
+			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.c.c;
+			name = bg_saberLoad.c;
+			path = game/bg_saberLoad.c;
+			refType = 4;
+			sourceTree = "<group>";
+		};
+		F5B88B04066EC8BF00A08EB6 = {
+			fileRef = F5B88B03066EC8BF00A08EB6;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		F5B88B05066EC8CD00A08EB6 = {
+			fileEncoding = 30;
+			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.c.c;
+			name = bg_saga.c;
+			path = game/bg_saga.c;
+			refType = 4;
+			sourceTree = "<group>";
+		};
+		F5B88B06066EC8CD00A08EB6 = {
+			fileRef = F5B88B05066EC8CD00A08EB6;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		F5B88B07066EC8D700A08EB6 = {
+			fileEncoding = 30;
+			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.c.c;
+			name = bg_vehicleLoad.c;
+			path = game/bg_vehicleLoad.c;
+			refType = 4;
+			sourceTree = "<group>";
+		};
+		F5B88B08066EC8D700A08EB6 = {
+			fileRef = F5B88B07066EC8D700A08EB6;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		F5B88B09066EC8F000A08EB6 = {
+			fileEncoding = 30;
+			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.c.c;
+			name = g_exphysics.c;
+			path = game/g_exphysics.c;
+			refType = 4;
+			sourceTree = "<group>";
+		};
+		F5B88B0A066EC8F000A08EB6 = {
+			fileRef = F5B88B09066EC8F000A08EB6;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		F5B88B0B066EC90200A08EB6 = {
+			fileEncoding = 30;
+			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.c.c;
+			name = g_nav.c;
+			path = game/g_nav.c;
+			refType = 4;
+			sourceTree = "<group>";
+		};
+		F5B88B0C066EC90200A08EB6 = {
+			fileRef = F5B88B0B066EC90200A08EB6;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		F5B88B0D066EC90900A08EB6 = {
+			fileEncoding = 30;
+			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.c.c;
+			name = g_navnew.c;
+			path = game/g_navnew.c;
+			refType = 4;
+			sourceTree = "<group>";
+		};
+		F5B88B0E066EC90900A08EB6 = {
+			fileRef = F5B88B0D066EC90900A08EB6;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		F5B88B0F066EC91900A08EB6 = {
+			fileEncoding = 30;
+			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.c.c;
+			name = g_strap.c;
+			path = game/g_strap.c;
+			refType = 4;
+			sourceTree = "<group>";
+		};
+		F5B88B10066EC91900A08EB6 = {
+			fileRef = F5B88B0F066EC91900A08EB6;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		F5B88B11066EC91F00A08EB6 = {
+			fileEncoding = 30;
+			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.c.c;
+			name = g_ICARUScb.c;
+			path = game/g_ICARUScb.c;
+			refType = 4;
+			sourceTree = "<group>";
+		};
+		F5B88B12066EC91F00A08EB6 = {
+			fileRef = F5B88B11066EC91F00A08EB6;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		F5B88B13066EC93300A08EB6 = {
+			fileEncoding = 30;
+			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.c.c;
+			name = g_timer.c;
+			path = game/g_timer.c;
+			refType = 4;
+			sourceTree = "<group>";
+		};
+		F5B88B14066EC93300A08EB6 = {
+			fileRef = F5B88B13066EC93300A08EB6;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		F5B88B15066EC93C00A08EB6 = {
+			fileEncoding = 30;
+			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.c.c;
+			name = g_turret.c;
+			path = game/g_turret.c;
+			refType = 4;
+			sourceTree = "<group>";
+		};
+		F5B88B16066EC93C00A08EB6 = {
+			fileRef = F5B88B15066EC93C00A08EB6;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		F5B88B17066EC94900A08EB6 = {
+			fileEncoding = 30;
+			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.c.c;
+			name = g_turret_G2.c;
+			path = game/g_turret_G2.c;
+			refType = 4;
+			sourceTree = "<group>";
+		};
+		F5B88B18066EC94900A08EB6 = {
+			fileRef = F5B88B17066EC94900A08EB6;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		F5B88B19066EC95500A08EB6 = {
+			fileEncoding = 30;
+			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.c.c;
+			name = g_vehicles.c;
+			path = game/g_vehicles.c;
+			refType = 4;
+			sourceTree = "<group>";
+		};
+		F5B88B1A066EC95500A08EB6 = {
+			fileEncoding = 30;
+			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.c.c;
+			name = g_vehicleTurret.c;
+			path = game/g_vehicleTurret.c;
+			refType = 4;
+			sourceTree = "<group>";
+		};
+		F5B88B1B066EC95500A08EB6 = {
+			fileRef = F5B88B19066EC95500A08EB6;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		F5B88B1C066EC95500A08EB6 = {
+			fileRef = F5B88B1A066EC95500A08EB6;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		F5B88B4E066ECA6500A08EB6 = {
+			fileEncoding = 30;
+			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.c.c;
+			name = tri_coll_test.c;
+			path = game/tri_coll_test.c;
+			refType = 4;
+			sourceTree = "<group>";
+		};
+		F5B88B4F066ECA6500A08EB6 = {
+			fileRef = F5B88B4E066ECA6500A08EB6;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		F5C12684034158F301A80169 = {
+			children = (
+				56AF84B407DA07830036A794,
+				56AF84B507DA07830036A794,
+				56AF84B607DA07830036A794,
+				56AF84B707DA07830036A794,
+				56AF84B807DA07830036A794,
+				56AF84B907DA07830036A794,
+				56AF84BA07DA07830036A794,
+				56AF84BB07DA07830036A794,
+				56AF84BC07DA07830036A794,
+				56AF84BD07DA07830036A794,
+				56AF84BE07DA07830036A794,
+				56AF84BF07DA07830036A794,
+				F5B88AB7066EC7AD00A08EB6,
+				F5A75C0506EA01B900658374,
+				F5B88AB9066EC7B700A08EB6,
+				F5B88AFE066EC87500A08EB6,
+				F5B88AFD066EC87500A08EB6,
+				F5B88ADB066EC7D100A08EB6,
+				F5B88ACD066EC7D100A08EB6,
+				F5B88ABD066EC7D100A08EB6,
+				F5B88AC8066EC7D100A08EB6,
+				F5B88AD2066EC7D100A08EB6,
+				F5B88AD1066EC7D100A08EB6,
+				F5B88AC7066EC7D100A08EB6,
+				F5B88AC6066EC7D100A08EB6,
+				F5B88AC5066EC7D100A08EB6,
+				F5B88AC4066EC7D100A08EB6,
+				F5B88AC3066EC7D100A08EB6,
+				F5B88AC2066EC7D100A08EB6,
+				F5B88AC1066EC7D100A08EB6,
+				F5B88AC0066EC7D100A08EB6,
+				F5B88ACC066EC7D100A08EB6,
+				F5B88ACB066EC7D100A08EB6,
+				F5B88ACA066EC7D100A08EB6,
+				F5B88AC9066EC7D100A08EB6,
+				F5B88AD8066EC7D100A08EB6,
+				F5B88AD7066EC7D100A08EB6,
+				F5B88ABC066EC7D100A08EB6,
+				F5B88ABB066EC7D100A08EB6,
+				F5B88ADA066EC7D100A08EB6,
+				F5B88AD9066EC7D100A08EB6,
+				F5B88ABE066EC7D100A08EB6,
+				F5B88ACF066EC7D100A08EB6,
+				F5B88ACE066EC7D100A08EB6,
+				F5B88AD6066EC7D100A08EB6,
+				F5B88AD5066EC7D100A08EB6,
+				F5B88AD4066EC7D100A08EB6,
+				F5B88AD3066EC7D100A08EB6,
+				F5B88AD0066EC7D100A08EB6,
+				F5B88ABF066EC7D100A08EB6,
+				F5FC334803536B2A01A80169,
+				F5FC334703536B2A01A80169,
+				F5FC334603536B2A01A80169,
+				F5B88B01066EC8AB00A08EB6,
+				F5C1268C0341593B01A80169,
+				F5C1268B0341593B01A80169,
+				F5C126890341593B01A80169,
+				F5C1268A0341593B01A80169,
+				F5C126880341593B01A80169,
+				F5B88B03066EC8BF00A08EB6,
+				F5B88B05066EC8CD00A08EB6,
+				F5C126870341593B01A80169,
+				F5B88B07066EC8D700A08EB6,
+				F5C126860341593B01A80169,
+				F5FC336503536BA201A80169,
+				F5FC336403536BA201A80169,
+				F5FC336303536BA201A80169,
+				F5FC336203536BA201A80169,
+				F5FC336103536BA201A80169,
+				F5FC335103536BA201A80169,
+				F5B88B09066EC8F000A08EB6,
+				F5B88B11066EC91F00A08EB6,
+				F5FC335003536BA201A80169,
+				F5FC334F03536BA201A80169,
+				F5FC334E03536BA201A80169,
+				F5FC334D03536BA201A80169,
+				F5FC334C03536BA201A80169,
+				F5FC335B03536BA201A80169,
+				F5FC335A03536BA201A80169,
+				F5B88B0B066EC90200A08EB6,
+				F5B88B0D066EC90900A08EB6,
+				F5FC335903536BA201A80169,
+				F5FC335803536BA201A80169,
+				F5FC335703536BA201A80169,
+				F5FC335603536BA201A80169,
+				F5B88B0F066EC91900A08EB6,
+				F5FC335503536BA201A80169,
+				F5FC335403536BA201A80169,
+				F5FC335303536BA201A80169,
+				F5FC335203536BA201A80169,
+				F5B88B13066EC93300A08EB6,
+				F5FC335E03536BA201A80169,
+				F5B88B15066EC93C00A08EB6,
+				F5B88B17066EC94900A08EB6,
+				F5FC335D03536BA201A80169,
+				F5B88B19066EC95500A08EB6,
+				F5B88B1A066EC95500A08EB6,
+				F5FC335C03536BA201A80169,
+				F5FC338003536D2B01A80169,
+				F5C126940341595F01A80169,
+				F5B88B4E066ECA6500A08EB6,
+				F5FC336003536BA201A80169,
+				F5FC335F03536BA201A80169,
+			);
+			isa = PBXGroup;
+			name = game;
+			path = "";
+			refType = 4;
+			sourceTree = "<group>";
+		};
+		F5C126860341593B01A80169 = {
+			fileEncoding = 30;
+			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.c.c;
+			name = bg_weapons.c;
+			path = game/bg_weapons.c;
+			refType = 4;
+			sourceTree = "<group>";
+		};
+		F5C126870341593B01A80169 = {
+			fileEncoding = 30;
+			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.c.c;
+			name = bg_slidemove.c;
+			path = game/bg_slidemove.c;
+			refType = 4;
+			sourceTree = "<group>";
+		};
+		F5C126880341593B01A80169 = {
+			fileEncoding = 30;
+			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.c.c;
+			name = bg_saber.c;
+			path = game/bg_saber.c;
+			refType = 4;
+			sourceTree = "<group>";
+		};
+		F5C126890341593B01A80169 = {
+			fileEncoding = 30;
+			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.c.c;
+			name = bg_panimate.c;
+			path = game/bg_panimate.c;
+			refType = 4;
+			sourceTree = "<group>";
+		};
+		F5C1268A0341593B01A80169 = {
+			fileEncoding = 30;
+			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.c.c;
+			name = bg_pmove.c;
+			path = game/bg_pmove.c;
+			refType = 4;
+			sourceTree = "<group>";
+		};
+		F5C1268B0341593B01A80169 = {
+			fileEncoding = 30;
+			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.c.c;
+			name = bg_misc.c;
+			path = game/bg_misc.c;
+			refType = 4;
+			sourceTree = "<group>";
+		};
+		F5C1268C0341593B01A80169 = {
+			fileEncoding = 30;
+			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.c.c;
+			name = bg_lib.c;
+			path = game/bg_lib.c;
+			refType = 4;
+			sourceTree = "<group>";
+		};
+		F5C1268D0341593B01A80169 = {
+			fileRef = F5C126860341593B01A80169;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		F5C1268E0341593B01A80169 = {
+			fileRef = F5C126870341593B01A80169;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		F5C1268F0341593B01A80169 = {
+			fileRef = F5C126880341593B01A80169;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		F5C126900341593B01A80169 = {
+			fileRef = F5C126890341593B01A80169;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		F5C126910341593B01A80169 = {
+			fileRef = F5C1268A0341593B01A80169;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		F5C126920341593B01A80169 = {
+			fileRef = F5C1268B0341593B01A80169;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		F5C126930341593B01A80169 = {
+			fileRef = F5C1268C0341593B01A80169;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		F5C126940341595F01A80169 = {
+			fileEncoding = 30;
+			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.c.c;
+			name = q_shared.c;
+			path = game/q_shared.c;
+			refType = 4;
+			sourceTree = "<group>";
+		};
+		F5C126960341595F01A80169 = {
+			fileRef = F5C126940341595F01A80169;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		F5D461E10341868601A80169 = {
+			fileRef = 0AA1909FFE8422F4C02AAC07;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		F5FC334603536B2A01A80169 = {
+			fileEncoding = 30;
+			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.c.c;
+			name = ai_wpnav.c;
+			path = game/ai_wpnav.c;
+			refType = 4;
+			sourceTree = "<group>";
+		};
+		F5FC334703536B2A01A80169 = {
+			fileEncoding = 30;
+			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.c.c;
+			name = ai_util.c;
+			path = game/ai_util.c;
+			refType = 4;
+			sourceTree = "<group>";
+		};
+		F5FC334803536B2A01A80169 = {
+			fileEncoding = 30;
+			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.c.c;
+			name = ai_main.c;
+			path = game/ai_main.c;
+			refType = 4;
+			sourceTree = "<group>";
+		};
+		F5FC334903536B2A01A80169 = {
+			fileRef = F5FC334603536B2A01A80169;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		F5FC334A03536B2A01A80169 = {
+			fileRef = F5FC334703536B2A01A80169;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		F5FC334B03536B2A01A80169 = {
+			fileRef = F5FC334803536B2A01A80169;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		F5FC334C03536BA201A80169 = {
+			fileEncoding = 30;
+			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.c.c;
+			name = g_misc.c;
+			path = game/g_misc.c;
+			refType = 4;
+			sourceTree = "<group>";
+		};
+		F5FC334D03536BA201A80169 = {
+			fileEncoding = 30;
+			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.c.c;
+			name = g_mem.c;
+			path = game/g_mem.c;
+			refType = 4;
+			sourceTree = "<group>";
+		};
+		F5FC334E03536BA201A80169 = {
+			fileEncoding = 30;
+			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.c.c;
+			name = g_main.c;
+			path = game/g_main.c;
+			refType = 4;
+			sourceTree = "<group>";
+		};
+		F5FC334F03536BA201A80169 = {
+			fileEncoding = 30;
+			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.c.c;
+			name = g_log.c;
+			path = game/g_log.c;
+			refType = 4;
+			sourceTree = "<group>";
+		};
+		F5FC335003536BA201A80169 = {
+			fileEncoding = 30;
+			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.c.c;
+			name = g_items.c;
+			path = game/g_items.c;
+			refType = 4;
+			sourceTree = "<group>";
+		};
+		F5FC335103536BA201A80169 = {
+			fileEncoding = 30;
+			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.c.c;
+			name = g_combat.c;
+			path = game/g_combat.c;
+			refType = 4;
+			sourceTree = "<group>";
+		};
+		F5FC335203536BA201A80169 = {
+			fileEncoding = 30;
+			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.c.c;
+			name = g_team.c;
+			path = game/g_team.c;
+			refType = 4;
+			sourceTree = "<group>";
+		};
+		F5FC335303536BA201A80169 = {
+			fileEncoding = 30;
+			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.c.c;
+			name = g_target.c;
+			path = game/g_target.c;
+			refType = 4;
+			sourceTree = "<group>";
+		};
+		F5FC335403536BA201A80169 = {
+			fileEncoding = 30;
+			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.c.c;
+			name = g_syscalls.c;
+			path = game/g_syscalls.c;
+			refType = 4;
+			sourceTree = "<group>";
+		};
+		F5FC335503536BA201A80169 = {
+			fileEncoding = 30;
+			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.c.c;
+			name = g_svcmds.c;
+			path = game/g_svcmds.c;
+			refType = 4;
+			sourceTree = "<group>";
+		};
+		F5FC335603536BA201A80169 = {
+			fileEncoding = 30;
+			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.c.c;
+			name = g_spawn.c;
+			path = game/g_spawn.c;
+			refType = 4;
+			sourceTree = "<group>";
+		};
+		F5FC335703536BA201A80169 = {
+			fileEncoding = 30;
+			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.c.c;
+			name = g_session.c;
+			path = game/g_session.c;
+			refType = 4;
+			sourceTree = "<group>";
+		};
+		F5FC335803536BA201A80169 = {
+			fileEncoding = 30;
+			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.c.c;
+			name = g_saga.c;
+			path = game/g_saga.c;
+			refType = 4;
+			sourceTree = "<group>";
+		};
+		F5FC335903536BA201A80169 = {
+			fileEncoding = 30;
+			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.c.c;
+			name = g_object.c;
+			path = game/g_object.c;
+			refType = 4;
+			sourceTree = "<group>";
+		};
+		F5FC335A03536BA201A80169 = {
+			fileEncoding = 30;
+			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.c.c;
+			name = g_mover.c;
+			path = game/g_mover.c;
+			refType = 4;
+			sourceTree = "<group>";
+		};
+		F5FC335B03536BA201A80169 = {
+			fileEncoding = 30;
+			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.c.c;
+			name = g_missile.c;
+			path = game/g_missile.c;
+			refType = 4;
+			sourceTree = "<group>";
+		};
+		F5FC335C03536BA201A80169 = {
+			fileEncoding = 30;
+			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.c.c;
+			name = g_weapon.c;
+			path = game/g_weapon.c;
+			refType = 4;
+			sourceTree = "<group>";
+		};
+		F5FC335D03536BA201A80169 = {
+			fileEncoding = 30;
+			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.c.c;
+			name = g_utils.c;
+			path = game/g_utils.c;
+			refType = 4;
+			sourceTree = "<group>";
+		};
+		F5FC335E03536BA201A80169 = {
+			fileEncoding = 30;
+			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.c.c;
+			name = g_trigger.c;
+			path = game/g_trigger.c;
+			refType = 4;
+			sourceTree = "<group>";
+		};
+		F5FC335F03536BA201A80169 = {
+			fileEncoding = 30;
+			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.c.c;
+			name = w_saber.c;
+			path = game/w_saber.c;
+			refType = 4;
+			sourceTree = "<group>";
+		};
+		F5FC336003536BA201A80169 = {
+			fileEncoding = 30;
+			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.c.c;
+			name = w_force.c;
+			path = game/w_force.c;
+			refType = 4;
+			sourceTree = "<group>";
+		};
+		F5FC336103536BA201A80169 = {
+			fileEncoding = 30;
+			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.c.c;
+			name = g_cmds.c;
+			path = game/g_cmds.c;
+			refType = 4;
+			sourceTree = "<group>";
+		};
+		F5FC336203536BA201A80169 = {
+			fileEncoding = 30;
+			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.c.c;
+			name = g_client.c;
+			path = game/g_client.c;
+			refType = 4;
+			sourceTree = "<group>";
+		};
+		F5FC336303536BA201A80169 = {
+			fileEncoding = 30;
+			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.c.c;
+			name = g_bot.c;
+			path = game/g_bot.c;
+			refType = 4;
+			sourceTree = "<group>";
+		};
+		F5FC336403536BA201A80169 = {
+			fileEncoding = 30;
+			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.c.c;
+			name = g_arenas.c;
+			path = game/g_arenas.c;
+			refType = 4;
+			sourceTree = "<group>";
+		};
+		F5FC336503536BA201A80169 = {
+			fileEncoding = 30;
+			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.c.c;
+			name = g_active.c;
+			path = game/g_active.c;
+			refType = 4;
+			sourceTree = "<group>";
+		};
+		F5FC336603536BA201A80169 = {
+			fileRef = F5FC334C03536BA201A80169;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		F5FC336703536BA201A80169 = {
+			fileRef = F5FC334D03536BA201A80169;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		F5FC336803536BA201A80169 = {
+			fileRef = F5FC334E03536BA201A80169;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		F5FC336903536BA201A80169 = {
+			fileRef = F5FC334F03536BA201A80169;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		F5FC336A03536BA201A80169 = {
+			fileRef = F5FC335003536BA201A80169;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		F5FC336B03536BA201A80169 = {
+			fileRef = F5FC335103536BA201A80169;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		F5FC336C03536BA201A80169 = {
+			fileRef = F5FC335203536BA201A80169;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		F5FC336D03536BA201A80169 = {
+			fileRef = F5FC335303536BA201A80169;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		F5FC336E03536BA201A80169 = {
+			fileRef = F5FC335403536BA201A80169;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		F5FC336F03536BA201A80169 = {
+			fileRef = F5FC335503536BA201A80169;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		F5FC337003536BA201A80169 = {
+			fileRef = F5FC335603536BA201A80169;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		F5FC337103536BA201A80169 = {
+			fileRef = F5FC335703536BA201A80169;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		F5FC337203536BA201A80169 = {
+			fileRef = F5FC335803536BA201A80169;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		F5FC337303536BA201A80169 = {
+			fileRef = F5FC335903536BA201A80169;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		F5FC337403536BA201A80169 = {
+			fileRef = F5FC335A03536BA201A80169;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		F5FC337503536BA201A80169 = {
+			fileRef = F5FC335B03536BA201A80169;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		F5FC337603536BA201A80169 = {
+			fileRef = F5FC335C03536BA201A80169;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		F5FC337703536BA201A80169 = {
+			fileRef = F5FC335D03536BA201A80169;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		F5FC337803536BA201A80169 = {
+			fileRef = F5FC335E03536BA201A80169;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		F5FC337903536BA201A80169 = {
+			fileRef = F5FC335F03536BA201A80169;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		F5FC337A03536BA201A80169 = {
+			fileRef = F5FC336003536BA201A80169;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		F5FC337B03536BA201A80169 = {
+			fileRef = F5FC336103536BA201A80169;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		F5FC337C03536BA201A80169 = {
+			fileRef = F5FC336203536BA201A80169;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		F5FC337D03536BA201A80169 = {
+			fileRef = F5FC336303536BA201A80169;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		F5FC337E03536BA201A80169 = {
+			fileRef = F5FC336403536BA201A80169;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		F5FC337F03536BA201A80169 = {
+			fileRef = F5FC336503536BA201A80169;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		F5FC338003536D2B01A80169 = {
+			fileEncoding = 30;
+			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.c.c;
+			name = q_math.c;
+			path = game/q_math.c;
+			refType = 4;
+			sourceTree = "<group>";
+		};
+		F5FC338103536D2B01A80169 = {
+			fileRef = F5FC338003536D2B01A80169;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+	};
+	rootObject = 089C1669FE841209C02AAC07;
+}

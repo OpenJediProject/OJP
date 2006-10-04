@@ -1,0 +1,276 @@
+//This file should never exceed 16384 bytes.
+
+Teams
+{
+	team1 @SIEGE_HOTH_TEAM1_IMPERIAL
+	team2 @SIEGE_HOTH_TEAM2_REBEL
+}
+
+mapgraphic "gfx/mplevels/siege1_hoth"
+missionname "''Hoth Assault''"
+
+roundbegin_target "droidhead"
+//this is a global target, it will be fired off if there is one when the round begins (this happens
+//when there is at least 1 player on each team active)
+
+//All message strings, like message_team1, wonround, etc. can be striped references by having the first char as @.
+
+@SIEGE_HOTH_TEAM1_IMPERIAL
+{
+	RequiredObjectives 1 								the round?
+	Timed 1200 									objectives, otherwise the other team wins.
+	UseTeam "Siege1_Imperials" 
+	TeamIcon	"gfx/2d/mp_imp_symbol_3"
+	TeamColorOn	"1 0 0 1"
+	TeamColorOff	".7 0 0 1"							
+
+		Objective1
+	{
+		goalname "@SIEGE_HOTH_IMP_OBJ_1_NEW"
+		final -1
+		message_team1 "@siege_hoth_obj_1_new_imp_final"
+		message_team2 "@siege_hoth_obj_1_new_reb_final"
+		target "spawn_relay_1a"
+		sound_team1 "sound/chars/protocol/misc/siege2.mp3"
+		sound_team2 "sound/chars/protocol/misc/siege6.mp3"
+		objdesc "@SIEGE_HOTH_IMP_OBJ_1_NEW_DESC" 
+					
+		objgfx "gfx/mplevels/hoth/imp_objective1_new" 		
+		mapicon "gfx/mp/siegeicons/hoth/walldoor_o"
+		litmapicon "gfx/mp/siegeicons/hoth/walldoor_outline"
+		donemapicon "gfx/mp/siegeicons/hoth/walldoor_x"
+		mappos "135 245 16 16"							
+	}
+
+	Objective2
+	{
+		goalname "@SIEGE_HOTH_OBJ_1"
+		final -1
+		message_team1 "@SIEGE_HOTH_OBJ_1_FINAL"
+		message_team2 "@SIEGE_HOTH_OBJ_1_FINAL"
+//		target "none"
+		sound_team1 "sound/chars/protocol/misc/siege2.mp3"
+		sound_team2 "sound/chars/protocol/misc/siege6.mp3"
+		objdesc "@SIEGE_HOTH_OBJ_1_DESC" 					
+		
+		objgfx "gfx/mplevels/hoth/imp_objective1" 		
+		mapicon "gfx/mp/siegeicons/hoth/bridge_o"
+		litmapicon "gfx/mp/siegeicons/hoth/bridge_outline"
+		donemapicon "gfx/mp/siegeicons/hoth/bridge_x"
+		mappos "144 163 16 16"
+		DependsOn1 1						
+	}
+
+	Objective3
+	{
+		goalname "@SIEGE_HOTH_OBJ_2"
+		final -1
+		message_team1 "@SIEGE_HOTH_OBJ_2_IMP_FINAL"		
+		message_team2 "@SIEGE_HOTH_OBJ_2_REB_FINAL"		
+		target "spawn_relay_1" 					
+		sound_team1 "sound/chars/protocol/misc/siege2.mp3" 
+		sound_team2 "sound/chars/protocol/misc/siege6.mp3"
+		objdesc "@SIEGE_HOTH_OBJ_2_DESC" 								
+		
+		objgfx "gfx/mplevels/hoth/imp_objective2" 			
+		mapicon "gfx/mp/siegeicons/hoth/generator_o"
+		litmapicon "gfx/mp/siegeicons/hoth/generator_outline"
+		donemapicon "gfx/mp/siegeicons/hoth/generator_x"
+		mappos "105 150 16 16"
+		DependsOn1 2							
+	}
+
+
+
+	Objective4
+	{
+		goalname "@SIEGE_HOTH_OBJ_3"
+		final -1
+		message_team1 "@SIEGE_HOTH_OBJ_3_IMP_FINAL"
+		message_team2 "@SIEGE_HOTH_OBJ_3_REB_FINAL"
+		target "spawn_relay_2"
+		sound_team1 "sound/chars/protocol/misc/siege2.mp3"
+		sound_team2 "sound/chars/protocol/misc/siege6.mp3"
+		objdesc "@SIEGE_HOTH_OBJ_3_DESC" 							
+		
+		objgfx "gfx/mplevels/hoth/imp_objective3" 			
+		mapicon "gfx/mp/siegeicons/hoth/droid_o"
+		litmapicon "gfx/mp/siegeicons/hoth/droid_outline"
+		donemapicon "gfx/mp/siegeicons/hoth/droid_x"
+		mappos "148 88 80 80"	
+		DependsOn1 3						
+	}
+
+	Objective5
+	{
+		goalname "@SIEGE_HOTH_OBJ_4"
+		final -1
+		message_team1 "@SIEGE_HOTH_OBJ_4_IMP_FINAL"
+		message_team2 "@SIEGE_HOTH_OBJ_4_REB_FINAL"
+		target "spawn_relay_3"
+		sound_team1 "sound/chars/protocol/misc/siege2.mp3"
+		sound_team2 "sound/chars/protocol/misc/siege6.mp3"
+		objdesc "@SIEGE_HOTH_OBJ_4_DESC" 			
+		
+		objgfx "gfx/mplevels/hoth/imp_objective4" 			
+		mapicon "gfx/mp/siegeicons/hoth/infirmary_o"
+		litmapicon "gfx/mp/siegeicons/hoth/infirmary_outline"
+		donemapicon "gfx/mp/siegeicons/hoth/infirmary_x"
+		mappos "154 124 16 16"
+		DependsOn1 4							
+	}
+
+	Objective6
+	{
+		goalname "@SIEGE_HOTH_OBJ_5"
+		final 1
+		message_team1 "@SIEGE_HOTH_OBJ_5_FINAL"
+		message_team2 "@SIEGE_HOTH_OBJ_5_FINAL"
+		target "explosion_relay"
+		sound_team1 "sound/chars/protocol/misc/siege1.mp3"
+		sound_team2 "sound/chars/protocol/misc/siege5.mp3"
+		objdesc "@SIEGE_HOTH_OBJ_5_DESC" 							
+		
+		objgfx "gfx/mplevels/hoth/imp_prime_obj" 				
+		mapicon "gfx/mp/siegeicons/hoth/comcenter_o"
+		litmapicon "gfx/mp/siegeicons/hoth/comcenter_outline"
+		donemapicon "gfx/mp/siegeicons/hoth/comcenter_x"
+		mappos "144 148 16 16"
+		DependsOn1 5							
+	}
+
+
+
+	wonround "@SIEGE_HOTH_IMP_WIN_FINAL"					
+	lostround "@SIEGE_HOTH_IMP_LOSE_FINAL" 					
+	roundover_sound_wewon "sound/chars/protocol/misc/40MOM014.mp3" 
+	roundover_sound_welost "sound/chars/protocol/misc/40MOM012.mp3"
+	roundover_target "siegeend" 							
+	attackers 1
+	briefing "@SIEGE_HOTH_IMPERIAL_BRIEF" 					
+}
+
+@SIEGE_HOTH_TEAM2_REBEL
+{
+	RequiredObjectives 0
+	UseTeam "Siege1_Rebels"
+	TeamIcon	"gfx/2d/mp_rebel_symbol_3"
+	TeamColorOn	"0 0 1 1"
+	TeamColorOff	"0 0 .7 1"	
+
+	Objective1
+	{
+		goalname "@SIEGE_HOTH_REBE_OBJ_1"
+		final -1
+		message_team2 "@SIEGE_HOTH_REBEL_OBJ_1_WIN"
+		message_team1 "@SIEGE_HOTH_REBEL_OBJ_1_WIN"
+//		target obj1_complete_rebel
+		sound_team1 "sound/chars/protocol/misc/siege5.mp3"
+		sound_team2 "sound/chars/protocol/misc/siege1.mp3"
+		objdesc "@SIEGE_HOTH_REBE_OBJ_1_DESC" 							
+		
+		objgfx "gfx/mplevels/hoth/imp_objective1_new"
+		mapicon "gfx/mp/siegeicons/hoth/walldoor_o"
+		litmapicon "gfx/mp/siegeicons/hoth/walldoor_outline"
+		donemapicon "gfx/mp/siegeicons/hoth/walldoor_x"
+		mappos "135 245 16 16"				
+	}
+
+	Objective2
+	{
+		goalname "@SIEGE_HOTH_REBE_OBJ_2"
+		final -1
+		message_team2 "@SIEGE_HOTH_REBEL_OBJ_1_WIN"
+		message_team1 "@SIEGE_HOTH_REBEL_OBJ_1_WIN"
+//		target obj1_complete_rebel
+		sound_team1 "sound/chars/protocol/misc/siege5.mp3"
+		sound_team2 "sound/chars/protocol/misc/siege1.mp3"
+		objdesc "@SIEGE_HOTH_REBE_OBJ_2_DESC" 		
+		
+		objgfx "gfx/mplevels/hoth/imp_objective1"
+		mapicon "gfx/mp/siegeicons/hoth/bridge_o"
+		litmapicon "gfx/mp/siegeicons/hoth/bridge_outline"
+		donemapicon "gfx/mp/siegeicons/hoth/bridge_x"
+		mappos "144 163 16 16"			
+	}
+
+	Objective3
+	{
+		goalname "@SIEGE_HOTH_REBE_OBJ_3"
+		final -1 									//If 1, the round is won instantly for completeing this goal. If 0, counts toward total number of goals required. If -1, does not count toward the number of final goals.
+		message_team1 "@SIEGE_HOTH_OBJ_2_IMP_FINAL"		
+		message_team2 "@SIEGE_HOTH_OBJ_2_REB_FINAL"	
+//		target "spawn_relay_1" 					
+		sound_team1 "sound/chars/protocol/misc/siege2.mp3" 		
+		sound_team2 "sound/chars/protocol/misc/siege6.mp3" 		
+		objdesc "@SIEGE_HOTH_REBE_OBJ_3_DESC" 				
+		
+		objgfx "gfx/mplevels/hoth/imp_objective2" 			
+		mapicon "gfx/mp/siegeicons/hoth/generator_o"
+		litmapicon "gfx/mp/siegeicons/hoth/generator_outline"
+		donemapicon "gfx/mp/siegeicons/hoth/generator_x"
+		mappos "105 150 16 16"
+	}
+
+	Objective4
+	{
+		goalname "@SIEGE_HOTH_REBE_OBJ_4"
+		final -1
+		message_team1 "@SIEGE_HOTH_OBJ_3_IMP_FINAL"
+		message_team2 "@SIEGE_HOTH_OBJ_3_REB_FINAL"
+//		target "spawn_relay_2"
+		sound_team1 "sound/chars/protocol/misc/siege2.mp3"
+		sound_team2 "sound/chars/protocol/misc/siege6.mp3"
+		objdesc "@SIEGE_HOTH_REBE_OBJ_4_DESC" 							
+		
+		objgfx "gfx/mplevels/hoth/imp_objective3" 			
+		mapicon "gfx/mp/siegeicons/hoth/droid_o"
+		litmapicon "gfx/mp/siegeicons/hoth/droid_outline"
+		donemapicon "gfx/mp/siegeicons/hoth/droid_x"
+		mappos "148 88 80 80"							
+	}
+
+	Objective5
+	{
+		goalname "@SIEGE_HOTH_REBE_OBJ_5"
+		final -1
+		message_team1 "@SIEGE_HOTH_OBJ_4_IMP_FINAL"
+		message_team2 "@SIEGE_HOTH_OBJ_4_REB_FINAL"
+//		target "spawn_relay_3"
+		sound_team1 "sound/chars/protocol/misc/siege2.mp3"
+		sound_team2 "sound/chars/protocol/misc/siege6.mp3"
+		objdesc "@SIEGE_HOTH_REBE_OBJ_5_DESC" 								
+		
+		objgfx "gfx/mplevels/hoth/imp_objective4" 			
+		mapicon "gfx/mp/siegeicons/hoth/infirmary_o"
+		litmapicon "gfx/mp/siegeicons/hoth/infirmary_outline"
+		donemapicon "gfx/mp/siegeicons/hoth/infirmary_x"
+		mappos "154 124 16 16"							
+	}
+
+	Objective6
+	{
+		goalname "@SIEGE_HOTH_REBE_OBJ_6"
+		final -1
+		message_team1 "@SIEGE_HOTH_OBJ_5_FINAL"
+		message_team2 "@SIEGE_HOTH_OBJ_5_FINAL"
+//		target "explosion_relay"
+		sound_team1 "sound/chars/protocol/misc/siege1.mp3"
+		sound_team2 "sound/chars/protocol/misc/siege5.mp3"
+		objdesc "@SIEGE_HOTH_REBE_OBJ_6_DESC" 								
+		
+		objgfx "gfx/mplevels/hoth/imp_prime_obj" 				
+		mapicon "gfx/mp/siegeicons/hoth/comcenter_o"
+		litmapicon "gfx/mp/siegeicons/hoth/comcenter_outline"
+		donemapicon "gfx/mp/siegeicons/hoth/comcenter_x"
+		mappos "144 148 16 16"							
+	}
+
+	wonround "@SIEGE_HOTH_REBELS_WIN_MISSION"
+	lostround "@SIEGE_HOTH_REBELS_FAILED_MISSION"
+	roundover_sound_wewon "sound/chars/protocol/misc/40MOM013.mp3"
+	roundover_sound_welost "sound/chars/protocol/misc/40MOM012.mp3"
+	roundover_target "siegeend"
+	attackers 0
+	briefing "@SIEGE_HOTH_REBEL_MAIN_BRIEFING"
+}

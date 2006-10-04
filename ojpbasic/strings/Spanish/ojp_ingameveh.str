@@ -1,0 +1,88 @@
+// Note to translators:
+// If a sentence is the same in your language then please change it to "#same"
+//
+// eg:
+// LANG_ENGLISH  "HALT"
+// LANG_GERMAN   "#same"
+//
+// (This is so we can tell which strings have been signed-off as ok to be the same words for QA
+//  and because we do not store duplicate strings, which will then get exported again next time
+//  as being untranslated.)
+//
+VERSION             "1"
+CONFIG              "W:\bin\stringed.cfg"
+FILENOTES           "In-game text for various events"
+
+//NEW VEHICLE-SPECIFIC KILL MESSAGES
+
+REFERENCE	    DIED_TURBOLASER
+LANG_ENGLISH        "was obliterated by a Turbolaser!"
+LANG_SPANISH        "ha sido obliterado por un Turbolaser!"
+
+REFERENCE	    KILLED_TURRET1
+LANG_ENGLISH        "was obliterated by a Turbolaser!"
+LANG_SPANISH        "ha sido obliterado por un Turbolaser!"
+
+REFERENCE	    KILLED_TURRET2
+LANG_ENGLISH        "was shot down by a Turbolaser!"
+LANG_SPANISH        "ha sido abatido por un Turbolaser!"
+
+REFERENCE	    KILLED_VEH_BLASTER1
+LANG_ENGLISH        "was blasted into oblivion by"
+LANG_SPANISH        "ha sido enviado al olvido por"
+
+REFERENCE	    KILLED_VEH_BLASTER2
+LANG_ENGLISH        "was mowed down by"
+LANG_SPANISH        "ha sido atropellado por"
+
+REFERENCE	    KILLED_VEH_BLASTER3
+LANG_ENGLISH        "was blasted out of the sky by"
+LANG_SPANISH        "ha sido abatido a tiros por"
+
+REFERENCE	    KILLED_VEH_MISSILE1
+LANG_ENGLISH        "was blown to smithereens by"
+LANG_SPANISH        "ha sido despedazado en cachitos por"
+
+REFERENCE	    KILLED_VEH_MISSILE2
+LANG_ENGLISH        "was rocketed by"
+LANG_SPANISH        "ha sido alcanzado por el cohete de"
+
+REFERENCE	    KILLED_VEH_BOMB
+LANG_ENGLISH        "was bombed by"
+LANG_SPANISH        "ha sido destruido por la bomba de"
+
+REFERENCE	    KILLED_VEH_ION
+LANG_ENGLISH        "was ion-blasted by"
+LANG_SPANISH        "ha sido alcanzado por el blaster de iones de"
+
+REFERENCE	    KILLED_VEH_TURRET
+LANG_ENGLISH        "was blasted by a turret from"
+LANG_SPANISH        "ha sido alcanzado por una torreta de"
+
+REFERENCE	    KILLED_VEH_COLLISION1
+LANG_ENGLISH        "crashed into"
+LANG_SPANISH        "se ha estrellado contra"
+
+REFERENCE	    KILLED_VEH_COLLISION2
+LANG_ENGLISH        "collided with"
+LANG_SPANISH        "ha colisionado con"
+
+REFERENCE	    KILLED_VEH_COLLISION3
+LANG_ENGLISH        "has become one with"
+LANG_SPANISH        "se ha vuelto uno con"
+
+REFERENCE           DIED_ASTEROID1
+LANG_ENGLISH        "smashed into an asteroid."
+LANG_SPANISH        "se ha estrellado contra un asteroide."
+
+REFERENCE           DIED_ASTEROID2
+LANG_ENGLISH        "zigged when they should have zagged."
+LANG_SPANISH        "hizo zig cuando debia hacer zag."
+
+REFERENCE           DIED_ASTEROID3
+LANG_ENGLISH        "failed Navigation 101."
+LANG_SPANISH        "suspendio Navegacion 101."
+
+ENDMARKER
+
+

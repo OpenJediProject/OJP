@@ -1,0 +1,13 @@
+//HSABERS
+single_stinger
+{
+	name		"Stinger"
+	saberType	SABER_SINGLE
+	saberModel	"models/weapons2/saber_reborn/saber_w.glm"
+	soundOn		"sound/weapons/saber/enemy_saber_on.wav"
+	soundLoop	"sound/weapons/saber/saberhum4.wav"
+	soundOff	"sound/weapons/saber/enemy_saber_off.wav"
+	saberLength	40
+	saberColor	random
+}
+

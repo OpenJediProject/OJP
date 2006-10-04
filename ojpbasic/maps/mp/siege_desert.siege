@@ -1,0 +1,248 @@
+//This file should never exceed 16384 bytes.
+
+Teams
+{
+	team1 @SIEGE_DESE_TEAM1_REBELS
+	team2 @SIEGE_DESE_TEAM2_MERCS
+}
+
+mapgraphic "gfx/mplevels/siege2_desert"
+missionname  "''Desert Rescue''"
+
+roundbegin_target ""
+//this is a global target, it will be fired off if there is one when the round begins (this happens
+//when there is at least 1 player on each team active)
+
+//All message strings, like message_team1, wonround, etc. can be striped references by having the first char as @.
+
+@SIEGE_DESE_TEAM1_REBELS
+{
+	RequiredObjectives 5 								//How many objectives must this team complete before winning the round?
+	Timed 1200 										//this team has 120 seconds to complete its objectives, otherwise the other team wins.
+	UseTeam "Siege2_Rebels" 							//Specifies the name of team "theme" to use
+	TeamIcon	"gfx/2d/mp_rebel_symbol_3"
+	TeamColorOn	"1 0 0 1"
+	TeamColorOff	".7 0 0 1"	
+
+
+	Objective1
+	{
+		goalname "@SIEGE_DESE_OBJ_1"
+		final 0 									//If 1, the round is won instantly for completeing this goal. If 0, counts toward total number of goals required. If -1, does not count toward the number of final goals.
+		message_team1 "@SIEGE_DESE_OBJ_1_FINAL"		//Printed for team1 when this objective is completed.
+		message_team2 "@SIEGE_DESE_OBJ_1_FINAL" 		//same as above, for team2.
+		target "spawntoggle1" 					//Will use this target when this objective is completed. Remove this line for nothing.
+		sound_team1 "sound/chars/protocol/misc/siege2.mp3" 		//upon completion of objective, play this sound for team1. If you want no sound, remove this line.
+		sound_team2 "sound/chars/protocol/misc/siege6.mp3" 		//same, for team2.
+
+		objdesc "@SIEGE_DESE_OBJ_1_DESC" 								//text description of objective
+		objgfx "gfx/mplevels/desert/reb_objective1" 			//graphic to display for objective
+		mapicon "gfx/mp/siegeicons/desert/wall_o"
+		litmapicon "gfx/mp/siegeicons/desert/wall_outline"
+		donemapicon "gfx/mp/siegeicons/desert/wall_x"		
+		mappos "120 88 80 80"							//what location to display
+	}
+	
+	Objective2
+	{
+		goalname "@SIEGE_DESE_OBJ_2"
+		final 0 									//If 1, the round is won instantly for completeing this goal. If 0, counts toward total number of goals required. If -1, does not count toward the number of final goals.
+		message_team1 "@SIEGE_DESE_OBJ_2_FINAL"	 	//Printed for team1 when this objective is completed.
+		message_team2 "@SIEGE_DESE_OBJ_2_FINAL"	 	//same as above, for team2.
+		target "spawntoggle2" 					//Will use this target when this objective is completed. Remove this line for nothing.
+		sound_team1 "sound/chars/protocol/misc/siege2.mp3" 		//upon completion of objective, play this sound for team1. If you want no sound, remove this line.
+		sound_team2 "sound/chars/protocol/misc/siege6.mp3" 		//same, for team2.
+
+		objdesc "@SIEGE_DESE_OBJ_2_DESC" 								//text description of objective
+		objgfx "gfx/mplevels/desert/reb_objective2"			//graphic to display for objective
+
+		mapicon "gfx/mp/siegeicons/desert/console_o"
+		litmapicon "gfx/mp/siegeicons/desert/console_outline"
+		donemapicon "gfx/mp/siegeicons/desert/console_x"		
+		mappos "126 130 80 80"							//what location to display
+		DependsOn1 1
+	}
+	
+	Objective3
+	{
+		goalname "@SIEGE_DESE_OBJ_3"
+		final 0 
+		message_team1 "@SIEGE_DESE_OBJ_3_FINAL_REB"	 	//Printed for team1 when this objective is completed.
+		message_team2 "@SIEGE_DESE_OBJ_3_FINAL_MERC"	 	//same as above, for team2.
+		target "spawntoggle3" 
+		sound_team1 "sound/chars/protocol/misc/siege2.mp3" 		//upon completion of objective, play this sound for team1. If you want no sound, remove this line.
+		sound_team2 "sound/chars/protocol/misc/siege6.mp3" 		//same, for team2.
+
+		objdesc "@SIEGE_DESE_OBJ_3_DESC" 								//text description of objective
+		objgfx "gfx/mplevels/desert/reb_objective3"			//graphic to display for objective
+
+		mapicon "gfx/mp/siegeicons/desert/gate_o"
+		litmapicon "gfx/mp/siegeicons/desert/gate_outline"
+		donemapicon "gfx/mp/siegeicons/desert/gate_x"		
+
+		mappos "153 223 16 16"							//what location to display
+		DependsOn1 2
+	}
+
+	Objective4
+	{
+		goalname "@SIEGE_DESE_OBJ_4"
+		final 0
+		message_team1 "@SIEGE_DESE_OBJ_4_FINAL"
+		message_team2 "@SIEGE_DESE_OBJ_4_FINAL"
+		target "droidparts_relay"
+		sound_team1 "sound/chars/protocol/misc/siege2.mp3" 		//upon completion of objective, play this sound for team1. If you want no sound, remove this line.
+		sound_team2 "sound/chars/protocol/misc/siege6.mp3" 		//same, for team2.
+
+		objdesc "@SIEGE_DESE_OBJ_4_DESC" 								//text description of objective
+		objgfx "gfx/mplevels/desert/reb_objective4"			//graphic to display for objective
+		mapicon "gfx/mp/siegeicons/desert/tower_o"
+		litmapicon "gfx/mp/siegeicons/desert/tower_outline"
+		donemapicon "gfx/mp/siegeicons/desert/tower_x"	
+		mappos "153 312 16 16"							//what location to display
+		DependsOn1 3
+	}
+
+	Objective5
+	{
+		goalname "@SIEGE_DESE_OBJ_5"
+		final 1
+		message_team1 "@SIEGE_DESE_OBJ_5_FINAL"
+		message_team2 "@SIEGE_DESE_OBJ_5_FINAL"
+		target obj1_complete_imperial
+		sound_team1 "sound/chars/protocol/misc/siege2.mp3" 		//upon completion of objective, play this sound for team1. If you want no sound, remove this line.
+		sound_team2 "sound/chars/protocol/misc/siege6.mp3" 		//same, for team2.
+
+		objdesc "@SIEGE_DESE_OBJ_5_DESC" 								//text description of objective
+		objgfx "gfx/mplevels/desert/reb_prime_obj"			//graphic to display for objective
+		mapicon "gfx/mp/siegeicons/desert/droid_parts"
+		litmapicon "gfx/mp/siegeicons/desert/droid_parts_hilite"
+		donemapicon "gfx/mp/siegeicons/desert/droid_parts_done"	
+		mappos "122 250 80 80"
+
+		DependsOn1 4
+	}
+	
+	wonround "@SIEGE_DESE_OBJ_REB_WIN" 						//Printed to this team if they won the round.
+	lostround "@SIEGE_DESE_FINAL_REB_LOSE" 					//Printed to this team if they lost the round.
+
+	roundover_sound_wewon "sound/chars/protocol/misc/40MOM013.mp3"
+	roundover_sound_welost "sound/chars/protocol/misc/40MOM012.mp3"
+
+	roundover_target "siegeisover" 						//object to use if this team won - ideally ending up on a target_saga_end
+
+	attackers 1 									//this actually does not affect the mission, but the bot AI will use the knowledge to decide on how to act.
+
+	briefing "@SIEGE_DESE_REBEL_BRIEFING" //Displayed on the mission briefing menu.
+}
+
+@SIEGE_DESE_TEAM2_MERCS
+{
+	RequiredObjectives 0
+	UseTeam "Siege2_Mercs"
+	TeamIcon	"gfx/2d/mp_imp_symbol_3"
+	TeamColorOn	"0 0 1 1"
+	TeamColorOff	"0 0 .7 1"
+
+	Objective1
+	{
+		goalname "@SIEGE_DESE_MERC_OBJ_1"
+		final 0 									//If 1, the round is won instantly for completeing this goal. 		If 0, counts toward total number of goals required. If -1, does not count toward the number of final goals.
+		message_team1 "@SIEGE_DESE_OBJ_1_FINAL"		//Printed for team1 when this objective is completed.
+		message_team2 "@SIEGE_DESE_OBJ_1_FINAL" 		//same as above, for team2.
+//		target "spawntoggle1" 					//Will use this target when this objective is completed. Remove this line for 				nothing.
+		sound_team1 "sound/chars/protocol/misc/siege2.mp3" 		//upon completion of objective, play this sound for team1. If you want no 		sound, remove this line.
+		sound_team2 "sound/chars/protocol/misc/siege6.mp3" 		//same, for team2.
+
+		objdesc "@SIEGE_DESE_MERC_OBJ_1_DESC" 								//text description of objective
+		objgfx "gfx/mplevels/desert/reb_objective1" 			//graphic to display for objective
+		mapicon "gfx/mp/siegeicons/desert/wall_o"
+		litmapicon "gfx/mp/siegeicons/desert/wall_outline"
+		donemapicon "gfx/mp/siegeicons/desert/wall_x"		
+		mappos "120 88 80 80"							//what location to display
+	}
+
+	Objective2
+	{
+		goalname "@SIEGE_DESE_MERC_OBJ_2"
+		final 0 									//If 1, the round is won instantly for completeing this goal. If 0, counts toward total number of goals required. If -1, does not count toward the number of final goals.
+		message_team1 "@SIEGE_DESE_OBJ_2_FINAL"	 	//Printed for team1 when this objective is completed.
+		message_team2 "@SIEGE_DESE_OBJ_2_FINAL"	 	//same as above, for team2.
+		target "spawntoggle2" 					//Will use this target when this objective is completed. Remove this line for nothing.
+		sound_team1 "sound/chars/protocol/misc/siege2.mp3" 		//upon completion of objective, play this sound for team1. If you want no sound, remove this line.
+		sound_team2 "sound/chars/protocol/misc/siege6.mp3" 		//same, for team2.
+
+		objdesc "@SIEGE_DESE_MERC_OBJ_2_DESC" 								//text description of objective
+		objgfx "gfx/mplevels/desert/reb_objective2"			//graphic to display for objective
+		mapicon "gfx/mp/siegeicons/desert/console_o"
+		litmapicon "gfx/mp/siegeicons/desert/console_outline"
+		donemapicon "gfx/mp/siegeicons/desert/console_x"		
+		mappos "126 130 80 80"							//what location to display on the radar when it has been completed.
+	}
+
+	Objective3
+	{
+		goalname "@SIEGE_DESE_MERC_OBJ_3"
+		final 0 
+		message_team1 "@SIEGE_DESE_OBJ_3_FINAL_REB"	 	//Printed for team1 when this objective is completed.
+		message_team2 "@SIEGE_DESE_OBJ_3_FINAL_MERC"	 	//same as above, for team2.
+		target "spawntoggle3" 
+		sound_team1 "sound/chars/protocol/misc/siege2.mp3" 		//upon completion of objective, play this sound for team1. If you want no sound, remove this line.
+		sound_team2 "sound/chars/protocol/misc/siege6.mp3" 		//same, for team2.
+
+		objdesc "@SIEGE_DESE_MERC_OBJ_3_DESC" 								//text description of objective
+		objgfx "gfx/mplevels/desert/reb_objective3"			//graphic to display for objective
+		mapicon "gfx/mp/siegeicons/desert/gate_o"
+		litmapicon "gfx/mp/siegeicons/desert/gate_outline"
+		donemapicon "gfx/mp/siegeicons/desert/gate_x"		
+		mappos "153 223 16 16"							//what location to display
+	}
+
+	Objective4
+	{
+		goalname "@SIEGE_DESE_MERC_OBJ_4"
+		final 0
+		message_team1 "@SIEGE_DESE_OBJ_4_FINAL"
+		message_team2 "@SIEGE_DESE_OBJ_4_FINAL"
+		target "droidparts_relay"
+		sound_team1 "sound/chars/protocol/misc/siege2.mp3" 		//upon completion of objective, play this sound for team1. If you want no sound, remove this line.
+		sound_team2 "sound/chars/protocol/misc/siege6.mp3" 		//same, for team2.
+
+		objdesc "@SIEGE_DESE_MERC_OBJ_4_DESC" 								//text description of objective
+		objgfx "gfx/mplevels/desert/reb_objective4"			//graphic to display for objective
+		mapicon "gfx/mp/siegeicons/desert/tower_o"
+		litmapicon "gfx/mp/siegeicons/desert/tower_outline"
+		donemapicon "gfx/mp/siegeicons/desert/tower_x"	
+		mappos "153 312 16 16"								//what location to display
+	}
+
+	Objective5
+	{
+		goalname "@SIEGE_DESE_MERC_OBJ_5"
+		final 1
+		message_team1 "@SIEGE_DESE_OBJ_5_FINAL"
+		message_team2 "@SIEGE_DESE_OBJ_5_FINAL"
+		target obj1_complete_imperial
+		sound_team1 "sound/chars/protocol/misc/siege2.mp3" 		//upon completion of objective, play this sound for team1. If you want no sound, remove this line.
+		sound_team2 "sound/chars/protocol/misc/siege6.mp3" 		//same, for team2.
+		objdesc "@SIEGE_DESE_MERC_OBJ_5_DESC" 								//text description of objective
+		objgfx "gfx/mplevels/desert/reb_prime_obj"			//graphic to display for objective
+		mapicon "gfx/mp/siegeicons/desert/droid_parts"
+		litmapicon "gfx/mp/siegeicons/desert/droid_parts_hilite"
+		donemapicon "gfx/mp/siegeicons/desert/droid_parts_done"	
+		mappos "122 250 80 80"							//what location to display
+	}
+
+
+	wonround "@SIEGE_DESE_MERC_WINROUND"
+	lostround "@SIEGE_DESE_MERCWIN_REBLOSE"
+
+	roundover_sound_wewon "sound/chars/protocol/misc/40MOM011.mp3"
+	roundover_sound_welost "sound/chars/protocol/misc/40MOM012.mp3"
+
+	roundover_target "siegeisover"
+
+	attackers 0
+
+	briefing "@SIEGE_2_DESERT_MERC_BRIEF"
+}

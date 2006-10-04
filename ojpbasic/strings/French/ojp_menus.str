@@ -1,0 +1,284 @@
+// Note to translators:
+// If a sentence is the same in your language then please change it to "#same"
+//
+// eg:
+// LANG_ENGLISH  "HALT"
+// LANG_GERMAN   "#same"
+//
+// (This is so we can tell which strings have been signed-off as ok to be the same words for QA
+//  and because we do not store duplicate strings, which will then get exported again next time
+//  as being untranslated.)
+//
+VERSION             "1"
+CONFIG              "W:\bin\stringed.cfg"
+FILENOTES           "OJP menu strings"
+
+//[OLDGAMETYPES]
+REFERENCE           JEDIMASTER
+LANG_ENGLISH        "Jedi Master"
+//[/OLDGAMETYPES]
+
+//[HSABERS]
+REFERENCE	    SINGLE_HILT10
+NOTES               "HSABERS"
+LANG_ENGLISH        "Retribution"
+
+REFERENCE	    SINGLE_HILT11
+NOTES               "HSABERS"
+LANG_ENGLISH        "Skywalker"
+
+REFERENCE	    SINGLE_HILT12
+NOTES               "HSABERS"
+LANG_ENGLISH        "Stinger"
+//[/HSABERS]
+
+//[SERVERFILTERS]
+REFERENCE	    OJP_BASIC
+LANG_ENGLISH        "OJP Basic"
+
+REFERENCE	    OJP_ENHANCED
+LANG_ENGLISH        "OJP Enhanced"
+//[/SERVERFILTERS]
+
+//[CoOp]
+REFERENCE           COOP
+LANG_ENGLISH        "Cooperative"
+//[/CoOp]
+
+//[AdminSys]
+REFERENCE           KICKALLY
+LANG_ENGLISH        "Kick Ally"
+
+REFERENCE           KICK_ALLY
+LANG_ENGLISH        "Kick Ally:"
+
+REFERENCE           BANISH_AN_ALLY_FROM
+LANG_ENGLISH        "Banish an ally from the server."
+
+REFERENCE           SELECT_ALLY_TO_KICK
+LANG_ENGLISH        "Select ally to kick."
+
+REFERENCE           BEGIN_VOTE_TO_BANISH_ALLY
+LANG_ENGLISH        "Begin vote to banish this ally."
+
+REFERENCE           WARNINGSUICIDEBAN
+LANG_ENGLISH        "Warning: Suicide spammers WILL be BANNED"
+
+REFERENCE           WARNINGSUICIDEKICK
+LANG_ENGLISH        "Warning: Suicide spammers WILL be KICKED"
+
+REFERENCE           SUICIDEBAN
+LANG_ENGLISH        "BANNED for suicide spamming!"
+
+REFERENCE           SUICIDEKICK
+LANG_ENGLISH        "KICKED for suicide spamming!"
+
+REFERENCE           WARNINGTKBAN
+LANG_ENGLISH        "Warning: Team-kill spammers WILL be BANNED"
+
+REFERENCE           WARNINGTKKICK
+LANG_ENGLISH        "Warning: Team-kill spammers WILL be KICKED"
+
+REFERENCE           TKBAN
+LANG_ENGLISH        "BANNED for team-kill spamming!"
+
+REFERENCE           TKKICK
+LANG_ENGLISH        "KICKED for team-kill spamming!"
+//[/AdminSys]
+
+//[UITweaks]
+REFERENCE	    DRAWCROSSHAIR_DESC
+LANG_ENGLISH	    "Hide/Show and choose crosshair"
+
+REFERENCE	    CROSSHAIRSIZE
+LANG_ENGLISH	    "Crosshair Size: "
+
+REFERENCE	    CROSSHAIRSIZE_DESC
+LANG_ENGLISH	   "Sets crosshair size"
+
+REFERENCE	    SMALL
+LANG_ENGLISH	    "Small"
+
+REFERENCE	    NORMAL
+LANG_ENGLISH	    "Normal"
+
+REFERENCE	    LARGE
+LANG_ENGLISH	    "Large"
+
+REFERENCE	    ADVANCED
+LANG_ENGLISH	    "Advanced"
+
+REFERENCE	    ADVANCED_DESC
+LANG_ENGLISH	    "Advanced Settings"
+
+REFERENCE	    SHOWFRAMERATE
+LANG_ENGLISH	    "Show Framerate:"
+
+REFERENCE	    SHOWFRAMERATE_DESC
+LANG_ENGLISH	    "Show framerate in upper right corner"
+
+REFERENCE	    LAGOMETER
+LANG_ENGLISH	    "Display Lag Meter:"
+
+REFERENCE	    LAGOMETER_DESC
+LANG_ENGLISH	    "Displays Lag Meter on right side"
+//[/UITweaks]
+
+//[MOREWEAPOPTIONS]
+REFERENCE	    WEAPONDISABLE
+LANG_ENGLISH	    "Weapons:"
+
+REFERENCE	    WEAPONDISABLE_DESC
+LANG_ENGLISH	    "Sets which weapons are useable."
+
+REFERENCE	    WEAPONDISABLE_ALLON
+LANG_ENGLISH	    "All On"
+
+REFERENCE	    WEAPONDISABLE_MELEEONLY
+LANG_ENGLISH	    "Melee Only"
+
+REFERENCE	    WEAPONDISABLE_SABERSONLY
+LANG_ENGLISH	    "Sabers Only"
+
+REFERENCE	    WEAPONDISABLE_SABERSMELEE
+LANG_ENGLISH	    "Sabers/Melee"
+
+REFERENCE	    WEAPONDISABLE_NOEXPLOSIVES
+LANG_ENGLISH	    "No Explosives"
+//[/MOREWEAPOPTIONS]
+
+//[MOREFORCEOPTIONS]
+REFERENCE	    DISABLEFORCEPOWERS
+LANG_ENGLISH	    "Force Powers:"
+
+REFERENCE	    DISABLEFORCEPOWERS_DESC
+LANG_ENGLISH	    "Sets which force powers are useable."
+
+REFERENCE	    DISABLEFORCEPOWERS_ALLON
+LANG_ENGLISH	    "All On"
+
+REFERENCE	    DISABLEFORCEPOWERS_ALLOFF
+LANG_ENGLISH	    "All Off"
+
+REFERENCE	    DISABLEFORCEPOWERS_JUMPONLY
+LANG_ENGLISH	    "Jump Only"
+
+REFERENCE	    DISABLEFORCEPOWERS_NEUTRALSONLY
+LANG_ENGLISH	    "Neutrals Only"	
+//[/MOREFORCEOPTIONS]
+
+//[VisualWeapons]
+REFERENCE	    HOLSTEREDWEAPONS
+LANG_ENGLISH	    "Display Holstered Weapons:"
+
+REFERENCE	    HOLSTEREDWEAPONS_DESC
+LANG_ENGLISH	    "Displays weaponry on players' models"
+
+REFERENCE	    HOLSTEREDWEAPONSPLAYER
+LANG_ENGLISH	    "On you only"
+
+REFERENCE	    HOLSTEREDWEAPONSALL
+LANG_ENGLISH	    "On everyone"
+//[/VisualWeapons]
+
+//[RGBSabers]
+REFERENCE	    TEAMRGBSABERS
+LANG_ENGLISH	    "Team RGB Sabers:"
+
+REFERENCE	    TEAMRGBSABERS_DESC
+LANG_ENGLISH	    "Displays custom colored sabers in team games"
+
+REFERENCE	    TEAMRGBSABERSPLAYER
+LANG_ENGLISH	    "Yours only"
+
+REFERENCE	    TEAMRGBSABERSALL
+LANG_ENGLISH	    "Everyone's"
+
+REFERENCE	    RGBSABERS_SETUP
+LANG_ENGLISH	    "RGB Saber Setup"
+
+REFERENCE	    RGBSABERS_SETUP_PROFILE
+LANG_ENGLISH	    "RGB Setup"	
+
+REFERENCE	    RGBSABERS_SETUP_DESC
+LANG_ENGLISH	    "Customize your sabers using RGB color channels."
+
+REFERENCE	    RGBSABERS_SETUP_APPLY_DESC
+LANG_ENGLISH	    "Apply these settings to your RGB saber blades and close the window."
+
+REFERENCE	    RGBSABERS_SETUP_SLIDER_RED1
+LANG_ENGLISH	    "Move this slider to select the red color component of your first lightsaber blade."
+
+REFERENCE	    RGBSABERS_SETUP_SLIDER_RED2
+LANG_ENGLISH	    "Move this slider to select the red color component of your second lightsaber blade."
+
+REFERENCE	    RGBSABERS_SETUP_SLIDER_GREEN1
+LANG_ENGLISH	    "Move this slider to select the green color component of your first lightsaber blade."
+
+REFERENCE	    RGBSABERS_SETUP_SLIDER_GREEN2
+LANG_ENGLISH	    "Move this slider to select the green color component of your second lightsaber blade."
+
+REFERENCE	    RGBSABERS_SETUP_SLIDER_BLUE1
+LANG_ENGLISH	    "Move this slider to select the blue color component of your first lightsaber blade."
+
+REFERENCE	    RGBSABERS_SETUP_SLIDER_BLUE2
+LANG_ENGLISH	    "Move this slider to select the blue color component of your second lightsaber blade."
+
+REFERENCE	    RGBSABERS_SETUP_RED1_DESC
+LANG_ENGLISH	    "The red color component of your first lightsaber blade."
+
+REFERENCE	    RGBSABERS_SETUP_RED2_DESC
+LANG_ENGLISH	    "The red color component of your second lightsaber blade."
+
+REFERENCE	    RGBSABERS_SETUP_GREEN1_DESC
+LANG_ENGLISH	    "The green color component of your first lightsaber blade."
+
+REFERENCE	    RGBSABERS_SETUP_GREEN2_DESC
+LANG_ENGLISH	    "The green color component of your second lightsaber blade."
+
+REFERENCE	    RGBSABERS_SETUP_BLUE1_DESC
+LANG_ENGLISH	    "The blue color component of your first lightsaber blade."
+
+REFERENCE	    RGBSABERS_SETUP_BLUE2_DESC
+LANG_ENGLISH	    "The blue color component of your second lightsaber blade."
+
+REFERENCE	    RGBSABERS_COLOR1
+LANG_ENGLISH	    "Color 1"
+
+REFERENCE	    RGBSABERS_COLOR2
+LANG_ENGLISH	    "Color 2"
+
+REFERENCE	    RGBSABERS_PIMP_DESC
+LANG_ENGLISH	    "A lightsaber blade that pulses with multiple colors. Consult the OJP documentation on how to make your own."
+
+REFERENCE	    RGBSABERS_RGB_DESC
+LANG_ENGLISH	    "Customize this lightsaber blade's color in the RGB Setup Menu."
+//[/RGBSabers]
+
+//[TrueView]
+REFERENCE	    TRUEINVERTSABER
+LANG_ENGLISH	    "3rd Person Invert:"
+
+REFERENCE	    TRUEINVERTSABER_DESC
+LANG_ENGLISH	    "Determines how the current third/first person setting affects sabers, melee, and guns."
+
+REFERENCE	    TRUEINVERTSABERSAME
+LANG_ENGLISH	    "All Same"
+
+REFERENCE	    TRUEINVERTSABERINVERT 
+LANG_ENGLISH	    "Saber/Melee Inverted"
+
+REFERENCE	    TRUEINVERTSABERALWAYSTHIRDPERSON
+LANG_ENGLISH	    "Sabers/Melee Always 3rd Person"
+//[/TrueView]
+
+//[CoOp]
+REFERENCE	    PLAYERTEAM
+LANG_ENGLISH	    "Friendlies"
+
+REFERENCE	    ENEMYTEAM
+LANG_ENGLISH	    "Enemies"
+//[/CoOp]
+
+ENDMARKER
+

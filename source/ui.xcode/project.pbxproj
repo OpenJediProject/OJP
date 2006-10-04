@@ -1,0 +1,520 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 39;
+	objects = {
+		014CEA3E0018CDD111CA2923 = {
+			explicitFileType = wrapper.cfbundle;
+			isa = PBXFileReference;
+			path = ui.bundle;
+			refType = 3;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		014CEA3F0018CDD111CA2923 = {
+			buildSettings = {
+				COPY_PHASE_STRIP = NO;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_ENABLE_FIX_AND_CONTINUE = YES;
+				GCC_GENERATE_DEBUGGING_SYMBOLS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				OPTIMIZATION_CFLAGS = "-O0";
+				ZERO_LINK = YES;
+			};
+			isa = PBXBuildStyle;
+			name = Development;
+		};
+		014CEA400018CDD111CA2923 = {
+			buildSettings = {
+				COPY_PHASE_STRIP = YES;
+				GCC_ENABLE_FIX_AND_CONTINUE = NO;
+				ZERO_LINK = NO;
+			};
+			isa = PBXBuildStyle;
+			name = Deployment;
+		};
+//010
+//011
+//012
+//013
+//014
+//080
+//081
+//082
+//083
+//084
+		089C1669FE841209C02AAC07 = {
+			buildSettings = {
+			};
+			buildStyles = (
+				014CEA3F0018CDD111CA2923,
+				014CEA400018CDD111CA2923,
+			);
+			hasScannedForEncodings = 1;
+			isa = PBXProject;
+			mainGroup = 089C166AFE841209C02AAC07;
+			projectDirPath = "";
+			targets = (
+				089C1673FE841209C02AAC07,
+			);
+		};
+		089C166AFE841209C02AAC07 = {
+			children = (
+				F5C12684034158F301A80169,
+				F5FC338B03536E6D01A80169,
+				089C167CFE841241C02AAC07,
+				089C1671FE841209C02AAC07,
+				19C28FB6FE9D52B211CA2CBB,
+			);
+			isa = PBXGroup;
+			name = cgame;
+			refType = 4;
+			sourceTree = "<group>";
+		};
+		089C1671FE841209C02AAC07 = {
+			children = (
+				0AA1909FFE8422F4C02AAC07,
+			);
+			isa = PBXGroup;
+			name = "External Frameworks and Libraries";
+			refType = 4;
+			sourceTree = "<group>";
+		};
+		089C1673FE841209C02AAC07 = {
+			buildPhases = (
+				089C1674FE841209C02AAC07,
+				089C1675FE841209C02AAC07,
+				089C1676FE841209C02AAC07,
+				089C1677FE841209C02AAC07,
+				089C1679FE841209C02AAC07,
+			);
+			buildSettings = {
+				FRAMEWORK_SEARCH_PATHS = "";
+				HEADER_SEARCH_PATHS = "";
+				LIBRARY_SEARCH_PATHS = "";
+				OTHER_LDFLAGS = "";
+				OTHER_REZFLAGS = "";
+				PREFIX_HEADER = MacPrefix_UI.h;
+				PRODUCT_NAME = ui;
+				SECTORDER_FLAGS = "";
+				WARNING_CFLAGS = "-Wmost -Wno-four-char-constants -Wno-unknown-pragmas";
+				WRAPPER_EXTENSION = bundle;
+			};
+			dependencies = (
+			);
+			isa = PBXBundleTarget;
+			name = ui;
+			productName = cgame;
+			productReference = 014CEA3E0018CDD111CA2923;
+			productSettingsXML = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>
+<!DOCTYPE plist PUBLIC \"-//Apple Computer//DTD PLIST 1.0//EN\" \"http://www.apple.com/DTDs/PropertyList-1.0.dtd\">
+<plist version=\"1.0\">
+<dict>
+	<key>CFBundleDevelopmentRegion</key>
+	<string>English</string>
+	<key>CFBundleExecutable</key>
+	<string>ui</string>
+	<key>CFBundleIconFile</key>
+	<string></string>
+	<key>CFBundleIdentifier</key>
+	<string></string>
+	<key>CFBundleInfoDictionaryVersion</key>
+	<string>6.0</string>
+	<key>CFBundleName</key>
+	<string>cgame</string>
+	<key>CFBundlePackageType</key>
+	<string>BNDL</string>
+	<key>CFBundleShortVersionString</key>
+	<string>1.03a</string>
+	<key>CFBundleSignature</key>
+	<string>JK2m</string>
+	<key>CFBundleVersion</key>
+	<string>1.03a</string>
+	<key>CFPlugInDynamicRegisterFunction</key>
+	<string></string>
+	<key>CFPlugInDynamicRegistration</key>
+	<string>NO</string>
+	<key>CFPlugInFactories</key>
+	<dict>
+		<key>00000000-0000-0000-0000-000000000000</key>
+		<string>MyFactoryFunction</string>
+	</dict>
+	<key>CFPlugInTypes</key>
+	<dict>
+		<key>00000000-0000-0000-0000-000000000000</key>
+		<array>
+			<string>00000000-0000-0000-0000-000000000000</string>
+		</array>
+	</dict>
+	<key>CFPlugInUnloadFunction</key>
+	<string></string>
+</dict>
+</plist>
+";
+		};
+		089C1674FE841209C02AAC07 = {
+			buildActionMask = 2147483647;
+			files = (
+			);
+			isa = PBXHeadersBuildPhase;
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		089C1675FE841209C02AAC07 = {
+			buildActionMask = 2147483647;
+			files = (
+				089C1680FE841241C02AAC07,
+			);
+			isa = PBXResourcesBuildPhase;
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		089C1676FE841209C02AAC07 = {
+			buildActionMask = 2147483647;
+			files = (
+				F5C1268D0341593B01A80169,
+				F5C126920341593B01A80169,
+				F5C126960341595F01A80169,
+				F5FC338103536D2B01A80169,
+				F5FC339303536E7B01A80169,
+				F5FC339403536E7B01A80169,
+				F5FC339503536E7B01A80169,
+				F5FC339703536E7B01A80169,
+				F5FC339803536E7B01A80169,
+				F5FC339903536E7B01A80169,
+				F5D73FCA066EB62A00990CEA,
+				F5D73FCC066EB63200990CEA,
+				F5D73FCE066EB65300990CEA,
+			);
+			isa = PBXSourcesBuildPhase;
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		089C1677FE841209C02AAC07 = {
+			buildActionMask = 2147483647;
+			files = (
+				F5D461E10341868601A80169,
+			);
+			isa = PBXFrameworksBuildPhase;
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		089C1679FE841209C02AAC07 = {
+			buildActionMask = 2147483647;
+			files = (
+			);
+			isa = PBXRezBuildPhase;
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		089C167CFE841241C02AAC07 = {
+			children = (
+				089C167DFE841241C02AAC07,
+			);
+			isa = PBXGroup;
+			name = Resources;
+			refType = 4;
+			sourceTree = "<group>";
+		};
+		089C167DFE841241C02AAC07 = {
+			children = (
+				089C167EFE841241C02AAC07,
+			);
+			isa = PBXVariantGroup;
+			name = InfoPlist.strings;
+			refType = 4;
+			sourceTree = "<group>";
+		};
+		089C167EFE841241C02AAC07 = {
+			fileEncoding = 10;
+			isa = PBXFileReference;
+			lastKnownFileType = text.plist.strings;
+			name = English;
+			path = English.lproj/InfoPlist.strings;
+			refType = 4;
+			sourceTree = "<group>";
+		};
+		089C1680FE841241C02AAC07 = {
+			fileRef = 089C167DFE841241C02AAC07;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+//080
+//081
+//082
+//083
+//084
+//0A0
+//0A1
+//0A2
+//0A3
+//0A4
+		0AA1909FFE8422F4C02AAC07 = {
+			isa = PBXFileReference;
+			lastKnownFileType = wrapper.framework;
+			name = CoreFoundation.framework;
+			path = /System/Library/Frameworks/CoreFoundation.framework;
+			refType = 0;
+			sourceTree = "<absolute>";
+		};
+//0A0
+//0A1
+//0A2
+//0A3
+//0A4
+//190
+//191
+//192
+//193
+//194
+		19C28FB6FE9D52B211CA2CBB = {
+			children = (
+				014CEA3E0018CDD111CA2923,
+			);
+			isa = PBXGroup;
+			name = Products;
+			refType = 4;
+			sourceTree = "<group>";
+		};
+//190
+//191
+//192
+//193
+//194
+//F50
+//F51
+//F52
+//F53
+//F54
+		F5C12684034158F301A80169 = {
+			children = (
+				F5C1268B0341593B01A80169,
+				F5D73FC9066EB62A00990CEA,
+				F5D73FCB066EB63200990CEA,
+				F5C126860341593B01A80169,
+				F5FC338003536D2B01A80169,
+				F5C126940341595F01A80169,
+			);
+			isa = PBXGroup;
+			name = game;
+			path = "";
+			refType = 4;
+			sourceTree = "<group>";
+		};
+		F5C126860341593B01A80169 = {
+			fileEncoding = 30;
+			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.c.c;
+			name = bg_weapons.c;
+			path = game/bg_weapons.c;
+			refType = 4;
+			sourceTree = "<group>";
+		};
+		F5C1268B0341593B01A80169 = {
+			fileEncoding = 30;
+			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.c.c;
+			name = bg_misc.c;
+			path = game/bg_misc.c;
+			refType = 4;
+			sourceTree = "<group>";
+		};
+		F5C1268D0341593B01A80169 = {
+			fileRef = F5C126860341593B01A80169;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		F5C126920341593B01A80169 = {
+			fileRef = F5C1268B0341593B01A80169;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		F5C126940341595F01A80169 = {
+			fileEncoding = 30;
+			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.c.c;
+			name = q_shared.c;
+			path = game/q_shared.c;
+			refType = 4;
+			sourceTree = "<group>";
+		};
+		F5C126960341595F01A80169 = {
+			fileRef = F5C126940341595F01A80169;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		F5D461E10341868601A80169 = {
+			fileRef = 0AA1909FFE8422F4C02AAC07;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		F5D73FC9066EB62A00990CEA = {
+			fileEncoding = 30;
+			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.c.c;
+			name = bg_saga.c;
+			path = game/bg_saga.c;
+			refType = 4;
+			sourceTree = "<group>";
+		};
+		F5D73FCA066EB62A00990CEA = {
+			fileRef = F5D73FC9066EB62A00990CEA;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		F5D73FCB066EB63200990CEA = {
+			fileEncoding = 30;
+			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.c.c;
+			name = bg_vehicleLoad.c;
+			path = game/bg_vehicleLoad.c;
+			refType = 4;
+			sourceTree = "<group>";
+		};
+		F5D73FCC066EB63200990CEA = {
+			fileRef = F5D73FCB066EB63200990CEA;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		F5D73FCD066EB65300990CEA = {
+			fileEncoding = 30;
+			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.c.c;
+			name = ui_saber.c;
+			path = ui/ui_saber.c;
+			refType = 4;
+			sourceTree = "<group>";
+		};
+		F5D73FCE066EB65300990CEA = {
+			fileRef = F5D73FCD066EB65300990CEA;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		F5FC338003536D2B01A80169 = {
+			fileEncoding = 30;
+			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.c.c;
+			name = q_math.c;
+			path = game/q_math.c;
+			refType = 4;
+			sourceTree = "<group>";
+		};
+		F5FC338103536D2B01A80169 = {
+			fileRef = F5FC338003536D2B01A80169;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		F5FC338B03536E6D01A80169 = {
+			children = (
+				F5FC339203536E7B01A80169,
+				F5FC339103536E7B01A80169,
+				F5FC339003536E7B01A80169,
+				F5FC338E03536E7B01A80169,
+				F5D73FCD066EB65300990CEA,
+				F5FC338D03536E7B01A80169,
+				F5FC338C03536E7B01A80169,
+			);
+			isa = PBXGroup;
+			name = ui;
+			path = "";
+			refType = 4;
+			sourceTree = "<group>";
+		};
+		F5FC338C03536E7B01A80169 = {
+			fileEncoding = 30;
+			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.c.c;
+			name = ui_syscalls.c;
+			path = ui/ui_syscalls.c;
+			refType = 4;
+			sourceTree = "<group>";
+		};
+		F5FC338D03536E7B01A80169 = {
+			fileEncoding = 30;
+			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.c.c;
+			name = ui_shared.c;
+			path = ui/ui_shared.c;
+			refType = 4;
+			sourceTree = "<group>";
+		};
+		F5FC338E03536E7B01A80169 = {
+			fileEncoding = 30;
+			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.c.c;
+			name = ui_main.c;
+			path = ui/ui_main.c;
+			refType = 4;
+			sourceTree = "<group>";
+		};
+		F5FC339003536E7B01A80169 = {
+			fileEncoding = 30;
+			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.c.c;
+			name = ui_gameinfo.c;
+			path = ui/ui_gameinfo.c;
+			refType = 4;
+			sourceTree = "<group>";
+		};
+		F5FC339103536E7B01A80169 = {
+			fileEncoding = 30;
+			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.c.c;
+			name = ui_force.c;
+			path = ui/ui_force.c;
+			refType = 4;
+			sourceTree = "<group>";
+		};
+		F5FC339203536E7B01A80169 = {
+			fileEncoding = 30;
+			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.c.c;
+			name = ui_atoms.c;
+			path = ui/ui_atoms.c;
+			refType = 4;
+			sourceTree = "<group>";
+		};
+		F5FC339303536E7B01A80169 = {
+			fileRef = F5FC338C03536E7B01A80169;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		F5FC339403536E7B01A80169 = {
+			fileRef = F5FC338D03536E7B01A80169;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		F5FC339503536E7B01A80169 = {
+			fileRef = F5FC338E03536E7B01A80169;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		F5FC339703536E7B01A80169 = {
+			fileRef = F5FC339003536E7B01A80169;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		F5FC339803536E7B01A80169 = {
+			fileRef = F5FC339103536E7B01A80169;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		F5FC339903536E7B01A80169 = {
+			fileRef = F5FC339203536E7B01A80169;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+	};
+	rootObject = 089C1669FE841209C02AAC07;
+}

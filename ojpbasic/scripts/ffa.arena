@@ -1,0 +1,38 @@
+{
+map			"mp/ffa1"
+bots			"Reborn"
+longname		"Vjun Sentinel"
+fraglimit		10
+type			"ffa team holocron"
+}
+
+{
+map			"mp/ffa2"
+longname		"Korriban Tombs"
+fraglimit		10
+type			"ffa team holocron"
+}
+
+{
+map			"mp/ffa3"
+longname		"Tatooine City"
+bots			"Luke"
+fraglimit		10
+type			"ffa team holocron"
+}
+
+{
+map			"mp/ffa4"
+bots			"Lando"
+longname		"Rift Sanctuary"
+fraglimit		10
+type			"ffa team holocron"
+}
+
+{
+map			"mp/ffa5"
+bots			"Kyle Luke Jan Stormtrooper"
+longname		"Taspir"
+fraglimit		10
+type			"ffa team holocron"
+}

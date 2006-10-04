@@ -1,0 +1,59 @@
+// Note to translators:
+// If a sentence is the same in your language then please change it to "#same"
+//
+// eg:
+// LANG_ENGLISH  "HALT"
+// LANG_GERMAN   "#same"
+//
+// (This is so we can tell which strings have been signed-off as ok to be the same words for QA
+//  and because we do not store duplicate strings, which will then get exported again next time
+//  as being untranslated.)
+//
+VERSION             "1"
+CONFIG              "W:\bin\stringed.cfg"
+FILENOTES           "OJP CoOp Strings.  This file is named weird to make sure it overrides the defualt SP strings."
+
+//[CoOp]
+//missing subtitles for t1_sour
+REFERENCE	    MIS_01L01
+LANG_ENGLISH	    "Is it just me or are the Rodians kind of creepy?"
+LANG_SPANISH          "Es cosa mia o los Rodianos son algo escalofriantes?"
+
+REFERENCE	    MIS_01L02
+LANG_ENGLISH	    "I know what you mean.  Those weird antanna things, right?"
+LANG_SPANISH          "Se a lo que te refieres.  Esas cosas que parecen antenas, verdad?"
+
+REFERENCE	    MIS_01L03
+LANG_ENGLISH	    "Yeah!  That and the nose.  Pretty spooky."
+LANG_SPANISH          "Si! Eso y la nariz. Bastante terrorifica."
+
+REFERENCE	    MIS_01L04
+LANG_ENGLISH	    "Yeah!  What is that?  On second thought, I don't want to know."
+LANG_SPANISH          "Si! Que es eso?  Bien pensado, no quiero saberlo."
+
+
+//missing subtitles for t3_rift
+REFERENCE           MME_01L01
+LANG_ENGLISH        "I can hardly see in this thing.  It's like being a stormtrooper all over again."
+LANG_SPANISH        "Casi no puedo ver aqui dentro.  Es como ser stormtrooper otra vez."
+
+REFERENCE           MME_01L02
+LANG_ENGLISH        "You were a stormtrooper?"
+LANG_SPANISH        "Fuiste stormtrooper?"
+
+REFERENCE           MME_01L03
+LANG_ENGLISH        "Yeah, but I couldn't stand taking orders.  So I jumped ship the first chance I got."
+LANG_SPANISH        "Si, pero no podia aguantar recibir ordenes. Asi que me fui a la primera oportunidad."
+
+REFERENCE           MME_01L04
+LANG_ENGLISH        "Smart move.  By the way, the boss gave us orders to patrol the north hall."
+LANG_SPANISH        "Gran idea.  Por cierto, el jefe nos ha dado ordenes de patrullar el corredor norte."
+
+REFERENCE           MME_01L05
+LANG_ENGLISH        "OK.  Let's go."
+LANG_SPANISH        "Bien.  Vamos."
+//[/CoOp]
+
+
+ENDMARKER
+

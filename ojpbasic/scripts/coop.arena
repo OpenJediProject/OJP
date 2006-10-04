@@ -1,0 +1,90 @@
+{
+map			"yavin1"
+longname		"Cutscene - Game Intro"
+fraglimit		10
+type			"coop"
+}
+
+{
+map			"yavin1b"
+longname		"Crashed on Yavin"
+fraglimit		10
+type			"coop"
+}
+
+{
+map			"academy1"
+longname		"Cutscene - Intro to Training"
+fraglimit		10
+type			"coop"
+}
+
+{
+map			"yavin2"
+longname		"Training"
+fraglimit		10
+type			"coop"
+}
+
+{
+map			"t1_fatal"
+longname		"Tier 1 - Fatal"
+fraglimit		10
+type			"coop"
+}
+
+{
+map			"t1_sour"
+longname		"Tier 1 - Sour"
+fraglimit		10
+type			"coop"
+}
+
+{
+map			"t1_danger"
+longname		"Tier 1 - Danger"
+fraglimit		10
+type			"coop"
+}
+
+{
+map			"t1_rail"
+longname		"Tier 1 - Rail"
+fraglimit		10
+type			"coop"
+}
+
+{
+map			"academy2"
+longname		"Cutscene - Tier 1 End"
+fraglimit		10
+type			"coop"
+}
+
+{
+map			"hoth2"
+longname		"Hoth Part 1"
+fraglimit		10
+type			"coop"
+}
+
+{
+map			"hoth3"
+longname		"Hoth Part 2"
+fraglimit		10
+type			"coop"
+}
+
+{
+map			"academy3"
+longname		"Cutscene - Post Hoth"
+fraglimit		10
+type			"coop"
+}
+
+{
+map			"t3_rift"
+longname		"Tier 3 - Rift"
+fraglimit		10
+type			"coop"
+}

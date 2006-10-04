@@ -1,0 +1,365 @@
+// Note to translators:
+// If a sentence is the same in your language then please change it to "#same"
+//
+// eg:
+// LANG_ENGLISH  "HALT"
+// LANG_GERMAN   "#same"
+//
+// (This is so we can tell which strings have been signed-off as ok to be the same words for QA
+//  and because we do not store duplicate strings, which will then get exported again next time
+//  as being untranslated.)
+//
+VERSION             "1"
+CONFIG              "W:\bin\stringed.cfg"
+FILENOTES           "OJP menu strings"
+
+//[OLDGAMETYPES]
+REFERENCE           JEDIMASTER
+LANG_ENGLISH        "Jedi Master"
+LANG_GERMAN	    "Jedi Meister"
+//[/OLDGAMETYPES]
+
+//[HSABERS]
+REFERENCE	    SINGLE_HILT10
+NOTES               "HSABERS"
+LANG_ENGLISH        "Retribution"
+LANG_GERMAN	    "#same"
+
+REFERENCE	    SINGLE_HILT11
+NOTES               "HSABERS"
+LANG_ENGLISH        "Skywalker"
+LANG_GERMAN	    "#same"
+
+REFERENCE	    SINGLE_HILT12
+NOTES               "HSABERS"
+LANG_ENGLISH        "Stinger"
+LANG_GERMAN	    "#same"
+//[/HSABERS]
+
+//[SERVERFILTERS]
+REFERENCE	    OJP_BASIC
+LANG_ENGLISH        "OJP Basic"
+LANG_GERMAN	    "#same"
+
+REFERENCE	    OJP_ENHANCED
+LANG_ENGLISH        "OJP Enhanced"
+LANG_GERMAN	    "#same"
+//[/SERVERFILTERS]
+
+//[CoOp]
+REFERENCE           COOP
+LANG_ENGLISH        "Cooperative"
+LANG_GERMAN	    "Kooperativ Modus"
+//[/CoOp]
+
+//[AdminSys]
+REFERENCE           KICKALLY
+LANG_ENGLISH        "Kick Ally"
+LANG_GERMAN	        "Verbündeten rauswerfen"
+
+REFERENCE           KICK_ALLY
+LANG_ENGLISH        "Kick Ally:"
+LANG_GERMAN	    "Verbündeten rauswerfen:"
+
+REFERENCE           BANISH_AN_ALLY_FROM
+LANG_ENGLISH        "Banish an ally from the server."
+LANG_GERMAN	        "Einen Verbündeten vom Server verbannen."
+
+REFERENCE           SELECT_ALLY_TO_KICK
+LANG_ENGLISH        "Select ally to kick."
+LANG_GERMAN	        "Verbündeten wählen, der rausgeworfen werden soll."
+
+REFERENCE           BEGIN_VOTE_TO_BANISH_ALLY
+LANG_ENGLISH        "Begin vote to banish this ally."
+LANG_GERMAN	        "Starte Abstimmung um einen Verbündeten rauszuwerfen."
+
+REFERENCE           WARNINGSUICIDEBAN
+LANG_ENGLISH        "Warning: Suicide spammers WILL be BANNED"
+LANG_GERMAN	    "Warnung: Selbstmord-Spammer WERDEN VERBANNT werden!"
+
+REFERENCE           WARNINGSUICIDEKICK
+LANG_ENGLISH        "Warning: Suicide spammers WILL be KICKED"
+LANG_GERMAN	    "Warnung: Selbstmord-Spammer WERDEN RAUSGEWORFEN werden!"
+
+REFERENCE           SUICIDEBAN
+LANG_ENGLISH        "BANNED for suicide spamming!"
+LANG_GERMAN	    "Für Selbstmord-spammen VERBANNT!"
+
+REFERENCE           SUICIDEKICK
+LANG_ENGLISH        "KICKED for suicide spamming!"
+LANG_GERMAN	    "Für Selbstmord-spammen RAUSGEWORFEN!"
+
+REFERENCE           WARNINGTKBAN
+LANG_ENGLISH        "Warning: Team-kill spammers WILL be BANNED"
+LANG_GERMAN	    "Warnung: Teammitglieder-töten-Spammer WERDEN VERBANNT werden!"
+
+REFERENCE           WARNINGTKKICK
+LANG_ENGLISH        "Warning: Team-kill spammers WILL be KICKED"
+LANG_GERMAN	    "Warnung: Teammitglieder-töten-Spammer WERDEN RAUSGEWORFEN!"
+
+REFERENCE           TKBAN
+LANG_ENGLISH        "BANNED for team-kill spamming!"
+LANG_GERMAN	    "Für Teammitglieder-töten-spammen VERBANNT!"
+
+REFERENCE           TKKICK
+LANG_ENGLISH        "KICKED for team-kill spamming!"
+LANG_GERMAN	    "Für Teammitglieder-töten-spammen RAUSGEWORFEN!"
+//[/AdminSys]
+
+//[UITweaks]
+REFERENCE	    DRAWCROSSHAIR_DESC
+LANG_ENGLISH	    "Hide/Show and choose crosshair"
+LANG_GERMAN		"Ein-/Ausschalten des Fadenkreuzes und auswählen"
+
+REFERENCE	    CROSSHAIRSIZE
+LANG_ENGLISH	    "Crosshair Size: "
+LANG_GERMAN		"Fadenkreuzgröße: "
+
+REFERENCE	    CROSSHAIRSIZE_DESC
+LANG_ENGLISH	   "Sets crosshair size"
+LANG_GERMAN			"Fadenkreuzgröße festlegen"
+
+REFERENCE	    SMALL
+LANG_ENGLISH	    "Small"
+LANG_GERMAN			"Klein”"
+
+REFERENCE	    NORMAL
+LANG_ENGLISH	    "Normal"
+LANG_GERMAN			"#same"
+
+REFERENCE	    LARGE
+LANG_ENGLISH	    "Large"
+LANG_GERMAN			"Groß"
+
+REFERENCE	    ADVANCED
+LANG_ENGLISH	    "Advanced"
+LANG_GERMAN			"Erweitert"
+
+REFERENCE	    ADVANCED_DESC
+LANG_ENGLISH	    "Advanced Settings"
+LANG_GERMAN			"Erweiterte Einstellungen"
+
+REFERENCE	    SHOWFRAMERATE
+LANG_ENGLISH	    "Show Framerate:"
+LANG_GERMAN			"Zeige die Framerate:"
+
+REFERENCE	    SHOWFRAMERATE_DESC
+LANG_ENGLISH	    "Show framerate in upper right corner"
+LANG_GERMAN			"Zeige die Framerate in der oberen rechten Ecke an"
+
+REFERENCE	    LAGOMETER
+LANG_ENGLISH	    "Display Lag Meter:"
+LANG_GERMAN			"Zeige das Lag-Meter:"
+
+REFERENCE	    LAGOMETER_DESC
+LANG_ENGLISH	    "Displays Lag Meter on right side"
+LANG_GERMAN			"Zeigt das Lag-Meter an der rechten Seite"
+//[/UITweaks]
+
+//[MOREWEAPOPTIONS]
+REFERENCE	    WEAPONDISABLE
+LANG_ENGLISH	    "Weapons:"
+LANG_GERMAN			"Waffen:"
+
+REFERENCE	    WEAPONDISABLE_DESC
+LANG_ENGLISH	    "Sets which weapons are useable."
+LANG_GERMAN			"Legt fest, welche Waffen benutzbar sind. "
+
+REFERENCE	    WEAPONDISABLE_ALLON
+LANG_ENGLISH	    "All On"
+LANG_GERMAN			"Alle"
+
+REFERENCE	    WEAPONDISABLE_MELEEONLY
+LANG_ENGLISH	    "Melee Only"
+LANG_GERMAN 		"Nur Nahkampf"
+
+REFERENCE	    WEAPONDISABLE_SABERSONLY
+LANG_ENGLISH	    "Sabers Only"
+LANG_GERMAN 		"Nur Lichtschwerter"
+
+REFERENCE	    WEAPONDISABLE_SABERSMELEE
+LANG_ENGLISH	    "Sabers/Melee"
+LANG_GERMAN 		"Lichtschwert/Nahkampf"
+
+REFERENCE	    WEAPONDISABLE_NOEXPLOSIVES
+LANG_ENGLISH	    "No Explosives"
+LANG_GERMAN 		"Keine Explosionswaffen"
+//[/MOREWEAPOPTIONS]
+
+//[MOREFORCEOPTIONS]
+REFERENCE	    DISABLEFORCEPOWERS
+LANG_ENGLISH	    "Force Powers:"
+LANG_GERMAN 		"Kräfte der Macht:"
+
+REFERENCE	    DISABLEFORCEPOWERS_DESC
+LANG_ENGLISH	    "Sets which force powers are useable."
+LANG_GERMAN 		"Legt fest welche Kräfte der Macht verfügbar sind."
+
+REFERENCE	    DISABLEFORCEPOWERS_ALLON
+LANG_ENGLISH	    "All On"
+LANG_GERMAN 		"Alle"
+
+REFERENCE	    DISABLEFORCEPOWERS_ALLOFF
+LANG_ENGLISH	    "All Off"
+LANG_GERMAN 		"Keine"
+
+REFERENCE	    DISABLEFORCEPOWERS_JUMPONLY
+LANG_ENGLISH	    "Jump Only"
+LANG_GERMAN 		"Nur Sprung"
+
+REFERENCE	    DISABLEFORCEPOWERS_NEUTRALSONLY
+LANG_ENGLISH	    "Neutrals Only"	
+LANG_GERMAN 		"Nur neutrale Kräfte"
+	
+//[/MOREFORCEOPTIONS]
+
+//[VisualWeapons]
+REFERENCE	    HOLSTEREDWEAPONS
+LANG_ENGLISH	    "Display Holstered Weapons:"
+LANG_GERMAN     "Zeige getragene Waffen an:"
+
+REFERENCE	    HOLSTEREDWEAPONS_DESC
+LANG_ENGLISH	    "Displays weaponry on players' models"
+LANG_GERMAN     "Zeigt Waffen am Model des Spielers"
+
+REFERENCE	    HOLSTEREDWEAPONSPLAYER
+LANG_ENGLISH	    "On you only"
+LANG_GERMAN     "Nur an dir"
+
+REFERENCE	    HOLSTEREDWEAPONSALL
+LANG_ENGLISH	    "On everyone"
+LANG_GERMAN     "An allen"
+//[/VisualWeapons]
+
+//[RGBSabers]
+REFERENCE	    TEAMRGBSABERS
+LANG_ENGLISH	    "Team RGB Sabers:"
+LANG_GERMAN	        "Team RGB Klingen:"
+
+REFERENCE	    TEAMRGBSABERS_DESC
+LANG_ENGLISH	    "Displays custom colored sabers in team games"
+LANG_GERMAN	        "Zeige farbige Klingen in Team-Spielen"
+
+REFERENCE	    TEAMRGBSABERSPLAYER
+LANG_ENGLISH	    "Yours only"
+LANG_GERMAN	        "Nur Deine"
+
+REFERENCE	    TEAMRGBSABERSALL
+LANG_ENGLISH	    "Everyone's"
+LANG_GERMAN	        "Von Allen"
+
+REFERENCE	    RGBSABERS_SETUP
+LANG_ENGLISH	    "RGB Saber Setup"
+LANG_GERMAN	        "RGB Klingen Setup"
+
+REFERENCE	    RGBSABERS_SETUP_PROFILE
+LANG_ENGLISH	    "RGB Setup"	
+LANG_GERMAN	        "#same"
+
+REFERENCE	    RGBSABERS_SETUP_DESC
+LANG_ENGLISH	    "Customize your sabers using RGB color channels."
+LANG_GERMAN	        "Verändere deine Klingen durch RGB Farbkanaele"
+
+REFERENCE	    RGBSABERS_SETUP_APPLY_DESC
+LANG_ENGLISH	    "Apply these settings to your RGB saber blades and close the window."
+LANG_GERMAN	        "Wende diese Einstellungen auf deine RGB Klingen an und schliess das Fenster."
+
+REFERENCE	    RGBSABERS_SETUP_SLIDER_RED1
+LANG_ENGLISH	    "Move this slider to select the red color component of your first lightsaber blade."
+LANG_GERMAN	        "Bewege diesen Regler um den Rotanteil deiner ersten Klinge festzulegen."
+
+REFERENCE	    RGBSABERS_SETUP_SLIDER_RED2
+LANG_ENGLISH	    "Move this slider to select the red color component of your second lightsaber blade."
+LANG_GERMAN	        "Bewege diesen Regler um den Rotanteil deiner zweiten Klinge festzulegen."
+
+REFERENCE	    RGBSABERS_SETUP_SLIDER_GREEN1
+LANG_ENGLISH	    "Move this slider to select the green color component of your first lightsaber blade."
+LANG_GERMAN	        "Bewege diesen Regler um den Gruenanteil deiner ersten Klinge festzulegen."
+
+REFERENCE	    RGBSABERS_SETUP_SLIDER_GREEN2
+LANG_ENGLISH	    "Move this slider to select the green color component of your second lightsaber blade."
+LANG_GERMAN	        "Bewege diesen Regler um den Gruenanteil deiner zweiten Klinge festzulegen."
+
+REFERENCE	    RGBSABERS_SETUP_SLIDER_BLUE1
+LANG_ENGLISH	    "Move this slider to select the blue color component of your first lightsaber blade."
+LANG_GERMAN	        "Bewege diesen Regler um den Blauanteil deiner ersten Klinge festzulegen."
+
+REFERENCE	    RGBSABERS_SETUP_SLIDER_BLUE2
+LANG_ENGLISH	    "Move this slider to select the blue color component of your second lightsaber blade."
+LANG_GERMAN	        "Bewege diesen Regler um den Blauanteil deiner zweiten Klinge festzulegen."
+
+REFERENCE	    RGBSABERS_SETUP_RED1_DESC
+LANG_ENGLISH	    "The red color component of your first lightsaber blade."
+LANG_GERMAN	        "Der Rotanteil deiner ersten Klinge."
+
+REFERENCE	    RGBSABERS_SETUP_RED2_DESC
+LANG_ENGLISH	    "The red color component of your second lightsaber blade."
+LANG_GERMAN	        "Der Rotanteil deiner zweiten Klinge."
+
+REFERENCE	    RGBSABERS_SETUP_GREEN1_DESC
+LANG_ENGLISH	    "The green color component of your first lightsaber blade."
+LANG_GERMAN	        "Der Gruenanteil deiner ersten Klinge."
+
+REFERENCE	    RGBSABERS_SETUP_GREEN2_DESC
+LANG_ENGLISH	    "The green color component of your second lightsaber blade."
+LANG_GERMAN	        "Der Gruenanteil deiner zweiten Klinge."
+
+REFERENCE	    RGBSABERS_SETUP_BLUE1_DESC
+LANG_ENGLISH	    "The blue color component of your first lightsaber blade."
+LANG_GERMAN	        "Der Blauanteil deiner ersten Klinge."
+
+REFERENCE	    RGBSABERS_SETUP_BLUE2_DESC
+LANG_ENGLISH	    "The blue color component of your second lightsaber blade."
+LANG_GERMAN	        "Der Blauanteil deiner zweiten Klinge."
+
+REFERENCE	    RGBSABERS_COLOR1
+LANG_ENGLISH	    "Color 1"
+LANG_GERMAN	        "Farbe 1"
+
+REFERENCE	    RGBSABERS_COLOR2
+LANG_ENGLISH	    "Color 2"
+LANG_GERMAN	        "Farbe 2"
+
+REFERENCE	    RGBSABERS_PIMP_DESC
+LANG_ENGLISH	    "A lightsaber blade that pulses with multiple colors. Consult the OJP documentation on how to make your own."
+LANG_GERMAN	        "Eine Klinge, die mit verschiedenen Farben pulsiert. Schlag in der OJP Dokumentation nach, wie du deine eigene machst."
+
+REFERENCE	    RGBSABERS_RGB_DESC
+LANG_ENGLISH	    "Customize this lightsaber blade's color in the RGB Setup Menu."
+LANG_GERMAN	        "Veraendere diese Farbe im RGB Setup Menu."
+//[/RGBSabers]
+
+//[TrueView]
+REFERENCE	    TRUEINVERTSABER
+LANG_ENGLISH	    "3rd Person Invert:"
+LANG_GERMAN	        "3. Person-Ansicht umkehren:"
+
+REFERENCE	    TRUEINVERTSABER_DESC
+LANG_ENGLISH	    "Determines how the current third/first person setting affects sabers, melee, and guns."
+LANG_GERMAN	        "Legt fest, wie die aktuelle 1./3. Person-Ansicht sich auf Schwert, Nahkampf und andere Waffen auswirkt."
+
+REFERENCE	    TRUEINVERTSABERSAME
+LANG_ENGLISH	    "All Same"
+LANG_GERMAN	        "Alle gleich"
+
+REFERENCE	    TRUEINVERTSABERINVERT 
+LANG_ENGLISH	    "Saber/Melee Inverted"
+LANG_GERMAN	        "Schwert/Nahkampf umgekehrt"
+
+REFERENCE	    TRUEINVERTSABERALWAYSTHIRDPERSON
+LANG_ENGLISH	    "Sabers/Melee Always 3rd Person"
+LANG_GERMAN	        "Schwert/Nahkampf  3. Person-Ansicht"
+//[/TrueView]
+
+//[CoOp]
+REFERENCE	    PLAYERTEAM
+LANG_ENGLISH	    "Friendlies"
+LANG_GERMAN         "#same"
+
+REFERENCE	    ENEMYTEAM
+LANG_ENGLISH	    "Enemies"
+LANG_GERMAN         "#same"
+//[/CoOp]
+
+ENDMARKER
+

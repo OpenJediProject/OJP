@@ -1,0 +1,299 @@
+//This file should never exceed 16384 bytes.
+
+Teams
+{
+	team1 @SIEGE_KORR_TEAM1_LIGHTJEDI
+	team2 @SIEGE_KORR_TEAM2_DARKJEDI
+}
+
+mapgraphic "gfx/mplevels/siege3_korriban"
+missionname  "''Korriban''"
+
+//roundbegin_target "gateopen"
+//this is a global target, it will be fired off if there is one when the round begins (this happens
+//when there is at least 1 player on each team active)
+
+//All message strings, like message_team1, wonround, etc. can be striped references by having the first char as @.
+
+@SIEGE_KORR_TEAM1_LIGHTJEDI
+{
+	RequiredObjectives 6 			//How many objectives must this team complete before winning the round?
+	Timed 1800 					//this team has 120 seconds to complete its objectives, otherwise the other team wins.
+	UseTeam "Siege3_Jedi" 			//Specifies the name of team "theme" to use
+	TeamIcon	"gfx/2d/mp_rebel_symbol_3"
+	TeamColorOn	"1 0 0 1"
+	TeamColorOff	".7 0 0 1"
+
+
+	Objective1
+	{
+		goalname "@SIEGE_3_KOR_LS_OBJ1"
+		final -1 									//If 1, the round is won instantly for completeing this goal. If 0, counts toward total number of goals required. If -1, does not count toward the number of final goals.
+		message_team1 "@SIEGE_3_KOR_LS_OBJ1_COMP_TEAM1"			//Printed for team1 when this objective is completed.
+		message_team2 "@SIEGE_3_KOR_LS_OBJ1_COMP_TEAM2" 		//same as above, for team2.
+		target "spawnrelay1" 							//Will use this target when this objective is completed. Remove this line for nothing.
+		sound_team1 "sound/chars/protocol/misc/siege2.mp3" 		//upon completion of objective, play this sound for team1. If you want no sound, remove this line.
+		sound_team2 "sound/chars/protocol/misc/siege6.mp3" 		//same, for team2.
+
+		objdesc "@SIEGE_3_KOR_LS_OBJ1" 								//text description of objective
+		objgfx "gfx/mplevels/korriban/objective1" 			//graphic to display for objective
+		mapicon "gfx/mp/siegeicons/korriban/gate1_o"
+		litmapicon "gfx/mp/siegeicons/korriban/gate1_outline"
+		donemapicon "gfx/mp/siegeicons/korriban/gate1_x"
+		mappos "152 256 18 18"							//what location to display
+	}
+
+	Objective2
+	{
+		goalname "@SIEGE_3_KOR_LS_OBJ2"
+		final -1
+		message_team1 "@SIEGE_3_KOR_LS_OBJ2_COMP_TEAM1"
+		message_team2 "@SIEGE_3_KOR_LS_OBJ2_COMP_TEAM2"
+		//target crystalcomplete1
+		sound_team1 "sound/chars/protocol/misc/siege2.mp3" 		//upon completion of objective, play this sound for team1. If you want no sound, remove this line.
+		sound_team2 "sound/chars/protocol/misc/siege6.mp3" 		//same, for team2.
+
+		objdesc "@SIEGE_3_KOR_LS_OBJ2" 								//text description of objective
+		objgfx "gfx/mplevels/korriban/objective2" 			//graphic to display for objective
+		mapicon "gfx/mp/siegeicons/korriban/red_crystal_o"
+		litmapicon "gfx/mp/siegeicons/korriban/red_crystal_outline"
+		donemapicon "gfx/mp/siegeicons/korriban/red_crystal_x"
+		mappos "200 220 18 18"							//what location to display
+		
+		DependsOn1 1	//this objective can't be completed until this objective is done (objective number)
+	}
+
+	Objective3
+	{
+		goalname "@SIEGE_3_KOR_LS_OBJ3"
+		final -1
+		message_team1 "@SIEGE_3_KOR_LS_OBJ3_COMP_TEAM1"
+		message_team2 "@SIEGE_3_KOR_LS_OBJ3_COMP_TEAM2"
+		//target crystalcomplete2
+		sound_team1 "sound/chars/protocol/misc/siege2.mp3" 		//upon completion of objective, play this sound for team1. If you want no sound, remove this line.
+		sound_team2 "sound/chars/protocol/misc/siege6.mp3" 		//same, for team2.
+
+		objdesc "@SIEGE_3_KOR_LS_OBJ3" 								//text description of objective
+		objgfx "gfx/mplevels/korriban/objective3" 			//graphic to display for objective
+		mapicon "gfx/mp/siegeicons/korriban/green_crystal_o"
+		litmapicon "gfx/mp/siegeicons/korriban/green_crystal_outline"
+		donemapicon "gfx/mp/siegeicons/korriban/green_crystal_x"
+		mappos "106 182 18 18"							//what location to display
+
+		DependsOn1 1	//this objective can't be completed until this objective is done (objective number)
+	}
+
+	Objective4
+	{
+		goalname "@SIEGE_3_KOR_LS_OBJ4"
+		final -1
+		message_team1 "@SIEGE_3_KOR_LS_OBJ4_COMP_TEAM1"
+		message_team2 "@SIEGE_3_KOR_LS_OBJ4_COMP_TEAM2"
+		//target crystalcomplete3
+		sound_team1 "sound/chars/protocol/misc/siege2.mp3" 		//upon completion of objective, play this sound for team1. If you want no sound, remove this line.
+		sound_team2 "sound/chars/protocol/misc/siege6.mp3" 		//same, for team2.
+
+		objdesc "@SIEGE_3_KOR_LS_OBJ4" 								//text description of objective
+		objgfx "gfx/mplevels/korriban/objective4" 			//graphic to display for objective
+		mapicon "gfx/mp/siegeicons/korriban/blue_crystal_o"
+		litmapicon "gfx/mp/siegeicons/korriban/blue_crystal_outline"
+		donemapicon "gfx/mp/siegeicons/korriban/blue_crystal_x"
+		mappos "105 220 18 18"							//what location to display
+
+		DependsOn1 1	//this objective can't be completed until this objective is done (objective number)
+	}
+
+	Objective5
+	{
+		goalname "@SIEGE_3_KOR_LS_OBJ5"
+		final -1
+		message_team1 "@SIEGE_3_KOR_LS_OBJ5_COMP_TEAM1"
+		message_team2 "@SIEGE_3_KOR_LS_OBJ5_COMP_TEAM1"
+//		target "spawnrelay3"
+		sound_team1 "sound/chars/protocol/misc/siege2.mp3" 		//upon completion of objective, play this sound for team1. If you want no sound, remove this line.
+		sound_team2 "sound/chars/protocol/misc/siege6.mp3" 		//same, for team2.
+
+		objdesc "@SIEGE_3_KOR_LS_OBJ5" 								//text description of objective
+		objgfx "gfx/mplevels/korriban/objective5" 			//graphic to display for objective
+		mapicon "gfx/mp/siegeicons/korriban/scepter_o"
+		litmapicon "gfx/mp/siegeicons/korriban/scepter_outline"
+		donemapicon "gfx/mp/siegeicons/korriban/scepter_x"
+		mappos "108 100 98 54"							//what location to display
+
+		DependsOn1 2	//this objective can't be completed until this objective is done (objective number)
+		DependsOn2 3
+		DependsOn3 4
+	}
+
+	Objective6
+	{
+		goalname "@SIEGE_3_KOR_LS_OBJ6"
+		final 1
+		message_team1 "@SIEGE_3_KOR_LS_OBJ6_COMP_TEAM1"
+		message_team2 "@SIEGE_3_KOR_LS_OBJ6_COMP_TEAM2"
+		target obj1_complete_imperial
+		sound_team1 "sound/chars/protocol/misc/siege1.mp3" 		//upon completion of objective, play this sound for team1. If you want no sound, remove this line.
+		sound_team2 "sound/chars/protocol/misc/siege5.mp3" 		//same, for team2.
+
+
+		objdesc "@SIEGE_3_KOR_LS_OBJ6"								//text description of objective
+		objgfx "gfx/mplevels/korriban/objective6" 			//graphic to display for objective
+		mapicon "gfx/mp/siegeicons/korriban/coffin_o"
+		litmapicon "gfx/mp/siegeicons/korriban/coffin_outline"
+		donemapicon "gfx/mp/siegeicons/korriban/coffin_x"
+		mappos "153 114 18 18"							//what location to display
+
+		DependsOn1 5	//this objective can't be completed until this objective is done (objective number)
+	}
+
+
+
+	wonround "@SIEGE_3_KOR_LS_WON" 						//Printed to this team if they won the round.
+	lostround "@SIEGE_3_KOR_LS_LOST" 						//Printed to this team if they lost the round.
+
+	roundover_sound_wewon "sound/chars/protocol/misc/40MOM011.mp3"
+	roundover_sound_welost "sound/chars/protocol/misc/40MOM012.mp3"
+
+	roundover_target "siegeend" 							//object to use if this team won - ideally ending up on a target_saga_end
+
+	attackers 1 									//this actually does not affect the mission, but the bot AI will use the knowledge to decide on how to act.
+
+	briefing "@SIEGE_3_KOR_LS_BRIEF" 						//Displayed on the mission briefing menu.
+}
+
+@SIEGE_KORR_TEAM2_DARKJEDI
+{
+	RequiredObjectives 0
+	UseTeam "Siege3_DarkJedi"
+	TeamIcon	"gfx/2d/mp_imp_symbol_3"
+	TeamColorOn	"0 0 1 1"
+	TeamColorOff	"0 0 .7 1"
+
+
+	Objective1
+	{
+		goalname "@SIEGE_3_KOR_DS_OBJ1"
+		final -1 									//If 1, the round is won instantly for completeing this goal. If 0, counts toward total number of goals required. If -1, does not count toward the number of final goals.
+		message_team1 "@SIEGE_3_KOR_LS_OBJ1_COMP_TEAM1"			//Printed for team1 when this objective is completed.
+		message_team2 "@SIEGE_3_KOR_LS_OBJ1_COMP_TEAM2" 		//same as above, for team2.
+		target "spawnrelay1" 							//Will use this target when this objective is completed. Remove this line for nothing.
+		sound_team1 "sound/chars/protocol/misc/siege2.mp3" 		//upon completion of objective, play this sound for team1. If you want no sound, remove this line.
+		sound_team2 "sound/chars/protocol/misc/siege6.mp3" 		//same, for team2.
+
+		objdesc "@SIEGE_3_KOR_DS_OBJ1_DESC" 								//text description of objective
+		objgfx "gfx/mplevels/korriban/objective1" 			//graphic to display for objective
+		mapicon "gfx/mp/siegeicons/korriban/gate1_o"
+		litmapicon "gfx/mp/siegeicons/korriban/gate1_outline"
+		donemapicon "gfx/mp/siegeicons/korriban/gate1_x"
+		mappos "152 256 18 18"							//what location to display
+	}
+
+	Objective2
+	{
+		goalname "@SIEGE_3_KOR_DS_OBJ_2"
+		final -1
+		message_team1 "@SIEGE_3_KOR_LS_OBJ2_COMP_TEAM1"
+		message_team2 "@SIEGE_3_KOR_LS_OBJ2_COMP_TEAM2"
+		//target crystalcomplete1
+		sound_team1 "sound/chars/protocol/misc/siege2.mp3" 		//upon completion of objective, play this sound for team1. If you want no sound, remove this line.
+		sound_team2 "sound/chars/protocol/misc/siege6.mp3" 		//same, for team2.
+
+		objdesc "@SIEGE_3_KOR_DS_OBJ_2_DESC" 								//text description of objective
+		objgfx "gfx/mplevels/korriban/objective2" 			//graphic to display for objective
+		mapicon "gfx/mp/siegeicons/korriban/red_crystal_o"
+		litmapicon "gfx/mp/siegeicons/korriban/red_crystal_outline"
+		donemapicon "gfx/mp/siegeicons/korriban/red_crystal_x"
+		mappos "200 220 18 18"							//what location to display
+
+	}
+
+	Objective3
+	{
+		goalname "@SIEGE_3_KOR_DS_OBJ_3"
+		final -1
+		message_team1 "@SIEGE_3_KOR_LS_OBJ3_COMP_TEAM1"
+		message_team2 "@SIEGE_3_KOR_LS_OBJ3_COMP_TEAM2"
+		//target crystalcomplete2
+		sound_team1 "sound/chars/protocol/misc/siege2.mp3" 		//upon completion of objective, play this sound for team1. If you want no sound, remove this line.
+		sound_team2 "sound/chars/protocol/misc/siege6.mp3" 		//same, for team2.
+
+		objdesc "@SIEGE_3_KOR_DS_OBJ_3_DESC" 								//text description of objective
+		objgfx "gfx/mplevels/korriban/objective3" 			//graphic to display for objective
+		mapicon "gfx/mp/siegeicons/korriban/green_crystal_o"
+		litmapicon "gfx/mp/siegeicons/korriban/green_crystal_outline"
+		donemapicon "gfx/mp/siegeicons/korriban/green_crystal_x"
+		mappos "106 182 18 18"							//what location to display
+
+	}
+
+	Objective4
+	{
+		goalname "@SIEGE_3_KOR_DS_OBJ_4"
+		final -1
+		message_team1 "@SIEGE_3_KOR_LS_OBJ4_COMP_TEAM1"
+		message_team2 "@SIEGE_3_KOR_LS_OBJ4_COMP_TEAM2"
+		//target crystalcomplete3
+		sound_team1 "sound/chars/protocol/misc/siege2.mp3" 		//upon completion of objective, play this sound for team1. If you want no sound, remove this line.
+		sound_team2 "sound/chars/protocol/misc/siege6.mp3" 		//same, for team2.
+
+		objdesc "@SIEGE_3_KOR_DS_OBJ_4_DESC" 								//text description of objective
+		objgfx "gfx/mplevels/korriban/objective4" 			//graphic to display for objective
+		mapicon "gfx/mp/siegeicons/korriban/blue_crystal_o"
+		litmapicon "gfx/mp/siegeicons/korriban/blue_crystal_outline"
+		donemapicon "gfx/mp/siegeicons/korriban/blue_crystal_x"
+		mappos "105 220 18 18"							//what location to display
+
+	}
+
+	Objective5
+	{
+		goalname "@SIEGE_3_KOR_DS_OBJ_5"
+		final -1
+		message_team1 "@SIEGE_3_KOR_LS_OBJ5_COMP_TEAM1"
+		message_team2 "@SIEGE_3_KOR_LS_OBJ5_COMP_TEAM1"
+//		target "spawnrelay3"
+		sound_team1 "sound/chars/protocol/misc/siege2.mp3" 		//upon completion of objective, play this sound for team1. If you want no sound, remove this line.
+		sound_team2 "sound/chars/protocol/misc/siege6.mp3" 		//same, for team2.
+
+		objdesc "@SIEGE_3_KOR_DS_OBJ_5_DESC" 								//text description of objective
+		objgfx "gfx/mplevels/korriban/objective5" 			//graphic to display for objective
+		mapicon "gfx/mp/siegeicons/korriban/scepter_o"
+		litmapicon "gfx/mp/siegeicons/korriban/scepter_outline"
+		donemapicon "gfx/mp/siegeicons/korriban/scepter_x"
+		mappos "108 100 98 54"						//what location to display
+
+	}
+
+	Objective6
+	{
+		goalname "@SIEGE_3_KOR_DS_OBJ_6"
+		final 1
+		message_team1 "@SIEGE_3_KOR_LS_OBJ6_COMP_TEAM1"
+		message_team2 "@SIEGE_3_KOR_LS_OBJ6_COMP_TEAM2"
+		target obj1_complete_imperial
+		sound_team1 "sound/chars/protocol/misc/siege1.mp3" 		//upon completion of objective, play this sound for team1. If you want no sound, remove this line.
+		sound_team2 "sound/chars/protocol/misc/siege5.mp3" 		//same, for team2.
+
+
+		objdesc "@SIEGE_3_KOR_DS_OBJ_6_DESC"								//text description of objective
+		objgfx "gfx/mplevels/korriban/objective6" 			//graphic to display for objective
+		mapicon "gfx/mp/siegeicons/korriban/coffin_o"
+		litmapicon "gfx/mp/siegeicons/korriban/coffin_outline"
+		donemapicon "gfx/mp/siegeicons/korriban/coffin_x"
+		mappos "153 114 18 18"							//what location to display
+
+	}
+
+
+	wonround "@SIEGE_3_KOR_DS_WON" 						//Printed to this team if they won the round.
+	lostround "@SIEGE_3_KOR_DS_LOST" 						//Printed to this team if they lost the round.
+
+	roundover_sound_wewon "sound/chars/protocol/misc/40MOM011.mp3"
+	roundover_sound_welost "sound/chars/protocol/misc/40MOM012.mp3"
+
+	roundover_target "siegeend"
+
+	attackers 0
+
+	briefing "@SIEGE_3_KOR_DS_BRIEF"
+}

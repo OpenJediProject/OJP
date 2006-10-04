@@ -1,0 +1,180 @@
+//This file lets the dynamic music system (DMS), for OJP based MP,
+//know the length of all the DMS related music files.  Time is
+//in seconds.  The filenames are not case sensitive.
+musiclengths
+{
+    //artus_topside
+    impbased_action		168.138 
+
+    //bespin_streets
+    BespinA_Action		67.273 
+
+    //hoth2
+    hoth2_action		156.158 
+    hoth2_atr00			11.834 
+    hoth2_atr01			13.921 
+    hoth2_atr02			8.429 
+    hoth2_atr03			10.946 
+    hoth2_etr00			6.152 
+    hoth2_etr01			14.287 
+    hoth2_explore		139.035 
+
+    //kor1
+    korrib_action		119.469 
+
+    //kor_dark
+    korrib_dark_etr00	22.724 
+    korrib_dark_etr01	17.436 
+    korrib_dark_explore	107.381 
+
+    //kor_lite
+    final_battle		155.728 
+    korrib_action		119.469 
+    korrib_atr00		8.813 
+    korrib_atr01		13.106 
+    korrib_atr02		6.948 
+    korrib_atr03		18.641 
+    korrib_lite_etr00	26.301 
+    korrib_lite_etr01	16.009 
+    korrib_lite_explore	96.738 
+
+    //t1_fatal
+    tunnels_action		76.82 
+    tunnels_atr00		3.474 
+    tunnels_atr01		17.898 
+    tunnels_atr02		16.458 
+    tunnels_atr03		7.008 
+    tunnels_etr00		7.085 
+    tunnels_etr01		14.05 
+    tunnels_explore		109.822 
+
+    //t1_sour
+    dealsour_action		114.009 
+    dealsour_atr00		6.591 
+    dealsour_atr01		11.808 
+    dealsour_atr02		8.91 
+    dealsour_etr00		12.245 
+    dealsour_etr01		20.22 
+    dealsour_explore	148.308 
+
+	//t1_surprise
+	tusken_action		117.726 
+	tusken_atr00		8.468 
+	tusken_atr01		10.392 
+	tusken_atr02		5.704 
+	tusken_atr03		8.494 
+	tusken_etr00		12.909 
+	tusken_etr01		11.026 
+	tusken_explore		154.088 
+
+    //t2_dpred
+    ImpBaseB_Action		111.229 
+    ImpBaseB_Atr00		4.641 
+    ImpBaseB_Atr01		8.272 
+    ImpBaseB_Atr02		8.396 
+    ImpBaseB_Atr03		6.032 
+    ImpBaseB_Etr00		23.373 
+    ImpBaseB_Etr01		16.732 
+    ImpBaseB_Explore	159.012 
+
+    //t2_rancor
+    rancor_action		159.812 
+    rancor_atr00		9.079 
+    rancor_atr01		6.259 
+    rancor_atr02		14.999 
+    rancor_etr00		24.796 
+    rancor_etr01		9.764 
+    rancor_explore		123.055 
+
+	//t2_rogue
+	narshaada_action	114.797 
+	narshaada_atr00		12.064 
+	narshaada_atr01		13.561 
+	narshaada_atr02		8.179 
+	narshaada_atr03		14.615 
+	narshaada_etr00		23.349 
+	narshaada_etr01		21.07 
+	narshaada_explore	187.846 
+
+    //t2_wedge
+    besplat_action		87.934 
+    besplat_atr00		1.986 
+    besplat_atr01		9.787 
+    besplat_atr02		14.88 
+    besplat_boss		77.598 
+    besplat_etr00		5.474 
+    besplat_etr01		9.43 
+    besplat_explore		169.378 
+
+    //t3_byss
+    alienhb_action		132.98 
+    alienhb_atr00		12.857 
+    alienhb_atr01		5.964 
+    alienhb_atr02		20.506 
+    alienhb_etr00		25.256 
+    alienhb_etr01		12.132 
+    alienhb_explore		186.892 
+
+    //vjun2
+    ImpBaseE_action		133.487 
+    ImpBaseE_atr00		9.578 
+    ImpBaseE_atr01		8.763 
+    ImpBaseE_atr02		13.574 
+    ImpBaseE_atr03		13.909 
+    ImpBaseE_etr00		6.647 
+    ImpBaseE_etr01		9.6 
+    ImpBaseE_explore	211.564 
+
+    //vjun3
+    vjun3_action		132.917 
+    vjun3_atr00			7.572 
+    vjun3_atr01			12.558 
+    vjun3_atr02			14.137 
+    vjun3_etr00			16.829 
+    vjun3_etr01			21.247 
+    vjun3_explore		157.185 
+
+    //yavin1
+    swamp_action		127.283 
+    swamp_atr00			4.719 
+    swamp_atr01			9.738 
+    swamp_atr02			19.534 
+    swamp_atr03			13.869 
+    swamp_etr00			8.969 
+    swamp_etr01			16.99 
+    swamp_explore		123.873 
+
+    //yavin2
+    yavtemp2_action		99.68 
+    yavtemp2_atr00		20.077 
+    yavtemp2_atr01		7.685 
+    yavtemp2_atr02		20.398 
+    yavtemp2_atr03		19.95 
+    yavtemp2_etr00		19.401 
+    yavtemp2_etr01		26.785 
+    yavtemp2_explore	169.273 
+	
+	//START DARK FORCES DMS
+	//secbase
+	secbase_action		98
+	secbase_atr00		5
+	secbase_explore		143
+	secbase_etr00		8
+
+	//sewers
+	sewers_action		110
+	sewers_atr00		36
+	sewers_atr01		23
+	sewers_explore		285
+	sewers_etr00		3
+
+	//talay
+	talay_action		124
+	talay_atr00			62
+	talay_atr01			30
+	talay_explore		220
+	talay_etr00			5
+	talay_etr01			41
+	//END DARK FORCES DMS
+}
+

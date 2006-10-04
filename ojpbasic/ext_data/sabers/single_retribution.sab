@@ -1,0 +1,13 @@
+//HSABERS
+single_retribution
+{
+	name		"Retribution"
+	saberType	SABER_SINGLE
+	saberModel	"models/weapons2/saber_desann/saber_w.glm"
+	soundOn		"sound/weapons/saber/enemy_saber_on.wav"
+	soundLoop	"sound/weapons/saber/saberhum2.wav"
+	soundOff	"sound/weapons/saber/enemy_saber_off.wav"
+	saberLength	40
+	saberColor	random
+}
+

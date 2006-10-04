@@ -1,0 +1,38 @@
+repeatDelay				300
+
+Emitter
+{
+	flags				useModel useBBox usePhysics deathFx
+
+	life				5000 1e+004
+
+	bounce				0.2 0.3
+
+	min					-10 -10 -10
+
+	max					10 10 10
+
+	angleDelta			-20 -40 -20 20 40 20
+
+	velocity			300 -80 -80 400 80 80
+
+	gravity				-800
+
+	density				6
+
+	models
+	[
+		models/players/r2d2/head.md3
+	]
+}
+
+Sound
+{
+	name				Boom
+
+	sounds
+	[
+		sound/chars/r5d2/misc/r5explode.mp3
+	]
+}
+

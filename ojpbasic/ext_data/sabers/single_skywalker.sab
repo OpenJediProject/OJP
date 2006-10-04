@@ -1,0 +1,13 @@
+//HSABERS
+single_skywalker
+{
+	name		"Skywalker"
+	saberType	SABER_SINGLE
+	saberModel	"models/weapons2/saber_luke/saber_w.glm"
+	soundOn		"sound/weapons/saber/saberonquick.wav"
+	soundLoop	"sound/weapons/saber/saberhum5.wav"
+	soundOff	"sound/weapons/saber/saberoffquick.wav"
+	saberLength	40
+	saberColor	random
+}
+
