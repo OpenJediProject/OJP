@@ -357,6 +357,10 @@
 
 //[ExpSys]
 #define UI_FORCE_RANK_JETPACK		298		//Jetpack skill rank ownerDraw
+#define UI_FORCE_RANK_PISTOL		299
+#define UI_FORCE_RANK_BLASTER		300
+#define UI_FORCE_RANK_THERMALS		301
+#define UI_FORCE_RANK_ROCKETS		302
 //[/ExpSys]
 
 #define VOICECHAT_GETFLAG			"getflag"				// command someone to get the flag

@@ -91,7 +91,11 @@ int uiForcePowersRank[NUM_TOTAL_SKILLS] = {
 	//0//FP_SABERTHROW,
 
 	//racc - addition skills
-	0//SK_JETPACK
+	0,//SK_JETPACK
+	0,//SK_PISTOL,
+	0,//SK_BLASTER,		
+	0,//SK_THERMAL,	
+	0,//SK_ROCKET,
 	//[/ExpSys]
 };
 
@@ -123,7 +127,11 @@ int uiForcePowerDarkLight[NUM_TOTAL_SKILLS] = //0 == neutral
 		//NUM_FORCE_POWERS
 	
 	//racc - additional skills
-	0//SK_JETPACK
+	0,//SK_JETPACK
+	0,//SK_PISTOL,
+	0,//SK_BLASTER,		
+	0,//SK_THERMAL,	
+	0,//SK_ROCKET,
 	//[/ExpSys]
 };
 
@@ -165,6 +173,7 @@ int NumberOfSkillRanks(int skill)
 	switch(skill)
 	{
 		case NUM_FORCE_POWERS+SK_JETPACK:
+		case NUM_FORCE_POWERS+SK_PISTOL:		//blaster pistol
 			return 1;
 		default:
 			return 3;
@@ -242,7 +251,7 @@ void UI_DrawForceStars(rectDef_t *rect, float scale, vec4_t color, int textStyle
 void UI_UpdateClientForcePowers(const char *teamArg)
 {
 	//[ExpSys]
-	trap_Cvar_Set( "forcepowers", va("%i-%i-%i%i%i%i%i%i%i%i%i%i%i%i%i%i%i%i%i%i%i",
+	trap_Cvar_Set( "forcepowers", va("%i-%i-%i%i%i%i%i%i%i%i%i%i%i%i%i%i%i%i%i%i%i%i%i%i%i",
 	//trap_Cvar_Set( "forcepowers", va("%i-%i-%i%i%i%i%i%i%i%i%i%i%i%i%i%i%i%i%i%i",
 	//[/ExpSys]
 		uiForceRank, uiForceSide, uiForcePowersRank[0], uiForcePowersRank[1],
@@ -252,7 +261,8 @@ void UI_UpdateClientForcePowers(const char *teamArg)
 		uiForcePowersRank[11], uiForcePowersRank[12], uiForcePowersRank[13],
 		uiForcePowersRank[14], uiForcePowersRank[15], uiForcePowersRank[16],
 		//[ExpSys]
-		uiForcePowersRank[17], uiForcePowersRank[18]) );
+		uiForcePowersRank[17], uiForcePowersRank[18], uiForcePowersRank[19],
+		uiForcePowersRank[20], uiForcePowersRank[21], uiForcePowersRank[22]) );
 		//uiForcePowersRank[17]) );
 		//[/ExpSys]
 

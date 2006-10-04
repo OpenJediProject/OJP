@@ -646,7 +646,11 @@ typedef int forcePowers_t;
 //[ExpSys]
 typedef enum
 {
-	SK_JETPACK,
+	SK_JETPACK,		//jetpack skill
+	SK_PISTOL,		//blaster pistol
+	SK_BLASTER,		//blaster rifle skill
+	SK_THERMAL,		//thermal detenator skill
+	SK_ROCKET,		//rocket launcher skill
 	NUM_SKILLS
 } skills_t;
 

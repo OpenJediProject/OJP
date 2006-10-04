@@ -3223,6 +3223,10 @@ qboolean Item_OwnerDraw_HandleKey(itemDef_t *item, int key) {
 			case UI_FORCE_RANK_SABERTHROW:
 			//[ExpSys]
 			case UI_FORCE_RANK_JETPACK:
+			case UI_FORCE_RANK_PISTOL:
+			case UI_FORCE_RANK_BLASTER:
+			case UI_FORCE_RANK_THERMALS:
+			case UI_FORCE_RANK_ROCKETS:
 			//[/ExpSys]
 	  			if(!Rect_ContainsPoint(&item->window.rect, DC->cursorx, DC->cursory) )
 				{

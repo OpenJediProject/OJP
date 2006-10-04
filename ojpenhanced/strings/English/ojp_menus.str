@@ -28,6 +28,30 @@ LANG_ENGLISH	    "Jetpack:"
 
 REFERENCE	    DESC_SKILL_JETPACK
 LANG_ENGLISH	"Gains the user a jetpack.  Additional points give the pack additional fuel."
+
+REFERENCE	    SKILL_PISTOL
+LANG_ENGLISH	    "Pistol:"
+
+REFERENCE	    DESC_SKILL_PISTOL
+LANG_ENGLISH	"Gains the user a blaster pistol."
+
+REFERENCE	    SKILL_BLASTER
+LANG_ENGLISH	    "Blaster:"
+
+REFERENCE	    DESC_SKILL_BLASTER
+LANG_ENGLISH	"Gains the user a blaster rifle."
+
+REFERENCE	    SKILL_THERMALS
+LANG_ENGLISH	    "Thermals:"
+
+REFERENCE	    DESC_SKILL_THERMALS
+LANG_ENGLISH	"Gains the user thermals."
+
+REFERENCE	    SKILL_ROCKET
+LANG_ENGLISH	    "Rocket Launcher:"
+
+REFERENCE	    DESC_SKILL_ROCKET
+LANG_ENGLISH	"Gains the user a Rocket Launcher."
 //[/ExpSys]
 
 //[SaberThrowSys]

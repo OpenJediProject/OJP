@@ -3046,6 +3046,12 @@ void ClearRegisteredItems( void ) {
 	RegisterItem( BG_FindItemForWeapon( WP_STUN_BATON ) );
 	RegisterItem( BG_FindItemForWeapon( WP_MELEE ) );
 	RegisterItem( BG_FindItemForWeapon( WP_SABER ) );
+	//[ExpSys]
+	//addition possible starting weapons
+	RegisterItem( BG_FindItemForWeapon( WP_BLASTER ) );
+	RegisterItem( BG_FindItemForWeapon( WP_THERMAL ) );
+	RegisterItem( BG_FindItemForWeapon( WP_ROCKET_LAUNCHER ) );
+	//[/ExpSys]
 
 	if (g_gametype.integer == GT_SIEGE)
 	{ //kind of cheesy, maybe check if siege class with disp's is gonna be on this map too

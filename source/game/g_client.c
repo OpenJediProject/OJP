@@ -3832,14 +3832,11 @@ void ClientSpawn(gentity_t *ent) {
 				//client->ps.stats[STAT_WEAPONS] |= ( 1 << WP_SABER );	//these are precached in g_items, ClearRegisteredItems()
 				
 			}
+			//[ExpSys]
+			/* NUAM already get melee for free earlier in the function.
 			else
 			{ //if you don't have saber attack rank then you don't get a saber
 				client->ps.stats[STAT_WEAPONS] |= (1 << WP_MELEE);
-
-				//[ExpSys]
-				//racc - give the non-saber users some guns
-				client->ps.stats[STAT_WEAPONS] |= (1 << WP_BLASTER);
-				//[/ExpSys]
 			}
 
 			//[CoOp]
@@ -3849,6 +3846,40 @@ void ClientSpawn(gentity_t *ent) {
 				client->ps.stats[STAT_WEAPONS] |= (1 << WP_MELEE);
 			}
 			//[/CoOp]
+			*/
+
+			if(client->skillLevel[SK_PISTOL])
+			{//player has blaster
+				if (!wDisable || !(wDisable & (1 << WP_BRYAR_PISTOL)))
+				{
+					client->ps.stats[STAT_WEAPONS] |= ( 1 << WP_BRYAR_PISTOL );
+				}
+			}
+
+			if(client->skillLevel[SK_BLASTER])
+			{//player has blaster
+				if (!wDisable || !(wDisable & (1 << WP_BLASTER)))
+				{
+					client->ps.stats[STAT_WEAPONS] |= ( 1 << WP_BLASTER );
+				}
+			}
+
+			if(client->skillLevel[SK_THERMAL])
+			{//player has thermals
+				if (!wDisable || !(wDisable & (1 << WP_THERMAL)))
+				{
+					client->ps.stats[STAT_WEAPONS] |= ( 1 << WP_THERMAL );
+				}
+			}
+
+			if(client->skillLevel[SK_ROCKET])
+			{//player has rocket launcher
+				if (!wDisable || !(wDisable & (1 << WP_ROCKET_LAUNCHER)))
+				{
+					client->ps.stats[STAT_WEAPONS] |= ( 1 << WP_ROCKET_LAUNCHER );
+				}
+			}
+			//[/ExpSys]
 		}
 
 		if (g_gametype.integer != GT_SIEGE)
@@ -3998,7 +4029,7 @@ void ClientSpawn(gentity_t *ent) {
 		client->ps.stats[STAT_HOLDABLE_ITEMS] = 0;
 
 		
-		if(client->skillLevel[SK_JETPACK] > 0)
+		if(client->skillLevel[SK_JETPACK])
 		{//player has jetpack
 			client->ps.stats[STAT_HOLDABLE_ITEMS] = (1 << HI_JETPACK);
 		}
@@ -4032,17 +4063,13 @@ void ClientSpawn(gentity_t *ent) {
 
 // nmckenzie: DESERT_SIEGE... or well, siege generally.  This was over-writing the max value, which was NOT good for siege.
 	if ( inSiegeWithClass == qfalse )
-	{
+	{//racc - not playing siege, assign ammo levels.
 		//[ExpSys]
-		if (client->ps.fd.forcePowerLevel[FP_SABER_OFFENSE])
-		{//default blaster ammo level.
-		client->ps.ammo[AMMO_BLASTER] = 100; //ammoData[AMMO_BLASTER].max; //100 seems fair.
+		client->ps.ammo[AMMO_BLASTER] = ammoData[AMMO_BLASTER].max * (float) client->skillLevel[SK_BLASTER]/FORCE_LEVEL_3;
 
-		}
-		else
-		{//non-saber users get max blaster ammo outside of siege.
-			client->ps.ammo[AMMO_BLASTER] = ammoData[AMMO_BLASTER].max;
-		}
+		client->ps.ammo[AMMO_THERMAL] = ammoData[AMMO_THERMAL].max * (float) client->skillLevel[SK_THERMAL]/FORCE_LEVEL_3;
+
+		client->ps.ammo[AMMO_ROCKETS] = ammoData[AMMO_ROCKETS].max * (float) client->skillLevel[SK_ROCKET]/FORCE_LEVEL_3;
 		//client->ps.ammo[AMMO_BLASTER] = 100; //ammoData[AMMO_BLASTER].max; //100 seems fair.
 		//[/ExpSys]
 	}

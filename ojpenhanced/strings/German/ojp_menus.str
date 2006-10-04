@@ -15,19 +15,56 @@ FILENOTES           "OJP menu strings"
 
 //[ExpSys]
 REFERENCE	    STARTINGSKILLPOINTS
-LANG_ENGLISH	    "#same"
+LANG_ENGLISH	    "Initial Skill Points:"
+LANG_GERMAN		"#same"
 
 REFERENCE	    MAXSKILLPOINTS
-LANG_ENGLISH	    "#same"
+LANG_ENGLISH	    "Maximum Skill Points:"
+LANG_GERMAN		"#same"
 
 REFERENCE	    SKILL
-LANG_ENGLISH	    "#same"
+LANG_ENGLISH	    "Skill"
+LANG_GERMAN		"#same"
 
 REFERENCE	    SKILL_JETPACK
-LANG_ENGLISH	"#same"
+LANG_ENGLISH	    "Jetpack:"
+LANG_GERMAN		"#same"
 
 REFERENCE	    DESC_SKILL_JETPACK
-LANG_ENGLISH	"#same"
+LANG_ENGLISH	"Gains the user a jetpack.  Additional points give the pack additional fuel."
+LANG_GERMAN		"#same"
+
+REFERENCE	    SKILL_PISTOL
+LANG_ENGLISH	    "Pistol:"
+LANG_GERMAN		"#same"
+
+REFERENCE	    DESC_SKILL_PISTOL
+LANG_ENGLISH	"Gains the user a blaster pistol."
+LANG_GERMAN		"#same"
+
+REFERENCE	    SKILL_BLASTER
+LANG_ENGLISH	    "Blaster:"
+LANG_GERMAN		"#same"
+
+REFERENCE	    DESC_SKILL_BLASTER
+LANG_ENGLISH	"Gains the user a blaster rifle."
+LANG_GERMAN		"#same"
+
+REFERENCE	    SKILL_THERMALS
+LANG_ENGLISH	    "Thermals:"
+LANG_GERMAN		"#same"
+
+REFERENCE	    DESC_SKILL_THERMALS
+LANG_ENGLISH	"Gains the user thermals."
+LANG_GERMAN		"#same"
+
+REFERENCE	    SKILL_ROCKET
+LANG_ENGLISH	    "Rocket Launcher:"
+LANG_GERMAN		"#same"
+
+REFERENCE	    DESC_SKILL_ROCKET
+LANG_ENGLISH	"Gains the user a Rocket Launcher."
+LANG_GERMAN		"#same"
 //[/ExpSys]
 
 //[SaberThrowSys]

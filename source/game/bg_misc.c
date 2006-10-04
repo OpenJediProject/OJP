@@ -206,7 +206,11 @@ int bgForcePowerCost[NUM_TOTAL_SKILLS][NUM_FORCE_POWER_LEVELS] = //0 == neutral
 	//{	0,	4,	6,	8	}	// Saber Throw	//FP_SABERTHROW,
 	//NUM_FORCE_POWERS
 	//racc - additional skills
-	{	0,	8,	0,	0	}	// Jetpack Skill	//SK_JETPACK,
+	{	0,	8,	0,	0	},	//SK_JETPACK,		// Jetpack Skill	
+	{	0,	2,	0,	0	},	//SK_PISTOL,		//blaster pistol
+	{	0,	4,	4,	4	},	//SK_BLASTER,		//blaster rifle skill
+	{	0,	6,	6,	6	},	//SK_THERMAL,		//thermal detenator skill
+	{	0,	4,	6,	8	},	//SK_ROCKET,		//rocket launcher skill
 	//[/ExpSys]
 };
 
