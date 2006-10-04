@@ -134,7 +134,9 @@ Version 0.1.0:
 				- Can't block lightning while too far off balance.
 				- Reduced the base lightning damage level to 1 point of damage per lightning strike.
 
-		Ledge Grab - Fixed bug where players could switch weapons while in a ledge grab. 
+		Ledge Grab:
+			- Fixed bug where players could switch weapons while in a ledge grab.
+			- Players can no longer ledgegrab while using a jetpack. 
 
 		Movement System:
 			- Players can now roll on fall landing with any weapon.

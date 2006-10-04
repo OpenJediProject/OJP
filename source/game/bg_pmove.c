@@ -3418,6 +3418,11 @@ void PM_CheckGrab(void)
 		return;
 	}
 
+	if(pm->ps->pm_type == PM_JETPACK)
+	{//don't do ledgegrab checks while using the jetpack
+		return;
+	}
+
 	if(BG_InLedgeMove(pm->ps->legsAnim) || pm->ps->pm_type == PM_SPECTATOR 
 		|| BG_InSpecialJump(pm->ps->legsAnim))
 	{//already on ledge, a spectator, or in a special jump
