@@ -3689,6 +3689,10 @@ qboolean TryGrapple(gentity_t *ent)
 			ent->client->ps.legsTimer = ent->client->ps.torsoTimer;
 		}
 		ent->client->ps.weaponTime = ent->client->ps.torsoTimer;
+
+		//[Melee]
+		ent->client->dangerTime = level.time;
+		//[/Melee]
 		return qtrue;
 	}
 
