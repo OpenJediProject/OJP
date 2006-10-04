@@ -11,9 +11,17 @@ extern int uiMaxRank;
 extern int uiForceUsed;
 extern int uiForceAvailable;
 extern qboolean gTouchedForce;
+
+//[ExpSys]
+qboolean uiForcePowersDisabled[NUM_TOTAL_SKILLS];
+extern int uiForcePowersRank[NUM_TOTAL_SKILLS];
+extern int uiForcePowerDarkLight[NUM_TOTAL_SKILLS];
+/*
 extern qboolean uiForcePowersDisabled[NUM_FORCE_POWERS];
 extern int uiForcePowersRank[NUM_FORCE_POWERS];
 extern int uiForcePowerDarkLight[NUM_FORCE_POWERS];
+*/
+//[/ExpSys]
 extern int uiSaberColorShaders[NUM_SABER_COLORS];
 // Dots above or equal to a given rank carry a certain color.
 extern vmCvar_t	ui_freeSaber, ui_forcePowerDisable;

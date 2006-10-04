@@ -29,7 +29,10 @@ vmCvar_t	ui_freeSaber, ui_forcePowerDisable;
 void Menu_ShowItemByName(menuDef_t *menu, const char *p, qboolean bShow);
 #include "../namespace_end.h"
 
-qboolean uiForcePowersDisabled[NUM_FORCE_POWERS] = {
+//[ExpSys]
+qboolean uiForcePowersDisabled[NUM_TOTAL_SKILLS] = {
+//qboolean uiForcePowersDisabled[NUM_FORCE_POWERS] = {
+//[/ExpSys]
 	qfalse,//FP_HEAL,//instant
 	qfalse,//FP_LEVITATION,//hold/duration
 	qfalse,//FP_SPEED,//duration
@@ -47,12 +50,24 @@ qboolean uiForcePowersDisabled[NUM_FORCE_POWERS] = {
 	qfalse,//FP_SEE,
 	qfalse,//FP_SABER_OFFENSE,
 	qfalse,//FP_SABER_DEFENSE,
-	qfalse//FP_SABERTHROW,
+	//[ExpSys]
+	qfalse,//FP_SABERTHROW,
+	//qfalse//FP_SABERTHROW,
+	//RAFIXME - this is a hack, actually impliment disabling of additional skills?
+	qfalse//SK_JETPACK
+	//[/ExpSys]
 };
 
-int uiForcePowersRank[NUM_FORCE_POWERS] = {
+//[ExpSys]
+int uiForcePowersRank[NUM_TOTAL_SKILLS] = {
+//int uiForcePowersRank[NUM_FORCE_POWERS] = {
+//[/ExpSys]
 	0,//FP_HEAL = 0,//instant
-	1,//FP_LEVITATION,//hold/duration, this one defaults to 1 (gives a free point)
+	//[ExpSys]
+	//don't auto assign current force powers.
+	0,//FP_LEVITATION,//hold/duration
+	//1,//FP_LEVITATION,//hold/duration, this one defaults to 1 (gives a free point)
+	//[/ExpSys]
 	0,//FP_SPEED,//duration
 	0,//FP_PUSH,//hold/duration
 	0,//FP_PULL,//hold/duration
@@ -66,12 +81,24 @@ int uiForcePowersRank[NUM_FORCE_POWERS] = {
 	0,//FP_TEAM_FORCE,
 	0,//FP_DRAIN,
 	0,//FP_SEE,
-	1,//FP_SABER_OFFENSE, //default to 1 point in attack
-	1,//FP_SABER_DEFENSE, //defualt to 1 point in defense
-	0//FP_SABERTHROW,
+	//[ExpSys]
+	//don't auto assign current force powers.
+	0,//FP_SABER_OFFENSE,
+	0,//FP_SABER_DEFENSE, 
+	//1,//FP_SABER_OFFENSE, //default to 1 point in attack
+	//1,//FP_SABER_DEFENSE, //defualt to 1 point in defense
+	0,//FP_SABERTHROW,
+	//0//FP_SABERTHROW,
+
+	//racc - addition skills
+	0//SK_JETPACK
+	//[/ExpSys]
 };
 
-int uiForcePowerDarkLight[NUM_FORCE_POWERS] = //0 == neutral
+//[ExpSys]
+int uiForcePowerDarkLight[NUM_TOTAL_SKILLS] = //0 == neutral
+//int uiForcePowerDarkLight[NUM_FORCE_POWERS] = //0 == neutral
+//[/ExpSys]
 { //nothing should be usable at rank 0..
 	FORCE_LIGHTSIDE,//FP_HEAL,//instant
 	0,//FP_LEVITATION,//hold/duration
@@ -90,8 +117,14 @@ int uiForcePowerDarkLight[NUM_FORCE_POWERS] = //0 == neutral
 	0,//FP_SEE,//duration
 	0,//FP_SABER_OFFENSE,
 	0,//FP_SABER_DEFENSE,
-	0//FP_SABERTHROW,
+	//[ExpSys]
+	0,//FP_SABERTHROW,
+	//0//FP_SABERTHROW,
 		//NUM_FORCE_POWERS
+	
+	//racc - additional skills
+	0//SK_JETPACK
+	//[/ExpSys]
 };
 
 int uiForceStarShaders[NUM_FORCE_STAR_IMAGES][2];
@@ -173,14 +206,20 @@ void UI_DrawForceStars(rectDef_t *rect, float scale, vec4_t color, int textStyle
 // Set the client's force power layout.
 void UI_UpdateClientForcePowers(const char *teamArg)
 {
-	trap_Cvar_Set( "forcepowers", va("%i-%i-%i%i%i%i%i%i%i%i%i%i%i%i%i%i%i%i%i%i",
+	//[ExpSys]
+	trap_Cvar_Set( "forcepowers", va("%i-%i-%i%i%i%i%i%i%i%i%i%i%i%i%i%i%i%i%i%i%i",
+	//trap_Cvar_Set( "forcepowers", va("%i-%i-%i%i%i%i%i%i%i%i%i%i%i%i%i%i%i%i%i%i",
+	//[/ExpSys]
 		uiForceRank, uiForceSide, uiForcePowersRank[0], uiForcePowersRank[1],
 		uiForcePowersRank[2], uiForcePowersRank[3], uiForcePowersRank[4],
 		uiForcePowersRank[5], uiForcePowersRank[6], uiForcePowersRank[7],
 		uiForcePowersRank[8], uiForcePowersRank[9], uiForcePowersRank[10],
 		uiForcePowersRank[11], uiForcePowersRank[12], uiForcePowersRank[13],
 		uiForcePowersRank[14], uiForcePowersRank[15], uiForcePowersRank[16],
-		uiForcePowersRank[17]) );
+		//[ExpSys]
+		uiForcePowersRank[17], uiForcePowersRank[18]) );
+		//uiForcePowersRank[17]) );
+		//[/ExpSys]
 
 	if (gTouchedForce)
 	{
@@ -188,10 +227,14 @@ void UI_UpdateClientForcePowers(const char *teamArg)
 		{
 			trap_Cmd_ExecuteText( EXEC_APPEND, va("forcechanged \"%s\"\n", teamArg) );
 		}
+		//[ExpSys]
+		/* racc - the way we do dynamic skill updates makes this redudent.
 		else
 		{
 			trap_Cmd_ExecuteText( EXEC_APPEND, "forcechanged\n" );
 		}
+		*/
+		//[/ExpSys]
 	}
 
 	gTouchedForce = qfalse;
@@ -429,7 +472,10 @@ void UpdateForceUsed()
 	}
 
 	// Make sure that we're still legal.
-	for (curpower=0;curpower<NUM_FORCE_POWERS;curpower++)
+	//[ExpSys]
+	for (curpower=0;curpower<NUM_TOTAL_SKILLS;curpower++)
+	//for (curpower=0;curpower<NUM_FORCE_POWERS;curpower++)
+	//[/ExpSys]
 	{	// Make sure that our ranks are within legal limits.
 		if (uiForcePowersRank[curpower]<0)
 			uiForcePowersRank[curpower]=0;
@@ -1031,8 +1077,18 @@ qboolean UI_ForcePowerRank_HandleKey(int flags, float *special, int key, int num
 	{
 		int forcepower, rank;
 
+		//[ExpSys]
+		if(type < UI_FORCE_RANK_JETPACK)
+		{
+			forcepower = (type - UI_FORCE_RANK)-1;
+		}
+		else
+		{//use a different index shift for the addition skills
+			forcepower = (type - UI_FORCE_RANK_JETPACK)+(UI_FORCE_RANK_SABERTHROW-UI_FORCE_RANK);
+		}
 		//this will give us the index as long as UI_FORCE_RANK is always one below the first force rank index
-		forcepower = (type-UI_FORCE_RANK)-1;
+		//forcepower = (type-UI_FORCE_RANK)-1;
+		//[/ExpSys]
 		
 		//the power is disabled on the server
 		if (uiForcePowersDisabled[forcepower])

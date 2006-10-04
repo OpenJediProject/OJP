@@ -643,6 +643,16 @@ enum
 };
 typedef int forcePowers_t;
 
+//[ExpSys]
+typedef enum
+{
+	SK_JETPACK,
+	NUM_SKILLS
+} skills_t;
+
+#define NUM_TOTAL_SKILLS	(NUM_FORCE_POWERS+NUM_SKILLS)
+//[/ExpSys]
+
 typedef enum
 {
 	SABER_NONE = 0,
@@ -2181,7 +2191,7 @@ typedef struct forcedata_s {
 	int			forceDoInit;
 
 	int			forceSide;
-	int			forceRank;
+	int			forceRank;		//racc - stores the force mastery rank of the player.  Is set but doesn't seem to be used.
 
 	int			forceDeactivateAll;
 

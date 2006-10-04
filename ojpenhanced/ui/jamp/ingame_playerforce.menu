@@ -987,6 +987,69 @@
 				setitemcolor	setfp_teamheal forecolor 0.5 0.5 1 1
 			}
 		}
+		
+		
+		//[ExpSys]
+		//----------------------------------------
+		// ADDITIONAL SKILLS
+		//----------------------------------------
+		
+		// Jetpack title
+		itemDef 
+		{
+			name					setsk_jetpack
+			group					gunpowers
+			style					0	
+			text					@OJP_MENUS_SKILL_JETPACK
+			rect					30 206 110 15
+			textalign				ITEM_ALIGN_RIGHT												
+			textalignx				105
+			textaligny				0
+			font					4
+			textscale				1
+			forecolor				1 0.2 0.2 1
+			outlinecolor			1 .5 .5 .5
+			backcolor				0 0 0 0
+			border					0
+			bordercolor				0 0 0 0
+			visible					1 
+			decoration
+		}
+	
+		// Jetpack assign
+		itemDef 
+		{
+			name					setsk_jetpack
+			group					gunpowers
+			style					0	
+			ownerdraw				UI_FORCE_RANK_JETPACK
+			rect					30 206 175 15
+			textalign				ITEM_ALIGN_LEFT		
+			textalignx				115
+			textaligny				-6
+			textscale				.25        
+			outlinecolor			1 .5 .5 .5
+			backcolor				0 0 0 0
+			forecolor				1 0.2 0.2 1
+			border					0
+			bordercolor				0 0 0 0
+			descText				@OJP_MENUS_DESC_SKILL_JETPACK
+			visible					1 
+			action 
+			{ 
+				play			"sound/interface/button1.wav" ;
+			}
+
+			mouseenter 
+			{ 
+				setitemcolor	setsk_jetpack forecolor 1 0.7 0.7 1
+			}
+			mouseexit 
+			{ 
+				setitemcolor	setsk_jetpack forecolor 1 0.2 0.2 1
+			}
+		}
+		//[/ExpSys]
 
 		//----------------------------------------
 		// DARKSIDE POWERS

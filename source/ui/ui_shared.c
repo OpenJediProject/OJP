@@ -3221,6 +3221,9 @@ qboolean Item_OwnerDraw_HandleKey(itemDef_t *item, int key) {
 			case UI_FORCE_RANK_SABERATTACK:
 			case UI_FORCE_RANK_SABERDEFEND:
 			case UI_FORCE_RANK_SABERTHROW:
+			//[ExpSys]
+			case UI_FORCE_RANK_JETPACK:
+			//[/ExpSys]
 	  			if(!Rect_ContainsPoint(&item->window.rect, DC->cursorx, DC->cursory) )
 				{
 					return qfalse;

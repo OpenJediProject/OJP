@@ -3261,7 +3261,18 @@ static int UI_OwnerDrawWidth(int ownerDraw, float scale) {
 	case UI_FORCE_RANK_SABERATTACK:
 	case UI_FORCE_RANK_SABERDEFEND:
 	case UI_FORCE_RANK_SABERTHROW:
-		findex = (ownerDraw - UI_FORCE_RANK)-1;
+	//[ExpSys]
+	case UI_FORCE_RANK_JETPACK:
+		if(ownerDraw < UI_FORCE_RANK_JETPACK)
+		{
+			findex = (ownerDraw - UI_FORCE_RANK)-1;
+		}
+		else
+		{//use a different index shift for the addition skills
+			findex = (ownerDraw - UI_FORCE_RANK_JETPACK)+(UI_FORCE_RANK_SABERTHROW-UI_FORCE_RANK);
+		}
+		//findex = (ownerDraw - UI_FORCE_RANK)-1;
+	//[/ExpSys]
 		//this will give us the index as long as UI_FORCE_RANK is always one below the first force rank index
 		i = uiForcePowersRank[findex];
 
@@ -3736,6 +3747,9 @@ static void UI_OwnerDraw(float x, float y, float w, float h, float text_x, float
 	case UI_FORCE_RANK_SABERATTACK:
 	case UI_FORCE_RANK_SABERDEFEND:
 	case UI_FORCE_RANK_SABERTHROW:
+	//[ExpSys]
+	case UI_FORCE_RANK_JETPACK:
+	//[/ExpSys]
 
 //		uiForceRank
 /*
@@ -3751,7 +3765,17 @@ static void UI_OwnerDraw(float x, float y, float w, float h, float text_x, float
 		}
 */
 
-		findex = (ownerDraw - UI_FORCE_RANK)-1;
+		//[ExpSys]
+		if(ownerDraw < UI_FORCE_RANK_JETPACK)
+		{
+			findex = (ownerDraw - UI_FORCE_RANK)-1;
+		}
+		else
+		{//use a different index shift for the addition skills
+			findex = (ownerDraw - UI_FORCE_RANK_JETPACK)+(UI_FORCE_RANK_SABERTHROW-UI_FORCE_RANK);
+		}
+		//findex = (ownerDraw - UI_FORCE_RANK)-1;
+		//[/ExpSys]
 		//this will give us the index as long as UI_FORCE_RANK is always one below the first force rank index
 		//[ForceSys]
 		//allow dark/light powers at the same time.
@@ -5054,7 +5078,18 @@ static qboolean UI_OwnerDrawHandleKey(int ownerDraw, int flags, float *special, 
 	case UI_FORCE_RANK_SABERATTACK:
 	case UI_FORCE_RANK_SABERDEFEND:
 	case UI_FORCE_RANK_SABERTHROW:
-		findex = (ownerDraw - UI_FORCE_RANK)-1;
+	//[ExpSys]
+	case UI_FORCE_RANK_JETPACK:
+		if(ownerDraw < UI_FORCE_RANK_JETPACK)
+		{
+			findex = (ownerDraw - UI_FORCE_RANK)-1;
+		}
+		else
+		{//use a different index shift for the addition skills
+			findex = (ownerDraw - UI_FORCE_RANK_JETPACK)+(UI_FORCE_RANK_SABERTHROW-UI_FORCE_RANK);
+		}
+		//findex = (ownerDraw - UI_FORCE_RANK)-1;
+	//[/ExpSys]
 		//this will give us the index as long as UI_FORCE_RANK is always one below the first force rank index
 		return UI_ForcePowerRank_HandleKey(flags, special, key, uiForcePowersRank[findex], 0, NUM_FORCE_POWER_LEVELS-1, ownerDraw);
 		break;

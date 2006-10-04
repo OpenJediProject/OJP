@@ -22,6 +22,12 @@ LANG_ENGLISH	    "Maximum Skill Points:"
 
 REFERENCE	    SKILL
 LANG_ENGLISH	    "Skill"
+
+REFERENCE	    SKILL_JETPACK
+LANG_ENGLISH	    "Jetpack:"
+
+REFERENCE	    DESC_SKILL_JETPACK
+LANG_ENGLISH	"Gains the user a jetpack.  Additional points give the pack additional fuel."
 //[/ExpSys]
 
 //[SaberThrowSys]

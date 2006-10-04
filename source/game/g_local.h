@@ -917,6 +917,12 @@ struct gclient_s {
 	//used for debouncing saber viewlock
 	int			viewLockTime;
 	//[/SaberSys]
+
+	//[ExpSys]
+	qboolean	skillUpdated;			//indicates that we've updated our skill points and should let the player's client know.
+	int			skillDebounce;			//debouncer for skill point updates to the player client
+	int			skillLevel[NUM_SKILLS];
+	//[/ExpSys]
 };
 
 //Interest points

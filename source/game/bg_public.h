@@ -512,7 +512,10 @@ enum {
 extern char *forceMasteryLevels[NUM_FORCE_MASTERY_LEVELS];
 extern int forceMasteryPoints[NUM_FORCE_MASTERY_LEVELS];
 
-extern int bgForcePowerCost[NUM_FORCE_POWERS][NUM_FORCE_POWER_LEVELS];
+//[ExpSys]
+extern int bgForcePowerCost[NUM_TOTAL_SKILLS][NUM_FORCE_POWER_LEVELS];
+//extern int bgForcePowerCost[NUM_FORCE_POWERS][NUM_FORCE_POWER_LEVELS];
+//[/ExpSys]
 #include "../namespace_end.h"
 
 // pmove->pm_flags

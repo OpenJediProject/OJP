@@ -175,7 +175,10 @@ int forceMasteryPoints[NUM_FORCE_MASTERY_LEVELS] =
 	100		// FORCE_MASTERY_JEDI_MASTER,
 };
 
-int bgForcePowerCost[NUM_FORCE_POWERS][NUM_FORCE_POWER_LEVELS] = //0 == neutral
+//[ExpSys]
+int bgForcePowerCost[NUM_TOTAL_SKILLS][NUM_FORCE_POWER_LEVELS] = //0 == neutral
+//int bgForcePowerCost[NUM_FORCE_POWERS][NUM_FORCE_POWER_LEVELS] = //0 == neutral
+//[/ExpSys]
 {
 	{	0,	2,	4,	6	},	// Heal			// FP_HEAL
 	//[ExpSys]
@@ -198,8 +201,13 @@ int bgForcePowerCost[NUM_FORCE_POWERS][NUM_FORCE_POWER_LEVELS] = //0 == neutral
 	{	0,	2,	5,	8	},	// Sight		//FP_SEE,//duration
 	{	0,	1,	5,	8	},	// Saber Attack	//FP_SABER_OFFENSE,
 	{	0,	1,	5,	8	},	// Saber Defend	//FP_SABER_DEFENSE,
-	{	0,	4,	6,	8	}	// Saber Throw	//FP_SABERTHROW,
+	//[ExpSys]
+	{	0,	4,	6,	8	},	// Saber Throw	//FP_SABERTHROW,
+	//{	0,	4,	6,	8	}	// Saber Throw	//FP_SABERTHROW,
 	//NUM_FORCE_POWERS
+	//racc - additional skills
+	{	0,	4,	6,	8	}	// Jetpack Skill	//SK_JETPACK,
+	//[/ExpSys]
 };
 
 int forcePowerSorted[NUM_FORCE_POWERS] = 
@@ -462,7 +470,10 @@ qboolean BG_LegalizedForcePowers(char *powerOut, int maxRank, qboolean freeSaber
 	int countDown = 0;
 	
 	int final_Side;
-	int final_Powers[NUM_FORCE_POWERS];
+	//[ExpSys]
+	int final_Powers[NUM_TOTAL_SKILLS];
+	//int final_Powers[NUM_FORCE_POWERS];
+	//[/ExpSys]
 
 	if (powerLen >= 128)
 	{ //This should not happen. If it does, this is obviously a bogus string.
@@ -516,7 +527,10 @@ qboolean BG_LegalizedForcePowers(char *powerOut, int maxRank, qboolean freeSaber
 	//Now we have established a valid rank, and a valid side.
 	//Read the force powers in, and cut them down based on the various rules supplied.
 	c = 0;
-	while (i < 128 && powerBuf[i] && powerBuf[i] != '\n' && c < NUM_FORCE_POWERS)
+	//[ExpSys]
+	while (i < 128 && powerBuf[i] && powerBuf[i] != '\n' && c < NUM_TOTAL_SKILLS)
+	//while (i < 128 && powerBuf[i] && powerBuf[i] != '\n' && c < NUM_FORCE_POWERS)
+	//[/ExpSys]
 	{
 		readBuf[0] = powerBuf[i];
 		readBuf[1] = 0;
@@ -534,6 +548,7 @@ qboolean BG_LegalizedForcePowers(char *powerOut, int maxRank, qboolean freeSaber
 
 	//racc - check to see if this power is approprate for your force side or if it's been disabled.
 	i = 0;
+	//RAFIXME - fpDisabled doesn't apply to the additional skills.
 	while (i < NUM_FORCE_POWERS)
 	{ //if this power doesn't match the side we're on, then 0 it now.
 		//[ForceSys]
@@ -567,7 +582,10 @@ qboolean BG_LegalizedForcePowers(char *powerOut, int maxRank, qboolean freeSaber
 	//racc - calculate the total cost of our current selection of force powers.
 	usedPoints = 0;
 	i = 0;
-	while (i < NUM_FORCE_POWERS)
+	//[ExpSys]
+	while (i < NUM_TOTAL_SKILLS)
+	//while (i < NUM_FORCE_POWERS)
+	//[/ExpSys]
 	{
 		countDown = 0;
 
@@ -610,7 +628,10 @@ qboolean BG_LegalizedForcePowers(char *powerOut, int maxRank, qboolean freeSaber
 		{
 			c = 0;
 
-			while (c < NUM_FORCE_POWERS && usedPoints > allowedPoints)
+			//[ExpSys]			
+			while (c < NUM_TOTAL_SKILLS && usedPoints > allowedPoints)
+			//while (c < NUM_FORCE_POWERS && usedPoints > allowedPoints)
+			//[ExpSys]
 			{
 				if (final_Powers[c] && final_Powers[c] < powerCycle)
 				{ //kill in order of lowest powers, because the higher powers are probably more important
@@ -670,7 +691,10 @@ qboolean BG_LegalizedForcePowers(char *powerOut, int maxRank, qboolean freeSaber
 			powerCycle++;
 			attemptedCycles++;
 
-			if (attemptedCycles > NUM_FORCE_POWERS)
+			//[ExpSys]
+			if (attemptedCycles > NUM_TOTAL_SKILLS)
+			//if (attemptedCycles > NUM_FORCE_POWERS)
+			//[/ExpSys]
 			{ //I think this should be impossible. But just in case.
 				break;
 			}
@@ -680,7 +704,10 @@ qboolean BG_LegalizedForcePowers(char *powerOut, int maxRank, qboolean freeSaber
 		{ //Still? Fine then.. we will kill all of your powers, except the freebies.
 			i = 0;
 
-			while (i < NUM_FORCE_POWERS)
+			//[ExpSys]
+			while (i < NUM_TOTAL_SKILLS)
+			//while (i < NUM_FORCE_POWERS)
+			//[/ExpSys]
 			{
 				final_Powers[i] = 0;
 				//[ExpSys]
@@ -719,7 +746,10 @@ qboolean BG_LegalizedForcePowers(char *powerOut, int maxRank, qboolean freeSaber
 	//[/ExpSys]
 
 	i = 0;
-	while (i < NUM_FORCE_POWERS)
+	//[ExpSys]
+	while (i < NUM_TOTAL_SKILLS)
+	//while (i < NUM_FORCE_POWERS)
+	//[/ExpSys]
 	{
 		if (final_Powers[i] > FORCE_LEVEL_3)
 		{
@@ -764,7 +794,10 @@ qboolean BG_LegalizedForcePowers(char *powerOut, int maxRank, qboolean freeSaber
 
 	i = strlen(powerOut);
 	c = 0;
-	while (c < NUM_FORCE_POWERS)
+	//[ExpSys]
+	while (c < NUM_TOTAL_SKILLS)
+	//while (c < NUM_FORCE_POWERS)
+	//[/ExpSys]
 	{
 		strcpy(readBuf, va("%i", final_Powers[c]));
 		powerOut[i] = readBuf[0];

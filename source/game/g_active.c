@@ -2384,6 +2384,18 @@ void ClientThink_real( gentity_t *ent ) {
 		}
 	}
 
+
+	//[ExpSys]
+	//update a player's skill if they haven't had it update in a while.
+	if(!ent->NPC && !(ent->r.svFlags & SVF_BOT) && client->skillUpdated && client->skillDebounce < level.time)
+	{
+		trap_SendServerCommand(ent->s.number, va("nfr %i %i %i", (int) ent->client->sess.skillPoints, 0, ent->client->sess.sessionTeam));
+		client->skillDebounce = level.time + 5000;
+		client->skillUpdated = qfalse;
+	}
+	//[/ExpSys]
+
+
 	//Check if we should have a fullbody push effect around the player
 	if (client->pushEffectTime > level.time)
 	{

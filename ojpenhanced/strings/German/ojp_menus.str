@@ -22,6 +22,12 @@ LANG_ENGLISH	    "#same"
 
 REFERENCE	    SKILL
 LANG_ENGLISH	    "#same"
+
+REFERENCE	    SKILL_JETPACK
+LANG_ENGLISH	"#same"
+
+REFERENCE	    DESC_SKILL_JETPACK
+LANG_ENGLISH	"#same"
 //[/ExpSys]
 
 //[SaberThrowSys]

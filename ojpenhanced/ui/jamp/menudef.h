@@ -355,6 +355,10 @@
 #define UI_CHAT_SPOT		296
 #define UI_CHAT_TACTICAL	297
 
+//[ExpSys]
+#define UI_FORCE_RANK_JETPACK		298		//Jetpack skill rank ownerDraw
+//[/ExpSys]
+
 #define VOICECHAT_GETFLAG			"getflag"				// command someone to get the flag
 #define VOICECHAT_OFFENSE			"offense"				// command someone to go on offense
 #define VOICECHAT_DEFEND			"defend"				// command someone to go on defense

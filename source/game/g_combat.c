@@ -6884,6 +6884,7 @@ void AddFatigueKillBonus( gentity_t *attacker, gentity_t *victim )
 void AddSkill(gentity_t *self, float amount)
 {//add skill points to self
 	self->client->sess.skillPoints += amount;
+	self->client->skillUpdated = qtrue; //mark that we've updated our skill points so we can update the player's client.
 
 	if(g_maxForceRank.integer < g_minForceRank.integer)
 	{//can't have a max skill point level that's less than our starting skill points.

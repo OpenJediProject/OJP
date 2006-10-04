@@ -2352,6 +2352,12 @@ void ClientUserinfoChanged( int clientNum ) {
 	}
 	//[/ClientPlugInDetect]
 
+	//[ExpSys]
+	//reinitialize our forcepowers because they might have changed.
+	WP_InitForcePowers(ent);
+	//[/ExpSys]
+
+
 	//[RGBSabers]
 	Q_strncpyz(rgb1,Info_ValueForKey(userinfo, "rgb_saber1"), sizeof(rgb1));
 	Q_strncpyz(rgb2,Info_ValueForKey(userinfo, "rgb_saber2"), sizeof(rgb2));
@@ -3217,6 +3223,9 @@ void ClientSpawn(gentity_t *ent) {
 	int					saveSaberNum = ENTITYNUM_NONE;
 	int					wDisable = 0;
 	int					savedSiegeIndex = 0;
+	//[ExpSys]
+	int					savedSkill[NUM_SKILLS];
+	//[/ExpSys]
 	int					maxHealth;
 	saberInfo_t			saberSaved[MAX_SABERS];
 	int					l = 0;
@@ -3494,6 +3503,13 @@ void ClientSpawn(gentity_t *ent) {
 
 	savedSiegeIndex = client->siegeClass;
 
+	//[ExpSys]
+	for(i = 0; i < NUM_SKILLS; i++)
+	{
+		savedSkill[i] = client->skillLevel[i];
+	}
+	//[/ExpSys]
+
 	l = 0;
 	while (l < MAX_SABERS)
 	{
@@ -3575,6 +3591,12 @@ void ClientSpawn(gentity_t *ent) {
 
 	client->siegeClass = savedSiegeIndex;
 
+	//[ExpSys]
+	for(i = 0; i < NUM_SKILLS; i++)
+	{
+		client->skillLevel[i] = savedSkill[i];
+	}
+	//[/ExpSys]
 
 	l = 0;
 	while (l < MAX_SABERS)
@@ -3989,12 +4011,11 @@ void ClientSpawn(gentity_t *ent) {
 	else
 	{
 		//[ExpSys]
-		if (client->ps.fd.forcePowerLevel[FP_SABER_OFFENSE])
-		{
 		client->ps.stats[STAT_HOLDABLE_ITEMS] = 0;
-		}
-		else
-		{ //if you don't have saber attack rank then you don't get a saber
+
+		
+		if(client->skillLevel[SK_JETPACK] > 0)
+		{//player has jetpack
 			client->ps.stats[STAT_HOLDABLE_ITEMS] = (1 << HI_JETPACK);
 		}
 		//client->ps.stats[STAT_HOLDABLE_ITEMS] = 0;

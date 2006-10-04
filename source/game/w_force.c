@@ -267,6 +267,14 @@ void WP_InitForcePowers( gentity_t *ent )
 		i++;
 	}
 
+	//[ExpSys]
+	//racc - reset additional skills
+	for(i=0; i < NUM_SKILLS; i++)
+	{
+		ent->client->skillLevel[i] = 0;
+	}
+	//[/ExpSys]
+
 	ent->client->ps.fd.forcePowerSelected = -1;
 
 	ent->client->ps.fd.forceSide = 0;
@@ -474,6 +482,17 @@ void WP_InitForcePowers( gentity_t *ent )
 		i_r++;
 	}
 	//THE POWERS
+
+	//[ExpSys]
+	//apply our additional force powers
+	for(i_r=0; forcePowers[i] && forcePowers[i] != '\n' && i_r < NUM_SKILLS; i_r++, i++)
+	{
+		readBuf[0] = forcePowers[i];
+		readBuf[1] = 0;
+
+		ent->client->skillLevel[i_r] = atoi(readBuf);
+	}
+	//[/ExpSys]
 
 	if (ent->s.eType != ET_NPC)
 	{

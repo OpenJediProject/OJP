@@ -1471,6 +1471,8 @@ Cmd_ForceChanged_f
 */
 void Cmd_ForceChanged_f( gentity_t *ent )
 {
+	//[ExpSys]
+	/* //racc - don't do this stuff anymore since forcepowers are now applied as soon as the client's userinfo updates.
 	char fpChStr[1024];
 	const char *buf;
 //	Cmd_Kill_f(ent);
@@ -1489,6 +1491,9 @@ void Cmd_ForceChanged_f( gentity_t *ent )
 	trap_SendServerCommand( ent-g_entities, va("print \"%s%s\n\n\"", S_COLOR_GREEN, fpChStr) );
 
 	ent->client->ps.fd.forceDoInit = 1;
+	*/
+	//[/ExpSys]
+
 argCheck:
 	if (g_gametype.integer == GT_DUEL || g_gametype.integer == GT_POWERDUEL)
 	{ //If this is duel, don't even bother changing team in relation to this.
