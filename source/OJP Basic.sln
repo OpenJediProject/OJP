@@ -1,6 +1,6 @@
 Microsoft Visual Studio Solution File, Format Version 9.00
 # Visual Studio 2005
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "JK2cgame", "..\..\..\JK2_cgame.vcproj", "{4DC69D68-9DB8-4DEB-AC63-481153B1F41D}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "JK2cgame", "cgame\JK2_cgame.vcproj", "{4DC69D68-9DB8-4DEB-AC63-481153B1F41D}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "JK2game", "game\JK2_game.vcproj", "{5B587283-8429-4F8B-AECA-C09BF364B617}"
 EndProject
