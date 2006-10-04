@@ -210,7 +210,7 @@ Coordinates are at 640 by 480 virtual resolution
 */
 //[SVN]
 //rearraigned repository to make it easier to initially compile.
-#include "../../ojpenhanced/ui/menudef.h"
+#include "../../ojpenhanced/ui/jamp/menudef.h"
 //#include "../../ui/menudef.h"	// for "ITEM_TEXTSTYLE_SHADOWED"
 //[/SVN]
 void CG_DrawStringExt( int x, int y, const char *string, const float *setColor, 

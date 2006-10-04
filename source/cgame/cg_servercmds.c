@@ -7,7 +7,7 @@
 #include "cg_local.h"
 //[SVN]
 //rearraigned repository to make it easier to initially compile.
-#include "../../ojpenhanced/ui/menudef.h"
+#include "../../ojpenhanced/ui/jamp/menudef.h"
 //#include "../../ui/menudef.h"
 //[/SVN]
 #if !defined(CL_LIGHT_H_INC)
