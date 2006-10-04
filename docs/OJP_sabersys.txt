@@ -1,0 +1,264 @@
+Enhanced v0.0.2 b4:
+
+ - Removed manual blocking button.  Replaced it with block/parry button.  Hold to block incoming saber attacks.  To parry incoming attacks, press and hold the block button right before an attack will hit.  Entering block/parry mode costs 1 FP but you can stay in it as long as you want without cost.  However, remember that your parry bonuses (chances of forcing your attacker into a knockaway, etc.) go way down after a second or so off holding the block button.
+
+ - Totally hacked the bots to walk instead of run everywhere.
+
+ - Remember to make sure that...
+	sv_fps is set to 50 or 100
+	g_saberDmgDelay_Wound = at least 100
+	cl_maxpackets = sv_fps
+	
+ - g_debugsabercombat 7 = Debug messages for the parry bonus results.
+
+ - g_dodgeRegenTime changed to 1000
+
+ - g_forceRegenTime changed to 500
+
+
+Enhanced v0.0.2 b3:
+
+ - Dodge Blocking works now.
+
+ - PreCog (IE dodging before something happens) Dodges for thermal weapons and other explosive weapons.
+
+ - Walk speed increased.
+
+ - You can now use the block button to override the manual blocking.
+
+
+Enhanced v0.0.2b2:
+
+ - g_saberDmgDelay_Idle & g_saberDmgDelay_Wound now control how often often hits against the exact same target will register.  This is to prevent the damage levels and saber/dodge behavior from acting differently when you're using a higher sv_fps setting.  This translates to more consistant damage as well.
+
+ - Players now become fatigued at 10% of max FP.  When fatigued, players make attacks much slower.
+
+ - You can now only walk during a Knockaway.
+
+ - Default value for g_saberanimspeed changed to .5.
+
+ - Fixed issue with g_saberanimspeed affecting some of the wall animations.
+
+ - Activated the two hidden stances (tavion's and Dasain's).  They are now part of the single saber's stance cycle but they don't have seperate hud icons yet. (HiddenStances)
+
+ - Proto Visual weapons code - While you're not using your saber, it will appear on your belt.  This only works for specially prepared models. (VisualWeapons)
+
+ - Dodge guage now flashes and makes sound when dodge is under 30.
+
+ - Both Dodge and Fatigue guages flash when low.
+
+ - Moded Force Fall so that it gradually slows down = instant slow down.
+
+ - Saber Fakes - pressing the block button before an attack starts will make your player do a fake.  Using Block + a direction will transistion the swing into different attack (based on the direction pressed).  Using Block without movement will cause the player to abort the attack and resume the ready position.
+
+
+Enhanced v0.0.2:
+
+ - Teammates' Sabers now collide with each other even if friendly fire damage is turned off.
+
+ - Teammate NPC blades now collide with other teammate blades.
+
+ - saberthrow is now binded to button12 (+button12 for binding purposes) and/or selectable thru the force menu.  Either will still operate the kicks with the saber staff.
+
+ - Turning off g_saberBladeFaces will result in poor viewlocking on saber impacts so don't do that.
+
+ - changed d_saberSPStyleDamage to 0 for the default.  It was causing problems with viewlocking with idle saber damage.
+
+ - Viewlocking!
+
+ - Manual Blocking.  Hold down secondary fire and use your movement keys to set a direction.  The current controls are inverted (backwards for upper positions, forwards for lower)  The availible positions are Lower Left, Lower Right, Upper Right,Upper Left, Top.
+
+ - Hilt bash should in theory work now.
+
+ - Fixed issue with the double/dual saber animation spazing while standings still and holding block position.  It was due to the block animation trying to restart each time the block position was refreshed. Since this is no longer the case, blocking will now take up less bandwidth.  Yeah!
+
+ - Moved all the movement set code for the blocking to PM_SetBlock().  It should be easier to edit now.
+
+ - For now, I've made the special moves go at normal speed.  We can mess with that stuff later.
+
+ - Added Movement locking.
+
+ - Sabers now bounces off players (and other damageable objects) when the saber does non-lethal damage.  Layman translation:  NO MORE GROSS SABER PASSTHRU.
+
+ - Added Corpse and saber throw checks to view/movement locking.  Also, added a check to prevent moves from view/move locking when you hit the ground (since many animations do that naturally).
+
+ - saber throw button (button12) added to idle client checks.
+
+ - sabers now use actual saber radiuses for saber collision checks.
+
+ - Rewrote saber tracing system (I call it a Real Trace now) for better performance and accuracy.  it's not 100% (there's some crazy situation where it isn't guarnteed to be perfect, like when multiple players and sabers touching the same saber @ the same time), but it's perfect enough for all the SANE situations that I could think of.
+
+ - sv_fps is now set to 50 for improved hit detection.  Please note that you might have to do some setting tweaks (that I can't do for you) to get the most out of the change.  See http://www.techspot.com/tweaks/jedioutcast/jedi-6.shtml for details.
+
+ - AI now uses saber throw correctly.
+
+ - anglar and linear movement now affects saber damage levels.  Running towards an opponent while spinning into an attack is do more damage.  Each element does about %60 +- when at maximum.
+
+ - Saber behavior completely rewrote.
+
+	- Running or moving faster than a walk greatly increases your chances of screwing up.
+	- Manually block an attack has a high probability of creating an openning in your opponent's defenses
+	
+
+ - New Saber Defines can be found in w_saber.c under the tag "SaberDefines".
+
+ - new debug mode cvar - g_debugsabercombat 0 in debug mode.  This cvar is used to test the new saber behavior.
+
+	0 = none
+	1 = attacker butter fingers
+	2 = attacker knockaway
+	3 = attacker knockdown
+	4 = defender butter fingers
+	5 = defender knockaway
+	6 = defender knockdown
+
+ - new saber hit detection cvar - d_saberBodyCheck 1.  Determines weither or not a RealTrace does an additional ghoul2 trace to determine if the player body was hit when the saberEntity was hit.  Layman translation:  It takes a little bit more CPU (shouldn't be noticeable) to ensure that the player hit detection is accurate whenever sabers are colliding.
+
+
+
+====
+FAQs
+====
+
+Q:  Does Enhanced have a cvar to make the saber system more like basejka's system?
+A:  There isn't a cvar.  Creating a totally configurable system would be a coding/balancing nightmare.  However, this is still a WIP so unresolved balancing/gameplay issues can/will be addressed if they are brought to our attention.
+
+Q:  Why does the new saber bouncing behavior have such a long recovery time after each impact?
+A:  The saber only returns to the ready stance if the player attempts to attack in the same direction as the original attack when the impact occurs.  To avoid this just move in another attack direction as the saber hits.  This will have your player bounce off the impact into another attack.  The goal of this change is to prevent bounce spamming for people that just charge blindly into combat.
+
+Q:  Where's my manual block button?!
+A:  We experimented with serveral different variations of a manual block button earlier in the development cycle but we weren't happy with the results.  The problem with a manual block button is that players end up getting caught "flat footed" simply because they weren't spamming the block button.  Plus, when would you ever NOT want to block an attack?
+
+    As such, the manual block button system was converted into part of the Dodge system.  Saber blocking now occurs automatically and deduces energy from your Dodge meter.  However, to parry attacks (and create an openning in your opponent's defenses) you must take an active role in your blocking.  To attempt to parry an attack, move in the direction of the attack as it approaches your player's body.  Note that up/down parrying is inverted IE, Move left to parry left; Move right to parry right; Move back to parry up; Move forward to parry down.  The chances of parrying an attack depends on the attacker's/defender's attack/defense saber skill levels, weither the players are running, etc.  
+ 
+   A successful parry will stun your opponent, making him stumble and lose his ability to saber block for a shot period of time.
+
+Q:  Can/How can I feint from one attack to another?
+A:  Hold down attack + altattack + new move direction while winding up for an attack to feint into a new move.
+
+Q:  Why do I keep getting stunned while attacking people?
+A:  Are you running?  Running greatly increases your chances of getting stunned or disarmed.
+    Try walking.  The walk speed has been vastly increased to be usable during saber combat. 
+
+Q:  Where is my Saber Throw?
+A:  Saber Throw is now a selectable Force Power in the Force Powers menu.
+
+
+
+=======
+Fatigue
+=======
+
+	Your Force Points now regenerate at a slower rate and most combat actions cause Force/Fatigue Points.  Attempting a saber move that costs more than your current FP will result in you doing the move much slower than normal.  The objective of this system is to make players concentrate on fighting smartly by effective mixes of attacking and defending.
+
+	Fatigue Regen Rates (dependant on g_ForceRegen setting):
+		Standing = Standard (= 1 FP per g_ForceRegen milliseconds)
+		Running =  No Regen
+		Walking = Standard/2
+		Meditate (using the meditate taunt) = Standard * 3
+
+	Fatigue Costs:
+		Standard Saber Attack = 1
+		Standard Saber Spin (transition) = 1
+		
+ - I've set up some easy to find tags for the defines that determine their behavior.
+	Saber System (SaberSys) = SaberDefines
+	Fatigue System (FatigueSys) = FatigueDefines
+	Dodge System (DodgeSys) = DodgeDefines
+
+=====
+Dodge
+=====
+
+	Dodge is a brand new system that prevents you from taking damage.  Whenever an attack is going to hit you, Dodge takes over and either automatically moves your saber to block the attack (Dodge Block) or Evades out of the way.  Dodge operates from a Dodge reserve that is seperated from the other stats (health, ammo, etc).  The new Hud in the upper left part of the screen displays how many Dodge Points (DP) you have.  Dodge has a maximum of 100 points and is refilled by draining energy from your Fatigue (Force) Points at a ratio of 6 DP to 1 FP.  Dodge regens at a much faster rate than Fatigue (is controlled by g_dodgeRegenTime).
+
+	There are several different types of Dodge:
+
+		Dodge Block - If the player is using a light saber and not attacking, he will automatically attempt to block incoming light saber attacks.  This is the first line of Dodge defense.  This currently doesn't have an DP cost but it also doesn't have the parry bonus of a manual block.
+		Dodge - The player physically evades an attack.  This currently only works for saber attacks.  Cost is dependant on method of attack.  
+			Sabers = 30 DP.
+		Dodge Roll - When normal Dodge fails, like say when a very solid saber swing continues to hit the player, the player will launch into a Dodge Roll
+
+Situations where Dodge doesn't work:
+	Choking
+	Knocked to the ground
+	In mid air
+
+	It's very important to remember these situations as sabers are VERY lethal without Dodge.
+
+	Dodge Cvars:
+
+		g_debugdodge 0 = debug cvar for Dodge.  Set to 1 to receive messages whenever Dodge is used.
+		g_dodgeRegenTime 555 = Controls the rate at which Dodge regens.  The value is in msecs between regens.
+
+
+
+===================
+Dodge/Fatigue Costs
+===================
+
+	6 Dodge (DP) = 1 Fatigue (FP)
+
+	Offense:
+		Normal Saber Attacks = 1 FP
+		Special Saber Attacks = 3 FP
+		Kicks = 0 FP
+
+	Defensive:
+		Saber Blocks = 10 DP
+		Dodges = 30 DP
+
+
+
+===========================
+Base JKA Saber System Terms
+===========================
+
+Knockaway - You (defender) just blasted an attacker into a Broken parry.  The animation start points seem to be from the parry positions.  (BOTH_K animations)
+
+Broken Parry - Your saber just got blased pretty hard. (BOTH_V animations)
+
+
+
+==========
+RealTraces
+==========
+
+	The RealTracing code is specifically set up to fix a lot of the conceptual issues with the basejka hit detection.  RealTraces can handle situations where a ghoul2 trace or a saber blade trace misses after the initial bounding box trace.  This is a major issue in the original system as since basejka just counts this as if the saber didn't hit ANYTHING.  This is a serious problem becuase the saber bounding box is normally inbetween the hit victim and the attacking saber.  IE, a lot of actual hit situations in basejka are treated as missies when they are clearly hits.
+
+
+
+==========================
+Super Duper Interplotation
+==========================
+
+	The super duper interplotation mode is set up to try to fix a lot of the problems related with having a slow frame rate for the server world processing which limits the game's ability to do hit detection for sabers.  The basic concept of this system is to maximize the hit detection by firing a bunch of RealTraces between from points on the last server frame's saber position to points on the current saber blade's position.  Super Duper Interplotation fires a traces in a pattern that covers every single space on the saber blade.  This system isn't perfect as the traces are linear.  IE, this system can't account for the slight curving of the saber path.
+
+	So far, this experiment in improving the hit detection has been a success, if not a perfect one.  For example, blade-on-blade impact detection appears to be perfect or near perfect and the general hit detection has improved noticably.  On the other hand, there's still some issues with hit detection @ the end of the blade during the faster saber moves.  However, due to the inharent issues with the JKA saber system (the server FPS limitation,the curving movement of the blades, and the fact that game engine doesn't have true object-on-object physics) I'm not sure there's much more that we can do.
+
+
+
+============
+View Locking
+============
+
+	View Locking is a fancy concept that I came up with to give the saber impacts some level of "feel" to them to make up for the fact that there's no true object impacts in the JKA engine.  All View Locking does is prevent a player from moving their view into the direction of a saber impact whenever the saber hits something.  The View locking is based on the surface normal of the object that was hit so the player is able move in directions away from the impact but not directly into it.  This system should in theory also prevent the sabers from passing thru objects without reason after impacts.  Unfortunately, I've only had limited success with this so far, It works fine for wall impacts but it doesn't seem to work well on saber-on-saber or saber-on-players yet. 
+
+
+
+=================
+Thoughts On Dodge
+=================
+
+	As for Dodge, there's a level of "control" that we have to take away from players since players want saber combat at "normal" speed, but they also want to BE Jedi.  However, we all know that players aren't REALLY Jedi and therefore don't have Jedi reflexes.  As such, I created Dodge as a way for players to HAVE Jedi Reflexes.
+
+In the earlier days, I thought that players would be able to do the saber blocking manually (like in MB2) but I discovered that that simply doesn't result in realistic Jedi Combat.  The saber attacks are just too fast for players to be able to manually block enough of them to make the game work.  As such, I moved blocking into Dodge system but still give players the ability to actively block thru their movement.  Plus, this opened up a button for kicking which players wanted. 
+
+
+
+==================
+Saber Throw System
+==================
+
+	- Dual saber users can now continue to use their second saber after dropping their first saber.
+

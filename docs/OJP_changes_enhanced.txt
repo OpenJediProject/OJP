@@ -1,0 +1,699 @@
+====================================================
+Open Jedi Project Change Log (Enhanced Distribution)
+====================================================
+
+This file stores all the information about what has changed from release version to release version for OJP Enhanced.  OJP Enhanced contains all the changes of OJP Basic plus a library of gameplay alterations made by OJP's contributors.
+
+
+Version 0.1.0:
+
+	New Features:
+
+		Experience System (ExpSys):
+			Retooled the skill point system into a true experience system.  Players now start out with a small amount of skill points and gain them by causing DP damage to their enemies or capturing the flag during ctf gametypes.  
+			- Force Jump is no longer a forced skill.  New skill point cost 2/4/6
+			- g_maxForceRank now sets the maximum number of skill points that a player can earn.
+
+		Force Powers:
+			- Players can now use powers from both sides of the Force at the same time.
+
+			Lightning:
+				- Players with skill points in absorb or lightning can now block lightning with their bare hands if they face their attacker.
+				- Changed the countering ability to behave based on the difference between the attacker's and defender's approprate Force Power skill levels. 
+					2 levels of difference = can't block while running or in mid-air.
+					1 level of difference = can't block while in mid-air.
+			
+			Push/Pull:
+				- Changed the countering ability to behave based on the difference between the attacker's and defender's approprate Force Power skill levels. 
+					2 levels of difference = can't block while running or in mid-air.
+					1 level of difference = can't block while in mid-air.
+				- Countering a push/pull now blocks all effects of the push/pull.
+				- Weapon pull is no longer randomized.
+				- Push can now be used to break out of a grip at any power level.
+
+		Melee System:
+			Kicks:
+				- Dodge Kicks work automatically when the player has less than a light mishap level.  At light mishap or above, the player may block them by holding alt attack.
+				- A player's reaction to getting kicked is now based on their MP level.  Players will stumble unless they have a high level of MP, in which case they'll get knocked to the ground.
+				- Players can now saber block during kicks.  
+
+		Saber Locks:
+			The control and damage behavior of saber locks have been retooled.
+			- Added brand new visual effects to the saber locks.
+			- Saber locks are now allowed in all gametypes.
+			- Saber locks now increment slower/more smoothly.
+			- Counterclockwise saber locks now actually move counterclockwise.
+			- Players can't saber lock if a player is in a slow bounce.
+			- Instead of rapidly tapping attack, whoever starts the saberlock is automatically the victor.  A player can start a saberlock by hitting a player with an attack fake or by using an attack parry.  Parrying the attack fake prevents a saberlock from occuring.  In addition, saberlocks can still occur randomly during combat.
+			- Super Breaks:  Players now have control over what they do when they win a saber lock.  When a player wins a saber lock, they can do a normal break or a super break.  Normal breaks cause the player to stun their opponent into a mishap. 
+
+				A super break attempts to kill their opponent with finishing move.  However, Super breaks only work on opponents who have critical DP.  Otherwise, the lock loser will block the super break and forces the attacker into a mishap.  To perform a super break, hold down the attack button while in a saber lock.  
+
+		Saber Combat System:
+
+			Blocking - Players now move to block saber attacks before they impact.
+			
+			Mishaps:
+				Redesigned the mishaping system to make it more dynamic and realistic.  Instead of basing the player's mishaps on their level of DP, it's now based on the new Mishap Meter.  There are 4 basic levels to the Mishap Meter, None->Light->Heavy->Full.  As a player attacks another saber user, they accumulate Mishap Points (AKA MP).  As the Mishap Meter reaches higher levels, more detrimental mishaps and vulnerabilities occur.
+
+				Mishap Levels:
+					None:
+						- No Mishaps.
+						- Stumble from kicks.
+					Light:
+						- Slow Bounces.
+						- Stumble from kicks.
+					Heavy:
+						- Heavy Slow Bounces.
+						- Knockdown from kicks.
+						- Vulnerable to Force Powers.
+					Full:
+						- Disarms, Knockdowns, Stuns
+						- Knockdown from kicks.
+						- Vulnerable to Force Powers.	
+				
+				You Gain MP By:
+					- Attacking a saber user.
+					- Getting hit by an attack fake (without parrying it).
+
+				You Lose MP By:
+					- Parrying an attack.
+					- Suffering a mishap (including getting knocked down).
+					- Getting kicked.
+					- Attacking an attack fake with a normal attack swing.
+					- Waiting (MP decreases automatically over time).
+
+				Mishaps Can Happen When:
+					- An attack fake is landed,
+					- An attack is parried.
+					- A move maxes out a player's Mishap Meter.  This results in a severe (full) mishap.
+
+				Additional Concepts:
+					- Running doubles the effect of misbalancing moves and halves of effect of balancing moves.
+					- Use g_mishapRegenTime to control the speed at which the mishap meter regenerates.
+
+	Improvements/Fixes:
+
+		Blaster Bolt Block System:
+			- Blocking bolts while running doubles the DP cost.
+
+		CoOp:
+			- Fixed bug where NPCs were never completing their attack swings. 
+
+		Dodge System:
+
+			Kick Dodges:
+				- Switched buttons so that players must hold crouch to Dodge Kicks while in a slow bounce (instead of jump).
+				- The attacker now gets a kill if the Kick Dodge ends up killing the player (like falling off a cliff.
+				- Bots automatically Dodge Kick 1/3 of the time when kicked while in slow bounces. 
+			
+			Misc:
+				- DP no longer regens while stunned, knockdowned, dodging, in mid-air, or in a slow bounce.
+				- Fixed bug where players with dropped sabers wouldn't take DP damage.
+
+		Fatigue System:
+			- Players now regenerate at the full rate while walking.
+			- Increased FP regen during meditation to 4x normal.
+			- Can't regen while in mid-air.
+
+		Force System:
+
+			Drain - Fixed issue where a player's FP was instantly drained by using Drain when the player didn't have any skill points in Lightning.
+
+			Push/Pull:
+				- Reduced the FP cost for these force powers.
+				- Push/Pull is no longer automatically countered if the player is hit from behind while critical DP.
+				- Can't block Push/Pull while too far off balance.
+
+			Lightning:
+				- The DP cost to saber block lightning is now directly related to the damage caused by the lightning.
+				- Lightning is no longer automatically countered if the player is hit from behind while critical DP.
+				- Can't block lightning while too far off balance.
+				- Reduced the base lightning damage level to 1 point of damage per lightning strike.
+
+		Ledge Grab - Fixed bug where players could switch weapons while in a ledge grab. 
+
+		Movement System:
+			- Players can now roll on fall landing with any weapon.
+			- Players now run slower when fatigued or when their DP is critical.
+
+		Saber Combat System:
+
+			Blocking:
+				- Parrying an attack fake causes the defender to go into a slow bounce.
+				- Saber blocking/parrying now costs 1 FP.
+				- Defenders can now "Attack Parry" incoming attacks by quickly tapping the attack button (to start an start fake) and moving into the attack right before the impact.  A successful Attack Parry will force the attacker into a heavy slow bounce.
+				- Fixed problem with players continuing to spin around when forced into a block during a spin move.
+				- Halfed the time spent in block animations.
+				- Players can't saber block while in a grappling move.
+				- Players can no longer parry while crouched.
+				- Reduced saber block cost for lunges to .75x normal dp cost. 
+
+			Attack Fakes:
+				- Fixed bug with attack fakes repeating twice before starting the actual attack swing.
+				- Fixed bug where attack fakes weren't costing FP.
+
+			Misc:
+				- Dual users who are using their second saber while their primary saber is dropped can now be properly affected by the saber combat behavior.
+				- Ground stab moves now do damage to all players rather than just players who are on the ground.	
+				- Cleaned up bounce behavior to prevent bounces from allow invisible spaz attacks.
+				- Single saber lunge move damage reduced to x1.25 normal DP damage.
+				- Fixed bug with the run penalties not working.
+				- Transition moves are no longer treated as attack moves.  This fixes the "lightning" hits problem.
+				- Slow bounce conversions now only work for heavy slow bounces or if the player is holding crouch to attempt a Kick Dodge.
+				- Made it so that attack moves made from bounces are automatically made from vastly different direction.
+				- Fixed minor issue where the code was still counting transitions as non-idle damage moves.
+				- Reworked the bounce code to fix some issues with bounces occurring or not occurring when they should.
+				- Fixed a major issue where animations could be unintentionally repeated due to the standing animation code in the PM_SetSaberMove().
+				- Fixed bug where certain special attack moves (jump flip attacks, roll stabs) were causing damage at unexpected parts of the moves.
+
+			Style Balancing:
+				Dual Saber Style:
+					- Dual saber users can now block saber attacks if they only have one of their sabers.
+					- Reduced saber attack cost to 1 FP.
+
+				Staff Saber Style:
+					- Staffs no longer get a DP reduction bonus for saber blocks.
+					- The staff saber's one-handed spinning attack now does 2x normal DP and breaks thru the block/Dodge defenses of fatigued players (just like the single saber lunge).
+					- Staff sabers don't have extra DP costs for blocking rear attacks.
+					- Reduced saber attack cost to 1 FP.
+		
+		Saber Throw System - Fixed the dreaded saber crotch bug.
+
+		Viewlocks:
+			- Players can't move during viewlocks anymore.	
+			- If a player is running when he goes into a viewlock, the viewlock lasts slightly longer than usual.
+
+	New Cvars/Cvar Improvements:
+
+		g_minForceRank 5:  Sets the initial number of skill points that players have.
+		g_maxForceRank 100:  Now sets the maximum number of skill points that a player can earn.
+		g_mishapRegenTime 3000:  This cvar controls the speed at which the new the mishap meter regenerates.
+		
+		sv_fps:
+			- sv_fps's setting is now saved between game seasons.
+			- A server's sv_fps setting is now broadcasted to server browsers.
+
+
+Version 0.0.9:
+
+	New Features:
+
+		Force System (ForceSys):
+			We're now in the process of retooling and balancing the force powers to work in conjunction with the new saber system.
+			Drain:
+				- Due to Drain being completely unbalanced in OJP Enhanced, we've made drain fire Lightning until we can figure out what to do with Drain.
+
+			Grip:
+				- Players can now only be gripped if they are stunned, heavy slow bounced, knockdowned, or has less force skill in absorb/grip than the attacker has in grip.
+
+			Lightning:
+				- Lightning can now be blocked by saber users for a cost of 1 DP per lightning hit if the are facing their attacker and are not in a stun or heavy slow bounce.
+				- Lightning now causes knockback and knockdown to successfully hit victims.
+
+			Misc:
+				- During powerduel, the doubles team now has a force mastery rank of one less than the map's set force mastery level.
+
+			Push/Pull:
+				- Push/Pull can now be countered while a player is attacking, in the air, or charging up an attack.  Push/Pull can't be countered during heavy slow bounces or while the player is stunned.
+				- Push/Pull now has more realistic knockdown strength.
+
+		Weapon System (WeaponSys):
+			Basically, we've retooled all the gun damage, speed, ammo usage, ammo capacity, and spread factors to make the blasters be more realistic.
+
+	Improvements/Fixes:
+		
+		Blaster Bolt Block System:
+			- Saberers can now deflect primary shots from the Demp2 gun.
+			- Saberers can now block shots from the disruptor gun.
+			- Repeater bolts now cost 1 DP to saber block instead of the usual 5 DP.
+	
+		Desperation Regeneration:
+			- Desperation regenerations have been removed for balance.
+
+		Dodge System:
+			- Added Body Dodge support for direct fire weapons.
+			- Increased DP cost for body dodging a saber attack to 40 DP.
+			- Fixed some issues with the Dodge System and the new knockdown system.
+			- DP meter now gives the critical alarm at less than 35 DP.
+			- Added ojp_allowBodyDodge cvar to allow enable/disable of the Dodge System's Body Dodges.
+			- Tweaked Dodge Push code so that it no longer costs FP.
+			- Players can now Dodge kicks by backflipping.  You can do a Kick Dodge automatically whenever you're on the ground, not stunned/slow bounced, and walking/standing.  You can do a Kick Dodge when you're in a slow bounce by pressing Jump.  Kick Dodges cost 10 DP.  Players can't dodge kicks made by a player using melee kicks.
+			- Fixed bug with missiles/blaster bolts getting stuck inside players and causing massive DP loss.
+
+		Fatigue System:
+			- Fixed a problem with the meditation regen rate not being consistent.
+			- Fixed problem with the meditation regen still happening even after a meditation taunt is finished.
+
+		Knockdown System:
+			- Fixed problem with knockdowns requiring a player to press their getup button before they had even hit the ground.
+
+		Ledge Grab:
+			- Doubled the ledge pull up animation to make it look better. 
+
+		Movement System:
+			- Players now walk backwards slightly slower.
+			- Increased the spinning animation movement speed to %75 normal.
+
+		Saber Combat System:
+			Attack Fakes:
+				- Shorten the saber blade trail for attack fakes to 2x normal.
+				- Non-directed attack fakes that are started from the top attack position now properly shift to the lower attack directions.
+				- Attack Fakes now do 25% more damage than a normal saber attack.
+
+			Blocking System:
+				- Getting attacked from behind now costs double DP to saber block.
+				- Parrying now costs 1/3 normal DP instead of no DP at all.
+				- Players can only parry attacks from players that are in front of them.  This parry arc is in a 180 degree arc in front of them.
+				- Fixed bug with players auto parrying any attack that hit the player while the player was already in a block animation.
+				- Roll stabs now cost 2x DP to saber block.
+				- Running doubles the DP cost required to saber block something.  However, this is capped at the Body Dodge cost of dodging a saber blade (35 DP).
+
+			Hit Detection:
+				- Dramatically improved the saber combat hit detection by retooling the Real Trace and saber collide code.
+
+			Fatigue System:
+				- Being fatigued now reduces a player's saber trail length to .5 normal since a fatigued player swings much slower.
+
+			Misc:
+				- Fixed bug with certain moves (mainly spins) not getting knocked into bounces after an impact.	
+				- Players now make shoved grunts sounds when they're stunned or knocked into a slow bounce.
+				- Downward ground stab moves now do damage to players are in the process of getting up.
+				- Saber attack wind ups no longer do attack damage.
+				- Fixed the attack move detection to also account for players who have just started a block/bounce move this frame.  This issue should fix the problems with dual saberers doing vast amounts of damage.
+				- Players now get a DP and FP bonus of 20 for killing another player.
+
+			Mishaps:
+				- Players who are running now have some level of slow bounce protection (while above 50 DP).
+
+			Slow Bounces:
+				- Fixed problem with slow bounces occurring when they shouldn't.
+				- Changed things so that return animations are used for all slow bounces while players have more than 50 DP.  The older, more vulnerable slow bounce animations are used when the player has less than 50 DP.
+				- Players can no longer move during slow bounces.
+			
+			Style Balancing:
+				- Each style now does a different amount of DP damage.  
+					Duals = 12	Yellow = 15
+					Staff = 12 	Purple = 16
+					Cyan = 13	Strong = 17
+					Blue = 14
+				- Heavy Hitter Styles (red and purple) now have a stun threshold of 30 DP.
+				- One-Handed Styles (Duals, Cyan, and Purple) have higher disarm thresholds of 30 DP.
+				- Reduced the attack fatigue for dual/staff sabers to 2 FP.
+				- Decreased the attack fake FP cost for sabers back to normal.
+				- Completely removed transition move (spin moves) FP costs for all styles unless the transition is part of an attack fake.  Dual sabers still get attack fakes for free.
+
+			Viewlocks:
+				- Viewlocks now no longer apply to two idle sabers touching. 
+				
+
+	New Cvars:
+		ojp_allowBodyDodge 1 - toggles the use of Body Dodges by players.
+
+
+Version 0.0.8:
+
+	Improvements/Fixes:
+
+		Dodge System:
+			- Players now dodge splash damage by rolling with the blast (and getting knocked down).
+
+		Fatigue System:
+			- Fixed bug where moves that cost more FP than the player currently had would cost no FP.
+			- Melee and special saber moves no longer have the saber attack FP cost stacked with the move's FP cost.
+			- Decreased cartwheel FP cost to 3.
+			- Backflips now have a single, upfront cost of 3 FP instead of the Force Jump style of constantly draining FP.
+
+		Knockdown System:
+			- Fixed problem with the players being able to move during non-force powered getups.
+			- Players can no longer look around while in a knockdown until they're able to get up.
+			- Fixed a variety of animation glitches involving the new knockdown system whenever the player gets some hang air mid-knockdown.
+
+		Saber Combat System:
+			
+			Blocking:
+				- Fixed bug with players being able to saber block while in a knockdown (due to new knockdown system).
+
+			Dual Saber Balancing:
+				- Increased saber attack FP cost to 3.
+
+			Slow Bounce:
+				- If player's saber is directly hit while they are in a slow bounce, they will be forced in a true saber mishap.
+
+			Staff Saber Balancing:
+				- Increased saber block DP cost from 50% to 75% normal DP cost.
+				- Increased saber attack FP cost to 4.
+				- Increased transition/attack fake FP cost to 4.
+
+			- Fixed bug with sabers not properly bouncing while in swing windups.
+			- Fixed bug with spin moves not bouncing properly.
+			- While players in the middle of a parry animation, they will parry any attack as long as the enemy is in front of them.  This is to assist players in multiple player saber battles.
+			- Friendly fire saber attacks still cause bounces/impacts but do not do DP/normal damage unless g_friendlySaber is set.
+ 
+
+Version 0.0.7:
+
+	New Features:
+
+		Blaster Bolt Block System (BoltBlockSys):
+			We've retooled the Blaster Bolt Blocking.
+			- All blaster bolt blocks require 5 DP to block.  If a player has less than 5 DP, they can still block by making the bolt physically hit their saber blade.
+			- There's no time limit between bolt blocks.
+			- Running or jumping reduces your effective block skill level by 1.
+			- Jedi Master level defenders now reflect all blocked bolts in into the direction they are facing. 
+
+		Knockdown System (KnockdownSys):
+			Ported the knockdown system from SP.  In addition, players can't use force powered getups if they are fatigued.
+		
+		Saber Combat System:
+
+			Death From Above:
+				- The DFA special move can now be done midair.  
+				- To do an DFA, you must be winding up to do a overhead swing and be moving at run speeds.
+				- Added the DFA special move (with different animation) to the purple (desann) style.
+				- DFA moves cost 2x DP to block.
+
+			Desperation Parries:
+				Parrying an attack while in the danger levels for DP or FP will regenerate 10 DP or 5 FP respectively.  This allows skilled players to continue fighting long over their energy is expended.  Desperation Parries make the force heal sound to alert fighters to the fact that regeneration has occurred.
+
+			Dual Saber Balancing:
+				- No FP cost for transitions or attack fakes
+				- Double FP cost for attack moves.
+				- Dual sabers must have a higher amount of FP (75 FP) to prevent being disarmed.
+
+			Lunge:
+				The Blue Style's Lunge special move has been retooled to fit in with the new saber combat system. 
+				- All single saber styles can now do lunges.
+				- When fatigued, defenders can't saber block or dodge a lunge.
+				- Saber blocking a lunge requires double the standard DP saber block cost (20 DP).
+
+			Overhead Flip:
+				- All single bladed weapons now have an overhead flip special move.  
+				- The red and purple styles have overhead flip slash while the yellow, blue, and aqua styles have an overhead flip stab. 
+				- Flip Stabs no longer over spin.
+				- Overhead flip moves now cost 2x standard block DP to block.
+				- Overhead flips no longer slow down when a player is fatigued.
+
+			Purple Saber Balancing:
+				- Sped up the windup and returns for the purple style.
+
+			Red Saber Balancing:
+				- Sped up the windup and returns for the red style.
+
+			Staff Saber Balancing:
+				- Staff sabers saber block at half DP cost.
+				- Double FP cost for attack moves.
+				- Staff sabers must have a higher amount of DP (75 DP) to prevent stuns.
+
+
+	Improvements/Fixes:
+
+		Dodge:
+			- Players can no longer do body dodges while using weapons other than the saber or melee.
+
+		Saber Combat System:
+
+			Fakes:
+				- Retooled attack fakes to make them occur even when the player isn't moving or is moving in the same direction as the original attack.  Attack faking in this situation reverses the direction of the attack.  This makes attack fakes much easier to do.  
+				- Attack fakes now have longer saber trails to make them visually different than normal attacks.
+				- Players can no longer do an attack fake while already in an attack fake. 				
+				- Fixed minor bug where attack fakes could continue multiple attacks if the attacker missed or if the defender Dodged the attack.				 
+
+			- Fixed problem with players Dodging attacks instead of saber blocking when the blade directly touches the player's body.
+			- Players can no longer parry during a block that they are forced into while attacking.
+			- Fixed problem with Blue style (and other styles in some situations) causing exessive DP drain seemly at random. 
+			- Fixed problem with defenders having attacker behavior when hit in certain situations.
+			- Made the saber behavior be more mechanical and less random.
+			- Fixed bug with some defenders not going into a block animation when hit.
+			- Players can no longer parry if they are hit while in a saber bounce animation.
+			- Reduced Blue Style's attack animation speed by %20 to make it more balanced vs the other styles.
+			- Removed the ability to instantly transition into a new attack in some saber impact/bounce situations.
+			- A normal attacking saber now counters an attack fake.
+			- Increased length of blue style bounce animations to make them visible.
+
+
+		TABBots:
+			- Fixed bug with bots not properly starting attack fakes.
+			
+			 
+
+Version 0.0.6:
+
+	Improvements/Fixes:
+
+		Fatigue System:
+			- Carrying a siege objective no longer freezes FP regeneration.
+
+		LedgeGrab:
+			- Fixed problem with the player's view jumping around sometimes when they let go of or climb up a ledge.
+			- Fixed bug with players spaz ledgegrabbing on short ledges.
+			- You now must be in mid-air for ledgegrab to work.
+
+		Saber System:
+			View Lock:
+				- Reworked the viewlocking system to make it functional.  Basically, viewlock adds a little bit of tactile feeling to saber-on-saber impacts by preventing players from moving or turning a way that would make the sabers illogically pass thru each other.
+			
+			- Players now hold their saber stance while walking forward.
+
+		Saber Throw System:
+			- Dual saberers can no longer get an invisible saber blade by switching to blue style while their first saber is dropped.
+			- Fixed problem with dual saberers being able to activate their dropped sabers by switching to another weapon and back.
+			- Dropped sabers can now be picked up by either crouching or rolling over them.
+			- Sabers will no longer stick into walls if their blade isn't facing the wall.
+			- Added german translations for the saber throw menu items.
+
+		Server Filter:
+			- Made OJP Enhanced filter the only filter since OJP is incompatible with basejka or OJP Basic.
+
+
+
+Version 0.0.5:
+
+	Improvements/Fixes:
+
+		Dodge System:
+			- Fixed problem with Dodge having an opening in the player's saber defense immediately after a Dodge is completed.
+
+		Melee System:
+			- Fixed the problem with melee's kick and grapple sticking the player to the ground.
+
+		Saber Combat System:
+
+			Blocking:
+				- Fixed problem with the parries only regularly working when the defender is moving forward/backwards.
+				- Blocks made in the correct direction to parry don't cost DP and play a special "knockaway" animation.
+				- The block animations now update per saber impact.
+
+			Slow Bounces:
+				- Slightly slowed down the slow bounce animations.
+
+			- Having a hidden saber style selected when a player dies no longer causes it to switch to another style when they respawn.
+			- Tweaked the speed at which players can switch saber styles to prevent style spazing while switching in lagged games.
+			- Saber drop (disarms) can't occur unless the player has less than 50 FP.
+			- Saber no longer activates if the saberer kicks while their saber is deactivated.
+
+		TABBots:
+			- TABBots now only walk in Enhanced when they are attacking with the lightsaber.
+
+		Saber Throw System:
+			- Saber users can now punch if they drop/throw their saber away.
+			- Dropped sabers no longer turn on saber blade if their owner died and respawns.
+
+
+
+Version 0.0.4:
+
+	New Features:
+
+		Movement System (MoveSys):
+			 This is just a collection of the movements tweaks that we've added to the game.  For now, all we've done is reduce the speed of players when running backwards and strafing left/right. 
+
+		New Saber Effects (NewSaberEffects):
+			We've replaced the original saber-to-saber clash effect with something much more true to the movies.
+
+
+	Improvements/Fixes:
+
+		Saber Combat System:
+
+			Slow Bounces:
+				Whenever a saber user is saber stunned and has 50+ DP, or is saber knockdowned and has 50+ FP, the player will automatically avoid the mishap and instead move a little slower on the saber bounce.  
+
+			- Added realistic stumble movement to the stun animations based on their footwork.
+			- Tweaked the saber block animation times.
+			- A player's saber block position now updates properly whenever a new swing is blocked.
+
+		Saber Throw System:
+			- Added menu items for Saber Throw Button binding.
+
+
+
+Version 0.0.3:
+
+	New Features:
+
+		New Saber Throw:
+			The Saber Throw mechanics have been completely reworked.  Saber Throw now acts more like it does in the movies.  Thrown sabers only move in a stright line but will defy gravity as long as the saber throw button is held.  Once the button is released, or the saber moves out of range, the saber will fall to the earth under normal gravity.  Sabers that hit the ground or hit a target now remain on the ground until the saber is called back to the playe.  The player can recall their saber by reusing Saber Throw or by pressing the lightsaber weapon selection button. 
+
+
+	Improvements/Fixes:
+
+		TABBots:
+			- TABBots can now retrieve their sabers when they drop them in the new Saber Throw system.
+		
+		Saber Combat System:
+			No Combo Limits:
+				All the attack chain (kata) limitations have been removed.  You can now swing as often as you want in a row.
+
+			Saber Attack Movement:
+				Removed all the base JKA restrictions to player movement while saber attacking.  This means that you can swing your saber while running or moving backwards and still move at the same speed.  Note that players still slow down while performing spin moves.
+
+			Saber Style Speeds:
+				All saber styles now move at the same speed.
+
+			- Fixed problem with multiple mishaps happening to both saber combatents at the same time.  IE, having both players fall down at the same time.  Now the most "serious" mishap takes precidence and ties are resolved randomly. 
+			- Boosted saber damage.
+			- Added new hud icons for the hidden stances.  Aqua = Tavion's style; Purple = Desann's style
+			- Speed up the speed at which you can switch saber styles.
+
+			Katas Removed:
+				Saber Katas have been removed for realism.  Useing altattack + attack is now used for feinting attack directions while winding up for a n attack.  Simply press attack + altattack + direction during the attack wind up to switch into another attack direction.
+
+		Various UI Tweaks:
+			- Fixed problem with mod names being cut off in the Mod Menu.
+
+
+
+Version 0.0.2b8:
+
+	Improvements:
+
+		Dodge System:
+			- Dodge Rolls have been replaced with simpler Dodge Hops.
+			- Fixed the Dodge fall checks so you can no longer fall off cliffs with a Dodge (unless you stupidly change movement directions).
+		
+		Fatigue System:
+			- The critical fatigue state is now correctly entered if the player uses special saber moves that drain Fatigue.
+
+		Saber Combat System:
+			Fakes:
+				You can now use directional attack faking to break thru enemies attacks and blocks.  This also reduces the effectiveness of an enemy's parry to that of a block.  Note that doing a directional fake does cost more FP for the extra transitioning. 
+
+			Mishaps:
+				The mishap system has been revamped.  The chances of a mishap occuring is now based on your current saber move situation and your related saber skill level (offense/defense) in relation to your opponent's.  The mishap chances are still being balanced at this point, so please give us some feedback on how you think it feels.
+
+			Stuns:
+				Stunning your opponent now forces them into a proper looking broken parry.  Players can't move (other than jump) or saber block while in broken parries.
+
+		TABBots:
+			- TABBots can do saber attack fakes and parries.
+			- TABBots no longer get stuck in ledge grabs.
+
+
+
+Version 0.0.2b7:
+
+	New Features:
+
+		Dodge System (DodgeSys):
+			Players now automatically bodily dodge physical attacks that would normally kill the player.  Your current dodge level is shown by the new gauge at the upper left part of the screen.
+
+		Fatigue System (FatigueSys):
+			Rather than simply drawing energy for Force Powers, your Force Power guage now serves as an indication of your overall fatigue (energy) level.  Fatigue does not regen while running.  Using the meditation taunt will regenerate your fatigue at triple speed, but your defenses will be down.  If you're at less than 10% of your standard maximum Fatigue, your attack moves will move much slower.
+
+			Kicks - Kicking a player while they've been stunned will make them loss a large amount of Fatigue.
+
+		New Saber Combat System (SaberSys):
+			You now have much more control over the lightsaber.  Saber attacks are 100% controlled by the player now.  If you attempt to continue attacking in the same direction after an impact, you will have to return to the idle/ready position before swing in that direction again.  In addition, sabers now have to physically transition between attacks, bounces, etc.  Running while attack greatly increases your chances of getting stunned. 
+
+			Blocking:
+				Sabers now automatically block incoming saber attacks from all directions (except straight back).  This blocking action costs a slight amount of Dodge.  To parry an attack (and stun your attacker), simply move into the attack when it comes.  Note that forward/backward are inverted.  IE, You have to move backwards to block an attack coming at your head and have to move forward to block an attack at your legs.  As for right/left, just move into the attack.   
+	
+			Fakes:
+				Saber users can now do fakes.  Fakes come in two forms:  Faking attacks and faking the direction of an attack.  You can fake an attack by simply letting go of the attack button after starting an attack, but before the attack swing is started.  To fake the direction of an attack, start an attack, then hold down attack + alt attack and select a new attack direction.  Your player will then transition to attack in the new direction.
+
+			Saber Throw - The saber throw ability had been moved to a new dedicated button.  Secondary fire with the lightsaber now performs kicks.
+
+
+
+Version 0.0.2b6:
+
+	New Features:
+
+		Super Duper Interplotation System:
+			This saber hit detection improvement gives you a higher level of hit detection without having to boost the sv_fps.  We recommend you try this first before you touch the sv_fps. Is controlled by d_saberInterpolate.  The game now defaults to Super Duper interplotation.
+
+	New Cvars:
+
+		d_saberInterpolate 2 - Sets the interpolation method (a system for improving hit detection of stuff that happens between world updates) used for the saber system.
+
+
+
+Version 0.0.2b65:
+
+	Improvements:
+	
+		Dodge System: 
+			- fixed some math errors involving Partial Dodges.  
+			
+		Force Fall:
+			- Force Fall starting fall speed tweaked.
+
+		Saber Combat System:
+
+			Faking System Tweaks:
+ 				- to abort an attack, simply let go of the attack button.
+				- to perform an attack fake, hold down attack + block + movement key for the attack you wish to use.  You need to already have started/be in an attack for this to work.
+
+			Misc:
+				- Idle sabers don't bounce on impacts anymore. 
+				- Fixed bug preventing saber bounces from occurring.
+				- Fixed a major bug in the Real Trace function code (improved saber hit detection).
+				- Saber clash effects now use the saber wound debounce (g_saberDmgDelay_Wound) to prevent effect spazzing at different sv_fps settings.		
+
+
+	New Cvars:
+
+		bot_fps 20 - This cvar controls the frames per second rate at which the bot ai is processed.  The cvar allows the server to raise the server fps without increasing the bot ai CPU load.
+			
+
+
+Version 0.0.2:
+
+	New Features:
+
+		Force Fall (FORCE FALL):
+			If you have any level of force jump you can use force fall by pressing and holding the jump button as you descend. The higher level force jump you have the slower the use of force power and the faster you slow down.
+
+		Ledge Grab (LedgeGrab):
+			Players can now grab ledges and shimmy right/left, pull up, or drop.  Ledge grabs occur when you're in the air near a ledge and either face towards it or press the movement keys in the direction of the ledge.
+
+			While on Ledge:
+				Forward = Climb up onto the ledge.
+				Backward = Let go of ledge.
+				Right/Left = Shimmy Right/Left
+		
+
+	Improvements:
+
+		Animation System:
+
+			New Animation Flag (SETANIM_FLAG_PACE):  This new animation flag acts like a SETANIM_FLAG_RESTART flag, but only restarts if the same animation is over (animation timer ran out). 
+
+
+
+Version 0.0.1:
+
+	New Features:
+
+		Melee Combat System (MeleeSys):
+			Radically changed the melee combat behavior.  Melee combat is now useable by all players in all gamemodes without cheats and includes working headlocks (Grapple + No Movement).  See OJP_readme.txt for details.
+
+
+	New Cvars/Commands:
+
+		ojp_sabermelee 1 - Controls the behavior of pressing the saber weapon button when the saber is already selected and turned on.  
+
+		/togglesaber - Toggles the saber blade when player has the saber selected.
+
+
