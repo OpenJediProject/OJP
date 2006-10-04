@@ -1001,13 +1001,13 @@
 			group					gunpowers
 			style					0	
 			text					@OJP_MENUS_SKILL_JETPACK
-			rect					30 206 110 15
+			rect					30 130 110 15
 			textalign				ITEM_ALIGN_RIGHT												
 			textalignx				105
 			textaligny				0
 			font					4
 			textscale				1
-			forecolor				1 0.2 0.2 1
+			forecolor				.2 1 .2 1
 			outlinecolor			1 .5 .5 .5
 			backcolor				0 0 0 0
 			border					0
@@ -1023,12 +1023,12 @@
 			group					gunpowers
 			style					0	
 			ownerdraw				UI_FORCE_RANK_JETPACK
-			rect					30 206 175 15
+			rect					30 130 175 15
 			textalign				ITEM_ALIGN_LEFT		
 			textalignx				115
 			textaligny				-6
 			textscale				.25        
-			outlinecolor			1 .5 .5 .5
+			forecolor				.2 1 .2 1
 			backcolor				0 0 0 0
 			forecolor				1 0.2 0.2 1
 			border					0
@@ -1042,11 +1042,11 @@
 
 			mouseenter 
 			{ 
-				setitemcolor	setsk_jetpack forecolor 1 0.7 0.7 1
+				setitemcolor	setsk_jetpack forecolor .7 1 2. 1
 			}
 			mouseexit 
 			{ 
-				setitemcolor	setsk_jetpack forecolor 1 0.2 0.2 1
+				setitemcolor	setsk_jetpack forecolor .2 1 .2 1
 			}
 		}
 		//[/ExpSys]
