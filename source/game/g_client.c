@@ -3884,22 +3884,6 @@ void ClientSpawn(gentity_t *ent) {
 		//[/MOREWEAPOPTIONS]
 			}
 		}
-
-		//[MOREWEAPOPTIONS]
-		if( wDisable == WP_ALLDISABLED )
-		{//some joker disabled all the weapons.  Give everyone Melee
-			client->ps.stats[STAT_WEAPONS] |= (1 << WP_MELEE);
-			G_Printf( "ERROR:  The game doesn't like it when you disable ALL the weapons.\nReenabling Melee.\n");
-			if (g_gametype.integer == GT_DUEL || g_gametype.integer == GT_POWERDUEL)
-			{
-				trap_Cvar_Set( "g_duelWeaponDisable", va("%i", WP_MELEEONLY) );
-			}
-			else
-			{
-				trap_Cvar_Set( "g_weaponDisable", va("%i", WP_MELEEONLY) );
-		//[/MOREWEAPOPTIONS]
-			}
-		}
 	
 		if (g_gametype.integer == GT_JEDIMASTER)
 		{
