@@ -158,12 +158,31 @@ void UI_InitForceShaders(void)
 	uiSaberColorShaders[SABER_PURPLE]	= trap_R_RegisterShaderNoMip("menu/art/saber_purple");
 }
 
+
+//[ExpSys]
+int NumberOfSkillRanks(int skill)
+{//returns the number of ranks that a given skill has.
+	switch(skill)
+	{
+		case NUM_FORCE_POWERS+SK_JETPACK:
+			return 1;
+		default:
+			return 3;
+	};
+}
+//[/ExpSys]
+
+
 // Draw the stars spent on the current force power
 void UI_DrawForceStars(rectDef_t *rect, float scale, vec4_t color, int textStyle, int forceindex, int val, int min, int max) 
 {
 	int	i,pad = 4;
 	int	xPos,width = 16;
 	int starcolor;
+
+	//[ExpSys]
+	max = NumberOfSkillRanks(forceindex);
+	//[/ExpSys]
 
 	if (val < min || val > max) 
 	{
@@ -184,6 +203,20 @@ void UI_DrawForceStars(rectDef_t *rect, float scale, vec4_t color, int textStyle
 				trap_R_SetColor(grColor);
 			}
 
+			//[ExpSys]
+			if(starcolor != 0)
+			{//only render if the force skill at this level costs something.
+				if (val >= i)
+				{	// Draw a star.
+					UI_DrawHandlePic( xPos, rect->y+6, width, width, uiForceStarShaders[starcolor][1] );
+				}
+				else
+				{	// Draw a circle.
+					UI_DrawHandlePic( xPos, rect->y+6, width, width, uiForceStarShaders[starcolor][0] );
+				}
+			}
+
+			/*
 			if (val >= i)
 			{	// Draw a star.
 				UI_DrawHandlePic( xPos, rect->y+6, width, width, uiForceStarShaders[starcolor][1] );
@@ -192,6 +225,8 @@ void UI_DrawForceStars(rectDef_t *rect, float scale, vec4_t color, int textStyle
 			{	// Draw a circle.
 				UI_DrawHandlePic( xPos, rect->y+6, width, width, uiForceStarShaders[starcolor][0] );
 			}
+			*/
+			//[/ExpSys]
 
 			if (uiForcePowersDisabled[forceindex])
 			{
@@ -1088,8 +1123,11 @@ qboolean UI_ForcePowerRank_HandleKey(int flags, float *special, int key, int num
 		}
 		//this will give us the index as long as UI_FORCE_RANK is always one below the first force rank index
 		//forcepower = (type-UI_FORCE_RANK)-1;
-		//[/ExpSys]
-		
+
+		//we now have a really maximum because some skills have less than 3 levels to them.
+		max = NumberOfSkillRanks(forcepower);
+		//[ExpSys]
+
 		//the power is disabled on the server
 		if (uiForcePowersDisabled[forcepower])
 		{
