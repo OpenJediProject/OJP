@@ -144,7 +144,10 @@ void CG_DrawInformation( void ) {
 	// screen to write into
 	if ( cg.infoScreenText[0] ) {
 		const char *psLoading = CG_GetStringEdString("MENUS", "LOADING_MAPNAME");
-		UI_DrawProportionalString( 320, 128-32, va(/*"Loading... %s"*/ psLoading, cg.infoScreenText),
+		//[OverflowProtection]
+		UI_DrawProportionalString( 320, 128-32, va(/*"Loading... %s"*/ (char*) psLoading, cg.infoScreenText),
+		//UI_DrawProportionalString( 320, 128-32, va(/*"Loading... %s"*/ psLoading, cg.infoScreenText),
+		//[/OverflowProtection]
 			UI_CENTER|UI_INFOFONT|UI_DROPSHADOW, colorWhite );		
 	} else {
 		const char *psAwaitingSnapshot = CG_GetStringEdString("MENUS", "AWAITING_SNAPSHOT");
