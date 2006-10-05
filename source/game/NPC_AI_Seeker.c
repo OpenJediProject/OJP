@@ -421,6 +421,12 @@ void Seeker_FindEnemy( void )
 	VectorSet( maxs, SEEKER_SEEK_RADIUS, SEEKER_SEEK_RADIUS, SEEKER_SEEK_RADIUS );
 	VectorScale( maxs, -1, mins );
 
+	//[CoOp]
+	//without this, the seekers are just scanning in terms of the world coordinates instead of around themselves, which is bad.
+	VectorAdd(maxs, NPC->r.currentOrigin, maxs);
+	VectorAdd(mins, NPC->r.currentOrigin, mins);
+	//[/CoOp]
+
 	numFound = trap_EntitiesInBox( mins, maxs, entityList, MAX_GENTITIES );
 
 	for ( i = 0 ; i < numFound ; i++ ) 
