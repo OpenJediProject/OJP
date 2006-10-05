@@ -3884,11 +3884,15 @@ void ClientSpawn(gentity_t *ent) {
 
 		if (g_gametype.integer != GT_SIEGE)
 		{
+			//[ExpSys]
+			//no free pistol outside of GT_JEDIMASTER and GT_SIEGE
+			/*
 			if (!wDisable || !(wDisable & (1 << WP_BRYAR_PISTOL)))
 			{
 				client->ps.stats[STAT_WEAPONS] |= ( 1 << WP_BRYAR_PISTOL );
 			}
-			else if (g_gametype.integer == GT_JEDIMASTER)
+			else*/ if (g_gametype.integer == GT_JEDIMASTER)
+			//[/ExpSys]
 			{
 				//[/MOREWEAPOPTIONS]
 				if (!wDisable || !(wDisable & (1 << WP_BRYAR_PISTOL)))
