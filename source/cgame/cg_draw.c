@@ -7738,7 +7738,11 @@ void CG_DrawFlagStatus()
 #define JPFUELBAR_H			100.0f
 #define JPFUELBAR_W			20.0f
 #define JPFUELBAR_X			(SCREEN_WIDTH-JPFUELBAR_W-8.0f)
-#define JPFUELBAR_Y			260.0f
+//[NewHud]
+//moved the jetpack fuel bar a little since the new hud overlapped it.
+#define JPFUELBAR_Y			240.0f
+//#define JPFUELBAR_Y			260.0f
+//[/NewHud]
 void CG_DrawJetpackFuel(void)
 {
 	vec4_t aColor;
