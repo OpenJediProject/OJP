@@ -16,7 +16,7 @@
 	<Configurations>
 		<Configuration
 			Name="Final|Win32"
-			OutputDirectory=".\../Final/"
+			OutputDirectory=".\../Final/ui"
 			IntermediateDirectory=".\../Final/ui"
 			ConfigurationType="2"
 			InheritedPropertySheets="$(VCInstallDir)VCProjectDefaults\UpgradeFromVC71.vsprops"
@@ -77,7 +77,7 @@
 				Name="VCLinkerTool"
 				AdditionalOptions="/MACHINE:I386"
 				AdditionalDependencies="odbc32.lib odbccp32.lib"
-				OutputFile="../Debug/ojpenhanced/uix86.dll"
+				OutputFile="../../ojpenhanced/uix86.dll"
 				LinkIncremental="1"
 				SuppressStartupBanner="true"
 				ModuleDefinitionFile=".\ui.def"
