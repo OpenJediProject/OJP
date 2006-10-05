@@ -485,7 +485,11 @@ void Seeker_FollowPlayer( void )
 
 	Seeker_MaintainHeight();
 
-	closestPlayer = FindClosestPlayer(NPC->r.currentOrigin, NPC->client->enemyTeam);
+	closestPlayer = FindClosestPlayer(NPC->r.currentOrigin, NPC->client->playerTeam);
+	if(!closestPlayer)
+	{//in MP it's actually possible that there's no players on our team at the moment.
+		return;
+	}
 
 	dis	= DistanceHorizontalSquared( NPC->r.currentOrigin, closestPlayer->r.currentOrigin );
 
