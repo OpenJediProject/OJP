@@ -1072,6 +1072,40 @@ varargs versions of all text functions.
 FIXME: make this buffer size safe someday
 ============
 */
+//[OverflowProtection]
+//Ensiform provided this new version which apprenently can't overflow and gives the char array pool circular indexing to
+//provide better protection against multiple va strings stepping on each other's data.
+char	* QDECL va( char *format, ... ) {
+	va_list		argptr;
+	#define	MAX_VA_STRING	32000
+	static char		temp_buffer[MAX_VA_STRING];
+	static char		string[MAX_VA_STRING];	// in case va is called by nested functions
+	static int		index = 0;
+	char	*buf;
+	int len;
+
+
+	va_start (argptr, format);
+	vsprintf (temp_buffer, format,argptr);
+	va_end (argptr);
+
+	if ((len = strlen(temp_buffer)) >= MAX_VA_STRING) {
+		Com_Error( ERR_DROP, "Attempted to overrun string in call to va2()\n" );
+	}
+
+	if (len + index >= MAX_VA_STRING-1) {
+		index = 0;
+	}
+
+	buf = &string[index];
+	memcpy( buf, temp_buffer, len+1 );
+
+	index += len + 1;
+
+	return buf;
+}
+
+/* basejka code
 char	* QDECL va( const char *format, ... ) {
 	va_list		argptr;
 	static char		string[2][32000];	// in case va is called by nested functions
@@ -1087,6 +1121,8 @@ char	* QDECL va( const char *format, ... ) {
 
 	return buf;
 }
+*/
+//[/OverflowProtection]
 
 
 /*

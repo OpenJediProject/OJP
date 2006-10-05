@@ -1827,7 +1827,11 @@ float	LittleFloat (const float *l);
 
 void	Swap_Init (void);
 */
-char	* QDECL va(const char *format, ...);
+//[OverflowProtection]
+char	* QDECL va( char *format, ... );
+//char	* QDECL va(const char *format, ...);
+//[/OverflowProtection]
+
 
 //=============================================
 
