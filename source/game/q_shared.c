@@ -988,6 +988,43 @@ char *Q_CleanStr( char *string ) {
 }
 
 
+//[OverflowProtection]
+/*
+============
+Q_vsnprintf
+
+vsnprintf portability:
+
+C99 standard: vsnprintf returns the number of characters (excluding the trailing
+'\0') which would have been written to the final string if enough space had been available
+snprintf and vsnprintf do not write more than size bytes (including the trailing '\0')
+
+win32: _vsnprintf returns the number of characters written, not including the terminating null character,
+or a negative value if an output error occurs. If the number of characters to write exceeds count, then count 
+characters are written and -1 is returned and no trailing '\0' is added.
+
+Q_vsnprintf: always appends a trailing '\0', returns number of characters written (not including terminal \0)
+or returns -1 on failure or if the buffer would be overflowed.
+============
+*/
+int Q_vsnprintf( char *dest, int size, const char *fmt, va_list argptr ) {
+	int ret;
+
+#ifdef _WIN32
+	ret = _vsnprintf( dest, size-1, fmt, argptr );
+#else
+	ret = vsnprintf( dest, size, fmt, argptr );
+#endif
+
+	dest[size-1] = '\0';
+	if ( ret < 0 || ret >= size ) {
+		return -1;
+	}
+	return ret;
+}
+//[/OverflowProtection]
+
+
 void QDECL Com_sprintf( char *dest, int size, const char *fmt, ...) {
 	int		len;
 	va_list		argptr;

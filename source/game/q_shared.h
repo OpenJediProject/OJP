@@ -1795,12 +1795,7 @@ int Q_PrintStrlen( const char *string );
 char *Q_CleanStr( char *string );
 
 //[OverflowProtection]
-#ifdef WIN32
-	#define Q_vsnprintf _vsnprintf
-#else
-	// TODO: do we need Mac define?
-	#define Q_vsnprintf vsnprintf
-#endif
+int Q_vsnprintf( char *dest, int size, const char *fmt, va_list argptr );
 //[/OverflowProtection]
 
 //=============================================
