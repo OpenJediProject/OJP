@@ -1022,9 +1022,22 @@ int Q_vsnprintf( char *dest, int size, const char *fmt, va_list argptr ) {
 	}
 	return ret;
 }
-//[/OverflowProtection]
 
 
+//Ensiform provided this version of Com_sprintf, which is supposed to be overflow protected and less hacky.
+void QDECL Com_sprintf( char *dest, int size, const char *fmt, ...) {
+	int		ret;
+	va_list		argptr;
+
+	va_start (argptr,fmt);
+	ret = Q_vsnprintf (dest, size, fmt, argptr);
+	va_end (argptr);
+	if (ret == -1) {
+		Com_Printf ("Com_sprintf2: overflow of %i bytes buffer\n", size);
+	}
+}
+
+/* basejka code
 void QDECL Com_sprintf( char *dest, int size, const char *fmt, ...) {
 	int		len;
 	va_list		argptr;
@@ -1046,6 +1059,8 @@ void QDECL Com_sprintf( char *dest, int size, const char *fmt, ...) {
 	}
 	Q_strncpyz (dest, bigbuffer, size );
 }
+*/
+//[/OverflowProtection]
 
 
 /*
