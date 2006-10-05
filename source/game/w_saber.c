@@ -8094,7 +8094,7 @@ void WP_SaberStartMissileBlockCheck( gentity_t *self, usercmd_t *ucmd  )
 {
 	//[SaberSys]
 	qboolean	swingBlock;
-	qboolean	closestSwingBlock;
+	qboolean	closestSwingBlock = qfalse;  //default setting makes the compiler happy.
 	int 		swingBlockQuad = Q_T;
 	int			closestSwingQuad = Q_T;
 	//[/SaberSys]
