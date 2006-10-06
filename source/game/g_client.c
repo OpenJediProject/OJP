@@ -3226,6 +3226,9 @@ void ClientSpawn(gentity_t *ent) {
 	//[ExpSys]
 	int					savedSkill[NUM_SKILLS];
 	//[/ExpSys]
+	//[DodgeSys]
+	int					savedDodgeMax;
+	//[/DodgeSys]
 	int					maxHealth;
 	saberInfo_t			saberSaved[MAX_SABERS];
 	int					l = 0;
@@ -3509,6 +3512,10 @@ void ClientSpawn(gentity_t *ent) {
 		savedSkill[i] = client->skillLevel[i];
 	}
 	//[/ExpSys]
+	
+	//[DodgeSys]
+	savedDodgeMax = client->ps.stats[STAT_MAX_DODGE];
+	//[/DodgeSys]
 
 	l = 0;
 	while (l < MAX_SABERS)
@@ -3597,6 +3604,10 @@ void ClientSpawn(gentity_t *ent) {
 		client->skillLevel[i] = savedSkill[i];
 	}
 	//[/ExpSys]
+
+	//[DodgeSys]
+	client->ps.stats[STAT_MAX_DODGE] = savedDodgeMax;
+	//[/DodgeSys]
 
 	l = 0;
 	while (l < MAX_SABERS)
@@ -4181,7 +4192,7 @@ void ClientSpawn(gentity_t *ent) {
 
 	//[DodgeSys]
 	//Init dodge stat.
-	client->ps.stats[STAT_DODGE] = DODGE_MAX;
+	client->ps.stats[STAT_DODGE] = client->ps.stats[STAT_MAX_DODGE];
 	//[/DodgeSys]
 
 	G_SetOrigin( ent, spawn_origin );

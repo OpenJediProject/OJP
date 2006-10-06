@@ -669,7 +669,8 @@ typedef enum {
 	STAT_CLIENTS_READY,				// bit mask of clients wishing to exit the intermission (FIXME: configstring?)
 	//[DodgeSys]
 	STAT_MAX_HEALTH,					// health / armor limit, changable by handicap
-	STAT_DODGE,
+	STAT_DODGE,			//number of Dodge Points the player has.  DP is used for evading/blocking attacks before they hurt you.
+	STAT_MAX_DODGE		//maximum number of dodge points allowed.
 	//STAT_MAX_HEALTH					// health / armor limit, changable by handicap
 	//[/DodgeSys]
 } statIndex_t;

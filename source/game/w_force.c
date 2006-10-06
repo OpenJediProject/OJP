@@ -151,6 +151,45 @@ const int mindTrickTime[NUM_FORCE_POWER_LEVELS] =
 };
 
 
+//[DodgeSys]
+#define SK_DP_FORFORCE		1.0f	//determines the number of DP points players get for each skill point dedicated to Force Powers.
+#define SK_DP_FORMERC		1/3.0f	//determines the number of DP points get for each skill point dedicated to gunner/merc skills.	
+//[/DodgeSys]
+void DetermineDodgeMax(gentity_t *ent)
+{//sets the maximum number of dodge points this player should have.  This is based on their skill point allociation.
+	int i;
+	int skillCount;
+	float dodgeMax = 0;
+
+	//force powers
+	for(i = 0; i < NUM_FORCE_POWERS; i++)
+	{
+		if(ent->client->ps.fd.forcePowerLevel[i])
+		{//has points in this skill
+			for(skillCount = FORCE_LEVEL_1; skillCount <= ent->client->ps.fd.forcePowerLevel[i]; skillCount++)
+			{
+				dodgeMax += bgForcePowerCost[i][skillCount] * SK_DP_FORFORCE;
+			}
+		}
+	}
+
+	//additional skills
+	for(i = 0; i < NUM_SKILLS; i++)
+	{
+		if(ent->client->skillLevel[i])
+		{//has points in this skill
+			for(skillCount = FORCE_LEVEL_1; skillCount <= ent->client->skillLevel[i]; skillCount++)
+			{
+				dodgeMax += bgForcePowerCost[i][skillCount] * SK_DP_FORMERC;
+			}
+		}
+	}
+
+	ent->client->ps.stats[STAT_MAX_DODGE] = (int) dodgeMax;
+}
+//[/DodgeSys]
+
+
 //[CoOp]
 extern int SpawnForcePowerLevels[NUM_FORCE_POWERS];
 extern qboolean UseSpawnForcePowers;
@@ -306,6 +345,9 @@ void WP_InitForcePowers( gentity_t *ent )
 		}
 		ent->client->sess.setForce = qtrue;
 
+		//[DodgeSys]
+		DetermineDodgeMax(ent);
+		//[/DodgeSys]
 		return;
 	}
 
@@ -655,6 +697,11 @@ void WP_InitForcePowers( gentity_t *ent )
 		i++;
 	}
 	ent->client->ps.fd.forceUsingAdded = 0;
+
+	//[DodgeSys]
+	//determine the player's DP max.
+	DetermineDodgeMax(ent);
+	//[/DodgeSys]
 }
 
 
@@ -6271,11 +6318,11 @@ void WP_ForcePowersUpdate( gentity_t *self, usercmd_t *ucmd )
 		&& self->client->ps.groundEntityNum != ENTITYNUM_NONE)  //can't regen while in the air.
 	{
 		if((self->client->ps.fd.forcePower > (self->client->ps.fd.forcePowerMax * FATIGUEDTHRESHHOLD)+1)
-			&& self->client->ps.stats[STAT_DODGE] < DODGE_MAX)
+			&& self->client->ps.stats[STAT_DODGE] < self->client->ps.stats[STAT_MAX_DODGE])
 		{//you have enough fatigue to transfer to Dodge
-			if(DODGE_MAX - self->client->ps.stats[STAT_DODGE] < DODGE_FATIGUE)
+			if(self->client->ps.stats[STAT_MAX_DODGE] - self->client->ps.stats[STAT_DODGE] < DODGE_FATIGUE)
 			{
-				self->client->ps.stats[STAT_DODGE] = DODGE_MAX;
+				self->client->ps.stats[STAT_DODGE] = self->client->ps.stats[STAT_MAX_DODGE];
 			}
 			else
 			{

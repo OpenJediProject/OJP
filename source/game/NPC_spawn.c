@@ -297,8 +297,15 @@ extern void G_CreateG2AttachedWeaponModel( gentity_t *ent, const char *weaponMod
 //[NPCSandCreature]
 extern void SandCreature_ClearTimers( gentity_t *ent );
 //[/NPCSandCreature]
+//[DodgeSys]
+void DetermineDodgeMax(gentity_t *ent);
+//[/DodgeSys]
 void NPC_SetMiscDefaultData( gentity_t *ent )
 {
+	//[ExpSys]
+	int i;
+	//[/ExpSys]
+
 	if ( ent->spawnflags & SFB_CINEMATIC )
 	{//if a cinematic guy, default us to wait bState
 		ent->NPC->behaviorState = BS_CINEMATIC;
@@ -392,6 +399,23 @@ void NPC_SetMiscDefaultData( gentity_t *ent )
 		WP_InitForcePowers( ent );
 		WP_SpawnInitForcePowers(ent); //rww
 	}
+
+	//[ExpSys] 
+	//initialize skill levels since the NPCs kick out of InitForcePowers early.
+	for(i=0; i < NUM_SKILLS; i++)
+	{
+		ent->client->skillLevel[i] = 0;
+	}
+	//[/ExpSys]
+
+	//[DodgeSys]
+	//determine DodgeMax since NPCs kick out of InitForcePowers early.
+	DetermineDodgeMax(ent);
+
+	//set their starting DP
+	ent->client->ps.stats[STAT_DODGE] = ent->client->ps.stats[STAT_MAX_DODGE];
+	//[/DodgeSys]
+
 	//[CoOp]
 	//missing howlerdata from SP
 	if ( ent->client->NPC_class == CLASS_HOWLER )

@@ -6872,9 +6872,9 @@ void AddFatigueKillBonus( gentity_t *attacker, gentity_t *victim )
 	WP_ForcePowerRegenerate(attacker, FATIGUE_KILLBONUS);
 	attacker->client->ps.stats[STAT_DODGE] += DODGE_KILLBONUS;
 
-	if(attacker->client->ps.stats[STAT_DODGE] > DODGE_MAX)
+	if(attacker->client->ps.stats[STAT_DODGE] > attacker->client->ps.stats[STAT_MAX_DODGE])
 	{
-		attacker->client->ps.stats[STAT_DODGE] = DODGE_MAX;
+		attacker->client->ps.stats[STAT_DODGE] = attacker->client->ps.stats[STAT_MAX_DODGE];
 	}
 }
 //[/SaberSys]

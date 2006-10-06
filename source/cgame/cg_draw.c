@@ -1306,7 +1306,7 @@ void CG_DrawDodge( menuDef_t *menuHUD )
 	//[NewHud]
 	vec4_t			aColor;
 	itemDef_t		*focusItem;
-	float			percent = ((float)cg.snap->ps.stats[STAT_DODGE]/100.0f)*DPBAR_H;
+	float			percent = ((float)cg.snap->ps.stats[STAT_DODGE]/cg.snap->ps.stats[STAT_MAX_DODGE])*DPBAR_H;
 
 	//color of the bar
 	aColor[0] = 0.0f;
@@ -1315,7 +1315,8 @@ void CG_DrawDodge( menuDef_t *menuHUD )
 	aColor[3] = 0.8f;
 
 	// Make the hud flash by setting forceHUDTotalFlashTime above cg.time
-	if (cg.snap->ps.stats[STAT_DODGE] < DODGE_CRITICALLEVEL)
+	if (cg.snap->ps.stats[STAT_MAX_DODGE] > DODGE_CRITICALLEVEL  //our maximum level is lower than the standard critical level.
+		&& cg.snap->ps.stats[STAT_DODGE] < DODGE_CRITICALLEVEL)
 	{
 		//color of the bar
 		aColor[0] = 1.0f;
