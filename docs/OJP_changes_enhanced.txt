@@ -19,17 +19,15 @@ Version 0.1.0:
 
 		Force Powers:
 			- Players can now use powers from both sides of the Force at the same time.
+			- Changed the countering ability to behave based on the difference between the attacker's and defender's approprate Force Power skill levels. 
+				2 levels of difference = can't block while running or in mid-air.
+				1 level of difference = can't block while in mid-air.
+				Powers Affected:  Lightning, Grip, Push/Pull
 
 			Lightning:
 				- Players with skill points in absorb or lightning can now block lightning with their bare hands if they face their attacker.
-				- Changed the countering ability to behave based on the difference between the attacker's and defender's approprate Force Power skill levels. 
-					2 levels of difference = can't block while running or in mid-air.
-					1 level of difference = can't block while in mid-air.
 			
 			Push/Pull:
-				- Changed the countering ability to behave based on the difference between the attacker's and defender's approprate Force Power skill levels. 
-					2 levels of difference = can't block while running or in mid-air.
-					1 level of difference = can't block while in mid-air.
 				- Countering a push/pull now blocks all effects of the push/pull.
 				- Weapon pull is no longer randomized.
 				- Push can now be used to break out of a grip at any power level.

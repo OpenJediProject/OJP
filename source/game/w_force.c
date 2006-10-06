@@ -836,6 +836,9 @@ int ForcePowerUsableOn(gentity_t *attacker, gentity_t *other, forcePowers_t forc
 		return 0;
 	}
 
+	//[ForceSys]
+	//handling the grip countering actions in OJP_CounterForce().
+	/*
 	if (forcePower == FP_GRIP)
 	{
 		if (other && other->client &&
@@ -850,30 +853,15 @@ int ForcePowerUsableOn(gentity_t *attacker, gentity_t *other, forcePowers_t forc
 			}
 			return 0;
 		}
-		//[ForceSys]
-		//only initially allow gripping on other players if they're stunned/heavy slow bounced 
-		//or don't have approprate levels of absorb/grip to block it.
-		else if (other && other->client //humanoid
-			&& other->client->ps.fd.forceGripBeingGripped < level.time //not already being gripped
-			&& (other->client->ps.fd.forcePowerLevel[FP_GRIP] >= attacker->client->ps.fd.forcePowerLevel[FP_GRIP] //has >= grip skill
-				|| other->client->ps.fd.forcePowerLevel[FP_ABSORB] >= attacker->client->ps.fd.forcePowerLevel[FP_GRIP]) //has >= absorb skill
-			&& !PM_SaberInBrokenParry(other->client->ps.saberMove) //not stunned
-			&& !(BG_InSlowBounce(&other->client->ps) && other->client->ps.userInt3 & (1 << FLAG_OLDSLOWBOUNCE)) //not heavy slow bounced
-			&& !BG_InKnockDownOnGround(&other->client->ps)) //not getting knocked down.
-		{//target is able to use the force to block us.  Can't even try.
-			return 0;
-		}
-
-		/* basejka code
 		else if (other && other->client &&
 			other->client->ps.weapon == WP_SABER &&
 			BG_SaberInSpecial(other->client->ps.saberMove))
 		{ //don't grip person while they are in a special or some really bad things can happen.
 			return 0;
 		}
-		*/
-		//[/ForceSys]
 	}
+	*/
+	//[/ForceSys]
 
 	if (other && other->client &&
 		(forcePower == FP_PUSH ||
@@ -900,7 +888,7 @@ int ForcePowerUsableOn(gentity_t *attacker, gentity_t *other, forcePowers_t forc
 
 	if (other && other->client && other->s.eType == ET_NPC &&
 		g_gametype.integer == GT_SIEGE)
-	{ //can't use powers at all on npc's normally in siege...
+	{ //can't use powers at all on npc's normally in siege... //racc - probably because they're objective based objects?
 		return 0;
 	}
 
@@ -1657,6 +1645,10 @@ void ForceTeamForceReplenish( gentity_t *self )
 	}
 }
 
+
+//[ForceSys]
+qboolean OJP_CounterForce(gentity_t *attacker, gentity_t *defender, int attackPower);
+//[/ForceSys]
 void ForceGrip( gentity_t *self )
 {
 	trace_t tr;
@@ -1699,9 +1691,11 @@ void ForceGrip( gentity_t *self )
 	if ( tr.fraction != 1.0 &&
 		tr.entityNum != ENTITYNUM_NONE &&
 		g_entities[tr.entityNum].client &&
-		!g_entities[tr.entityNum].client->ps.fd.forceGripCripple &&
-		g_entities[tr.entityNum].client->ps.fd.forceGripBeingGripped < level.time &&
+		!g_entities[tr.entityNum].client->ps.fd.forceGripCripple &&  //racc - not currently under the effects of gripcripple.
+		g_entities[tr.entityNum].client->ps.fd.forceGripBeingGripped < level.time && //racc - not being gripped
 		ForcePowerUsableOn(self, &g_entities[tr.entityNum], FP_GRIP) &&
+		//[/ForceSys]
+		!OJP_CounterForce(self, &g_entities[tr.entityNum], FP_GRIP) &&
 		(g_friendlyFire.integer || !OnSameTeam(self, &g_entities[tr.entityNum])) ) //don't grip someone who's still crippled
 	{
 		if (g_entities[tr.entityNum].s.number < MAX_CLIENTS && g_entities[tr.entityNum].client->ps.m_iVehicleNum)
@@ -1947,37 +1941,28 @@ void ForceLightning( gentity_t *self )
 }
 
 
-//[ForceSys]
-#define DODGE_SABERBLOCKLIGHTNING	1 //the DP cost to block lightning
-qboolean OJP_SaberBlockLightning(gentity_t *attacker, gentity_t *defender, vec3_t impactPoint, int damage)
-{//defender is attempting to use their saber to block lightning.  Try to do it.
-	int dpBlockCost;
-	qboolean saberLightBlock = qtrue;
-	int abilityDef;
+qboolean OJP_CounterForce(gentity_t *attacker, gentity_t *defender, int attackPower)
+{//generically checks to see if the defender is able to block an attack from this attacker 
+	int abilityDef;		//the difference in skill between the defender's defend power and the attacker's attack power.
 
-	if(!defender || !defender->client || !attacker || !attacker->client)
-	{//bad infor state
-		return qfalse;
-	}
-
-	if( !(defender->client->ps.fd.forcePowersKnown & (1 << FP_LIGHTNING)) 
+	if( !(defender->client->ps.fd.forcePowersKnown & (1 << attackPower)) 
 		&& !(defender->client->ps.fd.forcePowersKnown & (1 << FP_ABSORB)) )
-	{//don't have lightning or absorb, can't block it.
+	{//doesn't have absorb or same power as the attack power.
 		return qfalse;
 	}
 
 	//determine ability difference
-	abilityDef = attacker->client->ps.fd.forcePowerLevel[FP_LIGHTNING] - defender->client->ps.fd.forcePowerLevel[FP_LIGHTNING];
+	abilityDef = attacker->client->ps.fd.forcePowerLevel[attackPower] - defender->client->ps.fd.forcePowerLevel[attackPower];
 
-	if(abilityDef > attacker->client->ps.fd.forcePowerLevel[FP_LIGHTNING] - defender->client->ps.fd.forcePowerLevel[FP_ABSORB])
-	{//defender's absorb ability is stronger than their lightning ability, use that instead.
-		abilityDef = attacker->client->ps.fd.forcePowerLevel[FP_LIGHTNING] - defender->client->ps.fd.forcePowerLevel[FP_ABSORB];
+	if(abilityDef > attacker->client->ps.fd.forcePowerLevel[attackPower] - defender->client->ps.fd.forcePowerLevel[FP_ABSORB])
+	{//defender's absorb ability is stronger than their attackPower ability, use that instead.
+		abilityDef = attacker->client->ps.fd.forcePowerLevel[attackPower] - defender->client->ps.fd.forcePowerLevel[FP_ABSORB];
 	}
 	
 	if(abilityDef >= 2)
 	{//defender is largely weaker than the attacker (2 levels)
 		if(!WalkCheck(defender) || defender->client->ps.groundEntityNum == ENTITYNUM_NONE)
-		{//can't block lightning while running or in mid-air
+		{//can't block much stronger Force power while running or in mid-air
 			return qfalse;
 		}
 	}
@@ -2001,6 +1986,27 @@ qboolean OJP_SaberBlockLightning(gentity_t *attacker, gentity_t *defender, vec3_
 
 	if( defender->client->ps.saberAttackChainCount >= MISHAPLEVEL_HEAVY )
 	{//can't block if we're too off balance.
+		return qfalse;
+	}
+
+	return qtrue;
+}
+
+
+//[ForceSys]
+#define DODGE_SABERBLOCKLIGHTNING	1 //the DP cost to block lightning
+qboolean OJP_SaberBlockLightning(gentity_t *attacker, gentity_t *defender, vec3_t impactPoint, int damage)
+{//defender is attempting to use their saber to block lightning.  Try to do it.
+	int dpBlockCost;
+	qboolean saberLightBlock = qtrue;
+
+	if(!defender || !defender->client || !attacker || !attacker->client)
+	{//bad infor state
+		return qfalse;
+	}
+
+	if(!OJP_CounterForce(attacker, defender, FP_LIGHTNING))
+	{//failed generic Force countering effect
 		return qfalse;
 	}
 
@@ -3179,23 +3185,13 @@ qboolean CanCounterThrow(gentity_t *self, gentity_t *thrower, qboolean pull)
 	int abilityDef;
 	//[/ForceSys]
 
+	//[/ForceSys]
+	/*
 	if (self->client->ps.forceHandExtend != HANDEXTEND_NONE)
 	{
 		return 0;
 	}
 
-	//[ForceSys]
-	if(PM_SaberInBrokenParry(self->client->ps.saberMove))
-	{//can't block pushes while stunned
-		return 0;
-	}
-
-	if(BG_InSlowBounce(&self->client->ps) && self->client->ps.userInt3 & (1 << FLAG_OLDSLOWBOUNCE))
-	{//can't block push while in the heavier slow bounces.
-		return 0;
-	}
-
-	/*
 	if (self->client->ps.weaponTime > 0)
 	{
 		return 0;
@@ -3209,7 +3205,7 @@ qboolean CanCounterThrow(gentity_t *self, gentity_t *thrower, qboolean pull)
 	}
 
 	if ( self->client->ps.powerups[PW_DISINT_4] > level.time )
-	{
+	{//racc in the process of getting pushed/pulled already.
 		return 0;
 	}
 
@@ -3221,15 +3217,15 @@ qboolean CanCounterThrow(gentity_t *self, gentity_t *thrower, qboolean pull)
 		return 0;
 	}
 	*/
+
+	if(!OJP_CounterForce(thrower, self, (pull ? FP_PULL : FP_PUSH)))
+	{//wasn't able to counter due to generic counter issue
+		return qfalse;
+	}
 	
 	if(!InFront(thrower->client->ps.origin, self->client->ps.origin, self->client->ps.viewangles, 0.0f) 
 		&& self->client->ps.stats[STAT_DODGE] < DODGE_CRITICALLEVEL)
 	{//not facing the attacker and low on DP!
-		return qfalse;
-	}
-
-	if( self->client->ps.saberAttackChainCount >= MISHAPLEVEL_HEAVY )
-	{//can't block if we're too off balance.
 		return qfalse;
 	}
 
@@ -3262,26 +3258,6 @@ qboolean CanCounterThrow(gentity_t *self, gentity_t *thrower, qboolean pull)
 	{
 		powerUse = FP_PUSH;
 	}
-
-	//[ForceSys]
-	//determine ability difference
-	abilityDef = thrower->client->ps.fd.forcePowerLevel[powerUse] - self->client->ps.fd.forcePowerLevel[powerUse];
-
-	if(abilityDef >= 2)
-	{//defender is largely weaker than the attacker (2 levels)
-		if(!WalkCheck(self) || self->client->ps.groundEntityNum == ENTITYNUM_NONE)
-		{//can't block push/pull while running or in mid-air
-			return qfalse;
-		}
-	}
-	else if(abilityDef >= 1)
-	{//defender is slightly weaker than their attacker
-		if(self->client->ps.groundEntityNum == ENTITYNUM_NONE)
-		{
-			return qfalse;
-		}
-	}
-	//[/ForceSys]
 
 	if ( !WP_ForcePowerUsable( self, powerUse ) )
 	{
