@@ -2469,12 +2469,15 @@ char *ClientConnect( int clientNum, qboolean firstTime, qboolean isBot ) {
 	//[/BugFix11]
 		// check for a password
 		value = Info_ValueForKey (userinfo, "password");
-		if ( g_password.string[0] && Q_stricmp( g_password.string, "none" ) &&
-			strcmp( g_password.string, value) != 0) {
-			static char sTemp[1024];
-			Q_strncpyz(sTemp, G_GetStringEdString("MP_SVGAME","INVALID_ESCAPE_TO_MAIN"), sizeof (sTemp) );
-			return sTemp;// return "Invalid password";
+		//[PrivatePasswordFix]
+		if ( g_password.string[0] && Q_stricmp( g_password.string, "none" ) && strcmp( g_password.string, value) != 0) {
+			if( !sv_privatepassword.string[0] || strcmp( sv_privatepassword.string, value ) ) {
+				static char sTemp[1024];
+				Q_strncpyz(sTemp, G_GetStringEdString("MP_SVGAME","INVALID_ESCAPE_TO_MAIN"), sizeof (sTemp) );
+				return sTemp;// return "Invalid password";
+			}
 		}
+		//[PrivatePasswordFix]
 	}
 
 	// they can connect

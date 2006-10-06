@@ -115,6 +115,10 @@ vmCvar_t	g_RMG;
 
 vmCvar_t	g_svfps;
 
+//[PrivatePasswordFix]
+vmCvar_t	sv_privatepassword;
+//[/PrivatePasswordFix]
+
 vmCvar_t	g_forceRegenTime;
 
 //[DodgeSys]
@@ -457,6 +461,10 @@ static cvarTable_t		gameCvarTable[] = {
 	{ &g_svfps, "sv_fps", "20", CVAR_SERVERINFO | CVAR_ARCHIVE, 0, qtrue },
 	//{ &g_svfps, "sv_fps", "20", 0, 0, qtrue },
 	//[/SaberSys]
+	
+	//[PrivatePasswordFix]
+	{ &sv_privatepassword, "sv_privatePassword", "", CVAR_TEMP, 0, qfalse },
+	//[/PrivatePasswordFix]
 
 	//[FatigueSys]
 	{ &g_forceRegenTime, "g_forceRegenTime", "500", CVAR_SERVERINFO | CVAR_ARCHIVE, 0, qtrue  },

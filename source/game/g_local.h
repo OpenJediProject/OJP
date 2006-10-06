@@ -1834,6 +1834,10 @@ extern	vmCvar_t	g_RMG;
 
 extern	vmCvar_t	g_svfps;
 
+//[PrivatePasswordFix]
+extern	vmCvar_t	sv_privatepassword;
+//[/PrivatePasswordFix]
+
 extern	vmCvar_t	g_forceRegenTime;
 
 //[DodgeSys]
