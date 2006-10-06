@@ -6525,7 +6525,7 @@ static void UI_RunMenuScript(char **args)
 	if (String_Parse(args, &name)) 
 	{
 		if (Q_stricmp(name, "StartServer") == 0) 
-		{
+		{//racc - UI script for starting game.
 			int i, added = 0;
 			float skill;
 			int warmupTime = 0;
@@ -6546,7 +6546,10 @@ static void UI_RunMenuScript(char **args)
 			{
 				trap_Cvar_SetValue( "dedicated", Com_Clamp( 0, 2, ui_dedicated.integer ) );
 			}
-			trap_Cvar_SetValue( "g_gametype", Com_Clamp( 0, 8, uiInfo.gameTypes[ui_netGameType.integer].gtEnum ) );
+			//[OLDGAMETYPES]
+			trap_Cvar_SetValue( "g_gametype", Com_Clamp( GT_FFA, GT_CTY, uiInfo.gameTypes[ui_netGameType.integer].gtEnum ) );
+			//trap_Cvar_SetValue( "g_gametype", Com_Clamp( 0, 8, uiInfo.gameTypes[ui_netGameType.integer].gtEnum ) );
+			//[/OLDGAMETYPES]
 			//trap_Cvar_Set("g_redTeam", UI_Cvar_VariableString("ui_teamName"));
 			//trap_Cvar_Set("g_blueTeam", UI_Cvar_VariableString("ui_opponentName"));
 			trap_Cmd_ExecuteText( EXEC_APPEND, va( "wait ; wait ; map %s\n", uiInfo.mapList[ui_currentNetMap.integer].mapLoadName ) );
