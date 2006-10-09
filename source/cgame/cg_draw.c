@@ -7795,7 +7795,11 @@ void CG_DrawJetpackFuel(void)
 #define EWEBHEALTH_H			100.0f
 #define EWEBHEALTH_W			20.0f
 #define EWEBHEALTH_X			(SCREEN_WIDTH-EWEBHEALTH_W-8.0f)
-#define EWEBHEALTH_Y			290.0f
+//[NewHud]
+//moved to prevent overlap with new hud.
+#define EWEBHEALTH_Y			240.0f
+//#define EWEBHEALTH_Y			290.0f
+//[/NewHud]
 void CG_DrawEWebHealth(void)
 {
 	vec4_t aColor;
@@ -7858,7 +7862,11 @@ void CG_DrawEWebHealth(void)
 #define CLFUELBAR_H			100.0f
 #define CLFUELBAR_W			20.0f
 #define CLFUELBAR_X			(SCREEN_WIDTH-CLFUELBAR_W-8.0f)
-#define CLFUELBAR_Y			260.0f
+//[NewHud]
+//moved to prevent overlap with new hud.
+#define CLFUELBAR_Y			240.0f
+//#define CLFUELBAR_Y			260.0f
+//[/NewHud]
 void CG_DrawCloakFuel(void)
 {
 	vec4_t aColor;
