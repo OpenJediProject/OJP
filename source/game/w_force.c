@@ -3228,9 +3228,6 @@ void GEntity_UseFunc( gentity_t *self, gentity_t *other, gentity_t *activator )
 qboolean CanCounterThrow(gentity_t *self, gentity_t *thrower, qboolean pull)
 {
 	int powerUse = 0;
-	//[ForceSys]
-	int abilityDef;
-	//[/ForceSys]
 
 	//[/ForceSys]
 	/*
