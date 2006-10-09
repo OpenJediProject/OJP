@@ -745,6 +745,8 @@
 			}
 		}
 
+		//[ForceSys]
+		/*
 		// Force Heal title
 		itemDef 
 		{
@@ -987,7 +989,8 @@
 				setitemcolor	setfp_teamheal forecolor 0.5 0.5 1 1
 			}
 		}
-		
+		*/
+		//[/ForceSys]
 		
 		//[ExpSys]
 		//----------------------------------------
@@ -1342,6 +1345,8 @@
 			}
 		}
 
+		//[ForceSys]
+		/*
 		// Force Drain title
 		itemDef 
 		{
@@ -1403,6 +1408,8 @@
 				setitemcolor	setfp_drain forecolor 1 0.2 0.2 1
 			}
 		}
+		*/
+		//[/ForceSys]
 
 		// Force Lightning title
 		itemDef 
@@ -1467,6 +1474,8 @@
 			}
 		}
 
+		//[ForceSys]
+		/*
 		// Force Rage title
 		itemDef 
 		{
@@ -1610,6 +1619,8 @@
 				setitemcolor	setfp_powerother forecolor 1 0.2 0.2 1
 			}
 		}
+		*/
+		//[/ForceSys]
 
 		//----------------------------------------
 		// SABER POWERS
