@@ -1736,6 +1736,10 @@ void CG_DrawHUD(centity_t	*cent)
 		return;
 	}
 
+	//[NewHud]
+	//the new hud looks ugly if set with team colors.
+	hudTintColor = colorTable[CT_WHITE];
+	/* basejka code
 	if (cgs.gametype >= GT_TEAM && cgs.gametype != GT_SIEGE)
 	{	// tint the hud items based on team
 		if (cg.snap->ps.persistant[PERS_TEAM] == TEAM_RED )
@@ -1749,6 +1753,8 @@ void CG_DrawHUD(centity_t	*cent)
 	{	// tint the hud items white (dont' tint)
 		hudTintColor = colorTable[CT_WHITE];
 	}
+	*/
+	//[/NewHud]
 
 	// Draw the left HUD 
 	menuHUD = Menus_FindByName("lefthud");
@@ -1870,10 +1876,7 @@ void CG_DrawHUD(centity_t	*cent)
 		focusItem = Menu_FindItemByName(menuHUD, "frame");
 		if (focusItem)
 		{
-			//[NewHud]
-			//don't the background frame!
-			//trap_R_SetColor( hudTintColor );	
-			//[/NewHud]
+			trap_R_SetColor( hudTintColor );	
 			CG_DrawPic( 
 				focusItem->window.rect.x, 
 				focusItem->window.rect.y, 
