@@ -17,7 +17,7 @@ Version 0.1.0:
 			- Force Jump is no longer a forced skill.  New skill point cost 2/4/6
 			- g_maxForceRank now sets the maximum number of skill points that a player can earn.
 			- Added jetpack skill.  This skill gives the player a jetpack.
-			- Added skills for pistols, blasters, thermals, and rockets.  The more points you place into a gun skill, the more ammo you will get with the weapon.
+			- Added skills for pistols, blasters, thermals, and rockets.  The more points you place into a gun skill, the more ammo you will get with the weapon.  Weapons are no longer littered around on maps.
 			- Skills can now be changed while the player is alive.
 			- Completely reorganized the point requirements for the various skills.
 
