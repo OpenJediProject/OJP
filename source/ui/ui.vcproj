@@ -596,14 +596,6 @@
 				>
 			</File>
 		</Filter>
-		<Filter
-			Name="win32"
-			>
-			<File
-				RelativePath="..\win32\ui.rc"
-				>
-			</File>
-		</Filter>
 	</Files>
 	<Globals>
 	</Globals>

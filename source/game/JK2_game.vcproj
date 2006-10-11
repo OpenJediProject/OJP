@@ -1099,14 +1099,6 @@
 				</File>
 			</Filter>
 		</Filter>
-		<Filter
-			Name="win32"
-			>
-			<File
-				RelativePath="..\win32\JK2game.rc"
-				>
-			</File>
-		</Filter>
 	</Files>
 	<Globals>
 	</Globals>

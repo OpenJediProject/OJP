@@ -791,14 +791,6 @@
 				>
 			</File>
 		</Filter>
-		<Filter
-			Name="win32"
-			>
-			<File
-				RelativePath="..\win32\JK2cgame.rc"
-				>
-			</File>
-		</Filter>
 	</Files>
 	<Globals>
 	</Globals>
