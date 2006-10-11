@@ -13,7 +13,7 @@ Version 0.1.0:
 			- Made the number of DP points a player gets be based on their allocation and total amount of skill points.  Merc skills receive fewer DP per skill point than Jedi/Force skills.
 
 		Experience System (ExpSys):
-			Retooled the skill point system into a true experience system.  Players now start out with a small amount of skill points and gain them by causing DP damage to their enemies or capturing the flag during ctf gametypes.  
+			Retooled the skill point system into a true experience system.  Players now start out with a small amount of skill points and gain them by causing damage to their enemies or capturing the flag during ctf gametypes.  
 			- Force Jump is no longer a forced skill.  New skill point cost 2/4/6
 			- g_maxForceRank now sets the maximum number of skill points that a player can earn.
 			- Added jetpack skill.  This skill gives the player a jetpack.

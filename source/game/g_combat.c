@@ -6437,6 +6437,22 @@ void G_Damage( gentity_t *targ, gentity_t *inflictor, gentity_t *attacker,
 				take /= (targ->client->ps.fd.forcePowerLevel[FP_RAGE]+1);
 			}
 		}
+
+		//[ExpSys]
+		//give experience for damaging players
+		if(targ->client && attacker && attacker->client)
+		{//targ is creatuer and attacker is creature
+			if(take > targ->health)
+			{//damage is greated than target's health, only give experience for damage used to kill victim
+				AddSkill(attacker, (float) targ->health/100.0f);
+			}
+			else
+			{
+				AddSkill(attacker, take/100.0f);
+			}
+		}
+		//[/ExpSys]
+
 		targ->health = targ->health - take;
 
 		if ( (targ->flags&FL_UNDYING) )
