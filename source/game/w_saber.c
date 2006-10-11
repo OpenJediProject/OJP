@@ -13659,8 +13659,16 @@ void DebounceSaberImpact(gentity_t *self, gentity_t *otherSaberer,
 
 qboolean G_InAttackParry(gentity_t *self)
 {//checks to see if a player is doing an attack parry
+
+	//must be holding attack and not pressing alt attack
+	if(!(self->client->pers.cmd.buttons & BUTTON_ATTACK)			//not pressing attack
+		|| (self->client->pers.cmd.buttons & BUTTON_ALT_ATTACK))	//holding alt attack
+	{//not holding the right buttons
+		return qfalse;
+	}
+
 	if(PM_SaberInStart(self->client->ps.saberMove) //in windup
-		&& !(self->client->pers.cmd.buttons & BUTTON_ALT_ATTACK) ) //not pressing the attack button
+		|| PM_SaberInParry(self->client->ps.torsoAnim)) // in block (this check only finds blocks that weren't started this turn)
 	{
 		return qtrue;
 	}

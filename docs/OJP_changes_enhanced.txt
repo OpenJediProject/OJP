@@ -19,6 +19,7 @@ Version 0.1.0:
 			- Added jetpack skill.  This skill gives the player a jetpack.
 			- Added skills for pistols, blasters, thermals, and rockets.  The more points you place into a gun skill, the more ammo you will get with the weapon.
 			- Skills can now be changed while the player is alive.
+			- Completely reorganized the point requirements for the various skills.
 
 		Force Powers:
 			- Players can now use powers from both sides of the Force at the same time.
@@ -54,6 +55,8 @@ Version 0.1.0:
 				A super break attempts to kill their opponent with finishing move.  However, Super breaks only work on opponents who have critical DP.  Otherwise, the lock loser will block the super break and forces the attacker into a mishap.  To perform a super break, hold down the attack button while in a saber lock.  
 
 		Saber Combat System:
+
+			Attack Parries - Attack parries are now executed by pressing the attack button while parrying.  This will only work if the player is already in a block or just starting an attack swing.
 
 			Blocking - Players now move to block saber attacks before they impact.
 			

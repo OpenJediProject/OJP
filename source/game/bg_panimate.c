@@ -3885,4 +3885,16 @@ qboolean BG_BounceAnim( int anim )
 
 	return qfalse;
 }
+
+
+qboolean BG_BlockAnim( int anim )
+{//check for saber block animation
+	if( (anim >= BOTH_P1_S1_T_ && anim <= BOTH_P1_S1_BR)
+		|| (anim >= BOTH_P6_S6_T_ && anim <= BOTH_P6_S6_BR)
+		|| (anim >= BOTH_P7_S7_T_ && anim <= BOTH_P7_S7_BR) )
+	{
+		return qtrue;
+	}
+	return qfalse;
+}
 //[/SaberSys]
