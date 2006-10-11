@@ -183,9 +183,25 @@ int bgForcePowerCost[NUM_TOTAL_SKILLS][NUM_FORCE_POWER_LEVELS] = //0 == neutral
 	{	0,	2,	4,	6	},	// Heal			// FP_HEAL
 	//[ExpSys]
 	//we want jump to cost something as well.
-	{	0,	2,	4,	6	},	// Jump			//FP_LEVITATION,//hold/duration
-	//{	0,	0,	2,	6	},	// Jump			//FP_LEVITATION,//hold/duration
-	//[/ExpSys]
+	{	0,	8,	4,	6	},	// Jump			//FP_LEVITATION,//hold/duration
+	{	0,	8,	4,	6	},	// Speed		//FP_SPEED,//duration
+	{	0,	8,	3,	6	},	// Push			//FP_PUSH,//hold/duration
+	{	0,	8,	3,	6	},	// Pull			//FP_PULL,//hold/duration
+	{	0,	4,	6,	8	},	// Mind Trick	//FP_TELEPATHY,//instant
+	{	0,	8,	3,	6	},	// Grip			//FP_GRIP,//hold/duration
+	{	0,	8,	5,	8	},	// Lightning	//FP_LIGHTNING,//hold/duration
+	{	0,	4,	6,	8	},	// Dark Rage	//FP_RAGE,//duration
+	{	0,	2,	5,	8	},	// Protection	//FP_PROTECT,//duration
+	{	0,	8,	3,	6	},	// Absorb		//FP_ABSORB,//duration
+	{	0,	1,	3,	6	},	// Team Heal	//FP_TEAM_HEAL,//instant
+	{	0,	1,	3,	6	},	// Team Force	//FP_TEAM_FORCE,//instant
+	{	0,	2,	4,	6	},	// Drain		//FP_DRAIN,//hold/duration
+	{	0,	8,	5,	8	},	// Sight		//FP_SEE,//duration
+	{	0,	8,	5,	8	},	// Saber Attack	//FP_SABER_OFFENSE,
+	{	0,	1,	5,	8	},	// Saber Defend	//FP_SABER_DEFENSE,
+	{	0,	4,	6,	8	},	// Saber Throw	//FP_SABERTHROW,
+	/* basejka values
+	{	0,	0,	2,	6	},	// Jump			//FP_LEVITATION,//hold/duration
 	{	0,	2,	4,	6	},	// Speed		//FP_SPEED,//duration
 	{	0,	1,	3,	6	},	// Push			//FP_PUSH,//hold/duration
 	{	0,	1,	3,	6	},	// Pull			//FP_PULL,//hold/duration
@@ -201,9 +217,8 @@ int bgForcePowerCost[NUM_TOTAL_SKILLS][NUM_FORCE_POWER_LEVELS] = //0 == neutral
 	{	0,	2,	5,	8	},	// Sight		//FP_SEE,//duration
 	{	0,	1,	5,	8	},	// Saber Attack	//FP_SABER_OFFENSE,
 	{	0,	1,	5,	8	},	// Saber Defend	//FP_SABER_DEFENSE,
-	//[ExpSys]
-	{	0,	4,	6,	8	},	// Saber Throw	//FP_SABERTHROW,
-	//{	0,	4,	6,	8	}	// Saber Throw	//FP_SABERTHROW,
+	{	0,	4,	6,	8	}	// Saber Throw	//FP_SABERTHROW,
+	*/
 	//NUM_FORCE_POWERS
 	//racc - additional skills
 	{	0,	8,	0,	0	},	//SK_JETPACK,		// Jetpack Skill	
