@@ -197,8 +197,8 @@ int bgForcePowerCost[NUM_TOTAL_SKILLS][NUM_FORCE_POWER_LEVELS] = //0 == neutral
 	{	0,	1,	3,	6	},	// Team Force	//FP_TEAM_FORCE,//instant
 	{	0,	2,	4,	6	},	// Drain		//FP_DRAIN,//hold/duration
 	{	0,	8,	5,	8	},	// Sight		//FP_SEE,//duration
-	{	0,	8,	5,	8	},	// Saber Attack	//FP_SABER_OFFENSE,
-	{	0,	1,	5,	8	},	// Saber Defend	//FP_SABER_DEFENSE,
+	{	0,	SABER_OFFENSE_L1,	5,	8	},	// Saber Attack	//FP_SABER_OFFENSE,
+	{	0,	SABER_DEFENSE_L1,	5,	8	},	// Saber Defend	//FP_SABER_DEFENSE,
 	{	0,	4,	6,	8	},	// Saber Throw	//FP_SABERTHROW,
 	/* basejka values
 	{	0,	0,	2,	6	},	// Jump			//FP_LEVITATION,//hold/duration

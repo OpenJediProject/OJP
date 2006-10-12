@@ -487,8 +487,13 @@ void UpdateForceUsed()
 	}
 	else
 	{	// Make saber normal cost
-		bgForcePowerCost[FP_SABER_OFFENSE][FORCE_LEVEL_1] = 1;
-		bgForcePowerCost[FP_SABER_DEFENSE][FORCE_LEVEL_1] = 1;
+		//[ExpSys]
+		//use defines since we're tweaking these values for the experience system.
+		bgForcePowerCost[FP_SABER_OFFENSE][FORCE_LEVEL_1] = SABER_OFFENSE_L1;
+		bgForcePowerCost[FP_SABER_DEFENSE][FORCE_LEVEL_1] = SABER_DEFENSE_L1;
+		//bgForcePowerCost[FP_SABER_OFFENSE][FORCE_LEVEL_1] = 1;
+		//bgForcePowerCost[FP_SABER_DEFENSE][FORCE_LEVEL_1] = 1;
+		//[/ExpSys]
 		// Also, check if there is no saberattack.  If there isn't, there had better not be any defense or throw!
 		if (uiForcePowersRank[FP_SABER_OFFENSE]<1)
 		{
