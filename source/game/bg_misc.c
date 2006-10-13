@@ -494,6 +494,12 @@ qboolean BG_LegalizedForcePowers(char *powerOut, int maxRank, qboolean freeSaber
 	//int final_Powers[NUM_FORCE_POWERS];
 	//[/ExpSys]
 
+	//[BugFix36]
+	//blank out the final_Powers array in case we get garbage in powerOut.  
+	//Garbage is more freqent in Enhanced due to the new force skills.
+	memset(final_Powers, 0, sizeof(final_Powers));
+	//[/BugFix36]
+
 	if (powerLen >= 128)
 	{ //This should not happen. If it does, this is obviously a bogus string.
 		//They can have this string. Because I said so.
@@ -549,10 +555,14 @@ qboolean BG_LegalizedForcePowers(char *powerOut, int maxRank, qboolean freeSaber
 	//Now we have established a valid rank, and a valid side.
 	//Read the force powers in, and cut them down based on the various rules supplied.
 	c = 0;
+	//[BugFix36]
+	while (i < 128 && powerBuf[i] && powerBuf[i] != '\n' && powerBuf[i] != '\r'  //standard sanity checks
 	//[ExpSys]
-	while (i < 128 && powerBuf[i] && powerBuf[i] != '\n' && c < NUM_TOTAL_SKILLS)
-	//while (i < 128 && powerBuf[i] && powerBuf[i] != '\n' && c < NUM_FORCE_POWERS)
+		&& powerBuf[i] >= '0' && powerBuf[i] <= '3' && c < NUM_TOTAL_SKILLS)
+		//&& powerBuf[i] >= '0' && powerBuf[i] <= '3' && c < NUM_FORCE_POWERS)
 	//[/ExpSys]
+	//while (i < 128 && powerBuf[i] && powerBuf[i] != '\n' && c < NUM_FORCE_POWERS)
+	//[/BugFix36]
 	{
 		readBuf[0] = powerBuf[i];
 		readBuf[1] = 0;
