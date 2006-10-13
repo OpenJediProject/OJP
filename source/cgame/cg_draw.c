@@ -1306,7 +1306,7 @@ void CG_DrawDodge( menuDef_t *menuHUD )
 	//[NewHud]
 	vec4_t			aColor;
 	itemDef_t		*focusItem;
-	float			percent = ((float)cg.snap->ps.stats[STAT_DODGE]/cg.snap->ps.stats[STAT_MAX_DODGE])*DPBAR_H;
+	float			percent = ((float)cg.snap->ps.stats[STAT_DODGE]/DODGE_MAX)*DPBAR_H;
 
 	//color of the bar
 	aColor[0] = 0.0f;
