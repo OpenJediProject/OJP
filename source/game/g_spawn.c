@@ -781,7 +781,7 @@ qboolean G_CallSpawn( gentity_t *ent ) {
 	for ( item=bg_itemlist+1 ; item->classname ; item++ ) {
 		if ( !strcmp(item->classname, ent->classname) ) {
 			//[ExpSys]
-			if(item->giType != IT_WEAPON)
+			if(item->giType != IT_WEAPON && item->giType != IT_AMMO)
 			{//don't spawn weapons as part of the map load.  Weapons are now given to players when they spawn.
 				G_SpawnItem( ent, item );
 			}
