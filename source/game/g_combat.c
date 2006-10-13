@@ -5913,6 +5913,9 @@ void G_Damage( gentity_t *targ, gentity_t *inflictor, gentity_t *attacker,
 		attacker->client->ps.persistant[PERS_ATTACKEE_ARMOR] = (targ->health<<8)|(client->ps.stats[STAT_ARMOR]);
 	}
 
+	//[ExpSys]
+	//don't do this since it allows players to rocket themselves to hurt you!
+	/* basejka code
 	// always give half damage if hurting self... but not in siege.  Heavy weapons need a counter.
 	// calculated after knockback, so rocket jumping works
 	if ( targ == attacker && !(dflags & DAMAGE_NO_SELF_PROTECTION)) {
@@ -5925,6 +5928,8 @@ void G_Damage( gentity_t *targ, gentity_t *inflictor, gentity_t *attacker,
 			damage *= 0.5;
 		}
 	}
+	*/
+	//[/ExpSys]
 
 	if ( damage < 1 ) {
 		damage = 1;
