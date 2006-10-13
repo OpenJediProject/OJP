@@ -285,7 +285,12 @@ void AOTCTC_Create_Holocrons( void )
 	{// Add each type of holocron in order, but in a randomly chosen position...
 		int choice;
 
-		if (type == HC_TEAM_HEAL || type == HC_TEAM_FORCE)
+		//[ExpSys]
+		//disabled the holocrons for force powers we've disabled.
+		if (type == HC_TEAM_HEAL || type == HC_TEAM_FORCE || type == HC_DRAIN
+			|| type == HC_PROTECT || type == HC_RAGE || type == HC_TELEPATHY)
+		//if (type == HC_TEAM_HEAL || type == HC_TEAM_FORCE)
+		//[/ExpSys]
 		{// Don't do these...
 			type++;
 			continue;
