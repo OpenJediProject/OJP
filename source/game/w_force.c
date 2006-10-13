@@ -440,7 +440,9 @@ void WP_InitForcePowers( gentity_t *ent )
 	ent->client->ps.fd.forceSide = atoi(readBuf);
 	i++;
 
-
+	//[BotTweaks]
+	//racc - cheating is bad!
+	/*
 	if ( g_gametype.integer != GT_SIEGE && (ent->r.svFlags & SVF_BOT) && botstates[ent->s.number] )
 	{ //hmm..I'm going to cheat here.
 		int oldI = i;
@@ -503,6 +505,8 @@ void WP_InitForcePowers( gentity_t *ent )
 		}
 		i = oldI;
 	}
+	*/
+	//[/BotTweaks]
 
 	i_r = 0;
 	while (forcePowers[i] && forcePowers[i] != '\n' &&
