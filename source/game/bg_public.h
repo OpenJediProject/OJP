@@ -513,6 +513,11 @@ extern char *forceMasteryLevels[NUM_FORCE_MASTERY_LEVELS];
 extern int forceMasteryPoints[NUM_FORCE_MASTERY_LEVELS];
 
 //[ExpSys]
+//more skills makes this thingy longer
+//moved from ai_main.h since we need now need it in other areas as well.
+#define DEFAULT_FORCEPOWERS		"5-1-00000000000000000000000"
+//[/ExpSys]
+
 //Made defines for saber offense/defense level 1 since UpdateForceUsed() manually changes this values based on if sabers are given for free or not.
 #define SABER_OFFENSE_L1	8  
 #define SABER_DEFENSE_L1	1

@@ -497,7 +497,10 @@ qboolean BG_LegalizedForcePowers(char *powerOut, int maxRank, qboolean freeSaber
 	if (powerLen >= 128)
 	{ //This should not happen. If it does, this is obviously a bogus string.
 		//They can have this string. Because I said so.
-		strcpy(powerBuf, "7-1-032330000000001333");
+		//[ExpSys]
+		strcpy(powerBuf, DEFAULT_FORCEPOWERS);
+		//strcpy(powerBuf, "7-1-032330000000001333");
+		//[/ExpSys]
 		maintainsValidity = qfalse;
 	}
 	else
