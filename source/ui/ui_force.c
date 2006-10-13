@@ -588,7 +588,11 @@ void UI_ReadLegalForce(void)
 	Com_sprintf(fcfString, sizeof(fcfString), "%i-%i-", uiForceRank, uiForceSide);
 	strPlace = strlen(fcfString);
 
-	while (forcePlace < NUM_FORCE_POWERS)
+	//[ExpSys]
+	//added sanity check so we don't overflow fcfString.
+	while (forcePlace < NUM_TOTAL_SKILLS && strPlace < 512)
+	//while (forcePlace < NUM_FORCE_POWERS)
+	//[/ExpSys]
 	{
 		Com_sprintf(forceStringValue, sizeof(forceStringValue), "%i", uiForcePowersRank[forcePlace]);
 		//Just use the force digit even if multiple digits. Shouldn't be longer than 1.
@@ -677,7 +681,10 @@ void UI_ReadLegalForce(void)
 	//[/ExpSys]
 	gTouchedForce = qtrue;
 
-	for (c=0;fcfString[i]&&c<NUM_FORCE_POWERS;c++,i++)
+	//[ExpSys]
+	for (c=0; fcfString[i] && c < NUM_TOTAL_SKILLS;c++,i++)
+	//for (c=0;fcfString[i]&&c<NUM_FORCE_POWERS;c++,i++)
+	//[/ExpSys]
 	{
 		singleBuf[0] = fcfString[i];
 		singleBuf[1] = 0;
