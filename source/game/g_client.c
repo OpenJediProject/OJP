@@ -4605,7 +4605,10 @@ void CheckTeamBotBalance(void)
 		}
 
 		//send out the related messages.
-		trap_SendServerCommand( HumanSwitchEnt->client->ps.clientNum, "cp \"You were Team Switched for Game Balance\n\"" );
+		//[ClientNumFix]
+		trap_SendServerCommand( HumanSwitchEnt-g_entities, "cp \"You were Team Switched for Game Balance\n\"" );
+		//trap_SendServerCommand( HumanSwitchEnt->client->ps.clientNum, "cp \"You were Team Switched for Game Balance\n\"" );
+		//[/ClientNumFix]
 		trap_SendServerCommand(-1, va("print \"AutoGameBalancer: Moved %s" S_COLOR_WHITE " to %s Team because there wasn't enough humans on that team.\n\"",
 			HumanSwitchEnt->client->pers.netname, TeamName(HumanChangedToTeam)));
 		//[AdminSys]
@@ -4681,7 +4684,10 @@ void CheckTeamBalance(void)
 
 			if(ent)
 			{//switch teams
-				trap_SendServerCommand( ent->client->ps.clientNum, "cp \"You were Team Switched for Game Balance\n\"" );
+				//[ClientNumFix]
+				trap_SendServerCommand( ent-g_entities, "cp \"You were Team Switched for Game Balance\n\"" );
+				//trap_SendServerCommand( ent->client->ps.clientNum, "cp \"You were Team Switched for Game Balance\n\"" );
+				//[/ClientNumFix]
 				SetTeam(ent, "");
 				if(!ScoreBalance)
 				{

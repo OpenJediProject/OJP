@@ -64,7 +64,10 @@ void DeathmatchScoreboardMessage( gentity_t *ent ) {
 		if ( cl->pers.connected == CON_CONNECTING ) {
 			ping = -1;
 		//[BotTweaks] 
-		} else if ( g_entities[cl->ps.clientNum].r.svFlags & SVF_BOT )
+		//[ClientNumFix]
+		} else if ( g_entities[level.sortedClients[i]].r.svFlags & SVF_BOT )
+		//} else if ( g_entities[cl->ps.clientNum]r.svFlags & SVF_BOT )
+		//[/ClientNumFix]
 		{//make fake pings for bots.
 			ping = Q_irand(50, 150);
 		//[/BotTweaks]
@@ -694,6 +697,24 @@ void Cmd_Kill_f( gentity_t *ent ) {
 	player_die (ent, ent, ent, 100000, MOD_SUICIDE);
 }
 
+//[ClientNumFix]
+gentity_t *G_GetDuelWinner(gclient_t *client)
+{
+	int i;
+	gentity_t *wEnt;
+
+	for ( i = 0 ; i < level.maxclients ; i++ ) {
+		wEnt = &g_entities[i];
+		
+		if (wEnt->client && wEnt->client != client && wEnt->client->pers.connected == CON_CONNECTED && wEnt->client->sess.sessionTeam != TEAM_SPECTATOR)
+		{
+			return wEnt;
+		}
+	}
+
+	return NULL;
+}
+#if 0
 gentity_t *G_GetDuelWinner(gclient_t *client)
 {
 	gclient_t *wCl;
@@ -711,6 +732,8 @@ gentity_t *G_GetDuelWinner(gclient_t *client)
 
 	return NULL;
 }
+#endif
+//[/ClientNumFix]
 
 /*
 =================
@@ -877,8 +900,12 @@ void SetTeam( gentity_t *ent, char *s ) {
 		{//racc - override player's choice if the team balancer is in effect.
 			int		counts[TEAM_NUM_TEAMS];
 
-			counts[TEAM_BLUE] = TeamCount( ent->client->ps.clientNum, TEAM_BLUE );
-			counts[TEAM_RED] = TeamCount( ent->client->ps.clientNum, TEAM_RED );
+			//[ClientNumFix]
+			counts[TEAM_BLUE] = TeamCount( ent-g_entities, TEAM_BLUE );
+			counts[TEAM_RED] = TeamCount( ent-g_entities, TEAM_RED );
+			//counts[TEAM_BLUE] = TeamCount( ent->client->ps.clientNum, TEAM_BLUE );
+			//counts[TEAM_RED] = TeamCount( ent->client->ps.clientNUm, TEAM_RED );
+			//[/ClientNumFix]
 
 			// We allow a spread of two
 			if ( team == TEAM_RED && counts[TEAM_RED] - counts[TEAM_BLUE] > 1 ) {
@@ -886,13 +913,19 @@ void SetTeam( gentity_t *ent, char *s ) {
 				/*
 				if (g_forceBasedTeams.integer && ent->client->ps.fd.forceSide == FORCE_DARKSIDE)
 				{
-					trap_SendServerCommand( ent->client->ps.clientNum, 
+					//[ClientNumFix]
+					trap_SendServerCommand( ent-g_entities, 
+					//trap_SendServerCommand( ent->client->ps.clientNum, 
+					//[/ClientNumFix]
 						va("print \"%s\n\"", G_GetStringEdString("MP_SVGAME", "TOOMANYRED_SWITCH")) );
 				}
 				else
 				*/
 				{
-					trap_SendServerCommand( ent->client->ps.clientNum, 
+					//[ClientNumFix]
+					trap_SendServerCommand( ent-g_entities, 
+					//trap_SendServerCommand( ent->client->ps.clientNum, 
+					//[/ClientNumFix]
 						va("print \"%s\n\"", G_GetStringEdString("MP_SVGAME", "TOOMANYRED")) );
 				}
 				return; // ignore the request
@@ -902,13 +935,19 @@ void SetTeam( gentity_t *ent, char *s ) {
 				/*
 				if (g_forceBasedTeams.integer && ent->client->ps.fd.forceSide == FORCE_LIGHTSIDE)
 				{
-					trap_SendServerCommand( ent->client->ps.clientNum, 
+					//[ClientNumFix]
+					trap_SendServerCommand( ent-g_entities, 
+					//trap_SendServerCommand( ent->client->ps.clientNum, 
+					//[/ClientNumFix]
 						va("print \"%s\n\"", G_GetStringEdString("MP_SVGAME", "TOOMANYBLUE_SWITCH")) );
 				}
 				else
 				*/
 				{
-					trap_SendServerCommand( ent->client->ps.clientNum, 
+					//[ClientNumFix]
+					trap_SendServerCommand( ent-g_entities, 
+					//trap_SendServerCommand( ent->client->ps.clientNum, 
+					//[/ClientNumFix]
 						va("print \"%s\n\"", G_GetStringEdString("MP_SVGAME", "TOOMANYBLUE")) );
 				}
 				return; // ignore the request
@@ -920,14 +959,20 @@ void SetTeam( gentity_t *ent, char *s ) {
 				if(level.teamScores[TEAM_BLUE] - OJP_PointSpread() >= level.teamScores[TEAM_RED] 
 					&& counts[TEAM_BLUE] >= counts[TEAM_RED] && team == TEAM_BLUE)
 				{//blue team is ahead, don't add more players to that team
-					trap_SendServerCommand( ent->client->ps.clientNum, 
+					//[ClientNumFix]
+					trap_SendServerCommand( ent-g_entities, 
+					//trap_SendServerCommand( ent->client->ps.clientNum, 
+					//[/ClientNumFix]
 						va("print \"%s\n\"", G_GetStringEdString("MP_SVGAME", "TOOMANYBLUE")) );
 					return;
 				}
 				else if(level.teamScores[TEAM_RED] - OJP_PointSpread() >= level.teamScores[TEAM_BLUE] 
 					&& counts[TEAM_RED] > counts[TEAM_BLUE] && team == TEAM_RED)
 				{//red team is ahead, don't add more players to that team
-					trap_SendServerCommand( ent->client->ps.clientNum, 
+					//[ClientNumFix]
+					trap_SendServerCommand( ent-g_entities, 
+					//trap_SendServerCommand( ent->client->ps.clientNum, 
+					//[/ClientNumFix]
 						va("print \"%s\n\"", G_GetStringEdString("MP_SVGAME", "TOOMANYRED")) );
 					return;
 				}
@@ -948,14 +993,20 @@ void SetTeam( gentity_t *ent, char *s ) {
 				else if(BotCount[TEAM_RED] - BotCount[TEAM_BLUE] > 1 
 					&& !(ent->r.svFlags & SVF_BOT) && team == TEAM_BLUE)
 				{//red team has too many bots, humans can't join blue
-					trap_SendServerCommand( ent->client->ps.clientNum, 
+					//[ClientNumFix]
+					trap_SendServerCommand( ent-g_entities, 
+					//trap_SendServerCommand( ent->client->ps.clientNum, 
+					//[/ClientNumFix]
 						va("print \"%s\n\"", G_GetStringEdString("MP_SVGAME", "TOOMANYBLUE")) );
 					return;
 				}
 				else if(BotCount[TEAM_BLUE] - BotCount[TEAM_RED] > 1
 					&& !(ent->r.svFlags & SVF_BOT) && team == TEAM_RED)
 				{//blue team has too many bots, humans can't join red
-					trap_SendServerCommand( ent->client->ps.clientNum, 
+					//[ClientNumFix]
+					trap_SendServerCommand( ent-g_entities, 
+					//trap_SendServerCommand( ent->client->ps.clientNum, 
+					//[/ClientNumFix]
 						va("print \"%s\n\"", G_GetStringEdString("MP_SVGAME", "TOOMANYRED")) );
 					return;
 				}
@@ -1777,7 +1828,10 @@ void BotOrderParser(gentity_t *ent, gentity_t *target, int mode, const char *cha
 		{
 			continue;
 		}
-		if ( !(g_entities[cl->ps.clientNum].r.svFlags & SVF_BOT) )
+		//[ClientNumFix]
+		if ( !(g_entities[i].r.svFlags & SVF_BOT) )
+		//if ( !(g_entities[cl->ps.clientNum].r.svFlags & SVF_BOT) )
+		//[/ClientNumFix]
 		{
 			continue;
 		}
@@ -1792,7 +1846,10 @@ void BotOrderParser(gentity_t *ent, gentity_t *target, int mode, const char *cha
 			if(temp < ordereeloc)
 			{
 				ordereeloc = temp;
-				orderee = &g_entities[cl->ps.clientNum];
+				//[ClientNumFix]
+				orderee = &g_entities[i];
+				//orderee = &g_entities[cl->ps.clientNum];
+				//[/ClientNumFix]
 			}
 		}
 	}
@@ -1840,7 +1897,10 @@ void BotOrderParser(gentity_t *ent, gentity_t *target, int mode, const char *cha
 				{
 					continue;
 				}
-				if ( cl->ps.clientNum == orderee->client->ps.clientNum )
+				//[ClientNumFix]
+				if ( i == orderee-g_entities )
+				//if ( cl->ps.clientNum == orderee->client->ps.clientNum )
+				//[ClientNumFix]
 				{//Don't want the orderee to be the target
 					continue;
 				}
@@ -1854,7 +1914,10 @@ void BotOrderParser(gentity_t *ent, gentity_t *target, int mode, const char *cha
 				{
 					if(temp > ordereeloc)
 					{//Don't parse the orderee again
-						objective = &g_entities[cl->ps.clientNum];
+						//[ClientNumFix]
+						objective = &g_entities[i];
+						//objective = &g_entities[cl->ps.clientNum];
+						//[ClientNumFix]
 					}
 				}
 			}
