@@ -1919,7 +1919,10 @@ static void CG_RegisterSounds( void ) {
 	}
 
 	// only register the items that the server says we need
-	strcpy( items, CG_ConfigString( CS_ITEMS ) );
+	//[BugFix37]
+	Q_strncpyz(items, CG_ConfigString(CS_ITEMS), sizeof(items));
+	//strcpy( items, CG_ConfigString( CS_ITEMS ) );
+	//[/BugFix37]
 
 	for ( i = 1 ; i < bg_numItems ; i++ ) {
 		if ( items[ i ] == '1' || cg_buildScript.integer ) {
@@ -2369,7 +2372,10 @@ Ghoul2 Insert End
 	memset( cg_weapons, 0, sizeof( cg_weapons ) );
 
 	// only register the items that the server says we need
-	strcpy( items, CG_ConfigString( CS_ITEMS) );
+	//[BugFix37]
+	Q_strncpyz(items, CG_ConfigString(CS_ITEMS), sizeof(items));
+	//strcpy( items, CG_ConfigString( CS_ITEMS ) );
+	//[/BugFix37]
 
 	for ( i = 1 ; i < bg_numItems ; i++ ) {
 		if ( items[ i ] == '1' || cg_buildScript.integer ) {
