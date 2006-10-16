@@ -576,7 +576,13 @@ void WP_InitForcePowers( gentity_t *ent )
 //		ent->client->sess.setForce = qtrue;
 //	}
 
-	if (ent->s.eType == ET_NPC)
+	//racc - Forces the player to look at their Profiles menu in some situations 
+	//(like when the game starts or when the player's force power config string is bad)
+	//This also lets the client know the server's maxForceRank is.
+	//[BotTweaks]
+	if (ent->s.eType == ET_NPC || ent->r.svFlags & SVF_BOT)
+	//racc - bots care not about such things 
+	//[/BotTweaks]
 	{
 		ent->client->sess.setForce = qtrue;
 	}
@@ -611,13 +617,10 @@ void WP_InitForcePowers( gentity_t *ent )
 #endif
 				didEvent = qtrue;
 
-//[test]
-//This seems to be broken in duel mode.  I don't think this is the true root of the problem
-//the player's svFlags and eType seem to get screwed up but this should fix the initial problem.
-				if (!(ent->r.svFlags & SVF_BOT) && g_gametype.integer != GT_DUEL && g_gametype.integer != GT_POWERDUEL && ent->s.eType != ET_NPC)
-//				if (!(ent->r.svFlags & SVF_BOT) && ent->s.eType != ET_NPC)
-//[/test]
-
+				//[BotTweaks]
+				//racc - bots skip over this stuff now so this check isn't needed anymore.
+				//if (!(ent->r.svFlags & SVF_BOT) && ent->s.eType != ET_NPC)
+				//[/BotTweaks]
 				{
 					if (!g_teamAutoJoin.integer)
 					{
