@@ -591,7 +591,13 @@ void WP_InitForcePowers( gentity_t *ent )
 	}
 	else
 	{
-		if (warnClient || !ent->client->sess.setForce)
+		//[ExpSys]
+		//since the possibility that a player's force configuration is more likely to be bad
+		//with the new experience system, just go ahead and don't force warned clients into the
+		//force powers screen.
+		if (!ent->client->sess.setForce)
+		//if (warnClient || !ent->client->sess.setForce)
+		//[/ExpSys]
 		{ //the client's rank is too high for the server and has been autocapped, so tell them
 			if (g_gametype.integer != GT_HOLOCRON && g_gametype.integer != GT_JEDIMASTER )
 			{
