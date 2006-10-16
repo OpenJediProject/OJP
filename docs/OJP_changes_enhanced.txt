@@ -21,6 +21,7 @@ Version 0.1.0:
 			- Skills can now be changed while the player is alive.
 			- Completely reorganized the point requirements for the various skills.  
 			- Removed Drain, Protect, and Mind Trick as selectable powers until they can be balanced or retooled for realism.
+			- Enlightenment holocrons can now be picked up by users of both sides of the Force.
 			
 		Force Powers:
 			- Players can now use powers from both sides of the Force at the same time.

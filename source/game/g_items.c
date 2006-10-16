@@ -2415,6 +2415,10 @@ void Touch_Item (gentity_t *ent, gentity_t *other, trace_t *trace) {
 	if (other->health < 1)
 		return;		// dead people can't pickup
 
+	//[ExpSys]
+	//since players can use powers from both sides of the force, they should be able to use
+	//both force enlightenment holocrons
+	/*
 	if (ent->item->giType == IT_POWERUP &&
 		(ent->item->giTag == PW_FORCE_ENLIGHTENED_LIGHT || ent->item->giTag == PW_FORCE_ENLIGHTENED_DARK))
 	{
@@ -2433,6 +2437,8 @@ void Touch_Item (gentity_t *ent, gentity_t *other, trace_t *trace) {
 			}
 		}
 	}
+	*/
+	//[/ExpSys]
 
 	// the same pickup rules are used for client side and server side
 	if ( !BG_CanItemBeGrabbed( g_gametype.integer, &ent->s, &other->client->ps ) ) {

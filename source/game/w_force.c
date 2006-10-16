@@ -5921,8 +5921,24 @@ void WP_ForcePowersUpdate( gentity_t *self, usercmd_t *ucmd )
 			{
 				self->client->ps.fd.forcePowerBaseLevel[i] = self->client->ps.fd.forcePowerLevel[i];
 
-				if (!forcePowerDarkLight[i] ||
-					self->client->ps.fd.forceSide == forcePowerDarkLight[i])
+				//[ExpSys]
+				if(i == FP_HEAL 
+					|| i == FP_TELEPATHY 
+					|| i == FP_RAGE 
+					|| i == FP_PROTECT 
+					|| i == FP_TEAM_HEAL
+					|| i == FP_TEAM_FORCE
+					|| i == FP_DRAIN)
+				{//don't boost the level of Enhanced's disabled force powers.
+					i++;
+					continue;
+				}
+	
+				if((self->client->ps.powerups[PW_FORCE_ENLIGHTENED_LIGHT] && forcePowerDarkLight[i] == FORCE_LIGHTSIDE)
+					|| (self->client->ps.powerups[PW_FORCE_ENLIGHTENED_DARK] && forcePowerDarkLight[i] == FORCE_DARKSIDE))
+				//if (!forcePowerDarkLight[i] ||
+				//	self->client->ps.fd.forceSide == forcePowerDarkLight[i])
+				//[/ExpSys]
 				{
 					self->client->ps.fd.forcePowerLevel[i] = FORCE_LEVEL_3;
 					self->client->ps.fd.forcePowersKnown |= (1 << i);
