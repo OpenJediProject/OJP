@@ -105,6 +105,8 @@ Version 0.1.0:
 
 		Blaster Bolt Block System:
 			- Blocking bolts while running doubles the DP cost.
+			- Players can only reflect blaster bolts while swinging.
+			- Getting "hit" directly by a blaster bolt makes a player interrupt their current move to block the bolt.
 
 		CoOp:
 			- Fixed bug where NPCs were never completing their attack swings. 

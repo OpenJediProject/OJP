@@ -560,10 +560,11 @@ qboolean G_MissileImpact( gentity_t *ent, trace_t *trace ) {
 		//[/BoltBlockSys]
 	{ //only block one projectile per 200ms (to prevent giant swarms of projectiles being blocked)
 		//[BoltBlockSys]
-		if (other->client && other->client->ps.weaponTime <= 0)
-		{//racc - play projectile block animation
-			WP_SaberBlockNonRandom(other, ent->r.currentOrigin, qtrue);
-		}
+		//racc - missile hit the actual player and it's a type of missile that you can deflect/ref with the saber.
+
+		//racc - play projectile block animation
+		other->client->ps.weaponTime = 0;
+		WP_SaberBlockNonRandom(other, ent->r.currentOrigin, qtrue);
 
 		OJP_HandleBoltBlock(ent, other, trace);
 
@@ -656,8 +657,9 @@ qboolean G_MissileImpact( gentity_t *ent, trace_t *trace ) {
 
 			//in this case, deflect it even if we can't actually block it because it hit our saber
 			//WP_SaberCanBlock(otherOwner, ent->r.currentOrigin, 0, 0, qtrue, 0);
-			if (otherOwner->client && otherOwner->client->ps.weaponTime <= 0)
-			{//racc - play projectile block animation
+			if (otherOwner->client && !BG_SaberInAttack(otherOwner->client->ps.saberMove))
+			{//racc - play projectile block animation, but only if we're not attacking.
+				otherOwner->client->ps.weaponTime = 0;
 				WP_SaberBlockNonRandom(otherOwner, ent->r.currentOrigin, qtrue);
 			}
 
@@ -1167,6 +1169,11 @@ void OJP_HandleBoltBlock(gentity_t *bolt, gentity_t *player, trace_t *trace)
 	te->s.eventParm = 0;
 	te->s.weapon = 0;//saberNum
 	te->s.legsAnim = 0;//bladeNum
+
+	if(BG_SaberInAttack(player->client->ps.saberMove))
+	{//when slashing only reflect bolts.
+		otherDefLevel = FORCE_LEVEL_1;
+	}
 
 	//retooled the conditions under which we lose deflection ability
 	if(player->client->ps.groundEntityNum == ENTITYNUM_NONE || //while in the air
