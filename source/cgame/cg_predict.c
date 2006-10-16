@@ -621,6 +621,9 @@ static void CG_TouchItem( centity_t *cent ) {
 			return;
 	}
 
+	//[ExpSys]
+	//players are no longer dark/light siders for the purposes of this powerup.
+	/*
 	if (item->giType == IT_POWERUP &&
 		(item->giTag == PW_FORCE_ENLIGHTENED_LIGHT || item->giTag == PW_FORCE_ENLIGHTENED_DARK))
 	{
@@ -639,6 +642,8 @@ static void CG_TouchItem( centity_t *cent ) {
 			}
 		}
 	}
+	*/
+	//[/ExpSys]
 
 
 	// grab it
