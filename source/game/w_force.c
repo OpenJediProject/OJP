@@ -5920,7 +5920,7 @@ void WP_ForcePowersUpdate( gentity_t *self, usercmd_t *ucmd )
 			while (i < NUM_FORCE_POWERS)
 			{
 				self->client->ps.fd.forcePowerBaseLevel[i] = self->client->ps.fd.forcePowerLevel[i];
-
+				
 				//[ExpSys]
 				if(i == FP_HEAL 
 					|| i == FP_TELEPATHY 
@@ -5934,7 +5934,8 @@ void WP_ForcePowersUpdate( gentity_t *self, usercmd_t *ucmd )
 					continue;
 				}
 	
-				if((self->client->ps.powerups[PW_FORCE_ENLIGHTENED_LIGHT] && forcePowerDarkLight[i] == FORCE_LIGHTSIDE)
+				if(!forcePowerDarkLight[i] 
+					|| (self->client->ps.powerups[PW_FORCE_ENLIGHTENED_LIGHT] && forcePowerDarkLight[i] == FORCE_LIGHTSIDE)
 					|| (self->client->ps.powerups[PW_FORCE_ENLIGHTENED_DARK] && forcePowerDarkLight[i] == FORCE_DARKSIDE))
 				//if (!forcePowerDarkLight[i] ||
 				//	self->client->ps.fd.forceSide == forcePowerDarkLight[i])

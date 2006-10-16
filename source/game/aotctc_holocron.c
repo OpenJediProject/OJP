@@ -288,7 +288,7 @@ void AOTCTC_Create_Holocrons( void )
 		//[ExpSys]
 		//disabled the holocrons for force powers we've disabled.
 		if (type == HC_TEAM_HEAL || type == HC_TEAM_FORCE || type == HC_DRAIN
-			|| type == HC_PROTECT || type == HC_RAGE || type == HC_TELEPATHY)
+			|| type == HC_PROTECT || type == HC_RAGE || type == HC_TELEPATHY || type == HC_HEAL)
 		//if (type == HC_TEAM_HEAL || type == HC_TEAM_FORCE)
 		//[/ExpSys]
 		{// Don't do these...
