@@ -201,7 +201,7 @@ Version 0.1.0:
 
 	New Cvars/Cvar Improvements:
 
-		g_minForceRank 5:  Sets the initial number of skill points that players have.
+		g_minForceRank 16:  Sets the initial number of skill points that players have.
 		g_maxForceRank 200:  Now sets the maximum number of skill points that a player can earn.
 		g_mishapRegenTime 3000:  This cvar controls the speed at which the new the mishap meter regenerates.
 		
