@@ -678,7 +678,10 @@ void G_AddRandomBot( int team ) {
 			if ( cl->pers.connected != CON_CONNECTED ) {
 				continue;
 			}
-			if ( !(g_entities[cl->ps.clientNum].r.svFlags & SVF_BOT) ) {
+			//[ClientNumFix]
+			if ( !(g_entities[i].r.svFlags & SVF_BOT) ) {
+			//if ( !(g_entities[cl->ps.clientNum].r.svFlags & SVF_BOT) ) {
+			//[/ClientNumFix]
 				continue;
 			}
 			if (g_gametype.integer == GT_SIEGE)
