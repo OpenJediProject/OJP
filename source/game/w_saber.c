@@ -8328,7 +8328,7 @@ void WP_SaberStartMissileBlockCheck( gentity_t *self, usercmd_t *ucmd  )
 		{//thermal detonator!
 			//[DodgeSys]
 			//Do Dodge for thermal detonators.
-			if ( dist < ent->splashRadius )
+			if ( dist < ent->splashRadius  && !OnSameTeam(&g_entities[ent->r.ownerNum], self))
 			//if ( self->NPC && dist < ent->splashRadius )
 			{
 				if (self->client->ps.stats[STAT_DODGE] > PreCogDodgeCosts[MOD_THERMAL]) 
