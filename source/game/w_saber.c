@@ -106,7 +106,8 @@ qboolean ButterFingers(gentity_t *saberent, gentity_t *saberOwner, gentity_t *ot
 
 //This is the parry rate for bots (in addition to the normal check) since
 //bots don't block intelligently.
-#define BOT_PARRYRATE 300
+//This is multipled by the bot's skill level (which can be 1-5)
+#define BOT_PARRYRATE			150
 
 //scaler multipler for mishaps while running.
 #define SABBEH_RUN_MODIFIER		2
@@ -13421,7 +13422,7 @@ qboolean G_BlockIsParry( gentity_t *self, gentity_t *attacker, vec3_t hitLoc )
 		//fair to players.
 		if(self->r.svFlags & SVF_BOT)
 		{//bots just randomly parry to make up for them not intelligently parrying.
-			if(BOT_PARRYRATE > Q_irand(0,999))
+			if(BOT_PARRYRATE * botstates[self->s.number]->settings.skill > Q_irand(0,999))
 			{
 				return qtrue;
 			}

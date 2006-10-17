@@ -712,22 +712,6 @@ void G_AddRandomBot( int team ) {
 				Q_CleanStr(netname);
 				//[RandomBotNames]
 				//trap_SendConsoleCommand( EXEC_INSERT, va("addbot \"%s\" %f %s %i\n", netname, skill, teamstr, 0) );
-				//[NewGameTypes][EnhancedImpliment]
-				/*
-				if (g_gametype.integer == GT_SCENARIO)
-				{// Scenario will always use particular models...
-					if (team == TEAM_RED)
-					{
-						trap_SendConsoleCommand( EXEC_INSERT, va("addbot \"Geonosis\" %f \"%s\" %i \"%s\"\n", skill, teamstr, 0, va("TFD-%i", Q_irand(100, 999)) ) );
-					}
-					else
-					{
-						trap_SendConsoleCommand( EXEC_INSERT, va("addbot \"clone\" %f \"%s\" %i \"%s\"\n", skill, teamstr, 0, va("RC-%i", Q_irand(100, 999)) ) );
-					}
-				}
-				else
-				*/
-				//[/NewGameTypes][EnhancedImpliment]
 				//[TABBots]
 				//make random bots be TABBots.
 				trap_SendConsoleCommand( EXEC_INSERT, va("addbot \"%s\" %f \"%s\" %i \"%s\" %i\n", netname, skill, teamstr, 0, fullname, BOT_TAB) );
@@ -737,7 +721,7 @@ void G_AddRandomBot( int team ) {
 			}
 		}
 	}
-}
+} 
 
 /*
 ===============

@@ -194,6 +194,8 @@ Version 0.1.0:
 		
 		Saber Throw System - Fixed the dreaded saber crotch bug.
 
+		TABBots - TABBots are now better or worse at performing parries and attack parries based on their skill level.
+
 		Viewlocks:
 			- Players can't move during viewlocks anymore.	
 			- If a player is running when he goes into a viewlock, the viewlock lasts slightly longer than usual.
