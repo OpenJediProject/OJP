@@ -3245,6 +3245,14 @@ void ClientSpawn(gentity_t *ent) {
 	index = ent - g_entities;
 	client = ent->client;
 
+	//[ExpSys]
+	if(ent->client->sess.skillPoints < g_minForceRank.integer)
+	{//the minForceRank was changed to a higher value than the player has
+		ent->client->sess.skillPoints = g_minForceRank.integer;
+		ent->client->skillUpdated = qtrue;
+	}
+	//[/ExpSys]
+
 	//first we want the userinfo so we can see if we should update this client's saber -rww
 	trap_GetUserinfo( index, userinfo, sizeof(userinfo) );
 	while (l < MAX_SABERS)
