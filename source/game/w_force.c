@@ -158,7 +158,12 @@ void DetermineDodgeMax(gentity_t *ent)
 {//sets the maximum number of dodge points this player should have.  This is based on their skill point allociation.
 	int i;
 	int skillCount;
-	float dodgeMax = 50;
+	float dodgeMax = 0;
+
+	if(ent->s.number < MAX_CLIENTS)
+	{//players get a initial DP bonus.
+		dodgeMax = 50;
+	}
 
 	//force powers
 	for(i = 0; i < NUM_FORCE_POWERS; i++)
@@ -371,6 +376,10 @@ void WP_InitForcePowers( gentity_t *ent )
 		}
 
 		ent->client->sess.setForce = qtrue;
+
+		//[DodgeSys]
+		DetermineDodgeMax(ent);
+		//[/DodgeSys]
 		return;
 	}
 	//[/CoOp]
