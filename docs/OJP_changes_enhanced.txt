@@ -119,7 +119,7 @@ Version 0.1.0:
 				- Bots automatically Dodge Kick 1/3 of the time when kicked while in slow bounces. 
 			
 			Misc:
-				- DP no longer regens while stunned, knockdowned, dodging, in mid-air, or in a slow bounce.
+				- DP no longer regens while stunned, knockdowned, dodging, in mid-air, in a slow bounce, or in a saberlock.
 				- Fixed bug where players with dropped sabers wouldn't take DP damage.
 				- NPCs now start the game with DP approprate to their skill sets.
 
