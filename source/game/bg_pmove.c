@@ -7530,6 +7530,8 @@ static qboolean PM_DoChargedWeapons( qboolean vehicleRocketLock, bgEntity_t *veh
 		switch( pm->ps->weapon )
 		{
 		//------------------
+		//[WeaponSys]
+		/*
 		case WP_BRYAR_PISTOL:
 
 			// alt-fire charges the weapon
@@ -7543,6 +7545,8 @@ static qboolean PM_DoChargedWeapons( qboolean vehicleRocketLock, bgEntity_t *veh
 				}
 			}
 			break;
+		*/
+		//[/WeaponSys]
 
 		case WP_CONCUSSION:
 			if ( pm->cmd.buttons & BUTTON_ALT_ATTACK )
@@ -7551,6 +7555,8 @@ static qboolean PM_DoChargedWeapons( qboolean vehicleRocketLock, bgEntity_t *veh
 			}
 			break;
 
+		//[WeaponSys]
+		/*
 		case WP_BRYAR_OLD:
 
 			// alt-fire charges the weapon
@@ -7560,6 +7566,8 @@ static qboolean PM_DoChargedWeapons( qboolean vehicleRocketLock, bgEntity_t *veh
 				altFire = qtrue;
 			}
 			break;
+		*/
+		//[/WeaponSys]
 		
 		//------------------
 		case WP_BOWCASTER:

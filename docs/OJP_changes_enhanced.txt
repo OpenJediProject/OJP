@@ -101,6 +101,9 @@ Version 0.1.0:
 					- Running doubles the effect of misbalancing moves and halves of effect of balancing moves.
 					- Use g_mishapRegenTime to control the speed at which the mishap meter regenerates.
 
+		Weapon System:
+			- The pistol's secondary fire is now the same as its primary fire.
+
 	Improvements/Fixes:
 
 		Blaster Bolt Block System:

@@ -192,6 +192,19 @@ void CG_RegisterWeapon( int weaponNum) {
 		weaponInfo->missileHitSound		= NULL_SOUND;
 		weaponInfo->missileTrailFunc	= FX_BryarProjectileThink;
 
+		//[WeaponSys]
+		//racc - mading the alt fire the same as the secondary fire
+		weaponInfo->altFlashSound[0]	= trap_S_RegisterSound( "sound/weapons/bryar/fire.wav");
+		weaponInfo->altFiringSound		= NULL_SOUND;
+		weaponInfo->altChargeSound		= NULL_SOUND;
+		weaponInfo->altMuzzleEffect		= trap_FX_RegisterEffect( "bryar/muzzle_flash" );
+		weaponInfo->altMissileModel		= NULL_HANDLE;
+		weaponInfo->altMissileSound		= NULL_SOUND;
+		weaponInfo->altMissileDlight	= 0;
+		weaponInfo->altMissileHitSound	= NULL_SOUND;
+		weaponInfo->altMissileTrailFunc = FX_BryarProjectileThink;
+
+		/* basejka code
 		weaponInfo->altFlashSound[0]	= trap_S_RegisterSound( "sound/weapons/bryar/alt_fire.wav");
 		weaponInfo->altFiringSound		= NULL_SOUND;
 		weaponInfo->altChargeSound		= trap_S_RegisterSound( "sound/weapons/bryar/altcharge.wav");
@@ -202,6 +215,8 @@ void CG_RegisterWeapon( int weaponNum) {
 		//weaponInfo->altMissileDlightColor= {0,0,0};
 		weaponInfo->altMissileHitSound	= NULL_SOUND;
 		weaponInfo->altMissileTrailFunc = FX_BryarAltProjectileThink;
+		*/
+		//[/WeaponSys]
 
 		cgs.effects.bryarShotEffect			= trap_FX_RegisterEffect( "bryar/shot" );
 		cgs.effects.bryarPowerupShotEffect	= trap_FX_RegisterEffect( "bryar/crackleShot" );

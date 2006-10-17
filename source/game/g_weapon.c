@@ -4843,11 +4843,15 @@ void FireWeapon( gentity_t *ent, qboolean altFire )
 
 		case WP_BRYAR_PISTOL:
 			//if ( g_gametype.integer == GT_SIEGE )
+			//[WeaponSys]
+			/*
 			if (1)
 			{//allow alt-fire
 				WP_FireBryarPistol( ent, altFire );
 			}
 			else
+			*/
+			//[/WeaponSys]
 			{
 				WP_FireBryarPistol( ent, qfalse );
 			}
@@ -4865,7 +4869,10 @@ void FireWeapon( gentity_t *ent, qboolean altFire )
 			break;
 
 		case WP_BRYAR_OLD:
-			WP_FireBryarPistol( ent, altFire );
+			//[WeaponSys]
+			WP_FireBryarPistol( ent, qfalse );
+			//WP_FireBryarPistol( ent, altFire );
+			//[/WeaponSys]
 			break;
 
 		case WP_BLASTER:
@@ -5466,7 +5473,11 @@ void WP_AltFireMelee( gentity_t* ent )
 }
 void WP_AltFireBryarPistol( gentity_t* ent )
 {
-	WP_FireBryarPistol(ent, qtrue);
+	//[WeaponSys]
+	WP_FireBryarPistol(ent, qfalse);
+	//WP_FireBryarPistol(ent, qtrue);
+	//[/WeaponSys]
+	
 }
 void WP_AltFireConcussion( gentity_t* ent )
 {
@@ -5474,7 +5485,10 @@ void WP_AltFireConcussion( gentity_t* ent )
 }
 void WP_AltFireBryarOld( gentity_t* ent )
 {
-	WP_FireBryarPistol(ent, qtrue);
+	//[WeaponSys]
+	WP_FireBryarPistol(ent, qfalse);
+	//WP_FireBryarPistol(ent, qtrue);
+	//[/WeaponSys]
 }
 void WP_AltFireBlaster( gentity_t* ent )
 {
