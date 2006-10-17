@@ -496,7 +496,10 @@ ammoData_t ammoData[AMMO_MAX] =
 	},
 	{	// AMMO_ROCKETS
 //		"",				//	char	icon[32];	// Name of ammo icon file
-		25				//	int		max;		// Max amount player can hold of ammo
+		//[WeaponSys]
+		10				//	int		max;		// Max amount player can hold of ammo
+		//25				//	int		max;		// Max amount player can hold of ammo
+		//[/WeaponSys]
 	},
 	{	// AMMO_EMPLACED
 //		"",				//	char	icon[32];	// Name of ammo icon file

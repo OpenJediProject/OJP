@@ -208,6 +208,7 @@ Version 0.1.0:
 		Weapon System:
 			- Slowed down the fire rate of the blaster rifle slightly.
 			- Significantly slowed down the fire rate of the rocket launcher.
+			- Reduced maximum ammo for the rocket launcher to 10.
 
 	New Cvars/Cvar Improvements:
 
