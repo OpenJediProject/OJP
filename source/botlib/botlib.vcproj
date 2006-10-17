@@ -245,7 +245,7 @@
 			/>
 		</Configuration>
 		<Configuration
-			Name="Debug(SH)|Win32"
+			Name="Debug(Final)|Win32"
 			OutputDirectory="Debug(SH)"
 			IntermediateDirectory="Debug(SH)"
 			ConfigurationType="4"
