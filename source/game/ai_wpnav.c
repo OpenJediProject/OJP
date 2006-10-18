@@ -2135,7 +2135,10 @@ int LoadPathData(const char *filename)
 	i_cv = 0;
 
 	//[DynamicMemoryTweaks]
-	strcpy(routePath, va("botroutes/%s.wnt\0", filename));
+	//[OverflowProtection]
+	//strcpy(routePath, va("botroutes/%s.wnt\0", filename));
+	Com_sprintf(routePath, sizeof(routePath), "botroutes/%s.wnt", filename);
+	//[/OverflowProtection]
 	//routePath = (char *)B_TempAlloc(1024);
 
 	//Com_sprintf(routePath, 1024, "botroutes/%s.wnt\0", filename);
@@ -2159,6 +2162,9 @@ int LoadPathData(const char *filename)
 	//[/DynamicMemoryTweaks]
 	{
 		G_Printf(S_COLOR_RED "Route file exceeds maximum length\n");
+		//[MissingCloseFile]
+		trap_FS_FCloseFile(f);
+		//[/MissingCloseFile]
 		return 0;
 	}
 
@@ -2643,7 +2649,10 @@ int SavePathData(const char *filename)
 
 		Com_sprintf(storeString, 4096, "%s} %f\n", storeString, flLen);
 
-		strcat(fileString, storeString);
+		//[OverflowProtection]
+		//strcat(fileString, storeString);
+		Q_strcat(fileString, WPARRAY_BUFFER_SIZE, storeString);
+		//[/OverflowProtection]
 
 		i++;
 	}
@@ -2873,12 +2882,18 @@ void G_DebugNodeFile()
 
 	while (i < nodenum)
 	{
-		strcat(fileString, va("%i-%f ", i, nodetable[i].weight));
+		//[OverflowProtection]
+		//strcat(fileString, va("%i-%f ", i, nodetable[i].weight));
+		Q_strcat(fileString, sizeof(fileString), va("%i-%f ", i, nodetable[i].weight));
+		//[/OverflowProtection]
 		placeX += DEFAULT_GRID_SPACING;
 
 		if (placeX >= terrain->r.absmax[0])
 		{
-			strcat(fileString, "\n");
+			//[OverflowProtection]
+			//strcat(fileString, "\n");
+			Q_strcat(fileString, sizeof(fileString), "\n");
+			//[/OverflowProtection]
 			placeX = terrain->r.absmin[0];
 		}
 		i++;
@@ -3516,11 +3531,15 @@ extern vmCvar_t bot_normgpath;
 
 void LoadPath_ThisLevel(void)
 {
-	vmCvar_t	mapname;
+	//[RawMapName]
+	//vmCvar_t	mapname;
+	//[/RawMapName]
 	int			i = 0;
 	gentity_t	*ent = NULL;
 
-	trap_Cvar_Register( &mapname, "mapname", "", CVAR_SERVERINFO | CVAR_ROM );
+	//[RawMapName]
+	//trap_Cvar_Register( &mapname, "mapname", "", CVAR_SERVERINFO | CVAR_ROM );
+	//[/RawMapName]
 
 	if (g_RMG.integer)
 	{ //If RMG, generate the path on-the-fly
@@ -3537,7 +3556,10 @@ void LoadPath_ThisLevel(void)
 		}
 		else
 		{ //try loading standard nav data
-			LoadPathData(mapname.string);
+			//[RawMapName]
+			LoadPathData(level.rawmapname);
+			//LoadPathData(mapname.string);
+			//[/RawMapName]
 		}
 
 		gLevelFlags |= LEVELFLAG_NOPOINTPREDICTION;
@@ -3545,7 +3567,10 @@ void LoadPath_ThisLevel(void)
 	}
 	else
 	{
-		if (LoadPathData(mapname.string) == 2)
+		//[RawMapName]
+		if (LoadPathData(level.rawmapname) == 2)
+		//if (LoadPathData(mapname.string) == 2)
+		//[/RawMapName]
 		{
 			//enter "edit" mode if cheats enabled?
 		}
@@ -3673,9 +3698,11 @@ int AcceptBotCommand(char *cmd, gentity_t *pl)
 	int OptionalArgument, i;
 	int FlagsFromArgument;
 	char *OptionalSArgument, *RequiredSArgument;
-#ifndef _XBOX
+//[RawMapName]
+/*#ifndef _XBOX
 	vmCvar_t mapname;
-#endif
+#endif*/
+//[/RawMapName]
 
 	if (!gBotEdit)
 	{
@@ -4050,8 +4077,10 @@ int AcceptBotCommand(char *cmd, gentity_t *pl)
 	if (Q_stricmp (cmd, "bot_wp_save") == 0)
 	{
 		gDeactivated = 0;
-		trap_Cvar_Register( &mapname, "mapname", "", CVAR_SERVERINFO | CVAR_ROM );
-		SavePathData(mapname.string);
+		//[RawMapName]
+		//trap_Cvar_Register( &mapname, "mapname", "", CVAR_SERVERINFO | CVAR_ROM );
+		//SavePathData(mapname.string);
+		SavePathData(level.rawmapname);
 		return 1;
 	}
 #endif

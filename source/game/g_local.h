@@ -1117,6 +1117,10 @@ typedef struct {
 	char		*mTargetAdjust;
 
 	char		mTeamFilter[MAX_QPATH];
+		
+	//[RawMapName]
+	char		rawmapname[MAX_QPATH];
+	//[/RawMapName]
 
 } level_locals_t;
 
@@ -2321,6 +2325,14 @@ typedef struct teamgame_s {
 //[CoOpEditor]
 #define FLAG_TELETOSAVE		1 //->spawnflag for autosave map entities
 //[/CoOpEditor]
+
+//[CrashRecovery]
+// forty - stack traces - g_crash.c
+void EnableCoreDumps(void);
+void DisableCoreDumps(void);
+void EnableStackTrace(void);
+void DisableStackTrace(void);
+//[/CrashRecovery]
 
 
 #include "../namespace_end.h"

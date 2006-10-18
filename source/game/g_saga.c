@@ -105,7 +105,9 @@ void SiegeSetCompleteData(int team)
 
 void InitSiegeMode(void)
 {
-	vmCvar_t		mapname;
+	//[RawMapName]
+	//vmCvar_t		mapname;
+	//[/RawMapName]
 	char			levelname[512];
 	char			teamIcon[128];
 	char			goalreq[64];
@@ -164,9 +166,13 @@ void InitSiegeMode(void)
 	imperial_goals_completed = 0;
 	rebel_goals_completed = 0;
 
-	trap_Cvar_Register( &mapname, "mapname", "", CVAR_SERVERINFO | CVAR_ROM );
+	//[RawMapName]
+	//trap_Cvar_Register( &mapname, "mapname", "", CVAR_SERVERINFO | CVAR_ROM );
 
-	Com_sprintf(levelname, sizeof(levelname), "maps/%s.siege\0", mapname.string);
+	//Com_sprintf(levelname, sizeof(levelname), "maps/%s.siege\0", mapname.string);
+	
+	Com_sprintf(levelname, sizeof(levelname), "maps/%s.siege", level.rawmapname);
+	//[/RawMapName]
 
 	if (!levelname || !levelname[0])
 	{
@@ -177,6 +183,9 @@ void InitSiegeMode(void)
 
 	if (!f || len >= MAX_SIEGE_INFO_SIZE)
 	{
+		//[MissingCloseFile]
+		trap_FS_FCloseFile(f);
+		//[/MissingCloseFile]
 		goto failure;
 	}
 

@@ -269,7 +269,9 @@ const char *G_RefreshNextMap(int gametype, qboolean forced)
 	int			n = 0;
 	char		*type = NULL;
 	qboolean	loopingUp = qfalse;
-	vmCvar_t	mapname;
+	//[RawMapName]
+	//vmCvar_t	mapname;
+	//[/RawMapName]
 
 	if (!g_autoMapCycle.integer && !forced)
 	{
@@ -281,12 +283,17 @@ const char *G_RefreshNextMap(int gametype, qboolean forced)
 		return NULL;
 	}
 
-	trap_Cvar_Register( &mapname, "mapname", "", CVAR_SERVERINFO | CVAR_ROM );
+	//[RawMapName]
+	//trap_Cvar_Register( &mapname, "mapname", "", CVAR_SERVERINFO | CVAR_ROM );
+	//[/RawMapName]
 	for( n = 0; n < g_numArenas; n++ )
 	{
 		type = Info_ValueForKey( g_arenaInfos[n], "map" );
 
-		if (Q_stricmp(mapname.string, type) == 0)
+		//[RawMapName]
+		if (Q_stricmp(level.rawmapname, type) == 0)
+		//if (Q_stricmp(mapname.string, type) == 0)
+		//[/RawMapName]
 		{
 			thisLevel = n;
 			break;

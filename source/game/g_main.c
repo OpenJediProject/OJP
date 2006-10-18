@@ -814,10 +814,16 @@ extern "C" {
 int vmMain( int command, int arg0, int arg1, int arg2, int arg3, int arg4, int arg5, int arg6, int arg7, int arg8, int arg9, int arg10, int arg11  ) {
 	switch ( command ) {
 	case GAME_INIT:
+		//[CrashRecovery]
+		EnableStackTrace();
+		//[/CrashRecovery]
 		G_InitGame( arg0, arg1, arg2 );
 		return 0;
 	case GAME_SHUTDOWN:
 		G_ShutdownGame( arg0 );
+		//[CrashRecovery]
+		DisableStackTrace();
+		//[/CrashRecovery]
 		return 0;
 	case GAME_CLIENT_CONNECT:
 		return (int)ClientConnect( arg0, arg1, arg2 );
@@ -1222,6 +1228,9 @@ void G_InitGame( int levelTime, int randomSeed, int restart ) {
 	int					i;
 	vmCvar_t	mapname;
 	vmCvar_t	ckSum;
+	//[RawMapName]
+	char		cs[MAX_INFO_STRING];
+	//[/RawMapName]
 
 #ifdef _XBOX
 	if(restart) {
@@ -1273,6 +1282,11 @@ void G_InitGame( int levelTime, int randomSeed, int restart ) {
 	level.snd_medSupplied = G_SoundIndex("sound/player/supp_supplied.wav");
 
 	//trap_SP_RegisterServer("mp_svgame");
+
+	//[RawMapName]
+	trap_GetServerinfo( cs, sizeof( cs ) );
+	Q_strncpyz( level.rawmapname, Info_ValueForKey( cs, "mapname" ), sizeof(level.rawmapname) );
+	//[/RawMapName]
 
 #ifndef _XBOX
 	if ( g_log.string[0] ) {
@@ -1361,7 +1375,10 @@ void G_InitGame( int levelTime, int randomSeed, int restart ) {
 	trap_Cvar_Register( &mapname, "mapname", "", CVAR_SERVERINFO | CVAR_ROM );
 	trap_Cvar_Register( &ckSum, "sv_mapChecksum", "", CVAR_ROM );
 
-	navCalculatePaths	= ( trap_Nav_Load( mapname.string, ckSum.integer ) == qfalse );
+	//[RawMapName]
+	navCalculatePaths	= ( trap_Nav_Load( level.rawmapname, ckSum.integer ) == qfalse );
+	//navCalculatePaths	= ( trap_Nav_Load( mapname.string, ckSum.integer ) == qfalse );
+	//[/RawMapName]
 
 	// parse the key/value pairs and spawn gentities
 	G_SpawnEntitiesFromString(qfalse);
@@ -4083,7 +4100,10 @@ void NAV_CheckCalcPaths( void )
 		trap_Nav_ClearAllFailedEdges();
 
 		//Calculate all paths
-		NAV_CalculatePaths( mapname.string, ckSum.integer );
+		//[RawMapName]
+		NAV_CalculatePaths( level.rawmapname, ckSum.integer );
+		//NAV_CalculatePaths( mapname.string, ckSum.integer );
+		//[/RawMapName]
 		
 		trap_Nav_CalculatePaths(qfalse);
 
@@ -4095,9 +4115,15 @@ void NAV_CheckCalcPaths( void )
 		else 
 #endif
 #ifndef _XBOX
-		if ( trap_Nav_Save( mapname.string, ckSum.integer ) == qfalse )
+		//[RawMapName]
+		if ( trap_Nav_Save( level.rawmapname, ckSum.integer ) == qfalse )
+		//if ( trap_Nav_Save( mapname.string, ckSum.integer ) == qfalse )
+		//[/RawMapName]
 		{
-			Com_Printf("Unable to save navigations data for map \"%s\" (checksum:%d)\n", mapname.string, ckSum.integer );
+			//[RawMapName]
+			Com_Printf("Unable to save navigations data for map \"%s\" (checksum:%d)\n", level.rawmapname, ckSum.integer );
+			//Com_Printf("Unable to save navigations data for map \"%s\" (checksum:%d)\n", mapname.string, ckSum.integer );
+			//[/RawMapName]
 		}
 #endif
 		navCalcPathTime = 0;
@@ -4415,6 +4441,26 @@ void G_RunFrame( int levelTime ) {
 			continue;
 		}
 		//[/Test]
+		
+		//[AREAPORTALFIX]
+		//fix for self-deactivating areaportals in Siege
+		if ( ent->s.eType == ET_MOVER && g_gametype.integer == GT_SIEGE && level.intermissiontime)
+		{
+			if ( !Q_stricmp("func_door", ent->classname) && ent->moverState != MOVER_POS1 )
+			{
+				SetMoverState( ent, MOVER_POS1, level.time );
+				if ( ent->teammaster == ent || !ent->teammaster ) 
+				{
+					trap_AdjustAreaPortalState( ent, qfalse );
+				}
+
+				//stop the looping sound
+				ent->s.loopSound = 0;
+				ent->s.loopIsSoundset = qfalse;
+			}
+			continue;
+		}
+		//[/AREAPORTALFIX]
 
 		if ( i < MAX_CLIENTS ) 
 		{
