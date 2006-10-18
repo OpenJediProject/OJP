@@ -574,6 +574,10 @@
 				>
 			</File>
 			<File
+				RelativePath=".\g_crash.c"
+				>
+			</File>
+			<File
 				RelativePath="g_dynmusic.c"
 				>
 			</File>

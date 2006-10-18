@@ -332,6 +332,7 @@
 		GlobalFree(pSym);
 	}
 
+	void G_ShutdownGame( int restart );
 	LONG CALLBACK win32_exception_handler(LPEXCEPTION_POINTERS e) {
 		char basepath[MAX_PATH];
 		char gamepath[MAX_PATH];

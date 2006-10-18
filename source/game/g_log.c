@@ -245,6 +245,7 @@ void G_LogWeaponOutput(void)
 	int percharacter[WP_NUM_WEAPONS];
 	//[RawMapName]
 	//char info[1024];
+	
 	//char mapname[128];
 	//[/RawMapName]
 	char *nameptr, *unknownname="<Unknown>";
@@ -336,7 +337,6 @@ void G_LogWeaponOutput(void)
 	}
 
 	// Write out the level name
-	trap_GetServerinfo(info, sizeof(info));
 	//[RawMapName]
 	/*trap_GetServerinfo(info, sizeof(info));
 	strncpy(mapname, Info_ValueForKey( info, "mapname" ), sizeof(mapname)-1);

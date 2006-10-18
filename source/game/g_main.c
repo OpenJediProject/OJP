@@ -4163,6 +4163,10 @@ qboolean G_PointInBounds( vec3_t point, vec3_t mins, vec3_t maxs );
 
 int g_siegeRespawnCheck = 0;
 
+//[AREAPORTALFIX]
+void SetMoverState( gentity_t *ent, moverState_t moverState, int time );
+//[/AREAPORTALFIX]
+
 void G_RunFrame( int levelTime ) {
 	int			i;
 	gentity_t	*ent;
