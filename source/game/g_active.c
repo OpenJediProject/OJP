@@ -872,6 +872,10 @@ void G_VehicleAttachDroidUnit( gentity_t *vehEnt )
 	}
 }
 
+//[BugFix42]
+extern qboolean BG_SabersOff( playerState_t *ps );
+//[/BugFix42]
+
 //called gameside only from pmove code (convenience)
 void G_CheapWeaponFire(int entNum, int ev)
 {
@@ -892,7 +896,10 @@ void G_CheapWeaponFire(int entNum, int ev)
 				if (rider->inuse && rider->client)
 				{ //pilot is valid...
                     if (rider->client->ps.weapon != WP_MELEE &&
-						(rider->client->ps.weapon != WP_SABER || !rider->client->ps.saberHolstered))
+						//[BugFix42]
+						(rider->client->ps.weapon != WP_SABER || !BG_SabersOff(&rider->client->ps)))
+						//(rider->client->ps.weapon != WP_SABER || !rider->client->ps.saberHolstered))
+						//[/BugFix42]
 					{ //can only attack on speeder when using melee or when saber is holstered
 						break;
 					}

@@ -634,7 +634,10 @@ extern vmCvar_t	g_autoKickKillSpammers;
 extern vmCvar_t	g_autoBanKillSpammers;
 //[/AdminSys]
 void Cmd_Kill_f( gentity_t *ent ) {
-	if ( ent->client->sess.sessionTeam == TEAM_SPECTATOR ) {
+	//[BugFix41]
+	//if ( ent->client->sess.sessionTeam == TEAM_SPECTATOR ) {
+	if ( ent->client->sess.sessionTeam == TEAM_SPECTATOR || ent->client->tempSpectate >= level.time ) {
+	//[/BugFix41]
 		return;
 	}
 	if (ent->health <= 0) {
@@ -1037,6 +1040,10 @@ void SetTeam( gentity_t *ent, char *s ) {
 		// force them to spectators if there aren't any spots free
 		team = TEAM_FREE;
 	}
+	
+	//[BugFix41]
+	oldTeam = client->sess.sessionTeam;
+	//[/BugFix41]
 
 	if (g_gametype.integer == GT_SIEGE)
 	{
@@ -1045,6 +1052,12 @@ void SetTeam( gentity_t *ent, char *s ) {
 		{ //sorry, can't do that.
 			return;
 		}
+		
+		//[BugFix41]
+		if ( team == oldTeam && team != TEAM_SPECTATOR ) {
+			return qfalse;
+		}
+		//[/BugFix41]
 
 		client->sess.siegeDesiredTeam = team;
 		//oh well, just let them go.
@@ -1112,7 +1125,10 @@ void SetTeam( gentity_t *ent, char *s ) {
 	//
 	// decide if we will allow the change
 	//
-	oldTeam = client->sess.sessionTeam;
+	//[BugFix41]
+	// moved this up above the siege check
+	//oldTeam = client->sess.sessionTeam;
+	//[/BugFix41]
 	if ( team == oldTeam && team != TEAM_SPECTATOR ) {
 		return;
 	}
@@ -1194,6 +1210,9 @@ If the client being followed leaves the game, or you just want to drop
 to free floating spectator mode
 =================
 */
+//[BugFix38]
+extern void G_LeaveVehicle( gentity_t *ent, qboolean ConCheck );
+//[/BugFix38]
 void StopFollowing( gentity_t *ent ) {
 	ent->client->ps.persistant[ PERS_TEAM ] = TEAM_SPECTATOR;	
 	ent->client->sess.sessionTeam = TEAM_SPECTATOR;	
@@ -1202,7 +1221,10 @@ void StopFollowing( gentity_t *ent ) {
 	ent->r.svFlags &= ~SVF_BOT;
 	ent->client->ps.clientNum = ent - g_entities;
 	ent->client->ps.weapon = WP_NONE;
-	ent->client->ps.m_iVehicleNum = 0;
+	//[BugFix38]
+	G_LeaveVehicle( ent, qfalse ); // clears m_iVehicleNum as well
+	//ent->client->ps.m_iVehicleNum = 0;
+	//[/BugFix38]
 	ent->client->ps.viewangles[ROLL] = 0.0f;
 	ent->client->ps.forceHandExtend = HANDEXTEND_NONE;
 	ent->client->ps.forceHandExtendTime = 0;
@@ -1216,6 +1238,14 @@ void StopFollowing( gentity_t *ent ) {
 	//[DuelSys]
 	ent->client->ps.duelInProgress = qfalse; // MJN - added to clean it up a bit.
 	//[/DuelSys]
+	//[BugFix38]
+	//[OLDGAMETYPES]
+	ent->client->ps.isJediMaster = qfalse; // major exploit if you are spectating somebody and they are JM and you reconnect
+	//[/OLDGAMETYPES]
+	ent->client->ps.cloakFuel = 100; // so that fuel goes away after stop following them
+	ent->client->ps.jetpackFuel = 100; // so that fuel goes away after stop following them
+	ent->health = ent->client->ps.stats[STAT_HEALTH] = 100; // so that you don't keep dead angles if you were spectating a dead person
+	//[/BugFix38]
 }
 
 /*
@@ -1656,6 +1686,11 @@ void Cmd_Follow_f( gentity_t *ent ) {
 
 	// can't follow another spectator
 	if ( level.clients[ i ].sess.sessionTeam == TEAM_SPECTATOR ) {
+		return;
+	}
+	
+	// can't follow another spectator
+	if ( level.clients[ i ].tempSpectate >= level.time ) {
 		return;
 	}
 
@@ -2934,6 +2969,30 @@ void Cmd_Stats_f( gentity_t *ent ) {
 	trap_SendServerCommand( ent-g_entities, va("print \"%d%% level coverage\n\"", n * 100 / max));
 */
 }
+
+//[BugFix38]
+void G_LeaveVehicle( gentity_t* ent, qboolean ConCheck ) {
+
+	if (ent->client->ps.m_iVehicleNum)
+	{ //tell it I'm getting off
+		gentity_t *veh = &g_entities[ent->client->ps.m_iVehicleNum];
+
+		if (veh->inuse && veh->client && veh->m_pVehicle)
+		{
+			if ( ConCheck ) { // check connection
+				int pCon = ent->client->pers.connected;
+				ent->client->pers.connected = 0;
+				veh->m_pVehicle->m_pVehicleInfo->Eject(veh->m_pVehicle, (bgEntity_t *)ent, qtrue);
+				ent->client->pers.connected = pCon;
+			} else { // or not.
+				veh->m_pVehicle->m_pVehicleInfo->Eject(veh->m_pVehicle, (bgEntity_t *)ent, qtrue);
+			}
+		}
+	}
+
+	ent->client->ps.m_iVehicleNum = 0;
+}
+//[/BugFix38]
 
 int G_ItemUsable(playerState_t *ps, int forcedUse)
 {

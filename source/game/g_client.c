@@ -4367,6 +4367,9 @@ call trap_DropClient(), which will call this and do
 server system housekeeping.
 ============
 */
+//[BugFix38]
+extern void G_LeaveVehicle( gentity_t* ent, qboolean ConCheck );
+//[/BugFix38]
 void ClientDisconnect( int clientNum ) {
 	gentity_t	*ent;
 	gentity_t	*tent;
@@ -4403,8 +4406,11 @@ void ClientDisconnect( int clientNum ) {
 		i++;
 	}
 	i = 0;
+	
+	//[BugFix38]
+	G_LeaveVehicle( ent, qtrue );
 
-	if (ent->client->ps.m_iVehicleNum)
+	/*if (ent->client->ps.m_iVehicleNum)
 	{ //tell it I'm getting off
 		gentity_t *veh = &g_entities[ent->client->ps.m_iVehicleNum];
 
@@ -4416,7 +4422,8 @@ void ClientDisconnect( int clientNum ) {
 			veh->m_pVehicle->m_pVehicleInfo->Eject(veh->m_pVehicle, (bgEntity_t *)ent, qtrue);
 			ent->client->pers.connected = pCon;
 		}
-	}
+	}*/
+	//[/BugFix38]
 
 	// stop any following clients
 	for ( i = 0 ; i < level.maxclients ; i++ ) {
@@ -4481,6 +4488,21 @@ void ClientDisconnect( int clientNum ) {
 	ent->client->ps.persistant[PERS_TEAM] = TEAM_FREE;
 	ent->client->sess.sessionTeam = TEAM_FREE;
 	ent->r.contents = 0;
+	
+	//[BugFix39]
+	// we call this after all the clearing because the objectiveItem's
+	// think checks if the client entity is still inuse
+	// (which it is not anymore.) << ent->inuse >>
+	if (ent->client->holdingObjectiveItem > 0)
+	{ //carrying a siege objective item - make sure it updates and removes itself from us now in case this is a reconnecting client to make the ent remove
+		gentity_t *objectiveItem = &g_entities[ent->client->holdingObjectiveItem];
+
+		if (objectiveItem->inuse && objectiveItem->think)
+		{
+            objectiveItem->think(objectiveItem);
+		}
+	}
+	//[/BugFix39]
 
 	trap_SetConfigstring( CS_PLAYERS + clientNum, "");
 

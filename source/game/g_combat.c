@@ -2638,6 +2638,20 @@ void player_die( gentity_t *self, gentity_t *inflictor, gentity_t *attacker, int
 
 	G_BreakArm(self, 0); //unbreak anything we have broken
 	self->client->ps.saberEntityNum = self->client->saberStoredIndex; //in case we died while our saber was knocked away.
+	
+	//[BugFix45]
+	if (self->client->ps.weapon == WP_SABER && self->client->saberKnockedTime)
+	{
+		gentity_t *saberEnt = &g_entities[self->client->ps.saberEntityNum];
+		//G_Printf("DEBUG: Running saber cleanup for %s\n", self->client->pers.netname);
+		self->client->saberKnockedTime = 0;
+		saberReactivate(saberEnt, self);
+		saberEnt->r.contents = CONTENTS_LIGHTSABER;
+		saberEnt->think = saberBackToOwner;
+		saberEnt->nextthink = level.time;
+		G_RunObject(saberEnt);
+	}
+	//[/BugFix45]
 
 	self->client->bodyGrabIndex = ENTITYNUM_NONE;
 	self->client->bodyGrabTime = 0;
@@ -3257,6 +3271,11 @@ extern void RunEmplacedWeapon( gentity_t *ent, usercmd_t **ucmd );
 
 	// remove powerups
 	memset( self->client->ps.powerups, 0, sizeof(self->client->ps.powerups) );
+	
+	//[BugFix40]
+	self->client->ps.stats[STAT_HOLDABLE_ITEMS] = 0;
+	self->client->ps.stats[STAT_HOLDABLE_ITEM] = 0;
+	//[/BugFix40]
 
 	// NOTENOTE No gib deaths right now, this is star wars.
 	/*
