@@ -1151,6 +1151,14 @@ passthrough:
 //=============================================================================
 
 //[BoltBlockSys]
+int BoltReflectRate[NUM_FORCE_POWER_LEVELS] =
+{
+	0,	//FORCE_LEVEL_0
+	20,	//FORCE_LEVEL_1
+	35, //FORCE_LEVEL_2
+	50
+};
+qboolean PM_SaberInStart( int move );
 extern int OJP_SaberBlockCost(gentity_t *defender, gentity_t *attacker, vec3_t hitLoc);
 void OJP_HandleBoltBlock(gentity_t *bolt, gentity_t *player, trace_t *trace)
 {//handles all the behavior needed to saber block a blaster bolt.  
@@ -1185,6 +1193,18 @@ void OJP_HandleBoltBlock(gentity_t *bolt, gentity_t *player, trace_t *trace)
 		{
 			otherDefLevel = FORCE_LEVEL_1;
 		}
+	}
+
+	if(otherDefLevel > FORCE_LEVEL_1 
+		&& Q_irand(0, 99) >= BoltReflectRate[player->client->ps.fd.forcePowerLevel[FP_SABER_DEFENSE]])
+	{//player failed reflection roll, just do a deflect.
+		otherDefLevel = FORCE_LEVEL_1;
+	}
+
+	if(otherDefLevel < FORCE_LEVEL_2 
+		&& (PM_SaberInStart(player->client->ps.saberMove) || PM_SaberInReturn(player->client->ps.saberMove)) )
+	{//manually blocked the bolt as it impacted, cause aimmed reflection.
+		otherDefLevel = FORCE_LEVEL_2;
 	}
 
 	AngleVectors(player->client->ps.viewangles, fwd, NULL, NULL);

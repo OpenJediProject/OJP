@@ -110,6 +110,8 @@ Version 0.1.0:
 			- Blocking bolts while running doubles the DP cost.
 			- Players can only reflect blaster bolts while swinging.
 			- Getting "hit" directly by a blaster bolt makes a player interrupt their current move to block the bolt.
+			- Added manual bolt block option.  Just tap the attack button right before a bolt hits to reflect it at your enemies.  Manually blocking the bolt guarnteeds a reflection.
+			- Added randomness to the bolt reflections.  Players now perform reflections at a rate based on their Saber Defense skill level.
 
 		CoOp:
 			- Fixed bug where NPCs were never completing their attack swings. 
