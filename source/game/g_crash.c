@@ -1,4 +1,4 @@
-//[CrashRecovery]
+//[CrashLog]
 #include "g_local.h"
 
 #if defined __linux__ 
@@ -445,4 +445,4 @@ void DisableStackTrace() {
 
 	#endif
 }
-//[/CrashRecovery]
+//[/CrashLog]

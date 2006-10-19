@@ -814,16 +814,16 @@ extern "C" {
 int vmMain( int command, int arg0, int arg1, int arg2, int arg3, int arg4, int arg5, int arg6, int arg7, int arg8, int arg9, int arg10, int arg11  ) {
 	switch ( command ) {
 	case GAME_INIT:
-		//[CrashRecovery]
+		//[CrashLog]
 		EnableStackTrace();
-		//[/CrashRecovery]
+		//[/CrashLog]
 		G_InitGame( arg0, arg1, arg2 );
 		return 0;
 	case GAME_SHUTDOWN:
 		G_ShutdownGame( arg0 );
-		//[CrashRecovery]
+		//[CrashLog]
 		DisableStackTrace();
-		//[/CrashRecovery]
+		//[/CrashLog]
 		return 0;
 	case GAME_CLIENT_CONNECT:
 		return (int)ClientConnect( arg0, arg1, arg2 );
