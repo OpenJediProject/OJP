@@ -47,7 +47,7 @@
 				Name="VCLinkerTool"
 				AdditionalOptions="/MACHINE:I386"
 				AdditionalDependencies="winmm.lib"
-				OutputFile="../Release/jampgamex86.dll"
+				OutputFile="..\..\ojpenhanced\jampgamex86.dll"
 				LinkIncremental="1"
 				SuppressStartupBanner="TRUE"
 				ModuleDefinitionFile=".\JK2_game.def"
@@ -122,7 +122,7 @@
 				Name="VCLinkerTool"
 				AdditionalOptions="/MACHINE:I386"
 				AdditionalDependencies="winmm.lib"
-				OutputFile="../Debug/ojpenhanced/jampgamex86.dll"
+				OutputFile="..\..\ojpenhanced\jampgamex86.dll"
 				LinkIncremental="1"
 				SuppressStartupBanner="TRUE"
 				ModuleDefinitionFile=".\JK2_game.def"
@@ -193,7 +193,7 @@
 				Name="VCLinkerTool"
 				AdditionalOptions="/MACHINE:I386"
 				AdditionalDependencies="winmm.lib"
-				OutputFile="..\Debug\ojpenhanced\jampgamex86.dll"
+				OutputFile="..\..\ojpenhanced\jampgamex86.dll"
 				LinkIncremental="2"
 				SuppressStartupBanner="TRUE"
 				ModuleDefinitionFile=".\JK2_game.def"
@@ -261,7 +261,7 @@
 				Name="VCLinkerTool"
 				AdditionalOptions="/MACHINE:I386"
 				AdditionalDependencies="winmm.lib"
-				OutputFile="..\Debug\jampgamex86.dll"
+				OutputFile="..\..\ojpenhanced\jampgamex86.dll"
 				LinkIncremental="2"
 				SuppressStartupBanner="TRUE"
 				ModuleDefinitionFile=".\JK2_game.def"
@@ -422,6 +422,10 @@
 				RelativePath=".\g_combat.c">
 			</File>
 			<File
+				RelativePath=".\g_crash.c"
+				>
+			</File>
+			<File
 				RelativePath="g_dynmusic.c">
 			</File>
 			<File
@@ -462,6 +466,10 @@
 			</File>
 			<File
 				RelativePath="g_roff.c">
+			</File>
+			<File
+				RelativePath=".\g_saberbeh.c"
+				>
 			</File>
 			<File
 				RelativePath=".\g_saga.c">
@@ -759,6 +767,10 @@
 				RelativePath="g_roff.h">
 			</File>
 			<File
+				RelativePath=".\g_saberbeh.h"
+				>
+			</File>
+			<File
 				RelativePath=".\g_team.h">
 			</File>
 			<File
@@ -771,7 +783,7 @@
 				RelativePath=".\match.h">
 			</File>
 			<File
-				RelativePath="..\..\ui\menudef.h">
+				RelativePath="..\..\ojpenhanced\ui\jamp\menudef.h">
 			</File>
 			<File
 				RelativePath=".\npc_headers.h">
@@ -810,13 +822,6 @@
 					RelativePath="..\icarus\Q3_Interface.h">
 				</File>
 			</Filter>
-		</Filter>
-		<Filter
-			Name="win32"
-			Filter="">
-			<File
-				RelativePath="..\win32\JK2game.rc">
-			</File>
 		</Filter>
 	</Files>
 	<Globals>

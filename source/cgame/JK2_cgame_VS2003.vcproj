@@ -50,7 +50,7 @@
 				Name="VCLinkerTool"
 				AdditionalOptions="/MACHINE:I386"
 				AdditionalDependencies="odbc32.lib odbccp32.lib"
-				OutputFile="../Release/cgamex86.dll"
+				OutputFile="..\..\ojpenhanced\cgamex86.dll"
 				LinkIncremental="1"
 				SuppressStartupBanner="TRUE"
 				ModuleDefinitionFile=".\JK2_cgame.def"
@@ -128,7 +128,7 @@
 				Name="VCLinkerTool"
 				AdditionalOptions="/MACHINE:I386"
 				AdditionalDependencies="odbc32.lib odbccp32.lib"
-				OutputFile="../Debug/ojpenhanced/cgamex86.dll"
+				OutputFile="..\..\ojpenhanced\cgamex86.dll"
 				LinkIncremental="1"
 				SuppressStartupBanner="TRUE"
 				ModuleDefinitionFile=".\JK2_cgame.def"
@@ -200,7 +200,7 @@
 				Name="VCLinkerTool"
 				AdditionalOptions="/MACHINE:I386"
 				AdditionalDependencies="odbc32.lib odbccp32.lib"
-				OutputFile="..\Debug\ojpenhanced\cgamex86.dll"
+				OutputFile="..\..\ojpenhanced\cgamex86.dll"
 				LinkIncremental="2"
 				SuppressStartupBanner="TRUE"
 				ModuleDefinitionFile=".\JK2_cgame.def"
@@ -270,7 +270,7 @@
 				Name="VCLinkerTool"
 				AdditionalOptions="/MACHINE:I386"
 				AdditionalDependencies="odbc32.lib odbccp32.lib"
-				OutputFile="..\Debug\cgamex86.dll"
+				OutputFile="..\..\ojpenhanced\cgamex86.dll"
 				LinkIncremental="2"
 				SuppressStartupBanner="TRUE"
 				ModuleDefinitionFile=".\JK2_cgame.def"
@@ -567,7 +567,7 @@
 				RelativePath="..\ui\keycodes.h">
 			</File>
 			<File
-				RelativePath="..\..\ui\menudef.h">
+				RelativePath="..\..\ojpenhanced\ui\jamp\menudef.h">
 			</File>
 			<File
 				RelativePath="..\game\q_shared.h">
@@ -586,13 +586,6 @@
 			</File>
 			<File
 				RelativePath="..\ui\ui_shared.h">
-			</File>
-		</Filter>
-		<Filter
-			Name="win32"
-			Filter="">
-			<File
-				RelativePath="..\win32\JK2cgame.rc">
 			</File>
 		</Filter>
 	</Files>

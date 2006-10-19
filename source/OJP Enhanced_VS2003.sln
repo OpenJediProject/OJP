@@ -1,21 +1,25 @@
-Microsoft Visual Studio Solution File, Format Version 7.00
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "JK2cgame", "cgame\JK2_cgame.vcproj", "{4DC69D68-9DB8-4DEB-AC63-481153B1F41D}"
+Microsoft Visual Studio Solution File, Format Version 8.00
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "JK2cgame", "cgame\JK2_cgame_VS2003.vcproj", "{4DC69D68-9DB8-4DEB-AC63-481153B1F41D}"
+	ProjectSection(ProjectDependencies) = postProject
+	EndProjectSection
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "JK2game", "game\JK2_game.vcproj", "{5B587283-8429-4F8B-AECA-C09BF364B617}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "JK2game", "game\JK2_game_VS2003.vcproj", "{5B587283-8429-4F8B-AECA-C09BF364B617}"
+	ProjectSection(ProjectDependencies) = postProject
+	EndProjectSection
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "botlib", "botlib\botlib.vcproj", "{07CCC82A-B905-4384-8AC5-E8A8E352B14C}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "botlib", "botlib\botlib_VS2003.vcproj", "{07CCC82A-B905-4384-8AC5-E8A8E352B14C}"
+	ProjectSection(ProjectDependencies) = postProject
+	EndProjectSection
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ui", "ui\ui.vcproj", "{2DDA2041-6A68-4754-B342-14039CC91695}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ui", "ui\ui_VS2003.vcproj", "{2DDA2041-6A68-4754-B342-14039CC91695}"
+	ProjectSection(ProjectDependencies) = postProject
+	EndProjectSection
 EndProject
 Global
-	GlobalSection(DevPartner Solution Properties) = postSolution
-	EndGlobalSection
 	GlobalSection(SolutionConfiguration) = preSolution
-		ConfigName.0 = Debug
-		ConfigName.1 = Final
-		ConfigName.2 = Release
-	EndGlobalSection
-	GlobalSection(ProjectDependencies) = postSolution
+		Debug = Debug
+		Final = Final
+		Release = Release
 	EndGlobalSection
 	GlobalSection(ProjectConfiguration) = postSolution
 		{4DC69D68-9DB8-4DEB-AC63-481153B1F41D}.Debug.ActiveCfg = Debug|Win32
@@ -48,6 +52,8 @@ Global
 	GlobalSection(ExtensibilityGlobals) = postSolution
 	EndGlobalSection
 	GlobalSection(ExtensibilityAddIns) = postSolution
+	EndGlobalSection
+	GlobalSection(DevPartner Solution Properties) = postSolution
 	EndGlobalSection
 	GlobalSection(DevPartner) = postSolution
 	EndGlobalSection
