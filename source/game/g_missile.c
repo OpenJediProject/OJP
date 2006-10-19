@@ -1160,6 +1160,7 @@ int BoltReflectRate[NUM_FORCE_POWER_LEVELS] =
 };
 qboolean PM_SaberInStart( int move );
 extern int OJP_SaberBlockCost(gentity_t *defender, gentity_t *attacker, vec3_t hitLoc);
+extern qboolean PM_SaberInReturn( int move );
 void OJP_HandleBoltBlock(gentity_t *bolt, gentity_t *player, trace_t *trace)
 {//handles all the behavior needed to saber block a blaster bolt.  
 	//I created this function to unite the duplicated code in G_MissileImpact

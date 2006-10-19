@@ -2436,6 +2436,10 @@ extern void Rancor_DropVictim( gentity_t *self );
 
 extern qboolean g_dontFrickinCheck;
 extern qboolean g_endPDuel;
+//[BugFix45]
+extern void saberReactivate(gentity_t *saberent, gentity_t *saberOwner);
+extern void saberBackToOwner(gentity_t *saberent);
+//[/BugFix45]
 //[Asteroids]
 //extern qboolean g_noPDuelCheck;
 //[/Asteroids]

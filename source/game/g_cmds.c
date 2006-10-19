@@ -1055,7 +1055,7 @@ void SetTeam( gentity_t *ent, char *s ) {
 		
 		//[BugFix41]
 		if ( team == oldTeam && team != TEAM_SPECTATOR ) {
-			return qfalse;
+			return;
 		}
 		//[/BugFix41]
 
