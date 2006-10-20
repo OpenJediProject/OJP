@@ -5314,6 +5314,7 @@ void PM_SetSaberMove(short newMove)
 			//or the player is walking backwards
 			|| pm->ps->legsAnim == BOTH_WALKBACK1 || pm->ps->legsAnim == BOTH_WALKBACK2 
 			|| (pm->ps->legsAnim >= BOTH_WALK1 && pm->ps->legsAnim <= BOTH_WALKBACK_DUAL)
+			|| BG_InSlopeAnim(pm->ps->legsAnim)
 			|| BG_InSaberStandAnim(pm->ps->legsAnim) )
 		{//override the generic stance/stand animation with the approprate one for the current situation
 			anim = PM_GetSaberStance();
