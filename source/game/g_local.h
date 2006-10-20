@@ -1837,7 +1837,9 @@ extern	vmCvar_t	g_saberDamageScale;
 extern	vmCvar_t	g_saberanimspeed;
 //[/SaberSys]
 
-extern	vmCvar_t	g_useWhileThrowing;
+//[ForceSys]
+//extern	vmCvar_t	g_useWhileThrowing;
+//[/ForceSys]
 
 extern	vmCvar_t	g_RMG;
 

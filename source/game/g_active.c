@@ -3731,9 +3731,13 @@ void ClientThink_real( gentity_t *ent ) {
 		case GENCMD_FORCE_PROTECT:
 			ForceProtect(ent);
 			break;
+		//[ForceSys]
+		/*
 		case GENCMD_FORCE_ABSORB:
 			ForceAbsorb(ent);
 			break;
+		*/
+		//[/ForceSys]
 		case GENCMD_FORCE_HEALOTHER:
 			ForceTeamHeal(ent);
 			break;

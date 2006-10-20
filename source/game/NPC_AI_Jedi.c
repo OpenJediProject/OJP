@@ -2603,6 +2603,8 @@ static void Jedi_CombatDistance( int enemy_dist )
 				ForceProtect( NPC );
 				usedForce = qtrue;
 			}
+			//[ForceSys]
+			/*
 			else if ( (NPC->client->ps.fd.forcePowersKnown&(1<<FP_ABSORB)) != 0 
 				&& (NPC->client->ps.fd.forcePowersActive&(1<<FP_ABSORB)) == 0
 				&& Q_irand( 0, 1 ) )
@@ -2610,6 +2612,8 @@ static void Jedi_CombatDistance( int enemy_dist )
 				ForceAbsorb( NPC );
 				usedForce = qtrue;
 			}
+			*/
+			//[/ForceSys]
 			else if ( (NPC->client->ps.fd.forcePowersKnown&(1<<FP_RAGE)) != 0 
 				&& (NPC->client->ps.fd.forcePowersActive&(1<<FP_RAGE)) == 0
 				&& Q_irand( 0, 1 ) )
@@ -7595,6 +7599,8 @@ void NPC_Jedi_Pain(gentity_t *self, gentity_t *attacker, int damage)
 		//FIXME: delay this until *after* the pain anim?
 		if ( mod == MOD_FORCE_DARK )
 		{//see if we should turn on absorb
+			//[ForceSys]
+			/*
 			if ( (self->client->ps.fd.forcePowersKnown&(1<<FP_ABSORB)) != 0 
 				&& (self->client->ps.fd.forcePowersActive&(1<<FP_ABSORB)) == 0 )
 			{//know absorb and not already using it
@@ -7610,6 +7616,8 @@ void NPC_Jedi_Pain(gentity_t *self, gentity_t *attacker, int damage)
 					}
 				}
 			}
+			*/
+			//[/ForceSys]
 		}
 		else if ( damage > Q_irand( 5, 20 ) )
 		{//respectable amount of normal damage

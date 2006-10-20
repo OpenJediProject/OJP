@@ -1129,6 +1129,9 @@ qboolean WP_ForcePowerUsable( gentity_t *self, forcePowers_t forcePower )
 	return WP_ForcePowerAvailable( self, forcePower, 0 );	// OVERRIDEFIXME
 }
 
+
+//[ForceSys]
+/*
 int WP_AbsorbConversion(gentity_t *attacked, int atdAbsLevel, gentity_t *attacker, int atPower, int atPowerLevel, int atForceSpent)
 {//racc - performs force absorb check, returns power difference between the attacker's power level and the defender's power level.
 	//returns -1 if absorb didn't happen.  This function also handles the actual force absorb energy gain for the defender.
@@ -1188,6 +1191,9 @@ int WP_AbsorbConversion(gentity_t *attacked, int atdAbsLevel, gentity_t *attacke
 
 	return getLevel;
 }
+*/
+//[/ForceSys]
+
 
 void WP_ForcePowerRegenerate( gentity_t *self, int overrideAmt )
 { //called on a regular interval to regenerate force power.
@@ -1762,8 +1768,9 @@ void ForceGrip( gentity_t *self )
 		!g_entities[tr.entityNum].client->ps.fd.forceGripCripple &&  //racc - not currently under the effects of gripcripple.
 		g_entities[tr.entityNum].client->ps.fd.forceGripBeingGripped < level.time && //racc - not being gripped
 		ForcePowerUsableOn(self, &g_entities[tr.entityNum], FP_GRIP) &&
-		//[/ForceSys]
+		//[ForceSys]
 		!OJP_CounterForce(self, &g_entities[tr.entityNum], FP_GRIP) &&
+		//[/ForceSys]
 		(g_friendlyFire.integer || !OnSameTeam(self, &g_entities[tr.entityNum])) ) //don't grip someone who's still crippled
 	{
 		if (g_entities[tr.entityNum].s.number < MAX_CLIENTS && g_entities[tr.entityNum].client->ps.m_iVehicleNum)
@@ -2399,6 +2406,9 @@ void ForceDrain( gentity_t *self )
 	WP_ForcePowerStart( self, FP_DRAIN, 500 );
 }
 
+
+//[ForceSys]
+/* NUAM
 void ForceDrainDamage( gentity_t *self, gentity_t *traceEnt, vec3_t dir, vec3_t impactPoint )
 {
 	gentity_t *tent;
@@ -2511,7 +2521,7 @@ void ForceDrainDamage( gentity_t *self, gentity_t *traceEnt, vec3_t dir, vec3_t 
 				//	traceEnt->client->ps.powerups[PW_DISINT_1] = level.time + 500;
 				}
 				*/
-
+				/*
 				if (traceEnt->client->forcePowerSoundDebounce < level.time)
 				{
 					tent = G_TempEntity( impactPoint, EV_FORCE_DRAINED);
@@ -2524,6 +2534,7 @@ void ForceDrainDamage( gentity_t *self, gentity_t *traceEnt, vec3_t dir, vec3_t 
 		}
 	}
 }
+
 
 int ForceShootDrain( gentity_t *self )
 {
@@ -2657,6 +2668,9 @@ int ForceShootDrain( gentity_t *self )
 
 	return gotOneOrMore;
 }
+*/
+//[/ForceSys]
+
 
 void ForceJumpCharge( gentity_t *self, usercmd_t *ucmd )
 { //I guess this is unused now. Was used for the "charge" jump type.
@@ -3460,10 +3474,14 @@ void ForceThrow( gentity_t *self, qboolean pull )
 		return;
 	}
 
+	//[ForceSys]
+	/*
 	if (!g_useWhileThrowing.integer && self->client->ps.saberInFlight)
 	{
 		return;
 	}
+	*/
+	//[/ForceSys]
 
 	if (self->client->ps.weaponTime > 0)
 	{
@@ -3474,10 +3492,14 @@ void ForceThrow( gentity_t *self, qboolean pull )
 	{
 		return;
 	}
+	//[ForceSys]
+	/*
 	if ( self->client->ps.powerups[PW_DISINT_4] > level.time )
-	{
+	{//racc - in the process of getting pushed/pulled.
 		return;
 	}
+	*/
+	//[/ForceSys]
 	if (pull)
 	{
 		powerUse = FP_PULL;
@@ -3892,7 +3914,8 @@ void ForceThrow( gentity_t *self, qboolean pull )
 		{
 			int modPowerLevel = powerLevel;
 
-	
+			//[ForceSys]
+			/* racc - removed active component of absorb
 			if (push_list[x]->client)
 			{
 				modPowerLevel = WP_AbsorbConversion(push_list[x], push_list[x]->client->ps.fd.forcePowerLevel[FP_ABSORB], self, powerUse, powerLevel, forcePowerNeeded[self->client->ps.fd.forcePowerLevel[powerUse]][powerUse]);
@@ -3901,6 +3924,8 @@ void ForceThrow( gentity_t *self, qboolean pull )
 					modPowerLevel = powerLevel;
 				}
 			}
+			*/
+			//[/ForceSys]
 
 			pushPower = 256*modPowerLevel;
 
@@ -4433,7 +4458,7 @@ void WP_ForcePowerStop( gentity_t *self, forcePowers_t forcePower )
 }
 
 void DoGripAction(gentity_t *self, forcePowers_t forcePower)
-{
+{//racc - have someone in our grip, deal with them.
 	gentity_t *gripEnt;
 	int gripLevel = 0;
 	trace_t tr;
@@ -4462,6 +4487,10 @@ void DoGripAction(gentity_t *self, forcePowers_t forcePower)
 	
 	trap_Trace(&tr, self->client->ps.origin, NULL, NULL, gripEnt->client->ps.origin, self->s.number, MASK_PLAYERSOLID);
 
+	//[ForceSys]
+	gripLevel = self->client->ps.fd.forcePowerLevel[FP_GRIP];
+
+	/* racc - absorb no longer has an active power
 	gripLevel = WP_AbsorbConversion(gripEnt, gripEnt->client->ps.fd.forcePowerLevel[FP_ABSORB], self, FP_GRIP, self->client->ps.fd.forcePowerLevel[FP_GRIP], forcePowerNeeded[self->client->ps.fd.forcePowerLevel[FP_GRIP]][FP_GRIP]);
 
 	if (gripLevel == -1)
@@ -4474,6 +4503,8 @@ void DoGripAction(gentity_t *self, forcePowers_t forcePower)
 		WP_ForcePowerStop(self, forcePower);
 		return;
 	}
+	*/
+	//[/ForceSys]
 
 	if (VectorLength(a) > MAX_GRIP_DISTANCE)
 	{
@@ -5151,6 +5182,8 @@ int WP_DoSpecificPower( gentity_t *self, usercmd_t *ucmd, forcePowers_t forcepow
 		self->client->ps.fd.forceButtonNeedRelease = 1;
 		break;
 	case FP_ABSORB:
+		//[ForceSys]
+		/* disabled active power for absorb
 		powerSucceeded = 0; //always 0 for nonhold powers
 		if (self->client->ps.fd.forceButtonNeedRelease)
 		{ //need to release before we can use nonhold powers again
@@ -5158,6 +5191,8 @@ int WP_DoSpecificPower( gentity_t *self, usercmd_t *ucmd, forcePowers_t forcepow
 		}
 		ForceAbsorb(self);
 		self->client->ps.fd.forceButtonNeedRelease = 1;
+		*/
+		//[/ForceSys]
 		break;
 	case FP_TEAM_HEAL:
 		powerSucceeded = 0; //always 0 for nonhold powers

@@ -109,7 +109,9 @@ vmCvar_t	g_saberDamageScale;
 vmCvar_t	g_saberanimspeed;
 //[/SaberSys]
 
-vmCvar_t	g_useWhileThrowing;
+//[ForceSys]
+//vmCvar_t	g_useWhileThrowing;
+//[/ForceSys]
 
 vmCvar_t	g_RMG;
 
@@ -451,7 +453,9 @@ static cvarTable_t		gameCvarTable[] = {
 	{ &g_saberanimspeed, "g_saberanimspeed", "1", CVAR_SERVERINFO | CVAR_ARCHIVE | CVAR_SYSTEMINFO, 0, qtrue  },
 	//[/SaberSys]
 
-	{ &g_useWhileThrowing, "g_useWhileThrowing", "1", 0, 0, qtrue  },
+	//[ForceSys]
+	//{ &g_useWhileThrowing, "g_useWhileThrowing", "1", 0, 0, qtrue  },
+	//[/ForceSys]
 
 	{ &g_RMG, "RMG", "0", 0, 0, qtrue  },
 
@@ -655,6 +659,7 @@ static cvarTable_t		gameCvarTable[] = {
 	{ &d_patched, "d_patched", "0", CVAR_CHEAT, 0, qfalse },
 
 	{ &g_saberRealisticCombat, "g_saberRealisticCombat", "0", CVAR_CHEAT },
+	//racc - prevents the use of offensive powers while hands are using two handed/dual sabers.
 	{ &g_saberRestrictForce, "g_saberRestrictForce", "0", CVAR_CHEAT },
 	//[SaberSys]
 	//Yeah, this funks up my shit.  Turning it off for now.

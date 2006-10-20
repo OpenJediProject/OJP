@@ -136,12 +136,18 @@ Version 0.1.0:
 
 		Force System:
 
+			Absorb:
+				Absorb is now a passive power only.  Its purpose now is to provide protection against all Force powers thrown at the player.  When a player is effected by a Force power, they will use their highest skill level either in that particular skill or their absorb skill to attempt to block it.
+
 			Drain - Fixed issue where a player's FP was instantly drained by using Drain when the player didn't have any skill points in Lightning.
+
+			Misc - Disabled and removed g_useWhileThrowing.
 
 			Push/Pull:
 				- Reduced the FP cost for these force powers.
 				- Push/Pull is no longer automatically countered if the player is hit from behind while critical DP.
 				- Can't block Push/Pull while too far off balance.
+				- Players can now push/pull while they're being effected by a push/pull.
 
 			Lightning:
 				- The DP cost to saber block lightning is now directly related to the damage caused by the lightning.

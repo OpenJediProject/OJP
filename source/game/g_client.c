@@ -3190,6 +3190,7 @@ tryTorso:
 //[ExpSys]
 int TotalAllociatedSkillPoints(gentity_t *ent)
 {//returns the total number of points the player has allociated to various skills.
+	int i, countDown;
 	int usedPoints = 0;
 	qboolean freeSaber = HasSetSaberOnly();
 
