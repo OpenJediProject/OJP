@@ -133,6 +133,7 @@ Version 0.1.0:
 			- Players now regenerate at the full rate while walking.
 			- Increased FP regen during meditation to 4x normal.
 			- Can't regen while in mid-air.
+			- Added FP drain to normal jumps.
 
 		Force System:
 
