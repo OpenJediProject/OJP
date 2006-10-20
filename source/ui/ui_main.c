@@ -1417,7 +1417,11 @@ void _UI_Refresh( int realtime )
 	}
 #endif
 
-	if (ui_rankChange.integer)
+	//[ExpSys]
+	//only do this stuff when the your point total has changed.
+	if (ui_rankChange.integer != uiMaxRank)
+	//if (ui_rankChange.integer)
+	//[/ExpSys]
 	{
 		FPMessageTime = realtime + 3000;
 
@@ -1474,7 +1478,10 @@ void _UI_Refresh( int realtime )
 		{
 			uiForcePowersRank[FP_SABER_DEFENSE] = 1;
 		}
-		trap_Cvar_Set("ui_rankChange", "0");
+		//[ExpSys]
+		//ui_rankChange is now treated like a variable rather than a message sender
+		//trap_Cvar_Set("ui_rankChange", "0");
+		//[/ExpSys]
 
 		//remember to update the force power count after changing the max rank
 		UpdateForceUsed();
