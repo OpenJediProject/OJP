@@ -814,10 +814,14 @@ void ClientTimerActions( gentity_t *ent, int msec ) {
 			ent->health--;
 		}
 
+		//[ExpSys]
+		/*
 		// count down armor when over max
 		if ( client->ps.stats[STAT_ARMOR] > client->ps.stats[STAT_MAX_HEALTH] ) {
 			client->ps.stats[STAT_ARMOR]--;
 		}
+		*/
+		//[/ExpSys]
 	}
 }
 

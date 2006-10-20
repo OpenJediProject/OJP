@@ -3186,6 +3186,42 @@ tryTorso:
 #endif
 }
 
+
+//[ExpSys]
+int TotalAllociatedSkillPoints(gentity_t *ent)
+{//returns the total number of points the player has allociated to various skills.
+	int usedPoints = 0;
+	qboolean freeSaber = HasSetSaberOnly();
+
+	for(i = 0; i < NUM_TOTAL_SKILLS; i++)
+	{
+		if(i < NUM_FORCE_POWERS)
+		{//force power
+			countDown = ent->client->ps.fd.forcePowerLevel[i];
+		}
+		else
+		{
+			countDown = ent->client->skillLevel[i-NUM_FORCE_POWERS];
+		}
+
+		while (countDown > 0)
+		{
+			usedPoints += bgForcePowerCost[i][countDown];
+			if ( countDown == 1 &&
+				((i == FP_SABER_OFFENSE && freeSaber) ||
+				 (i == FP_SABER_DEFENSE && freeSaber)) )
+			{
+				usedPoints -= bgForcePowerCost[i][countDown];
+			}
+			countDown--;
+		}
+	}
+
+	return usedPoints;
+}
+//[/ExpSys]
+
+
 /*
 ===========
 ClientSpawn
@@ -4192,6 +4228,13 @@ void ClientSpawn(gentity_t *ent) {
 	{ //class specifies a start armor amount, so use it
 		client->ps.stats[STAT_ARMOR] = bgSiegeClasses[client->siegeClass].startarmor;
 	}
+	//[ExpSys]
+	else
+	{//armor in non-siege gametypes
+		//armor is now the number of skill points a player has not allociated. 
+		client->ps.stats[STAT_ARMOR] = client->sess.skillPoints - TotalAllociatedSkillPoints(ent);
+	}
+	/*
 	else if ( g_gametype.integer == GT_DUEL || g_gametype.integer == GT_POWERDUEL )
 	{//no armor in duel
 		client->ps.stats[STAT_ARMOR] = 0;
@@ -4200,6 +4243,8 @@ void ClientSpawn(gentity_t *ent) {
 	{
 		client->ps.stats[STAT_ARMOR] = client->ps.stats[STAT_MAX_HEALTH] * 0.25;
 	}
+	*/
+	//[/ExpSys]
 
 	//[DodgeSys]
 	//Init dodge stat.

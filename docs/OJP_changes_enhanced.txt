@@ -13,7 +13,7 @@ Version 0.1.0:
 			- Made the number of DP points a player gets be based on their allocation and total amount of skill points.  Merc skills receive fewer DP per skill point than Jedi/Force skills.
 
 		Experience System (ExpSys):
-			Retooled the skill point system into a true experience system.  Players now start out with a small amount of skill points and gain them by causing damage to their enemies or capturing the flag during ctf gametypes.  Ammo, health, and weapons now spawn with the player rather than be pickups thruout the maps.
+			Retooled the skill point system into a true experience system.  Players now start out with a small amount of skill points and gain them by causing damage to their enemies or capturing the flag during ctf gametypes.  Ammo, health, and weapons now spawn with the player rather than be pickups thruout the maps.  The experience system doesn't apply to Holocron FFA and Siege.
 			- Force Jump is no longer a forced skill.
 			- g_maxForceRank now sets the maximum number of skill points that a player can earn.
 			- Added jetpack skill.  This skill gives the player a jetpack.
@@ -22,6 +22,7 @@ Version 0.1.0:
 			- Completely reorganized the point requirements for the various skills.  
 			- Removed Drain, Protect, and Mind Trick as selectable powers until they can be balanced or retooled for realism.
 			- Enlightenment holocrons can now be picked up by users of both sides of the Force.
+			- Any skill points that a player hasn't allociated to skills is the amount of armor (shields) that a player gets on spawn.
 			
 		Force Powers:
 			- Players can now use powers from both sides of the Force at the same time.
