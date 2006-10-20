@@ -161,7 +161,7 @@ Version 0.1.0:
 			Blocking:
 				- Parrying an attack fake causes the defender to go into a slow bounce.
 				- Saber blocking/parrying now costs 1 FP.
-				- Defenders can now "Attack Parry" incoming attacks by quickly tapping the attack button (to start an start fake) and moving into the attack right before the impact.  A successful Attack Parry will force the attacker into a heavy slow bounce.
+				- Defenders can now "Attack Parry" incoming attacks by parrying the attack and holding down the attack button right before the attack lands.  This only works if the defender is in a block animation or is just starting or ending an attack.
 				- Fixed problem with players continuing to spin around when forced into a block during a spin move.
 				- Halfed the time spent in block animations.
 				- Players can't saber block while in a grappling move.

@@ -13672,6 +13672,8 @@ void DebounceSaberImpact(gentity_t *self, gentity_t *otherSaberer,
 }
 
 
+//[SaberSys]
+extern qboolean PM_SaberInReturn( int move );
 qboolean G_InAttackParry(gentity_t *self)
 {//checks to see if a player is doing an attack parry
 
@@ -13683,6 +13685,7 @@ qboolean G_InAttackParry(gentity_t *self)
 	}
 
 	if(PM_SaberInStart(self->client->ps.saberMove) //in windup
+		|| PM_SaberInReturn(self->client->ps.saberMove)
 		|| PM_SaberInParry(self->client->ps.torsoAnim)) // in block (this check only finds blocks that weren't started this turn)
 	{
 		return qtrue;
