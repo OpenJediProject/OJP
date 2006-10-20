@@ -3312,9 +3312,8 @@ qboolean CanCounterThrow(gentity_t *self, gentity_t *thrower, qboolean pull)
 			return 0;
 		}
 	}
-	*/
-	//[/ForceSys]
 
+	//racc - don't use because it assumes you have to have same power to pass WP_ForcePowerUsable.
 	if (pull)
 	{
 		powerUse = FP_PULL;
@@ -3329,8 +3328,7 @@ qboolean CanCounterThrow(gentity_t *self, gentity_t *thrower, qboolean pull)
 		return 0;
 	}
 
-	//[ForceSys]
-	/* racc - we want to be able to block push in mid-air
+	// racc - we want to be able to block push in mid-air
 	if (self->client->ps.groundEntityNum == ENTITYNUM_NONE)
 	{ //you cannot counter a push/pull if you're in the air
 		return 0;
