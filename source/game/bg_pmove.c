@@ -2766,6 +2766,9 @@ static qboolean PM_CheckJump( void )
 				{
 					vertPush = JUMP_VELOCITY;
 					anim = BOTH_FLIP_BACK1;//BG_PickAnim( BOTH_FLIP_BACK1, BOTH_FLIP_BACK3 );
+					//[FatigueSys]
+					BG_AddFatigue(pm->ps, FATIGUE_BACKFLIP);
+					//[/FatigueSys]
 				}
 			}
 
@@ -2845,9 +2848,6 @@ static qboolean PM_CheckJump( void )
 						{
 							pm->ps->velocity[0] = pm->ps->velocity[1] = 0;
 							VectorMA( pm->ps->velocity, -150, fwd, pm->ps->velocity );
-							//[FatigueSys]
-							BG_AddFatigue(pm->ps, FATIGUE_BACKFLIP);
-							//[/FatigueSys]
 						}
 
 						/*
@@ -3297,6 +3297,16 @@ static qboolean PM_CheckJump( void )
 	{
 		return qfalse;
 	}
+
+	//[FatigueSys]
+	if( pm->ps->fd.forcePower < FATIGUE_JUMP )
+	{//too tired to jump
+		return qfalse;
+	}
+							
+	BG_AddFatigue(pm->ps, FATIGUE_JUMP);
+	//[/FatigueSys]
+
 	if ( pm->cmd.upmove > 0 )
 	{//no special jumps
 		pm->ps->velocity[2] = JUMP_VELOCITY;

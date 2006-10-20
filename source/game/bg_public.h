@@ -84,6 +84,9 @@
 //Fatigue for backflips
 #define FATIGUE_BACKFLIP		3
 
+//Fatigue for jumps (This is the basic cost of a jump, force jumps cost points in addition to this)
+#define FATIGUE_JUMP			2
+
 //Fatigue for standard melee moves
 #define FATIGUE_MELEE			1
 
