@@ -1577,7 +1577,9 @@ void Menus_CloseByName ( const char *p )
 	menu->window.flags &= ~(WINDOW_VISIBLE | WINDOW_HASFOCUS);
 }
 
-int FPMessageTime = 0;
+//[UITweaks]
+//int FPMessageTime = 0;
+//[/UITweaks]
 
 void Menus_CloseAll() 
 {
@@ -1594,7 +1596,9 @@ void Menus_CloseAll()
 	// Clear the menu stack
 	openMenuCount = 0;
 
-	FPMessageTime = 0;
+	//[UITweaks]
+	//FPMessageTime = 0;
+	//[/UITweaks]
 }
 
 qboolean Script_Show(itemDef_t *item, char **args) 

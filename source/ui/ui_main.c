@@ -1338,11 +1338,15 @@ int startTime;
 
 vmCvar_t	ui_rankChange;
 static void UI_BuildPlayerList();
-char parsedFPMessage[1024];
+//[UITweaks]
+/* not used in basejka code
+//char parsedFPMessage[1024];
 
 #include "../namespace_begin.h"
 extern int FPMessageTime;
 #include "../namespace_end.h"
+*/
+//[/UITweaks]
 
 void Text_PaintCenter(float x, float y, float scale, vec4_t color, const char *text, float adjust, int iMenuFont);
 
@@ -1423,9 +1427,12 @@ void _UI_Refresh( int realtime )
 	//if (ui_rankChange.integer)
 	//[/ExpSys]
 	{
+		//[UITweaks]
+		//not used in basejka code
+		/*
 		FPMessageTime = realtime + 3000;
 
-		if (!parsedFPMessage[0] /*&& uiMaxRank > ui_rankChange.integer*/)
+		if (!parsedFPMessage[0] /*&& uiMaxRank > ui_rankChange.integer*//*)
 		{
 			const char *printMessage = UI_GetStringEdString("MP_INGAME", "SET_NEW_RANK");
 
@@ -1449,6 +1456,8 @@ void _UI_Refresh( int realtime )
 			}
 			parsedFPMessage[p] = '\0';
 		}
+		*/
+		//[/UITweaks]
 
 		//if (uiMaxRank > ui_rankChange.integer)
 		{
