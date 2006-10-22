@@ -3231,6 +3231,7 @@ qboolean Item_OwnerDraw_HandleKey(itemDef_t *item, int key) {
 			case UI_FORCE_RANK_BLASTER:
 			case UI_FORCE_RANK_THERMALS:
 			case UI_FORCE_RANK_ROCKETS:
+			case UI_FORCE_RANK_BACTA:
 			//[/ExpSys]
 	  			if(!Rect_ContainsPoint(&item->window.rect, DC->cursorx, DC->cursory) )
 				{

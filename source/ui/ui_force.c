@@ -54,7 +54,12 @@ qboolean uiForcePowersDisabled[NUM_TOTAL_SKILLS] = {
 	qfalse,//FP_SABERTHROW,
 	//qfalse//FP_SABERTHROW,
 	//RAFIXME - this is a hack, actually impliment disabling of additional skills?
-	qfalse//SK_JETPACK
+	qfalse,//SK_JETPACK
+	qfalse,//SK_PISTOL,		//blaster pistol
+	qfalse,//SK_BLASTER,		//blaster rifle skill
+	qfalse,//SK_THERMAL,		//thermal detenator skill
+	qfalse,//SK_ROCKET,		//rocket launcher skill
+	qfalse//SK_BACTA,
 	//[/ExpSys]
 };
 
@@ -96,6 +101,7 @@ int uiForcePowersRank[NUM_TOTAL_SKILLS] = {
 	0,//SK_BLASTER,		
 	0,//SK_THERMAL,	
 	0,//SK_ROCKET,
+	0,//SK_BACTA
 	//[/ExpSys]
 };
 
@@ -132,6 +138,7 @@ int uiForcePowerDarkLight[NUM_TOTAL_SKILLS] = //0 == neutral
 	0,//SK_BLASTER,		
 	0,//SK_THERMAL,	
 	0,//SK_ROCKET,
+	0,//SK_BACTA
 	//[/ExpSys]
 };
 
@@ -175,6 +182,10 @@ int NumberOfSkillRanks(int skill)
 		case NUM_FORCE_POWERS+SK_JETPACK:
 		case NUM_FORCE_POWERS+SK_PISTOL:		//blaster pistol
 			return 1;
+			break;
+		case NUM_FORCE_POWERS+SK_BACTA:
+			return 2;
+			break;
 		default:
 			return 3;
 	};
@@ -251,7 +262,7 @@ void UI_DrawForceStars(rectDef_t *rect, float scale, vec4_t color, int textStyle
 void UI_UpdateClientForcePowers(const char *teamArg)
 {
 	//[ExpSys]
-	trap_Cvar_Set( "forcepowers", va("%i-%i-%i%i%i%i%i%i%i%i%i%i%i%i%i%i%i%i%i%i%i%i%i%i%i",
+	trap_Cvar_Set( "forcepowers", va("%i-%i-%i%i%i%i%i%i%i%i%i%i%i%i%i%i%i%i%i%i%i%i%i%i%i%i",
 	//trap_Cvar_Set( "forcepowers", va("%i-%i-%i%i%i%i%i%i%i%i%i%i%i%i%i%i%i%i%i%i",
 	//[/ExpSys]
 		uiForceRank, uiForceSide, uiForcePowersRank[0], uiForcePowersRank[1],
@@ -262,7 +273,8 @@ void UI_UpdateClientForcePowers(const char *teamArg)
 		uiForcePowersRank[14], uiForcePowersRank[15], uiForcePowersRank[16],
 		//[ExpSys]
 		uiForcePowersRank[17], uiForcePowersRank[18], uiForcePowersRank[19],
-		uiForcePowersRank[20], uiForcePowersRank[21], uiForcePowersRank[22]) );
+		uiForcePowersRank[20], uiForcePowersRank[21], uiForcePowersRank[22],
+		uiForcePowersRank[23]) );
 		//uiForcePowersRank[17]) );
 		//[/ExpSys]
 

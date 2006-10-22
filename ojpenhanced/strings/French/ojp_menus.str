@@ -65,6 +65,14 @@ LANG_FRENCH		"#same"
 REFERENCE	    DESC_SKILL_ROCKET
 LANG_ENGLISH	"Gains the user a Rocket Launcher."
 LANG_FRENCH		"#same"
+
+REFERENCE	    SKILL_BACTA
+LANG_ENGLISH	    "Bacta:"
+LANG_FRENCH		"#same"
+
+REFERENCE	    DESC_SKILL_BACTA
+LANG_ENGLISH	"Gains the user a emergency medical bacta pack.  Additional points makes the pack larger."
+LANG_FRENCH		"#same"
 //[/ExpSys]
 
 //[OLDGAMETYPES]

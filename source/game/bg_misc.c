@@ -226,6 +226,7 @@ int bgForcePowerCost[NUM_TOTAL_SKILLS][NUM_FORCE_POWER_LEVELS] = //0 == neutral
 	{	0,	4,	4,	4	},	//SK_BLASTER,		//blaster rifle skill
 	{	0,	6,	6,	6	},	//SK_THERMAL,		//thermal detenator skill
 	{	0,	4,	6,	8	},	//SK_ROCKET,		//rocket launcher skill
+	{	0,	4,	4,	0	},	//SK_BACTA
 	//[/ExpSys]
 };
 

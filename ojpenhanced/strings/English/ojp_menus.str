@@ -52,6 +52,12 @@ LANG_ENGLISH	    "Rocket Launcher:"
 
 REFERENCE	    DESC_SKILL_ROCKET
 LANG_ENGLISH	"Gains the user a Rocket Launcher."
+
+REFERENCE	    SKILL_BACTA
+LANG_ENGLISH	    "Bacta:"
+
+REFERENCE	    DESC_SKILL_BACTA
+LANG_ENGLISH	"Gains the user a emergency medical bacta pack.  Additional points makes the pack larger."
 //[/ExpSys]
 
 //[SaberThrowSys]

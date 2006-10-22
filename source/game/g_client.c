@@ -4094,7 +4094,16 @@ void ClientSpawn(gentity_t *ent) {
 		
 		if(client->skillLevel[SK_JETPACK])
 		{//player has jetpack
-			client->ps.stats[STAT_HOLDABLE_ITEMS] = (1 << HI_JETPACK);
+			client->ps.stats[STAT_HOLDABLE_ITEMS] |= (1 << HI_JETPACK);
+		}
+
+		if(client->skillLevel[SK_BACTA] == FORCE_LEVEL_2)
+		{
+			client->ps.stats[STAT_HOLDABLE_ITEMS] |= (1 << HI_MEDPAC_BIG);
+		}
+		else if(client->skillLevel[SK_BACTA])
+		{
+			client->ps.stats[STAT_HOLDABLE_ITEMS] |= (1 << HI_MEDPAC);
 		}
 		//client->ps.stats[STAT_HOLDABLE_ITEMS] = 0;
 		//[/ExpSys]
