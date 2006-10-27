@@ -401,12 +401,42 @@
 			visible				1 
 			decoration
 		}
+		
+	//[ExpSys]
+	//Made Force Seeing Level 1 a pre-req to taking any additional force powers, except in the case of free sabers.
+		itemDef 
+		{
+			name				notforcesensitive
+			group				"playersettinggroup"
+			text				"Need Force Seeing to use Force Powers"
+			type				1
+			style				0	
+			rect				230 130 0 0
+			textalign			ITEM_ALIGN_CENTER	 	
+			textalignx			65
+			textaligny				0
+			font					4
+			textscale				1
+			forecolor			0.5 0.5 0.5 1
+			outlinecolor			1 .5 .5 .5
+			backcolor			0 0 0 0
+			border				0
+			bordercolor			0 0 0 0
+			descText			"Need Force Seeing to use Force Powers"
+			visible				0 
+			decoration
+		}
+	//[/ExpSys]
 
 		// Force Jump Title
 		itemDef 
 		{
 			name					setfp_jump
-			group					"playersettingforcegroup"
+			//[ExpSys]
+			//Made Force Seeing Level 1 a pre-req to taking any additional force powers, except in the case of free sabers.
+			group					neutralpowers
+			//group					"playersettingforcegroup"
+			//[/ExpSys]
 			style					0	
 			text					@MENUS_FORCE_JUMP
 			//descText				@MENUS_DESCRIPTION_OF_A_FORCE
@@ -429,7 +459,11 @@
 		itemDef 
 		{
 			name					setfp_jump
-			group					"playersettingforcegroup"
+			//[ExpSys]
+			//Made Force Seeing Level 1 a pre-req to taking any additional force powers, except in the case of free sabers.
+			group					neutralpowers
+			//group					"playersettingforcegroup"
+			//[/ExpSys]
 			style					0	
 			ownerdraw				UI_FORCE_RANK_LEVITATION
 			rect					230 130 175 15
@@ -463,7 +497,11 @@
 		itemDef 
 		{
 			name					setfp_push
-			group					"playersettingforcegroup"
+			//[ExpSys]
+			//Made Force Seeing Level 1 a pre-req to taking any additional force powers, except in the case of free sabers.
+			group					neutralpowers
+			//group					"playersettingforcegroup"
+			//[/ExpSys]
 			style					0	
 			text					@MENUS_FORCE_PUSH
 			//descText				@MENUS_DESCRIPTION_OF_A_FORCE
@@ -486,7 +524,11 @@
 		itemDef 
 		{
 			name					setfp_push
-			group					"playersettingforcegroup"
+			//[ExpSys]
+			//Made Force Seeing Level 1 a pre-req to taking any additional force powers, except in the case of free sabers.
+			group					neutralpowers
+			//group					"playersettingforcegroup"
+			//[/ExpSys]
 			style					0	
 			ownerdraw				UI_FORCE_RANK_PUSH
 			rect					230 147 175 15
@@ -520,7 +562,11 @@
 		itemDef 
 		{
 			name					setfp_pull
-			group					"playersettingforcegroup"
+			//[ExpSys]
+			//Made Force Seeing Level 1 a pre-req to taking any additional force powers, except in the case of free sabers.
+			group					neutralpowers
+			//group					"playersettingforcegroup"
+			//[/ExpSys]
 			style					0	
 			text					@MENUS_FORCE_PULL
 			//descText				@MENUS_DESCRIPTION_OF_A_FORCE
@@ -543,7 +589,11 @@
 		itemDef 
 		{
 			name					setfp_pull
-			group					"playersettingforcegroup"
+			//[ExpSys]
+			//Made Force Seeing Level 1 a pre-req to taking any additional force powers, except in the case of free sabers.
+			group					neutralpowers
+			//group					"playersettingforcegroup"
+			//[/ExpSys]
 			style					0	
 			ownerdraw				UI_FORCE_RANK_PULL
 			rect					230 164 175 15
@@ -577,7 +627,11 @@
 		itemDef 
 		{
 			name					setfp_speed
-			group					"playersettingforcegroup"
+			//[ExpSys]
+			//Made Force Seeing Level 1 a pre-req to taking any additional force powers, except in the case of free sabers.
+			group					neutralpowers
+			//group					"playersettingforcegroup"
+			//[/ExpSys]
 			style					0	
 			text					@MENUS_FORCE_SPEED
 			//descText				@MENUS_DESCRIPTION_OF_A_FORCE
@@ -600,7 +654,11 @@
 		itemDef 
 		{
 			name					setfp_speed
-			group					"playersettingforcegroup"
+			//[ExpSys]
+			//Made Force Seeing Level 1 a pre-req to taking any additional force powers, except in the case of free sabers.
+			group					neutralpowers
+			//group					"playersettingforcegroup"
+			//[/ExpSys]
 			style					0	
 			ownerdraw				UI_FORCE_RANK_SPEED
 			rect					230 181 175 15

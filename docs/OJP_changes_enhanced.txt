@@ -25,6 +25,7 @@ Version 0.1.0:
 			- Any skill points that a player hasn't allociated to skills is the amount of armor (shields) that a player gets on spawn.
 			
 		Force Powers:
+			- Players must now be Force Sensitive (have at least one rank of Force Seeing) to access the other Force skills.
 			- Players can now use powers from both sides of the Force at the same time.
 			- Changed the countering ability to behave based on the difference between the attacker's and defender's approprate Force Power skill levels. 
 				2 levels of difference = can't block while running or in mid-air.

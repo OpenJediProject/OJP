@@ -813,6 +813,28 @@ qboolean BG_LegalizedForcePowers(char *powerOut, int maxRank, qboolean freeSaber
 		}
 	}
 
+	//[ExpSys]
+	//Made Force Seeing Level 1 a pre-req to taking any additional force powers, except in the case of free sabers.
+	if (final_Powers[FP_SEE] < 1)
+	{//can't use force powers if the player isn't Force Sensitive
+		for(i = 0; i < NUM_FORCE_POWERS; i++)
+		{
+			//don't need to worry about FP_SEE since it's already zero.
+			if(freeSaber 
+				&& (i == FP_SABER_OFFENSE 
+					|| i == FP_SABER_DEFENSE 
+					|| i == FP_SABERTHROW) )
+			{//free saber overrides the Force Sensitive requirement. 
+				continue;
+			}
+			else
+			{//zero out Force power
+				final_Powers[i] = 0;
+			}
+		}
+	}
+	//[/ExpSys]
+
 	//racc - can't have saber defense or throw without saber offense.
 	if (final_Powers[FP_SABER_OFFENSE] < 1)
 	{

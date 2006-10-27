@@ -504,11 +504,30 @@ void UpdateForceUsed()
 		bgForcePowerCost[FP_SABER_OFFENSE][FORCE_LEVEL_1] = SABER_OFFENSE_L1;
 		bgForcePowerCost[FP_SABER_DEFENSE][FORCE_LEVEL_1] = SABER_DEFENSE_L1;
 		//bgForcePowerCost[FP_SABER_OFFENSE][FORCE_LEVEL_1] = 1;
-		//bgForcePowerCost[FP_SABER_DEFENSE][FORCE_LEVEL_1] = 1;
-		//[/ExpSys]
+		//bgForcePowerCost[FP_SABER_DEFENSE][FORCE_LEVEL_1] = 1;	
+
+		//Made Force Seeing Level 1 a pre-req to taking any additional force powers, except in the case of free sabers.
+		if(uiForcePowersRank[FP_SEE] <= FORCE_LEVEL_0)
+		{//can't use a saber if we're not Force sensitive!
+			uiForcePowersRank[FP_SABER_OFFENSE]=0;
+			uiForcePowersRank[FP_SABER_DEFENSE]=0;
+			uiForcePowersRank[FP_SABERTHROW]=0;
+			if (menu)
+			{
+				Menu_ShowItemByName(menu, "setfp_saberattack", qfalse);
+				Menu_ShowItemByName(menu, "setfp_saberdefend", qfalse);
+				Menu_ShowItemByName(menu, "setfp_saberthrow", qfalse);
+				Menu_ShowItemByName(menu, "effectentry", qfalse);
+				Menu_ShowItemByName(menu, "effectfield", qfalse);
+				Menu_ShowItemByName(menu, "nosaber", qtrue);
+			}
+		}
 		// Also, check if there is no saberattack.  If there isn't, there had better not be any defense or throw!
-		if (uiForcePowersRank[FP_SABER_OFFENSE]<1)
+		else if (uiForcePowersRank[FP_SABER_OFFENSE]<1)
+		//if (uiForcePowersRank[FP_SABER_OFFENSE]<1)
 		{
+			Menu_ShowItemByName(menu, "setfp_saberattack", qtrue);
+		//[/ExpSys]
 			uiForcePowersRank[FP_SABER_DEFENSE]=0;
 			uiForcePowersRank[FP_SABERTHROW]=0;
 			if (menu)
@@ -533,8 +552,36 @@ void UpdateForceUsed()
 		}
 	}
 
-	// Make sure that we're still legal.
 	//[ExpSys]
+	//Made Force Seeing Level 1 a pre-req to taking any additional force powers, except in the case of free sabers.
+	if(uiForcePowersRank[FP_SEE] <= FORCE_LEVEL_0)
+	{//can't use the force if we aren't Force sensitive.
+		int i;
+		for(i = 0; i < FP_SEE; i++) //saber powers set above!
+		{
+			uiForcePowersRank[i] = 0;
+		}
+
+		if(menu)
+		{
+			Menu_ShowItemByName(menu, "notforcesensitive", qtrue);
+			Menu_ShowItemByName(menu, "neutralpowers", qfalse);
+			Menu_ShowItemByName(menu, "darkpowers", qfalse);
+			Menu_ShowItemByName(menu, "lightpowers", qfalse);
+		}
+	}
+	else
+	{
+		if(menu)
+		{
+			Menu_ShowItemByName(menu, "notforcesensitive", qfalse);
+			Menu_ShowItemByName(menu, "neutralpowers", qtrue);
+			Menu_ShowItemByName(menu, "darkpowers", qtrue);
+			Menu_ShowItemByName(menu, "lightpowers", qtrue);
+		}
+	}
+
+	// Make sure that we're still legal.
 	for (curpower=0;curpower<NUM_TOTAL_SKILLS;curpower++)
 	//for (curpower=0;curpower<NUM_FORCE_POWERS;curpower++)
 	//[/ExpSys]
@@ -1167,6 +1214,17 @@ qboolean UI_ForcePowerRank_HandleKey(int flags, float *special, int key, int num
 		{
 			return qtrue;
 		}
+
+		//[ExpSys]
+		//Made Force Seeing Level 1 a pre-req to taking any additional force powers, except in the case of free sabers.
+		if (forcepower < NUM_FORCE_POWERS && forcepower != FP_SEE)
+		{//force powers can't be bought without being force sensitive
+			if (uiForcePowersRank[FP_SEE] < 1)
+			{
+				return qtrue;
+			}
+		}
+		//[/ExpSys]
 
 		// If we are not on the same side as a power, or if we are not of any rank at all.
 		//[ForceSys]
