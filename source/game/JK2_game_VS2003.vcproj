@@ -126,7 +126,8 @@
 				LinkIncremental="1"
 				SuppressStartupBanner="TRUE"
 				ModuleDefinitionFile=".\JK2_game.def"
-				ProgramDatabaseFile=""
+				GenerateDebugInformation="TRUE"
+				ProgramDatabaseFile="..\..\ojpenhanced\jampgamex86.pdb"
 				GenerateMapFile="TRUE"
 				MapFileName=".\../Final/jampgamex86.map"
 				MapLines="TRUE"
@@ -422,8 +423,7 @@
 				RelativePath=".\g_combat.c">
 			</File>
 			<File
-				RelativePath=".\g_crash.c"
-				>
+				RelativePath=".\g_crash.c">
 			</File>
 			<File
 				RelativePath="g_dynmusic.c">
@@ -468,8 +468,7 @@
 				RelativePath="g_roff.c">
 			</File>
 			<File
-				RelativePath=".\g_saberbeh.c"
-				>
+				RelativePath=".\g_saberbeh.c">
 			</File>
 			<File
 				RelativePath=".\g_saga.c">
@@ -767,8 +766,7 @@
 				RelativePath="g_roff.h">
 			</File>
 			<File
-				RelativePath=".\g_saberbeh.h"
-				>
+				RelativePath=".\g_saberbeh.h">
 			</File>
 			<File
 				RelativePath=".\g_team.h">

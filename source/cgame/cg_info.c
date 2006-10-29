@@ -283,12 +283,22 @@ void CG_DrawInformation( void ) {
 		
 	if (cgs.gametype != GT_SIEGE)
 	{
-		value = atoi( Info_ValueForKey( info, "timelimit" ) );
+		//[CoOp]
+		if ( cgs.gametype != GT_SINGLE_PLAYER ) {
+			value = atoi( Info_ValueForKey( info, "timelimit" ) );
+			if ( value ) {
+				UI_DrawProportionalString( 320, y, va( "%s %i", CG_GetStringEdString("MP_INGAME", "TIMELIMIT"), value ),
+					UI_CENTER|UI_INFOFONT|UI_DROPSHADOW, colorWhite );
+				y += iPropHeight;
+			}
+		}
+		/*value = atoi( Info_ValueForKey( info, "timelimit" ) );
 		if ( value ) {
 			UI_DrawProportionalString( 320, y, va( "%s %i", CG_GetStringEdString("MP_INGAME", "TIMELIMIT"), value ),
 				UI_CENTER|UI_INFOFONT|UI_DROPSHADOW, colorWhite );
 			y += iPropHeight;
-		}
+		}*/
+		//[/CoOp]
 
 		//[CoOp]
 		if ( cgs.gametype < GT_CTF && cgs.gametype != GT_SINGLE_PLAYER ) {
