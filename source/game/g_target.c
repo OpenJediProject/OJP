@@ -1196,7 +1196,7 @@ void Use_Autosave( gentity_t *ent, gentity_t *other, gentity_t *activator )
 
 	if(activator->client && activator->client->pers.netname)
 	{
-		trap_SendServerCommand(-1, va("cp \""S_COLOR_RED"%s Reached Checkpoint.\n\"", activator->client->pers.netname));
+		trap_SendServerCommand(-1, va("cp \""S_COLOR_RED"%s^1 Reached Checkpoint.\n\"", activator->client->pers.netname));
 	}
 	else
 	{

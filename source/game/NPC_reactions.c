@@ -592,29 +592,38 @@ void NPC_Touch(gentity_t *self, gentity_t *other, trace_t *trace)
 			//[CoOp]
 			char *text;
 			qboolean	keyTaken;
+			int sendnum = -1; // ensiform - added this
 			//give him my key
 			if ( Q_stricmp( "goodie", self->message ) == 0 )
 			{//a goodie key
 				if ( (keyTaken = INV_GoodieKeyGive( other )) == qtrue )
 				{
-					text = "cp @SP_INGAME_TOOK_IMPERIAL_GOODIE_KEY";
+					// ensiform TODO - Add name of 'other' (who picked up key) text = va("cp \"%s^7 %s\n\"", other->client->pers.netname, G_GetStringEdString("SP_INGAME", "TOOK_IMPERIAL_GOODIE_KEY2"));
+					text = va("cp \"%s\n\"", G_GetStringEdString("SP_INGAME", "TOOK_IMPERIAL_GOODIE_KEY"));
+					//text = "cp @SP_INGAME_TOOK_IMPERIAL_GOODIE_KEY";
 					//G_AddEvent( other, EV_ITEM_PICKUP, (FindItemForInventory( INV_GOODIE_KEY )-bg_itemlist) );
 				}
 				else
 				{
-					text = "cp @SP_INGAME_CANT_CARRY_GOODIE_KEY";
+					sendnum = other->s.number;
+					text = va("cp \"%s\n\"", G_GetStringEdString("SP_INGAME", "CANT_CARRY_GOODIE_KEY"));
+					//text = "cp @SP_INGAME_CANT_CARRY_GOODIE_KEY";
 				}
 			}
 			else
 			{//a named security key
 				if ( (keyTaken = INV_SecurityKeyGive( other, self->message )) == qtrue )
 				{
-					text = "cp @SP_INGAME_TOOK_IMPERIAL_SECURITY_KEY";
+					// ensiform TODO - Add name of 'other' (who picked up key) text = va("cp \"%s^7 %s\n\"", other->client->pers.netname, G_GetStringEdString("SP_INGAME", "TOOK_IMPERIAL_SECURITY_KEY2"));
+					text = va("cp \"%s\n\"", G_GetStringEdString("SP_INGAME", "TOOK_IMPERIAL_SECURITY_KEY"));
+					//text = "cp @SP_INGAME_TOOK_IMPERIAL_SECURITY_KEY";
 					//G_AddEvent( other, EV_ITEM_PICKUP, (FindItemForInventory( INV_SECURITY_KEY )-bg_itemlist) );
 				}
 				else
 				{
-					text = "cp @SP_INGAME_CANT_CARRY_SECURITY_KEY";
+					sendnum = other->s.number;
+					text = va("cp \"%s\n\"", G_GetStringEdString("SP_INGAME", "CANT_CARRY_SECURITY_KEY"));
+					//text = "cp @SP_INGAME_CANT_CARRY_SECURITY_KEY";
 				}
 			}
 			if ( keyTaken )
@@ -627,7 +636,8 @@ void NPC_Touch(gentity_t *self, gentity_t *other, trace_t *trace)
 				//FIXME: need some event to pass to cgame for sound/graphic/message?
 			}
 			//FIXME: temp message
-			trap_SendServerCommand( -1, text );
+			trap_SendServerCommand( sendnum, text );
+			//trap_SendServerCommand( -1, text );
 			//[/CoOp]
 		}
 	}
