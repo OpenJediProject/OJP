@@ -2599,9 +2599,7 @@ const char *CG_GetStringEdString(char *refSection, char *refName)
 
 	Com_sprintf(temp_buffer, sizeof(temp_buffer), "%s_%s", refSection, refName);
 
-	if ((len = strlen(temp_buffer)) >= MAX_VA_STRING) {
-		Com_Error( ERR_DROP, "Attempted to overrun string in call to CG_GetStringEdString()\n" );
-	}
+	len = strlen(temp_buffer);
 
 	if (len + index >= MAX_VA_STRING-1) {
 		index = 0;
@@ -4107,12 +4105,16 @@ Ghoul2 Insert End
 	CG_TrueViewInit();
 	//[/TrueView]
 
+	//[ExpSys]
+	/* Don't load weapons.dat in Enhanced, it breaks some things with the ExpSys
 	//[WEAPONSDAT]
 	if(cgs.gametype == GT_SINGLE_PLAYER)
 	{//load in the weapons.dat overrides if we're playing CoOp.
 		BG_LoadWeaponsData();
 	}
 	//[/WEAPONSDAT]
+	*/
+	//[/ExpSys]
 
 	CG_RegisterSounds();
 

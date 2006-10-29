@@ -1436,12 +1436,16 @@ void SP_worldspawn( void )
 	}
 	//[/DynamicMusic]
 
+	//[ExpSys]
+	/* Don't load weapons.dat in Enhanced, it breaks some things with the ExpSys
 	//[WEAPONSDAT]
 	if(g_gametype.integer == GT_SINGLE_PLAYER)
 	{//load in the weapons.dat overrides if we're playing CoOp.
 		BG_LoadWeaponsData();
 	}
 	//[/WEAPONSDAT]
+	*/
+	//[/ExpSys]
 
 	trap_SetConfigstring( CS_MUSIC, text );
 

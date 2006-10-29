@@ -23,6 +23,7 @@ Version 0.1.0:
 			- Removed Drain, Protect, and Mind Trick as selectable powers until they can be balanced or retooled for realism.
 			- Enlightenment holocrons can now be picked up by users of both sides of the Force.
 			- Any skill points that a player hasn't allociated to skills is the amount of armor (shields) that a player gets on spawn.
+			- The weapons.dat file is no longer loaded in Enhanced because it messes up some of the skill code
 			
 		Force Powers:
 			- Players must now be Force Sensitive (have at least one rank of Force Seeing) to access the other Force skills.
