@@ -150,6 +150,7 @@ Version 0.1.0:
 				- Push/Pull is no longer automatically countered if the player is hit from behind while critical DP.
 				- Can't block Push/Pull while too far off balance.
 				- Players can now push/pull while they're being effected by a push/pull.
+				- (ensiform) Fixed an unused integer that was in CanCounterThrow and no longer needed with Force System.
 
 			Lightning:
 				- The DP cost to saber block lightning is now directly related to the damage caused by the lightning.

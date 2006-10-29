@@ -1828,6 +1828,30 @@ void G_SetTauntAnim( gentity_t *ent, int taunt )
 		return;
 	}
 
+	//[TAUNTFIX]
+	// dead clients dont get to spam taunt
+	if ( ent->client->ps.stats[STAT_HEALTH] <= 0 ) {
+		return;
+	}
+	if (ent->client->ps.emplacedIndex)
+	{ //on an emplaced gun
+		return;
+	}
+	if (ent->client->ps.m_iVehicleNum)
+	{ //in a vehicle like at-st
+		gentity_t *veh = &g_entities[ent->client->ps.m_iVehicleNum];
+
+		if ( veh->m_pVehicle && veh->m_pVehicle->m_pVehicleInfo->type == VH_WALKER )
+			return;
+
+		if ( veh->m_pVehicle && veh->m_pVehicle->m_pVehicleInfo->type == VH_FIGHTER )
+			return;
+
+		if ( taunt == TAUNT_FLOURISH || taunt == TAUNT_GLOAT ) taunt = TAUNT_TAUNT;
+		if ( taunt == TAUNT_MEDITATE || taunt == TAUNT_BOW ) return;
+	}
+	//[/TAUNTFIX]
+
 	//[ALLTAUNTS]
 	/*
 	if ( taunt != TAUNT_TAUNT )
@@ -1933,11 +1957,17 @@ void G_SetTauntAnim( gentity_t *ent, int taunt )
 				&& ent->client->saber[1].model 
 				&& ent->client->saber[1].model[0] )
 			{//turn off second saber
-				G_Sound( ent, CHAN_WEAPON, ent->client->saber[1].soundOff );
+				//[TAUNTFIX]
+				if (ent->client->ps.weapon == WP_SABER)
+					G_Sound( ent, CHAN_WEAPON, ent->client->saber[1].soundOff );
+				//[/TAUNTFIX]
 			}
 			else if ( ent->client->ps.saberHolstered == 0 )
 			{//turn off first
-				G_Sound( ent, CHAN_WEAPON, ent->client->saber[0].soundOff );
+				//[TAUNTFIX]
+				if (ent->client->ps.weapon == WP_SABER)
+					G_Sound( ent, CHAN_WEAPON, ent->client->saber[0].soundOff );
+				//[/TAUNTFIX]
 			}
 			ent->client->ps.saberHolstered = 2;
 			break;
@@ -1960,11 +1990,17 @@ void G_SetTauntAnim( gentity_t *ent, int taunt )
 				&& ent->client->saber[1].model 
 				&& ent->client->saber[1].model[0] )
 			{//turn off second saber
-				G_Sound( ent, CHAN_WEAPON, ent->client->saber[1].soundOff );
+				//[TAUNTFIX]
+				if (ent->client->ps.weapon == WP_SABER)
+					G_Sound( ent, CHAN_WEAPON, ent->client->saber[1].soundOff );
+				//[/TAUNTFIX]
 			}
 			else if ( ent->client->ps.saberHolstered == 0 )
 			{//turn off first
-				G_Sound( ent, CHAN_WEAPON, ent->client->saber[0].soundOff );
+				//[TAUNTFIX]
+				if (ent->client->ps.weapon == WP_SABER)
+					G_Sound( ent, CHAN_WEAPON, ent->client->saber[0].soundOff );
+				//[/TAUNTFIX]
 			}
 			ent->client->ps.saberHolstered = 2;
 			break;

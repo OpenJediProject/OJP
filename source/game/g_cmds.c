@@ -1689,10 +1689,12 @@ void Cmd_Follow_f( gentity_t *ent ) {
 		return;
 	}
 	
+	//[BugFix38]
 	// can't follow another spectator
 	if ( level.clients[ i ].tempSpectate >= level.time ) {
 		return;
 	}
+	//[/BugFix38]
 
 	// if they are playing a tournement game, count as a loss
 	if ( (g_gametype.integer == GT_DUEL || g_gametype.integer == GT_POWERDUEL)
@@ -1754,6 +1756,13 @@ void Cmd_FollowCycle_f( gentity_t *ent, int dir ) {
 		if ( level.clients[ clientnum ].sess.sessionTeam == TEAM_SPECTATOR ) {
 			continue;
 		}
+
+		//[BugFix38]
+		// can't follow another spectator
+		if ( level.clients[ clientnum ].tempSpectate >= level.time ) {
+			return;
+		}
+		//[/BugFix38]
 
 		// this is good, we can use it
 		ent->client->sess.spectatorClient = clientnum;
@@ -3122,6 +3131,38 @@ void saberKnockDown(gentity_t *saberent, gentity_t *saberOwner, gentity_t *other
 
 void Cmd_ToggleSaber_f(gentity_t *ent)
 {
+	//[TAUNTFIX]
+	if (ent->client->ps.weapon != WP_SABER) {
+		return;
+	}
+
+	if (level.intermissiontime) { // not during intermission
+		return;
+	}
+
+	if (ent->client->sess.sessionTeam == TEAM_SPECTATOR ) { // not when spec
+		return;
+	}
+
+	if (ent->client->tempSpectate >= level.time ) { // not when tempSpec
+		return;
+	}
+
+	if (ent->client->ps.emplacedIndex) { //on an emplaced gun
+		return;
+	}
+
+	if (ent->client->ps.m_iVehicleNum) { //in a vehicle like at-st
+		gentity_t *veh = &g_entities[ent->client->ps.m_iVehicleNum];
+
+		if ( veh->m_pVehicle && veh->m_pVehicle->m_pVehicleInfo->type == VH_WALKER )
+			return;
+
+		if ( veh->m_pVehicle && veh->m_pVehicle->m_pVehicleInfo->type == VH_FIGHTER )
+			return;
+	}
+	//[/TAUNTFIX]
+
 	if (ent->client->ps.fd.forceGripCripple)
 	{ //if they are being gripped, don't let them unholster their saber
 		if (ent->client->ps.saberHolstered)
@@ -3154,10 +3195,14 @@ void Cmd_ToggleSaber_f(gentity_t *ent)
 		return;
 	}
 
+	//[TAUNTFIX]
+	/* ensiform - moved this up to the top of function
 	if (ent->client->ps.weapon != WP_SABER)
 	{
 		return;
 	}
+	*/
+	//[/TAUNTFIX]
 
 //	if (ent->client->ps.duelInProgress && !ent->client->ps.saberHolstered)
 //	{
@@ -3235,6 +3280,34 @@ void Cmd_SaberAttackCycle_f(gentity_t *ent)
 	}
 	*/	
 	//[/BugFix15]
+
+	//[TAUNTFIX]
+	if (ent->client->sess.sessionTeam == TEAM_SPECTATOR)
+	{ //not for spectators
+		return;
+	}
+
+	if (ent->client->tempSpectate >= level.time)
+	{ //not for spectators
+		return;
+	}
+
+	if (level.intermissiontime)
+	{ //not during intermission
+		return;
+	}
+
+	if (ent->client->ps.m_iVehicleNum)
+	{ //in a vehicle like at-st
+		gentity_t *veh = &g_entities[ent->client->ps.m_iVehicleNum];
+
+		if ( veh->m_pVehicle && veh->m_pVehicle->m_pVehicleInfo->type == VH_WALKER )
+			return;
+
+		if ( veh->m_pVehicle && veh->m_pVehicle->m_pVehicleInfo->type == VH_FIGHTER )
+			return;
+	}
+	//[/TAUNTFIX]
 
 	if (ent->client->saber[0].model[0] && ent->client->saber[1].model[0])
 	{ //no cycling for akimbo

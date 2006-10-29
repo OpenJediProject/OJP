@@ -290,7 +290,10 @@ void CG_DrawInformation( void ) {
 			y += iPropHeight;
 		}
 
-		if (cgs.gametype < GT_CTF ) {
+		//[CoOp]
+		if ( cgs.gametype < GT_CTF && cgs.gametype != GT_SINGLE_PLAYER ) {
+		//if (cgs.gametype < GT_CTF ) {
+		//[/CoOp]
 			value = atoi( Info_ValueForKey( info, "fraglimit" ) );
 			if ( value ) {
 				UI_DrawProportionalString( 320, y, va( "%s %i", CG_GetStringEdString("MP_INGAME", "FRAGLIMIT"), value ),
@@ -415,6 +418,12 @@ void CG_DrawInformation( void ) {
 		else if ( value == WP_NOEXPLOS )
 		{
 			UI_DrawProportionalString( 320, y, "No Explosives",
+			UI_CENTER|UI_INFOFONT|UI_DROPSHADOW, colorWhite );
+			y += iPropHeight;
+		}
+		else if ( value )
+		{
+			UI_DrawProportionalString( 320, y, "Custom Weapon Setup",
 			UI_CENTER|UI_INFOFONT|UI_DROPSHADOW, colorWhite );
 			y += iPropHeight;
 		}

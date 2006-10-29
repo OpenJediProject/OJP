@@ -7609,6 +7609,10 @@ static void CG_DrawWarmup( void ) {
 			s = CG_GetStringEdString("MENUS", "CAPTURE_THE_FLAG");//"Capture the Flag";
 		} else if ( cgs.gametype == GT_CTY ) {
 			s = CG_GetStringEdString("MENUS", "CAPTURE_THE_YSALIMARI");//"Capture the Ysalamiri";
+		//[CoOp]
+		} else if ( cgs.gametype == GT_SINGLE_PLAYER ) {
+			s = CG_GetStringEdString("OJP_MENUS", "COOP");//"Cooperative";
+		//[/CoOp]
 		} else {
 			s = "";
 		}
