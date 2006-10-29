@@ -558,7 +558,11 @@ qboolean CG_DrawOldScoreboard( void ) {
 
 	//I guess this can be accomplished simply by printing the first teams score with a maxClients
 	//value passed in related to how many players are on both teams.
-	if ( cgs.gametype >= GT_TEAM ) {
+	//[CoOp]
+	//treat CoOp as a team game for the scoreboard
+	if ( cgs.gametype >= GT_SINGLE_PLAYER ) {
+	//if ( cgs.gametype >= GT_TEAM ) {
+	//[/CoOp]
 		//
 		// teamplay scoreboard
 		//
