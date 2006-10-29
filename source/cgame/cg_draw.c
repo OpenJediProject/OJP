@@ -6931,6 +6931,13 @@ static void CG_DrawCrosshairNames( void ) {
 	int			baseColor;
 	qboolean	isVeh = qfalse;
 
+	//[CoOp]
+	if(in_camera)
+	{//no crosshair while in cutscenes
+		return;
+	}
+	//[/CoOp]
+
 	if ( !cg_drawCrosshair.integer ) {
 		return;
 	}
