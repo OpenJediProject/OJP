@@ -263,11 +263,11 @@ void Cmd_Give_f (gentity_t *cmdent, int baseArg)
 {
 	char		name[MAX_TOKEN_CHARS];
 	gentity_t	*ent;
-	gitem_t		*it;
+	//gitem_t		*it; // ensiform - removed
 	int			i;
 	qboolean	give_all;
-	gentity_t		*it_ent;
-	trace_t		trace;
+	//gentity_t		*it_ent; // ensiform - removed
+	//trace_t		trace; // ensiform - removed
 	char		arg[MAX_TOKEN_CHARS];
 
 	if ( !CheatsOk( cmdent ) ) {
@@ -314,7 +314,8 @@ void Cmd_Give_f (gentity_t *cmdent, int baseArg)
 	else
 		give_all = qfalse;
 
-	if (give_all)
+	//[CoOp]
+	/*if (give_all)
 	{
 		i = 0;
 		while (i < HI_NUM_HOLDABLE)
@@ -323,7 +324,8 @@ void Cmd_Give_f (gentity_t *cmdent, int baseArg)
 			i++;
 		}
 		i = 0;
-	}
+	}*/
+	//[/CoOp]
 
 	if (give_all || Q_stricmp( name, "health") == 0)
 	{
@@ -340,6 +342,32 @@ void Cmd_Give_f (gentity_t *cmdent, int baseArg)
 		if (!give_all)
 			return;
 	}
+
+	//[CoOp]
+	if (give_all || Q_stricmp( name, "inventory") == 0)
+	{
+		i = 0;
+		for ( i = 0 ; i < HI_NUM_HOLDABLE ; i++ ) {
+			ent->client->ps.stats[STAT_HOLDABLE_ITEMS] |= (1 << i);
+		}
+	}
+
+	if (give_all || Q_stricmp( name, "force") == 0)
+	{
+		if (trap_Argc() == 3+baseArg) {
+			trap_Argv( 2+baseArg, arg, sizeof( arg ) );
+			ent->client->ps.fd.forcePower = atoi(arg);
+			if (ent->client->ps.fd.forcePower > 100) {
+				ent->client->ps.fd.forcePower = 100;
+			}
+		}
+		else {
+			ent->client->ps.fd.forcePower = 100;
+		}
+		if (!give_all)
+			return;
+	}
+	//[/CoOp]
 
 	if (give_all || Q_stricmp(name, "weapons") == 0)
 	{
@@ -372,7 +400,24 @@ void Cmd_Give_f (gentity_t *cmdent, int baseArg)
 		return;
 	}
 
+	//[CoOp]
 	if (give_all || Q_stricmp(name, "ammo") == 0)
+	{
+		int num = 999;
+		if (trap_Argc() == 3+baseArg) {
+			trap_Argv( 2+baseArg, arg, sizeof( arg ) );
+			num = atoi(arg);
+		}
+		for ( i = AMMO_BLASTER ; i < AMMO_MAX ; i++ ) {
+			if ( num > ammoData[i].max )
+				num = ammoData[i].max;
+			Add_Ammo( ent, i, num );
+		}
+		if (!give_all)
+			return;
+	}
+
+	/*if (give_all || Q_stricmp(name, "ammo") == 0)
 	{
 		int num = 999;
 		if (trap_Argc() == 3+baseArg) {
@@ -384,7 +429,8 @@ void Cmd_Give_f (gentity_t *cmdent, int baseArg)
 		}
 		if (!give_all)
 			return;
-	}
+	}*/
+	//[/CoOp]
 
 	if (give_all || Q_stricmp(name, "armor") == 0)
 	{
@@ -399,6 +445,8 @@ void Cmd_Give_f (gentity_t *cmdent, int baseArg)
 			return;
 	}
 
+	/*
+	// ensiform - Not used in basejka or OJP so why keep?
 	if (Q_stricmp(name, "excellent") == 0) {
 		ent->client->ps.persistant[PERS_EXCELLENT_COUNT]++;
 		return;
@@ -437,7 +485,7 @@ void Cmd_Give_f (gentity_t *cmdent, int baseArg)
 		if (it_ent->inuse) {
 			G_FreeEntity( it_ent );
 		}
-	}
+	}*/
 }
 
 /*

@@ -1076,23 +1076,23 @@ void Use_Secret( gentity_t *ent, gentity_t *other, gentity_t *activator )
 
 	ent->count--;
 
-	trap_SendServerCommand(-1, va("cp \""S_COLOR_RED"%s discovered a secret area.\n\"", activator->client->pers.netname));
+	trap_SendServerCommand(-1, va("cp \"%s^7 discovered a secret area.\n\"", activator->client->pers.netname));
 	G_Sound( activator, CHAN_AUTO, G_SoundIndex("sound/interface/secret_area"));
 
 	if(ent->count == 1)
 	{
-		trap_SendServerCommand(-1, "cp \""S_COLOR_RED"One secret remains.\n\"");
+		trap_SendServerCommand(-1, "cp \"^1One secret remains.\n\"");
 	}
 	else if(!ent->count)
 	{
-		trap_SendServerCommand(-1, "cp \""S_COLOR_RED"All secrets have been found!\n\"");
+		trap_SendServerCommand(-1, "cp \"^1All secrets have been found!\n\"");
 
 		//disable target
 		ent->use = 0;
 	}
 	else
 	{
-		trap_SendServerCommand(-1, va("cp \""S_COLOR_BLUE"%i / %i "S_COLOR_RED"Secrets Found\n\"", ent->genericValue1-ent->count, ent->genericValue1));
+		trap_SendServerCommand(-1, va("cp \"^4%i / %i^1 Secrets Found\n\"", ent->genericValue1-ent->count, ent->genericValue1));
 	}
 }
 
@@ -1196,11 +1196,11 @@ void Use_Autosave( gentity_t *ent, gentity_t *other, gentity_t *activator )
 
 	if(activator->client && activator->client->pers.netname)
 	{
-		trap_SendServerCommand(-1, va("cp \""S_COLOR_RED"%s^1 Reached Checkpoint.\n\"", activator->client->pers.netname));
+		trap_SendServerCommand(-1, va("cp \"%s^1 Reached Checkpoint.\n\"", activator->client->pers.netname));
 	}
 	else
 	{
-		trap_SendServerCommand(-1, "cp \""S_COLOR_RED"Reached Checkpoint.\n\"");
+		trap_SendServerCommand(-1, "cp \"^1Reached Checkpoint.\n\"");
 	}
 
 	//[CoOpEditor]
