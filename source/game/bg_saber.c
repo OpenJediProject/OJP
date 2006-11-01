@@ -4174,7 +4174,7 @@ void PM_WeaponLightsaber(void)
 	// Now we react to a block action by the player's lightsaber.
 	if ( pm->ps->saberBlocked )
 	{
-		//[RACC] - Hold projectile blocks for a bit.
+		//[RACC] - Hold saber blocks for a bit.
 		if ( pm->ps->saberBlocked >= BLOCKED_UPPER_RIGHT 
 			&& pm->ps->saberBlocked < BLOCKED_UPPER_RIGHT_PROJ)
 		{//hold the parry for a bit

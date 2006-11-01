@@ -2680,6 +2680,11 @@ typedef struct siegePers_s
 //this flag indicates that this player is supposed to win the current saberlock.
 #define FLAG_LOCKWINNER		6
 
+//[Flamethrower]
+//flag indicating that the player's flamethrower is active.
+#define FLAG_FLAMETHROWER	7
+//[/Flamethrower]
+
 
 //[SaberDefines]
 //scaler to the walkspeed

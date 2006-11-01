@@ -1209,6 +1209,152 @@ void Jetpack_On(gentity_t *ent)
 	ent->client->jetPackOn = qtrue;
 }
 
+
+//[FlameThrower]
+#define FLAMETHROWER_RADIUS 300
+void Flamethrower_Fire( gentity_t *self )
+{
+	trace_t	tr;
+	vec3_t	forward;
+	gentity_t	*traceEnt;
+	vec3_t	center, mins, maxs, dir, ent_org, size, v;
+
+	float	radius = FLAMETHROWER_RADIUS, dot, dist;
+	int		damage	= Q_irand( 20, 30 );
+	gentity_t	*entityList[MAX_GENTITIES];
+	int			iEntityList[MAX_GENTITIES];
+	int		e, numListedEntities, i;
+
+	AngleVectors( self->client->ps.viewangles, forward, NULL, NULL );
+	VectorNormalize( forward );
+
+	VectorCopy( self->client->ps.origin, center );
+	for ( i = 0 ; i < 3 ; i++ ) 
+	{
+		mins[i] = center[i] - radius;
+		maxs[i] = center[i] + radius;
+	}
+	numListedEntities = trap_EntitiesInBox( mins, maxs, iEntityList, MAX_GENTITIES );
+
+	i = 0;
+	while (i < numListedEntities)
+	{
+		entityList[i] = &g_entities[iEntityList[i]];
+
+		i++;
+	}
+
+	for ( e = 0 ; e < numListedEntities ; e++ ) 
+	{
+		traceEnt = entityList[e];
+
+		if ( !traceEnt )
+			continue;
+		if ( traceEnt == self )
+			continue;
+		if ( !traceEnt->inuse )
+			continue;
+		if ( !traceEnt->takedamage )
+			continue;
+		if ( traceEnt->health <= 0 )//no torturing corpses
+			continue;
+		if ( !g_friendlyFire.integer && OnSameTeam(self, traceEnt))
+			continue;
+		//this is all to see if we need to start a saber attack, if it's in flight, this doesn't matter
+		// find the distance from the edge of the bounding box
+		for ( i = 0 ; i < 3 ; i++ ) 
+		{
+			if ( center[i] < traceEnt->r.absmin[i] ) 
+			{
+				v[i] = traceEnt->r.absmin[i] - center[i];
+			} else if ( center[i] > traceEnt->r.absmax[i] ) 
+			{
+				v[i] = center[i] - traceEnt->r.absmax[i];
+			} else 
+			{
+				v[i] = 0;
+			}
+		}
+
+		VectorSubtract( traceEnt->r.absmax, traceEnt->r.absmin, size );
+		VectorMA( traceEnt->r.absmin, 0.5, size, ent_org );
+
+		//see if they're in front of me
+		//must be within the forward cone
+		VectorSubtract( ent_org, center, dir );
+		VectorNormalize( dir );
+		if ( (dot = DotProduct( dir, forward )) < 0.5 )
+			continue;
+
+		//must be close enough
+		dist = VectorLength( v );
+		if ( dist >= radius ) 
+		{
+			continue;
+		}
+	
+		//in PVS?
+		if ( !traceEnt->r.bmodel && !trap_InPVS( ent_org, self->client->ps.origin ) )
+		{//must be in PVS
+			continue;
+		}
+
+		//Now check and see if we can actually hit it
+		trap_Trace( &tr, self->client->ps.origin, vec3_origin, vec3_origin, ent_org, self->s.number, MASK_SHOT );
+		if ( tr.fraction < 1.0f && tr.entityNum != traceEnt->s.number )
+		{//must have clear LOS
+			continue;
+		}
+
+		G_Damage( traceEnt, self, self, dir, tr.endpos, damage, DAMAGE_NO_ARMOR|DAMAGE_NO_KNOCKBACK|/*DAMAGE_NO_HIT_LOC|*/DAMAGE_IGNORE_TEAM, MOD_LAVA );
+
+	}
+}
+
+extern void G_SoundOnEnt( gentity_t *ent, int channel, const char *soundPath );
+void Flamethrower_Start( gentity_t *self )
+{
+	//mdxaBone_t	boltMatrix;
+	//vec3_t		org, dir;
+
+	G_SoundOnEnt( self, CHAN_WEAPON, "sound/effects/combustfire.mp3" );
+
+	self->client->ps.userInt3 |= (1 << FLAG_FLAMETHROWER);
+	/*
+
+	trap_G2API_GetBoltMatrix(self->ghoul2, 0, self->client->renderInfo.handLBolt, &boltMatrix, self->client->ps.viewangles, self->client->ps.origin, level.time, NULL, self->modelScale);
+		
+	//trap_G2API_GetBoltMatrix(self->ghoul2, 0, self->client->renderInfo.handLBolt, &boltMatrix, self->r.currentAngles,
+	//	self->r.currentOrigin, level.time, NULL, self->modelScale);
+
+	BG_GiveMeVectorFromMatrix( &boltMatrix, ORIGIN, org );
+	BG_GiveMeVectorFromMatrix( &boltMatrix, NEGATIVE_Y, dir );
+
+	//AngleVectors(self->client->ps.viewangles, dir, NULL, NULL);
+
+	//G_PlayEffectID( G_EffectIndex("boba/fthrw"), org, dir);
+	*/
+}
+
+void Flamethrower_On(gentity_t *ent)
+{
+	ent->client->ps.forceHandExtend = HANDEXTEND_FORCE_HOLD;
+	ent->client->ps.forceHandExtendTime = level.time + 500;
+	if(ent->client->flameTime < level.time)
+	{//start flamethrower up
+		Flamethrower_Start(ent);
+	}
+
+	Flamethrower_Fire(ent);
+}
+
+void ItemUse_FlameThrower(gentity_t *ent)
+{
+	Flamethrower_On(ent);
+}
+//[/Flamethrower]
+
+
 void ItemUse_Jetpack( gentity_t *ent )
 {
 	assert(ent && ent->client);

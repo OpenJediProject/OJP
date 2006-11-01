@@ -1553,6 +1553,10 @@ typedef struct
 	fxHandle_t forceLightning;
 	fxHandle_t forceLightningWide;
 
+	//[Flamethrower]
+	fxHandle_t flamethrower;
+	//[/Flamethrower]
+
 	fxHandle_t forceDrain;
 	fxHandle_t forceDrainWide;
 	fxHandle_t forceDrained;

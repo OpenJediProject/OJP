@@ -8383,7 +8383,11 @@ static void PM_Weapon( void )
 			}
 			else
 			{//???
-				desiredAnim = BOTH_FORCEGRIP_HOLD;
+				//[Flamethrower]
+				//had to alter the default to make the flamethrower use this stuff correctly.
+				desiredAnim = BOTH_FORCELIGHTNING_HOLD;
+				//desiredAnim = BOTH_FORCEGRIP_HOLD;
+				//[/Flamethrower]
 			}
 			break;
 		case HANDEXTEND_SABERPULL:

@@ -928,6 +928,11 @@ struct gclient_s {
 	int			skillDebounce;			//debouncer for skill point updates to the player client
 	int			skillLevel[NUM_SKILLS];
 	//[/ExpSys]
+
+	//[Flamethrower]
+	int			flameTime;
+	//[/Flamethrower]
+
 };
 
 //Interest points
@@ -1165,6 +1170,9 @@ void ItemUse_Sentry(gentity_t *ent);
 
 void Jetpack_Off(gentity_t *ent);
 void Jetpack_On(gentity_t *ent);
+//[Flamethrower]
+void ItemUse_FlameThrower(gentity_t *ent);
+//[/Flamethrower]
 void ItemUse_Jetpack(gentity_t *ent);
 void ItemUse_UseCloak( gentity_t *ent );
 void ItemUse_UseDisp(gentity_t *ent, int type);

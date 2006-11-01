@@ -2213,6 +2213,11 @@ static void CG_RegisterGraphics( void ) {
 
 	cgs.effects.forceLightning		= trap_FX_RegisterEffect( "effects/force/lightning.efx" );
 	cgs.effects.forceLightningWide	= trap_FX_RegisterEffect( "effects/force/lightningwide.efx" );
+	
+	//[Flamethrower]
+	cgs.effects.flamethrower = trap_FX_RegisterEffect( "boba/fthrw" );
+	//[/Flamethrower]
+
 	cgs.effects.forceDrain		= trap_FX_RegisterEffect( "effects/mp/drain.efx" );
 	cgs.effects.forceDrainWide	= trap_FX_RegisterEffect( "effects/mp/drainwide.efx" );
 	cgs.effects.forceDrained	= trap_FX_RegisterEffect( "effects/mp/drainhit.efx");
