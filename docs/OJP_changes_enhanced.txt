@@ -118,6 +118,7 @@ Version 0.1.0:
 
 		CoOp:
 			- Fixed bug where NPCs were never completing their attack swings. 
+			- Disabled the forcepower spawning scripting since the experience system screws things up.
 
 		Dodge System:
 

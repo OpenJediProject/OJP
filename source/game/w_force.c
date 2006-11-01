@@ -356,6 +356,9 @@ void WP_InitForcePowers( gentity_t *ent )
 	}
 
 	//[CoOp]
+	//[ExpSys]
+	/* the spawn forcepowers screw up the experience system.  Disabling them.
+	//[/ExpSys]
 	//use ICARUS overrides for our initial force powers.
 	if(UseSpawnForcePowers)
 	{
@@ -382,6 +385,9 @@ void WP_InitForcePowers( gentity_t *ent )
 		//[/DodgeSys]
 		return;
 	}
+	//[ExpSys]
+	*/
+	//[/ExpSys]
 	//[/CoOp]
 
 	//racc - actually all the NPC should have dumped out of here earlier than this.
@@ -6140,6 +6146,9 @@ void WP_ForcePowersUpdate( gentity_t *self, usercmd_t *ucmd )
 
 	if ( ucmd->buttons & BUTTON_FORCE_LIGHTNING )
 	{ //lightning
+		//[Flamethrower]
+		//ItemUse_FlameThrower(self);
+		//[/Flamethrower]
 		WP_DoSpecificPower(self, ucmd, FP_LIGHTNING);
 		usingForce = qtrue;
 	}
