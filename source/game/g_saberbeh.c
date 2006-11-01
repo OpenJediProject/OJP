@@ -43,7 +43,7 @@ qboolean SabBeh_RollBalance(gentity_t *self, sabmech_t *mechSelf, qboolean force
 	else if( self->client->ps.saberAttackChainCount >= MISHAPLEVEL_HEAVY )
 	{//heavy slow bounce
 		randNum = Q_irand(0, 99);
-		if(randNum < 50 || forceMishap)
+		if(randNum < 0 || forceMishap)
 		{
 			mechSelf->doHeavySlowBounce = qtrue;
 			self->client->ps.saberAttackChainCount = MISHAPLEVEL_LIGHT;
@@ -53,7 +53,7 @@ qboolean SabBeh_RollBalance(gentity_t *self, sabmech_t *mechSelf, qboolean force
 	else if( self->client->ps.saberAttackChainCount >= MISHAPLEVEL_LIGHT )
 	{//slow bounce
 		randNum = Q_irand(0, 99);
-		if(randNum < 50 || forceMishap)
+		if(randNum < 0 || forceMishap)
 		{
 			mechSelf->doSlowBounce = qtrue;
 			self->client->ps.saberAttackChainCount = MISHAPLEVEL_NONE;
@@ -327,12 +327,6 @@ void SabBeh_AttackVsBlock( gentity_t *attacker, sabmech_t *mechAttacker,
 
 			SabBeh_AddBalance(blocker, mechBlocker, -3, qfalse);
 
-			if (atkparry && WP_SabersCheckLock(blocker, attacker))
-			{//attack parries cause saber locks.
-				attacker->client->ps.saberBlocked = BLOCKED_NONE;
-				blocker->client->ps.userInt3 |= ( 1 << FLAG_LOCKWINNER );
-				blocker->client->ps.saberBlocked = BLOCKED_NONE;
-			}
 		}
 		else
 		{//blocked values

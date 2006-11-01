@@ -54,7 +54,7 @@ Version 0.1.0:
 			- Saber locks now increment slower/more smoothly.
 			- Counterclockwise saber locks now actually move counterclockwise.
 			- Players can't saber lock if a player is in a slow bounce.
-			- Instead of rapidly tapping attack, whoever starts the saberlock is automatically the victor.  A player can start a saberlock by hitting a player with an attack fake or by using an attack parry.  Parrying the attack fake prevents a saberlock from occuring.  In addition, saberlocks can still occur randomly during combat.
+			- Instead of rapidly tapping attack, whoever starts the saberlock is automatically the victor.  A player can start a saberlock by hitting a player with an attack fake.  Parrying the attack fake prevents a saberlock from occuring.  In addition, saberlocks can still occur randomly during combat.
 			- Super Breaks:  Players now have control over what they do when they win a saber lock.  When a player wins a saber lock, they can do a normal break or a super break.  Normal breaks cause the player to stun their opponent into a mishap. 
 
 				A super break attempts to kill their opponent with finishing move.  However, Super breaks only work on opponents who have critical DP.  Otherwise, the lock loser will block the super break and forces the attacker into a mishap.  To perform a super break, hold down the attack button while in a saber lock.  
@@ -97,7 +97,7 @@ Version 0.1.0:
 
 				Mishaps Can Happen When:
 					- An attack fake is landed,
-					- An attack is parried.
+					- An attack is attack parried.
 					- A move maxes out a player's Mishap Meter.  This results in a severe (full) mishap.
 
 				Additional Concepts:
