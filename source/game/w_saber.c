@@ -10899,8 +10899,7 @@ static gentity_t *G_KickTrace( gentity_t *ent, vec3_t kickDir, float kickDist, v
 
 					//[SaberSys]
 					//made the knockdown behavior of kicks be based on the player's mishap level.
-					if (hitEnt->client->ps.saberAttackChainCount >= MISHAPLEVEL_HEAVY 
-						|| BG_InSlowBounce(&hitEnt->client->ps))
+					if (hitEnt->client->ps.saberAttackChainCount >= MISHAPLEVEL_HEAVY)
 					{//knockdown
 					if ( kickPush >= 75.0f && !Q_irand( 0, 2 ) )
 					{
@@ -13686,7 +13685,9 @@ qboolean G_InAttackParry(gentity_t *self)
 
 	if(PM_SaberInStart(self->client->ps.saberMove) //in windup
 		|| PM_SaberInReturn(self->client->ps.saberMove)
-		|| PM_SaberInParry(self->client->ps.torsoAnim)) // in block (this check only finds blocks that weren't started this turn)
+		|| PM_SaberInParry(self->client->ps.torsoAnim) // in block animation
+		|| (self->client->ps.saberBlocked >= BLOCKED_UPPER_RIGHT	//started a saber block this turn.
+			&& self->client->ps.saberBlocked < BLOCKED_UPPER_RIGHT_PROJ)) 
 	{
 		return qtrue;
 	}
