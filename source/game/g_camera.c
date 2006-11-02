@@ -755,11 +755,15 @@ void GCam_Pan( vec3_t dest, vec3_t panDirection, float duration )
 Player Positional Stuff
 ====================================*/
 
-vec3_t	playerpos[MAX_CLIENTS] = {0};
-vec3_t	playerang[MAX_CLIENTS] = {0};
-int		playerclip[MAX_CLIENTS] = {0};
-int		playercontents[MAX_CLIENTS] = {0};
+typedef struct 
+{
+	vec3_t		origin;
+	vec3_t		viewangles;
+	qboolean	inuse;
+} playerPos_t;
 
+//stores the original positions of all the players so the game can move them around for cutscenes.
+playerPos_t playerCamPos[MAX_CLIENTS]; 
 
 //while in a cutscene have all the player origins/angles on the camera's.  we do this to
 //make the game render the scenes for the camera correctly.
@@ -783,7 +787,7 @@ void UpdatePlayerCameraPos(void)
 			continue;
 		}
 
-		if(VectorCompare(vec3_origin, playerpos[i]))
+		if(!playerCamPos[i].inuse)
 		{//player hasn't been snapped to camera yet
 			EnablePlayerCameraPos(player);
 		}
@@ -811,6 +815,9 @@ void EnablePlayerCameraPos(gentity_t *player)
 	//turn off zoomMode
 	player->client->ps.zoomMode = 0;
 
+	//holster sabers
+	player->client->ps.saberHolstered = 2;
+
 	if ( player->client->ps.saberInFlight && player->client->ps.saberEntityNum )
 	{//saber is out
 		gentity_t *saberent = &g_entities[player->client->ps.saberEntityNum];
@@ -831,7 +838,6 @@ void EnablePlayerCameraPos(gentity_t *player)
 	for ( x = 0; x < NUM_FORCE_POWERS; x++ )
 	{//deactivate any active force powers
 		player->client->ps.fd.forcePowerDuration[x] = 0;
-//extern void WP_ForcePowerStop( gentity_t *self, forcePowers_t forcePower );
 		if ( player->client->ps.fd.forcePowerDuration[x] || (player->client->ps.fd.forcePowersActive&( 1 << x )) )
 		{
 			WP_ForcePowerStop( player, (forcePowers_t)x );
@@ -848,8 +854,9 @@ void EnablePlayerCameraPos(gentity_t *player)
 	player->client->noclip = qtrue;
 
 	//save our current position to the array
-	VectorCopy(player->client->ps.origin, playerpos[player->s.number]);
-	VectorCopy(player->client->ps.viewangles, playerang[player->s.number]);
+	VectorCopy(player->client->ps.origin, playerCamPos[player->s.number].origin);
+	VectorCopy(player->client->ps.viewangles, playerCamPos[player->s.number].viewangles);
+	playerCamPos[player->s.number].inuse = qtrue;
 }
 
 
@@ -863,13 +870,20 @@ void DisablePlayerCameraPos(void)
 	{
 		int flags;
 
+		if(!playerCamPos[i].inuse)
+		{//player's camera position was never set, just move on.
+			continue;
+		}
+
+		//since we're going to be done with the player positional data no matter what after this, 
+		//say that we're done with it.
+		playerCamPos[i].inuse = qfalse;
+
 		player = &g_entities[i];
 		if(!player || !player->client || !player->inuse 
 			|| player->client->pers.connected != CON_CONNECTED)
 		{//player not ingame
-			//still clear the player data array for next time.
-			VectorClear(playerpos[i]);
-			VectorClear(playerang[i]);
+
 			continue;
 		}
 
@@ -879,10 +893,8 @@ void DisablePlayerCameraPos(void)
 		player->client->ps.eFlags &= ~EF_NODRAW;
 
 		//check our respawn point
-		if(!SPSpawnpointCheck(playerpos[i]))
+		if(!SPSpawnpointCheck(playerCamPos[i].origin))
 		{//couldn't spawn in our original area, kill them.
-			VectorClear(playerpos[i]);
-			VectorClear(playerang[i]);
 			G_Damage ( player, NULL, NULL, NULL, NULL, 100000, DAMAGE_NO_PROTECTION, MOD_TELEFRAG);
 			continue;
 		}
@@ -893,14 +905,12 @@ void DisablePlayerCameraPos(void)
 		player->client->ps.eFlags = flags;
 
 		//restore view angle
-		SetClientViewAngle(player, playerang[i]);
+		SetClientViewAngle(player, playerCamPos[i].viewangles);
 
 		//found good spot, move them there
-		G_SetOrigin(player, playerpos[i]);
-		VectorCopy(playerpos[i], player->client->ps.origin);
-
-		VectorClear(playerpos[i]);
-		VectorClear(playerang[i]);
+		G_SetOrigin(player, playerCamPos[i].origin);
+		VectorCopy(playerCamPos[i].origin, player->client->ps.origin);
+	
 
 		trap_LinkEntity(player);
 
