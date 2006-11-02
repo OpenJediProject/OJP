@@ -17,32 +17,41 @@ FILENOTES           "OJP CoOp Strings.  This file is named weird to make sure it
 //missing subtitles for t1_sour
 REFERENCE	    MIS_01L01
 LANG_ENGLISH	    "Is it just me or are the Rodians kind of creepy?"
+LANG_FRENCH	    "#same"
 
 REFERENCE	    MIS_01L02
 LANG_ENGLISH	    "I know what you mean.  Those weird antanna things, right?"
+LANG_FRENCH	    "#same"
 
 REFERENCE	    MIS_01L03
 LANG_ENGLISH	    "Yeah!  That and the nose.  Pretty spooky."
+LANG_FRENCH	    "#same"
 
 REFERENCE	    MIS_01L04
 LANG_ENGLISH	    "Yeah!  What is that?  On second thought, I don't want to know."
+LANG_FRENCH	    "#same"
 
 
 //missing subtitles for t3_rift
 REFERENCE           MME_01L01
 LANG_ENGLISH        "I can hardly see in this thing.  It's like being a stormtrooper all over again."
+LANG_FRENCH	    "#same"
 
 REFERENCE           MME_01L02
 LANG_ENGLISH        "You were a stormtrooper?"
+LANG_FRENCH	    "#same"
 
 REFERENCE           MME_01L03
 LANG_ENGLISH        "Yeah, but I couldn't stand taking orders.  So I jumped ship the first chance I got."
+LANG_FRENCH	    "#same"
 
 REFERENCE           MME_01L04
 LANG_ENGLISH        "Smart move.  By the way, the boss gave us orders to patrol the north hall."
+LANG_FRENCH	    "#same"
 
 REFERENCE           MME_01L05
 LANG_ENGLISH        "OK.  Let's go."
+LANG_FRENCH	    "#same"
 //[/CoOp]
 
 
