@@ -3761,6 +3761,9 @@ void ClientSpawn(gentity_t *ent) {
 
 	//racc - set weapons for everything except siege
 	//[CoOp]
+	//[ExpSys]
+	/* spawn weapons screws up the experience system
+	//[/ExpSys]
 	if( UseSpawnWeapons )
 	{//we have ICARUS overrides on the weapons you should spawn with.
 		client->ps.stats[STAT_WEAPONS] = SpawnWeapons;
@@ -3787,8 +3790,11 @@ void ClientSpawn(gentity_t *ent) {
 			client->ps.weapon = WP_MELEE;
 		}
 	}
+	//[ExpSys]
 	else if ( g_gametype.integer != GT_HOLOCRON 
-	//if ( g_gametype.integer != GT_HOLOCRON 
+	*/
+	if ( g_gametype.integer != GT_HOLOCRON 
+	//[/ExpSys]
 	//[/CoOp]
 		&& g_gametype.integer != GT_JEDIMASTER 
 		&& !HasSetSaberOnly()
