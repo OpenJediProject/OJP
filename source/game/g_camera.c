@@ -778,9 +778,7 @@ void UpdatePlayerCameraPos(void)
 	{
 		player = &g_entities[i];
 		if(!player || !player->client || !player->inuse 
-			|| player->client->ps.pm_type == PM_SPECTATOR
-			|| player->client->pers.connected != CON_CONNECTED
-			|| player->client->sess.sessionTeam == TEAM_SPECTATOR)
+			|| player->client->pers.connected != CON_CONNECTED)
 		{//player not ingame
 			continue;
 		}
@@ -863,8 +861,11 @@ void DisablePlayerCameraPos(void)
 
 	for(i = 0; i < MAX_CLIENTS; i++)
 	{
+		int flags;
+
 		player = &g_entities[i];
-		if(!player || !player->client || !player->inuse || player->client->ps.pm_type == PM_SPECTATOR)
+		if(!player || !player->client || !player->inuse 
+			|| player->client->pers.connected != CON_CONNECTED)
 		{//player not ingame
 			//still clear the player data array for next time.
 			VectorClear(playerpos[i]);
@@ -877,9 +878,6 @@ void DisablePlayerCameraPos(void)
 		player->s.eFlags &= ~EF_NODRAW;
 		player->client->ps.eFlags &= ~EF_NODRAW;
 
-		//move the player origin/angles to the camera's
-		VectorCopy(playerang[i], player->client->ps.viewangles);
-
 		//check our respawn point
 		if(!SPSpawnpointCheck(playerpos[i]))
 		{//couldn't spawn in our original area, kill them.
@@ -889,11 +887,22 @@ void DisablePlayerCameraPos(void)
 			continue;
 		}
 
+		//flip the teleport flag so this dude doesn't client lerp
+		flags = player->client->ps.eFlags & (EF_TELEPORT_BIT );
+		flags ^= EF_TELEPORT_BIT;
+		player->client->ps.eFlags = flags;
+
+		//restore view angle
+		SetClientViewAngle(player, playerang[i]);
+
 		//found good spot, move them there
+		G_SetOrigin(player, playerpos[i]);
 		VectorCopy(playerpos[i], player->client->ps.origin);
+
 		VectorClear(playerpos[i]);
 		VectorClear(playerang[i]);
 
+		trap_LinkEntity(player);
 
 	}
 }

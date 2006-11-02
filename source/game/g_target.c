@@ -1238,6 +1238,8 @@ void Use_Autosave( gentity_t *ent, gentity_t *other, gentity_t *activator )
 
 				//set angles
 				SetClientViewAngle( player, spawnang );
+
+				trap_LinkEntity(player);
 			}
 			else
 			{//hmm, couldn't teleport.  
