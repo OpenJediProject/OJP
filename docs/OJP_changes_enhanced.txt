@@ -9,6 +9,11 @@ Version 0.0.9q:
 
 	Improvements/Fixes:
 
+		Saber Combat System:
+
+			Blocking:
+				- Reduced the distance at which characters attempt to incoming attacks to 7.5 feet.
+
 		CoOp:
 			- Fixed issue where NPCs were constantly swinging.
 

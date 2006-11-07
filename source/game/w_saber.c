@@ -8331,7 +8331,7 @@ void WP_SaberStartMissileBlockCheck( gentity_t *self, usercmd_t *ucmd  )
 		dist = VectorNormalize( dir );
 
 		//[SaberSys]
-		if(dist > 175 && swingBlock)
+		if(dist > 75 && swingBlock)
 		{//don't block swings that are too far away.
 			continue;
 		}
