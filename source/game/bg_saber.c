@@ -4710,13 +4710,7 @@ weapChecks:
 		//[SaberSys]
 		//Cleaning up the faking code.  This section dictates want happens when you
 		//quit holding down attack.
-		//[CoOp]
-#ifdef QAGAME
-		else if ( !(pm->cmd.buttons & (BUTTON_ATTACK)) && pm_entSelf->s.NPC_class == CLASS_NONE )
-#else
 		else if ( !(pm->cmd.buttons & (BUTTON_ATTACK)) )
-#endif
-		//[/CoOp]
 		//else if ( !(pm->cmd.buttons & (BUTTON_ATTACK|BUTTON_ALT_ATTACK)) )
 		//[/SaberSys]
 		{//not attacking
@@ -4741,9 +4735,18 @@ weapChecks:
 			//Check for finishing an anim if necc.
 			if ( curmove >= LS_S_TL2BR && curmove <= LS_S_T2B )
 			{//started a swing, must continue from here
-				newmove = PM_ReturnforQuad(saberMoveData[curmove].endQuad);
-				//attack fakes now cost FP
-				BG_AddFatigue(pm->ps, 1);
+#ifdef QAGAME
+				if(pm_entSelf->s.NPC_class != CLASS_NONE)
+				{//NPCs never do attack fakes, just follow thru with attack.
+					newmove = LS_A_TL2BR + (curmove-LS_S_TL2BR);
+				}
+				else
+#endif
+				{//perform attack fake
+					newmove = PM_ReturnforQuad(saberMoveData[curmove].endQuad);
+					//attack fakes now cost FP
+					BG_AddFatigue(pm->ps, 1);
+				}
 				//newmove = LS_A_TL2BR + (curmove-LS_S_TL2BR);
 			}
 			else if ( curmove >= LS_A_TL2BR && curmove <= LS_A_T2B )
@@ -4752,7 +4755,16 @@ weapChecks:
 			}
 			else if ( PM_SaberInTransition( curmove ) )
 			{//in a transition, must play sequential attack
-				newmove = PM_ReturnforQuad(saberMoveData[curmove].endQuad);
+#ifdef QAGAME
+				if(pm_entSelf->s.NPC_class != CLASS_NONE)
+				{//NPCs never stop attacking mid-attack, just follow thru with attack.
+					newmove = saberMoveData[curmove].chain_attack;
+				}
+				else
+#endif
+				{//exit out of transition without attacking
+					newmove = PM_ReturnforQuad(saberMoveData[curmove].endQuad);
+				}
 				//newmove = saberMoveData[curmove].chain_attack;
 			//[/SaberSys]
 			}
