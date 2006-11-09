@@ -12805,7 +12805,9 @@ SkipTrueView:
 
 		AnglesToAxis( tAng, axis );
 	
-		trap_FX_PlayEntityEffectID(cgs.effects.flamethrower, efOrg, axis, -1, -1, -1, -1);		
+		trap_FX_PlayEntityEffectID(cgs.effects.flamethrower, efOrg, axis, -1, -1, -1, -1);	
+
+		trap_S_StartSound ( NULL, cent->currentState.number, CHAN_ITEM, trap_S_RegisterSound("sound/effects/combustfire.mp3") );
 	}
 	//[/Flamethrower]
 

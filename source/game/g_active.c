@@ -1078,6 +1078,10 @@ void ClientEvents( gentity_t *ent, int oldEventSequence ) {
 		case EV_USE_ITEM11: //cloak
 			ItemUse_UseCloak(ent);
 			break;
+		//[Flamethrower]
+		case EV_USE_ITEM12: //flamethrower
+			ItemUse_FlameThrower(ent);
+		//[/Flamethrower]
 		default:
 			break;
 		}

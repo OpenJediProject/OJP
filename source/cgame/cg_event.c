@@ -840,10 +840,18 @@ static void CG_UseItem( centity_t *cent ) {
 		break;
 	case HI_CLOAK:
 		break; //Do something?
+	//[Flamethrower]
+	case HI_FLAMETHROWER:
+		break; //Do something?
+	//[/Flamethrower]
 	}
 
 	if (cg.snap && cg.snap->ps.clientNum == cent->currentState.number && itemNum != HI_BINOCULARS &&
-		itemNum != HI_JETPACK && itemNum != HI_HEALTHDISP && itemNum != HI_AMMODISP && itemNum != HI_CLOAK && itemNum != HI_EWEB)
+		//[Flamethrower]
+		itemNum != HI_JETPACK && itemNum != HI_HEALTHDISP && itemNum != HI_AMMODISP && itemNum != HI_CLOAK && itemNum != HI_EWEB 
+		&& itemNum != HI_FLAMETHROWER)
+		//itemNum != HI_JETPACK && itemNum != HI_HEALTHDISP && itemNum != HI_AMMODISP && itemNum != HI_CLOAK && itemNum != HI_EWEB)
+		//[/Flamethrower]
 	{ //if not using binoculars/jetpack/dispensers/cloak, we just used that item up, so switch
 		BG_CycleInven(&cg.snap->ps, 1);
 		cg.itemSelect = -1; //update the client-side selection display

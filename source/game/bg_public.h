@@ -872,6 +872,9 @@ enum {
 	HI_AMMODISP,
 	HI_EWEB,
 	HI_CLOAK,
+	//[Flamethrower]
+	HI_FLAMETHROWER,
+	//[/Flamethrower]
 
 	HI_NUM_HOLDABLE
 };
@@ -995,7 +998,7 @@ typedef enum {
 	EV_USE_ITEM9,
 	EV_USE_ITEM10,
 	EV_USE_ITEM11,
-	EV_USE_ITEM12,
+	EV_USE_ITEM12,		//use flamethrower
 	EV_USE_ITEM13,
 	EV_USE_ITEM14,
 	EV_USE_ITEM15,

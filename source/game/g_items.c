@@ -1311,46 +1311,10 @@ void Flamethrower_Fire( gentity_t *self )
 	}
 }
 
-extern void G_SoundOnEnt( gentity_t *ent, int channel, const char *soundPath );
-void Flamethrower_Start( gentity_t *self )
-{
-	//mdxaBone_t	boltMatrix;
-	//vec3_t		org, dir;
-
-	G_SoundOnEnt( self, CHAN_WEAPON, "sound/effects/combustfire.mp3" );
-
-	self->client->ps.userInt3 |= (1 << FLAG_FLAMETHROWER);
-	/*
-
-	trap_G2API_GetBoltMatrix(self->ghoul2, 0, self->client->renderInfo.handLBolt, &boltMatrix, self->client->ps.viewangles, self->client->ps.origin, level.time, NULL, self->modelScale);
-		
-	//trap_G2API_GetBoltMatrix(self->ghoul2, 0, self->client->renderInfo.handLBolt, &boltMatrix, self->r.currentAngles,
-	//	self->r.currentOrigin, level.time, NULL, self->modelScale);
-
-	BG_GiveMeVectorFromMatrix( &boltMatrix, ORIGIN, org );
-	BG_GiveMeVectorFromMatrix( &boltMatrix, NEGATIVE_Y, dir );
-
-	//AngleVectors(self->client->ps.viewangles, dir, NULL, NULL);
-
-	//G_PlayEffectID( G_EffectIndex("boba/fthrw"), org, dir);
-	*/
-}
-
-void Flamethrower_On(gentity_t *ent)
-{
-	ent->client->ps.forceHandExtend = HANDEXTEND_FORCE_HOLD;
-	ent->client->ps.forceHandExtendTime = level.time + 500;
-	if(ent->client->flameTime < level.time)
-	{//start flamethrower up
-		Flamethrower_Start(ent);
-	}
-
-	Flamethrower_Fire(ent);
-}
 
 void ItemUse_FlameThrower(gentity_t *ent)
 {
-	Flamethrower_On(ent);
+	ent->client->flameTime = level.time + 1500;
 }
 //[/Flamethrower]
 

@@ -7907,6 +7907,10 @@ int PM_ItemUsable(playerState_t *ps, int forcedUse)
 		return 1;
 	case HI_CLOAK: //check for stuff here?
 		return 1;
+	//[Flamethrower]
+	case HI_FLAMETHROWER: //check for stuff here?
+		return 1;
+	//[/Flamethrower]
 	default:
 		return 1;
 	}
@@ -8661,7 +8665,8 @@ static void PM_Weapon( void )
 						bg_itemlist[pm->ps->stats[STAT_HOLDABLE_ITEM]].giTag != HI_HEALTHDISP &&
 						bg_itemlist[pm->ps->stats[STAT_HOLDABLE_ITEM]].giTag != HI_AMMODISP &&
 						bg_itemlist[pm->ps->stats[STAT_HOLDABLE_ITEM]].giTag != HI_CLOAK &&
-						bg_itemlist[pm->ps->stats[STAT_HOLDABLE_ITEM]].giTag != HI_EWEB)
+						bg_itemlist[pm->ps->stats[STAT_HOLDABLE_ITEM]].giTag != HI_EWEB &&
+						bg_itemlist[pm->ps->stats[STAT_HOLDABLE_ITEM]].giTag != HI_FLAMETHROWER)
 					{ //never use up the binoculars or jetpack or dispensers or cloak or ...
 						pm->ps->stats[STAT_HOLDABLE_ITEMS] -= (1 << bg_itemlist[pm->ps->stats[STAT_HOLDABLE_ITEM]].giTag);
 					}
@@ -8679,7 +8684,8 @@ static void PM_Weapon( void )
 					bg_itemlist[pm->ps->stats[STAT_HOLDABLE_ITEM]].giTag != HI_HEALTHDISP &&
 					bg_itemlist[pm->ps->stats[STAT_HOLDABLE_ITEM]].giTag != HI_AMMODISP &&
 					bg_itemlist[pm->ps->stats[STAT_HOLDABLE_ITEM]].giTag != HI_CLOAK &&
-					bg_itemlist[pm->ps->stats[STAT_HOLDABLE_ITEM]].giTag != HI_EWEB)
+					bg_itemlist[pm->ps->stats[STAT_HOLDABLE_ITEM]].giTag != HI_EWEB &&
+					bg_itemlist[pm->ps->stats[STAT_HOLDABLE_ITEM]].giTag != HI_FLAMETHROWER)
 				{
 					pm->ps->stats[STAT_HOLDABLE_ITEM] = 0;
 					BG_CycleInven(pm->ps, 1);

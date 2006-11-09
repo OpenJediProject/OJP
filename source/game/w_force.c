@@ -5724,6 +5724,9 @@ static GAME_INLINE qboolean MeditateCheck( gentity_t * self )
 extern qboolean PM_SaberInBrokenParry( int move );
 extern qboolean PM_InKnockDown( playerState_t *ps );
 //[/FatigueSys]
+//[Flamethrower]
+void Flamethrower_Fire( gentity_t *self );
+//[/Flamethrower]
 void WP_ForcePowersUpdate( gentity_t *self, usercmd_t *ucmd )
 {
 	qboolean	usingForce = qfalse;
@@ -6139,6 +6142,36 @@ void WP_ForcePowersUpdate( gentity_t *self, usercmd_t *ucmd )
 			}
 		}
 	}
+
+	//[Flamethrower]
+	if(self->client->flameTime > level.time)
+	{//flamethrower is active, flip active flamethrower flag
+		self->client->ps.userInt3 |= (1 << FLAG_FLAMETHROWER);
+		self->client->ps.forceHandExtend = HANDEXTEND_FORCE_HOLD;
+		self->client->ps.forceHandExtendTime = level.time + 500;
+		
+		if( LightningDebounceTime == level.time //someone already advanced the timer this frame
+			|| (level.time - LightningDebounceTime >= LIGHTNINGDEBOUNCE) )
+		{
+			//G_Sound( self, CHAN_WEAPON, G_SoundIndex("sound/effects/combustfire.mp3") );
+			Flamethrower_Fire(self);
+			LightningDebounceTime = level.time;
+			
+			self->client->ps.jetpackFuel -= 1;
+
+			if (self->client->ps.jetpackFuel <= 0)
+			{ //turn it off
+				self->client->ps.jetpackFuel = 0;
+				self->client->flameTime = 0;
+				self->client->ps.userInt3 &= ~(1 << FLAG_FLAMETHROWER);
+			}
+		}	
+	}
+	else
+	{
+		self->client->ps.userInt3 &= ~(1 << FLAG_FLAMETHROWER);
+	}
+	//[/Flamethrower]
 
 	if ( ucmd->buttons & BUTTON_FORCEGRIP )
 	{ //grip is one of the powers with its own button.. if it's held, call the specific grip power function.
