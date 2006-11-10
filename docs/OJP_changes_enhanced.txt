@@ -14,6 +14,9 @@ Version 0.0.9q:
 			Blocking:
 				- Reduced the distance at which characters attempt to incoming attacks to 7.5 feet.
 
+			Misc:
+				- Tweaked the speeds of Blue stance's return animations to match the speeds of Yellow stance.
+
 		CoOp:
 			- Fixed issue where NPCs were constantly swinging.
 
