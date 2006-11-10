@@ -781,6 +781,20 @@ void BotUtilizePersonality(bot_state_t *bs)
 		Com_sprintf(bs->forceinfo, sizeof(bs->forceinfo), "%s\0", DEFAULT_FORCEPOWERS);
 	}
 
+	//[ExpSys]
+	i = 4;
+	for(i = 4; (i - 4) < NUM_FORCE_POWERS; i++)
+	{
+		if(bs->forceinfo[i] != '0')
+		{//bot is using force power, make sure that they have at least one rank of force seeing
+			if(bs->forceinfo[FP_SEE + 4] == '0')
+			{//bot file doesn't normally have force seeing, give them some
+				bs->forceinfo[FP_SEE + 4] = '1';
+			}
+		}
+	}
+	//[/ExpSys]
+
 	i = 0;
 
 	while (i < MAX_CHAT_BUFFER_SIZE)

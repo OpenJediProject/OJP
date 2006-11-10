@@ -695,7 +695,28 @@ qboolean BG_LegalizedForcePowers(char *powerOut, int maxRank, qboolean freeSaber
 						}
 					}
 					else
-					{
+					{//racc - reduce this power down
+						//[ExpSys]
+						if (c == FP_SEE)
+						{//since force seeing is a prereq for all force powers now, don't reduce it unless we have no other force powers left
+							int counter;
+							qboolean stillHaveForce = qfalse;
+							for(counter = 0; counter < NUM_TOTAL_SKILLS; counter++)
+							{
+								if(counter != FP_SEE && final_Powers[counter])
+								{
+									stillHaveForce = qtrue;
+									break;
+								}
+							}
+
+							if(stillHaveForce)
+							{//don't remove FP_SEE!
+								c++;
+								continue;
+							}
+						}
+						//[/ExpSys]
 						while (final_Powers[c] > 0 && usedPoints > allowedPoints)
 						{
 							if ( final_Powers[c] > 1 ||

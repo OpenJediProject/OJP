@@ -11,6 +11,7 @@ Version 0.0.9q:
 
 		Experience System:
 			- Added some protection to prevent possible situations where the players could received negative amounts of experience.
+			- Fixed problem where bots were spawning without Force powers or sabers.  This was due the code removing Force Seeing before other powers when players had more skill points allociated than what they had.  This has been corrected.
 
 		Saber Combat System:
 
