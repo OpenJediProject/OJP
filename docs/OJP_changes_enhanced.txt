@@ -20,6 +20,11 @@ Version 0.0.9q:
 
 			Misc:
 				- Tweaked the speeds of Blue stance's return animations to match the speeds of Yellow stance.
+				- Attack parries don't work during saber returns anymore.
+
+		TABBots:
+			- Decreased the base bot attack parrying rate to 2%.
+			- Decreased the base bot parry rate to 5%.
 
 		CoOp:
 			- Fixed issue where NPCs were constantly swinging.

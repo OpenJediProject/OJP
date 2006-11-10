@@ -107,7 +107,7 @@ qboolean ButterFingers(gentity_t *saberent, gentity_t *saberOwner, gentity_t *ot
 //This is the parry rate for bots (in addition to the normal check) since
 //bots don't block intelligently.
 //This is multipled by the bot's skill level (which can be 1-5)
-#define BOT_PARRYRATE			150
+#define BOT_PARRYRATE			50
 
 //scaler multipler for mishaps while running.
 #define SABBEH_RUN_MODIFIER		2
@@ -13427,6 +13427,7 @@ qboolean G_BlockIsParry( gentity_t *self, gentity_t *attacker, vec3_t hitLoc )
 
 	if(blockDot >= .4)
 	{//player successfully blocked in the right direction to do a full parry.
+		//G_Printf("%i: %i: parried\n", level.time, self->s.number);
 		return qtrue;
 	}
 	else
@@ -13437,6 +13438,7 @@ qboolean G_BlockIsParry( gentity_t *self, gentity_t *attacker, vec3_t hitLoc )
 		{//bots just randomly parry to make up for them not intelligently parrying.
 			if(BOT_PARRYRATE * botstates[self->s.number]->settings.skill > Q_irand(0,999))
 			{
+				//G_Printf("%i: %i: Bot cheat parried\n", level.time, self->s.number);
 				return qtrue;
 			}
 		}
@@ -13684,7 +13686,7 @@ qboolean G_InAttackParry(gentity_t *self)
 	}
 
 	if(PM_SaberInStart(self->client->ps.saberMove) //in windup
-		|| PM_SaberInReturn(self->client->ps.saberMove)
+		//|| PM_SaberInReturn(self->client->ps.saberMove)
 		|| PM_SaberInParry(self->client->ps.torsoAnim) // in block animation
 		|| (self->client->ps.saberBlocked >= BLOCKED_UPPER_RIGHT	//started a saber block this turn.
 			&& self->client->ps.saberBlocked < BLOCKED_UPPER_RIGHT_PROJ)) 

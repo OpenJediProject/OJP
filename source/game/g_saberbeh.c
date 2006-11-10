@@ -221,7 +221,7 @@ void SabBeh_AttackVsAttack( gentity_t *self, sabmech_t *mechSelf,
 //This is the attack parry rate for the bots since bots don't block intelligently
 //This is multipled by the bot's skill level (which can be 1-5) and is actually a percentage of the total parries as
 //set by BOT_PARRYRATE.
-#define BOT_ATTACKPARRYRATE		100
+#define BOT_ATTACKPARRYRATE		20
 extern bot_state_t *botstates[MAX_CLIENTS];
 extern qboolean BG_SuperBreakWinAnim( int anim );
 extern stringID_table_t SaberMoveTable[];
@@ -244,8 +244,16 @@ void SabBeh_AttackVsBlock( gentity_t *attacker, sabmech_t *mechAttacker,
 	if(parried && blocker->r.svFlags & SVF_BOT 
 		&& BOT_ATTACKPARRYRATE * botstates[blocker->s.number]->settings.skill > Q_irand(0,999))
 	{//bot performed an attack parry (by cheating a bit)
+		//G_Printf("%i: %i: Bot Cheat Attack Parried\n", level.time, blocker->s.number);
 		atkparry = qtrue;
 	}
+
+	/*
+	if(parried && atkparry)
+	{
+		G_Printf("%i: %i: Attack Parried\n", level.time, blocker->s.number);
+	}
+	*/
 
 	if(BG_SuperBreakWinAnim(attacker->client->ps.torsoAnim))
 	{//attacker was attempting a superbreak and he hit someone who could block the move, rail him for screwing up.
