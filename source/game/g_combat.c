@@ -6468,8 +6468,8 @@ void G_Damage( gentity_t *targ, gentity_t *inflictor, gentity_t *attacker,
 
 		//[ExpSys]
 		//give experience for damaging players
-		if(targ->client && attacker && attacker->client)
-		{//targ is creatuer and attacker is creature
+		if(targ->client && targ->health > 0 && attacker && attacker->client)
+		{//targ is creature and attacker is creature
 			if(take > targ->health)
 			{//damage is greated than target's health, only give experience for damage used to kill victim
 				AddSkill(attacker, (float) targ->health/100.0f);
@@ -6927,6 +6927,12 @@ void AddFatigueKillBonus( gentity_t *attacker, gentity_t *victim )
 //[ExpSys]
 void AddSkill(gentity_t *self, float amount)
 {//add skill points to self
+	if(amount < 0)
+	{
+		G_Printf("Negative amount %i in AddSkill\n");
+		return;
+	}
+
 	self->client->sess.skillPoints += amount;
 	self->client->skillUpdated = qtrue; //mark that we've updated our skill points so we can update the player's client.
 

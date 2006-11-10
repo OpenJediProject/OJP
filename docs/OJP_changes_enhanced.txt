@@ -9,6 +9,9 @@ Version 0.0.9q:
 
 	Improvements/Fixes:
 
+		Experience System:
+			- Added some protection to prevent possible situations where the players could received negative amounts of experience.
+
 		Saber Combat System:
 
 			Blocking:
