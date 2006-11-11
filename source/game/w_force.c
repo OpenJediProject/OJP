@@ -404,7 +404,7 @@ void WP_InitForcePowers( gentity_t *ent )
 
 	if ( (ent->r.svFlags & SVF_BOT) && botstates[ent->s.number] )
 	{ //if it's a bot just copy the info directly from its personality
-		Com_sprintf(forcePowers, sizeof(forcePowers), "%s\0", botstates[ent->s.number]->forceinfo);
+		Com_sprintf(forcePowers, sizeof(forcePowers), "%s", botstates[ent->s.number]->forceinfo);
 	}
 
 	//rww - parse through the string manually and eat out all the appropriate data

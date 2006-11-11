@@ -491,7 +491,7 @@ ammoData_t ammoData[AMMO_MAX] =
 	{	// AMMO_METAL_BOLTS
 //		"",				//	char	icon[32];	// Name of ammo icon file
 		//[WeaponSys]
-		1000				//	int		max;		// Max amount player can hold of ammo was 300
+		400				//	int		max;		// Max amount player can hold of ammo; basejka: 300, was 1000
 		//300				//	int		max;		// Max amount player can hold of ammo
 		//[/WeaponSys]
 	},

@@ -2240,7 +2240,7 @@ static void UI_DrawGenericNum(rectDef_t *rect, float scale, vec4_t color, int te
 		i = min;
 	}
 
-	Com_sprintf(s, sizeof(s), "%i\0", val);
+	Com_sprintf(s, sizeof(s), "%i", val);
 	Text_Paint(rect->x, rect->y, scale, color, s,0, 0, textStyle, iMenuFont);
 }
 

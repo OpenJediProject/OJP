@@ -3581,12 +3581,29 @@ Ghoul2 Insert Start
 
 			if(!player)
 			{//no players have spawned in yet.  As such, wing it by using jan
-				Q_strncpyz( playerModel, ojp_spmodel.string, sizeof(playerModel));
+				int scan, rgb[3];
+				char *s2;
+				Q_strncpyz( playerModel, ojp_spmodel.string, sizeof(playerModel) );
+				s2 = va("%s", ojp_spmodelrgb.string);
+				scan = sscanf(s2, "%i %i %i", &rgb[0], &rgb[1], &rgb[2]);
+				*s2 = '\0';
+				if ( scan != 3 ) {
+					G_Printf( "^3Warning: ojp_spmodelrgb could not parse out all 3 valid colors! Using Defaults.\n" );
+					rgb[0] = 255;
+					rgb[1] = 255;
+					rgb[2] = 255;
+				}
+				if ((rgb[0]+rgb[1]+rgb[2]) < 100) // too dark
+					rgb[0] = rgb[1] = rgb[2] = 255;
+				NPC->client->ps.customRGBA[0] = rgb[0];
+				NPC->client->ps.customRGBA[1] = rgb[1];
+				NPC->client->ps.customRGBA[2] = rgb[2];
 			}
 			else
 			{
 				char	userinfo[MAX_INFO_STRING];
-				trap_GetUserinfo( player->client->ps.clientNum, userinfo, sizeof( userinfo ) );
+				trap_GetUserinfo( player->s.number, userinfo, sizeof( userinfo ) );
+				//trap_GetUserinfo( player->client->ps.clientNum, userinfo, sizeof( userinfo ) );
 				Q_strncpyz( playerModel, Info_ValueForKey (userinfo, "model"), sizeof(playerModel));
 				//copy over the customRGB data
 				NPC->client->ps.customRGBA[0] = player->client->ps.customRGBA[0];

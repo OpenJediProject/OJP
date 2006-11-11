@@ -123,7 +123,7 @@ void Create_Autosave( vec3_t origin, int size, qboolean teleportPlayers )
 
 
 void Load_Autosaves(void)
-{//load in our autosave from the .asp
+{//load in our autosave from the .autosp
 	char			*s;
 	int				len;
 	fileHandle_t	f;
@@ -131,14 +131,19 @@ void Load_Autosaves(void)
 	char			loadPath[MAX_QPATH];
 	vec3_t			positionData;
 	int				sizeData;
-	vmCvar_t		mapname;
+	//[RawMapName]
+	//vmCvar_t		mapname;
+	//[/RawMapName]
 	qboolean		teleportPlayers = qfalse;
 
 	G_Printf("^5Loading Autosave File Data...");
 
-	trap_Cvar_Register( &mapname, "mapname", "", CVAR_SERVERINFO | CVAR_ROM );
+	//[RawMapName]
+	//trap_Cvar_Register( &mapname, "mapname", "", CVAR_SERVERINFO | CVAR_ROM );
 
-	Com_sprintf(loadPath, MAX_QPATH, "maps/%s.autosp\0", mapname.string);
+	//Com_sprintf(loadPath, MAX_QPATH, "maps/%s.autosp", mapname.string);
+	Com_sprintf(loadPath, sizeof(loadPath), "maps/%s.autosp", level.rawmapname);
+	//[/RawMapName]
 
 	len = trap_FS_FOpenFile( loadPath, &f, FS_READ );
 	if ( !f )
@@ -188,16 +193,21 @@ void Save_Autosaves(void)
 	char			fileBuf[MAX_AUTOSAVE_FILESIZE];
 	char			loadPath[MAX_QPATH];
 	int				len;
-	vmCvar_t		mapname;
+	//[RawMapName]
+	//vmCvar_t		mapname;
+	//[/RawMapName]
 	gentity_t*		autosavePoint;
 
 	fileBuf[0] = '\0';
 
 	G_Printf("^5Saving Autosave File Data...");
 
-	trap_Cvar_Register( &mapname, "mapname", "", CVAR_SERVERINFO | CVAR_ROM );
+	//[RawMapName]
+	//trap_Cvar_Register( &mapname, "mapname", "", CVAR_SERVERINFO | CVAR_ROM );
 
-	Com_sprintf(loadPath, MAX_QPATH, "maps/%s.autosp\0", mapname.string);
+	//Com_sprintf(loadPath, MAX_QPATH, "maps/%s.autosp", mapname.string);
+	Com_sprintf(loadPath, sizeof(loadPath), "maps/%s.autosp", level.rawmapname);
+	//[/RawMapName]
 
 	len = trap_FS_FOpenFile( loadPath, &f, FS_WRITE );
 	if ( !f )
@@ -210,7 +220,7 @@ void Save_Autosaves(void)
 	autosavePoint = NULL;
 	while ( (autosavePoint = G_Find (autosavePoint, FOFS(classname), "trigger_autosave")) != NULL )
 	{
-		Com_sprintf(lineBuf, MAX_QPATH, "%f %f %f %i %i\n\0", 
+		Com_sprintf(lineBuf, MAX_QPATH, "%f %f %f %i %i\n", 
 			autosavePoint->r.currentOrigin[0], autosavePoint->r.currentOrigin[1],
 			autosavePoint->r.currentOrigin[2], (int) autosavePoint->r.maxs[0],
 			(autosavePoint->spawnflags & FLAG_TELETOSAVE) );
@@ -225,7 +235,7 @@ void Save_Autosaves(void)
 		{//not a manually placed spawnpoint
 			continue;
 		}
-		Com_sprintf(lineBuf, MAX_QPATH, "%f %f %f %i %i\n\0", 
+		Com_sprintf(lineBuf, MAX_QPATH, "%f %f %f %i %i\n", 
 			autosavePoint->r.currentOrigin[0], autosavePoint->r.currentOrigin[1],
 			autosavePoint->r.currentOrigin[2], -1, 0 );
 		strcat(fileBuf, lineBuf);

@@ -1739,7 +1739,140 @@ void shield_power_converter_use( gentity_t *self, gentity_t *other, gentity_t *a
 	}
 }
 
+//[AmmoSys]
+qboolean HasValidWeaponThatUsesAmmo( gentity_t *ent, int ammotype ) {
+	switch ( ammotype ) {
+		case AMMO_BLASTER:
+			if ( (ent->client->ps.stats[STAT_WEAPONS] & ( 1 << WP_BLASTER ) ) )
+				return qtrue;
+			break;
+		case AMMO_POWERCELL:
+			if ( (ent->client->ps.stats[STAT_WEAPONS] & ( 1 << WP_DISRUPTOR ) ) )
+				return qtrue;
+			if ( (ent->client->ps.stats[STAT_WEAPONS] & ( 1 << WP_BOWCASTER ) ) )
+				return qtrue;
+			if ( (ent->client->ps.stats[STAT_WEAPONS] & ( 1 << WP_DEMP2 ) ) )
+				return qtrue;
+
+			break;
+		case AMMO_METAL_BOLTS:
+			if ( (ent->client->ps.stats[STAT_WEAPONS] & ( 1 << WP_REPEATER ) ) )
+				return qtrue;
+			if ( (ent->client->ps.stats[STAT_WEAPONS] & ( 1 << WP_FLECHETTE ) ) )
+				return qtrue;
+			if ( (ent->client->ps.stats[STAT_WEAPONS] & ( 1 << WP_CONCUSSION ) ) )
+				return qtrue;
+
+			break;
+		case AMMO_ROCKETS:
+			if ( (ent->client->ps.stats[STAT_WEAPONS] & ( 1 << WP_ROCKET_LAUNCHER ) ) )
+				return qtrue;
+			break;
+		case AMMO_THERMAL:
+			if ( (ent->client->ps.stats[STAT_WEAPONS] & ( 1 << WP_THERMAL ) ) || 
+				  ent->client->ps.ammo[AMMO_THERMAL] > 0 )
+				return qtrue;
+			break;
+		case AMMO_TRIPMINE:
+			if ( (ent->client->ps.stats[STAT_WEAPONS] & ( 1 << WP_TRIP_MINE ) ) || 
+				  ent->client->ps.ammo[AMMO_TRIPMINE] > 0 )
+				return qtrue;
+			break;
+		case AMMO_DETPACK:
+			if ( (ent->client->ps.stats[STAT_WEAPONS] & ( 1 << WP_DET_PACK ) ) || 
+				  ent->client->ps.ammo[AMMO_DETPACK] > 0 )
+				return qtrue;
+			break;
+		default:
+			break;
+	}
+
+	return qfalse;
+}
+
 //dispense generic ammo
+extern void Add_Ammo3 (gentity_t *ent, int weapon, int count, int *stop, qboolean *gaveSome);
+void ammo_generic_power_converter_use( gentity_t *self, gentity_t *other, gentity_t *activator)
+{
+	int /*dif,*/ add;
+	//int ammoType;
+	int stop = 1;
+
+	if (!activator || !activator->client)
+	{
+		return;
+	}
+
+	if (self->setTime < level.time)
+	{
+		qboolean gaveSome = qfalse;
+		int i = AMMO_BLASTER;
+
+		if (!self->s.loopSound)
+		{
+			self->s.loopSound = G_SoundIndex("sound/interface/ammocon_run");
+			self->s.loopIsSoundset = qfalse;
+		}
+		//self->setTime = level.time + 100;
+		self->fly_sound_debounce_time = level.time + 500;
+		self->activator = activator;
+		for ( i = AMMO_BLASTER ; i < AMMO_MAX ; i++ ) {
+			if ( i == AMMO_EMPLACED ) continue; // screw you emplaced
+
+			if ( !HasValidWeaponThatUsesAmmo(activator, i) ) continue;
+
+				if ( activator->client->ps.eFlags & EF_DOUBLE_AMMO ) {
+					add = ((ammoData[i].max*2)*0.05);
+				} else {
+					add = ammoData[i].max*0.05;
+				}
+
+			if (add < 1) add = 1;
+
+			Add_Ammo3(activator, i, add, &stop, &gaveSome);
+
+			if (!self->genericValue12 && gaveSome)
+			{
+				int sub = (add*0.2);
+				if (sub < 1)
+				{
+					sub = 1;
+				}
+				self->count -= sub;
+				if (self->count <= 0)
+				{
+					self->count = 0;
+					stop = 1;
+					break;
+				}
+			}
+		}
+	}
+
+	if (stop || self->count <= 0)
+	{
+		if (self->s.loopSound && self->setTime < level.time)
+		{
+			if (self->count <= 0)
+			{
+				G_Sound(self, CHAN_AUTO, G_SoundIndex("sound/interface/ammocon_empty"));
+			}
+			else
+			{
+				G_Sound(self, CHAN_AUTO, self->genericValue7);
+			}
+		}
+		self->s.loopSound = 0;
+		self->s.loopIsSoundset = qfalse;
+		if (self->setTime < level.time)
+		{
+			self->setTime = level.time + self->genericValue5+100;
+		}
+	}
+}
+
+//dispense generic ammo
+#if 0
 void ammo_generic_power_converter_use( gentity_t *self, gentity_t *other, gentity_t *activator)
 {
 	int /*dif,*/ add;
@@ -1915,6 +2048,8 @@ void ammo_generic_power_converter_use( gentity_t *self, gentity_t *other, gentit
 		}
 	}
 }
+#endif
+//[/AmmoSys]
 
 /*QUAKED misc_ammo_floor_unit (1 0 0) (-16 -16 0) (16 16 40)
 model="/models/items/a_pwr_converter.md3"
@@ -2162,6 +2297,67 @@ void EnergyAmmoStationSettings(gentity_t *ent)
 ammo_power_converter_use
 ================
 */
+//[AmmoSys]
+void ammo_power_converter_use( gentity_t *self, gentity_t *other, gentity_t *activator)
+{
+	int			add = 0.0f;//,highest;
+//	qboolean	overcharge; // ensiform - not used
+//	int			difBlaster,difPowerCell,difMetalBolts;
+	int			stop = 1;
+
+	if (!activator || !activator->client)
+	{
+		return;
+	}
+
+	if (self->setTime < level.time)
+	{
+		//overcharge = qfalse; // ensiform - not rly used
+
+		if (!self->s.loopSound)
+		{
+			self->s.loopSound = G_SoundIndex("sound/player/pickupshield.wav");
+		}
+
+		self->setTime = level.time + 100;
+
+		if (self->count)	// Has it got any power left?
+		{
+			int i = AMMO_BLASTER;
+			for ( i = AMMO_BLASTER ; i < AMMO_MAX ; i++ ) {
+				if ( i == AMMO_EMPLACED ) continue; // screw you emplaced
+
+				if ( !HasValidWeaponThatUsesAmmo(activator, i) ) continue;
+
+				if ( activator->client->ps.eFlags & EF_DOUBLE_AMMO ) {
+					add = ((ammoData[i].max*2)*0.1);
+				} else {
+					add = ammoData[i].max*0.1;
+				}
+
+				if (add < 1) add = 1;
+
+				Add_Ammo3(activator, i, add, &stop, (qboolean *)qfalse);
+			}
+			if (!self->genericValue12)
+			{
+				self->count -= add;
+			}
+			stop = 0;
+
+			self->fly_sound_debounce_time = level.time + 500;
+			self->activator = activator;
+		}
+	}
+
+	if (stop)
+	{
+		self->s.loopSound = 0;
+		self->s.loopIsSoundset = qfalse;
+	}
+}
+
+#if 0
 void ammo_power_converter_use( gentity_t *self, gentity_t *other, gentity_t *activator)
 {
 	int			add = 0.0f;//,highest;
@@ -2263,7 +2459,8 @@ void ammo_power_converter_use( gentity_t *self, gentity_t *other, gentity_t *act
 		self->s.loopIsSoundset = qfalse;
 	}
 }
-
+#endif
+//[/AmmoSys]
 
 /*QUAKED misc_model_ammo_power_converter (1 0 0) (-16 -16 -16) (16 16 16)
 model="models/items/power_converter.md3"

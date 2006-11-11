@@ -6929,7 +6929,7 @@ void AddSkill(gentity_t *self, float amount)
 {//add skill points to self
 	if(amount < 0)
 	{
-		G_Printf("Negative amount %i in AddSkill\n");
+		G_Printf("AddSkill: amount cannot be negative (%f)\n");
 		return;
 	}
 

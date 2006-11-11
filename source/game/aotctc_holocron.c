@@ -99,19 +99,25 @@ void AOTCTC_Holocron_Loadpositions( void )
 	int len;
 	fileHandle_t	f;
 	char *buf;
-	char *loadPath;
+	//[DynamicMemoryTweaks]
+	char	loadPath[MAX_QPATH];
+	//[/DynamicMemoryTweaks]
 	int statnum = 0;
 	float stats[50*3]; // 1 extra.
 	int holocron_number = 0;
-	vmCvar_t		mapname;
+	//[RawMapName]
+	//vmCvar_t		mapname;
+	//[/RawMapName]
 
 	G_Printf("^5Loading holocron position table...");
 
-	loadPath = (char *)B_TempAlloc(1024*4);
+	//[RawMapName]
+	//loadPath = (char *)B_TempAlloc(1024*4);
+	//trap_Cvar_Register( &mapname, "mapname", "", CVAR_SERVERINFO | CVAR_ROM );
 
-	trap_Cvar_Register( &mapname, "mapname", "", CVAR_SERVERINFO | CVAR_ROM );
-
-	Com_sprintf(loadPath, 1024*4, "holocron_positions/%s.hpf\0", mapname.string);
+	//Com_sprintf(loadPath, 1024*4, "holocron_positions/%s.hpf\0", mapname.string);
+	Com_sprintf(loadPath, sizeof(loadPath), "holocron_positions/%s.hpf", level.rawmapname);
+	//[/RawMapName]
 
 	len = trap_FS_FOpenFile( loadPath, &f, FS_READ );
 	if ( !f )
@@ -198,8 +204,12 @@ void AOTCTC_Holocron_Savepositions( void )
 {
 	fileHandle_t	f;
 	char			*fileString;
-	char			*savePath;
-	vmCvar_t		mapname;
+	//[DynamicMemoryTweaks]
+	char			savePath[MAX_QPATH];
+	//[/DynamicMemoryTweaks]
+	//[RawMapName]
+	//vmCvar_t		mapname;
+	//[/RawMapName]
 	char			lineout[MAX_INFO_STRING];
 	int				loop = 0;
 
@@ -209,11 +219,13 @@ void AOTCTC_Holocron_Savepositions( void )
 
 	fileString = NULL;
 
-	savePath = (char *)B_TempAlloc(1024*4);
+	//[RawMapName]
+	//savePath = (char *)B_TempAlloc(1024*4);
+	//trap_Cvar_Register( &mapname, "mapname", "", CVAR_SERVERINFO | CVAR_ROM );
 
-	trap_Cvar_Register( &mapname, "mapname", "", CVAR_SERVERINFO | CVAR_ROM );
-
-	Com_sprintf(savePath, 1024*4, "holocron_positions/%s.hpf\0", mapname.string);
+	//Com_sprintf(savePath, 1024*4, "holocron_positions/%s.hpf\0", mapname.string);
+	Com_sprintf(savePath, sizeof(savePath), "holocron_positions/%s.hpf", level.rawmapname);
+	//[/RawMapName]
 
 	trap_FS_FOpenFile(savePath, &f, FS_WRITE);
 

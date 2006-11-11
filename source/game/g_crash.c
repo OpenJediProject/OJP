@@ -1,7 +1,7 @@
 //[CrashLog]
 #include "g_local.h"
 
-#if defined __linux__ 
+#if defined __linux__ && !defined GNUC
 
 	#include <string.h>
 	#include <signal.h>
@@ -427,7 +427,7 @@ void DisableCoreDump() {
 }
 
 void EnableStackTrace() {
-	#if defined __linux__
+	#if defined __linux__ && !defined GNUC
 		installcrashhandler();
 	#elif defined WIN32		
 		win32_initialize_handler();
@@ -437,7 +437,7 @@ void EnableStackTrace() {
 }
 
 void DisableStackTrace() {
-	#if defined __linux__
+	#if defined __linux__ && !defined GNUC
 		restorecrashhandler();
 	#elif defined WIN32
 		win32_deinitialize_handler();

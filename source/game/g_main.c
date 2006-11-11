@@ -310,6 +310,7 @@ vmCvar_t		g_showDuelHealths;
 //[CoOp]
 vmCvar_t		ojp_skipcutscenes;
 vmCvar_t		ojp_spmodel;
+vmCvar_t		ojp_spmodelrgb;
 //[/CoOp]
 
 //[AotCAI]
@@ -744,6 +745,7 @@ static cvarTable_t		gameCvarTable[] = {
 	//[CoOp]
 	{ &ojp_skipcutscenes, "ojp_skipcutscenes", "0", CVAR_SERVERINFO|CVAR_ARCHIVE, 0, qtrue },
 	{ &ojp_spmodel, "ojp_spmodel", "jan", CVAR_ARCHIVE, 0, qtrue },
+	{ &ojp_spmodelrgb, "ojp_spmodelrgb", "255 255 255", CVAR_ARCHIVE, 0, qtrue },
 	//[/CoOp]
 
 	//[AotCAI]

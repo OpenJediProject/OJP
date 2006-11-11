@@ -2236,16 +2236,69 @@ int Pickup_Holdable( gentity_t *ent, gentity_t *other ) {
 
 //======================================================================
 
+//[AmmoSys]
+void Add_Ammo3 (gentity_t *ent, int weapon, int count, int *stop, qboolean *gaveSome)
+{ // weapon is actually ammotype
+	*gaveSome = qtrue;
+	if ( ent->client->ps.eFlags & EF_DOUBLE_AMMO ) {
+		if ( ent->client->ps.ammo[weapon] < ammoData[weapon].max*2 )
+		{
+			ent->client->ps.ammo[weapon] += count;
+			if ( ent->client->ps.ammo[weapon] > ammoData[weapon].max*2 )
+			{
+				ent->client->ps.ammo[weapon] = ammoData[weapon].max*2;
+				*gaveSome = qfalse;
+			} else {
+				*stop = 0;
+			}
+		}
+	} else {
+		if ( ent->client->ps.ammo[weapon] < ammoData[weapon].max )
+		{
+			ent->client->ps.ammo[weapon] += count;
+			if ( ent->client->ps.ammo[weapon] > ammoData[weapon].max )
+			{
+				ent->client->ps.ammo[weapon] = ammoData[weapon].max;
+				*gaveSome = qfalse;
+			} else {
+				*stop = 0;
+			}
+		}
+	}
+}
+//[/AmmoSys]
+
 void Add_Ammo (gentity_t *ent, int weapon, int count)
-{
-	if ( ent->client->ps.ammo[weapon] < ammoData[weapon].max )
+{ // weapon is actually type
+	//[AmmoSys]
+	if ( ent->client->ps.eFlags & EF_DOUBLE_AMMO ) {
+		if ( ent->client->ps.ammo[weapon] < ammoData[weapon].max*2 )
+		{
+			ent->client->ps.ammo[weapon] += count;
+			if ( ent->client->ps.ammo[weapon] > ammoData[weapon].max*2 )
+			{
+				ent->client->ps.ammo[weapon] = ammoData[weapon].max*2;
+			}
+		}
+	} else {
+		if ( ent->client->ps.ammo[weapon] < ammoData[weapon].max )
+		{
+			ent->client->ps.ammo[weapon] += count;
+			if ( ent->client->ps.ammo[weapon] > ammoData[weapon].max )
+			{
+				ent->client->ps.ammo[weapon] = ammoData[weapon].max;
+			}
+		}
+	}
+	/*if ( ent->client->ps.ammo[weapon] < ammoData[weapon].max )
 	{
 		ent->client->ps.ammo[weapon] += count;
 		if ( ent->client->ps.ammo[weapon] > ammoData[weapon].max )
 		{
 			ent->client->ps.ammo[weapon] = ammoData[weapon].max;
 		}
-	}
+	}*/
+	//[/AmmoSys]
 }
 
 int Pickup_Ammo (gentity_t *ent, gentity_t *other)

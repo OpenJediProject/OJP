@@ -6984,7 +6984,11 @@ static void CG_DrawCrosshairNames( void ) {
 
 	name = cgs.clientinfo[ cg.crosshairClientNum ].name;
 
-	if (cgs.gametype >= GT_TEAM)
+	//[CoOp]
+	//make other players show as allies in CoOp
+	//if (cgs.gametype >= GT_TEAM)
+	if (cgs.gametype >= GT_SINGLE_PLAYER)
+	//[/CoOp]
 	{
 		//if (cgs.gametype == GT_SIEGE)
 		if (1)
