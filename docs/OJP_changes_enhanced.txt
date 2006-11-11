@@ -28,6 +28,13 @@ Version 0.0.9q:
 
 		CoOp:
 			- Fixed issue where NPCs were constantly swinging.
+			- Added ojp_spmodelrgb for customizing rgb of ojp_spmodel if it is a multi-part model.
+			
+		Ammo System (AmmoSys):
+			- Fixed EF_DOUBLE_AMMO flag with adding ammo (mostly with ammo floor units).
+			
+		Weapon System:
+			- Lowered AMMO_METAL_BOLTS max from 1000 to 400.
 
 
 Version 0.0.9p:

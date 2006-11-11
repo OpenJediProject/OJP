@@ -1986,6 +1986,7 @@ extern vmCvar_t		g_showDuelHealths;
 //[CoOp]
 extern vmCvar_t		ojp_skipcutscenes;
 extern vmCvar_t		ojp_spmodel;
+extern vmCvar_t		ojp_spmodelrgb;
 //[/CoOp]
 
 //[AotCAI]
