@@ -21,6 +21,7 @@ Version 0.0.9q:
 			Misc:
 				- Tweaked the speeds of Blue stance's return animations to match the speeds of Yellow stance.
 				- Attack parries don't work during saber returns anymore.
+				- Tweaked the super duper saber interpolation to only use the swing interpolation during full damage moves.  This should dramatically reduce the CPU useage of OJP Enhanced.
 
 		TABBots:
 			- Decreased the base bot attack parrying rate to 2%.
@@ -35,6 +36,10 @@ Version 0.0.9q:
 			
 		Weapon System:
 			- Lowered AMMO_METAL_BOLTS max from 1000 to 400.
+
+	Cvar Improvements:
+		
+		- d_saberInterpolate is no longer a cheat mode cvar. 
 
 
 Version 0.0.9p:

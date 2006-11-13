@@ -503,7 +503,7 @@ static cvarTable_t		gameCvarTable[] = {
 
 	//[SaberSys]
 	//turn on Super Duper Interpolation by default
-	{ &d_saberInterpolate, "d_saberInterpolate", "2", CVAR_CHEAT, 0, qtrue },
+	{ &d_saberInterpolate, "d_saberInterpolate", "2", 0, 0, qtrue },
 	//{ &d_saberInterpolate, "d_saberInterpolate", "0", CVAR_CHEAT, 0, qtrue },
 	//[/SaberSys]
 

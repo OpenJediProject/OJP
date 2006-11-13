@@ -12508,7 +12508,6 @@ nextStep:
 							BG_EvaluateTrajectory( &saberEnt->s.apos, level.time+50, saberAngles );
 						}
 						else
-						//[RACC] - I beleive this is what kenshire was looking for.
 						{//coming right back
 							vec3_t saberDir;
 							BG_EvaluateTrajectory( &saberEnt->s.pos, level.time, saberOrg );
@@ -12709,8 +12708,8 @@ nextStep:
 
 				else if(self->client->hasCurrentPosition && d_saberInterpolate.integer == 2)
 				{//Super duper interplotation system
-					if ( (level.time-self->client->saber[rSaberNum].blade[rBladeNum].trail.lastTime) < 100 )
-					{
+					if ( (level.time-self->client->saber[rSaberNum].blade[rBladeNum].trail.lastTime) < 100 && BG_SaberInFullDamageMove(&self->client->ps, self->localAnimIndex) )
+					{//only do the full swing interpolation while in a true attack swing.
 						vec3_t olddir, endpos, startpos;
 						int checksaberreturn = 0;
 						float dist = (d_saberBoxTraceSize.value + self->client->saber[rSaberNum].blade[rBladeNum].radius)*0.5f;
@@ -12750,8 +12749,9 @@ nextStep:
 						}
 					}
 					else
-					{//out of date blade position data
-						CheckSaberDamage(self, rSaberNum, rBladeNum, boltOrigin, end, qfalse, (MASK_PLAYERSOLID|CONTENTS_LIGHTSABER|MASK_SHOT), qfalse);
+					{//out of date blade position data or not in full damage move, 
+						//just do a single ghoul2 trace to keep the CPU useage down.					
+						CheckSaberDamage(self, rSaberNum, rBladeNum, boltOrigin, end, qfalse, (MASK_PLAYERSOLID|CONTENTS_LIGHTSABER|MASK_SHOT), qtrue);
 					}
 				//[/SaberSys]
 				}
