@@ -1724,6 +1724,10 @@ static void CG_RegisterSounds( void ) {
 	trap_S_RegisterSound("sound/weapons/force/pull.wav");
 	trap_S_RegisterSound("sound/weapons/force/push.wav");
 
+	//[FlameThrower]
+	trap_S_RegisterSound("sound/effects/fireburst");
+	//[/FlameThrower]
+
 	for (i=1 ; i<3 ; i++)
 	{
 		trap_S_RegisterSound(va("sound/weapons/thermal/bounce%i.wav", i));
@@ -2215,7 +2219,7 @@ static void CG_RegisterGraphics( void ) {
 	cgs.effects.forceLightningWide	= trap_FX_RegisterEffect( "effects/force/lightningwide.efx" );
 	
 	//[Flamethrower]
-	cgs.effects.flamethrower = trap_FX_RegisterEffect( "boba/fthrw" );
+	cgs.effects.flamethrower = trap_FX_RegisterEffect( "effects/flamethrower/flamethrower.efx" );
 	//[/Flamethrower]
 
 	cgs.effects.forceDrain		= trap_FX_RegisterEffect( "effects/mp/drain.efx" );

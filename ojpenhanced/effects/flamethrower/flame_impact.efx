@@ -1,0 +1,98 @@
+Particle
+{
+	spawnFlags			evenDistribution rgbComponentInterpolation
+
+	count				2 3
+
+	life				300 450
+
+	delay				0 200
+
+	origin				0 -8 -8 0 8 8
+
+	rotation			87 93
+
+	rotationDelta		-4 4
+
+	velocity			0 -5 -5 10 5 5
+
+	gravity				20 60
+
+	rgb
+	{
+		start			1 0.7843 0.7843 1 0.4902 0.4902
+	}
+
+	alpha
+	{
+		end				0
+		parm			50
+		flags			linear nonlinear
+	}
+
+	size
+	{
+		start			3 6
+		end				24 28
+		parm			50
+		flags			linear clamp
+	}
+
+	shaders
+	[
+		gfx/effects/fire2
+		gfx/effects/fire3
+		gfx/effects/fire4
+	]
+}
+
+Particle
+{
+	spawnFlags			evenDistribution
+
+	life				250 700
+
+	delay				0 200
+
+	cullrange			350
+
+	origin				10 -6 -6 20 6 6
+
+	velocity			10 0 0 20 0 0
+
+	acceleration		0 -10 -10 0 10 10
+
+	gravity				40 70
+
+	alpha
+	{
+		end				0
+		parm			60
+		flags			linear nonlinear
+	}
+
+	size
+	{
+		start			10 12
+		end				16 20
+		flags			linear
+	}
+
+	shaders
+	[
+		gfx/misc/steam
+	]
+}
+
+Decal
+{
+	size
+	{
+		start		 1 3
+	}
+
+	shaders
+	[
+		gfx/damage/burnmark4
+	]
+}

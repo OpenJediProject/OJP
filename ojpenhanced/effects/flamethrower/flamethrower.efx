@@ -1,0 +1,74 @@
+// Quick and dirty lightning effect....let's make the shader do all the hard work. :)
+
+Particle
+{
+	spawnFlags			evenDistribution rgbComponentInterpolation
+
+	count				7
+
+	life				800
+
+	origin				-1 -20 -10 1 20 10
+
+	rotation			-1 1
+
+	rotationDelta		-20 20
+
+	velocity			200 -10 -10 500 10 10
+
+	acceleration		10 10 10 50 10 10
+
+	rgb
+	{
+		start			0 0 0.7333 0.1255 0.1255 1
+		end				1 1 1 0.9569 0.702 0.4667
+		parm			50 60
+		flags			nonlinear
+	}
+
+	alpha
+	{
+		end				0
+		parm			80 90
+		flags			linear nonlinear
+	}
+
+	size
+	{
+		start			3 4
+		end				12 30
+		flags			linear
+	}
+
+	shaders
+	[
+		gfx/effects/fire2
+		gfx/effects/fire3
+		gfx/effects/fire4
+	]
+
+ 	impactfx
+	[
+		flamethrower/flame_impact
+	]
+}
+
+Particle
+{
+	life	30
+
+	size
+	{
+		start	10	15
+		flags	random
+	}
+
+	rotation			0 360
+
+	rotationDelta		20
+
+	shaders
+	[
+		gfx/effects/fire3
+	]
+}

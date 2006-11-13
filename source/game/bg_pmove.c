@@ -7796,7 +7796,10 @@ int PM_ItemUsable(playerState_t *ps, int forcedUse)
 		return 0;
 	}
 
-	if (ps->pm_flags & PMF_USE_ITEM_HELD)
+	//[Flamethrower]
+	if (ps->pm_flags & PMF_USE_ITEM_HELD && bg_itemlist[ps->stats[STAT_HOLDABLE_ITEM]].giTag != HI_FLAMETHROWER)
+	//if (ps->pm_flags & PMF_USE_ITEM_HELD)
+	//[/Flamethrower]
 	{ //force to let go first
 		return 0;
 	}
@@ -7909,7 +7912,14 @@ int PM_ItemUsable(playerState_t *ps, int forcedUse)
 		return 1;
 	//[Flamethrower]
 	case HI_FLAMETHROWER: //check for stuff here?
-		return 1;
+		if (pm->ps->jetpackFuel > 15)
+		{
+			return 1;
+		}
+		else
+		{
+			return 0;
+		}
 	//[/Flamethrower]
 	default:
 		return 1;
@@ -8638,7 +8648,12 @@ static void PM_Weapon( void )
 
 	// check for item using
 	if ( pm->cmd.buttons & BUTTON_USE_HOLDABLE ) {
-		if ( ! ( pm->ps->pm_flags & PMF_USE_ITEM_HELD ) ) {
+		//[FlameThrower]
+		//RAFIXME - This is a total hack to allow the player to hold down the button for using the flamethrower.
+		//But, fortunately, this doesn't cause lag because we use HANDEXTENDing for the animation, which blocks the code before this point.  Wooh!
+		if ( ! ( pm->ps->pm_flags & PMF_USE_ITEM_HELD ) || bg_itemlist[pm->ps->stats[STAT_HOLDABLE_ITEM]].giTag == HI_FLAMETHROWER) {
+		//if ( ! ( pm->ps->pm_flags & PMF_USE_ITEM_HELD ) ) {
+		//[/FlameThrower]
 
 			if (pm_entSelf->s.NPC_class!=CLASS_VEHICLE
 				&& pm->ps->m_iVehicleNum)

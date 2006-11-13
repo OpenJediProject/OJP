@@ -12787,6 +12787,7 @@ SkipTrueView:
 
 		VectorSet( tAng, cent->turAngles[PITCH], cent->turAngles[YAW], cent->turAngles[ROLL] );
 
+		//fAng adjusts the effect for the player's spine orientation.
 		VectorSet( fAng, cent->pe.torso.pitchAngle, cent->pe.torso.yawAngle, 0 );
 
 		AngleVectors( fAng, fxDir, NULL, NULL );
@@ -12801,13 +12802,9 @@ SkipTrueView:
 		efOrg[1] = lHandMatrix.matrix[1][3];
 		efOrg[2] = lHandMatrix.matrix[2][3];
 
-		tAng[YAW] += 180;
-
-		AnglesToAxis( tAng, axis );
+		AnglesToAxis( fAng, axis );
 	
 		trap_FX_PlayEntityEffectID(cgs.effects.flamethrower, efOrg, axis, -1, -1, -1, -1);	
-
-		trap_S_StartSound ( NULL, cent->currentState.number, CHAN_ITEM, trap_S_RegisterSound("sound/effects/combustfire.mp3") );
 	}
 	//[/Flamethrower]
 

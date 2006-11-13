@@ -6148,12 +6148,12 @@ void WP_ForcePowersUpdate( gentity_t *self, usercmd_t *ucmd )
 	{//flamethrower is active, flip active flamethrower flag
 		self->client->ps.userInt3 |= (1 << FLAG_FLAMETHROWER);
 		self->client->ps.forceHandExtend = HANDEXTEND_FORCE_HOLD;
-		self->client->ps.forceHandExtendTime = level.time + 500;
+		self->client->ps.forceHandExtendTime = level.time + 100;
 		
 		if( LightningDebounceTime == level.time //someone already advanced the timer this frame
 			|| (level.time - LightningDebounceTime >= LIGHTNINGDEBOUNCE) )
 		{
-			//G_Sound( self, CHAN_WEAPON, G_SoundIndex("sound/effects/combustfire.mp3") );
+			G_Sound( self, CHAN_WEAPON, G_SoundIndex("sound/effects/fireburst") );
 			Flamethrower_Fire(self);
 			LightningDebounceTime = level.time;
 			
@@ -6169,6 +6169,7 @@ void WP_ForcePowersUpdate( gentity_t *self, usercmd_t *ucmd )
 	}
 	else
 	{
+		//G_Printf("%i: %i: Not using flamethrower\n", level.time, self->s.number);
 		self->client->ps.userInt3 &= ~(1 << FLAG_FLAMETHROWER);
 	}
 	//[/Flamethrower]

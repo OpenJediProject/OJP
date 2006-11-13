@@ -1220,7 +1220,7 @@ void Flamethrower_Fire( gentity_t *self )
 	vec3_t	center, mins, maxs, dir, ent_org, size, v;
 
 	float	radius = FLAMETHROWER_RADIUS, dot, dist;
-	int		damage	= Q_irand( 20, 30 );
+	int damage = 2;
 	gentity_t	*entityList[MAX_GENTITIES];
 	int			iEntityList[MAX_GENTITIES];
 	int		e, numListedEntities, i;
