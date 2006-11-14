@@ -1336,8 +1336,8 @@ void CG_DrawDodge( menuDef_t *menuHUD )
 	}
 
 	if (percent > DPBAR_H)
-	{
-		return;
+	{//clamp to MAX_DODGE
+		percent = DPBAR_H;
 	}
 
 	if (percent < 0.1f)
