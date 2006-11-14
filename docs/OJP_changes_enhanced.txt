@@ -12,6 +12,8 @@ Version 0.0.9q:
 		Animation Tweaks (AnimTweaks):
 			- Added a variety of animation tweaks that dramatically alter many of the animations used in the game including the saber combat, forward kick, left/right arials, gun fire, overhead swings, back flips, force lightning attacks, and style stances.
 
+		Flamethrower - A wrist flamethrower has been added as a selectable item/skill.
+
 	Improvements/Fixes:
 
 		Dodge System:
@@ -20,6 +22,7 @@ Version 0.0.9q:
 		Experience System:
 			- Added some protection to prevent possible situations where the players could received negative amounts of experience.
 			- Fixed problem where bots were spawning without Force powers or sabers.  This was due the code removing Force Seeing before other powers when players had more skill points allociated than what they had.  This has been corrected.
+			- Cleaned up skills menu.
 
 		Saber Combat System:
 

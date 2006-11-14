@@ -403,15 +403,59 @@
 		}
 		
 	//[ExpSys]
+		//need power rank titles for the mercs column as well.
+		itemDef 
+		{
+			name				forceranktitle
+			group				"playersettingforcegroup"
+			style				0	
+			text				@MENUS_POWER
+			rect				30 112 0 0
+			textalign			ITEM_ALIGN_RIGHT		
+			textalignx			104
+			textaligny			0
+			outlinecolor			1 .5 .5 .5
+			backcolor			0.3 0.3 0.3 1
+			font				4
+			textscale		     	1 
+			forecolor			.549 .854 1 1
+			border				0
+			bordercolor			0 0 0 0
+			visible				1 
+			decoration
+		}
+
+		itemDef 
+		{
+			name				forceranktitle2
+			group				"playersettingforcegroup"
+			style				0	
+			text				@MENUS_1_2_3
+			rect				30 112 0 0
+			textalign			ITEM_ALIGN_LEFT
+			textalignx			115
+			textaligny			0
+			outlinecolor			1 .5 .5 .5
+			backcolor			0.3 0.3 0.3 1
+			font				4
+			textscale		      	1
+			forecolor			.549 .854 1 1
+			border				0
+			bordercolor			0 0 0 0
+			visible				1 
+			decoration
+		}
+	
+	
 	//Made Force Seeing Level 1 a pre-req to taking any additional force powers, except in the case of free sabers.
 		itemDef 
 		{
 			name				notforcesensitive
 			group				"playersettinggroup"
-			text				"Need Force Seeing to use Force Powers"
+			text				@OJP_MENUS_NOTFORCESENSITIVE
 			type				1
 			style				0	
-			rect				230 130 0 0
+			rect				253 248 0 0
 			textalign			ITEM_ALIGN_CENTER	 	
 			textalignx			65
 			textaligny				0
@@ -422,9 +466,22 @@
 			backcolor			0 0 0 0
 			border				0
 			bordercolor			0 0 0 0
-			descText			"Need Force Seeing to use Force Powers"
+			descText			@OJP_MENUS_DESC_NOTFORCESENSITIVE
 			visible				0 
 			decoration
+		}
+		
+		// Invisible description box for notforcesensitive
+		itemDef 
+		{
+			name					notforcesensitive
+			group					"playersettinggroup"
+			style					0
+			rect					230 248 175 34
+			forecolor				.7 .7 .7 1
+			decoration
+			descText				@OJP_MENUS_DESC_NOTFORCESENSITIVE
+			visible					0
 		}
 	//[/ExpSys]
 
@@ -1055,14 +1112,14 @@
 		// ADDITIONAL SKILLS
 		//----------------------------------------
 		
-		// Jetpack title
+		// Bacta title
 		itemDef 
 		{
 			name					setsk_bacta
 			group					gunpowers
 			style					0	
 			text					@OJP_MENUS_SKILL_BACTA
-			rect					30 113 110 15
+			rect					30 130 110 15
 			textalign				ITEM_ALIGN_RIGHT												
 			textalignx				105
 			textaligny				0
@@ -1077,14 +1134,14 @@
 			decoration
 		}
 	
-		// Jetpack assign
+		// Bacta assign
 		itemDef 
 		{
 			name					setsk_bacta
 			group					gunpowers
 			style					0	
 			ownerdraw				UI_FORCE_RANK_BACTA
-			rect					30 113 175 15
+			rect					30 130 175 15
 			textalign				ITEM_ALIGN_LEFT		
 			textalignx				115
 			textaligny				-6
@@ -1118,7 +1175,7 @@
 			group					gunpowers
 			style					0	
 			text					@OJP_MENUS_SKILL_JETPACK
-			rect					30 130 110 15
+			rect					30 147 110 15
 			textalign				ITEM_ALIGN_RIGHT												
 			textalignx				105
 			textaligny				0
@@ -1140,7 +1197,7 @@
 			group					gunpowers
 			style					0	
 			ownerdraw				UI_FORCE_RANK_JETPACK
-			rect					30 130 175 15
+			rect					30 147 175 15
 			textalign				ITEM_ALIGN_LEFT		
 			textalignx				115
 			textaligny				-6
@@ -1174,7 +1231,7 @@
 			group					gunpowers
 			style					0	
 			text					@OJP_MENUS_SKILL_PISTOL
-			rect					30 147 110 15
+			rect					30 164 110 15
 			textalign				ITEM_ALIGN_RIGHT												
 			textalignx				105
 			textaligny				0
@@ -1196,7 +1253,7 @@
 			group					gunpowers
 			style					0	
 			ownerdraw				UI_FORCE_RANK_PISTOL
-			rect					30 147 175 15
+			rect					30 164 175 15
 			textalign				ITEM_ALIGN_LEFT		
 			textalignx				115
 			textaligny				-6
@@ -1230,7 +1287,7 @@
 			group					gunpowers
 			style					0	
 			text					@OJP_MENUS_SKILL_BLASTER
-			rect					30 164 110 15
+			rect					30 181 110 15
 			textalign				ITEM_ALIGN_RIGHT												
 			textalignx				105
 			textaligny				0
@@ -1252,7 +1309,7 @@
 			group					gunpowers
 			style					0	
 			ownerdraw				UI_FORCE_RANK_BLASTER
-			rect					30 164 175 15
+			rect					30 181 175 15
 			textalign				ITEM_ALIGN_LEFT		
 			textalignx				115
 			textaligny				-6
@@ -1286,7 +1343,7 @@
 			group					gunpowers
 			style					0	
 			text					@OJP_MENUS_SKILL_THERMALS
-			rect					30 181 110 15
+			rect					30 198 110 15
 			textalign				ITEM_ALIGN_RIGHT												
 			textalignx				105
 			textaligny				0
@@ -1308,7 +1365,7 @@
 			group					gunpowers
 			style					0	
 			ownerdraw				UI_FORCE_RANK_THERMALS
-			rect					30 181 175 15
+			rect					30 198 175 15
 			textalign				ITEM_ALIGN_LEFT		
 			textalignx				115
 			textaligny				-6
@@ -1342,7 +1399,7 @@
 			group					gunpowers
 			style					0	
 			text					@OJP_MENUS_SKILL_ROCKET
-			rect					30 198 110 15
+			rect					30 215 110 15
 			textalign				ITEM_ALIGN_RIGHT												
 			textalignx				105
 			textaligny				0
@@ -1364,7 +1421,7 @@
 			group					gunpowers
 			style					0	
 			ownerdraw				UI_FORCE_RANK_ROCKETS
-			rect					30 198 175 15
+			rect					30 215 175 15
 			textalign				ITEM_ALIGN_LEFT		
 			textalignx				115
 			textaligny				-6
@@ -1390,6 +1447,64 @@
 				setitemcolor	setsk_rocket forecolor .2 1 .2 1
 			}
 		}
+		
+		//[Flamethrower]
+		// flamethrower title
+		itemDef 
+		{
+			name					setsk_flamethrower
+			group					gunpowers
+			style					0	
+			text					@OJP_MENUS_SKILL_FLAMETHROWER
+			rect					30 232 110 15
+			textalign				ITEM_ALIGN_RIGHT												
+			textalignx				105
+			textaligny				0
+			font					4
+			textscale				1
+			forecolor				.2 1 .2 1
+			outlinecolor			1 .5 .5 .5
+			backcolor				0 0 0 0
+			border					0
+			bordercolor				0 0 0 0
+			visible					1 
+			decoration
+		}
+	
+		// flamethrower assign
+		itemDef 
+		{
+			name					setsk_flamethrower
+			group					gunpowers
+			style					0	
+			ownerdraw				UI_FORCE_RANK_FLAMETHROWER
+			rect					30 232 175 15
+			textalign				ITEM_ALIGN_LEFT		
+			textalignx				115
+			textaligny				-6
+			textscale				.25        
+			forecolor				.2 1 .2 1
+			backcolor				0 0 0 0
+			forecolor				1 0.2 0.2 1
+			border					0
+			bordercolor				0 0 0 0
+			descText				@OJP_MENUS_DESC_SKILL_FLAMETHROWER
+			visible					1 
+			action 
+			{ 
+				play			"sound/interface/button1.wav" ;
+			}
+
+			mouseenter 
+			{ 
+				setitemcolor	setsk_flamethrower forecolor .7 1 2. 1
+			}
+			mouseexit 
+			{ 
+				setitemcolor	setsk_flamethrower forecolor .2 1 .2 1
+			}
+		}
+		//[/Flamethrower]
 		//[/ExpSys]
 
 		//----------------------------------------
@@ -1405,7 +1520,7 @@
 			text					@MENUS_FORCE_GRIP
 			//descText				@MENUS_DESCRIPTION_OF_A_FORCE
 			//[ForceSys]
-			rect					30 223 110 15
+			rect					230 265 110 15
 			//rect					230 223 110 15
 			//[/ForceSys]
 			textalign				ITEM_ALIGN_RIGHT												
@@ -1430,7 +1545,7 @@
 			style					0	
 			ownerdraw				UI_FORCE_RANK_GRIP
 			//[ForceSys]
-			rect					30 223 175 15
+			rect					230 265 175 15
 			//rect					230 223 175 15
 			//[/ForceSys]
 			textalign				ITEM_ALIGN_LEFT		
@@ -1534,7 +1649,7 @@
 			text					@MENUS_FORCE_LIGHTNING
 			//descText				@MENUS_DESCRIPTION_OF_A_FORCE
 			//[ForceSys]
-			rect					30 257 110 15
+			rect					230 248 110 15
 			//rect					230 257 110 15
 			//[/ForceSys]
 			textalign				ITEM_ALIGN_RIGHT												
@@ -1559,7 +1674,7 @@
 			style					0	
 			ownerdraw				UI_FORCE_RANK_LIGHTNING
 			//[ForceSys]
-			rect					30 257 175 15
+			rect					230 248 175 15
 			//rect					230 257 175 15
 			//[/ForceSys]
 			textalign				ITEM_ALIGN_LEFT										

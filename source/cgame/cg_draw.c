@@ -2257,7 +2257,11 @@ void CG_DrawInvenSelect( void )
 
 			strcpy(upperKey, bg_itemlist[itemNdex].classname);
 			
-			if ( trap_SP_GetStringTextString( va("SP_INGAME_%s",Q_strupr(upperKey)), text, sizeof( text )))
+			//[Flamethrower]
+			if ( trap_SP_GetStringTextString( va("SP_INGAME_%s",Q_strupr(upperKey)), text, sizeof( text )) 
+				|| trap_SP_GetStringTextString( va("OJP_MENUS_%s",Q_strupr(upperKey)), text, sizeof( text )))
+			//if ( trap_SP_GetStringTextString( va("SP_INGAME_%s",Q_strupr(upperKey)), text, sizeof( text )))
+			//[/Flamethrower]
 			{
 				UI_DrawProportionalString(320, y+45, text, UI_CENTER | UI_SMALLFONT, textColor);
 			}

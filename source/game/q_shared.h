@@ -652,6 +652,7 @@ typedef enum
 	SK_THERMAL,		//thermal detenator skill
 	SK_ROCKET,		//rocket launcher skill
 	SK_BACTA,
+	SK_FLAMETHROWER, //flamethrower skill
 	NUM_SKILLS
 } skills_t;
 

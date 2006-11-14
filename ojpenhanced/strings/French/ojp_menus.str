@@ -26,6 +26,14 @@ REFERENCE	    SKILL
 LANG_ENGLISH	    "Skill"
 LANG_FRENCH		"#same"
 
+REFERENCE	    NOTFORCESENSITIVE
+LANG_ENGLISH	    "No Force Powers"
+LANG_FRENCH		"#same"
+
+REFERENCE	    DESC_NOTFORCESENSITIVE
+LANG_ENGLISH	    "Must acquire a minimum rank of 1 in Force Seeing to use other Force Powers."
+LANG_FRENCH		"#same"
+
 REFERENCE	    SKILL_JETPACK
 LANG_ENGLISH	    "Jetpack:"
 LANG_FRENCH		"#same"
@@ -73,7 +81,21 @@ LANG_FRENCH		"#same"
 REFERENCE	    DESC_SKILL_BACTA
 LANG_ENGLISH	"Gains the user a emergency medical bacta pack.  Additional points makes the pack larger."
 LANG_FRENCH		"#same"
+
+REFERENCE	    SKILL_FLAMETHROWER
+LANG_ENGLISH	    "Flamethrower:"
+LANG_FRENCH		"#same"
+
+REFERENCE	    DESC_SKILL_FLAMETHROWER
+LANG_ENGLISH	"Gains the user a Flamethrower."
+LANG_FRENCH		"#same"
 //[/ExpSys]
+
+//[Flamethrower]
+REFERENCE	    ITEM_FLAMETHROWER
+LANG_ENGLISH	    "Flamethrower"
+LANG_FRENCH		"#same"
+//[/Flamethrower]
 
 //[OLDGAMETYPES]
 REFERENCE           JEDIMASTER
