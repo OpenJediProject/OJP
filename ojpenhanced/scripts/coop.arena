@@ -88,3 +88,10 @@ longname		"Tier 3 - Rift"
 fraglimit		10
 type			"coop"
 }
+
+{
+map			"taspir1"
+longname		"Taspir Part 1"
+fraglimit		10
+type			"coop"
+}

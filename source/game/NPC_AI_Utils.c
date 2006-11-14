@@ -571,6 +571,15 @@ void AI_DeleteGroupMember( AIGroupInfo_t *group, int memberNum )
 {
 	int i;
 
+	//[CoOp]
+	//added additional sanity checks to fix some crashing problems.
+	if(memberNum >= MAX_GROUP_MEMBERS || memberNum >= group->numGroup)
+	{//invalid group member number
+		G_Printf("Invalid memberNum %i in AI_DeleteGroupMember\n", memberNum);
+		return;
+	}
+	//[/CoOp]
+
 	if ( group->commander && group->commander->s.number == group->member[memberNum].number )
 	{
 		group->commander = NULL;
@@ -579,7 +588,11 @@ void AI_DeleteGroupMember( AIGroupInfo_t *group, int memberNum )
 	{
 		g_entities[group->member[memberNum].number].NPC->group = NULL;
 	}
-	for ( i = memberNum; i < (group->numGroup-1); i++ )
+	//[OverflowProtection]
+	//adding overflow protection since something already appears to be screwing the level.groups code up.
+	for ( i = memberNum; i < (group->numGroup-1) && i < (MAX_GROUP_MEMBERS-1); i++ )
+	//for ( i = memberNum; i < (group->numGroup-1); i++ )
+	//[/OverflowProtection]
 	{
 		memcpy( &group->member[i], &group->member[i+1], sizeof( group->member[i] ) );
 	}

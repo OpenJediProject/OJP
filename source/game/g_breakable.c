@@ -172,6 +172,11 @@ void misc_model_breakable_die( gentity_t *self, gentity_t *inflictor, gentity_t 
 }
 
 
+void misc_model_breakable_touch(gentity_t *self, gentity_t *other, trace_t *trace)
+{//touch function for model breakable.  doesn't actually do anything, but we need one to prevent crashs like the one on taspir2
+}
+
+
 void misc_model_throw_at_target4( gentity_t *self, gentity_t *activator )
 {
 	vec3_t	pushDir, kvel;
@@ -717,6 +722,8 @@ void misc_model_breakable_init( gentity_t *ent )
 		//ent->think  = misc_model_breakable_die;
 
 	}
+
+	ent->touch = misc_model_breakable_touch;
 }
 
 
@@ -1106,4 +1113,5 @@ void SP_misc_model_breakable( gentity_t *ent )
 		//ent->flags |= FL_RED_CROSSHAIR;
 	}
 }
+//[/CoOp]
 
