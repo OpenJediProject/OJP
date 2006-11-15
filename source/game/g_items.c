@@ -1314,7 +1314,12 @@ void Flamethrower_Fire( gentity_t *self )
 
 void ItemUse_FlameThrower(gentity_t *ent)
 {
-	ent->client->flameTime = level.time + 1500;
+	if(BG_InLedgeMove(ent->client->ps.legsAnim))
+	{//can't use flamethrower while in ledgegrab
+		return;
+	}
+
+	ent->client->flameTime = level.time + 300;
 }
 //[/Flamethrower]
 

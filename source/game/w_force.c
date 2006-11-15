@@ -6146,26 +6146,28 @@ void WP_ForcePowersUpdate( gentity_t *self, usercmd_t *ucmd )
 	//[Flamethrower]
 	if(self->client->flameTime > level.time)
 	{//flamethrower is active, flip active flamethrower flag
-		self->client->ps.userInt3 |= (1 << FLAG_FLAMETHROWER);
-		self->client->ps.forceHandExtend = HANDEXTEND_FORCE_HOLD;
-		self->client->ps.forceHandExtendTime = level.time + 100;
-		
-		if( LightningDebounceTime == level.time //someone already advanced the timer this frame
-			|| (level.time - LightningDebounceTime >= LIGHTNINGDEBOUNCE) )
-		{
-			G_Sound( self, CHAN_WEAPON, G_SoundIndex("sound/effects/fireburst") );
-			Flamethrower_Fire(self);
-			LightningDebounceTime = level.time;
-			
-			self->client->ps.jetpackFuel -= 1;
 
-			if (self->client->ps.jetpackFuel <= 0)
-			{ //turn it off
-				self->client->ps.jetpackFuel = 0;
-				self->client->flameTime = 0;
-				self->client->ps.userInt3 &= ~(1 << FLAG_FLAMETHROWER);
-			}
-		}	
+		if (self->client->ps.jetpackFuel < FLAMETHROWER_FUELCOST)
+		{//not enough gas, turn it off.
+			self->client->flameTime = 0;
+			self->client->ps.userInt3 &= ~(1 << FLAG_FLAMETHROWER);
+		}
+		else
+		{//fire flamethrower
+			self->client->ps.userInt3 |= (1 << FLAG_FLAMETHROWER);
+			self->client->ps.forceHandExtend = HANDEXTEND_FORCE_HOLD;
+			self->client->ps.forceHandExtendTime = level.time + 100;
+			
+			if( LightningDebounceTime == level.time //someone already advanced the timer this frame
+				|| (level.time - LightningDebounceTime >= LIGHTNINGDEBOUNCE) )
+			{
+				G_Sound( self, CHAN_WEAPON, G_SoundIndex("sound/effects/fireburst") );
+				Flamethrower_Fire(self);
+				LightningDebounceTime = level.time;
+				
+				self->client->ps.jetpackFuel -= FLAMETHROWER_FUELCOST;
+			}	
+		}
 	}
 	else
 	{

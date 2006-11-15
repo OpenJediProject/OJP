@@ -7912,13 +7912,13 @@ int PM_ItemUsable(playerState_t *ps, int forcedUse)
 		return 1;
 	//[Flamethrower]
 	case HI_FLAMETHROWER: //check for stuff here?
-		if (pm->ps->jetpackFuel > 15)
-		{
-			return 1;
+		if (pm->ps->jetpackFuel < FLAMETHROWER_FUELCOST)
+		{//not enough fuel to fire the weapon.
+			return 0;
 		}
 		else
 		{
-			return 0;
+			return 1;
 		}
 	//[/Flamethrower]
 	default:
@@ -8328,6 +8328,26 @@ static void PM_Weapon( void )
 		}
 	}
 
+	//[Flamethrower]
+	//we handle the flame thrower item useage seperately to allow it to be held down and used continously (ignores PMF_USE_ITEM_HELD)
+	//it's also processed before the handextend stuff so we can continue to use it even when the player's already in the 
+	//handextend animation for the flamethrower.
+	if ( pm->cmd.buttons & BUTTON_USE_HOLDABLE && bg_itemlist[pm->ps->stats[STAT_HOLDABLE_ITEM]].giTag == HI_FLAMETHROWER) 
+	{
+		if (pm_entSelf->s.NPC_class!=CLASS_VEHICLE
+			&& pm->ps->m_iVehicleNum)
+		{//riding a vehicle, can't use holdable items, this button operates as the weapon link/unlink toggle
+		}
+		else if (!PM_ItemUsable(pm->ps, 0))
+		{
+		}
+		else
+		{//use flamethrower
+			PM_AddEvent( EV_USE_ITEM0 + bg_itemlist[pm->ps->stats[STAT_HOLDABLE_ITEM]].giTag );
+		}
+	}
+	//[/Flamethrower]
+
 	if (pm->ps->forceHandExtend == HANDEXTEND_WEAPONREADY &&
 		PM_CanSetWeaponAnims())
 	{ //reset into weapon stance
@@ -8647,14 +8667,10 @@ static void PM_Weapon( void )
 	}
 
 	// check for item using
-	if ( pm->cmd.buttons & BUTTON_USE_HOLDABLE ) {
-		//[FlameThrower]
-		//RAFIXME - This is a total hack to allow the player to hold down the button for using the flamethrower.
-		//But, fortunately, this doesn't cause lag because we use HANDEXTENDing for the animation, which blocks the code before this point.  Wooh!
-		if ( ! ( pm->ps->pm_flags & PMF_USE_ITEM_HELD ) || bg_itemlist[pm->ps->stats[STAT_HOLDABLE_ITEM]].giTag == HI_FLAMETHROWER) {
-		//if ( ! ( pm->ps->pm_flags & PMF_USE_ITEM_HELD ) ) {
-		//[/FlameThrower]
-
+	if ( pm->cmd.buttons & BUTTON_USE_HOLDABLE ) 
+	{
+		if ( ! ( pm->ps->pm_flags & PMF_USE_ITEM_HELD ) ) 
+		{
 			if (pm_entSelf->s.NPC_class!=CLASS_VEHICLE
 				&& pm->ps->m_iVehicleNum)
 			{//riding a vehicle, can't use holdable items, this button operates as the weapon link/unlink toggle
@@ -8663,6 +8679,11 @@ static void PM_Weapon( void )
 
 			if (!pm->ps->stats[STAT_HOLDABLE_ITEM])
 			{
+				return;
+			}
+
+			if(bg_itemlist[pm->ps->stats[STAT_HOLDABLE_ITEM]].giTag == HI_FLAMETHROWER)
+			{//flame thrower is handled earlier, just terminate out
 				return;
 			}
 
@@ -8680,8 +8701,7 @@ static void PM_Weapon( void )
 						bg_itemlist[pm->ps->stats[STAT_HOLDABLE_ITEM]].giTag != HI_HEALTHDISP &&
 						bg_itemlist[pm->ps->stats[STAT_HOLDABLE_ITEM]].giTag != HI_AMMODISP &&
 						bg_itemlist[pm->ps->stats[STAT_HOLDABLE_ITEM]].giTag != HI_CLOAK &&
-						bg_itemlist[pm->ps->stats[STAT_HOLDABLE_ITEM]].giTag != HI_EWEB &&
-						bg_itemlist[pm->ps->stats[STAT_HOLDABLE_ITEM]].giTag != HI_FLAMETHROWER)
+						bg_itemlist[pm->ps->stats[STAT_HOLDABLE_ITEM]].giTag != HI_EWEB)
 					{ //never use up the binoculars or jetpack or dispensers or cloak or ...
 						pm->ps->stats[STAT_HOLDABLE_ITEMS] -= (1 << bg_itemlist[pm->ps->stats[STAT_HOLDABLE_ITEM]].giTag);
 					}
@@ -8699,8 +8719,7 @@ static void PM_Weapon( void )
 					bg_itemlist[pm->ps->stats[STAT_HOLDABLE_ITEM]].giTag != HI_HEALTHDISP &&
 					bg_itemlist[pm->ps->stats[STAT_HOLDABLE_ITEM]].giTag != HI_AMMODISP &&
 					bg_itemlist[pm->ps->stats[STAT_HOLDABLE_ITEM]].giTag != HI_CLOAK &&
-					bg_itemlist[pm->ps->stats[STAT_HOLDABLE_ITEM]].giTag != HI_EWEB &&
-					bg_itemlist[pm->ps->stats[STAT_HOLDABLE_ITEM]].giTag != HI_FLAMETHROWER)
+					bg_itemlist[pm->ps->stats[STAT_HOLDABLE_ITEM]].giTag != HI_EWEB)
 				{
 					pm->ps->stats[STAT_HOLDABLE_ITEM] = 0;
 					BG_CycleInven(pm->ps, 1);
@@ -8708,7 +8727,8 @@ static void PM_Weapon( void )
 			}
 			return;
 		}
-	} else {
+	} else 
+	{
 		pm->ps->pm_flags &= ~PMF_USE_ITEM_HELD;
 	}
 

@@ -117,6 +117,11 @@
 #define	DODGE_CRITICALLEVEL				35
 //[/DodgeDefines]
 //[/DodgeSys]
+
+//[Flamethrower]
+#define FLAMETHROWER_FUELCOST 2		//fuel cost of flamethrower per hit trace
+//[/Flamethrower]
+
 //[BUGFIX12]
 //as part of this fix I'm giving some defines for the ghoul2 model indexes.
 #define		G2MODEL_PLAYER				0

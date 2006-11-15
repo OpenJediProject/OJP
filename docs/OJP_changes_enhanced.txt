@@ -5,6 +5,17 @@ Open Jedi Project Change Log (Enhanced Distribution)
 This file stores all the information about what has changed from release version to release version for OJP Enhanced.  OJP Enhanced contains all the changes of OJP Basic plus a library of gameplay alterations made by OJP's contributors.
 
 
+Version 0.0.9r:
+
+	Improvements/Fixes:
+
+		Flamethrower:
+			- Can't use the flamethrower during ledgegrabs.
+			- Doubled the jetfuel consumption rate.
+			- Retooled the fire control to allow the flamethrower to turn off faster.
+			- Fixed issue where the flamethrower effect continued when players died.
+
+
 Version 0.0.9q:
 
 	New Features:

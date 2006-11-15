@@ -2850,6 +2850,12 @@ extern void RunEmplacedWeapon( gentity_t *ent, usercmd_t **ucmd );
 		wasJediMaster = qtrue;
 	}
 
+	//[Flamethrower]
+	//turn off flamethrower
+	self->client->flameTime = 0;
+	self->client->ps.userInt3 &= ~(1 << FLAG_FLAMETHROWER);
+	//[/Flamethrower]
+
 	//[NOBODYQUE]
 	//this is set earlier since some of the previous function calls depend on this being
 	//set for the g_spawn emergency entity override stuff.
