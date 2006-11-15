@@ -293,7 +293,7 @@ void NPC_RemoveBody( gentity_t *self )
 			{
 				self->nextthink = level.time + FRAMETIME; // try back in a second
 
-				if( DistancetoClosestPlayer(self->r.currentOrigin, -1) <= REMOVE_DISTANCE_SQR )
+				if( DistancetoClosestPlayer(self->r.currentOrigin, -1) <= REMOVE_DISTANCE )
 				//if ( DistanceSquared( g_entities[0].r.currentOrigin, self->r.currentOrigin ) <= REMOVE_DISTANCE_SQR )
 				{
 					return;
@@ -323,7 +323,11 @@ void NPC_RemoveBody( gentity_t *self )
 			//			placed as dead NPCs by a designer...
 			//			For now we just assume that a corpse with no enemy was 
 			//			placed in the map as a corpse
-			if ( self->enemy )
+
+			//racc - I'm pretty sure that any "corpses" placed on the maps actually have health and are not technically dead.  
+			//As such, I'm removing this to prevent NPC corpses from not disappear when killed by something other than another
+			//creature.
+			//if ( self->enemy )
 			{
 				if ( self->client && self->client->ps.saberEntityNum > 0 && self->client->ps.saberEntityNum < ENTITYNUM_WORLD )
 				{
