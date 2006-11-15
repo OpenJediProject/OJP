@@ -81,6 +81,13 @@ longname		"Cutscene - Post Hoth"
 fraglimit		10
 type			"coop"
 }
+             
+{
+map			"t2_rogue"
+longname		"Capture Crime Lord - Coruscant"
+fraglimit		10
+type			"coop"
+}
 
 {
 map			"t3_rift"
