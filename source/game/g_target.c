@@ -1254,9 +1254,8 @@ void Use_Autosave( gentity_t *ent, gentity_t *other, gentity_t *activator )
 		ent->use = 0;
 	}
 	else
-	{
-		ent->think = G_FreeEntity;
-		ent->nextthink = level.time + FRAMETIME;
+	{//we're done with this entity, dump it immediately.
+		G_FreeEntity(ent);
 	}
 	//[/CoOpEditor]
 }
