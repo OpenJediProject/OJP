@@ -363,6 +363,7 @@
 #define UI_FORCE_RANK_ROCKETS		302
 #define UI_FORCE_RANK_BACTA			303
 #define UI_FORCE_RANK_FLAMETHROWER	304
+#define UI_FORCE_RANK_BOWCASTER		305
 //[/ExpSys]
 
 #define VOICECHAT_GETFLAG			"getflag"				// command someone to get the flag

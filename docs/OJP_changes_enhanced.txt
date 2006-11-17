@@ -7,6 +7,11 @@ This file stores all the information about what has changed from release version
 
 Version 0.0.9r:
 
+	New Features:
+
+		Experience System:
+			- Added bowcaster skill.
+
 	Improvements/Fixes:		
 	
 		Blaster Bolt Block System:

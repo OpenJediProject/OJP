@@ -89,6 +89,14 @@ LANG_GERMAN		"#same"
 REFERENCE	    DESC_SKILL_FLAMETHROWER
 LANG_ENGLISH	"Gains the user a Flamethrower."
 LANG_GERMAN		"#same"
+
+REFERENCE	    SKILL_BOWCASTER
+LANG_ENGLISH	    "Bowcaster:"
+LANG_GERMAN		"#same"
+
+REFERENCE	    DESC_SKILL_BOWCASTER
+LANG_ENGLISH	"Gains the user a Bowcaster."
+LANG_GERMAN		"#same"
 //[/ExpSys]
 
 //[Flamethrower]

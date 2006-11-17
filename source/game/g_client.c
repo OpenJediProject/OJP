@@ -3929,6 +3929,14 @@ void ClientSpawn(gentity_t *ent) {
 				}
 			}
 
+			if(client->skillLevel[SK_BOWCASTER])
+			{//player has bowcaster skill
+				if (!wDisable || !(wDisable & (1 << WP_BOWCASTER)))
+				{
+					client->ps.stats[STAT_WEAPONS] |= ( 1 << WP_BOWCASTER );
+				}
+			}
+
 			if(client->skillLevel[SK_THERMAL])
 			{//player has thermals
 				if (!wDisable || !(wDisable & (1 << WP_THERMAL)))
@@ -4149,6 +4157,8 @@ void ClientSpawn(gentity_t *ent) {
 	if ( inSiegeWithClass == qfalse )
 	{//racc - not playing siege, assign ammo levels.
 		//[ExpSys]
+		client->ps.ammo[AMMO_POWERCELL] = ammoData[AMMO_POWERCELL].max * (float) client->skillLevel[SK_BOWCASTER]/FORCE_LEVEL_3;
+
 		client->ps.ammo[AMMO_BLASTER] = ammoData[AMMO_BLASTER].max * (float) client->skillLevel[SK_BLASTER]/FORCE_LEVEL_3;
 
 		client->ps.ammo[AMMO_THERMAL] = ammoData[AMMO_THERMAL].max * (float) client->skillLevel[SK_THERMAL]/FORCE_LEVEL_3;

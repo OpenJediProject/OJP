@@ -70,6 +70,12 @@ LANG_ENGLISH	    "Flamethrower:"
 
 REFERENCE	    DESC_SKILL_FLAMETHROWER
 LANG_ENGLISH	"Gains the user a Flamethrower."
+
+REFERENCE	    SKILL_BOWCASTER
+LANG_ENGLISH	    "Bowcaster:"
+
+REFERENCE	    DESC_SKILL_BOWCASTER
+LANG_ENGLISH	"Gains the user a Bowcaster."
 //[/ExpSys]
 
 //[Flamethrower]

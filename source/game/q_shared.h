@@ -651,8 +651,9 @@ typedef enum
 	SK_BLASTER,		//blaster rifle skill
 	SK_THERMAL,		//thermal detenator skill
 	SK_ROCKET,		//rocket launcher skill
-	SK_BACTA,
-	SK_FLAMETHROWER, //flamethrower skill
+	SK_BACTA,		//bacta tank skill
+	SK_FLAMETHROWER,//flamethrower skill
+	SK_BOWCASTER,	//bowcaster skill
 	NUM_SKILLS
 } skills_t;
 
