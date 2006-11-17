@@ -15,6 +15,9 @@ Version 0.0.9r:
 		CoOp:
 			- Disabled the Force Powers spawn scripting since it's incompatable with experience system. 
 
+		ExpSys:
+			- Fixed problem with the "Join Game" button not working if player changed their Force Powers right after connecting to a game.
+
 		Flamethrower:
 			- Can't use the flamethrower during ledgegrabs.
 			- Doubled the jetfuel consumption rate.
