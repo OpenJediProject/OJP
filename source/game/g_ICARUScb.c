@@ -2961,6 +2961,9 @@ FIXME: this should be a general NPC wrapper function
 	that is called ANY time	a bState is changed...
 ============
 */
+//[CoOp]
+void ClearNPCGlobals( void );
+//[/CoOp]
 static qboolean Q3_SetBState( int entID, const char *bs_name )
 {
 	gentity_t	*ent  = &g_entities[entID];
@@ -2978,6 +2981,10 @@ static qboolean Q3_SetBState( int entID, const char *bs_name )
 		return qtrue;//ok to complete
 	}
 
+	//[CoOp]
+	//some of the below called functions use the NPCGlobals, make sure they've been set up.
+	SetNPCGlobals(ent);
+	//[/CoOp]
 	bSID = (bState_t)(GetIDForString( BSTable, bs_name ));
 	if ( bSID > -1 )
 	{
@@ -3026,6 +3033,11 @@ static qboolean Q3_SetBState( int entID, const char *bs_name )
 			ent->NPC->defaultBehavior = bSID;
 		}
 	}
+
+	//[CoOp]
+	//finished making NPC function calls, don't need globals anymore
+	ClearNPCGlobals();
+	//[/CoOp]
 
 	ent->NPC->aiFlags &= ~NPCAI_TOUCHED_GOAL;
 
