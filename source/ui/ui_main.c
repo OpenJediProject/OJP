@@ -2903,7 +2903,46 @@ void UpdateForceStatus()
 	if ( !UI_TrueJediEnabled() )
 	{// Take the current team and force a skin color based on it.
 		char	info[MAX_INFO_STRING];
+		//[CoOp]
+		int gametype;
 
+		trap_GetConfigString( CS_SERVERINFO, info, sizeof(info) );
+
+		gametype = atoi(Info_ValueForKey(info, "g_gametype"));
+
+		if (gametype == GT_SINGLE_PLAYER)
+		{//even thou players are on a team for CoOp, they act like they're not
+			uiSkinColor = uiHoldSkinColor;
+		}
+		else
+		{
+			switch((int)(trap_Cvar_VariableValue("ui_myteam")))
+			{
+			case TEAM_RED:
+				uiSkinColor = TEAM_RED;
+				uiInfo.effectsColor = SABER_RED;
+				break;
+			case TEAM_BLUE:
+				uiSkinColor = TEAM_BLUE;
+				uiInfo.effectsColor = SABER_BLUE;
+				break;
+			default:
+				//trap_GetConfigString( CS_SERVERINFO, info, sizeof(info) );
+
+				if(gametype >= GT_TEAM)
+				//if (atoi(Info_ValueForKey(info, "g_gametype")) >= GT_TEAM)
+				{
+					uiSkinColor = TEAM_FREE;
+				}
+				else	// A bit of a hack so non-team games will remember which skin set you chose in the player menu
+				{
+					uiSkinColor = uiHoldSkinColor;
+				}
+				break;
+			}
+		}
+
+		/* basejka code
 		switch((int)(trap_Cvar_VariableValue("ui_myteam")))
 		{
 		case TEAM_RED:
@@ -2927,6 +2966,8 @@ void UpdateForceStatus()
 			}
 			break;
 		}
+		*/
+		//[/CoOp]
 	}
 }
 
@@ -7097,6 +7138,11 @@ static void UI_RunMenuScript(char **args)
 				}
 				else
 				{
+					//[ExpSys]
+					//somehow my experience system changes broke the join game button.  
+					//Manually setting the approprate variable to send the team change command.
+					gTouchedForce = qtrue;
+					//[/ExpSys]
 					UI_UpdateClientForcePowers(teamArg);
 				}
 			}
