@@ -9,6 +9,9 @@ Version 0.0.9r:
 
 	Improvements/Fixes:
 
+		CoOp:
+			- Disabled the Force Powers spawn scripting since it's incompatable with experience system. 
+
 		Flamethrower:
 			- Can't use the flamethrower during ledgegrabs.
 			- Doubled the jetfuel consumption rate.

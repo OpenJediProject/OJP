@@ -856,6 +856,9 @@ void WP_SpawnInitForcePowers( gentity_t *ent )
 
 	//[CoOp]
 	//use ICARUS overrides for our initial force powers.
+	//[ExpSys]
+	/* racc - disabled the force power spawn scripting since it screws up the experience system.
+	//[/ExpSys]
 	if(UseSpawnForcePowers && !ent->NPC)
 	{
 		i = 0;
@@ -875,6 +878,9 @@ void WP_SpawnInitForcePowers( gentity_t *ent )
 		}
 
 	}
+	//[ExpSys]
+	*/
+	//[/ExpSys]
 	//[/CoOp]
 }
 
