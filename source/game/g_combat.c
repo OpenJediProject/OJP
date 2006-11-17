@@ -6975,6 +6975,8 @@ void G_DodgeDrain(gentity_t *victim, gentity_t *attacker, int amount)
 		AddSkill(attacker, 
 			(float) amount / 50 * (victim->client->sess.skillPoints / attacker->client->sess.skillPoints)); 
 	}
+
+	//G_Printf("%i: %i: %i Points of Dodge Drained\n", level.time, victim->s.number, amount);
 }
 //[/ExpSys]
 
