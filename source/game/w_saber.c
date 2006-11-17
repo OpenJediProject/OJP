@@ -597,25 +597,11 @@ static GAME_INLINE void SetSaberBoxSize(gentity_t *saberent)
 		owner = &g_entities[saberent->r.ownerNum];
 	}
 
-	//[BugFix45]
-	/*if (!owner || !owner->inuse || !owner->client)
+	if (!owner || !owner->inuse || !owner->client)
 	{
 		assert(!"Saber with no owner?");
 		return;
-	}*/
-	if (!owner || !owner->client || !owner->inuse /*|| !owner->client*/)
-	{
-// XMOD ERROR WITH SABER!!!
-		//assert(!"Saber with no owner?");
-		G_Printf("Error: Saber ent has no owner... Deleted!\n");
-//		MakeDeadSaber(saberent);
-
-		saberent->think = G_FreeEntity;
-		saberent->nextthink = level.time;
-		// delete the saber entity
-		return;
 	}
-	//[/BugFix45]
 
 	if ( owner->client->saber[1].model
 		&& owner->client->saber[1].model[0] )
