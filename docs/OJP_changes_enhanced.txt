@@ -7,7 +7,10 @@ This file stores all the information about what has changed from release version
 
 Version 0.0.9r:
 
-	Improvements/Fixes:
+	Improvements/Fixes:		
+	
+		Blaster Bolt Block System:
+			- Fixed problem where having no levels in saber defense gave players 100% level 3 reflections.
 
 		CoOp:
 			- Disabled the Force Powers spawn scripting since it's incompatable with experience system. 

@@ -1189,11 +1189,6 @@ void OJP_HandleBoltBlock(gentity_t *bolt, gentity_t *player, trace_t *trace)
 		!WalkCheck( player ) ) //while running
 	{
 		otherDefLevel -= 1;
-
-		if (otherDefLevel < FORCE_LEVEL_1)
-		{
-			otherDefLevel = FORCE_LEVEL_1;
-		}
 	}
 
 	if(otherDefLevel > FORCE_LEVEL_1 
@@ -1209,12 +1204,13 @@ void OJP_HandleBoltBlock(gentity_t *bolt, gentity_t *player, trace_t *trace)
 	}
 
 	AngleVectors(player->client->ps.viewangles, fwd, NULL, NULL);
-	if (otherDefLevel == FORCE_LEVEL_1)
+	if (otherDefLevel <= FORCE_LEVEL_1)
 	{//only randomly deflect away the bolt
 		G_DeflectMissile(player, bolt, fwd);
 	}
 	else if (otherDefLevel == FORCE_LEVEL_2)
 	{//bounce the bolt back to sender
+		//G_Printf("%i: %i: Level 2 Reflect\n", level.time, player->s.number);
 		G_ReflectMissile(player, bolt, fwd);
 	}
 	else
@@ -1223,6 +1219,8 @@ void OJP_HandleBoltBlock(gentity_t *bolt, gentity_t *player, trace_t *trace)
 		float	speed;
 		//gentity_t	*owner = ent;
 		//int		isowner = 0;
+
+		//G_Printf("%i: %i: Level 3 Reflect\n", level.time, player->s.number);
 
 		//save the original speed
 		speed = VectorNormalize( bolt->s.pos.trDelta );
