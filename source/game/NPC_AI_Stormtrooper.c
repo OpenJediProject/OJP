@@ -3497,7 +3497,12 @@ void NPC_BSST_Attack( void )
 		shoot = qfalse;
 	}
 
-	if ( NPC->enemy && NPC->enemy->enemy )
+	//[CoOp]
+	//we ecountered a crash where the enemy->enemy was locked onto a tempEntity!  This probably shouldn't be possible, 
+	//but it showed that we needed more sanity checks for this.
+	if ( NPC->enemy && NPC->enemy->enemy && NPC->enemy->enemy->client )
+	//if ( NPC->enemy && NPC->enemy->enemy )
+	//[/CoOp]
 	{
 		//[CoOp]
 		//added ally check to this.  Otherwise, accidental damage by allies causes
