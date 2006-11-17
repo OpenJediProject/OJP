@@ -3811,6 +3811,12 @@ static void Q3_SetWeapon (int entID, const char *wp_name)
 	int		wp = GetIDForString( WPTable, wp_name );
 
 	//[CoOp]
+	if (wp == -1)
+	{//unknown weapon
+		G_Printf("Unknown weapon %s in Q3_SetWeapon\n", wp_name);
+		wp = WP_NONE;
+	}
+
 	if ( !ent )
 	{
 		G_DebugPrint( WL_WARNING, "Q3_SetWeapon: invalid entID %d\n", entID);

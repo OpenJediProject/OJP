@@ -6493,6 +6493,10 @@ void G_Damage( gentity_t *targ, gentity_t *inflictor, gentity_t *attacker,
 		{//take damage down to 1, but never die
 			if ( targ->health < 1 )
 			{
+				//[CoOp]
+				//trigger death script (this flag is normally used for NPC bosses who you want to lose, but not die onscreen before the script is run.
+				G_ActivateBehavior( targ, BSET_DEATH );
+				//[/CoOp]
 				targ->health = 1;
 			}
 		}
