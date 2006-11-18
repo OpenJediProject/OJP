@@ -5,6 +5,9 @@
 #include "g_local.h"
 #include "bg_saga.h"
 #include "q_shared.h"
+//[CoOp]
+#include "g_nav.h" //needed for WAYPOINT_NONE define
+//[/CoOp]
 
 typedef struct {
   char oldShader[MAX_QPATH];
@@ -2048,15 +2051,48 @@ G_SetOrigin
 Sets the pos trajectory for a fixed position
 ================
 */
+//[SPPortComplete]
 void G_SetOrigin( gentity_t *ent, vec3_t origin ) {
 	VectorCopy( origin, ent->s.pos.trBase );
-	ent->s.pos.trType = TR_STATIONARY;
+	//[CoOp]
+	//SP code
+	if(ent->client)
+	{
+		VectorCopy( origin, ent->client->ps.origin );
+		VectorCopy( origin, ent->s.origin );
+	}
+	else
+	{
+		ent->s.pos.trType = TR_STATIONARY;
+	}
+	//ent->s.pos.trType = TR_STATIONARY;
+	//[/CoOp]
 	ent->s.pos.trTime = 0;
 	ent->s.pos.trDuration = 0;
 	VectorClear( ent->s.pos.trDelta );
 
 	VectorCopy( origin, ent->r.currentOrigin );
+
+	//[CoOp]
+	//SP code
+	// clear waypoints
+	if( ent->client && ent->NPC )
+	{
+		//racc - the SP code shows the waypoints as being this.  However the rest of the code uses WAYPOINT_NONE, so I'm trying that.
+		ent->waypoint = WAYPOINT_NONE;
+		ent->lastWaypoint = WAYPOINT_NONE;
+		//ent->waypoint = 0;
+		//ent->lastWaypoint = 0;
+		/* COOPFIXME RAFIXME - Impliment this nav code stuff?
+		if( NAV::HasPath( ent ) )
+		{
+			NAV::ClearPath( ent );
+		}
+		*/
+	}
+	//[/CoOp]
 }
+//[/SPPortComplete]
 
 qboolean G_CheckInSolid (gentity_t *self, qboolean fix)
 {

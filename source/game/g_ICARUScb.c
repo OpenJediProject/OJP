@@ -6616,6 +6616,7 @@ qboolean Q3_Set( int taskID, int entID, const char *type_name, const char *data 
 	//		showscript can take any number of targetnames or "all"?  Groupname?
 	switch ( toSet )
 	{
+	//[SPPortComplete]
 	case SET_ORIGIN:
 		sscanf( data, "%f %f %f", &vector_data[0], &vector_data[1], &vector_data[2] );
 		G_SetOrigin( ent, vector_data );
@@ -6623,7 +6624,19 @@ qboolean Q3_Set( int taskID, int entID, const char *type_name, const char *data 
 		{//hack for moving spawners
 			VectorCopy( vector_data, ent->s.origin);
 		}
+		
+		//[CoOp]
+		//SP Code
+		if ( ent->client )
+		{//clear jump start positions so we don't take damage when we land...
+			//COOPFIXME RAFIXME - Impliment jumpZStart?
+			ent->client->ps.fd.forceJumpZStart = vector_data[2];
+			//ent->client->ps.jumpZStart = ent->client->ps.forceJumpZStart = vector_data[2];
+		}
+		trap_LinkEntity( ent );
+		//[/CoOp]
 		break;
+	//[/SPPortComplete]
 
 	case SET_TELEPORT_DEST:
 		sscanf( data, "%f %f %f", &vector_data[0], &vector_data[1], &vector_data[2] );
