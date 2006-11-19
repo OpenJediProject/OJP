@@ -1149,7 +1149,6 @@ qboolean CheckforGoodSpawnPoint(vec3_t location, qboolean playersolidcheck)
 //flag for autosave map entities that makes all players teleport to the savepoint when
 //used.
 #define FLAG_TELETOSAVE		1
-extern vmCvar_t bot_wp_edit;
 extern qboolean SPSpawnpointCheck( vec3_t spawnloc );
 //[/CoOpEditor]
 void Use_Autosave( gentity_t *ent, gentity_t *other, gentity_t *activator )
@@ -1248,15 +1247,8 @@ void Use_Autosave( gentity_t *ent, gentity_t *other, gentity_t *activator )
 		}
 	}
 
-	if(bot_wp_edit.integer)
-	{//just disable the savepoint while in the autosave editor
-		ent->touch = 0;
-		ent->use = 0;
-	}
-	else
-	{//we're done with this entity, dump it immediately.
-		G_FreeEntity(ent);
-	}
+	ent->touch = 0;
+	ent->use = 0;
 	//[/CoOpEditor]
 }
 
