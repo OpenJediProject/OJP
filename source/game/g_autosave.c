@@ -22,29 +22,41 @@ void Touch_Autosave(gentity_t *self, gentity_t *other, trace_t *trace)
 
 
 extern void G_TestLine(vec3_t start, vec3_t end, int color, int time);
-void Think_DrawBBox(gentity_t* ent)
-{//draw a diagonal that covers the bounding box of the entity
-	vec3_t start;
+void SpawnPointRender()
+{//renders all the spawnpoints used for CoOp so that the CoOp editor can add more of them as needed.
+	//warning: It's assumed that the debounce for this function is handled elsewhere (in this case BotWaypointRender)
+	//without a debounce, this can overload and crash the game with events!
+	gentity_t *spawnpoint = NULL;
 	vec3_t end;
-
-	VectorAdd(ent->r.currentOrigin, ent->r.maxs, start);
-	VectorAdd(ent->r.currentOrigin, ent->r.mins, end);
-
-	ent->nextthink = level.time + FRAMETIME;
-	G_TestLine(start, end, 0x000000, FRAMETIME);
+	
+	while ( (spawnpoint = G_Find( spawnpoint, FOFS( classname ), "info_player_deathmatch" )) != NULL )
+	{//Scan thru all the coop spawnpoints
+		if(spawnpoint->spawnflags & 1)
+		{//this is a spawnpoint created by our coopeditor, display it.
+			VectorCopy(spawnpoint->r.currentOrigin, end);
+			end[2] += 20;
+			G_TestLine(spawnpoint->r.currentOrigin, end, SABER_BLUE, FRAMETIME);
+		}
+	}
 }
 
 
-void Think_DrawSpawnpoint(gentity_t* ent)
-{//draw a line to show the spawnpoint
-	vec3_t end;
-
-	VectorCopy(ent->r.currentOrigin, end);
-
-	end[2] += 20;
-
-	ent->nextthink = level.time + FRAMETIME;
-	G_TestLine(ent->r.currentOrigin, end, SABER_BLUE, FRAMETIME);
+void AutosaveRender()
+{//renders all the autosaves used for CoOp so that the CoOp editor can add more of them as needed.
+	//warning: It's assumed that the debounce for this function is handled elsewhere (in this case BotWaypointRender)
+	//without a debounce, this can overload and crash the game with events!
+	gentity_t *autosave = NULL;
+	vec3_t end, start;
+	
+	while ( (autosave = G_Find( autosave, FOFS( classname ), "trigger_autosave" )) != NULL )
+	{//Scan thru all the coop autosaves
+		if(autosave->spawnflags & AUTOSAVE_EDITOR)
+		{//this is an autosave created by our coopeditor, display it.
+			VectorAdd(autosave->r.currentOrigin, autosave->r.maxs, start);
+			VectorAdd(autosave->r.currentOrigin, autosave->r.mins, end);
+			G_TestLine(start, end, 0x000000, FRAMETIME);
+		}
+	}
 }
 
 
@@ -62,12 +74,6 @@ void SP_trigger_autosave(gentity_t *self)
 	self->touch = Touch_Autosave;
 
 	self->classname = "trigger_autosave";
-
-	if(bot_wp_edit.integer)
-	{//if we're in editor mode, have this entity draw a debug line of the area covered.
-		self->think = Think_DrawBBox;
-		self->nextthink = level.time + FRAMETIME;
-	}
 
 	trap_LinkEntity(self);
 }
@@ -89,19 +95,13 @@ void Create_Autosave( vec3_t origin, int size, qboolean teleportPlayers )
 
 			//manually created spawnpoints have the lowest priority.
 			newAutosave->genericValue1 = 50; 
-
-			if(bot_wp_edit.integer)
-			{//editor mode, show the point.
-				newAutosave->think = Think_DrawSpawnpoint;
-				newAutosave->nextthink = level.time + FRAMETIME;
-			}
 			return;
 		}
 
 		if(teleportPlayers)
 		{//we want to force all players to teleport to this autosave.
 			//use this to get around tricky scripting in the maps.
-			newAutosave->spawnflags |= FLAG_TELETOSAVE;
+			newAutosave->spawnflags |= AUTOSAVE_TELE;
 		}
 
 		if(!size)
@@ -118,6 +118,8 @@ void Create_Autosave( vec3_t origin, int size, qboolean teleportPlayers )
 		newAutosave->r.mins[2] = -size;
 
 		SP_trigger_autosave(newAutosave);
+
+		newAutosave->spawnflags |= AUTOSAVE_EDITOR; //indicate that this was manually created and should be rendered if we're in the coop editor.
 	}
 }
 
@@ -223,7 +225,7 @@ void Save_Autosaves(void)
 		Com_sprintf(lineBuf, MAX_QPATH, "%f %f %f %i %i\n", 
 			autosavePoint->r.currentOrigin[0], autosavePoint->r.currentOrigin[1],
 			autosavePoint->r.currentOrigin[2], (int) autosavePoint->r.maxs[0],
-			(autosavePoint->spawnflags & FLAG_TELETOSAVE) );
+			(autosavePoint->spawnflags & AUTOSAVE_TELE) );
 		strcat(fileBuf, lineBuf);
 	}
 

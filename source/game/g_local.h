@@ -2339,7 +2339,8 @@ typedef struct teamgame_s {
 //[/TABBots]
 
 //[CoOpEditor]
-#define FLAG_TELETOSAVE		1 //->spawnflag for autosave map entities
+#define AUTOSAVE_TELE		0x00000001 //->spawnflag for autosave map entities that teleport all players when activated
+#define AUTOSAVE_EDITOR		0x00000002 //this autosave point was created with the CoOp editor, used to know if the autosave should be rendered when the CoOp Editor is on.
 //[/CoOpEditor]
 
 //[CrashLog]

@@ -257,6 +257,10 @@ void G_TestLine(vec3_t start, vec3_t end, int color, int time)
 //[BotTweaks]
 extern vmCvar_t bot_wp_editornumber;
 //[/BotTweaks]
+//[CoOpEditor]
+void AutosaveRender();
+void SpawnPointRender();
+//[/CoOpEditor]
 void BotWaypointRender(void)
 {
 	int i, n;
@@ -337,9 +341,18 @@ void BotWaypointRender(void)
 
 	if (i >= gWPNum)
 	{
-		gWPRenderTime = level.time + 1500; //wait a bit after we finish doing the whole trail
+		//[CoOpEditor]
+		//don't pause between scans to allow the autosave/spawnpoint renders to work constantly.
+		//gWPRenderTime = level.time + 1500; //wait a bit after we finish doing the whole trail
+		//[/CoOpEditor]
 		gWPRenderedFrame = 0;
 	}
+
+	//[CoOpEditor]
+	//render 
+	AutosaveRender();
+	SpawnPointRender();
+	//[/CoOpEditor]
 
 checkprint:
 
