@@ -530,10 +530,6 @@
 				>
 			</File>
 			<File
-				RelativePath="bg_weaponsdat.c"
-				>
-			</File>
-			<File
 				RelativePath="FighterNPC.c"
 				>
 			</File>
@@ -968,10 +964,6 @@
 			</File>
 			<File
 				RelativePath=".\bg_weapons.h"
-				>
-			</File>
-			<File
-				RelativePath="bg_weaponsdat.h"
 				>
 			</File>
 			<File

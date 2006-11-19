@@ -510,10 +510,6 @@
 				>
 			</File>
 			<File
-				RelativePath="..\game\bg_weaponsdat.c"
-				>
-			</File>
-			<File
 				RelativePath="cg_camera.c"
 				>
 			</File>
@@ -712,10 +708,6 @@
 			</File>
 			<File
 				RelativePath="..\game\bg_weapons.h"
-				>
-			</File>
-			<File
-				RelativePath="..\game\bg_weaponsdat.h"
 				>
 			</File>
 			<File
