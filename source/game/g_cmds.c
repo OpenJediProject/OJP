@@ -9,6 +9,10 @@
 //#include "../../ui/menudef.h"			// for the voice chats
 //[/SVN]
 
+//[CoOp]
+extern	qboolean		in_camera;
+//[/CoOp]
+
 //rww - for getting bot commands...
 int AcceptBotCommand(char *cmd, gentity_t *pl);
 //end rww
@@ -257,7 +261,7 @@ Give items to a client
 ==================
 */
 //[VisualWeapons]
-qboolean OJP_AllPlayersHaveClientPlugin(void);
+extern qboolean OJP_AllPlayersHaveClientPlugin(void);
 //[/VisualWeapons]
 void Cmd_Give_f (gentity_t *cmdent, int baseArg)
 {
@@ -555,6 +559,11 @@ void Cmd_Noclip_f( gentity_t *ent ) {
 		return;
 	}
 
+	//[CoOp]
+	if (in_camera)
+		return;
+	//[/CoOp]
+
 	if ( ent->client->noclip ) {
 		msg = "noclip OFF\n";
 	} else {
@@ -688,9 +697,12 @@ void Cmd_Kill_f( gentity_t *ent ) {
 	//[/BugFix41]
 		return;
 	}
-	if (ent->health <= 0) {
+	if (ent->health <= 0)
 		return;
-	}
+	//[CoOp]
+	if (in_camera)
+		return;
+	//[/CoOp]
 
 	if ((g_gametype.integer == GT_DUEL || g_gametype.integer == GT_POWERDUEL) &&
 		level.numPlayingClients > 1 && !level.warmupTime)
@@ -802,40 +814,52 @@ void BroadcastTeamChange( gclient_t *client, int oldTeam )
 		return;
 	}
 
-	if ( client->sess.sessionTeam == TEAM_RED ) {
-		trap_SendServerCommand( -1, va("cp \"%s" S_COLOR_WHITE " %s\n\"",
-			client->pers.netname, G_GetStringEdString("MP_SVGAME", "JOINEDTHEREDTEAM")) );
-	} else if ( client->sess.sessionTeam == TEAM_BLUE ) {
-		trap_SendServerCommand( -1, va("cp \"%s" S_COLOR_WHITE " %s\n\"",
-		client->pers.netname, G_GetStringEdString("MP_SVGAME", "JOINEDTHEBLUETEAM")));
-	} else if ( client->sess.sessionTeam == TEAM_SPECTATOR && oldTeam != TEAM_SPECTATOR ) {
-		trap_SendServerCommand( -1, va("cp \"%s" S_COLOR_WHITE " %s\n\"",
-		client->pers.netname, G_GetStringEdString("MP_SVGAME", "JOINEDTHESPECTATORS")));
-	} else if ( client->sess.sessionTeam == TEAM_FREE ) {
-		if (g_gametype.integer == GT_DUEL || g_gametype.integer == GT_POWERDUEL)
-		{
-			/*
-			gentity_t *currentWinner = G_GetDuelWinner(client);
-
-			if (currentWinner && currentWinner->client)
+	//[CoOp]
+	if ( g_gametype.integer == GT_SINGLE_PLAYER ) {
+		if ( client->sess.sessionTeam == TEAM_SPECTATOR && oldTeam != TEAM_SPECTATOR ) {
+			trap_SendServerCommand( -1, va("cp \"%s" S_COLOR_WHITE " %s\n\"",
+			client->pers.netname, G_GetStringEdString("MP_SVGAME", "JOINEDTHESPECTATORS")));
+		} else if ( client->sess.sessionTeam == TEAM_FREE ) {
+			trap_SendServerCommand( -1, va("cp \"%s" S_COLOR_WHITE " %s\n\"",
+			client->pers.netname, G_GetStringEdString("MP_SVGAME", "JOINEDTHEBATTLE")));
+		}
+	} else {
+		if ( client->sess.sessionTeam == TEAM_RED ) {
+			trap_SendServerCommand( -1, va("cp \"%s" S_COLOR_WHITE " %s\n\"",
+				client->pers.netname, G_GetStringEdString("MP_SVGAME", "JOINEDTHEREDTEAM")) );
+		} else if ( client->sess.sessionTeam == TEAM_BLUE ) {
+			trap_SendServerCommand( -1, va("cp \"%s" S_COLOR_WHITE " %s\n\"",
+			client->pers.netname, G_GetStringEdString("MP_SVGAME", "JOINEDTHEBLUETEAM")));
+		} else if ( client->sess.sessionTeam == TEAM_SPECTATOR && oldTeam != TEAM_SPECTATOR ) {
+			trap_SendServerCommand( -1, va("cp \"%s" S_COLOR_WHITE " %s\n\"",
+			client->pers.netname, G_GetStringEdString("MP_SVGAME", "JOINEDTHESPECTATORS")));
+		} else if ( client->sess.sessionTeam == TEAM_FREE ) {
+			if (g_gametype.integer == GT_DUEL || g_gametype.integer == GT_POWERDUEL)
 			{
-				trap_SendServerCommand( -1, va("cp \"%s" S_COLOR_WHITE " %s %s\n\"",
-				currentWinner->client->pers.netname, G_GetStringEdString("MP_SVGAME", "VERSUS"), client->pers.netname));
+				/*
+				gentity_t *currentWinner = G_GetDuelWinner(client);
+
+				if (currentWinner && currentWinner->client)
+				{
+					trap_SendServerCommand( -1, va("cp \"%s" S_COLOR_WHITE " %s %s\n\"",
+					currentWinner->client->pers.netname, G_GetStringEdString("MP_SVGAME", "VERSUS"), client->pers.netname));
+				}
+				else
+				{
+					trap_SendServerCommand( -1, va("cp \"%s" S_COLOR_WHITE " %s\n\"",
+					client->pers.netname, G_GetStringEdString("MP_SVGAME", "JOINEDTHEBATTLE")));
+				}
+				*/
+				//NOTE: Just doing a vs. once it counts two players up
 			}
 			else
 			{
 				trap_SendServerCommand( -1, va("cp \"%s" S_COLOR_WHITE " %s\n\"",
 				client->pers.netname, G_GetStringEdString("MP_SVGAME", "JOINEDTHEBATTLE")));
 			}
-			*/
-			//NOTE: Just doing a vs. once it counts two players up
-		}
-		else
-		{
-			trap_SendServerCommand( -1, va("cp \"%s" S_COLOR_WHITE " %s\n\"",
-			client->pers.netname, G_GetStringEdString("MP_SVGAME", "JOINEDTHEBATTLE")));
 		}
 	}
+	//[/CoOp]
 
 	G_LogPrintf ( "setteam:  %i %s %s\n",
 				  client - &level.clients[0],
@@ -1307,20 +1331,33 @@ void Cmd_Team_f( gentity_t *ent ) {
 
 	if ( trap_Argc() != 2 ) {
 		oldTeam = ent->client->sess.sessionTeam;
-		switch ( oldTeam ) {
-		case TEAM_BLUE:
-			trap_SendServerCommand( ent-g_entities, va("print \"%s\n\"", G_GetStringEdString("MP_SVGAME", "PRINTBLUETEAM")) );
-			break;
-		case TEAM_RED:
-			trap_SendServerCommand( ent-g_entities, va("print \"%s\n\"", G_GetStringEdString("MP_SVGAME", "PRINTREDTEAM")) );
-			break;
-		case TEAM_FREE:
-			trap_SendServerCommand( ent-g_entities, va("print \"%s\n\"", G_GetStringEdString("MP_SVGAME", "PRINTFREETEAM")) );
-			break;
-		case TEAM_SPECTATOR:
-			trap_SendServerCommand( ent-g_entities, va("print \"%s\n\"", G_GetStringEdString("MP_SVGAME", "PRINTSPECTEAM")) );
-			break;
+		//[CoOp]
+		if ( g_gametype.integer == GT_SINGLE_PLAYER ) {
+			switch ( oldTeam ) {
+			case NPCTEAM_PLAYER:
+				trap_SendServerCommand( ent-g_entities, va("print \"%s\n\"", G_GetStringEdString("MP_SVGAME", "PRINTFREETEAM")) );
+				break;
+			case TEAM_SPECTATOR:
+				trap_SendServerCommand( ent-g_entities, va("print \"%s\n\"", G_GetStringEdString("MP_SVGAME", "PRINTSPECTEAM")) );
+				break;
+			}
+		} else {
+			switch ( oldTeam ) {
+			case TEAM_BLUE:
+				trap_SendServerCommand( ent-g_entities, va("print \"%s\n\"", G_GetStringEdString("MP_SVGAME", "PRINTBLUETEAM")) );
+				break;
+			case TEAM_RED:
+				trap_SendServerCommand( ent-g_entities, va("print \"%s\n\"", G_GetStringEdString("MP_SVGAME", "PRINTREDTEAM")) );
+				break;
+			case TEAM_FREE:
+				trap_SendServerCommand( ent-g_entities, va("print \"%s\n\"", G_GetStringEdString("MP_SVGAME", "PRINTFREETEAM")) );
+				break;
+			case TEAM_SPECTATOR:
+				trap_SendServerCommand( ent-g_entities, va("print \"%s\n\"", G_GetStringEdString("MP_SVGAME", "PRINTSPECTEAM")) );
+				break;
+			}
 		}
+		//[/CoOp]
 		return;
 	}
 
@@ -1330,9 +1367,12 @@ void Cmd_Team_f( gentity_t *ent ) {
 	}
 
 	if (gEscaping)
-	{
 		return;
-	}
+
+	//[CoOp]
+	if (in_camera)
+		return;
+	//[/CoOp]
 
 	// if they are playing a tournement game, count as a loss
 	if ( g_gametype.integer == GT_DUEL

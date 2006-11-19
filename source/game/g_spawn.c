@@ -260,6 +260,9 @@ void SP_misc_model_ammo_rack( gentity_t *ent );
 void SP_misc_camera( gentity_t *self );
 void SP_misc_spotlight( gentity_t *self );
 void SP_misc_security_panel(gentity_t *self);
+void SP_misc_model_bomb_planted( gentity_t *ent );
+void SP_misc_model_beacon( gentity_t *ent );
+void SP_PAS( gentity_t *ent );
 //[/CoOp]
 
 void SP_misc_bsp (gentity_t *ent);
@@ -600,6 +603,9 @@ spawn_t	spawns[] = {
 	{"misc_camera", SP_misc_camera},
 	{"misc_spotlight", SP_misc_spotlight},
 	{"misc_security_panel", SP_misc_security_panel},
+	{"misc_model_bomb_planted", SP_misc_model_bomb_planted},
+	{"misc_model_beacon", SP_misc_model_beacon},
+	{"misc_sentry_turret", SP_PAS},
 	//[/CoOp]
 
 	{"fx_runner", SP_fx_runner},
@@ -1356,9 +1362,6 @@ BSP Options
 //[DynamicMusic]
 void LoadDynamicMusic(void);
 //[/DynamicMusic]
-//[WEAPONSDAT]
-extern void BG_LoadWeaponsData(void);
-//[/WEAPONSDAT]
 
 extern void EWebPrecache(void); //g_items.c
 float g_cullDistance;
@@ -1435,17 +1438,6 @@ void SP_worldspawn( void )
 		LoadDynamicMusic();
 	}
 	//[/DynamicMusic]
-
-	//[ExpSys]
-	/* Don't load weapons.dat in Enhanced, it breaks some things with the ExpSys
-	//[WEAPONSDAT]
-	if(g_gametype.integer == GT_SINGLE_PLAYER)
-	{//load in the weapons.dat overrides if we're playing CoOp.
-		BG_LoadWeaponsData();
-	}
-	//[/WEAPONSDAT]
-	*/
-	//[/ExpSys]
 
 	trap_SetConfigstring( CS_MUSIC, text );
 

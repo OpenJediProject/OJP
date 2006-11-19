@@ -1797,6 +1797,13 @@ int Q_PrintStrlen( const char *string );
 // removes color sequences from string
 char *Q_CleanStr( char *string );
 
+char	*Q_stristr( const char *s, const char *find);
+char	*Q_StrReplace(char *haystack, char *needle, char *newp);
+
+qboolean COM_BitCheck( const int array[], int bitNum );
+void COM_BitSet( int array[], int bitNum );
+void COM_BitClear( int array[], int bitNum );
+
 //[OverflowProtection]
 int Q_vsnprintf( char *dest, int size, const char *fmt, va_list argptr );
 //[/OverflowProtection]

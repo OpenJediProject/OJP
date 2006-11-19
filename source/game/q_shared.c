@@ -906,6 +906,155 @@ int Q_stricmp (const char *s1, const char *s2) {
 	return (s1 && s2) ? Q_stricmpn (s1, s2, 99999) : -1;
 }
 
+// ensiform - like strstr but ignores case
+char *Q_stristr( const char *s, const char *find)
+{
+	char c, sc;
+	size_t len;
+
+	if ((c = *find++) != 0)
+	{
+		if (c >= 'a' && c <= 'z')
+		{
+			c -= ('a' - 'A');
+		}
+		len = strlen(find);
+		do
+		{
+			do
+			{
+				if ((sc = *s++) == 0)
+					return NULL;
+				if (sc >= 'a' && sc <= 'z')
+				{
+					sc -= ('a' - 'A');
+				}
+			} while (sc != c);
+		} while (Q_stricmpn(s, find, len) != 0);
+		s--;
+	}
+	return (char *)s;
+}
+
+char *Q_StrReplace(char *haystack, char *needle, char *newp)
+{
+	static char final[MAX_STRING_CHARS] = {""};
+	char dest[MAX_STRING_CHARS] = {""};
+	char new[MAX_STRING_CHARS] = {""};
+	char *destp;
+	int needle_len = 0;
+	int new_len = 0;
+
+	if(!*haystack) {
+		return final;
+	}
+	if(!*needle) {
+		Q_strncpyz(final, haystack, sizeof(final));
+		return final;
+	}
+	if(*newp) {
+		Q_strncpyz(new, newp, sizeof(new));	
+	}
+
+	dest[0] = '\0';
+	needle_len = strlen(needle);
+	new_len = strlen(new);
+	destp = &dest[0];
+	while(*haystack) {
+		if(!Q_stricmpn(haystack, needle, needle_len)) {
+			Q_strcat(dest, sizeof(dest), new);
+			haystack += needle_len;
+			destp += new_len;
+			continue;
+		}
+		if(MAX_STRING_CHARS > (strlen(dest) + 1)) {
+			*destp = *haystack;
+			*++destp = '\0';
+		}
+		*haystack++;
+	}
+	// tjw: don't work with final return value in case haystack 
+	//      was pointing at it.
+	Q_strncpyz(final, dest, sizeof(final));
+	return final;
+}
+
+//============================================================================
+/*
+==================
+COM_BitCheck
+
+  Allows bit-wise checks on arrays with more than one item (> 32 bits)
+==================
+*/
+qboolean COM_BitCheck( const int array[], int bitNum ) {
+	int i;
+
+	i = 0;
+	while (bitNum > 31) {
+		i++;
+		bitNum -= 32;
+	}
+
+	// tjw: from the 2.60 changes: 
+	//      "Fixed the Com_BitSet() with ridiculous bit number in the 
+	//       anim  condition code."
+	//       Is this what causes the glider/transmitter crashes?
+	if(i >= sizeof(array)) return qfalse;
+
+	return ((array[i] & (1 << bitNum) ) != 0);	// (SA) heh, whoops. :)
+}
+
+/*
+==================
+COM_BitSet
+
+  Allows bit-wise SETS on arrays with more than one item (> 32 bits)
+==================
+*/
+void COM_BitSet( int array[], int bitNum ) {
+	int i;
+
+	i = 0;
+	while (bitNum > 31) {
+		i++;
+		bitNum -= 32;
+	}
+
+	// tjw: from the 2.60 changes: 
+	//      "Fixed the Com_BitSet() with ridiculous bit number in the 
+	//       anim  condition code."
+	//       Is this what causes the glider/transmitter crashes?
+	if(i >= sizeof(array)) return;
+
+	array[i] |= (1 << bitNum);
+}
+
+/*
+==================
+COM_BitClear
+
+  Allows bit-wise CLEAR on arrays with more than one item (> 32 bits)
+==================
+*/
+void COM_BitClear( int array[], int bitNum ) {
+	int i;
+
+	i = 0;
+	while (bitNum > 31) {
+		i++;
+		bitNum -= 32;
+	}
+
+	// tjw: from the 2.60 changes: 
+	//      "Fixed the Com_BitSet() with ridiculous bit number in the 
+	//       anim  condition code."
+	//       Is this what causes the glider/transmitter crashes?
+	if(i >= sizeof(array)) return;
+
+	array[i] &= ~(1 << bitNum);
+}
+//============================================================================
 
 char *Q_strlwr( char *s1 ) {
     char	*s;

@@ -2416,11 +2416,27 @@ qboolean BG_CanItemBeGrabbed( int gametype, const entityState_t *ent, const play
 		{
 			return qfalse;
 		}
-		if (!(ent->eFlags & EF_DROPPEDWEAPON) && (ps->stats[STAT_WEAPONS] & (1 << item->giTag)) &&
+		//[CoOp]
+		if ( gametype == GT_SINGLE_PLAYER ) {
+			int ammoIndex = weaponData[item->giTag].ammoIndex;
+			if (COM_BitCheck(&ps->stats[STAT_WEAPONS], item->giTag) && ps->ammo[ammoIndex] >= ammoData[ammoIndex].max &&
+				item->giTag != WP_THERMAL && item->giTag != WP_TRIP_MINE && item->giTag != WP_DET_PACK)
+			{ //weaponstay stuff.. in CoOp all weapons (not just dropped ones) are restricted to already have checks
+				return qfalse;
+			}
+		} else {
+			if (!(ent->eFlags & EF_DROPPEDWEAPON) && (ps->stats[STAT_WEAPONS] & (1 << item->giTag)) &&
+				item->giTag != WP_THERMAL && item->giTag != WP_TRIP_MINE && item->giTag != WP_DET_PACK)
+			{ //weaponstay stuff.. if this isn't dropped, and you already have it, you don't get it.
+				return qfalse;
+			}
+		}
+		/*if (!(ent->eFlags & EF_DROPPEDWEAPON) && (ps->stats[STAT_WEAPONS] & (1 << item->giTag)) &&
 			item->giTag != WP_THERMAL && item->giTag != WP_TRIP_MINE && item->giTag != WP_DET_PACK)
 		{ //weaponstay stuff.. if this isn't dropped, and you already have it, you don't get it.
 			return qfalse;
-		}
+		}*/
+		//[/CoOp]
 		if (item->giTag == WP_THERMAL || item->giTag == WP_TRIP_MINE || item->giTag == WP_DET_PACK)
 		{ //check to see if full on ammo for this, if so, then..
 			int ammoIndex = weaponData[item->giTag].ammoIndex;

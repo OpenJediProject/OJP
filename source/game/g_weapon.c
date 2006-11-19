@@ -8,9 +8,6 @@
 #include "bg_saga.h"
 #include "../ghoul2/G2.h"
 #include "q_shared.h"
-//[WEAPONSDAT]
-#include "bg_weaponsdat.h"
-//[/WEAPONSDAT]
 
 static	float	s_quadFactor;
 static	vec3_t	forward, vright, up;
@@ -4700,23 +4697,6 @@ tryFire:
 	}
 }
 
-
-//[WEAPONSDAT]
-qboolean WP_CallFireFunction( int weaponNumber, qboolean altFire, gentity_t* ent )
-{//calls the set weapon fire function.  Uses the default fire functions if
-	//these aren't set.
-	int index = 0;
-	if(altFire)
-		index = weaponData[weaponNumber].altFireFunctionIndex;
-	else
-		index = weaponData[weaponNumber].fireFunctionIndex;
-	if(index == 0)
-		return qfalse;
-	(fireFunctions[index].func)(ent);
-	return qtrue;
-}
-//[/WEAPONSDAT]
-
 /*
 ===============
 FireWeapon
@@ -4822,10 +4802,6 @@ void FireWeapon( gentity_t *ent, qboolean altFire )
 		CalcMuzzlePoint ( ent, forward, vright, up, muzzle );
 
 		// fire the specific weapon
-//[WEAPONSDAT]
-		if(!WP_CallFireFunction(ent->s.weapon, altFire, ent))
-		{
-//[/WEAPONSDAT]
 		switch( ent->s.weapon ) {
 		case WP_STUN_BATON:
 			WP_FireStunBaton( ent, altFire );
@@ -4935,9 +4911,6 @@ void FireWeapon( gentity_t *ent, qboolean altFire )
 //			assert(!"unknown weapon fire");
 			break;
 		}
-//[WEAPONSDAT]
-		}
-//[/WEAPONSDAT]
 	}
 
 	//[CoOp] SP code
@@ -5396,146 +5369,6 @@ void SP_emplaced_gun( gentity_t *ent )
 
 	trap_LinkEntity(ent);
 }
-
-//[WEAPONSDAT]
-void WP_PrimaryFireStunBaton( gentity_t* ent )
-{
-	WP_FireStunBaton(ent, qfalse);
-}
-void WP_PrimaryFireMelee( gentity_t* ent )
-{
-	WP_FireMelee(ent, qfalse);
-}
-void WP_PrimaryFireBryarPistol( gentity_t* ent )
-{
-	WP_FireBryarPistol(ent, qfalse);
-}
-void WP_PrimaryFireConcussion( gentity_t* ent )
-{
-	WP_FireConcussion(ent);
-}
-void WP_PrimaryFireBryarOld( gentity_t* ent )
-{
-	WP_FireBryarPistol(ent, qfalse);
-}
-void WP_PrimaryFireBlaster( gentity_t* ent )
-{
-	WP_FireBlaster(ent, qfalse);
-}
-void WP_PrimaryFireDisruptor( gentity_t* ent )
-{
-	WP_FireDisruptor(ent, qfalse);
-}
-void WP_PrimaryFireBowcaster( gentity_t* ent )
-{
-	WP_FireBowcaster(ent, qfalse);
-}
-void WP_PrimaryFireRepeater( gentity_t* ent )
-{
-	WP_FireRepeater(ent, qfalse);
-}
-void WP_PrimaryFireDEMP2( gentity_t* ent )
-{
-	WP_FireDEMP2(ent, qfalse);
-}
-void WP_PrimaryFireFlechette( gentity_t* ent )
-{
-	WP_FireFlechette(ent, qfalse);
-}
-void WP_PrimaryFireRocket( gentity_t* ent )
-{
-	WP_FireRocket(ent, qfalse);
-}
-void WP_PrimaryFireThermalDetonator( gentity_t* ent )
-{
-	WP_FireThermalDetonator(ent, qfalse);
-}
-void WP_PrimaryPlaceLaserTrap( gentity_t* ent )
-{
-	WP_PlaceLaserTrap(ent, qfalse);
-}
-void WP_PrimaryDropDetPack( gentity_t* ent )
-{
-	WP_DropDetPack(ent, qfalse);
-}
-void WP_PrimaryFireEmplaced( gentity_t* ent )
-{
-	WP_FireEmplaced(ent, qfalse);
-}
-
-void WP_AltFireStunBaton( gentity_t* ent )
-{
-	WP_FireStunBaton(ent, qtrue);
-}
-void WP_AltFireMelee( gentity_t* ent )
-{
-	WP_FireMelee(ent, qtrue);
-}
-void WP_AltFireBryarPistol( gentity_t* ent )
-{
-	//[WeaponSys]
-	WP_FireBryarPistol(ent, qfalse);
-	//WP_FireBryarPistol(ent, qtrue);
-	//[/WeaponSys]
-	
-}
-void WP_AltFireConcussion( gentity_t* ent )
-{
-	WP_FireConcussionAlt(ent);
-}
-void WP_AltFireBryarOld( gentity_t* ent )
-{
-	//[WeaponSys]
-	WP_FireBryarPistol(ent, qfalse);
-	//WP_FireBryarPistol(ent, qtrue);
-	//[/WeaponSys]
-}
-void WP_AltFireBlaster( gentity_t* ent )
-{
-	WP_FireBlaster(ent, qtrue);
-}
-void WP_AltFireDisruptor( gentity_t* ent )
-{
-	WP_FireDisruptor(ent, qtrue);
-}
-void WP_AltFireBowcaster( gentity_t* ent )
-{
-	WP_FireBowcaster(ent, qtrue);
-}
-void WP_AltFireRepeater( gentity_t* ent )
-{
-	WP_FireRepeater(ent, qtrue);
-}
-void WP_AltFireDEMP2( gentity_t* ent )
-{
-	WP_FireDEMP2(ent, qtrue);
-}
-void WP_AltFireFlechette( gentity_t* ent )
-{
-	WP_FireFlechette(ent, qtrue);
-}
-void WP_AltFireRocket( gentity_t* ent )
-{
-	WP_FireRocket(ent, qtrue);
-}
-void WP_AltFireThermalDetonator( gentity_t* ent )
-{
-	WP_FireThermalDetonator(ent, qtrue);
-}
-void WP_AltPlaceLaserTrap( gentity_t* ent )
-{
-	WP_PlaceLaserTrap(ent, qtrue);
-}
-void WP_AltDropDetPack( gentity_t* ent )
-{
-	WP_DropDetPack(ent, qtrue);
-}
-void WP_AltFireEmplaced( gentity_t* ent )
-{
-	WP_FireEmplaced(ent, qtrue);
-}
-//[/WEAPONSDAT]
-
 
 //[CoOp]
 /*QUAKED emplaced_eweb (0 0 1) (-12 -12 -24) (12 12 24) INACTIVE FACING INVULNERABLE PLAYERUSE

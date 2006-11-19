@@ -3578,14 +3578,21 @@ void LoadPath_ThisLevel(void)
 
 	trap_Cvar_Update(&bot_wp_edit);
 
-	if (bot_wp_edit.value)
+	//[BotTweaks]
+	if (bot_wp_edit.integer) {
+		gBotEdit = 1;
+	} else {
+		gBotEdit = 0;
+	}
+	/*if (bot_wp_edit.value)
 	{
 		gBotEdit = 1;
 	}
 	else
 	{
 		gBotEdit = 0;
-	}
+	}*/
+	//[/BotTweaks]
 
 	//set the flag entities
 	while (i < level.num_entities)
@@ -3692,6 +3699,16 @@ gentity_t *GetNextSpawnInIndex(gentity_t *currentSpawn)
 
 	return nextSpawn;
 }
+
+//[BotTweaks]
+void UpdateEditorMode(void) {
+	if (bot_wp_edit.integer) {
+		gBotEdit = 1;
+	} else {
+		gBotEdit = 0;
+	}
+}
+//[/BotTweaks]
 
 int AcceptBotCommand(char *cmd, gentity_t *pl)
 {

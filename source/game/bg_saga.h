@@ -98,6 +98,7 @@ extern int bgNumSiegeTeams;
 int BG_SiegeGetValueGroup(char *buf, char *group, char *outbuf);
 int BG_SiegeGetPairedValue(char *buf, char *key, char *outbuf);
 void BG_SiegeStripTabs(char *buf);
+char *BG_GetNextValueGroup(char *inbuf, char *outbuf);
 
 void BG_SiegeLoadClasses(siegeClassDesc_t *descBuffer);
 void BG_SiegeLoadTeams(void);

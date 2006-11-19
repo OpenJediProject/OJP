@@ -595,8 +595,12 @@ void UpdateForceUsed()
 	{	// Make sure that our ranks are within legal limits.
 		if (uiForcePowersRank[curpower]<0)
 			uiForcePowersRank[curpower]=0;
-		else if (uiForcePowersRank[curpower]>=NUM_FORCE_POWER_LEVELS)
-			uiForcePowersRank[curpower]=(NUM_FORCE_POWER_LEVELS-1);
+		//[ExpSys]
+		else if (uiForcePowersRank[curpower]>=NumberOfSkillRanks(curpower)+1)
+			uiForcePowersRank[curpower]=NumberOfSkillRanks(curpower);
+		//else if (uiForcePowersRank[curpower]>=NUM_FORCE_POWER_LEVELS)
+		//	uiForcePowersRank[curpower]=(NUM_FORCE_POWER_LEVELS-1);
+		//[/ExpSys]
 
 		for (currank=FORCE_LEVEL_1;currank<=uiForcePowersRank[curpower];currank++)
 		{	// Check on this force power
@@ -628,9 +632,7 @@ void UpdateForceUsed()
 			}
 		}
 	}
-
 }
-
 
 //Mostly parts of other functions merged into one another.
 //Puts the current UI stuff into a string, legalizes it, and then reads it back out.
@@ -961,43 +963,34 @@ extern int	uiHoldSkinColor;
 
 qboolean UI_SkinColor_HandleKey(int flags, float *special, int key, int num, int min, int max, int type) 
 {
-  if (key == A_MOUSE1 || key == A_MOUSE2 || key == A_ENTER || key == A_KP_ENTER) 
-  {
-  	int i = num;
-
-	if (key == A_MOUSE2)
+	if (key == A_MOUSE1 || key == A_MOUSE2 || key == A_ENTER || key == A_KP_ENTER) 
 	{
-	    i--;
+		int i = num;
+
+		if (key == A_MOUSE2) {
+			i--;
+		} else {
+			i++;
+		}
+
+		if (i < min) {
+			i = max;
+		} else if (i > max) {
+			i = min;
+		}
+
+		num = i;
+
+		uiSkinColor = num;
+
+		uiHoldSkinColor = uiSkinColor;
+
+		UI_FeederSelection(FEEDER_Q3HEADS, uiInfo.q3SelectedHead, NULL);
+
+		return qtrue;
 	}
-	else
-	{
-	    i++;
-	}
-
-    if (i < min)
-	{
-		i = max;
-	}
-	else if (i > max)
-	{
-      i = min;
-    }
-
-    num = i;
-
-	uiSkinColor = num;
-
-	uiHoldSkinColor = uiSkinColor;
-
-	UI_FeederSelection(FEEDER_Q3HEADS, uiInfo.q3SelectedHead, NULL);
-
-    return qtrue;
-  }
-  return qfalse;
+	return qfalse;
 }
-
-
-
 
 qboolean UI_ForceSide_HandleKey(int flags, float *special, int key, int num, int min, int max, int type) 
 {
@@ -1152,42 +1145,36 @@ qboolean UI_JediNonJedi_HandleKey(int flags, float *special, int key, int num, i
 
 qboolean UI_ForceMaxRank_HandleKey(int flags, float *special, int key, int num, int min, int max, int type) 
 {//racc - handle key presses for the Force Master Rank menu item.
-  if (key == A_MOUSE1 || key == A_MOUSE2 || key == A_ENTER || key == A_KP_ENTER) 
-  {
-  	int i = num;
-
-	if (key == A_MOUSE2)
+	if (key == A_MOUSE1 || key == A_MOUSE2 || key == A_ENTER || key == A_KP_ENTER) 
 	{
-	    i--;
+		int i = num;
+
+		if (key == A_MOUSE2) {
+			i--;
+		} else {
+			i++;
+		}
+
+		if (i < min) {
+			i = max;
+		} else if (i > max){
+			i = min;
+		}
+
+		num = i;
+
+		uiMaxRank = num;
+
+		trap_Cvar_Set( "g_maxForceRank", va("%i", num));
+
+		// The update force used will remove overallocated powers automatically.
+		UpdateForceUsed();
+
+		gTouchedForce = qtrue;
+
+		return qtrue;
 	}
-	else
-	{
-	    i++;
-	}
-
-    if (i < min)
-	{
-		i = max;
-	}
-	else if (i > max)
-	{
-      i = min;
-    }
-
-    num = i;
-
-	uiMaxRank = num;
-
-	trap_Cvar_Set( "g_maxForceRank", va("%i", num));
-
-	// The update force used will remove overallocated powers automatically.
-	UpdateForceUsed();
-
-	gTouchedForce = qtrue;
-
-    return qtrue;
-  }
-  return qfalse;
+	return qfalse;
 }
 
 

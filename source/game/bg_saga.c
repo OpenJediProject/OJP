@@ -184,6 +184,63 @@ void BG_SiegeStripTabs(char *buf)
 	buf[i_r] = '\0';
 }
 
+char *BG_GetNextValueGroup(char *inbuf, char *outbuf)
+{//grabs the next value group that's defined in the inbuf buffer and places it
+	//into the oubuf
+	int i = 0;
+	int j = 0;
+
+	while ( inbuf[i] && inbuf[i] != '{' )
+	{//advance to start of value group
+		i++;
+	}
+
+	if(!inbuf[i])
+	{//couldn't find a value group.
+		return NULL;
+	}
+
+	i++;	//advance past '{'
+
+	while(inbuf[i] && inbuf[i] != '}')
+	{//copy all the stuff inside the define group to outbuf
+		//Make sure this is a group as opposed to a globally defined value.
+		if (inbuf[i] == '/' && inbuf[i+1] == '/')
+		{ //stopped on a comment, so first parse to the end of it.
+            while (inbuf[i] && inbuf[i] != '\n' && inbuf[i] != '\r')
+			{
+				i++;
+			}
+			while (inbuf[i] == '\n' || inbuf[i] == '\r')
+			{
+				i++;
+			}
+		}
+			
+		outbuf[j] = inbuf[i];
+		i++;
+		j++;
+	}
+
+	outbuf[j] = '\0';
+
+	//Verify that we ended up on the closing bracket.
+	if (inbuf[i] != '}')
+	{
+		Com_Error(ERR_DROP, "BG_GetNextValueGroup couldn't find a define group's closing bracket");
+		return NULL;
+	}
+
+	//Strip the tabs so we're friendly for value parsing.
+	BG_SiegeStripTabs(outbuf);
+
+	//slide the buffer pointer to the end of this define group.
+	inbuf++;
+	inbuf = &inbuf[i];
+
+	return inbuf;
+}
+
 int BG_SiegeGetValueGroup(char *buf, char *group, char *outbuf)
 {
 	int i = 0;

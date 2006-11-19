@@ -1656,7 +1656,7 @@ void shield_power_converter_use( gentity_t *self, gentity_t *other, gentity_t *a
 	{
 		if ( !bgSiegeClasses[other->client->siegeClass].maxarmor )
 		{//can't use it!
-			G_Sound(self, CHAN_AUTO, G_SoundIndex("sound/interface/shieldcon_empty"));
+			G_Sound(self, CHAN_AUTO, G_SoundIndex("sound/interface/shieldcon_empty.mp3"));
 			return;
 		}
 	}
@@ -1666,7 +1666,7 @@ void shield_power_converter_use( gentity_t *self, gentity_t *other, gentity_t *a
 		int	maxArmor;
 		if (!self->s.loopSound)
 		{
-			self->s.loopSound = G_SoundIndex("sound/interface/shieldcon_run");
+			self->s.loopSound = G_SoundIndex("sound/interface/shieldcon_run.wav");
 			self->s.loopIsSoundset = qfalse;
 		}
 		self->setTime = level.time + 100;
@@ -1723,7 +1723,7 @@ void shield_power_converter_use( gentity_t *self, gentity_t *other, gentity_t *a
 		{
 			if (self->count <= 0)
 			{
-				G_Sound(self, CHAN_AUTO, G_SoundIndex("sound/interface/shieldcon_empty"));
+				G_Sound(self, CHAN_AUTO, G_SoundIndex("sound/interface/shieldcon_empty.mp3"));
 			}
 			else
 			{
@@ -1790,6 +1790,43 @@ qboolean HasValidWeaponThatUsesAmmo( gentity_t *ent, int ammotype ) {
 	return qfalse;
 }
 
+qboolean AllAmmosFull (gentity_t *ent) {
+	int i = 0;
+	int max;
+	qboolean maxBlaster=qfalse;
+	qboolean maxPowercell=qfalse;
+	qboolean maxMetalBolts=qfalse;
+	qboolean maxRockets=qfalse;
+	qboolean maxThermals=qfalse;
+	qboolean maxTripMines=qfalse;
+	qboolean maxDetpacks=qfalse;
+
+	for ( i = AMMO_BLASTER ; i < AMMO_MAX ; i++ ) {
+		if ( i == AMMO_EMPLACED ) continue;
+
+		if ( !HasValidWeaponThatUsesAmmo(ent, i) ) continue;
+
+		if ( ent->client->ps.eFlags & EF_DOUBLE_AMMO ) {
+			max = ammoData[i].max*2;
+		} else {
+			max = ammoData[i].max;
+		}
+
+		if ( i == AMMO_BLASTER && ent->client->ps.ammo[AMMO_BLASTER] >= max ) maxBlaster = qtrue;
+		if ( i == AMMO_POWERCELL && ent->client->ps.ammo[AMMO_POWERCELL] >= max ) maxPowercell = qtrue;
+		if ( i == AMMO_METAL_BOLTS && ent->client->ps.ammo[AMMO_METAL_BOLTS] >= max ) maxMetalBolts = qtrue;
+		if ( i == AMMO_ROCKETS && ent->client->ps.ammo[AMMO_ROCKETS] >= max ) maxRockets = qtrue;
+		if ( i == AMMO_THERMAL && ent->client->ps.ammo[AMMO_THERMAL] >= max ) maxThermals = qtrue;
+		if ( i == AMMO_TRIPMINE && ent->client->ps.ammo[AMMO_TRIPMINE] >= max ) maxTripMines = qtrue;
+		if ( i == AMMO_DETPACK && ent->client->ps.ammo[AMMO_DETPACK] >= max ) maxDetpacks = qtrue;
+	}
+
+	if ( maxBlaster && maxMetalBolts && maxRockets && maxThermals && maxTripMines && maxDetpacks )
+		return qtrue;
+
+	return qfalse;
+}
+
 //dispense generic ammo
 extern void Add_Ammo3 (gentity_t *ent, int weapon, int count, int *stop, qboolean *gaveSome);
 void ammo_generic_power_converter_use( gentity_t *self, gentity_t *other, gentity_t *activator)
@@ -1810,7 +1847,7 @@ void ammo_generic_power_converter_use( gentity_t *self, gentity_t *other, gentit
 
 		if (!self->s.loopSound)
 		{
-			self->s.loopSound = G_SoundIndex("sound/interface/ammocon_run");
+			self->s.loopSound = G_SoundIndex("sound/interface/ammocon_run.wav");
 			self->s.loopIsSoundset = qfalse;
 		}
 		//self->setTime = level.time + 100;
@@ -1842,7 +1879,7 @@ void ammo_generic_power_converter_use( gentity_t *self, gentity_t *other, gentit
 				if (self->count <= 0)
 				{
 					self->count = 0;
-					stop = 1;
+					//stop = 1;
 					break;
 				}
 			}
@@ -1855,7 +1892,7 @@ void ammo_generic_power_converter_use( gentity_t *self, gentity_t *other, gentit
 		{
 			if (self->count <= 0)
 			{
-				G_Sound(self, CHAN_AUTO, G_SoundIndex("sound/interface/ammocon_empty"));
+				G_Sound(self, CHAN_AUTO, G_SoundIndex("sound/interface/ammocon_empty.mp3"));
 			}
 			else
 			{
@@ -2126,9 +2163,9 @@ void SP_misc_ammo_floor_unit(gentity_t *ent)
 	VectorCopy( ent->s.angles, ent->s.apos.trBase );
 	trap_LinkEntity (ent);
 
-	G_SoundIndex("sound/interface/ammocon_run");
-	ent->genericValue7 = G_SoundIndex("sound/interface/ammocon_done");
-	G_SoundIndex("sound/interface/ammocon_empty");
+	G_SoundIndex("sound/interface/ammocon_run.wav");
+	ent->genericValue7 = G_SoundIndex("sound/interface/ammocon_done.mp3");
+	G_SoundIndex("sound/interface/ammocon_empty.mp3");
 
 	if (g_gametype.integer == GT_SIEGE)
 	{ //show on radar from everywhere
@@ -2136,6 +2173,14 @@ void SP_misc_ammo_floor_unit(gentity_t *ent)
 		ent->s.eFlags |= EF_RADAROBJECT;
 		ent->s.genericenemyindex = G_IconIndex("gfx/mp/siegeicons/desert/weapon_recharge");
 	}
+	
+	//[CoOp]
+	if (g_gametype.integer == GT_SINGLE_PLAYER)
+	{ //always visible with force sight in single player
+		ent->r.svFlags |= SVF_BROADCAST;
+		ent->s.eFlags |= EF_FORCE_VISIBLE;
+	}
+	//[CoOp]
 }
 
 /*QUAKED misc_shield_floor_unit (1 0 0) (-16 -16 0) (16 16 40)
@@ -2153,7 +2198,11 @@ void SP_misc_shield_floor_unit( gentity_t *ent )
 
 	if (g_gametype.integer != GT_CTF &&
 		g_gametype.integer != GT_CTY &&
-		g_gametype.integer != GT_SIEGE)
+		//[CoOp]
+		g_gametype.integer != GT_SIEGE &&
+		g_gametype.integer != GT_SINGLE_PLAYER)
+		//g_gametype.intger != GT_SIEGE)
+		//[/CoOp]
 	{
 		G_FreeEntity( ent );
 		return;
@@ -2221,9 +2270,9 @@ void SP_misc_shield_floor_unit( gentity_t *ent )
 	VectorCopy( ent->s.angles, ent->s.apos.trBase );
 	trap_LinkEntity (ent);
 
-	G_SoundIndex("sound/interface/shieldcon_run");
-	ent->genericValue7 = G_SoundIndex("sound/interface/shieldcon_done");
-	G_SoundIndex("sound/interface/shieldcon_empty");
+	G_SoundIndex("sound/interface/shieldcon_run.wav");
+	ent->genericValue7 = G_SoundIndex("sound/interface/shieldcon_done.mp3");
+	G_SoundIndex("sound/interface/shieldcon_empty.mp3");
 
 	if (g_gametype.integer == GT_SIEGE)
 	{ //show on radar from everywhere
@@ -2231,6 +2280,14 @@ void SP_misc_shield_floor_unit( gentity_t *ent )
 		ent->s.eFlags |= EF_RADAROBJECT;
 		ent->s.genericenemyindex = G_IconIndex("gfx/mp/siegeicons/desert/shield_recharge");
 	}
+
+	//[CoOp]
+	if (g_gametype.integer == GT_SINGLE_PLAYER)
+	{ //always visible with force sight
+		ent->r.svFlags |= SVF_BROADCAST;
+		ent->s.eFlags |= EF_FORCE_VISIBLE;
+	}
+	//[/CoOp]
 }
 
 
@@ -4138,9 +4195,8 @@ void SP_misc_trip_mine(gentity_t *ent)
 	AngleVectors(ent->s.angles, fwd, NULL, NULL);
 	VectorScale(fwd, -1, fwd);
 	laserTrapStick(laserTrap, ent->s.origin, fwd);
-
+	laserTrap->r.svFlags |= SVF_BROADCAST; // these should show up through areaportals
 }
-
 
 #define RACK_BLASTER	1
 #define RACK_REPEATER	2
@@ -5017,10 +5073,8 @@ void panel_touch(gentity_t *self, gentity_t *other, trace_t *trace)
 	}
 }
 
-
 void SP_misc_security_panel(gentity_t *self)
 {
-
 	if(self->spawnflags & 128)
 	{
 		self->flags |= FL_INACTIVE;
@@ -5043,7 +5097,6 @@ void SP_misc_security_panel(gentity_t *self)
 	trap_LinkEntity(self);
 }
 
-
 /*QUAKED item_security_key (.3 .3 1) (-8 -8 0) (8 8 16) suspended
 message - used to differentiate one key from another.
 */
@@ -5052,7 +5105,6 @@ void Precashe_Key(void)
 	G_ModelIndex( "models/items/key.md3" );
 	G_SoundIndex( "sound/weapons/key_pkup.wav" );
 }
-
 
 int GoodieKeys = 0;	//number of goodie keys currently held.
 qboolean INV_GoodieKeyGive( gentity_t *target )
@@ -5076,7 +5128,6 @@ void key_touch(gentity_t *self, gentity_t *other, trace_t *trace)
 	}
 }
 
-
 void SP_item_security_key(gentity_t *self)
 {
 	//make sure all the nessicary key object data is precashed.
@@ -5092,5 +5143,201 @@ void SP_item_security_key(gentity_t *self)
 	VectorSet (self->r.maxs, 16, 16, 16);
 	self->touch = key_touch;
 	trap_LinkEntity(self);
+}
+
+void bomb_planted_use( gentity_t *self, gentity_t *other, gentity_t *activator)
+{
+	if ( self->count == 2 )
+	{
+		self->s.eFlags &= ~EF_NODRAW;
+		self->r.contents = CONTENTS_SOLID;
+		self->clipmask = MASK_SOLID;
+		self->count = 1;
+		self->s.loopSound = self->noise_index;
+	}
+	else if ( self->count == 1 )
+	{
+		self->count = 0;
+		// play disarm sound
+		self->setTime = level.time + 1000; // extra debounce so that the sounds don't overlap too much
+		G_Sound( self, CHAN_AUTO, G_SoundIndex("sound/weapons/overchargeend"));
+		self->s.loopSound = 0;
+
+		// this pauses the shader on one frame (more or less)
+		self->s.eFlags |= EF_DISABLE_SHADER_ANIM;
+
+		// this starts the animation for the model
+		self->s.eFlags |= EF_ANIM_ONCE;
+		self->s.frame = 0;
+
+		//use targets
+		G_UseTargets( self, activator );
+	}
+}
+
+/*QUAKED misc_model_bomb_planted (1 0 0) (-16 -16 0) (16 16 70) x x x USETARGET
+model="models/map_objects/factory/bomb_new_deact.md3"
+Planted by evil men for evil purposes.
+
+"health" - please don't shoot the thermonuclear device
+"forcevisible" - When you turn on force sight (any level), you can see these draw through the entire level...
+*/
+//------------------------------------------------------------
+void SP_misc_model_bomb_planted( gentity_t *ent )
+{
+	int forceVisible = 0;
+	VectorSet( ent->r.mins, -16, -16, 0 );
+	VectorSet( ent->r.maxs, 16, 16, 70 );
+
+	ent->s.modelindex = G_ModelIndex("models/map_objects/factory/bomb_new_deact.md3");	// Precache model
+	ent->s.modelindex2 = G_ModelIndex("models/map_objects/factory/bomb_new_deact.md3");	// Precache model
+	ent->noise_index = G_SoundIndex("sound/interface/ammocon_run");
+
+	ent->s.eFlags = 0;
+	ent->r.svFlags |= SVF_PLAYER_USABLE;
+	ent->r.contents = CONTENTS_SOLID;
+	ent->clipmask = MASK_SOLID;
+
+	G_SetOrigin( ent, ent->s.origin );
+	VectorCopy( ent->s.angles, ent->s.apos.trBase );
+	trap_LinkEntity (ent);
+
+	ent->use = bomb_planted_use;
+
+	G_SpawnInt( "material", "4", (int *)&ent->material );
+
+	ent->takedamage = qfalse;
+
+	G_SoundIndex("sound/weapons/overchargeend");
+
+	ent->s.loopSound = ent->noise_index;
+	//ent->s.eFlags |= EF_SHADER_ANIM;
+	//ent->s.frame = ent->startFrame = 0;
+	ent->count = 1;
+
+	// If we have a targetname, we're are invisible until we are spawned in by being used.
+	if ( ent->targetname )
+	{
+		ent->s.eFlags = EF_NODRAW;
+		ent->r.contents = 0;
+		ent->clipmask = 0;
+		ent->count = 2;
+		ent->s.loopSound = 0;
+	}
+
+	G_SpawnInt( "forcevisible", "0", &forceVisible );
+	if ( forceVisible )
+	{//can see these through walls with force sight, so must be broadcast
+		ent->r.svFlags |= SVF_BROADCAST;
+		ent->s.eFlags |= EF_FORCE_VISIBLE;
+	}
+}
+
+extern void beacon_think( gentity_t *ent );
+void beacon_deploy( gentity_t *ent )
+{
+	ent->think = beacon_think;
+	ent->nextthink = level.time + FRAMETIME * 0.5f;
+
+	ent->s.frame = 0;
+	ent->startFrame = 0;
+	ent->endFrame = 30;
+	ent->loopAnim = qfalse;
+}
+
+void beacon_think( gentity_t *ent )
+{
+	ent->nextthink = level.time + FRAMETIME * 0.5f;
+
+	// Deploy animation complete? Stop thinking and just animate signal forever.
+	if ( ent->s.frame == 30 ) 
+	{
+		ent->think = NULL;
+		ent->nextthink = -1;
+
+		ent->startFrame = 31;
+		ent->endFrame = 60;
+		ent->loopAnim = qtrue;
+
+		ent->s.loopSound = ent->noise_index;
+	}
+}
+
+void beacon_use( gentity_t *self, gentity_t *other, gentity_t *activator)
+{
+	// Every time it's used it will be toggled on or off.
+	if ( self->count == 0 )
+	{
+		self->s.eFlags &= ~EF_NODRAW;
+		self->r.contents = CONTENTS_SOLID;
+		self->clipmask = MASK_SOLID;
+		self->count = 1;
+		self->r.svFlags = SVF_ANIMATING;
+		beacon_deploy( self );
+	}
+	else
+	{
+		self->s.eFlags = EF_NODRAW;
+		self->r.contents = 0; 
+		self->clipmask = 0;
+		self->count = 0;
+		self->s.loopSound = 0;
+		self->r.svFlags = 0;
+	}
+}
+
+/*QUAKED misc_model_beacon (1 0 0) (-16 -16 0) (16 16 24) x x x
+model="models/map_objects/wedge/beacon.md3"
+An animating beacon model.
+
+"forcevisible" - When you turn on force sight (any level), you can see these draw through the entire level...
+*/
+//------------------------------------------------------------
+void SP_misc_model_beacon( gentity_t *ent )
+{
+	int forceVisible = 0;
+	VectorSet( ent->r.mins, -16, -16, 0 );
+	VectorSet( ent->r.maxs, 16, 16, 24 );
+
+	ent->s.modelindex = G_ModelIndex("models/map_objects/wedge/beacon.md3");	// Precache model
+	ent->s.modelindex2 = G_ModelIndex("models/map_objects/wedge/beacon.md3");	// Precache model
+	ent->noise_index = G_SoundIndex("sound/interface/ammocon_run");
+
+	ent->s.eFlags = 0;
+	ent->r.svFlags |= SVF_PLAYER_USABLE;
+	ent->r.contents = CONTENTS_SOLID;
+	ent->clipmask = MASK_SOLID;
+
+	G_SetOrigin( ent, ent->s.origin );
+	VectorCopy( ent->s.angles, ent->s.apos.trBase );
+	trap_LinkEntity (ent);
+
+	ent->use = beacon_use;
+
+	G_SpawnInt( "material", "4", (int *)&ent->material );
+
+	ent->takedamage = qfalse;
+
+	// If we have a targetname, we're are invisible until we are spawned in by being used.
+	if ( ent->targetname )
+	{
+		ent->s.eFlags = EF_NODRAW;
+		ent->r.contents = 0;
+		ent->clipmask = 0;
+		ent->s.loopSound = 0;
+		ent->count = 0;
+	}
+	else
+	{
+		ent->count = 1;
+		beacon_deploy( ent );
+	}
+
+	G_SpawnInt( "forcevisible", "0", &forceVisible );
+	if ( forceVisible )
+	{//can see these through walls with force sight, so must be broadcast
+		ent->r.svFlags |= SVF_BROADCAST;
+		ent->s.eFlags |= EF_FORCE_VISIBLE;
+	}
 }
 //[/CoOp]

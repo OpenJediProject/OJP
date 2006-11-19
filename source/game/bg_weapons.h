@@ -107,11 +107,6 @@ typedef struct weaponData_s
 
 	int		maxCharge;			// stop subtracting once charged for this many ms
 	int		altMaxCharge;		// above for secondary
-
-	//[WEAPONSDAT]
-	int		fireFunctionIndex;	// the function to call when fire is pressed (see fireFunctions array in g_weaponsdat.c)
-	int		altFireFunctionIndex;	// the function to call when alt-fire is pressed (see fireFunctions array in g_weaponsdat.c)
-	//[/WEAPONSDAT]
 } weaponData_t;
 
 
@@ -140,8 +135,10 @@ extern ammoData_t ammoData[AMMO_MAX];
 
 #define	LIGHTNING_RANGE		768
 
+#define MAX_WEAPONS_IN_SLOT	4
+#define MAX_WEAP_SLOTS		10
+#define LAST_USABLE_SLOT	7
 
-
-
+extern int weaponSlots[MAX_WEAP_SLOTS][MAX_WEAPONS_IN_SLOT];
 
 #endif//#ifndef __WEAPONS_H__

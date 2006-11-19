@@ -63,7 +63,7 @@
 static qboolean localClient; // true if local client has been displayed
 
 
-							 /*
+/*
 =================
 CG_DrawScoreboard
 =================

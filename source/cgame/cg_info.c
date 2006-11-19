@@ -26,7 +26,14 @@ CG_LoadingString
 ======================
 */
 void CG_LoadingString( const char *s ) {
+	const char *psLoading = CG_GetStringEdString("MENUS", "LOADING_MAPNAME");
+
 	Q_strncpyz( cg.infoScreenText, s, sizeof( cg.infoScreenText ) );
+
+	if(s && *s) {
+		CG_Printf(va((char *)psLoading, (char *)s));
+		CG_Printf("\n");
+	}
 
 	trap_UpdateScreen();
 }

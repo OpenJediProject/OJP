@@ -45,11 +45,7 @@ weaponData_t weaponData[WP_NUM_WEAPONS] =
 		0,						//	int		chargeSub;			// amount to subtract during charge on each interval
 		0,						//int		altChargeSub;		// above for secondary
 		0,						//	int		maxCharge;			// stop subtracting once charged for this many ms
-		0,						//	int		altMaxCharge;		// above for secondary
-//[WEAPONSDAT]
-		0,						//	int		fireFunctionIndex;	// the function to call when fire is pressed (see fireFunctions array in g_weaponsdat.c)
-		0						//	int		altFireFunctionIndex;// the function to call when alt-fire is pressed (see fireFunctions array in g_weaponsdat.c)
-//[/WEAPONSDAT]
+		0						//	int		altMaxCharge;		// above for secondary
 	},
 	{	// WP_STUN_BATON
 //		"Stun Baton",			//	char	classname[32];		// Spawning name
@@ -66,11 +62,7 @@ weaponData_t weaponData[WP_NUM_WEAPONS] =
 		0,						//	int		chargeSub;			// amount to subtract during charge on each interval
 		0,						//int		altChargeSub;		// above for secondary
 		0,						//	int		maxCharge;			// stop subtracting once charged for this many ms
-		0,						//	int		altMaxCharge;		// above for secondary
-//[WEAPONSDAT]
-		0,						//	int		fireFunctionIndex;	// the function to call when fire is pressed (see fireFunctions array in g_weaponsdat.c)
-		0						//	int		altFireFunctionIndex;// the function to call when alt-fire is pressed (see fireFunctions array in g_weaponsdat.c)
-//[/WEAPONSDAT]
+		0						//	int		altMaxCharge;		// above for secondary
 	},
 	{	// WP_MELEE
 //		"Melee",			//	char	classname[32];		// Spawning name
@@ -87,11 +79,7 @@ weaponData_t weaponData[WP_NUM_WEAPONS] =
 		0,						//	int		chargeSub;			// amount to subtract during charge on each interval
 		0,						//int		altChargeSub;		// above for secondary
 		0,						//	int		maxCharge;			// stop subtracting once charged for this many ms
-		0,						//	int		altMaxCharge;		// above for secondary
-//[WEAPONSDAT]
-		0,						//	int		fireFunctionIndex;	// the function to call when fire is pressed (see fireFunctions array in g_weaponsdat.c)
-		0						//	int		altFireFunctionIndex;// the function to call when alt-fire is pressed (see fireFunctions array in g_weaponsdat.c)
-//[/WEAPONSDAT]
+		0						//	int		altMaxCharge;		// above for secondary
 	},
 	{	// WP_SABER,
 //		"Lightsaber",			//	char	classname[32];		// Spawning name
@@ -108,11 +96,7 @@ weaponData_t weaponData[WP_NUM_WEAPONS] =
 		0,						//	int		chargeSub;			// amount to subtract during charge on each interval
 		0,						//int		altChargeSub;		// above for secondary
 		0,						//	int		maxCharge;			// stop subtracting once charged for this many ms
-		0,						//	int		altMaxCharge;		// above for secondary
-//[WEAPONSDAT]
-		0,						//	int		fireFunctionIndex;	// the function to call when fire is pressed (see fireFunctions array in g_weaponsdat.c)
-		0						//	int		altFireFunctionIndex;// the function to call when alt-fire is pressed (see fireFunctions array in g_weaponsdat.c)
-//[/WEAPONSDAT]
+		0						//	int		altMaxCharge;		// above for secondary
 	},
 	{	// WP_BRYAR_PISTOL,
 //		"Bryar Pistol",			//	char	classname[32];		// Spawning name
@@ -135,11 +119,7 @@ weaponData_t weaponData[WP_NUM_WEAPONS] =
 		0,						//	int		chargeSub;			// amount to subtract during charge on each interval
 		0,//1,						//int		altChargeSub;		// above for secondary
 		0,						//	int		maxCharge;			// stop subtracting once charged for this many ms
-		0,//1500					//	int		altMaxCharge;		// above for secondary
-//[WEAPONSDAT]
-		0,						//	int		fireFunctionIndex;	// the function to call when fire is pressed (see fireFunctions array in g_weaponsdat.c)
-		0						//	int		altFireFunctionIndex;// the function to call when alt-fire is pressed (see fireFunctions array in g_weaponsdat.c)
-//[/WEAPONSDAT]
+		0//1500					//	int		altMaxCharge;		// above for secondary
 	},
 	{	// WP_BLASTER
 //		"E11 Blaster Rifle",	//	char	classname[32];		// Spawning name
@@ -164,11 +144,7 @@ weaponData_t weaponData[WP_NUM_WEAPONS] =
 		0,						//	int		chargeSub;			// amount to subtract during charge on each interval
 		0,						//int		altChargeSub;		// above for secondary
 		0,						//	int		maxCharge;			// stop subtracting once charged for this many ms
-		0,						//	int		altMaxCharge;		// above for secondary
-//[WEAPONSDAT]
-		0,						//	int		fireFunctionIndex;	// the function to call when fire is pressed (see fireFunctions array in g_weaponsdat.c)
-		0						//	int		altFireFunctionIndex;// the function to call when alt-fire is pressed (see fireFunctions array in g_weaponsdat.c)
-//[/WEAPONSDAT]
+		0						//	int		altMaxCharge;		// above for secondary
 	},
 	{	// WP_DISRUPTOR
 //		"Tenloss Disruptor Rifle",//	char	classname[32];		// Spawning name
@@ -192,11 +168,7 @@ weaponData_t weaponData[WP_NUM_WEAPONS] =
 		0,						//	int		chargeSub;			// amount to subtract during charge on each interval
 		3,						//int		altChargeSub;		// above for secondary
 		0,						//	int		maxCharge;			// stop subtracting once charged for this many ms
-		1700,					//	int		altMaxCharge;		// above for secondary
-//[WEAPONSDAT]
-		0,						//	int		fireFunctionIndex;	// the function to call when fire is pressed (see fireFunctions array in g_weaponsdat.c)
-		0						//	int		altFireFunctionIndex;// the function to call when alt-fire is pressed (see fireFunctions array in g_weaponsdat.c)
-//[/WEAPONSDAT]
+		1700					//	int		altMaxCharge;		// above for secondary
 	},
 	{	// WP_BOWCASTER
 //		"Wookiee Bowcaster",		//	char	classname[32];		// Spawning name
@@ -221,11 +193,7 @@ weaponData_t weaponData[WP_NUM_WEAPONS] =
 		5,						//	int		chargeSub;			// amount to subtract during charge on each interval
 		0,						//int		altChargeSub;		// above for secondary
 		1700,						//	int		maxCharge;			// stop subtracting once charged for this many ms
-		0,					//	int		altMaxCharge;		// above for secondary
-//[WEAPONSDAT]
-		0,						//	int		fireFunctionIndex;	// the function to call when fire is pressed (see fireFunctions array in g_weaponsdat.c)
-		0						//	int		altFireFunctionIndex;// the function to call when alt-fire is pressed (see fireFunctions array in g_weaponsdat.c)
-//[/WEAPONSDAT]
+		0					//	int		altMaxCharge;		// above for secondary
 	},
 	{	// WP_REPEATER
 //		"Imperial Heavy Repeater",//	char	classname[32];		// Spawning name
@@ -245,11 +213,7 @@ weaponData_t weaponData[WP_NUM_WEAPONS] =
 		0,						//	int		chargeSub;			// amount to subtract during charge on each interval
 		0,						//int		altChargeSub;		// above for secondary
 		0,						//	int		maxCharge;			// stop subtracting once charged for this many ms
-		0,						//	int		altMaxCharge;		// above for secondary
-//[WEAPONSDAT]
-		0,						//	int		fireFunctionIndex;	// the function to call when fire is pressed (see fireFunctions array in g_weaponsdat.c)
-		0						//	int		altFireFunctionIndex;// the function to call when alt-fire is pressed (see fireFunctions array in g_weaponsdat.c)
-//[/WEAPONSDAT]
+		0						//	int		altMaxCharge;		// above for secondary
 	},
 	{	// WP_DEMP2
 //		"DEMP2",				//	char	classname[32];		// Spawning name
@@ -266,11 +230,7 @@ weaponData_t weaponData[WP_NUM_WEAPONS] =
 		0,						//	int		chargeSub;			// amount to subtract during charge on each interval
 		3,						//	int		altChargeSub;		// above for secondary
 		0,						//	int		maxCharge;			// stop subtracting once charged for this many ms
-		2100,					//	int		altMaxCharge;		// above for secondary
-//[WEAPONSDAT]
-		0,						//	int		fireFunctionIndex;	// the function to call when fire is pressed (see fireFunctions array in g_weaponsdat.c)
-		0						//	int		altFireFunctionIndex;// the function to call when alt-fire is pressed (see fireFunctions array in g_weaponsdat.c)
-//[/WEAPONSDAT]
+		2100					//	int		altMaxCharge;		// above for secondary
 	},
 	{	// WP_FLECHETTE
 //		"Golan Arms Flechette",	//	char	classname[32];		// Spawning name
@@ -287,11 +247,7 @@ weaponData_t weaponData[WP_NUM_WEAPONS] =
 		0,						//	int		chargeSub;			// amount to subtract during charge on each interval
 		0,						//int		altChargeSub;		// above for secondary
 		0,						//	int		maxCharge;			// stop subtracting once charged for this many ms
-		0,						//	int		altMaxCharge;		// above for secondary
-//[WEAPONSDAT]
-		0,						//	int		fireFunctionIndex;	// the function to call when fire is pressed (see fireFunctions array in g_weaponsdat.c)
-		0						//	int		altFireFunctionIndex;// the function to call when alt-fire is pressed (see fireFunctions array in g_weaponsdat.c)
-//[/WEAPONSDAT]
+		0						//	int		altMaxCharge;		// above for secondary
 	},
 	{	// WP_ROCKET_LAUNCHER
 //		"Merr-Sonn Missile System",	//	char	classname[32];		// Spawning name
@@ -315,11 +271,7 @@ weaponData_t weaponData[WP_NUM_WEAPONS] =
 		0,						//	int		chargeSub;			// amount to subtract during charge on each interval
 		0,						//int		altChargeSub;		// above for secondary
 		0,						//	int		maxCharge;			// stop subtracting once charged for this many ms
-		0,						//	int		altMaxCharge;		// above for secondary
-//[WEAPONSDAT]
-		0,						//	int		fireFunctionIndex;	// the function to call when fire is pressed (see fireFunctions array in g_weaponsdat.c)
-		0						//	int		altFireFunctionIndex;// the function to call when alt-fire is pressed (see fireFunctions array in g_weaponsdat.c)
-//[/WEAPONSDAT]
+		0						//	int		altMaxCharge;		// above for secondary
 	},
 	{	// WP_THERMAL
 //		"Thermal Detonator",	//	char	classname[32];		// Spawning name
@@ -336,11 +288,7 @@ weaponData_t weaponData[WP_NUM_WEAPONS] =
 		0,						//	int		chargeSub;			// amount to subtract during charge on each interval
 		0,						//int		altChargeSub;		// above for secondary
 		0,						//	int		maxCharge;			// stop subtracting once charged for this many ms
-		0,						//	int		altMaxCharge;		// above for secondary
-//[WEAPONSDAT]
-		0,						//	int		fireFunctionIndex;	// the function to call when fire is pressed (see fireFunctions array in g_weaponsdat.c)
-		0						//	int		altFireFunctionIndex;// the function to call when alt-fire is pressed (see fireFunctions array in g_weaponsdat.c)
-//[/WEAPONSDAT]
+		0						//	int		altMaxCharge;		// above for secondary
 	},
 	{	// WP_TRIP_MINE
 //		"Trip Mine",			//	char	classname[32];		// Spawning name
@@ -357,11 +305,7 @@ weaponData_t weaponData[WP_NUM_WEAPONS] =
 		0,						//	int		chargeSub;			// amount to subtract during charge on each interval
 		0,						//int		altChargeSub;		// above for secondary
 		0,						//	int		maxCharge;			// stop subtracting once charged for this many ms
-		0,						//	int		altMaxCharge;		// above for secondary
-//[WEAPONSDAT]
-		0,						//	int		fireFunctionIndex;	// the function to call when fire is pressed (see fireFunctions array in g_weaponsdat.c)
-		0						//	int		altFireFunctionIndex;// the function to call when alt-fire is pressed (see fireFunctions array in g_weaponsdat.c)
-//[/WEAPONSDAT]
+		0						//	int		altMaxCharge;		// above for secondary
 	},
 	{	// WP_DET_PACK
 //		"Det Pack",				//	char	classname[32];		// Spawning name
@@ -378,11 +322,7 @@ weaponData_t weaponData[WP_NUM_WEAPONS] =
 		0,						//	int		chargeSub;			// amount to subtract during charge on each interval
 		0,						//int		altChargeSub;		// above for secondary
 		0,						//	int		maxCharge;			// stop subtracting once charged for this many ms
-		0,						//	int		altMaxCharge;		// above for secondary
-//[WEAPONSDAT]
-		0,						//	int		fireFunctionIndex;	// the function to call when fire is pressed (see fireFunctions array in g_weaponsdat.c)
-		0						//	int		altFireFunctionIndex;// the function to call when alt-fire is pressed (see fireFunctions array in g_weaponsdat.c)
-//[/WEAPONSDAT]
+		0						//	int		altMaxCharge;		// above for secondary
 	},
 	{	// WP_CONCUSSION
 //		"Concussion Rifle",		//	char	classname[32];		// Spawning name
@@ -399,11 +339,7 @@ weaponData_t weaponData[WP_NUM_WEAPONS] =
 		0,						//	int		chargeSub;			// amount to subtract during charge on each interval
 		0,						//	int		altChargeSub;		// above for secondary
 		0,						//	int		maxCharge;			// stop subtracting once charged for this many ms
-		0,						//	int		altMaxCharge;		// above for secondary
-//[WEAPONSDAT]
-		0,						//	int		fireFunctionIndex;	// the function to call when fire is pressed (see fireFunctions array in g_weaponsdat.c)
-		0						//	int		altFireFunctionIndex;// the function to call when alt-fire is pressed (see fireFunctions array in g_weaponsdat.c)
-//[/WEAPONSDAT]
+		0						//	int		altMaxCharge;		// above for secondary
 	},
 	{	// WP_BRYAR_OLD,
 //		"Bryar Pistol",			//	char	classname[32];		// Spawning name
@@ -420,11 +356,7 @@ weaponData_t weaponData[WP_NUM_WEAPONS] =
 		0,						//	int		chargeSub;			// amount to subtract during charge on each interval
 		1,						//int		altChargeSub;		// above for secondary
 		0,						//	int		maxCharge;			// stop subtracting once charged for this many ms
-		1500,					//	int		altMaxCharge;		// above for secondary
-//[WEAPONSDAT]
-		0,						//	int		fireFunctionIndex;	// the function to call when fire is pressed (see fireFunctions array in g_weaponsdat.c)
-		0						//	int		altFireFunctionIndex;// the function to call when alt-fire is pressed (see fireFunctions array in g_weaponsdat.c)
-//[/WEAPONSDAT]
+		1500					//	int		altMaxCharge;		// above for secondary
 	},
 	{	// WP_EMPLCACED_GUN
 //		"Emplaced Gun",			//	char	classname[32];		// Spawning name
@@ -441,11 +373,7 @@ weaponData_t weaponData[WP_NUM_WEAPONS] =
 		0,						//	int		chargeSub;			// amount to subtract during charge on each interval
 		0,						//int		altChargeSub;		// above for secondary
 		0,						//	int		maxCharge;			// stop subtracting once charged for this many ms
-		0,						//	int		altMaxCharge;		// above for secondary
-//[WEAPONSDAT]
-		0,						//	int		fireFunctionIndex;	// the function to call when fire is pressed (see fireFunctions array in g_weaponsdat.c)
-		0						//	int		altFireFunctionIndex;// the function to call when alt-fire is pressed (see fireFunctions array in g_weaponsdat.c)
-//[/WEAPONSDAT]
+		0						//	int		altMaxCharge;		// above for secondary
 	},
 	{	// WP_TURRET - NOTE NOT ACTUALLY USEABLE BY PLAYER!
 //		"Emplaced Gun",			//	char	classname[32];		// Spawning name
@@ -462,11 +390,7 @@ weaponData_t weaponData[WP_NUM_WEAPONS] =
 		0,						//	int		chargeSub;			// amount to subtract during charge on each interval
 		0,						//int		altChargeSub;		// above for secondary
 		0,						//	int		maxCharge;			// stop subtracting once charged for this many ms
-		0,						//	int		altMaxCharge;		// above for secondary
-//[WEAPONSDAT]
-		0,						//	int		fireFunctionIndex;	// the function to call when fire is pressed (see fireFunctions array in g_weaponsdat.c)
-		0						//	int		altFireFunctionIndex;// the function to call when alt-fire is pressed (see fireFunctions array in g_weaponsdat.c)
-//[/WEAPONSDAT]
+		0						//	int		altMaxCharge;		// above for secondary
 	}
 };
 
@@ -520,4 +444,15 @@ ammoData_t ammoData[AMMO_MAX] =
 	}
 };
 
-
+int weaponSlots[MAX_WEAP_SLOTS][MAX_WEAPONS_IN_SLOT] = {
+	{0,						0,		0,		0	},	// empty slot '0'
+	{WP_MELEE,				0,		0,		0	},
+	{WP_SABER,				0,		0,		0	},
+	{WP_BRYAR_PISTOL,		0,		0,		0	},
+	{WP_BLASTER,			WP_BOWCASTER,		WP_REPEATER,		0	},
+	{WP_DISRUPTOR,			WP_DEMP2,			WP_FLECHETTE,		0	},
+	{WP_ROCKET_LAUNCHER,	WP_CONCUSSION,		0,		0	},
+	{WP_THERMAL,			WP_TRIP_MINE,		WP_DET_PACK,		0	},
+	{0,						0,		0,		0	}, // extra slot
+	{0,						0,		0,		0	}, // extra slot
+};

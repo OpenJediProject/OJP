@@ -390,9 +390,6 @@
 				RelativePath=".\bg_weapons.c">
 			</File>
 			<File
-				RelativePath="bg_weaponsdat.c">
-			</File>
-			<File
 				RelativePath="FighterNPC.c">
 			</File>
 			<File
@@ -719,9 +716,6 @@
 			</File>
 			<File
 				RelativePath=".\bg_weapons.h">
-			</File>
-			<File
-				RelativePath="bg_weaponsdat.h">
 			</File>
 			<File
 				RelativePath=".\botlib.h">

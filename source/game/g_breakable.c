@@ -867,7 +867,9 @@ void SP_misc_model_breakable( gentity_t *ent )
 	qboolean bHasScale;
 
 	float grav = 0;
+	//[CoOp]
 	int forceVisible = 0;
+	//[/CoOp]
 	int redCrosshair = 0;
 	
 	// Chris F. requested default for misc_model_breakable to be NONE...so don't arbitrarily change this.
@@ -1101,9 +1103,11 @@ void SP_misc_model_breakable( gentity_t *ent )
 	G_SpawnInt( "forcevisible", "0", &forceVisible );
 	if ( forceVisible )
 	{//can see these through walls with force sight, so must be broadcast
-		//ent->svFlags |= SVF_BROADCAST;
+		//[CoOp]
+		ent->r.svFlags |= SVF_BROADCAST;
 		//RAFIXME - impliment this flag
-		//ent->s.eFlags |= EF_FORCE_VISIBLE;
+		ent->s.eFlags |= EF_FORCE_VISIBLE;
+		//[/CoOp]
 	}
 
 	G_SpawnInt( "redCrosshair", "0", &redCrosshair );

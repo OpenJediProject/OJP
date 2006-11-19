@@ -1224,6 +1224,66 @@
 			}
 		}
 		
+		//[Flamethrower]
+		// flamethrower title
+		itemDef 
+		{
+			name					setsk_flamethrower
+			group					gunpowers
+			style					0	
+			text					@OJP_MENUS_SKILL_FLAMETHROWER
+			rect					30 164 110 15
+			//rect					30 232 110 15
+			textalign				ITEM_ALIGN_RIGHT												
+			textalignx				105
+			textaligny				0
+			font					4
+			textscale				1
+			forecolor				.2 1 .2 1
+			outlinecolor			1 .5 .5 .5
+			backcolor				0 0 0 0
+			border					0
+			bordercolor				0 0 0 0
+			visible					1 
+			decoration
+		}
+	
+		// flamethrower assign
+		itemDef 
+		{
+			name					setsk_flamethrower
+			group					gunpowers
+			style					0	
+			ownerdraw				UI_FORCE_RANK_FLAMETHROWER
+			rect					30 164 175 15
+			//rect					30 232 175 15
+			textalign				ITEM_ALIGN_LEFT		
+			textalignx				115
+			textaligny				-6
+			textscale				.25        
+			forecolor				.2 1 .2 1
+			backcolor				0 0 0 0
+			forecolor				1 0.2 0.2 1
+			border					0
+			bordercolor				0 0 0 0
+			descText				@OJP_MENUS_DESC_SKILL_FLAMETHROWER
+			visible					1 
+			action 
+			{ 
+				play			"sound/interface/button1.wav" ;
+			}
+
+			mouseenter 
+			{ 
+				setitemcolor	setsk_flamethrower forecolor .7 1 2. 1
+			}
+			mouseexit 
+			{ 
+				setitemcolor	setsk_flamethrower forecolor .2 1 .2 1
+			}
+		}
+		//[/Flamethrower]
+		
 		// pistol title
 		itemDef 
 		{
@@ -1231,7 +1291,8 @@
 			group					gunpowers
 			style					0	
 			text					@OJP_MENUS_SKILL_PISTOL
-			rect					30 164 110 15
+			rect					30 181 110 15
+			//rect					30 164 110 15
 			textalign				ITEM_ALIGN_RIGHT												
 			textalignx				105
 			textaligny				0
@@ -1253,7 +1314,8 @@
 			group					gunpowers
 			style					0	
 			ownerdraw				UI_FORCE_RANK_PISTOL
-			rect					30 164 175 15
+			rect					30 181 175 15
+			//rect					30 164 175 15
 			textalign				ITEM_ALIGN_LEFT		
 			textalignx				115
 			textaligny				-6
@@ -1287,7 +1349,8 @@
 			group					gunpowers
 			style					0	
 			text					@OJP_MENUS_SKILL_BLASTER
-			rect					30 181 110 15
+			rect					30 198 110 15
+			//rect					30 181 110 15
 			textalign				ITEM_ALIGN_RIGHT												
 			textalignx				105
 			textaligny				0
@@ -1309,7 +1372,8 @@
 			group					gunpowers
 			style					0	
 			ownerdraw				UI_FORCE_RANK_BLASTER
-			rect					30 181 175 15
+			rect					30 198 175 15
+			//rect					30 181 175 15
 			textalign				ITEM_ALIGN_LEFT		
 			textalignx				115
 			textaligny				-6
@@ -1343,7 +1407,8 @@
 			group					gunpowers
 			style					0	
 			text					@OJP_MENUS_SKILL_THERMALS
-			rect					30 198 110 15
+			rect					30 215 110 10
+			//rect					30 198 110 15
 			textalign				ITEM_ALIGN_RIGHT												
 			textalignx				105
 			textaligny				0
@@ -1365,7 +1430,8 @@
 			group					gunpowers
 			style					0	
 			ownerdraw				UI_FORCE_RANK_THERMALS
-			rect					30 198 175 15
+			rect					30 215 175 15
+			//rect					30 198 175 15
 			textalign				ITEM_ALIGN_LEFT		
 			textalignx				115
 			textaligny				-6
@@ -1399,7 +1465,8 @@
 			group					gunpowers
 			style					0	
 			text					@OJP_MENUS_SKILL_ROCKET
-			rect					30 215 110 15
+			rect					30 232 110 15
+			//rect					30 215 110 15
 			textalign				ITEM_ALIGN_RIGHT												
 			textalignx				105
 			textaligny				0
@@ -1421,7 +1488,8 @@
 			group					gunpowers
 			style					0	
 			ownerdraw				UI_FORCE_RANK_ROCKETS
-			rect					30 215 175 15
+			rect					30 232 175 15
+			//rect					30 215 175 15
 			textalign				ITEM_ALIGN_LEFT		
 			textalignx				115
 			textaligny				-6
@@ -1447,65 +1515,6 @@
 				setitemcolor	setsk_rocket forecolor .2 1 .2 1
 			}
 		}
-		
-		//[Flamethrower]
-		// flamethrower title
-		itemDef 
-		{
-			name					setsk_flamethrower
-			group					gunpowers
-			style					0	
-			text					@OJP_MENUS_SKILL_FLAMETHROWER
-			rect					30 232 110 15
-			textalign				ITEM_ALIGN_RIGHT												
-			textalignx				105
-			textaligny				0
-			font					4
-			textscale				1
-			forecolor				.2 1 .2 1
-			outlinecolor			1 .5 .5 .5
-			backcolor				0 0 0 0
-			border					0
-			bordercolor				0 0 0 0
-			visible					1 
-			decoration
-		}
-	
-		// flamethrower assign
-		itemDef 
-		{
-			name					setsk_flamethrower
-			group					gunpowers
-			style					0	
-			ownerdraw				UI_FORCE_RANK_FLAMETHROWER
-			rect					30 232 175 15
-			textalign				ITEM_ALIGN_LEFT		
-			textalignx				115
-			textaligny				-6
-			textscale				.25        
-			forecolor				.2 1 .2 1
-			backcolor				0 0 0 0
-			forecolor				1 0.2 0.2 1
-			border					0
-			bordercolor				0 0 0 0
-			descText				@OJP_MENUS_DESC_SKILL_FLAMETHROWER
-			visible					1 
-			action 
-			{ 
-				play			"sound/interface/button1.wav" ;
-			}
-
-			mouseenter 
-			{ 
-				setitemcolor	setsk_flamethrower forecolor .7 1 2. 1
-			}
-			mouseexit 
-			{ 
-				setitemcolor	setsk_flamethrower forecolor .2 1 .2 1
-			}
-		}
-		//[/Flamethrower]
-
 
 		// bowcaster title
 		itemDef 

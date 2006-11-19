@@ -46,21 +46,22 @@ void GCam_Follow( int cameraGroup[MAX_CAMERA_GROUP_SUBJECTS], float speed, float
 
 extern void LogExit( const char *string );
 
-int FindVTypeforDeclaredVariable(const char *name);
+int VariableDeclared( const char *name );
 int GetStringDeclaredVariable( const char *name, char **value );
 int GetFloatDeclaredVariable( const char *name, float *value );
 int GetVectorDeclaredVariable( const char *name, vec3_t value );
-void SetDeclaredVariable( const char *name, const char *data );
+void SetVar( const char *type_name, const char *data );
 
 //used to get the icarus declare varible stuff to work.  Apprenently the engine calls
 //don't work.
-#define MAX_DECLAREDVARIABLES	16 //I think the engine max is supposed to be 16
+#define MAX_DECLAREDVARIABLES	32 //I think the engine max is supposed to be 32
 
 struct DeclaredVariable_s
 {
 	char name[2048];	//name of the varible
-	qboolean inuse;		//type of data this varible stores
+	qboolean inuse;		//variable is currently being used or not
 	char Data[2048];	//string data for this variable
+	int type;			// type for this variable
 };
 
 typedef struct DeclaredVariable_s DeclaredVariable_t;
@@ -267,6 +268,9 @@ stringID_table_t setTable[] =
 	ENUM2STRING(SET_OBJECTIVE_HIDE),
 	ENUM2STRING(SET_OBJECTIVE_SUCCEEDED),
 	ENUM2STRING(SET_OBJECTIVE_FAILED),
+	//[CoOp]
+	ENUM2STRING(SET_OBJECTIVE_LIGHTSIDE),
+	//[/CoOp]
 	ENUM2STRING(SET_MISSIONFAILED),
 	ENUM2STRING(SET_TACTICAL_SHOW),
 	ENUM2STRING(SET_TACTICAL_HIDE),
@@ -1765,10 +1769,18 @@ int Q3_GetFloat( int entID, int type, const char *name, float *value )
 	case SET_SHADER_ANIM:	//## %t="BOOL_TYPES" # Shader will be under frame control
 		return 0;
 		break;
+	//[CoOp]
+	case SET_OBJECTIVE_LIGHTSIDE:
+		return 0;
+		break;
+	//[/CoOp]
 
 	default:
 		//[CoOp]
 		//fixing all the varibledeclared stuff
+		if ( VariableDeclared( name ) != VTYPE_FLOAT )
+			return 0;
+
 		return GetFloatDeclaredVariable( name, value );
 
 		/*
@@ -1846,6 +1858,9 @@ int Q3_GetVector( int entID, int type, const char *name, vec3_t value )
 
 		//[CoOp]
 		//fixing all the varibledeclared stuff
+		if ( VariableDeclared( name ) != VTYPE_VECTOR )
+			return 0;
+
 		return GetVectorDeclaredVariable( name, value );
 
 		/*
@@ -2133,6 +2148,9 @@ int Q3_GetString( int entID, int type, const char *name, char **value )
 
 		//[CoOp]
 		//fixing all the varibledeclared stuff
+		if ( VariableDeclared( name ) != VTYPE_STRING )
+			return 0;
+
 		return GetStringDeclaredVariable( name, value );
 
 		/*
@@ -2334,6 +2352,104 @@ static void Q3_SetAngles( int entID, vec3_t angles )
 	}
 	trap_LinkEntity( ent );
 }
+
+//[CoOp]
+//[SPPortComplete]
+/*
+============
+Q3_SetAdjustAreaPortals
+  Description	: 
+  Return type	: void 
+  Argument		:  int entID
+  Argument		: qboolean adjust
+============
+*/
+static void Q3_SetAdjustAreaPortals( int entID, qboolean adjust )
+{
+	gentity_t	*ent  = &g_entities[entID];
+
+	if ( !ent )
+	{
+		G_DebugPrint( WL_WARNING, "Q3_SetAdjustAreaPortals: invalid entID %d\n", entID);
+		return;
+	}
+
+	trap_AdjustAreaPortalState( ent, adjust );
+}
+
+/*
+============
+Q3_SetDmgByHeavyWeapOnly
+  Description	: 
+  Return type	: void 
+  Argument		:  int entID
+  Argument		: qboolean dmg
+============
+*/
+static void Q3_SetDmgByHeavyWeapOnly( int entID, qboolean dmg )
+{
+	gentity_t	*ent  = &g_entities[entID];
+
+	if ( !ent )
+	{
+		G_DebugPrint( WL_WARNING, "Q3_SetDmgByHeavyWeapOnly: invalid entID %d\n", entID);
+		return;
+	}
+	
+	ent->flags = (dmg) ? (ent->flags|FL_DMG_BY_HEAVY_WEAP_ONLY) : (ent->flags&~FL_DMG_BY_HEAVY_WEAP_ONLY);
+}
+
+/*
+============
+Q3_SetShielded
+  Description	: 
+  Return type	: void 
+  Argument		:  int entID
+  Argument		: qboolean dmg
+============
+*/
+static void Q3_SetShielded( int entID, qboolean dmg )
+{
+	gentity_t	*ent  = &g_entities[entID];
+
+	if ( !ent )
+	{
+		G_DebugPrint( WL_WARNING, "Q3_SetShielded: invalid entID %d\n", entID);
+		return;
+	}
+	
+	ent->flags = (dmg) ? (ent->flags|FL_SHIELDED) : (ent->flags&~FL_SHIELDED);
+}
+
+/*
+============
+Q3_SetNoGroups
+  Description	: 
+  Return type	: void 
+  Argument		:  int entID
+  Argument		: qboolean noGroups
+============
+*/
+static void Q3_SetNoGroups( int entID, qboolean noGroups )
+{
+	gentity_t	*ent  = &g_entities[entID];
+
+	if ( !ent )
+	{
+		G_DebugPrint( WL_WARNING, "Q3_SetNoGroups: invalid entID %d\n", entID);
+		return;
+	}
+
+	if ( !ent->NPC )
+	{
+		G_DebugPrint( WL_WARNING, "Q3_SetNoGroups: ent %s is not an NPC!\n", ent->targetname );
+		return;
+	}
+	
+	ent->NPC->scriptFlags = noGroups ? (ent->NPC->scriptFlags|SCF_NO_GROUPS) : (ent->NPC->scriptFlags&~SCF_NO_GROUPS);
+}
+//[/SPPortComplete]
+//[/CoOp]
 
 /*
 =============
@@ -6223,8 +6339,25 @@ Q3_SetDisableShaderAnims
 */
 static void Q3_SetDisableShaderAnims( int entID, int disabled )
 {
-	G_DebugPrint( WL_WARNING, "Q3_SetDisableShaderAnims: NOT SUPPORTED IN MP\n");
-	return;
+	//[CoOp]
+	gentity_t *ent = &g_entities[entID];
+
+	if ( !ent )
+	{
+		G_DebugPrint( WL_WARNING, "Q3_SetDisableShaderAnims: invalid entID %d\n", entID);
+		return;
+	}
+
+	if ( disabled )
+	{
+		ent->s.eFlags |= EF_DISABLE_SHADER_ANIM;
+	}
+	else
+	{
+		ent->s.eFlags &= ~EF_DISABLE_SHADER_ANIM;
+	}
+	//G_DebugPrint( WL_WARNING, "Q3_SetDisableShaderAnims: NOT SUPPORTED IN MP\n");
+	//[/CoOp]
 }
 
 /*
@@ -6238,8 +6371,25 @@ Q3_SetShaderAnim
 */
 static void Q3_SetShaderAnim( int entID, int disabled )
 {
-	G_DebugPrint( WL_WARNING, "Q3_SetShaderAnim: NOT SUPPORTED IN MP\n");
-	return;
+	//[CoOp]
+	gentity_t *ent = &g_entities[entID];
+
+	if ( !ent )
+	{
+		G_DebugPrint( WL_WARNING, "Q3_SetShaderAnim: invalid entID %d\n", entID);
+		return;
+	}
+
+	if ( disabled )
+	{
+		ent->s.eFlags |= EF_SHADER_ANIM;
+	}
+	else
+	{
+		ent->s.eFlags &= ~EF_SHADER_ANIM;
+	}
+	//G_DebugPrint( WL_WARNING, "Q3_SetShaderAnim: NOT SUPPORTED IN MP\n");
+	//[/CoOp]
 }
 
 /*
@@ -7485,19 +7635,67 @@ qboolean Q3_Set( int taskID, int entID, const char *type_name, const char *data 
 		break;
 
 	case SET_ADJUST_AREA_PORTALS:
-		G_DebugPrint( WL_WARNING, "Q3_SetAdjustAreaPortals: NOT SUPPORTED IN MP\n");
+	//[CoOp]
+	//[SPPortCompleted]
+		if(!Q_stricmp("true", ((char *)data)))
+		{
+			Q3_SetAdjustAreaPortals( entID, qtrue );
+		}
+		else
+		{
+			Q3_SetAdjustAreaPortals( entID, qfalse );
+		}
+		//G_DebugPrint( WL_WARNING, "Q3_SetAdjustAreaPortals: NOT SUPPORTED IN MP\n");
+	//[/SPPortCompleted]
+	//[/CoOp]
 		break;
 	
 	case SET_DMG_BY_HEAVY_WEAP_ONLY:
-		G_DebugPrint( WL_WARNING, "Q3_SetDmgByHeavyWeapOnly: NOT SUPPORTED IN MP\n");
+	//[CoOp]
+	//[SPPortCompleted]
+		if(!stricmp("true", ((char *)data)))
+		{
+			Q3_SetDmgByHeavyWeapOnly( entID, qtrue );
+		}
+		else
+		{
+			Q3_SetDmgByHeavyWeapOnly( entID, qfalse );
+		}
+		//G_DebugPrint( WL_WARNING, "Q3_SetDmgByHeavyWeapOnly: NOT SUPPORTED IN MP\n");
+	//[/SPPortCompleted]
+	//[/CoOp]
 		break;
 
 	case SET_SHIELDED:
-		G_DebugPrint( WL_WARNING, "Q3_SetShielded: NOT SUPPORTED IN MP\n");
+	//[CoOp]
+	//[SPPortCompleted]
+		if(!stricmp("true", ((char *)data)))
+		{
+			Q3_SetShielded( entID, qtrue );
+		}
+		else
+		{
+			Q3_SetShielded( entID, qfalse );
+		}
+		//G_DebugPrint( WL_WARNING, "Q3_SetShielded: NOT SUPPORTED IN MP\n");
+	//[/SPPortCompleted]
+	//[/CoOp]
 		break;
 
 	case SET_NO_GROUPS:
-		G_DebugPrint( WL_WARNING, "Q3_SetNoGroups: NOT SUPPORTED IN MP\n");
+	//[CoOp]
+	//[SPPortCompleted]
+		if(!stricmp("true", ((char *)data)))
+		{
+			Q3_SetNoGroups( entID, qtrue );
+		}
+		else
+		{
+			Q3_SetNoGroups( entID, qfalse );
+		}
+		//G_DebugPrint( WL_WARNING, "Q3_SetNoGroups: NOT SUPPORTED IN MP\n");
+	//[/SPPortCompleted]
+	//[/CoOp]
 		break;
 
 	case SET_FIRE_WEAPON:
@@ -7823,7 +8021,7 @@ qboolean Q3_Set( int taskID, int entID, const char *type_name, const char *data 
 		//G_DebugPrint( WL_ERROR, "Q3_Set: '%s' is not a valid set field\n", type_name );
 		//[CoOp]
 		//Fixing the declared varible stuff.
-		SetDeclaredVariable( type_name, data );
+		SetVar( type_name, data );
 		//trap_ICARUS_SetVar( taskID, entID, type_name, data );
 		//[/CoOp]
 		break;
@@ -8245,103 +8443,172 @@ ICARUS Declared Variable Code
 -------------------------------------------------------------------------------------------
 */
 
+DeclaredVariable_t *GetDeclaredVariableFromName( const char *name ) {
+	int i = 0;
+	for(i = 0; i < MAX_DECLAREDVARIABLES; i++) {
+		if(!strcmp( DeclaredVariables[i].name, name)) {
+			return &DeclaredVariables[i];
+		}
+	}
+	return NULL;
+}
+
+/*
+-------------------------
+VariableDeclared
+-------------------------
+*/
+int VariableDeclared( const char *name ) {
+	DeclaredVariable_t *var = GetDeclaredVariableFromName( name );
+
+	if ( var != NULL )
+		return var->type;
+	else
+		return VTYPE_NONE;
+}
+
+int NumDeclaredVariables( void ) {
+	int i=0,cnt=0;
+
+	for(i = 0; i < MAX_DECLAREDVARIABLES; i++) {
+		if(DeclaredVariables[i].inuse) cnt++;
+	}
+	return cnt;
+}
 
 int GetStringDeclaredVariable( const char *name, char **value )
 {//returns 1 for success; 0 for fail
-	int i;
-		
-	for( i = 0; i < MAX_DECLAREDVARIABLES; i++ )
-	{
-		if(!strcmp( DeclaredVariables[i].name, name))
-		{
-			*value = DeclaredVariables[i].Data;
-			return 1;	
-		}
+	DeclaredVariable_t *strVar = GetDeclaredVariableFromName( name );
+
+	if ( strVar != NULL ) {
+		*value = strVar->Data;
+		return 1;
 	}
 
-	G_Printf("ICARUS Declared Variable %s not found.\n", name);
+	G_DebugPrint( WL_ERROR, "ICARUS Declared Variable %s not found.\n", name);
 	return 0;
 }
 
 int GetFloatDeclaredVariable( const char *name, float *value )
 {//returns 1 for success; 0 for fail
-	int i;
-		
-	for( i = 0; i < MAX_DECLAREDVARIABLES; i++ )
-	{
-		if(!strcmp( DeclaredVariables[i].name, name))
-		{
-			*value = atof(DeclaredVariables[i].Data);
-			return 1;
-			
-		}
+	DeclaredVariable_t *floatVar = GetDeclaredVariableFromName( name );
+
+	if ( floatVar != NULL ) {
+		*value = atof(floatVar->Data);
+		return 1;
 	}
 
-	G_Printf("ICARUS Declared Variable %s not found.\n", name);
+	G_DebugPrint( WL_ERROR, "ICARUS Declared Variable %s not found.\n", name);
 	return 0;
 }
-
 
 int GetVectorDeclaredVariable( const char *name, vec3_t value )
 {//returns 1 for success; 0 for fail
-	int i;
-		
-	for( i = 0; i < MAX_DECLAREDVARIABLES; i++ )
-	{
-		if(!strcmp( DeclaredVariables[i].name, name))
-		{
-			//Do I need to actually impliment this system?
-			G_Printf("Error:  ICARUS vector declared variables are implimented.  Contact Razor Ace if you need them.\n");
-			/*
-			VectorCopy( DeclaredVariables[i].vectorData, *value );
+	DeclaredVariable_t *vectorVar = GetDeclaredVariableFromName( name );
+
+	if ( vectorVar != NULL ) {
+		const char *str = vectorVar->Data;
+
+		if ( sscanf ( str, "%f %f %f", &value[0], &value[1], &value[2] ) == 3 ) {
 			return 1;
-			*/
+		} else {
+			G_DebugPrint( WL_ERROR, "ICARUS Declared Variable %s failed parse vector.\n", name);
+			return 0;
 		}
 	}
 
-	G_Printf("ICARUS Declared Variable %s not found.\n", name);
+	G_DebugPrint( WL_ERROR, "ICARUS Declared Variable %s not found.\n", name);
 	return 0;
 }
 
-
-void SetDeclaredVariable( const char *name, const char *data )
-{//sets up a declared variable for ICARUS since the engine code for this is borked.
-	int i;
-
-	for( i = 0; i < MAX_DECLAREDVARIABLES; i++ )
-	{//check to see if this variable already exists
-		if(!strcmp( DeclaredVariables[i].name, name))
-		{//update data
-			if(data[0] == '+')
-			{//increment counter
-				float value = atof(DeclaredVariables[i].Data);
-				data++;
-				value += atof(data);
-				strcpy(DeclaredVariables[i].Data, va("%f\0", value));
-			}
-			else
-			{//just overwrite
-				strcpy(DeclaredVariables[i].Data, data);
-			}
+/*
+-------------------------
+SetVarReal
+-------------------------
+*/
+void SetVarReal( const char *name, const char *value, int type )
+{
+	DeclaredVariable_t *var = GetDeclaredVariableFromName( name );
+	if ( var != NULL ) {
+		Q_strncpyz(var->Data, value, sizeof(var->Data));
+		return;
+	} else {
+		if ( NumDeclaredVariables() > MAX_DECLAREDVARIABLES ) {
+			G_DebugPrint( WL_ERROR, "Too many variables already declared, maximum is %d\n", MAX_DECLAREDVARIABLES );
+			return;
+		}
+		if ( !var->inuse ) {
+			Q_strncpyz(var->name, name, sizeof(var->name));
+			Q_strncpyz(var->Data, value, sizeof(var->Data));
+			var->type = type;
+			var->inuse = qtrue;
 			return;
 		}
 	}
-
-	//doesn't exist, fill an open slot
-	for( i = 0; i < MAX_DECLAREDVARIABLES; i++ )
-	{
-		if(!DeclaredVariables[i].inuse)
-		{//empty slot, place it here.
-			strcpy(DeclaredVariables[i].name, name);
-			strcpy(DeclaredVariables[i].Data, data);
-			DeclaredVariables[i].inuse = qtrue;
-			return;
-		}
-	}
-
-	G_Printf("Error:  Too many declared variables in the ICARUS scripting.\n");
 }
 
+/*
+-------------------------
+SetFloatVarReal
+-------------------------
+*/
+void SetFloatVarReal( const char *name, float value )
+{
+	DeclaredVariable_t *var = GetDeclaredVariableFromName( name );
+	if ( var != NULL ) {
+		Q_strncpyz(var->Data, va("%f", value), sizeof(var->Data));
+		return;
+	} else {
+		if ( NumDeclaredVariables() > MAX_DECLAREDVARIABLES ) {
+			G_DebugPrint( WL_ERROR, "Too many variables already declared, maximum is %d\n", MAX_DECLAREDVARIABLES );
+			return;
+		}
+		if ( !var->inuse ) {
+			Q_strncpyz(var->name, name, sizeof(var->name));
+			Q_strncpyz(var->Data, va("%f", value), sizeof(var->Data));
+			var->type = VTYPE_FLOAT;
+			var->inuse = qtrue;
+			return;
+		}
+	}
+}
+
+/*
+-------------------------
+SetVar
+-------------------------
+*/
+void SetVar( const char *type_name, const char *data ) {
+	int		vret = VariableDeclared( type_name ) ;
+	float	float_data;
+	float	val = 0.0f;
+	
+	if ( vret != VTYPE_NONE ) {
+		switch ( vret ) {
+			case VTYPE_FLOAT:
+				//Check to see if increment command
+				if ( (val = Q3_GameSideCheckStringCounterIncrement( data )) ) {
+					GetFloatDeclaredVariable( type_name, &float_data );
+					float_data += val;
+				} else {
+					float_data = atof(data);
+				}
+				SetFloatVarReal( type_name, float_data );
+				break;
+
+			case VTYPE_STRING:
+				SetVarReal( type_name, data, VTYPE_STRING );
+				break;
+
+			case VTYPE_VECTOR:
+				SetVarReal( type_name, data, VTYPE_VECTOR );
+				break;
+		}
+		return;
+	}
+
+	G_DebugPrint( WL_ERROR, "%s variable or field not found!\n", type_name );
+}
 
 /*
 -------------------------------------------------------------------------------------------

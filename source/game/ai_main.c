@@ -8420,6 +8420,9 @@ int gUpdateVars = 0;
 BotAIStartFrame
 ==================
 */
+//[BotTweaks]
+extern void UpdateEditorMode(void);
+//[/BotTweaks]
 int BotAIStartFrame(int time) {
 	int i;
 	int elapsed_time, thinktime;
@@ -8443,8 +8446,16 @@ int BotAIStartFrame(int time) {
 		trap_Cvar_Update(&bot_fps);
 		//[/BotTweaks]
 
+		//[BotTweaks]
+		trap_Cvar_Update(&bot_wp_edit);
+		//[/BotTweaks]
+
 		gUpdateVars = level.time + 1000;
 	}
+
+	//[BotTweaks]
+	UpdateEditorMode();
+	//[/BotTweaks]
 
 	G_CheckBotSpawn();
 

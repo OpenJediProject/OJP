@@ -2808,6 +2808,9 @@ teamnodmg - if 1, team 1 can't damage this. If 2, team 2 can't damage this.
 void SP_func_breakable( gentity_t *self ) 
 {
 	int t;
+	//[CoOp]
+	int forceVisible = 0;
+	//[/CoOp]
 	char *s = NULL;
 
 	G_SpawnString("playfx", "", &s);
@@ -2893,6 +2896,18 @@ void SP_func_breakable( gentity_t *self )
 		G_Error("func_breakable with NULL model\n");
 	}
 	InitBBrush( self );
+
+	//[CoOp]
+	G_SpawnInt( "forcevisible", "0", &forceVisible );
+	if ( forceVisible )
+	{//can see these through walls with force sight, so must be broadcast
+		if ( VectorCompare( self->s.origin, vec3_origin ) )
+		{//no origin brush
+			self->r.svFlags |= SVF_BROADCAST;
+		}
+		self->s.eFlags |= EF_FORCE_VISIBLE;
+	}
+	//[/CoOp]
 
 	if ( !self->radius )
 	{//numchunks multiplier
@@ -3352,5 +3367,4 @@ void SP_func_wall( gentity_t *ent )
 	ent->use = use_wall;
 
 	trap_LinkEntity (ent);
-
 }

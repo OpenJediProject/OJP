@@ -262,6 +262,10 @@ typedef enum //# setType_e
 	SET_OBJECTIVE_SUCCEEDED,//## %t="OBJECTIVES" # Mark objective as completed
 	SET_OBJECTIVE_FAILED,	//## %t="OBJECTIVES" # Mark objective as failed
 
+	//[CoOp]
+	SET_OBJECTIVE_LIGHTSIDE,	//## # Used to get whether the player has chosen the light (succeeded) or dark (failed) side.
+	//[/CoOp]
+
 	SET_MISSIONFAILED,		//## %t="MISSIONFAILED" # Mission failed screen activates
 
 	SET_TACTICAL_SHOW,		//## %t="TACTICAL" # Show tactical info on mission objectives screen

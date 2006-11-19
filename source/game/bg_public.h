@@ -23,7 +23,7 @@
 //This is the current keyword used to denote the current OJP Basic and Enhanced client plugins.  
 //These values should be changed whenever something is changed that would make the new clients 
 //incompatiable with previous versions of OJP Basic or Enhanced (on individual basis).
-#define CURRENT_OJPENHANCED_CLIENTVERSION		"OJP Enhanced v0.0.9q"
+#define CURRENT_OJPENHANCED_CLIENTVERSION		"OJP Enhanced v0.0.9r"
 //[/ClientPlugInDetect]
 
 #define	STEPSIZE		18
@@ -744,7 +744,10 @@ typedef enum {
 #define	EF_JETPACK_ACTIVE		(1<<11)		//jetpack is activated
 											//RACC - also used to flag vehicle missiles
 
-#define EF_NOT_USED_1			(1<<12)		// not used
+//[CoOp]
+#define EF_DISABLE_SHADER_ANIM	(1<<12)		// Normally shader animation chugs along, but movers can force shader animation to be on frame 1
+//#define EF_NOT_USED_1			(1<<12)		// not used
+//[/CoOp]
 
 #define	EF_TALK					(1<<13)		// draw a talk balloon
 #define	EF_CONNECTION			(1<<14)		// draw a connection trouble sprite
@@ -776,7 +779,10 @@ typedef enum {
 #define EF_JETPACK				(1<<29)		//rww - wearing a jetpack
 #define EF_JETPACK_FLAMING		(1<<30)		//rww - jetpack fire effect
 
-#define	EF_NOT_USED_5			(1<<31)		// not used
+//[CoOp]
+#define EF_FORCE_VISIBLE		(1<<31)		// Always visible with force sight
+//#define EF_NOT_USED_5			(1<<31)		// not used
+//[/CoOp]
 
 //These new EF2_??? flags were added for NPCs, they really should not be used often.
 //NOTE: we only allow 10 of these!
