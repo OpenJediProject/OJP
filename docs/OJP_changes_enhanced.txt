@@ -12,7 +12,10 @@ Version 0.0.9r:
 		Experience System:
 			- Added bowcaster skill.
 
-	Improvements/Fixes:		
+	Improvements/Fixes:	
+
+		Animation Tweaks:
+			- Changed the primary gun fire animation back to normal since the altered animaton makes the gun block the player's view while using True View. 	
 	
 		Blaster Bolt Block System:
 			- Fixed problem where having no levels in saber defense gave players 100% level 3 reflections.
