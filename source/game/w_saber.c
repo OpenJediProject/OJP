@@ -5378,6 +5378,21 @@ qboolean G_DoDodge( gentity_t *self, gentity_t *shooter, vec3_t dmgOrigin, int h
 		return qfalse;
 	}
 
+	if(self->NPC 
+		&& (self->client->NPC_class == CLASS_SABER_DROID ||
+			self->client->NPC_class == CLASS_ASSASSIN_DROID ||
+			self->client->NPC_class == CLASS_GONK ||
+			self->client->NPC_class == CLASS_MOUSE ||
+			self->client->NPC_class == CLASS_PROBE ||
+			self->client->NPC_class == CLASS_PROTOCOL ||
+			self->client->NPC_class == CLASS_R2D2 ||
+			self->client->NPC_class == CLASS_R5D2 ||
+			self->client->NPC_class == CLASS_SEEKER ||
+			self->client->NPC_class == CLASS_INTERROGATOR) )
+	{//non-humans don't get Dodge.
+		return qfalse;
+	}
+
 	if( dpcost == -1 )
 	{//can't dodge this.
 		if(g_debugdodge.integer)
@@ -5924,10 +5939,15 @@ static GAME_INLINE qboolean CheckSaberDamage(gentity_t *self, int rSaberNum, int
 	{
 		return qfalse;
 	}
+	/* 
+	//racc - I've modified the super duper interpolation so that it checks for possible collisions at the starting area
+	//before tracing thru to the current position.  As such, you'll only get startsolid on that initial trace and if that's 
+	//the case, we want to count that as a true impact anyway.  Therefore, this bit of code is no longer needed.
 	else if ( tr.startsolid && !extrapolate && d_saberInterpolate.integer == 2)
 	{//ok, we started inside an object and we're using the super duper interpolation system
 		return 2;
 	}
+	*/
 
 
 	//added damage setting for thrown sabers
@@ -11284,36 +11304,31 @@ nextStep:
 						VectorSubtract(self->client->saber[rSaberNum].blade[rBladeNum].trail.tip, self->client->saber[rSaberNum].blade[rBladeNum].trail.base, olddir);
 						VectorNormalize(olddir);
 
-						while( dist < self->client->saber[rSaberNum].blade[rBladeNum].lengthMax )
-						{
-							//set new blade position
-							VectorMA( boltOrigin, dist, self->client->saber[rSaberNum].blade[rBladeNum].muzzleDir, endpos );
-						
-							//set old blade position
-							VectorMA( self->client->saber[rSaberNum].blade[rBladeNum].trail.base, dist, olddir, startpos );
+						//start off by firing a trace down the old saber position to see if it's still inside something.
+						if(CheckSaberDamage(self, rSaberNum, rBladeNum, self->client->saber[rSaberNum].blade[rBladeNum].trail.base, 
+							self->client->saber[rSaberNum].blade[rBladeNum].trail.tip, qfalse, (MASK_PLAYERSOLID|CONTENTS_LIGHTSABER|MASK_SHOT), qtrue) )
+						{//saber was still in something at it's previous position, just check damage there.
+						}
+						else
+						{//fire a series of traces thru the space the saber moved thru where it moved during the last frame.
+							//This is done linearly so it's not going to 100% accurately reflect the normally curved movement
+							//of the saber.
+							while( dist < self->client->saber[rSaberNum].blade[rBladeNum].lengthMax )
+							{
+								//set new blade position
+								VectorMA( boltOrigin, dist, self->client->saber[rSaberNum].blade[rBladeNum].muzzleDir, endpos );
 							
-							checksaberreturn = CheckSaberDamage(self, rSaberNum, rBladeNum, startpos, endpos, qfalse, (MASK_PLAYERSOLID|CONTENTS_LIGHTSABER|MASK_SHOT), qfalse);
-							
-							if(checksaberreturn == 2)
-							{//startsolid, meaning your blade is already inside something in the
-								//previous frame.  Shoot the trace straight down the old blade
-								//position to get an accurate reading on the impact point.
-								if(!CheckSaberDamage(self, rSaberNum, rBladeNum, 
-										self->client->saber[rSaberNum].blade[rBladeNum].trail.base, 
-										self->client->saber[rSaberNum].blade[rBladeNum].trail.tip, 
-										qfalse, (MASK_PLAYERSOLID|CONTENTS_LIGHTSABER|MASK_SHOT), qtrue))
-								{//no dice, just do it with what we got then
-									CheckSaberDamage(self, rSaberNum, rBladeNum, boltOrigin, end, qfalse, (MASK_PLAYERSOLID|CONTENTS_LIGHTSABER|MASK_SHOT), qtrue);
-								}	
-								break;
+								//set old blade position
+								VectorMA( self->client->saber[rSaberNum].blade[rBladeNum].trail.base, dist, olddir, startpos );
+								
+								if(CheckSaberDamage(self, rSaberNum, rBladeNum, startpos, endpos, qfalse, (MASK_PLAYERSOLID|CONTENTS_LIGHTSABER|MASK_SHOT), qtrue))
+								{//saber hit something, that's good enough for us!
+									break;
+								}
+
+								//didn't hit anything, slide down the blade a bit and try again.
+								dist += d_saberBoxTraceSize.value + self->client->saber[rSaberNum].blade[rBladeNum].radius;
 							}
-							else if(checksaberreturn)
-							{//hit!
-								break;
-							}
-							
-							//boost the distance down the blade
-							dist += d_saberBoxTraceSize.value + self->client->saber[rSaberNum].blade[rBladeNum].radius;
 						}
 					}
 					else

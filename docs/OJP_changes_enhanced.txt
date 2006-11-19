@@ -23,7 +23,10 @@ Version 0.0.9r:
 		CoOp:
 			- Disabled the Force Powers spawn scripting since it's incompatable with experience system. 
 
-		ExpSys:
+		Dodge System:
+			- Non-humanoids can't do body dodges anymore.
+
+		Experience System:
 			- Fixed problem with the "Join Game" button not working if player changed their Force Powers right after connecting to a game.
 
 		Flamethrower:
@@ -31,6 +34,9 @@ Version 0.0.9r:
 			- Doubled the jetfuel consumption rate.
 			- Retooled the fire control to allow the flamethrower to turn off faster.
 			- Fixed issue where the flamethrower effect continued when players died.
+
+		Super Duper Interplotation System:
+			- Tweaked the super duper interpolation for the sabers.  This should reduce the algorithm's CPU usage.  
 
 
 Version 0.0.9q:
