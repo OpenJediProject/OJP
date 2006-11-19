@@ -21,13 +21,14 @@ Version 0.0.9r:
 			- Fixed problem where having no levels in saber defense gave players 100% level 3 reflections.
 
 		CoOp:
-			- Disabled the Force Powers spawn scripting since it's incompatable with experience system. 
+			- Disabled the Force Powers spawn scripting since it's incompatable with experience system.
 
 		Dodge System:
 			- Non-humanoids can't do body dodges anymore.
 
 		Experience System:
 			- Fixed problem with the "Join Game" button not working if player changed their Force Powers right after connecting to a game.
+			- Fixed UpdateForceUsed using >= level 3 instead of >= NumberOfSkillRanks.
 
 		Flamethrower:
 			- Can't use the flamethrower during ledgegrabs.
