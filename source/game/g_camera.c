@@ -917,3 +917,27 @@ void DisablePlayerCameraPos(void)
 	}
 }
 
+
+void UpdatePlayerCameraOrigin(gentity_t * ent, vec3_t newPos)
+{//this alters the position at which the player will return to after the camera commands are over.
+	if(!in_camera || ent->s.number >= MAX_CLIENTS || !playerCamPos[ent->s.number].inuse)
+	{//not using camera or not able to use camera
+		return;
+	}
+
+	VectorCopy(newPos, playerCamPos[ent->s.number].origin);
+
+}
+
+
+void UpdatePlayerCameraAngle(gentity_t * ent, vec3_t newAngle)
+{//this function alters the angle at which the player will return to after the camera commands are over.
+	if(!in_camera || ent->s.number >= MAX_CLIENTS || !playerCamPos[ent->s.number].inuse)
+	{//not using camera or not able to use camera
+		return;
+	}
+
+	VectorCopy(newAngle, playerCamPos[ent->s.number].viewangles);
+
+}
+

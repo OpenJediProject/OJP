@@ -3985,6 +3985,11 @@ ALTFIRE - fire the alt-fire of the chosen weapon
 TOGGLE - keep firing until used again (fires at intervals of "wait")
 
 "wait" - debounce time between refires (defaults to 500)
+//[CoOp]
+//SP entity attributes
+"delay" - speed of WP_THERMAL (default is 900)
+"random" - ranges from 0 to random, added to wait (defaults to 0)
+//[/CoOp]
 
 "target" - what to aim at (will update aim every frame if it's a moving target)  
 
@@ -4057,15 +4062,27 @@ void G_FreeClientForShooter(gclient_t *cl)
 	}
 }
 
+//[SPPortComplete]
 void misc_weapon_shooter_fire( gentity_t *self )
 {
 	FireWeapon( self, (self->spawnflags&1) );
 	if ( (self->spawnflags&2) )
 	{//repeat
 		self->think = misc_weapon_shooter_fire;
-		self->nextthink = level.time + self->wait;
+		//[CoOp]
+		if (self->random)
+		{
+			self->nextthink = level.time + self->wait + (int)(random()*self->random);
+		}
+		else
+		{
+			self->nextthink = level.time + self->wait;
+		}
+		//self->nextthink = level.time + self->wait;
+		//[/CoOp]
 	}
 }
+
 
 void misc_weapon_shooter_use ( gentity_t *self, gentity_t *other, gentity_t *activator )
 {
@@ -4083,6 +4100,7 @@ void misc_weapon_shooter_use ( gentity_t *self, gentity_t *other, gentity_t *act
 	misc_weapon_shooter_fire( self );
 }
 
+
 void misc_weapon_shooter_aim( gentity_t *self )
 {
 	//update my aim
@@ -4092,9 +4110,17 @@ void misc_weapon_shooter_aim( gentity_t *self )
 		if ( targ )
 		{
 			self->enemy = targ;
+			//[CoOp]
+			//SP Code
+			VectorSubtract( targ->r.currentOrigin, self->r.currentOrigin, self->client->renderInfo.muzzleDir );
+			VectorCopy( targ->r.currentOrigin, self->pos1 );
+			vectoangles( self->client->renderInfo.muzzleDir, self->client->ps.viewangles );
+			/*
 			VectorSubtract( targ->r.currentOrigin, self->r.currentOrigin, self->pos1 );
 			VectorCopy( targ->r.currentOrigin, self->pos1 );
 			vectoangles( self->pos1, self->client->ps.viewangles );
+			*/
+			//[/CoOp]
 			SetClientViewAngle( self, self->client->ps.viewangles );
 			//FIXME: don't keep doing this unless target is a moving target?
 			self->nextthink = level.time + FRAMETIME;
@@ -4105,6 +4131,7 @@ void misc_weapon_shooter_aim( gentity_t *self )
 		}
 	}
 }
+
 
 #include "../namespace_begin.h"
 extern stringID_table_t WPTable[];
@@ -4123,15 +4150,25 @@ void SP_misc_weapon_shooter( gentity_t *self )
 	self->s.weapon = self->client->ps.weapon = WP_BLASTER;
 	if ( s && s[0] )
 	{//use a different weapon
-		self->s.weapon = self->client->ps.weapon = GetIDForString( WPTable, s );
+		//[CoOp]
+		//added sanity check to prevent a -1 weapon being set
+		int newWeap = GetIDForString( WPTable, s );
+
+		if(newWeap != -1)
+		{
+			self->s.weapon = self->client->ps.weapon = newWeap;
+		}
+		//self->s.weapon = self->client->ps.weapon = GetIDForString( WPTable, s );
+		//[/CoOp]
 	}
 
+	//racc - load the weapon assets on the clients for this weapon.
 	RegisterItem(BG_FindItemForWeapon(self->s.weapon));
 
 	//set where our muzzle is
 	VectorCopy( self->s.origin, self->client->renderInfo.muzzlePoint );
 	//permanently updated (don't need for MP)
-	//self->client->renderInfo.mPCalcTime = Q3_INFINITE;
+	//self->client->renderInfo.mPCalcTime = Q3_INFINITE; //racc - is must be the update time for the renderInfo.  Cool!
 
 	//set up to link
 	if ( self->target )
@@ -4142,7 +4179,10 @@ void SP_misc_weapon_shooter( gentity_t *self )
 	else
 	{//just set aim angles
 		VectorCopy( self->s.angles, self->client->ps.viewangles );
-		AngleVectors( self->s.angles, self->pos1, NULL, NULL );
+		//[CoOp]
+		AngleVectors( self->s.angles, self->client->renderInfo.muzzleDir, NULL, NULL );
+		//AngleVectors( self->s.angles, self->pos1, NULL, NULL );
+		//[/CoOp]
 	}
 
 	//set up to fire when used
@@ -4153,6 +4193,7 @@ void SP_misc_weapon_shooter( gentity_t *self )
 		self->wait = 500;
 	}
 }
+//[/SPPortComplete]
 
 /*QUAKED misc_weather_zone (0 .5 .8) ? 
 Determines a region to check for weather contents - will significantly reduce load time

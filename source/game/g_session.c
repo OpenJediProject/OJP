@@ -193,7 +193,11 @@ void G_InitSessionData( gclient_t *client, char *userinfo, qboolean isBot ) {
 	client->sess.siegeDesiredTeam = TEAM_FREE;
 
 	// initial team determination
-	if ( g_gametype.integer >= GT_TEAM ) {
+	//[CoOp]
+	//CoOp counts as a multi-team game.
+	if ( g_gametype.integer >= GT_SINGLE_PLAYER) {
+	//if ( g_gametype.integer >= GT_TEAM ) {
+	//[/CoOp]
 		if ( g_teamAutoJoin.integer ) 
 		{
 			//[AdminSys]
@@ -241,7 +245,10 @@ void G_InitSessionData( gclient_t *client, char *userinfo, qboolean isBot ) {
 			case GT_FFA:
 			case GT_HOLOCRON:
 			case GT_JEDIMASTER:
-			case GT_SINGLE_PLAYER:
+			//[CoOp]
+			//CoOp counts as a multi-team game.
+			//case GT_SINGLE_PLAYER:
+			//[/CoOp]
 				if ( g_maxGameClients.integer > 0 && 
 					level.numNonSpectatorClients >= g_maxGameClients.integer ) {
 					sess->sessionTeam = TEAM_SPECTATOR;

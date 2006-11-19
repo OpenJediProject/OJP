@@ -16,6 +16,9 @@
 //[ROFF]
 #include "g_roff.h"
 //[/ROFF]
+//[CoOp]
+#include "g_camera.h"
+//[/CoOp]
 
 #include "../namespace_begin.h"
 qboolean BG_SabersOff( playerState_t *ps );
@@ -1246,6 +1249,60 @@ Q3_RemoveEnt
   Argument		: sharedEntity_t *victim
 ============
 */
+//[SPPortComplete]
+//[CoOp]
+static void Q3_RemoveEnt( gentity_t *victim )
+{
+	if (!victim || !victim->inuse)
+	{
+		return;
+	}
+
+	if( victim->client )
+	{
+		if ( victim->client->NPC_class == CLASS_VEHICLE )
+		{//eject everyone out of a vehicle that's about to remove itself
+			Vehicle_t *pVeh = victim->m_pVehicle;
+			if ( pVeh && pVeh->m_pVehicleInfo )
+			{
+				pVeh->m_pVehicleInfo->EjectAll( pVeh );
+			}
+		}
+		//ClientDisconnect(ent);
+		victim->s.eFlags |= EF_NODRAW;
+		//victim->svFlags &= ~SVF_NPC; //RAFIXME - impliment this flag?
+		victim->s.eType = ET_INVISIBLE;
+		victim->r.contents = 0;
+		victim->health = 0;
+		victim->targetname = NULL;
+
+		if ( victim->NPC && victim->NPC->tempGoal != NULL )
+		{
+			G_FreeEntity( victim->NPC->tempGoal );
+			victim->NPC->tempGoal = NULL;
+		}
+		if ( victim->client->ps.saberEntityNum != ENTITYNUM_NONE && victim->client->ps.saberEntityNum > 0 )
+		{
+			if ( g_entities[victim->client->ps.saberEntityNum].inuse )
+			{
+				G_FreeEntity( &g_entities[victim->client->ps.saberEntityNum] );
+			}
+			victim->client->ps.saberEntityNum = ENTITYNUM_NONE;
+		}
+		//Disappear in half a second
+		victim->think = G_FreeEntity;
+		victim->nextthink = level.time + 500;
+		return;
+	}
+	else
+	{
+		victim->think = G_FreeEntity;
+		victim->nextthink = level.time + 100;
+	}
+}
+
+
+/* basejka method
 void Q3_RemoveEnt( gentity_t *victim )
 {
 	if( victim->client )
@@ -1296,7 +1353,7 @@ void Q3_RemoveEnt( gentity_t *victim )
 		victim->e_ThinkFunc = thinkF_G_FreeEntity;
 		victim->nextthink = level.time + 500;
 		return;
-		*/
+		*//*
 	}
 	else
 	{
@@ -1304,6 +1361,9 @@ void Q3_RemoveEnt( gentity_t *victim )
 		victim->nextthink = level.time + 100;
 	}
 }
+*/
+//[/CoOp]
+//[/SPPortComplete]
 
 
 /*
@@ -2331,6 +2391,11 @@ Q3_SetAngles
 Sets the angles of an entity directly
 =============
 */
+//[SPPortComplete]
+//[CoOp]
+void UpdatePlayerCameraAngle(gentity_t * ent, vec3_t newAngle);
+static void Q3_SetDYaw( int entID, float data );
+//[/CoOp]
 static void Q3_SetAngles( int entID, vec3_t angles )
 {
 	gentity_t	*ent = &g_entities[entID];
@@ -2345,16 +2410,31 @@ static void Q3_SetAngles( int entID, vec3_t angles )
 	if (ent->client)
 	{
 		SetClientViewAngle( ent, angles );
+		//[CoOp]
+		if(in_camera && ent->s.number < MAX_CLIENTS)
+		{//the players are currently in a cutscene.  This means that we need to change the player's stored origin.
+			UpdatePlayerCameraAngle(ent, angles);
+		}
+
+		//SP Code
+		if ( ent->NPC )
+		{
+			Q3_SetDYaw( entID, angles[YAW] );
+		}
+		//[/CoOp]
 	}
 	else
 	{
 		VectorCopy( angles, ent->s.angles );
+		//[CoOp]
+		//SP Code
+		VectorCopy( angles, ent->s.apos.trBase );
+		VectorCopy( angles, ent->r.currentAngles );
+		//[/CoOp]
 	}
 	trap_LinkEntity( ent );
 }
 
-//[CoOp]
-//[SPPortComplete]
 /*
 ============
 Q3_SetAdjustAreaPortals
@@ -3311,15 +3391,52 @@ Q3_SetDPitch
   Argument		: float data
 ============
 */
+//[SPPortComplete]
+//[CoOp]
 static void Q3_SetDPitch( int entID, float data )
 {
-//[CoOp]
-//[SuperDindon]	
-	SET_NPC(desiredPitch);
+	//[CoOp]
+	int pitchMin;
+	int pitchMax;
+	gentity_t	*ent  = &g_entities[entID];
+
+	if ( !ent )
+	{
+		G_DebugPrint( WL_WARNING, "Q3_SetDPitch: invalid entID %d\n", entID);
+		return;
+	}
+	
+	if ( !ent->NPC || !ent->client )
+	{
+		G_DebugPrint( WL_ERROR, "Q3_SetDPitch: '%s' is not an NPC\n", ent->targetname );
+		return;
+	}
+	
+	pitchMin = -ent->client->renderInfo.headPitchRangeUp + 1;
+	pitchMax = ent->client->renderInfo.headPitchRangeDown - 1;
+
+	//clamp angle to -180 -> 180
+	data = AngleNormalize180( data );
+
+	//Clamp it to my valid range
+	if ( data < -1 )
+	{
+		if ( data < pitchMin )
+		{
+			data = pitchMin;
+		}
+	}
+	else if ( data > 1 )
+	{
+		if ( data > pitchMax )
+		{
+			data = pitchMax;
+		}
+	}
+
+	ent->NPC->lockedDesiredPitch = ent->NPC->desiredPitch = data;
 	//G_DebugPrint( WL_WARNING, "Q3_SetDPitch: NOT SUPPORTED IN MP\n");
-//[/CoOp]
-//[/SuperDindon]
-	return;
+	//[/CoOp]
 }
 
 
@@ -3334,14 +3451,34 @@ Q3_SetDYaw
 */
 static void Q3_SetDYaw( int entID, float data )
 {
-//[CoOp]
-//[SuperDindon]
+	//[CoOp]
+	gentity_t	*ent  = &g_entities[entID];
+	
+	if ( !ent )
+	{
+		G_DebugPrint( WL_WARNING, "Q3_SetDYaw: invalid entID %d\n", entID);
+		return;
+	}
+	
+	if ( !ent->NPC )
+	{
+		G_DebugPrint( WL_ERROR, "Q3_SetDYaw: '%s' is not an NPC\n", ent->targetname );
+		return;
+	}
+
+	if(!ent->enemy)
+	{//don't mess with this if they're aiming at someone
+		ent->NPC->lockedDesiredYaw = ent->NPC->desiredYaw = ent->s.angles[1] = data;
+	}
+	else
+	{
+		G_DebugPrint( WL_WARNING, "Could not set DYAW: '%s' has an enemy (%s)!\n", ent->targetname, ent->enemy->targetname );
+	}
 	//G_DebugPrint( WL_WARNING, "Q3_SetDYaw: NOT SUPPORTED IN MP\n");
-	SET_NPC(desiredYaw);
-//[/CoOp]
-//[/SuperDindon]
-	return;
+	//[/CoOp]
 }
+//[/SPPortComplete]
+
 
 
 /*
@@ -6740,6 +6877,9 @@ static void Q3_LCARSText ( const char *id)
 void UnLockDoors(gentity_t *const ent);
 void LockDoors(gentity_t *const ent);
 
+//[CoOp]
+void UpdatePlayerCameraOrigin(gentity_t * ent, vec3_t newPos);
+//[/CoOp]
 //returns qtrue if it got to the end, otherwise qfalse.
 qboolean Q3_Set( int taskID, int entID, const char *type_name, const char *data )
 {
@@ -6776,6 +6916,11 @@ qboolean Q3_Set( int taskID, int entID, const char *type_name, const char *data 
 		}
 		
 		//[CoOp]
+		if(in_camera && ent->s.number < MAX_CLIENTS)
+		{//the players are currently in a cutscene.  This means that we need to change the player's stored origin.
+			UpdatePlayerCameraOrigin(ent, vector_data);
+		}
+
 		//SP Code
 		if ( ent->client )
 		{//clear jump start positions so we don't take damage when we land...
