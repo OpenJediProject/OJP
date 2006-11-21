@@ -654,6 +654,8 @@ typedef enum
 	SK_BACTA,		//bacta tank skill
 	SK_FLAMETHROWER,//flamethrower skill
 	SK_BOWCASTER,	//bowcaster skill
+	SK_FORCEFIELD,	//forcefield skill
+	SK_CLOAK,		//cloaking device skill
 	NUM_SKILLS
 } skills_t;
 

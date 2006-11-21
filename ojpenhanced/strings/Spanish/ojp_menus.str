@@ -97,6 +97,22 @@ LANG_SPANISH		"#same"
 REFERENCE	    DESC_SKILL_BOWCASTER
 LANG_ENGLISH	"Gains the user a Bowcaster."
 LANG_SPANISH		"#same"
+
+REFERENCE	    SKILL_FORCEFIELD
+LANG_ENGLISH	    "Force Field:"
+LANG_SPANISH		"#same"
+
+REFERENCE	    DESC_SKILL_BOWCASTER
+LANG_ENGLISH	"Gains the user a portable ray shield."
+LANG_SPANISH		"#same"
+
+REFERENCE	    SKILL_CLOAK
+LANG_ENGLISH	    "Cloaking Device:"
+LANG_SPANISH		"#same"
+
+REFERENCE	    DESC_SKILL_CLOAK
+LANG_ENGLISH	"Gains the user a cloaking device."
+LANG_SPANISH		"#same"
 //[/ExpSys]
 
 //[Flamethrower]

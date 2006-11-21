@@ -11,6 +11,8 @@ Version 0.0.9r:
 
 		Experience System:
 			- Added bowcaster skill.
+			- Added cloaking device skill.
+			- Added force field skill.
 
 	Improvements/Fixes:	
 

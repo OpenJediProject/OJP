@@ -3366,6 +3366,8 @@ static int UI_OwnerDrawWidth(int ownerDraw, float scale) {
 	case UI_FORCE_RANK_BACTA:
 	case UI_FORCE_RANK_FLAMETHROWER:
 	case UI_FORCE_RANK_BOWCASTER:
+	case UI_FORCE_RANK_FORCEFIELD:
+	case UI_FORCE_RANK_CLOAK:
 		if(ownerDraw < UI_FORCE_RANK_JETPACK)
 		{
 			findex = (ownerDraw - UI_FORCE_RANK)-1;
@@ -3859,6 +3861,8 @@ static void UI_OwnerDraw(float x, float y, float w, float h, float text_x, float
 	case UI_FORCE_RANK_BACTA:
 	case UI_FORCE_RANK_FLAMETHROWER:
 	case UI_FORCE_RANK_BOWCASTER:
+	case UI_FORCE_RANK_FORCEFIELD:
+	case UI_FORCE_RANK_CLOAK:
 	//[/ExpSys]
 
 //		uiForceRank
@@ -5197,6 +5201,8 @@ static qboolean UI_OwnerDrawHandleKey(int ownerDraw, int flags, float *special, 
 	case UI_FORCE_RANK_BACTA:
 	case UI_FORCE_RANK_FLAMETHROWER:
 	case UI_FORCE_RANK_BOWCASTER:
+	case UI_FORCE_RANK_FORCEFIELD:
+	case UI_FORCE_RANK_CLOAK:
 		if(ownerDraw < UI_FORCE_RANK_JETPACK)
 		{
 			findex = (ownerDraw - UI_FORCE_RANK)-1;

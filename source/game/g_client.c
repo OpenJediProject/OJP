@@ -4111,6 +4111,16 @@ void ClientSpawn(gentity_t *ent) {
 			client->ps.stats[STAT_HOLDABLE_ITEMS] |= (1 << HI_JETPACK);
 		}
 
+		if(client->skillLevel[SK_FORCEFIELD])
+		{//give the player the force field item
+			client->ps.stats[STAT_HOLDABLE_ITEMS] |= (1 << HI_SHIELD);
+		}
+
+		if(client->skillLevel[SK_CLOAK])
+		{//give the player the cloaking device
+			client->ps.stats[STAT_HOLDABLE_ITEMS] |= (1 << HI_CLOAK);
+		}
+
 		if(client->skillLevel[SK_BACTA] == FORCE_LEVEL_2)
 		{
 			client->ps.stats[STAT_HOLDABLE_ITEMS] |= (1 << HI_MEDPAC_BIG);

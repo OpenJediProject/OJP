@@ -76,6 +76,18 @@ LANG_ENGLISH	    "Bowcaster:"
 
 REFERENCE	    DESC_SKILL_BOWCASTER
 LANG_ENGLISH	"Gains the user a Bowcaster."
+
+REFERENCE	    SKILL_FORCEFIELD
+LANG_ENGLISH	    "Force Field:"
+
+REFERENCE	    DESC_SKILL_BOWCASTER
+LANG_ENGLISH	"Gains the user a portable ray shield."
+
+REFERENCE	    SKILL_CLOAK
+LANG_ENGLISH	    "Cloaking Device:"
+
+REFERENCE	    DESC_SKILL_CLOAK
+LANG_ENGLISH	"Gains the user a cloaking device."
 //[/ExpSys]
 
 //[Flamethrower]

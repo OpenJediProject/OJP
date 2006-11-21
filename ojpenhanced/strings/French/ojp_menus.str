@@ -97,6 +97,22 @@ LANG_FRENCH		"#same"
 REFERENCE	    DESC_SKILL_BOWCASTER
 LANG_ENGLISH	"Gains the user a Bowcaster."
 LANG_FRENCH		"#same"
+
+REFERENCE	    SKILL_FORCEFIELD
+LANG_ENGLISH	    "Force Field:"
+LANG_FRENCH		"#same"
+
+REFERENCE	    DESC_SKILL_BOWCASTER
+LANG_ENGLISH	"Gains the user a portable ray shield."
+LANG_FRENCH		"#same"
+
+REFERENCE	    SKILL_CLOAK
+LANG_ENGLISH	    "Cloaking Device:"
+LANG_FRENCH		"#same"
+
+REFERENCE	    DESC_SKILL_CLOAK
+LANG_ENGLISH	"Gains the user a cloaking device."
+LANG_FRENCH		"#same"
 //[/ExpSys]
 
 //[Flamethrower]
