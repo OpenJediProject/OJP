@@ -11299,7 +11299,6 @@ nextStep:
 					if ( (level.time-self->client->saber[rSaberNum].blade[rBladeNum].trail.lastTime) < 100 && BG_SaberInFullDamageMove(&self->client->ps, self->localAnimIndex) )
 					{//only do the full swing interpolation while in a true attack swing.
 						vec3_t olddir, endpos, startpos;
-						int checksaberreturn = 0;
 						float dist = (d_saberBoxTraceSize.value + self->client->saber[rSaberNum].blade[rBladeNum].radius)*0.5f;
 						VectorSubtract(self->client->saber[rSaberNum].blade[rBladeNum].trail.tip, self->client->saber[rSaberNum].blade[rBladeNum].trail.base, olddir);
 						VectorNormalize(olddir);
