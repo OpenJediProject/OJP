@@ -2599,29 +2599,29 @@ Ghoul2 Insert End
 const char *CG_GetStringEdString(char *refSection, char *refName)
 {
 	#define	MAX_VA_STRING	32000
-	static char		temp_buffer[MAX_VA_STRING];
-	static char		output_buffer[MAX_VA_STRING];
+	static char		intext[MAX_VA_STRING];
+	static char		translation[MAX_VA_STRING];
 	static char		string[MAX_VA_STRING];	// in case va is called by nested functions
 	static int		index = 0;
 	char	*buf;
 	int len;
 
-	Com_sprintf(temp_buffer, sizeof(temp_buffer), "%s_%s", refSection, refName);
+	Com_sprintf(intext, sizeof(intext), "%s_%s", refSection, refName);
 
-	len = strlen(temp_buffer);
+	trap_SP_GetStringTextString(intext, translation, sizeof(translation));
+
+	len = strlen(translation);
 
 	if (len + index >= MAX_VA_STRING-1) {
 		index = 0;
 	}
 
 	buf = &string[index];
-	memcpy( buf, temp_buffer, len+1 );
+	memcpy( buf, translation, len+1 );
 
 	index += len + 1;
 
-	trap_SP_GetStringTextString(buf, output_buffer, sizeof(output_buffer));
-
-	return output_buffer;
+	return buf;
 }
 
 /*const char *CG_GetStringEdString(char *refSection, char *refName)
