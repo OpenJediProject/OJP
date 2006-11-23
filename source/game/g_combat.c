@@ -6952,9 +6952,9 @@ void AddSkill(gentity_t *self, float amount)
 		trap_Cvar_Set("g_maxForceRank", g_minForceRank.string);
 	}
 
-	if(self->client->sess.skillPoints > g_maxForceRank.integer)
+	if(self->client->sess.skillPoints > g_maxForceRank.value)
 	{
-		self->client->sess.skillPoints = g_maxForceRank.integer;
+		self->client->sess.skillPoints = g_maxForceRank.value;
 	}
 }
 
@@ -6970,10 +6970,9 @@ void G_DodgeDrain(gentity_t *victim, gentity_t *attacker, int amount)
 
 	if(attacker && attacker->client)
 	{//attacker gets experience for causing damage.
-		if(!attacker->client->sess.skillPoints)
-		{//don't want a divide by zero error, give the player a bonus skill point for starters
-			attacker->client->sess.skillPoints = 1;
-		}
+			
+		//don't want a divide by zero errors
+		assert(!attacker->client->sess.skillPoints);
 
 		//scale skill points based on the ratio between skills
 		AddSkill(attacker, 

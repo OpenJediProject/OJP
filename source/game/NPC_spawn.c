@@ -300,6 +300,9 @@ extern void SandCreature_ClearTimers( gentity_t *ent );
 //[DodgeSys]
 void DetermineDodgeMax(gentity_t *ent);
 //[/DodgeSys]
+//[ExpSys]
+int TotalAllociatedSkillPoints(gentity_t *ent);
+//[/ExpSys]
 void NPC_SetMiscDefaultData( gentity_t *ent )
 {
 	//[ExpSys]
@@ -406,11 +409,50 @@ void NPC_SetMiscDefaultData( gentity_t *ent )
 	{
 		ent->client->skillLevel[i] = 0;
 	}
+
+	//allocate the NPC's skills based on their weapon selection
+	if(ent->client->ps.weapon == WP_BLASTER)
+	{
+		ent->client->skillLevel[SK_BLASTER] = FORCE_LEVEL_3;
+	}
+
+	if(ent->client->ps.weapon == WP_BOWCASTER)
+	{
+		ent->client->skillLevel[SK_BOWCASTER] = FORCE_LEVEL_3;
+	}
+
+	if(ent->client->ps.weapon == WP_BLASTER)
+	{
+		ent->client->skillLevel[SK_BLASTER] = FORCE_LEVEL_3;
+	}
+
+	if(ent->client->ps.weapon == WP_ROCKET_LAUNCHER)
+	{
+		ent->client->skillLevel[SK_ROCKET] = FORCE_LEVEL_3;
+	}
+
+	if(ent->client->ps.weapon == WP_THERMAL)
+	{
+		ent->client->skillLevel[SK_THERMAL] = FORCE_LEVEL_3;
+	}
+
+	if(ent->client->ps.weapon == WP_BRYAR_PISTOL || ent->client->ps.weapon == WP_BRYAR_OLD)
+	{
+		ent->client->skillLevel[SK_PISTOL] = FORCE_LEVEL_3;
+	}
 	//[/ExpSys]
 
 	//[DodgeSys]
 	//determine DodgeMax since NPCs kick out of InitForcePowers early.
 	DetermineDodgeMax(ent);
+
+	//figure out how many skill points this NPC would need to have to have number of skills they have.
+	ent->client->sess.skillPoints = TotalAllociatedSkillPoints(ent);
+
+	if(!ent->client->sess.skillPoints)
+	{//apprenently this character doesn't have any skills at all, give them a point so they cause a divide by zero error later.
+		ent->client->sess.skillPoints = 1;
+	}
 
 	//set their starting DP
 	ent->client->ps.stats[STAT_DODGE] = ent->client->ps.stats[STAT_MAX_DODGE];

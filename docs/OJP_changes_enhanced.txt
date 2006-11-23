@@ -13,6 +13,9 @@ Version 0.0.9r:
 			- Added bowcaster skill.
 			- Added cloaking device skill.
 			- Added force field skill.
+			- Changed g_forceminRank and g_forceMaxRank to use float values instead of integers since the skillPoints are stored as floats anyway.
+			- Tweaked some of the skill setting stuff since some of the error checking it was doing was unneeded.
+			- NPCs now have skill point totals that reflect the skills they have.
 
 	Improvements/Fixes:	
 

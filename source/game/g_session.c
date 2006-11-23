@@ -72,7 +72,10 @@ void G_WriteClientSessionData( gclient_t *client ) {
 		i++;
 	}
 
-	s = va("%i %i %i %i %i %i %i %i %i %i %i %i %s %s %s", 
+	//[ExpSys]
+	s = va("%i %i %i %i %i %i %i %i %i %i %i %i %s %s %s %f",
+	//s = va("%i %i %i %i %i %i %i %i %i %i %i %i %s %s %s",
+	//[/ExpSys]
 		client->sess.sessionTeam,
 		client->sess.spectatorTime,
 		client->sess.spectatorState,
@@ -87,7 +90,11 @@ void G_WriteClientSessionData( gclient_t *client ) {
 		client->sess.siegeDesiredTeam,
 		siegeClass,
 		saberType,
-		saber2Type
+		//[ExpSys]
+		saber2Type,
+		client->sess.skillPoints
+		//saber2Type
+		//[/ExpSys]
 		);
 
 	var = va( "session%i", client - level.clients );
@@ -114,8 +121,10 @@ void G_ReadSessionData( gclient_t *client ) {
 
 	var = va( "session%i", client - level.clients );
 	trap_Cvar_VariableStringBuffer( var, s, sizeof(s) );
-
-	sscanf( s, "%i %i %i %i %i %i %i %i %i %i %i %i %s %s %s",
+	//[ExpSys]
+	sscanf( s, "%i %i %i %i %i %i %i %i %i %i %i %i %s %s %s %f",
+	//sscanf( s, "%i %i %i %i %i %i %i %i %i %i %i %i %s %s %s",
+	//[ExpSys]
 		&sessionTeam,                 // bk010221 - format
 		&client->sess.spectatorTime,
 		&spectatorState,              // bk010221 - format
@@ -130,7 +139,11 @@ void G_ReadSessionData( gclient_t *client ) {
 		&client->sess.siegeDesiredTeam,
 		&client->sess.siegeClass,
 		&client->sess.saberType,
-		&client->sess.saber2Type
+		//[ExpSys]
+		&client->sess.saber2Type,
+		&client->sess.skillPoints
+		//&client->sess.saber2Type
+		//[ExpSys]
 		);
 
 	while (client->sess.siegeClass[i])
@@ -293,6 +306,10 @@ void G_InitSessionData( gclient_t *client, char *userinfo, qboolean isBot ) {
 	sess->siegeClass[0] = 0;
 	sess->saberType[0] = 0;
 	sess->saber2Type[0] = 0;
+
+	//[ExpSys]
+	sess->skillPoints = g_minForceRank.value;
+	//[/ExpSys]
 
 	G_WriteClientSessionData( client );
 }

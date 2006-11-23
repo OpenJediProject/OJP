@@ -2574,20 +2574,6 @@ char *ClientConnect( int clientNum, qboolean firstTime, qboolean isBot ) {
 	te->r.svFlags |= SVF_BROADCAST;
 	te->s.eventParm = clientNum;
 
-	//[ExpSys]
-	//set the player's starting skill points
-	if(g_minForceRank.integer < 0)
-	{//don't allow illegal starting point values
-		G_Printf("g_minForceRank less than zero.  Defaulting to 0.\n");
-		trap_Cvar_Set("g_minForceRank", "0");
-		ent->client->sess.skillPoints = 0;
-	}
-	else
-	{
-		ent->client->sess.skillPoints = g_minForceRank.integer;
-	}
-	//[/ExpSys]
-
 	// for statistics
 //	client->areabits = areabits;
 //	if ( !client->areabits )
@@ -3283,9 +3269,9 @@ void ClientSpawn(gentity_t *ent) {
 	client = ent->client;
 
 	//[ExpSys]
-	if(ent->client->sess.skillPoints < g_minForceRank.integer)
+	if(ent->client->sess.skillPoints < g_minForceRank.value)
 	{//the minForceRank was changed to a higher value than the player has
-		ent->client->sess.skillPoints = g_minForceRank.integer;
+		ent->client->sess.skillPoints = g_minForceRank.value;
 		ent->client->skillUpdated = qtrue;
 	}
 	//[/ExpSys]
