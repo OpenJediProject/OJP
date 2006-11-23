@@ -2487,6 +2487,12 @@ char *ClientConnect( int clientNum, qboolean firstTime, qboolean isBot ) {
 	//assign the pointer for bg entity access
 	ent->playerState = &ent->client->ps;
 
+	//[ExpSys]
+	//initialize the player's entity now so that ent->s.number will be valid.  Otherwise, poor clientNum 0 will always get 
+	//spammed whenever someone joins the game.
+	G_InitGentity(ent);
+	//[/ExpSys]
+
 //	areabits = client->areabits;
 
 	memset( client, 0, sizeof(*client) );
