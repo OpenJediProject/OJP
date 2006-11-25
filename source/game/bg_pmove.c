@@ -8682,10 +8682,12 @@ static void PM_Weapon( void )
 				return;
 			}
 
+			//[Flamethrower]
 			if(bg_itemlist[pm->ps->stats[STAT_HOLDABLE_ITEM]].giTag == HI_FLAMETHROWER)
 			{//flame thrower is handled earlier, just terminate out
 				return;
 			}
+			//[/Flamethrower]
 
 			if (!PM_ItemUsable(pm->ps, 0))
 			{
@@ -8701,7 +8703,12 @@ static void PM_Weapon( void )
 						bg_itemlist[pm->ps->stats[STAT_HOLDABLE_ITEM]].giTag != HI_HEALTHDISP &&
 						bg_itemlist[pm->ps->stats[STAT_HOLDABLE_ITEM]].giTag != HI_AMMODISP &&
 						bg_itemlist[pm->ps->stats[STAT_HOLDABLE_ITEM]].giTag != HI_CLOAK &&
-						bg_itemlist[pm->ps->stats[STAT_HOLDABLE_ITEM]].giTag != HI_EWEB)
+						bg_itemlist[pm->ps->stats[STAT_HOLDABLE_ITEM]].giTag != HI_EWEB &&
+						//[SeekerItemNpc]
+						//seeker isnt used up when deployed, player can still command it
+						bg_itemlist[pm->ps->stats[STAT_HOLDABLE_ITEM]].giTag != HI_SEEKER)
+						//[/SeekerItemNpc]
+
 					{ //never use up the binoculars or jetpack or dispensers or cloak or ...
 						pm->ps->stats[STAT_HOLDABLE_ITEMS] -= (1 << bg_itemlist[pm->ps->stats[STAT_HOLDABLE_ITEM]].giTag);
 					}

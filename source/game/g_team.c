@@ -293,6 +293,14 @@ qboolean OnSameTeam( gentity_t *ent1, gentity_t *ent2 ) {
 		return qtrue;
 	}
 
+	//[SeekerItemNpc]
+	if(ent1->client->remote == ent2)
+		return qtrue;
+	else if(ent2->client->remote == ent1)
+		return qtrue;
+	//[/SeekerItemNpc]
+
+
 	return qfalse;
 }
 

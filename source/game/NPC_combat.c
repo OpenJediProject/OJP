@@ -1774,6 +1774,12 @@ qboolean G_ValidEnemy( gentity_t *self, gentity_t *enemy )
 		return qfalse;
 	}
 
+	//[SeekerItemNpc] dont attack our leader
+	else if(enemy->client && self->client->leader == enemy){
+		return qfalse;
+	}
+	//[/SeekerItemNpc]
+
 	if ( enemy->client->playerTeam == TEAM_FREE && enemy->s.number < MAX_CLIENTS )
 	{//An evil player, everyone attacks him
 		return qtrue;

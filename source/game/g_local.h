@@ -933,6 +933,10 @@ struct gclient_s {
 	int			flameTime;
 	//[/Flamethrower]
 
+	//[SeekerItemNpc]
+	gentity_t *remote;
+	//[/SeekerItemNpc]
+
 };
 
 //Interest points

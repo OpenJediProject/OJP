@@ -1097,8 +1097,125 @@ void ItemUse_Sentry( gentity_t *ent )
 }
 
 extern gentity_t *NPC_SpawnType( gentity_t *ent, char *npc_type, char *targetname, qboolean isVehicle );
+
+//[SeekerItemNpc]
+void NPC_SetMoveGoal( gentity_t *ent, vec3_t point, int radius, qboolean isNavGoal, int combatPoint, gentity_t *targetEnt );
+gentity_t *ViewTarget(gentity_t *ent, int length, vec3_t *target, cplane_t *plane);
+qboolean NPC_MoveToGoal( qboolean tryStraight );
+//[/SeekerItemNpc]
+
 void ItemUse_Seeker(gentity_t *ent)
 {
+	//[SeekerItemNpc]
+
+	gentity_t *remote = ent->client->remote;
+
+	if(!remote || !remote->inuse || !remote->client || remote->activator != ent)
+	{//actualy spawn a remote NPC
+
+		remote = NPC_SpawnType( ent, "seeker", va("player%iseeker", ent->s.number), qfalse );
+		if ( remote && remote->client )
+		{//set it to my team
+			remote->s.owner = remote->r.ownerNum = ent->s.number;
+			remote->activator = ent;
+			//remote->NPC->goalEntity is being cleared after we spawn
+			remote->NPC->goalEntity = remote->client->leader = ent;
+			//remote->NPC->behaviorState = BS_FOLLOW_LEADER;
+			//remote->NPC->followDist = 200;
+			ent->client->remote = remote;
+
+
+			//TODO: set 'remote->count' to the ammo for this seeker according to the player skill
+
+			//TODO: set 'remote->health' according to player skill
+			//remember, demp2 pwns seekers
+
+			//TODO: set these based on player skill
+			remote->genericValue1 = 250; //minimum time between shots
+			remote->genericValue2 = 1000; //maximum time between shots
+
+			//TODO: set this based on player skill
+			remote->damage = 10; //damage per shot
+
+			//TODO: should beeping on seeing enemy change based on skill?
+			//disabling this for now, but the code to beep every 900 ms while attacking an enemy is still active, 
+			//set remote->genericValue3 to the sound index if you still want it
+			//remote->genericValue3 = G_SoundIndex( "sound/chars/turret/ping.wav" );
+
+			//IDEA: instead of beeping when we are attacking, lets beep when there is an enemy within a radar range!
+			remote->genericValue4 = G_SoundIndex( "sound/chars/turret/ping.wav" );
+			//time between beeps will scale to how far away the enemy is
+			//STOPPING POINT: this isnt beeping... fix!  and the radius seems to be needing to be uberlarge even when the enemies
+			//					are close...
+			remote->radius = -20000; //if this is POSITIVE, it beeps only if the enemy is within the sight range.
+								  //if this is NEGITIVE, it has a 'radar' and beeps for enemies not in sight range.
+								  //FIXME: should this beep for players with cloaking?  currently it wont.
+			
+
+			//TODO: if our player dies, the seeker explodes.  Should it wander around looking for players still?
+			//if it should explode, then reactivate and set up the code to have the seeker fall down and hit the ground and explode
+			//instead of exploding in the air... OR: let it sit there as a seeker item?  conserve its ammo to use the same amount for
+			//the next person who uses it?
+
+			
+			//dont chance enemies unless we were specificly told to
+			remote->NPC->scriptFlags &= ~SCF_CHASE_ENEMIES;
+			if(g_gametype.integer == GT_SIEGE){
+				if ( ent->client->sess.sessionTeam == TEAM_BLUE )
+				{
+					remote->client->playerTeam = NPCTEAM_PLAYER;
+				}
+				else if ( ent->client->sess.sessionTeam == TEAM_RED )
+				{
+					remote->client->playerTeam = NPCTEAM_ENEMY;
+				}
+				//else
+				//{
+				//	remote->client->playerTeam = NPCTEAM_NEUTRAL;
+				//}
+			}
+			//this stops it moving and it just sits there, I need to check why
+			//else
+			//{
+			//	remote->client->playerTeam = NPCTEAM_NEUTRAL;
+			//}
+		}	
+	}
+	else
+	{
+		//TODO: have commandable seekers be based on skill level?
+		if(remote->NPC->goalEntity == ent /*&& remote->NPC->behaviorState == BS_FOLLOW_LEADER*/){
+			vec3_t targVec;
+			gentity_t *targ;
+			cplane_t plane; //for getting aim offset so seeker doesnt try to enter the walls (in which case it will just stay put)
+			int range = 1800; //TODO: set this based on skill level
+			if((targ = ViewTarget(ent, range, &targVec, &plane))){
+				if(targ->client && targ->client->playerTeam != ent->client->playerTeam){
+					//remote->NPC->behaviorState = BS_HUNT_AND_KILL;
+					remote->NPC->goalEntity = remote->enemy = targ;
+					remote->NPC->scriptFlags |= SCF_CHASE_ENEMIES; //we are allowed to hunt down our target
+				}
+				else{
+					//remote->NPC->behaviorState = BS_FOLLOW_LEADER;
+					remote->NPC->goalEntity = remote->client->leader = targ;
+				}
+			}
+			else if(!VectorCompare(targVec, ent->r.currentOrigin)){
+				//remote->NPC->behaviorState = BS_INVESTIGATE;
+				VectorMA(targVec, 15, plane.normal, targVec);
+				NPC_SetMoveGoal(remote, targVec, 50, qfalse, -1, NULL);
+				remote->NPC->scriptFlags |= SCF_CHASE_ENEMIES; //we are allowed to hunt down enemies
+			}
+		}
+		else{
+			remote->NPC->goalEntity = ent;
+			remote->NPC->scriptFlags &= ~SCF_CHASE_ENEMIES;
+
+			//remote->NPC->behaviorState = BS_FOLLOW_LEADER;
+		}	
+	}
+
+	/*
 	if ( g_gametype.integer == GT_SIEGE && d_siegeSeekerNPC.integer )
 	{//actualy spawn a remote NPC
 		gentity_t *remote = NPC_SpawnType( ent, "remote", NULL, qfalse );
@@ -1126,6 +1243,8 @@ void ItemUse_Seeker(gentity_t *ent)
 		ent->client->ps.droneExistTime = level.time + 30000;
 		ent->client->ps.droneFireTime = level.time + 1500;
 	}
+	*/
+	//[/SeekerItemNpc]
 }
 
 static void MedPackGive(gentity_t *ent, int amount)

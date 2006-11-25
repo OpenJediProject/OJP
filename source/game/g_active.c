@@ -3793,7 +3793,10 @@ void ClientThink_real( gentity_t *ent ) {
 			{
 				ItemUse_Seeker(ent);
 				G_AddEvent(ent, EV_USE_ITEM0+HI_SEEKER, 0);
-				ent->client->ps.stats[STAT_HOLDABLE_ITEMS] &= ~(1 << HI_SEEKER);
+				//[SeekerItemNpc] the seeker is an npc and is commandable by using the item again.  This flag will be removed when the
+				//seeker dies
+				//ent->client->ps.stats[STAT_HOLDABLE_ITEMS] &= ~(1 << HI_SEEKER);
+				//[/SeekerItemNpc]
 			}
 			break;
 		case GENCMD_USE_FIELD:

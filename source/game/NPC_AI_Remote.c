@@ -239,8 +239,11 @@ void Remote_Fire (void)
 {
 	vec3_t	delta1, enemy_org1, muzzle1;
 	vec3_t	angleToEnemy1;
-	static	vec3_t	forward, vright, up;
-	static	vec3_t	muzzle;
+	//[SeekerItemNpc]
+	//these dont need to be static, and vright and up arent used
+	/*static*/ vec3_t	forward;//, vright, up;
+	/*static*/ vec3_t	muzzle;
+	//[/SeekerItemNpc]
 	gentity_t	*missile;
 
 	CalcEntitySpot( NPC->enemy, SPOT_HEAD, enemy_org1 );
@@ -249,7 +252,10 @@ void Remote_Fire (void)
 	VectorSubtract (enemy_org1, muzzle1, delta1);
 
 	vectoangles ( delta1, angleToEnemy1 );
-	AngleVectors (angleToEnemy1, forward, vright, up);
+	//[SeekerItemNpc]
+	AngleVectors (angleToEnemy1, forward, NULL, NULL);
+	//AngleVectors (angleToEnemy1, forward, vright, up);
+	//[/SeekerItemNpc]
 
 	missile = CreateMissile( NPC->r.currentOrigin, forward, 1000, 10000, NPC, qfalse );
 

@@ -44,6 +44,14 @@ void NPC_Seeker_Pain(gentity_t *self, gentity_t *attacker, int damage)
 		//[/CoOp]
 	}
 
+	//[SeekerItemNpc]
+	//if we die, remove the control from our owner
+	if(self->health < 0 && self->activator && self->activator->client){
+		self->activator->client->remote = NULL;
+		self->activator->client->ps.stats[STAT_HOLDABLE_ITEMS] &= ~(1 << HI_SEEKER);
+	}
+	//[/SeekerItemNpc]
+
 	SaveNPCGlobals();
 	SetNPCGlobals( self );
 	Seeker_Strafe();
@@ -265,6 +273,22 @@ void Seeker_Hunt( qboolean visible, qboolean advance )
 
 	NPC_FaceEnemy( qtrue );
 
+	//[SeekerItemNpc]
+	if(NPC->genericValue3){
+		if ( TIMER_Done( NPC, "seekerAlert" )){
+			//TODO: different sound for 'found enemy' or 'searching' ?
+			/*
+			if(visible)
+				G_Sound( NPC, CHAN_AUTO, G_SoundIndex( "sound/chars/seeker/misc/hiss" ));
+			else
+			*/
+			TIMER_Set(NPC, "seekerAlert", level.time + 900);
+			G_Sound(NPC, CHAN_AUTO, NPC->genericValue3);
+		}
+	}
+	//[/SeekerItemNpc]
+
+
 	// If we're not supposed to stand still, pursue the player
 	if ( NPCInfo->standTime < level.time )
 	{
@@ -314,6 +338,49 @@ void Seeker_Hunt( qboolean visible, qboolean advance )
 //------------------------------------
 void Seeker_Fire( void )
 {
+
+	//[SeekerItemNpc]
+#if 1
+
+
+	vec3_t		dir, enemy_org, muzzle;
+	gentity_t	*missile;
+
+	CalcEntitySpot( NPC->enemy, SPOT_HEAD, enemy_org );
+
+	//calculate everything based on our model offset
+	VectorCopy(NPC->r.currentOrigin, muzzle);
+	//correct for our model offset
+	muzzle[2] -= 22;
+
+	VectorSubtract( enemy_org, NPC->r.currentOrigin, dir );
+	VectorNormalize( dir );
+
+	// move a bit forward in the direction we shall shoot in so that the bolt doesn't poke out the other side of the seeker
+	VectorMA( muzzle, 15, dir, muzzle );
+
+	
+	missile = CreateMissile( muzzle, dir, 1000, 10000, NPC, qfalse );
+
+	G_PlayEffectID( G_EffectIndex("blaster/muzzle_flash"), muzzle, dir );
+
+	missile->classname = "blaster";
+	missile->s.weapon = WP_BLASTER;
+
+	missile->damage = NPC->damage;
+	missile->dflags = DAMAGE_DEATH_KNOCKBACK;
+	missile->methodOfDeath = MOD_BLASTER;
+	missile->clipmask = MASK_SHOT | CONTENTS_LIGHTSABER;
+	//[CoOp]
+	/* Not in SP version of code.
+	if ( NPC->r.ownerNum < ENTITYNUM_NONE )
+	{
+		missile->r.ownerNum = NPC->r.ownerNum;
+	}
+	*/
+	//[/CoOp]
+
+#else
 	vec3_t		dir, enemy_org, muzzle;
 	gentity_t	*missile;
 
@@ -343,6 +410,7 @@ void Seeker_Fire( void )
 	}
 	*/
 	//[/CoOp]
+#endif
 }
 
 //------------------------------------
@@ -352,20 +420,39 @@ void Seeker_Ranged( qboolean visible, qboolean advance )
 	{//racc - boba fett doesn't run out of ammo.
 		if ( NPC->count > 0 )
 		{
+			//[SeekerItemNpc]
+			//better than using the timer, and if the dynamic music is ever used, then we can apply it to them using the shootTime
+			//meh, just using TIMER_ stuff for now, in case standard npc ai messes it up
+			//if (NPCInfo->shotTime < level.time)	// Attack?
+			if ( TIMER_Done( NPC, "attackDelay" ))	// Attack?
+			{
+				//NPCInfo->shotTime = level.time + NPC->delay + Q_irand(0, NPC->random);
+				TIMER_Set( NPC, "attackDelay", Q_irand(NPC->genericValue1, NPC->genericValue2));
+				Seeker_Fire();
+				NPC->count--;
+			}
+			/*
 			if ( TIMER_Done( NPC, "attackDelay" ))	// Attack?
 			{
 				TIMER_Set( NPC, "attackDelay", Q_irand( 250, 2500 ));
 				Seeker_Fire();
 				NPC->count--;
 			}
+			*/
+			//[/SeekerItemNpc]
 		}
 		else
 		{
+			//[SeekerItemNpc] what is wrong with this?  re-enabling...
+			//hmm, somewhere I saw code that handles the final death, but I cant find it anymore...
+			//meh, disabling again
+
 			// out of ammo, so let it die...give it a push up so it can fall more and blow up on impact
-	//		NPC->client->ps.gravity = 900;
-	//		NPC->svFlags &= ~SVF_CUSTOM_GRAVITY;
-	//		NPC->client->ps.velocity[2] += 16;
-			G_Damage( NPC, NPC, NPC, NULL, NULL, 999, 0, MOD_UNKNOWN );
+			//NPC->client->ps.gravity = 900;
+			//NPC->svFlags &= ~SVF_CUSTOM_GRAVITY;
+			//NPC->client->ps.velocity[2] += 16;
+			G_Damage( NPC, NPC, NPC, NULL, NULL, NPC->health/*999*/, 0, MOD_UNKNOWN );
+			//[/SeekerItemNpc]
 		}
 	}
 
@@ -376,6 +463,7 @@ void Seeker_Ranged( qboolean visible, qboolean advance )
 } 
 
 //------------------------------------
+
 void Seeker_Attack( void )
 {
 	float		distance;
@@ -390,6 +478,14 @@ void Seeker_Attack( void )
 	visible		= NPC_ClearLOS4( NPC->enemy );
 	advance		= (qboolean)(distance > MIN_DISTANCE_SQR);
 
+	//[SeekerItemNpc]
+	//dont shoot at dead people
+	if(!NPC->enemy->inuse || NPC->enemy->health <= 0){
+		NPC->enemy = NULL;
+		return;
+	}
+	//[/SeekerItemNpc]
+
 	if ( NPC->client->NPC_class == CLASS_BOBAFETT )
 	{
 		advance = (qboolean)(distance>(200.0f*200.0f));
@@ -403,6 +499,16 @@ void Seeker_Attack( void )
 			Seeker_Hunt( visible, advance );
 			return;
 		}
+		//[SeekerItemNpc]
+		else{
+			//we cant chase them?  then return to the follow target
+			NPC->enemy = NULL;
+			if(NPC->client->leader)
+				NPCInfo->goalEntity = NPC->client->leader;
+			return;
+		}	
+		//[/SeekerItemNpc]
+
 	}
 
 	Seeker_Ranged( visible, advance );
@@ -417,6 +523,10 @@ void Seeker_FindEnemy( void )
 	int			entityList[MAX_GENTITIES];
 	gentity_t	*ent, *best = NULL;
 	int			i;
+	//[SeekerItemNpc]
+	float closestDist = SEEKER_SEEK_RADIUS * SEEKER_SEEK_RADIUS + 1;
+	//[/SeekerItemNpc]
+
 
 	VectorSet( maxs, SEEKER_SEEK_RADIUS, SEEKER_SEEK_RADIUS, SEEKER_SEEK_RADIUS );
 	VectorScale( maxs, -1, mins );
@@ -450,35 +560,174 @@ void Seeker_FindEnemy( void )
 			continue;
 		}
 
+
+		//[/SeekerItemNpc]
+
+		dis = DistanceHorizontalSquared( NPC->r.currentOrigin, ent->r.currentOrigin );
+
+		if ( dis <= closestDist )
+			closestDist = dis;
+
 		// try to find the closest visible one
 		if ( !NPC_ClearLOS4( ent ))
 		{
 			continue;
 		}
 
-		dis = DistanceHorizontalSquared( NPC->r.currentOrigin, ent->r.currentOrigin );
-
 		if ( dis <= bestDis )
 		{
 			bestDis = dis;
 			best = ent;
 		}
+		//[/SeekerItemNpc]
+
 	}
 
 	if ( best )
 	{
-		// used to offset seekers around a circle so they don't occupy the same spot.  This is not a fool-proof method.
-		NPC->random = random() * 6.3f; // roughly 2pi
+		//[SeekerItemNpc] because we can run even if we already have an enemy
+		if(!NPC->enemy){
+			// used to offset seekers around a circle so they don't occupy the same spot.  This is not a fool-proof method.
+			NPC->random = random() * 6.3f; // roughly 2pi
 
-		NPC->enemy = best;
+			NPC->enemy = best;
+		}
+		//[/SeekerItemNpc]
 	}
+
+	//[SeekerItemNpc]
+	//positive radius, check with los in mind
+	if(NPC->radius > 0){
+		if(best && bestDis <= NPC->radius)
+			NPC->fly_sound_debounce_time = level.time + (int)floor(2500.0f * (bestDis / (float)NPC->radius)) + 500;
+		else
+			NPC->fly_sound_debounce_time = -1;
+	}
+	//negitive radius, check only closest without los
+	else if(NPC->radius < 0){
+		if(closestDist <= -NPC->radius)
+			NPC->fly_sound_debounce_time = level.time + (int)floor(2500.0f * (closestDist / -(float)NPC->radius)) + 500;
+		else
+			NPC->fly_sound_debounce_time = -1;
+	}
+	//[/SeekerItemNpc]
+
 }
 
 //[CoOp]
 //------------------------------------
 void Seeker_FollowPlayer( void )
 {//hover around the closest player
+
+	//[SeekerItemNpc]
+#if 1
 	vec3_t	pt, dir;
+	float	dis;
+	float	minDistSqr = MIN_DISTANCE_SQR;
+	gentity_t *target;
+
+	Seeker_MaintainHeight();
+
+	if(NPC->activator && NPC->activator->client){
+		if(NPC->activator->client->remote != NPC || NPC->activator->health <= 0){
+			//have us fall down and explode.
+			NPC->NPC->aiFlags |= NPCAI_CUSTOM_GRAVITY;
+			return;
+		}
+		target = NPCInfo->goalEntity;
+		if(!target)
+			target = NPC->client->leader;
+	}
+	else{
+		gentity_t *target = FindClosestPlayer(NPC->r.currentOrigin, NPC->client->playerTeam);
+	}
+
+	if(!target)
+	{//in MP it's actually possible that there's no players on our team at the moment.
+		return;
+	}
+
+	dis	= DistanceHorizontalSquared( NPC->r.currentOrigin, target->r.currentOrigin );
+
+	if ( NPC->client->NPC_class == CLASS_BOBAFETT )
+	{
+		if ( TIMER_Done( NPC, "flameTime" ) )
+		{
+			minDistSqr = 200*200;
+		}
+	}
+
+	if ( dis < minDistSqr )
+	{
+		// generally circle the player closely till we take an enemy..this is our target point
+		if ( NPC->client->NPC_class == CLASS_BOBAFETT )
+		{
+			pt[0] = target->r.currentOrigin[0] + cos( level.time * 0.001f + NPC->random ) * 250;
+			pt[1] = target->r.currentOrigin[1] + sin( level.time * 0.001f + NPC->random ) * 250;
+			if ( NPC->client->jetPackTime < level.time )
+			{
+				pt[2] = target->r.currentOrigin[2] - 64;
+			}
+			else
+			{
+				pt[2] = target->r.currentOrigin[2] + 200;
+			}
+		}
+		else
+		{
+			pt[0] = target->r.currentOrigin[0] + cos( level.time * 0.001f + NPC->random ) * 56;
+			pt[1] = target->r.currentOrigin[1] + sin( level.time * 0.001f + NPC->random ) * 56;
+			pt[2] = target->r.currentOrigin[2] + 40;
+		}
+
+		VectorSubtract( pt, NPC->r.currentOrigin, dir );
+		VectorMA( NPC->client->ps.velocity, 0.8f, dir, NPC->client->ps.velocity );
+	}
+	else
+	{
+		if ( NPC->client->NPC_class != CLASS_BOBAFETT )
+		{
+			if ( TIMER_Done( NPC, "seekerhiss" ))
+			{
+				TIMER_Set( NPC, "seekerhiss", 1000 + random() * 1000 );
+				G_Sound( NPC, CHAN_AUTO, G_SoundIndex( "sound/chars/seeker/misc/hiss" ));
+			}
+		}
+
+		// Hey come back!
+		NPCInfo->goalEntity = target;
+		if(target == NPC->enemy)
+			NPCInfo->goalRadius = 60;
+		else
+			NPCInfo->goalRadius = 32;
+		if(!NPC_MoveToGoal(qtrue)){
+			//cant go there on our first try, abort.
+			//this really isnt the best way... but if it cant reach the point, it will just sit there doing nothing.
+			NPCInfo->goalEntity = NPC->client->leader;
+			//stop chasing the enemy if we were told to, and return to the player
+			NPCInfo->scriptFlags &= ~SCF_CHASE_ENEMIES;
+		}
+	}
+
+	//call this even if we do have an enemy, for enemy proximity detection
+	if ( /*!NPC->enemy && */ NPCInfo->enemyCheckDebounceTime < level.time )
+	{
+		// check twice a second to find a new enemy
+		Seeker_FindEnemy();
+		NPCInfo->enemyCheckDebounceTime = level.time + 500;
+	}
+
+	//play our proximity beep
+	if(NPC->genericValue3 && NPC->fly_sound_debounce_time > 0 && NPC->fly_sound_debounce_time < level.time){
+		G_Sound(NPC, CHAN_AUTO, NPC->genericValue3);
+		NPC->fly_sound_debounce_time = -1;
+	}
+
+
+	NPC_UpdateAngles( qtrue, qtrue );
+
+#else
+		vec3_t	pt, dir;
 	float	dis;
 	float	minDistSqr = MIN_DISTANCE_SQR;
 	gentity_t *closestPlayer = NULL;
@@ -486,10 +735,12 @@ void Seeker_FollowPlayer( void )
 	Seeker_MaintainHeight();
 
 	closestPlayer = FindClosestPlayer(NPC->r.currentOrigin, NPC->client->playerTeam);
+
 	if(!closestPlayer)
 	{//in MP it's actually possible that there's no players on our team at the moment.
 		return;
 	}
+
 
 	dis	= DistanceHorizontalSquared( NPC->r.currentOrigin, closestPlayer->r.currentOrigin );
 
@@ -553,6 +804,8 @@ void Seeker_FollowPlayer( void )
 	}
 
 	NPC_UpdateAngles( qtrue, qtrue );
+#endif
+	//[/SeekerItemNpc]
 }
 
 
@@ -659,8 +912,20 @@ void NPC_BSSeeker_Default( void )
 		{
 			// cameras make me commit suicide....
 			G_Damage( NPC, NPC, NPC, NULL, NULL, 999, 0, MOD_UNKNOWN );
+			//[SeekerItemNpc]
+			//dont continue this run because we are dead
+			return;
+			//[/SeekerItemNpc]
 		}
 	}
+
+	//[SeekerItemNpc]
+	if ( NPC->client->NPC_class != CLASS_BOBAFETT && NPC->activator->health <= 0){
+		G_Damage( NPC, NPC, NPC, NULL, NULL, NPC->health, 0, MOD_UNKNOWN );
+		return;
+	}
+	//[/SeekerItemNpc]
+
 
 	/*
 	//N/A for MP.
@@ -686,9 +951,13 @@ void NPC_BSSeeker_Default( void )
 
 	if ( NPC->enemy && NPC->enemy->health && NPC->enemy->inuse )
 	{
-		if ( NPC->client->NPC_class != CLASS_BOBAFETT 
+		if ( NPC->client->NPC_class != CLASS_BOBAFETT
 			//[CoOp]
-			&& ( NPC->enemy->s.number < MAX_CLIENTS || ( NPC->enemy->client && NPC->enemy->client->NPC_class == CLASS_SEEKER )) )
+			//[SeekerItemNpc] - dont attack our owner or leader, and dont shoot at dead people
+			&& ( NPC->enemy == NPC->activator || NPC->enemy == NPC->client->leader || !NPC->enemy->inuse || NPC->health <= 0 ||
+			( NPC->enemy->client && NPC->enemy->client->NPC_class == CLASS_SEEKER )) )
+			//&& ( NPC->enemy->s.number < MAX_CLIENTS || ( NPC->enemy->client && NPC->enemy->client->NPC_class == CLASS_SEEKER )) )
+			//[/SeekerItemNpc]
 			//&& ( NPC->enemy->s.number == 0 || ( NPC->enemy->client && NPC->enemy->client->NPC_class == CLASS_SEEKER )) )
 			//[/CoOp]
 		{
@@ -702,7 +971,11 @@ void NPC_BSSeeker_Default( void )
 			{
 				Boba_FireDecide();
 			}
-			return;
+			//[SeekerItemNpc]
+			//still follow our target, be it a targeted enemy or our owner, but only if we aren't allowed to hunt down enemies.
+			if ( NPCInfo->scriptFlags & SCF_CHASE_ENEMIES )
+				return;
+			//[/SeekerItemNpc]
 		}
 	}
 	//[CoOp]

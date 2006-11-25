@@ -2515,3 +2515,34 @@ void TextWrapCenterPrint(char orgtext[CENTERPRINT_MAXSTRING], char output[CENTER
 }
 //[/AdminSys]
 
+//[SeekerItemNpc]
+gentity_t *ViewTarget(gentity_t *ent, int length, vec3_t *target, cplane_t *plane){
+	trace_t tr;
+	vec3_t traceVec;
+
+	AngleVectors(ent->client->ps.viewangles, traceVec, 0, 0);
+	//VectorMA(traceVec, length, ent->client->renderInfo.eyePoint, traceVec);
+	traceVec[0] = ent->client->renderInfo.eyePoint[0] + traceVec[0] * length;
+	traceVec[1] = ent->client->renderInfo.eyePoint[1] + traceVec[1] * length;
+	traceVec[2] = ent->client->renderInfo.eyePoint[2] + traceVec[2] * length;
+
+	trap_Trace(&tr, ent->client->renderInfo.eyePoint, vec3_origin, vec3_origin, traceVec, ent->s.number, 
+		CONTENTS_SOLID | CONTENTS_TERRAIN | CONTENTS_BODY);
+	if(tr.fraction >= 1.0f){
+		//in a rare case, we could validly aim at vec3_origin, but we can never aim at ourself.
+		if(target)
+			VectorCopy(ent->r.currentOrigin, *target); 
+		return NULL;
+	}
+	if(plane)
+		memcpy(plane, &tr.plane, sizeof(tr.plane));
+
+	if(target)
+		VectorCopy(tr.endpos, *target);
+
+	if (tr.entityNum >= ENTITYNUM_MAX_NORMAL)
+		return NULL;
+	else
+		return &g_entities[tr.entityNum];
+}
+//[/SeekerItemNpc]

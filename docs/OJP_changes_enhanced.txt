@@ -18,7 +18,11 @@ Version 0.0.9r:
 			- NPCs now have skill point totals that reflect the skills they have.
 			- Fixed problem with client 0 always having their skill selection screen appear whenever a new player connected to the game.
 
-	Improvements/Fixes:	
+		Seeker item npc:
+			- Converted the seeker item into a functional npc.
+			- Added the ability to command the seeker to follow/patrol/attack by aiming at a place and using its item again.
+
+	Improvements/Fixes:
 
 		Animation Tweaks:
 			- Changed the primary gun fire animation back to normal since the altered animaton makes the gun block the player's view while using True View. 	
@@ -44,7 +48,6 @@ Version 0.0.9r:
 
 		Super Duper Interplotation System:
 			- Tweaked the super duper interpolation for the sabers.  This should reduce the algorithm's CPU usage.  
-
 
 Version 0.0.9q:
 
