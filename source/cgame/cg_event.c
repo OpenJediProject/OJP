@@ -3570,6 +3570,34 @@ void CG_EntityEvent( centity_t *cent, vec3_t position ) {
 		}
 		break;
 
+	//[Bolted effect]
+	case EV_PLAY_EFFECT_BOLTED:
+		DEBUGNAME("EV_PLAY_EFFECT_BOLTED");
+		{
+			centity_t *effectOn = &cg_entities[es->owner];
+			eID = 0;
+
+			//if the effect is already registered go ahead grab it
+			if ( cgs.gameEffects[ es->eventParm ] )
+				eID = cgs.gameEffects[es->eventParm];
+			else
+			{
+				//else it must be registered before using it
+				s = CG_ConfigString( CS_EFFECTS + es->eventParm );
+				if (s && s[0])
+					eID = trap_FX_RegisterEffect(s);
+			}
+
+			if( ( es->bolt1 == -1 ) || !eID )		//we don't have this particular bone or effect so can't play it
+				break;
+
+			//attach the effect on the entity
+			trap_FX_PlayBoltedEffectID( eID, es->origin, effectOn->ghoul2, 
+				es->generic1, es->owner, 0, 0, qtrue);
+		}
+		break;
+	//[/Bolted effect]
+
 	case EV_PLAY_EFFECT_ID:
 	case EV_PLAY_PORTAL_EFFECT_ID:
 		DEBUGNAME("EV_PLAY_EFFECT_ID");

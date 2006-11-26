@@ -1500,6 +1500,10 @@ void ForceHeal( gentity_t *self )
 	//NOTE: Decided to make all levels instant.
 
 	G_Sound( self, CHAN_ITEM, G_SoundIndex("sound/weapons/force/heal.wav") );
+
+//[Bolted effect]
+	G_PlayBoltedEffect( G_EffectIndex( "force/heal2.efx" ), self, "thoracic" );
+//[/Bolted effect]
 }
 
 void WP_AddToClientBitflags(gentity_t *ent, int entNum)

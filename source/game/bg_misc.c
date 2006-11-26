@@ -2821,6 +2821,10 @@ char *eventnames[] = {
 	"EV_STOPLOOPINGSOUND",
 	"EV_STARTLOOPINGSOUND",
 	"EV_TAUNT",
+
+	//[Bolted effect]
+	"EV_PLAY_EFFECT_BOLTED",
+	//[/Bolted effect]
 //fixme, added a bunch that aren't here!
 };
 

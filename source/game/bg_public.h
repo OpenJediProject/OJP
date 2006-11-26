@@ -1181,6 +1181,9 @@ typedef enum {
 	//[VisualWeapons]
 	EV_WEAPINVCHANGE,
 	//[/VisualWeapons]
+	//[Bolted effect]
+	EV_PLAY_EFFECT_BOLTED,	// new effect event that allows server to call effects bolted to ghoul2 ents
+	//[/Bolted effect]
 	
 } entity_event_t;			// There is a maximum of 256 events (8 bits transmission, 2 high bits for uniqueness)
 
