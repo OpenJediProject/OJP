@@ -6961,6 +6961,11 @@ void AddSkill(gentity_t *self, float amount)
 
 void G_DodgeDrain(gentity_t *victim, gentity_t *attacker, int amount)
 {//drains DP from victim.  Also awards experience points to the attacker.
+	if ( !g_friendlyFire.integer && OnSameTeam(victim, attacker))
+	{//don't drain DP if we're hit by a team member
+		return;
+	}
+
 	victim->client->ps.stats[STAT_DODGE] -= amount;
 
 	if(victim->client->ps.stats[STAT_DODGE] < 0)

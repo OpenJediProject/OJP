@@ -17,6 +17,7 @@ Version 0.0.9r:
 			- Tweaked some of the skill setting stuff since some of the error checking it was doing was unneeded.
 			- NPCs now have skill point totals that reflect the skills they have.
 			- Fixed problem with client 0 always having their skill selection screen appear whenever a new player connected to the game.
+			- Players' skill point totals are saved between map/round changes.
 
 		Seeker item npc:
 			- Converted the seeker item into a functional npc.
@@ -35,6 +36,7 @@ Version 0.0.9r:
 
 		Dodge System:
 			- Non-humanoids can't do body dodges anymore.
+			- Dodging team player's damage doesn't cost DP if friendly fire is turned off.
 
 		Experience System:
 			- Fixed problem with the "Join Game" button not working if player changed their Force Powers right after connecting to a game.
