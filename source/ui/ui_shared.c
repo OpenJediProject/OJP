@@ -3237,6 +3237,7 @@ qboolean Item_OwnerDraw_HandleKey(itemDef_t *item, int key) {
 			case UI_FORCE_RANK_FORCEFIELD:
 			case UI_FORCE_RANK_CLOAK:
 			case UI_FORCE_RANK_SEEKER:
+			case UI_FORCE_RANK_SENTRY:
 			//[/ExpSys]
 	  			if(!Rect_ContainsPoint(&item->window.rect, DC->cursorx, DC->cursory) )
 				{

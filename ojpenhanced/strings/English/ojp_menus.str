@@ -94,6 +94,12 @@ LANG_ENGLISH	    "Seeker Droid:"
 
 REFERENCE	    DESC_SKILL_SEEKER
 LANG_ENGLISH	"Gains the user a seeker droid."
+
+REFERENCE	    SKILL_SENTRY
+LANG_ENGLISH	    "Sentry Gun:"
+
+REFERENCE	    DESC_SKILL_SENTRY
+LANG_ENGLISH	"Gains the user a sentry gun."
 //[/ExpSys]
 
 //[Flamethrower]

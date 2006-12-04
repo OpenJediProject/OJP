@@ -1679,7 +1679,7 @@
 			}
 		}
 		
-		// bowcaster title
+		// seeker title
 		itemDef 
 		{
 			name					setsk_seeker
@@ -1701,7 +1701,7 @@
 			decoration
 		}
 	
-		// bowcaster assign
+		// seeker assign
 		itemDef 
 		{
 			name					setsk_seeker
@@ -1732,6 +1732,62 @@
 			mouseexit 
 			{ 
 				setitemcolor	setsk_seeker forecolor .2 1 .2 1
+			}
+		}
+		
+		// sentry title
+		itemDef 
+		{
+			name					setsk_sentry
+			group					gunpowers
+			style					0	
+			text					@OJP_MENUS_SKILL_SENTRY
+			rect					30 317 110 15
+			textalign				ITEM_ALIGN_RIGHT												
+			textalignx				105
+			textaligny				0
+			font					4
+			textscale				1
+			forecolor				.2 1 .2 1
+			outlinecolor			1 .5 .5 .5
+			backcolor				0 0 0 0
+			border					0
+			bordercolor				0 0 0 0
+			visible					1 
+			decoration
+		}
+	
+		// sentry assign
+		itemDef 
+		{
+			name					setsk_sentry
+			group					gunpowers
+			style					0	
+			ownerdraw				UI_FORCE_RANK_SENTRY
+			rect					30 317 175 15
+			textalign				ITEM_ALIGN_LEFT		
+			textalignx				115
+			textaligny				-6
+			textscale				.25        
+			forecolor				.2 1 .2 1
+			backcolor				0 0 0 0
+			forecolor				1 0.2 0.2 1
+			border					0
+			bordercolor				0 0 0 0
+			descText				@OJP_MENUS_DESC_SKILL_SENTRY
+			visible					1 
+			action 
+			{ 
+				play			"sound/interface/button1.wav" ;
+			}
+
+			mouseenter 
+			{ 
+				setitemcolor	setsk_sentry forecolor .7 1 2. 1
+			}
+			mouseexit 
+			{ 
+				setitemcolor	setsk_sentry forecolor .2 1 .2 1
 			}
 		}
 		//[/ExpSys]

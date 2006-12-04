@@ -657,6 +657,7 @@ typedef enum
 	SK_FORCEFIELD,	//forcefield skill
 	SK_CLOAK,		//cloaking device skill
 	SK_SEEKER,		//seeker droid skill
+	SK_SENTRY,		//sentry gun skill
 	NUM_SKILLS
 } skills_t;
 

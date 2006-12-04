@@ -121,6 +121,14 @@ LANG_GERMAN		"#same"
 REFERENCE	    DESC_SKILL_SEEKER
 LANG_ENGLISH	"Gains the user a seeker droid."
 LANG_GERMAN		"#same"
+
+REFERENCE	    SKILL_SENTRY
+LANG_ENGLISH	    "Sentry Gun:"
+LANG_GERMAN		"#same"
+
+REFERENCE	    DESC_SKILL_SENTRY
+LANG_ENGLISH	"Gains the user a sentry gun."
+LANG_GERMAN		"#same"
 //[/ExpSys]
 
 //[Flamethrower]

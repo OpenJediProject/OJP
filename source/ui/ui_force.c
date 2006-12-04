@@ -65,6 +65,7 @@ qboolean uiForcePowersDisabled[NUM_TOTAL_SKILLS] = {
 	qfalse,//SK_FORCEFIELD,	//forcefield skill
 	qfalse,//SK_CLOAK,		//cloaking device skill
 	qfalse,//SK_SEEKER,		//seeker droid skill
+	qfalse,//SK_SENTRY,		//sentry gun skill
 	//[/ExpSys]
 };
 
@@ -112,6 +113,7 @@ int uiForcePowersRank[NUM_TOTAL_SKILLS] = {
 	0,//SK_FORCEFIELD,	//forcefield skill
 	0,//SK_CLOAK,		//cloaking device skill
 	0,//SK_SEEKER,		//seeker droid skill
+	0,//SK_SENTRY,		//sentry gun skill
 	//[/ExpSys]
 };
 
@@ -154,6 +156,7 @@ int uiForcePowerDarkLight[NUM_TOTAL_SKILLS] = //0 == neutral
 	0,//SK_FORCEFIELD,	//forcefield skill
 	0,//SK_CLOAK,		//cloaking device skill
 	0,//SK_SEEKER,		//seeker droid skill
+	0,//SK_SENTRY,		//sentry gun skill
 	//[/ExpSys]
 };
 
@@ -200,6 +203,7 @@ int NumberOfSkillRanks(int skill)
 		case NUM_FORCE_POWERS+SK_FORCEFIELD:	//forcefield skill
 		case NUM_FORCE_POWERS+SK_CLOAK:			//cloaking device skill
 		case NUM_FORCE_POWERS+SK_SEEKER:		//seeker droid skill
+		case NUM_FORCE_POWERS+SK_SENTRY:		//sentry gun skill
 			return 1;
 			break;
 		case NUM_FORCE_POWERS+SK_BACTA:
@@ -281,7 +285,7 @@ void UI_DrawForceStars(rectDef_t *rect, float scale, vec4_t color, int textStyle
 void UI_UpdateClientForcePowers(const char *teamArg)
 {
 	//[ExpSys]
-	trap_Cvar_Set( "forcepowers", va("%i-%i-%i%i%i%i%i%i%i%i%i%i%i%i%i%i%i%i%i%i%i%i%i%i%i%i%i%i%i%i%i",
+	trap_Cvar_Set( "forcepowers", va("%i-%i-%i%i%i%i%i%i%i%i%i%i%i%i%i%i%i%i%i%i%i%i%i%i%i%i%i%i%i%i%i%i",
 	//trap_Cvar_Set( "forcepowers", va("%i-%i-%i%i%i%i%i%i%i%i%i%i%i%i%i%i%i%i%i%i",
 	//[/ExpSys]
 		uiForceRank, uiForceSide, uiForcePowersRank[0], uiForcePowersRank[1],
@@ -294,7 +298,8 @@ void UI_UpdateClientForcePowers(const char *teamArg)
 		uiForcePowersRank[17], uiForcePowersRank[18], uiForcePowersRank[19],
 		uiForcePowersRank[20], uiForcePowersRank[21], uiForcePowersRank[22],
 		uiForcePowersRank[23], uiForcePowersRank[24], uiForcePowersRank[25],
-		uiForcePowersRank[26], uiForcePowersRank[27], uiForcePowersRank[28]) );
+		uiForcePowersRank[26], uiForcePowersRank[27], uiForcePowersRank[28],
+		uiForcePowersRank[29]) );
 		//uiForcePowersRank[17]) );
 		//[/ExpSys]
 
