@@ -4127,6 +4127,11 @@ void ClientSpawn(gentity_t *ent) {
 		{
 			client->ps.stats[STAT_HOLDABLE_ITEMS] |= (1 << HI_FLAMETHROWER);
 		}
+
+		if(client->skillLevel[SK_SEEKER])
+		{
+			client->ps.stats[STAT_HOLDABLE_ITEMS] |= (1 << HI_SEEKER);
+		}
 		//client->ps.stats[STAT_HOLDABLE_ITEMS] = 0;
 		//[/ExpSys]
 		client->ps.stats[STAT_HOLDABLE_ITEM] = 0;

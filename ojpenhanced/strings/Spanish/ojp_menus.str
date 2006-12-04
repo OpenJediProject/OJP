@@ -113,6 +113,14 @@ LANG_SPANISH		"#same"
 REFERENCE	    DESC_SKILL_CLOAK
 LANG_ENGLISH	"Gains the user a cloaking device."
 LANG_SPANISH		"#same"
+
+REFERENCE	    SKILL_SEEKER
+LANG_ENGLISH	    "Seeker Droid:"
+LANG_SPANISH		"#same"
+
+REFERENCE	    DESC_SKILL_SEEKER
+LANG_ENGLISH	"Gains the user a seeker droid."
+LANG_SPANISH		"#same"
 //[/ExpSys]
 
 //[Flamethrower]

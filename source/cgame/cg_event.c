@@ -849,7 +849,7 @@ static void CG_UseItem( centity_t *cent ) {
 	if (cg.snap && cg.snap->ps.clientNum == cent->currentState.number && itemNum != HI_BINOCULARS &&
 		//[Flamethrower]
 		itemNum != HI_JETPACK && itemNum != HI_HEALTHDISP && itemNum != HI_AMMODISP && itemNum != HI_CLOAK && itemNum != HI_EWEB 
-		&& itemNum != HI_FLAMETHROWER)
+		&& itemNum != HI_FLAMETHROWER && itemNum != HI_SEEKER)
 		//itemNum != HI_JETPACK && itemNum != HI_HEALTHDISP && itemNum != HI_AMMODISP && itemNum != HI_CLOAK && itemNum != HI_EWEB)
 		//[/Flamethrower]
 	{ //if not using binoculars/jetpack/dispensers/cloak, we just used that item up, so switch

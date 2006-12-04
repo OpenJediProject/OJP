@@ -88,6 +88,12 @@ LANG_ENGLISH	    "Cloaking Device:"
 
 REFERENCE	    DESC_SKILL_CLOAK
 LANG_ENGLISH	"Gains the user a cloaking device."
+
+REFERENCE	    SKILL_SEEKER
+LANG_ENGLISH	    "Seeker Droid:"
+
+REFERENCE	    DESC_SKILL_SEEKER
+LANG_ENGLISH	"Gains the user a seeker droid."
 //[/ExpSys]
 
 //[Flamethrower]
