@@ -242,7 +242,7 @@ void Remote_Fire (void)
 	//[SeekerItemNpc]
 	//these dont need to be static, and vright and up arent used
 	/*static*/ vec3_t	forward;//, vright, up;
-	/*static*/ vec3_t	muzzle;
+	/*static vec3_t	muzzle;*/
 	//[/SeekerItemNpc]
 	gentity_t	*missile;
 
