@@ -4915,10 +4915,22 @@ weapChecks:
 					//newmove = LS_A_TL2BR + (curmove-LS_S_TL2BR);
 					//[/SaberSys]
 				}
+				//[SaberSys]
+				else if ( PM_SaberInBounce( curmove ) && pm->ps->userInt3 & (1 << FLAG_PARRIED) )
+				{//can't combo if we were parried.
+					newmove = LS_READY;
+				}
+				else if ( PM_SaberInParry( curmove ) )
+				{//can't attack straight from a block animation.
+					newmove = LS_READY;
+				}
+				/*
 				else if ( PM_SaberInBrokenParry( curmove ) )
 				{//broken parries must always return to ready
 					newmove = LS_READY;
 				}
+				*/
+				//[/SaberSys]
 				else//if ( pm->cmd.buttons&BUTTON_ATTACK && !(pm->ps->pm_flags&PMF_ATTACK_HELD) )//only do this if just pressed attack button?
 				{//get attack move from movement command
 					/*
@@ -5491,6 +5503,7 @@ void PM_SetSaberMove(short newMove)
 		{//switched away from a slow bounce move, remove the flags.
 			pm->ps->userInt3 &= ~( 1 << FLAG_SLOWBOUNCE );
 			pm->ps->userInt3 &= ~( 1 << FLAG_OLDSLOWBOUNCE );
+			pm->ps->userInt3 &= ~( 1 << FLAG_PARRIED );
 		}
 		//[/SaberSys]
 

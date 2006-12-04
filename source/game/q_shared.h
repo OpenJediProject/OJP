@@ -2696,6 +2696,10 @@ typedef struct siegePers_s
 #define FLAG_FLAMETHROWER	7
 //[/Flamethrower]
 
+//flag indicates that the player was parried.  
+//They won't be able to launch into a combo from the bounce.
+#define FLAG_PARRIED		8
+
 
 //[SaberDefines]
 //scaler to the walkspeed

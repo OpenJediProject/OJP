@@ -277,6 +277,7 @@ void SabBeh_AttackVsBlock( gentity_t *attacker, sabmech_t *mechAttacker,
 #ifdef _DEBUG
 			mechAttacker->behaveMode = SABBEHAVE_ATTACK;
 #endif
+			attacker->client->ps.userInt3 |= ( 1 << FLAG_PARRIED );
 
 			SabBeh_AddBalance(blocker, mechBlocker, -1, qfalse);
 #ifdef _DEBUG
@@ -332,6 +333,7 @@ void SabBeh_AttackVsBlock( gentity_t *attacker, sabmech_t *mechAttacker,
 #ifdef _DEBUG
 			mechAttacker->behaveMode = SABBEHAVE_ATTACKPARRIED;
 #endif
+			attacker->client->ps.userInt3 |= ( 1 << FLAG_PARRIED );
 
 			SabBeh_AddBalance(blocker, mechBlocker, -3, qfalse);
 

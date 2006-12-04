@@ -7766,11 +7766,14 @@ void DownedSaberThink(gentity_t *saberent)
 
 #ifdef _DEBUG
 		if (saberOwn->client->saberStoredIndex != saberent->s.number)
-		{ //I'm paranoid.
-			assert(!"Bad saber index!!!");
+		{ //I'm paranoid.		
 			//[test]
-			//reassign the saber index number to recover.
-			saberOwn->client->saberStoredIndex = saberent->s.number;
+			//kill the saber entity to recover
+			G_LogPrintf("Saber index didn't match that of owner in DownedSaberThink!\n");
+			saberent->think = G_FreeEntity;
+			saberent->nextthink = level.time;
+			return;
+			//assert(!"Bad saber index!!!");
 			//[/test]
 		}
 #endif

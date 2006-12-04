@@ -23,6 +23,13 @@ Version 0.0.9r:
 			- Converted the seeker item into a functional npc.
 			- Added the ability to command the seeker to follow/patrol/attack by aiming at a place and using its item again.
 
+		Saber Combat System:
+		
+			Misc:
+				- Attackers can't combo if they are parried.
+				- Can no longer attack straight from a block animation.
+				- Can now combo into an attack from a parry animation.
+
 	Improvements/Fixes:
 
 		Animation Tweaks:
