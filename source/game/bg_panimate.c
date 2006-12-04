@@ -3322,6 +3322,7 @@ void BG_SaberStartTransAnim( int clientNum, int saberAnimLevel, int weapon, int 
 	saberanimscale = atof(buf);
 	//[/SaberSys]
 
+	//racc - adjust saber attack animatons by the .sab files speed scaler.
 	if ( anim >= BOTH_A1_T__B_ && anim <= BOTH_ROLL_STAB )
 	{
 		if ( weapon == WP_SABER )
