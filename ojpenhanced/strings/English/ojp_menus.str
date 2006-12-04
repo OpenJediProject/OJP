@@ -80,7 +80,7 @@ LANG_ENGLISH	"Gains the user a Bowcaster."
 REFERENCE	    SKILL_FORCEFIELD
 LANG_ENGLISH	    "Force Field:"
 
-REFERENCE	    DESC_SKILL_BOWCASTER
+REFERENCE	    DESC_SKILL_FORCEFIELD
 LANG_ENGLISH	"Gains the user a portable ray shield."
 
 REFERENCE	    SKILL_CLOAK

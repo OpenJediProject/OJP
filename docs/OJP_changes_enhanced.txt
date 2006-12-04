@@ -10,6 +10,7 @@ Version 0.0.9r:
 	New Features:
 
 		Experience System:
+			- Fixed problem with force field skill's description not showing.
 			- Added seeker skill.
 			- Added bowcaster skill.
 			- Added cloaking device skill.
