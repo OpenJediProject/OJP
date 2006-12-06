@@ -383,7 +383,11 @@ qboolean G_MissileImpact( gentity_t *ent, trace_t *trace ) {
 	other = &g_entities[trace->entityNum];
 
 	// check for bounce
-	if ( !other->takedamage &&
+	//[WeaponSys]
+	//allow thermals to bounce off players and such.
+	if ( (!other->takedamage || ent->s.weapon == WP_THERMAL) &&
+	//if ( !other->takedamage &&
+	//[/WeaponSys]
 		(ent->bounceCount > 0 || ent->bounceCount == -5) &&
 		( ent->flags & ( FL_BOUNCE | FL_BOUNCE_HALF ) ) ) {
 		G_BounceMissile( ent, trace );

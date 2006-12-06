@@ -33,6 +33,12 @@ Version 0.0.9r:
 				- Can now combo into an attack from a parry animation.
 				- Parried lunges result in a forced mishap for the attacker.
 
+		Weapon System:
+
+			Thermals:
+				- Dramatically increased the damage of the thermals.
+				- Removed contact trigger mode.  Thermals only explode when their timer runs out.
+
 	Improvements/Fixes:
 
 		Animation Tweaks:

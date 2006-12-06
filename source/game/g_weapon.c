@@ -2146,10 +2146,16 @@ THERMAL DETONATOR
 
 ======================================================================
 */
-
+//[WeaponSys]
+#define TD_DAMAGE			250 //only on a direct impact
+#define TD_SPLASH_RAD		250
+#define TD_SPLASH_DAM		210
+/*
 #define TD_DAMAGE			70 //only do 70 on a direct impact
 #define TD_SPLASH_RAD		128
 #define TD_SPLASH_DAM		90
+*/
+//[/WeaponSys]
 #define TD_VELOCITY			900
 #define TD_MIN_CHARGE		0.15f
 #define TD_TIME				3000//6000
@@ -4883,7 +4889,10 @@ void FireWeapon( gentity_t *ent, qboolean altFire )
 			break;
 
 		case WP_THERMAL:
-			WP_FireThermalDetonator( ent, altFire );
+			//[WeaponSys]
+			WP_FireThermalDetonator( ent, qfalse );
+			//WP_FireThermalDetonator( ent, altFire );
+			//[/WeaponSys]
 			break;
 
 		case WP_TRIP_MINE:
