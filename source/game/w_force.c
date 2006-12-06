@@ -3453,6 +3453,9 @@ float forcePushPullRadius[NUM_FORCE_POWER_LEVELS] =
 //rwwFIXMEFIXME: incorporate this into the below function? Currently it's only being used by jedi AI
 
 extern void Touch_Button(gentity_t *ent, gentity_t *other, trace_t *trace );
+//[ForceSys]
+void G_DeflectMissile( gentity_t *ent, gentity_t *missile, vec3_t forward ) ;
+//[/ForceSys]
 void ForceThrow( gentity_t *self, qboolean pull )
 {
 	//shove things in front of you away
