@@ -31,6 +31,7 @@ Version 0.0.9r:
 				- Attackers can't combo if they are parried.
 				- Can no longer attack straight from a block animation.
 				- Can now combo into an attack from a parry animation.
+				- Parried lunges result in a forced mishap for the attacker.
 
 	Improvements/Fixes:
 
