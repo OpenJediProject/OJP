@@ -639,7 +639,7 @@ void Seeker_FollowPlayer( void )
 			target = NPC->client->leader;
 	}
 	else{
-		gentity_t *target = FindClosestPlayer(NPC->r.currentOrigin, NPC->client->playerTeam);
+		target = FindClosestPlayer(NPC->r.currentOrigin, NPC->client->playerTeam);
 	}
 
 	if(!target)

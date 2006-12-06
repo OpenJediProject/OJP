@@ -1184,12 +1184,15 @@ void ItemUse_Seeker(gentity_t *ent)
 	else
 	{
 		//TODO: have commandable seekers be based on skill level?
-		if(remote->NPC->goalEntity == ent /*&& remote->NPC->behaviorState == BS_FOLLOW_LEADER*/){
+		if(remote->NPC->goalEntity == ent /*&& remote->NPC->behaviorState == BS_FOLLOW_LEADER*/)
+		{
 			vec3_t targVec;
 			gentity_t *targ;
 			cplane_t plane; //for getting aim offset so seeker doesnt try to enter the walls (in which case it will just stay put)
 			int range = 1800; //TODO: set this based on skill level
-			if((targ = ViewTarget(ent, range, &targVec, &plane))){
+			targ = ViewTarget(ent, range, &targVec, &plane); //racc - find the entity of whatever we're looking at.
+			if(targ)
+			{//racc - found viewed entity.
 				if(targ->client && targ->client->playerTeam != ent->client->playerTeam){
 					//remote->NPC->behaviorState = BS_HUNT_AND_KILL;
 					remote->NPC->goalEntity = remote->enemy = targ;
