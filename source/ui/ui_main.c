@@ -3370,6 +3370,7 @@ static int UI_OwnerDrawWidth(int ownerDraw, float scale) {
 	case UI_FORCE_RANK_CLOAK:
 	case UI_FORCE_RANK_SEEKER:
 	case UI_FORCE_RANK_SENTRY:
+	case UI_FORCE_RANK_DETPACK:
 		if(ownerDraw < UI_FORCE_RANK_JETPACK)
 		{
 			findex = (ownerDraw - UI_FORCE_RANK)-1;
@@ -3867,6 +3868,7 @@ static void UI_OwnerDraw(float x, float y, float w, float h, float text_x, float
 	case UI_FORCE_RANK_CLOAK:
 	case UI_FORCE_RANK_SEEKER:
 	case UI_FORCE_RANK_SENTRY:
+	case UI_FORCE_RANK_DETPACK:
 	//[/ExpSys]
 
 //		uiForceRank
@@ -5209,6 +5211,7 @@ static qboolean UI_OwnerDrawHandleKey(int ownerDraw, int flags, float *special, 
 	case UI_FORCE_RANK_CLOAK:
 	case UI_FORCE_RANK_SEEKER:
 	case UI_FORCE_RANK_SENTRY:
+	case UI_FORCE_RANK_DETPACK:
 		if(ownerDraw < UI_FORCE_RANK_JETPACK)
 		{
 			findex = (ownerDraw - UI_FORCE_RANK)-1;

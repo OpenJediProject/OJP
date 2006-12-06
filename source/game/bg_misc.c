@@ -233,6 +233,7 @@ int bgForcePowerCost[NUM_TOTAL_SKILLS][NUM_FORCE_POWER_LEVELS] = //0 == neutral
 	{	0,	8,	0,	0	},	//SK_CLOAK,		//cloaking device skill
 	{	0,	6,	0,	0	},	//SK_SEEKER,		//seeker droid skill
 	{	0,  5,  0,  0	},	//SK_SENTRY,		//sentry gun skill
+	{	0,  8,  8,  0	},	//SK_DETPACK,		//detpack skill
 	//[/ExpSys]
 };
 

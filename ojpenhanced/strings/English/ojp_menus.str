@@ -100,6 +100,12 @@ LANG_ENGLISH	    "Sentry Gun:"
 
 REFERENCE	    DESC_SKILL_SENTRY
 LANG_ENGLISH	"Gains the user a sentry gun."
+
+REFERENCE	    SKILL_DETPACK
+LANG_ENGLISH	    "Detpack:"
+
+REFERENCE	    DESC_SKILL_DETPACK
+LANG_ENGLISH	"Gains the user detpacks."
 //[/ExpSys]
 
 //[Flamethrower]

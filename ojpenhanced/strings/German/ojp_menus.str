@@ -129,6 +129,14 @@ LANG_GERMAN		"#same"
 REFERENCE	    DESC_SKILL_SENTRY
 LANG_ENGLISH	"Gains the user a sentry gun."
 LANG_GERMAN		"#same"
+
+REFERENCE	    SKILL_DETPACK
+LANG_ENGLISH	    "Detpack:"
+LANG_GERMAN		"#same"
+
+REFERENCE	    DESC_SKILL_DETPACK
+LANG_ENGLISH	"Gains the user detpacks."
+LANG_GERMAN		"#same"
 //[/ExpSys]
 
 //[Flamethrower]

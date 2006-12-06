@@ -3944,6 +3944,14 @@ void ClientSpawn(gentity_t *ent) {
 					client->ps.stats[STAT_WEAPONS] |= ( 1 << WP_ROCKET_LAUNCHER );
 				}
 			}
+
+			if(client->skillLevel[SK_DETPACK])
+			{//player has blaster
+				if (!wDisable || !(wDisable & (1 << WP_DET_PACK)))
+				{
+					client->ps.stats[STAT_WEAPONS] |= ( 1 << WP_DET_PACK );
+				}
+			}
 			//[/ExpSys]
 		}
 
@@ -4176,6 +4184,8 @@ void ClientSpawn(gentity_t *ent) {
 		client->ps.ammo[AMMO_THERMAL] = ammoData[AMMO_THERMAL].max * (float) client->skillLevel[SK_THERMAL]/FORCE_LEVEL_3;
 
 		client->ps.ammo[AMMO_ROCKETS] = ammoData[AMMO_ROCKETS].max * (float) client->skillLevel[SK_ROCKET]/FORCE_LEVEL_3;
+
+		client->ps.ammo[AMMO_DETPACK] = ammoData[AMMO_DETPACK].max * (float) client->skillLevel[SK_DETPACK]/FORCE_LEVEL_2;
 		//client->ps.ammo[AMMO_BLASTER] = 100; //ammoData[AMMO_BLASTER].max; //100 seems fair.
 		//[/ExpSys]
 	}

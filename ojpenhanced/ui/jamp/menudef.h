@@ -368,6 +368,7 @@
 #define UI_FORCE_RANK_CLOAK			307
 #define UI_FORCE_RANK_SEEKER		308
 #define UI_FORCE_RANK_SENTRY		309
+#define UI_FORCE_RANK_DETPACK		310
 //[/ExpSys]
 
 #define VOICECHAT_GETFLAG			"getflag"				// command someone to get the flag

@@ -658,6 +658,7 @@ typedef enum
 	SK_CLOAK,		//cloaking device skill
 	SK_SEEKER,		//seeker droid skill
 	SK_SENTRY,		//sentry gun skill
+	SK_DETPACK,		//detpack skill
 	NUM_SKILLS
 } skills_t;
 
