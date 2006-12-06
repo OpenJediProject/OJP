@@ -180,27 +180,27 @@ int bgForcePowerCost[NUM_TOTAL_SKILLS][NUM_FORCE_POWER_LEVELS] = //0 == neutral
 //int bgForcePowerCost[NUM_FORCE_POWERS][NUM_FORCE_POWER_LEVELS] = //0 == neutral
 //[/ExpSys]
 {
-	{	0,	2,	4,	6	},	// Heal			// FP_HEAL
 	//[ExpSys]
-	//we want jump to cost something as well.
-	{	0,	8,	4,	6	},	// Jump			//FP_LEVITATION,//hold/duration
-	{	0,	8,	4,	6	},	// Speed		//FP_SPEED,//duration
-	{	0,	8,	3,	6	},	// Push			//FP_PUSH,//hold/duration
-	{	0,	8,	3,	6	},	// Pull			//FP_PULL,//hold/duration
+	{	0,	2,	4,	6	},	// Heal			// FP_HEAL
+	{	0,	4,	4,	4	},	// Jump			//FP_LEVITATION,//hold/duration
+	{	0,	4,	4,	4	},	// Speed		//FP_SPEED,//duration
+	{	0,	4,	4,	4	},	// Push			//FP_PUSH,//hold/duration
+	{	0,	4,	4,	4	},	// Pull			//FP_PULL,//hold/duration
 	{	0,	4,	6,	8	},	// Mind Trick	//FP_TELEPATHY,//instant
-	{	0,	8,	3,	6	},	// Grip			//FP_GRIP,//hold/duration
-	{	0,	8,	5,	8	},	// Lightning	//FP_LIGHTNING,//hold/duration
+	{	0,	8,	8,	8	},	// Grip			//FP_GRIP,//hold/duration
+	{	0,	8,	8,	8	},	// Lightning	//FP_LIGHTNING,//hold/duration
 	{	0,	4,	6,	8	},	// Dark Rage	//FP_RAGE,//duration
 	{	0,	2,	5,	8	},	// Protection	//FP_PROTECT,//duration
-	{	0,	8,	3,	6	},	// Absorb		//FP_ABSORB,//duration
+	{	0,	4,	4,	4	},	// Absorb		//FP_ABSORB,//duration
 	{	0,	1,	3,	6	},	// Team Heal	//FP_TEAM_HEAL,//instant
 	{	0,	1,	3,	6	},	// Team Force	//FP_TEAM_FORCE,//instant
 	{	0,	2,	4,	6	},	// Drain		//FP_DRAIN,//hold/duration
-	{	0,	8,	5,	8	},	// Sight		//FP_SEE,//duration
-	{	0,	SABER_OFFENSE_L1,	5,	8	},	// Saber Attack	//FP_SABER_OFFENSE,
-	{	0,	SABER_DEFENSE_L1,	5,	8	},	// Saber Defend	//FP_SABER_DEFENSE,
+	{	0,	4,	4,	4	},	// Sight		//FP_SEE,//duration
+	{	0,	SABER_OFFENSE_L1,	4,	4	},	// Saber Attack	//FP_SABER_OFFENSE,
+	{	0,	SABER_DEFENSE_L1,	4,	4	},	// Saber Defend	//FP_SABER_DEFENSE,
 	{	0,	4,	6,	8	},	// Saber Throw	//FP_SABERTHROW,
 	/* basejka values
+	{	0,	2,	4,	6	},	// Heal			// FP_HEAL
 	{	0,	0,	2,	6	},	// Jump			//FP_LEVITATION,//hold/duration
 	{	0,	2,	4,	6	},	// Speed		//FP_SPEED,//duration
 	{	0,	1,	3,	6	},	// Push			//FP_PUSH,//hold/duration
@@ -222,14 +222,14 @@ int bgForcePowerCost[NUM_TOTAL_SKILLS][NUM_FORCE_POWER_LEVELS] = //0 == neutral
 	//NUM_FORCE_POWERS
 	//racc - additional skills
 	{	0,	8,	0,	0	},	//SK_JETPACK,		// Jetpack Skill	
-	{	0,	2,	0,	0	},	//SK_PISTOL,		//blaster pistol
-	{	0,	4,	4,	4	},	//SK_BLASTER,		//blaster rifle skill
-	{	0,	6,	6,	6	},	//SK_THERMAL,		//thermal detenator skill
-	{	0,	4,	6,	8	},	//SK_ROCKET,		//rocket launcher skill
-	{	0,	4,	4,	0	},	//SK_BACTA			//bacta medikits skill
+	{	0,	1,	0,	0	},	//SK_PISTOL,		//blaster pistol
+	{	0,	2,	1,	1	},	//SK_BLASTER,		//blaster rifle skill
+	{	0,	8,	8,	8	},	//SK_THERMAL,		//thermal detenator skill
+	{	0,	8,	8,	8	},	//SK_ROCKET,		//rocket launcher skill
+	{	0,	3,	3,	0	},	//SK_BACTA			//bacta medikits skill
 	{	0,	8,	0,	0	},	//SK_FLAMETHROWER	//flamethrower skill
-	{	0,	5,	3,	2	},	//SK_BOWCASTER,		//bowcaster skill
-	{	0,	5,	0,	0	},	//SK_FORCEFIELD,	//forcefield skill
+	{	0,	2,	1,	1	},	//SK_BOWCASTER,		//bowcaster skill
+	{	0,	3,	0,	0	},	//SK_FORCEFIELD,	//forcefield skill
 	{	0,	8,	0,	0	},	//SK_CLOAK,		//cloaking device skill
 	{	0,	6,	0,	0	},	//SK_SEEKER,		//seeker droid skill
 	{	0,  5,  0,  0	},	//SK_SENTRY,		//sentry gun skill

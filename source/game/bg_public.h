@@ -527,8 +527,8 @@ extern int forceMasteryPoints[NUM_FORCE_MASTERY_LEVELS];
 //[/ExpSys]
 
 //Made defines for saber offense/defense level 1 since UpdateForceUsed() manually changes this values based on if sabers are given for free or not.
-#define SABER_OFFENSE_L1	8  
-#define SABER_DEFENSE_L1	1
+#define SABER_OFFENSE_L1	4  
+#define SABER_DEFENSE_L1	4
 extern int bgForcePowerCost[NUM_TOTAL_SKILLS][NUM_FORCE_POWER_LEVELS];
 //extern int bgForcePowerCost[NUM_FORCE_POWERS][NUM_FORCE_POWER_LEVELS];
 //[/ExpSys]

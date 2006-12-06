@@ -281,7 +281,10 @@ weaponData_t weaponData[WP_NUM_WEAPONS] =
 		800,					//	int		fireTime;			// Amount of time between firings
 		8192,					//	int		range;				// Range of weapon
 		1,						//	int		altEnergyPerShot;	// Amount of energy used for alt-fire
-		400,					//	int		altFireTime;		// Amount of time between alt-firings
+		//[WeaponSys]
+		800,					//	int		altFireTime;		// Amount of time between alt-firings
+		//400,					//	int		altFireTime;		// Amount of time between alt-firings
+		//[/WeaponSys]
 		8192,					//	int		altRange;			// Range of alt-fire
 		0,						//	int		chargeSubTime;		// ms interval for subtracting ammo during charge
 		0,						//	int		altChargeSubTime;	// above for secondary
@@ -422,7 +425,7 @@ ammoData_t ammoData[AMMO_MAX] =
 	{	// AMMO_ROCKETS
 //		"",				//	char	icon[32];	// Name of ammo icon file
 		//[WeaponSys]
-		10				//	int		max;		// Max amount player can hold of ammo
+		3				//	int		max;		// Max amount player can hold of ammo
 		//25				//	int		max;		// Max amount player can hold of ammo
 		//[/WeaponSys]
 	},
@@ -432,7 +435,10 @@ ammoData_t ammoData[AMMO_MAX] =
 	},
 	{	// AMMO_THERMAL
 //		"",				//	char	icon[32];	// Name of ammo icon file
-		10				//	int		max;		// Max amount player can hold of ammo
+		//[WeaponSys]
+		3				//	int		max;		// Max amount player can hold of ammo
+		//10				//	int		max;		// Max amount player can hold of ammo
+		//[/WeaponSys]
 	},
 	{	// AMMO_TRIPMINE
 //		"",				//	char	icon[32];	// Name of ammo icon file
