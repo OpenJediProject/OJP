@@ -359,8 +359,11 @@ void Seeker_Fire( void )
 	// move a bit forward in the direction we shall shoot in so that the bolt doesn't poke out the other side of the seeker
 	VectorMA( muzzle, 15, dir, muzzle );
 
-	
-	missile = CreateMissile( muzzle, dir, 1000, 10000, NPC, qfalse );
+
+	//our player should get the kill, if any
+	if(NPC->activator)
+		missile = CreateMissile( muzzle, dir, 1000, 10000, NPC->activator, qfalse );
+	//missile = CreateMissile( muzzle, dir, 1000, 10000, NPC, qfalse );
 
 	G_PlayEffectID( G_EffectIndex("blaster/muzzle_flash"), muzzle, dir );
 
@@ -561,7 +564,7 @@ void Seeker_FindEnemy( void )
 		}
 
 		//dont attack our owner
-		if(NPC->s.owner == ent)
+		if(NPC->activator == ent)
 			continue;
 
 
