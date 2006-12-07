@@ -7,6 +7,16 @@ This file stores all the information about what has changed from release version
 
 Version 0.0.9s:
 
+	New Features:
+
+		Stun Shield (StunShield):
+			- Force field item now acts like stun shield.  Enemies that touch the field are knocked to the ground. 
+
+		Weapon System:
+
+			Misc:
+				- Dropped weapons now have the ammo amount that their owners had when the weapon was dropped.
+
 	Improvements/Fixes:
 
 		Improved Seeker Item:
@@ -17,8 +27,6 @@ Version 0.0.9s:
 			Blocking:
 				- Having Saber Defense 3 allows players to block back attacks without the extra DP cost.
 
-		Stun Shield (StunShield):
-			- Force field item now acts like stun shield.  Enemies that touch the field are knocked to the ground. 
 
 Version 0.0.9r:
 
