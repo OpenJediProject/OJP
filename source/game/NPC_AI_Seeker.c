@@ -555,10 +555,14 @@ void Seeker_FindEnemy( void )
 			continue;
 		}
 
-		if ( ent->client->playerTeam == NPC->client->playerTeam || ent->client->playerTeam == NPCTEAM_NEUTRAL ) // don't attack same team or bots
+		if (g_gametype.integer > GT_TEAM && (ent->client->playerTeam == NPC->client->playerTeam || ent->client->playerTeam == NPCTEAM_NEUTRAL )) // don't attack same team or bots
 		{
 			continue;
 		}
+
+		//dont attack our owner
+		if(NPC->s.owner == ent)
+			continue;
 
 
 		//[/SeekerItemNpc]
