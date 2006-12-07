@@ -21,6 +21,8 @@ Version 0.0.9r:
 			- Fixed problem with client 0 always having their skill selection screen appear whenever a new player connected to the game.
 			- Players' skill point totals are saved between map/round changes.
 			- Reworked the skill point costs for all skills.
+			- Lowered the rate at which skill points are gained.  
+			- Made the skill point gain for HP damage be relative to the skill levels of the attacker and victim.
 
 		Improved Seeker Item (SeekerItemNpc):
 			- Converted the seeker item into a functional npc.

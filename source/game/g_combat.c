@@ -6478,11 +6478,11 @@ void G_Damage( gentity_t *targ, gentity_t *inflictor, gentity_t *attacker,
 		{//targ is creature and attacker is creature
 			if(take > targ->health)
 			{//damage is greated than target's health, only give experience for damage used to kill victim
-				AddSkill(attacker, (float) targ->health/100.0f);
+				AddSkill(attacker, (float) targ->health / SKILL_HP_PER_SKILL * (targ->client->sess.skillPoints / attacker->client->sess.skillPoints));
 			}
 			else
 			{
-				AddSkill(attacker, take/100.0f);
+				AddSkill(attacker, (float) take / SKILL_HP_PER_SKILL * (targ->client->sess.skillPoints / attacker->client->sess.skillPoints));
 			}
 		}
 		//[/ExpSys]
@@ -6981,7 +6981,7 @@ void G_DodgeDrain(gentity_t *victim, gentity_t *attacker, int amount)
 
 		//scale skill points based on the ratio between skills
 		AddSkill(attacker, 
-			(float) amount / 50 * (victim->client->sess.skillPoints / attacker->client->sess.skillPoints)); 
+			(float) amount / SKILL_DP_PER_SKILL * (victim->client->sess.skillPoints / attacker->client->sess.skillPoints)); 
 	}
 
 	//G_Printf("%i: %i: %i Points of Dodge Drained\n", level.time, victim->s.number, amount);

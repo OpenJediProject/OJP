@@ -118,6 +118,15 @@
 //[/DodgeDefines]
 //[/DodgeSys]
 
+//[ExpSys]
+//[ExpDefines]
+//the current theory is that a player gets 1 SP per player they kill.  
+//The "average" player is assumed to have 100 DP and 100 HP
+#define SKILL_DP_PER_SKILL				200	//the number of DP damage a player has to cause before they get 1 skill point				
+#define SKILL_HP_PER_SKILL				200	//the number of HP damage a player has to cause before they get 1 skill point
+//[/ExpDefines]
+//[/ExpSys]
+
 //[Flamethrower]
 #define FLAMETHROWER_FUELCOST 2		//fuel cost of flamethrower per hit trace
 //[/Flamethrower]
