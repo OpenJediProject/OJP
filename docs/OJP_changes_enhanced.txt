@@ -17,6 +17,8 @@ Version 0.0.9s:
 			Blocking:
 				- Having Saber Defense 3 allows players to block back attacks without the extra DP cost.
 
+		Stun Shield (StunShield):
+			- Force field item now acts like stun shield.  Enemies that touch the field are knocked to the ground. 
 
 Version 0.0.9r:
 

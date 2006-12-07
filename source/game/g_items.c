@@ -230,9 +230,16 @@ void ShieldGoNotSolid(gentity_t *self)
 }
 
 
+//[StunShield]
+extern void G_Knockdown( gentity_t *self, gentity_t *attacker, const vec3_t pushDir, float strength, qboolean breakSaberLock );
+//[/StunShield]
 // Somebody (a player) has touched the shield.  See if it is a "friend".
 void ShieldTouch(gentity_t *self, gentity_t *other, trace_t *trace)
 {
+	//[StunShield]
+	vec3_t tempDir, stunDir;
+	//[/StunShield]
+
 	if (g_gametype.integer >= GT_TEAM)
 	{ // let teammates through
 		// compare the parent's team to the "other's" team
@@ -241,6 +248,9 @@ void ShieldTouch(gentity_t *self, gentity_t *other, trace_t *trace)
 			if (OnSameTeam(self->parent, other))
 			{
 				ShieldGoNotSolid(self);
+				//[StunShield]
+				return;
+				//[/StunShield]
 			}
 		}
 	}
@@ -249,8 +259,39 @@ void ShieldTouch(gentity_t *self, gentity_t *other, trace_t *trace)
 		if (self->parent && self->parent->s.number == other->s.number)
 		{
 			ShieldGoNotSolid(self);
+			//[StunShield]
+			return;
+			//[/StunShield]
 		}
 	}
+
+	//[StunShield]
+	if(!other->client)
+	{//can't knock over non-clients
+		return;
+	}
+
+	//player touched the shield, knock them on their ass.
+	if(self->s.time2 & (1 << 24))
+	{//shield on xaxis
+		VectorSet(stunDir, 0, 1, 0);
+	}
+	else
+	{
+		VectorSet(stunDir, 1, 0, 0);
+	}
+
+	VectorSubtract(self->r.currentOrigin, other->client->ps.origin, tempDir);
+
+	if(DotProduct(tempDir, stunDir) > 0)
+	{//stun the player away from the shield
+		VectorScale(stunDir, -1, stunDir);
+	}
+
+	stunDir[2] = 0.5; //bump the kickback up into the air a bit.
+	G_Throw( other, stunDir, 75 );
+	G_Knockdown(other, self, stunDir, 300, qtrue);
+	//[/StunShield]
 }
 
 
