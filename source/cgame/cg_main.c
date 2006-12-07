@@ -3563,6 +3563,18 @@ char *CG_NewString( const char *string )
 
 	// turn \n into a real linefeed
 	for ( i=0 ; i< l ; i++ ) {
+		//[BugFix47]
+		if (string[i] == '\\' && i < l-1) {
+			if (string[i+1] == 'n') {
+				*new_p++ = '\n';
+				i++;
+			} else {
+				*new_p++ = '\\';
+			}
+		} else {
+			*new_p++ = string[i];
+		}
+		/*old code
 		if (string[i] == '\\' && i < l-1) {
 			i++;
 			if (string[i] == 'n') {
@@ -3573,6 +3585,8 @@ char *CG_NewString( const char *string )
 		} else {
 			*new_p++ = string[i];
 		}
+		*/
+		//[/BugFix47]
 	}
 	
 	return newb;
@@ -4231,9 +4245,18 @@ CG_Shutdown
 Called before every level change or subsystem restart
 =================
 */
+
+//[DynamicMemory_Vehicles]
+void BG_VehicleUnloadParms( void );
+//[/DynamicMemory_Vehicles]
+
 void CG_Shutdown( void ) 
 {
 	BG_ClearAnimsets(); //free all dynamic allocations made through the engine
+
+//[DynamicMemory_Vehicles]
+	BG_VehicleUnloadParms();
+//[/DynamicMemory_Vehicles]
 
     CG_DestroyAllGhoul2();
 

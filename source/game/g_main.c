@@ -1546,6 +1546,10 @@ G_ShutdownGame
 extern void G_SaveBanIP( void );
 //[/AdminCommands]
 
+//[DynamicMemory_Vehicles]
+void BG_VehicleUnloadParms( void );
+//[/DynamicMemory_Vehicles]
+
 void G_ShutdownGame( int restart ) {
 	int i = 0;
 	gentity_t *ent;
@@ -1559,6 +1563,10 @@ void G_ShutdownGame( int restart ) {
 	G_CleanAllFakeClients(); //get rid of dynamically allocated fake client structs.
 
 	BG_ClearAnimsets(); //free all dynamic allocations made through the engine
+
+//[DynamicMemory_Vehicles]
+	BG_VehicleUnloadParms();
+//[/DynamicMemory_Vehicles]
 
 //	Com_Printf("... Gameside GHOUL2 Cleanup\n");
 	while (i < MAX_GENTITIES)

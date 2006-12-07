@@ -13,13 +13,35 @@ USER INTERFACE SABER LOADING & DISPLAY CODE
 #include "ui_local.h"
 #include "ui_shared.h"
 
-//#define MAX_SABER_DATA_SIZE 0x8000
+//[DynamicMemory_Sabers]
+
+//NOTE: this is working 100% up to the point where trap_TrueMalloc is ONLY defined for game and cgame, NOT ui
+//thousand curses upon that.
+
+//#define DYNAMICMEMORY_SABERS
+
+
+#ifndef DYNAMICMEMORY_SABERS
+//#define MAX_SABER_DATA_SIZE 0x8000]
 #define MAX_SABER_DATA_SIZE 0x80000
+#endif
+//[/DynamicMemory_Sabers]
+
 
 // On Xbox, static linking lets us steal the buffer from wp_saberLoad
 // Just make sure that the saber data size is the same
 // Damn. OK. Gotta fix this again. Later.
+
+//[DynamicMemory_Sabers]
+#ifdef DYNAMICMEMORY_SABERS
+char *SaberParms;
+void trap_TrueMalloc(void **ptr, int size);
+void trap_TrueFree(void **ptr);
+#else
 static char	SaberParms[MAX_SABER_DATA_SIZE];
+#endif
+//[/DynamicMemory_Sabers]
+
 qboolean	ui_saber_parms_parsed = qfalse;
 
 static qhandle_t redSaberGlowShader;
@@ -360,15 +382,50 @@ void UI_SaberLoadParms( void )
 	ui_saber_parms_parsed = qtrue;
 	UI_CacheSaberGlowGraphics();
 
+//[DynamicMemory_Sabers] moved down lower
+	/*
 	//set where to store the first one
 	totallen = 0;
 	marker = SaberParms;
 	marker[0] = '\0';
+	*/
+
+	//we werent initilizing saberExtFNLen, which is Bad
+	//this is just a general bug fix, not for the purpose of [DynamicMemory_Sabers]
+	saberExtFNLen = 0;
+///[DynamicMemory_Sabers]
+
 
 	//now load in the extra .npc extensions
 	fileCnt = trap_FS_GetFileList("ext_data/sabers", ".sab", saberExtensionListBuf, sizeof(saberExtensionListBuf) );
 
 	holdChar = saberExtensionListBuf;
+
+//[DynamicMemory_Sabers]
+#ifdef DYNAMICMEMORY_SABERS
+	totallen = 0;
+	for ( i = 0; i < fileCnt; i++, holdChar += saberExtFNLen + 1 ) {
+		len = trap_FS_FOpenFile( va( "ext_data/sabers/%s", holdChar), &f, FS_READ );
+		if(!f)
+			continue;
+		totallen += len;
+	}
+	//what do we do if totallen is zero?  will never happen, but COULD happen in theory...
+	trap_TrueMalloc(&SaberParms, totallen+1); //+1 for null char, needed?
+	if(!SaberParms)
+		//ERR_FATAL or any level isnt used with Com_Error
+		Com_Error(ERR_FATAL, "Saber parsing: Out of memory!");
+	holdChar = saberExtensionListBuf;
+#endif
+//[/DynamicMemory_Sabers]
+
+//[DynamicMemory_Sabers] moved to here
+	//set where to store the first one
+	totallen = 0;
+	marker = SaberParms;
+	marker[0] = '\0';
+///[DynamicMemory_Sabers]
+
 	for ( i = 0; i < fileCnt; i++, holdChar += saberExtFNLen + 1 ) 
 	{
 		saberExtFNLen = strlen( holdChar );
@@ -402,9 +459,13 @@ void UI_SaberLoadParms( void )
 			}
 			len = COM_Compress( buffer );
 
+//[DynamicMemory_Sabers]
+#ifndef DYNAMICMEMORY_SABERS
 			if ( totallen + len >= MAX_SABER_DATA_SIZE ) {
 				Com_Error( ERR_FATAL, "UI_SaberLoadParms: ran out of space before reading %s\n(you must make the .sab files smaller)", holdChar );
 			}
+#endif
+//[/DynamicMemory_Sabers]
 			strcat( marker, buffer );
 
 			totallen += len;

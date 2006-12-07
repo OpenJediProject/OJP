@@ -54,6 +54,8 @@ extern qhandle_t	trap_R_RegisterShader( const char *name );
 extern qhandle_t	trap_R_RegisterShaderNoMip( const char *name );
 extern int			trap_FX_RegisterEffect(const char *file);
 extern sfxHandle_t	trap_S_RegisterSound( const char *sample);		// returns buzz if not found
+
+
 #include "../namespace_end.h"
 #else//UI
 #include "../namespace_begin.h"
@@ -69,6 +71,24 @@ extern stringID_table_t animTable [MAX_ANIMATIONS+1];
 
 // These buffers are filled in with the same contents and then just read from in
 // a few places. We only need one copy on Xbox.
+
+//[DynamicMemory_Vehicles]
+//TODO: dynamicize g_vehicleInfo as well
+//NOTE: why dont we just load all g_vehicleInfo indexes at game startup?  it (currently) is static memory, 
+	//so memory usage has nothing to do with it, and better to have the load time be at startup instead of 
+	//in the middle of the game as a new vehicle is created
+
+#define DYNAMICMEMORY_VEHICLES
+//NOTE: ONCE AGAIN we have the lack of trap_TrueMalloc for ui, a lazyness in ravensoft leads us to not being able to use dynamic loading...
+	//what does the ui even use this for?  anything?
+	//can I just blindly disable it for the ui?
+	//yep, we can.  
+
+#ifndef WE_ARE_IN_THE_UI
+
+#if !defined(_XBOX) || defined(QAGAME)
+
+#ifndef DYNAMICMEMORY_VEHICLES
 //[MOREVEHICLES]
 #define MAX_VEH_WEAPON_DATA_SIZE 0x10000
 #define MAX_VEHICLE_DATA_SIZE 0x40000
@@ -77,18 +97,45 @@ extern stringID_table_t animTable [MAX_ANIMATIONS+1];
 //#define MAX_VEHICLE_DATA_SIZE 0x10000
 //[/MOREVEHICLES]
 
-#if !defined(_XBOX) || defined(QAGAME)
 	char	VehWeaponParms[MAX_VEH_WEAPON_DATA_SIZE];
 	char	VehicleParms[MAX_VEHICLE_DATA_SIZE];
 
+#else
+	extern void trap_TrueMalloc(void **ptr, int size);
+	extern void trap_TrueFree(void **ptr);
+
+	//char *VehWeaponParms; //will do this later
+#define MAX_VEH_WEAPON_DATA_SIZE 0x10000
+	char	VehWeaponParms[MAX_VEH_WEAPON_DATA_SIZE];
+
+	char *VehicleParms;
+
+	//this is still used for a few temp buffers
+#define MAX_VEHICLE_DATA_SIZE 0x40000
+#endif
+
+//[/DynamicMemory_Vehicles]
+
+
 void BG_ClearVehicleParseParms(void)
 {
+
+//[DynamicMemory_Vehicles]
+#ifdef DYNAMICMEMORY_VEHICLES
+	//trap_TrueFree(&VehWeaponParms);
+	VehWeaponParms[0] = 0;
+	trap_TrueFree(&VehicleParms);
+#else
 	//You can't strcat to these forever without clearing them!
 	VehWeaponParms[0] = 0;
 	VehicleParms[0] = 0;
+#endif
+//[/DynamicMemory_Vehicles]
+
 }
 
-#else
+#else //!defined(_XBOX) || defined(QAGAME)
+	//Comment[DynamicMemory_Vehicles]: are these ever used?  nope, !defined(_XBOX) is always true.  Just going to ignore them then
 	extern char VehWeaponParms[MAX_VEH_WEAPON_DATA_SIZE];
 	extern char VehicleParms[MAX_VEHICLE_DATA_SIZE];
 #endif
@@ -1058,6 +1105,12 @@ int VEH_LoadVehicle( const char *vehicleName )
 	if ( numVehicles == 0 ) 
 	{
 		BG_VehicleLoadParms();
+
+		//[DynamicMemory_Vehicles]
+		//it COULD happen!
+		if(numVehicles == 0)
+			return VEHICLE_NONE;
+		//[/DynamicMemory_Vehicles]
 	}
 
 	//try to parse data out
@@ -1538,6 +1591,13 @@ void BG_VehWeaponLoadParms( void )
 #endif
 }
 
+//[DynamicMemory_Vehicles]
+void BG_VehicleUnloadParms( void ){
+	//this func doesnt need the #ifdef check, just wont have any effect if it is off.
+	BG_ClearVehicleParseParms();
+}
+//[/DynamicMemory_Vehicles]
+
 void BG_VehicleLoadParms( void ) 
 {//HMM... only do this if there's a vehicle on the level?
 	int			len, totallen, vehExtFNLen, mainBlockLen, fileCnt, i;
@@ -1546,13 +1606,24 @@ void BG_VehicleLoadParms( void )
 	char		vehExtensionListBuf[2048];			//	The list of file names read in
 	fileHandle_t	f;
 	char		*tempReadBuffer;
+//[DynamicMemory_Vehicles]
+#ifdef DYNAMICMEMORY_VEHICLES
+	int maxLen;
+#endif
+//[/DynamicMemory_Vehicles]
+
 
 	len = 0;
 
+//[DynamicMemory_Vehicles]
+	//moved to below
+	/*
 	//remember where to store the next one
 	totallen = mainBlockLen = len;
 	marker = VehicleParms+totallen;
 	*marker = 0;
+	*/
+//[/DynamicMemory_Vehicles]
 
 	//now load in the extra .veh extensions
 #ifdef _JK2MP
@@ -1561,7 +1632,38 @@ void BG_VehicleLoadParms( void )
 	fileCnt = gi.FS_GetFileList("ext_data/vehicles", ".veh", vehExtensionListBuf, sizeof(vehExtensionListBuf) );
 #endif
 
+
 	holdChar = vehExtensionListBuf;
+
+//[DynamicMemory_Vehicles]
+#ifdef DYNAMICMEMORY_VEHICLES
+	maxLen = 0;
+	for(i = 0;i<fileCnt;i++){
+		len = trap_FS_FOpenFile(va( "ext_data/vehicles/%s", holdChar), &f, FS_READ);
+		if(!f)
+			continue;
+		maxLen += len;
+	}
+	maxLen++; //for null char
+	trap_TrueMalloc(&VehicleParms, maxLen);
+	if(!VehicleParms){
+		Com_Error(ERR_DROP, "Unable to alloc memory for vehicles.");
+		return;
+	}
+#endif
+
+
+
+	//moved the code somewhere above to here
+
+	//the heck?  it LOOKS like it was designed to be able to run BG_VehicleLoadParms() multiple times, BUT it isnt, so why this madness?
+	//totallen = mainBlockLen = len;
+	totallen = mainBlockLen = len = 0;
+	//marker = VehicleParms+totallen;
+	marker = VehicleParms;
+	//*marker = 0;
+	marker[0] = '\0';
+//[/DynamicMemory_Vehicles]
 
 #ifdef _JK2MP
 	tempReadBuffer = (char *)BG_TempAlloc(MAX_VEHICLE_DATA_SIZE);
@@ -1608,9 +1710,16 @@ void BG_VehicleLoadParms( void )
 				marker++; 
 			}
 
+//[DynamicMemory_Vehicles]
+#ifdef DYNAMICMEMORY_VEHICLES
+			if ( totallen + len >= maxLen ) {
+				Com_Error(ERR_DROP, "Vehicle extensions (*.veh) somehow exceeded precalculated size! (should never happen)" );
+			}
+#else
 			if ( totallen + len >= MAX_VEHICLE_DATA_SIZE ) {
 				Com_Error(ERR_DROP, "Vehicle extensions (*.veh) are too large" );
 			}
+#endif
 			strcat( marker, tempReadBuffer );
 #ifdef _JK2MP
 			trap_FS_FCloseFile( f );
@@ -1717,6 +1826,12 @@ void AttachRidersGeneric( Vehicle_t *pVeh )
 	}
 }
 #endif
+
+
+//[DynamicMemory_Vehicles]
+//trying to blindly cut out this file for UI
+#endif
+//[/DynamicMemory_Vehicles]
 
 #include "../namespace_end.h"
 

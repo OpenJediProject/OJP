@@ -839,12 +839,22 @@ char *G_NewString( const char *string ) {
 	// turn \n into a real linefeed
 	for ( i=0 ; i< l ; i++ ) {
 		if (string[i] == '\\' && i < l-1) {
+			//[BugFix47]
+			if (string[i+1] == 'n') {
+				*new_p++ = '\n';
+				i++;
+			} else {
+				*new_p++ = '\\';
+			}
+			/* old code
 			i++;
 			if (string[i] == 'n') {
 				*new_p++ = '\n';
 			} else {
 				*new_p++ = '\\';
 			}
+			*/
+			//[/BugFix47]
 		} else {
 			*new_p++ = string[i];
 		}
