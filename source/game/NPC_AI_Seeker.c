@@ -558,7 +558,7 @@ void Seeker_FindEnemy( void )
 			continue;
 		}
 
-		if (g_gametype.integer > GT_TEAM && (ent->client->playerTeam == NPC->client->playerTeam || ent->client->playerTeam == NPCTEAM_NEUTRAL )) // don't attack same team or bots
+		if (g_gametype.integer >= GT_TEAM && (ent->client->playerTeam == NPC->client->playerTeam || ent->client->playerTeam == NPCTEAM_NEUTRAL )) // don't attack same team or bots
 		{
 			continue;
 		}
