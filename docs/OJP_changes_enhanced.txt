@@ -5,6 +5,14 @@ Open Jedi Project Change Log (Enhanced Distribution)
 This file stores all the information about what has changed from release version to release version for OJP Enhanced.  OJP Enhanced contains all the changes of OJP Basic plus a library of gameplay alterations made by OJP's contributors.
 
 
+Version 0.0.9s:
+
+	Improvements/Fixes:
+
+		Improved Seeker Item:
+			- Fixed problem with seekers not attacking other players outside of CoOp.
+
+
 Version 0.0.9r:
 
 	New Features:
@@ -76,6 +84,7 @@ Version 0.0.9r:
 
 		Super Duper Interplotation System:
 			- Tweaked the super duper interpolation for the sabers.  This should reduce the algorithm's CPU usage.  
+
 
 Version 0.0.9q:
 

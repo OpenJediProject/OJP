@@ -550,7 +550,7 @@ void Seeker_FindEnemy( void )
 			|| !ent->client //&& || !ent->NPC 
 			//[CoOp]
 			//SP says this.  Don't attack non-NPCs?!
-			|| !ent->NPC 
+			//|| !ent->NPC 
 			//[/CoOp]
 			|| ent->health <= 0 
 			|| !ent->inuse )
@@ -558,16 +558,15 @@ void Seeker_FindEnemy( void )
 			continue;
 		}
 
-		if (g_gametype.integer >= GT_TEAM && (ent->client->playerTeam == NPC->client->playerTeam || ent->client->playerTeam == NPCTEAM_NEUTRAL )) // don't attack same team or bots
-		{
+		//[SeekerItemNpc]
+		if(OnSameTeam(NPC->activator, ent))
+		{//our owner is on the same team as this entity, don't target them.
 			continue;
 		}
 
 		//dont attack our owner
 		if(NPC->activator == ent)
 			continue;
-
-
 		//[/SeekerItemNpc]
 
 		dis = DistanceHorizontalSquared( NPC->r.currentOrigin, ent->r.currentOrigin );

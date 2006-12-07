@@ -1117,7 +1117,6 @@ void ItemUse_Seeker(gentity_t *ent)
 		if ( remote && remote->client )
 		{//set it to my team
 			remote->s.owner = remote->r.ownerNum = ent->s.number;
-			remote->r.ownerNum
 			remote->activator = ent;
 			//remote->NPC->goalEntity is being cleared after we spawn
 			remote->NPC->goalEntity = remote->client->leader = ent;
