@@ -12,6 +12,11 @@ Version 0.0.9s:
 		Improved Seeker Item:
 			- Fixed problem with seekers not attacking other players outside of CoOp.
 
+		Saber Combat System:
+
+			Blocking:
+				- Having Saber Defense 3 allows players to block back attacks without the extra DP cost.
+
 
 Version 0.0.9r:
 

@@ -3416,8 +3416,11 @@ int OJP_SaberBlockCost(gentity_t *defender, gentity_t *attacker, vec3_t hitLoc)
 
 		if(!InFront(attacker->client->ps.origin, defender->client->ps.origin, defender->client->ps.viewangles, -.7f))
 		{//player is behind us, costs more to block
-			if(defender->client->ps.fd.saberAnimLevel != SS_STAFF)
-			{//staffs back block at normal cost.  Everyone else costs double DP
+				//staffs back block at normal cost.
+			if(defender->client->ps.fd.saberAnimLevel != SS_STAFF 
+				//level 3 saber defenders do back blocks for normal cost.
+				&& defender->client->ps.fd.forcePowerLevel[FP_SABER_DEFENSE] < FORCE_LEVEL_3) 
+			{
 				saberBlockCost *= 2;
 			}
 		}
