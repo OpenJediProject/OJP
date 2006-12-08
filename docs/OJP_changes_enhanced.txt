@@ -19,6 +19,9 @@ Version 0.0.9s:
 
 	Improvements/Fixes:
 
+		CoOp:
+			- Fixed time limits for CoOp maps.
+
 		Experience System:
 			- Fixed problem where skill points weren't being saved between gametypes.
 
