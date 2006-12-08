@@ -3452,10 +3452,12 @@ int OJP_SaberCanBlock(gentity_t *self, gentity_t *atk, qboolean checkBBoxBlock, 
 		return 0;
 	}
 
+	/* racc - we need to block during stumbles because kicks cause stumbles...a lot!
 	if (PM_SaberInBrokenParry(self->client->ps.saberMove))
 	{//you've been stunned from a broken parry
 		return 0;
 	}
+	*/
 
 	if(BG_InGrappleMove(self->client->ps.torsoAnim))
 	{//you can't block while doing a melee move.
