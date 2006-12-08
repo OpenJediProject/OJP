@@ -3135,13 +3135,6 @@ void CheckExitRules( void ) {
 		}
 	}
 	*/
-	//[CoOp]
-	//coop mode never exits until someone touches the level end
-	if(g_gametype.integer == GT_SINGLE_PLAYER)
-	{
-		return;
-	}
-	//[/CoOp]
 
 	// check for sudden death
 	if (g_gametype.integer != GT_SIEGE)
