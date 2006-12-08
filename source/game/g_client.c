@@ -2501,7 +2501,11 @@ char *ClientConnect( int clientNum, qboolean firstTime, qboolean isBot ) {
 
 	// read or initialize the session data
 	if ( firstTime || level.newSession ) {
-		G_InitSessionData( client, userinfo, isBot );
+		//[ExpSys]
+		//pass first time so we know if we need to reset skill levels or not.
+		G_InitSessionData( client, userinfo, isBot, firstTime );
+		//G_InitSessionData( client, userinfo, isBot );
+		//[/ExpSys]
 	}
 	G_ReadSessionData( client );
 

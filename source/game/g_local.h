@@ -1604,7 +1604,11 @@ void Svcmd_GameMem_f( void );
 // g_session.c
 //
 void G_ReadSessionData( gclient_t *client );
-void G_InitSessionData( gclient_t *client, char *userinfo, qboolean isBot );
+//[ExpSys]
+//added firstTime input so we'll know if we need to reset our skill point totals or not.
+void G_InitSessionData( gclient_t *client, char *userinfo, qboolean isBot, qboolean firstTime);
+//void G_InitSessionData( gclient_t *client, char *userinfo, qboolean isBot );
+//[/ExpSys]
 
 void G_InitWorldSession( void );
 void G_WriteSessionData( void );

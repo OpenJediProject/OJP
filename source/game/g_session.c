@@ -197,7 +197,11 @@ G_InitSessionData
 Called on a first-time connect
 ================
 */
-void G_InitSessionData( gclient_t *client, char *userinfo, qboolean isBot ) {
+//[ExpSys]
+//added firsttime input so we'll know if we need to reset our skill point totals or not.
+void G_InitSessionData( gclient_t *client, char *userinfo, qboolean isBot, qboolean firstTime) {
+//void G_InitSessionData( gclient_t *client, char *userinfo, qboolean isBot ) {
+//[/ExpSys]
 	clientSession_t	*sess;
 	const char		*value;
 
@@ -308,7 +312,41 @@ void G_InitSessionData( gclient_t *client, char *userinfo, qboolean isBot ) {
 	sess->saber2Type[0] = 0;
 
 	//[ExpSys]
-	sess->skillPoints = g_minForceRank.value;
+	if(firstTime)
+	{//only reset skillpoints for new players.
+		sess->skillPoints = g_minForceRank.value;
+	}
+	else
+	{//remember the data from the last time.
+		char	s[MAX_STRING_CHARS];
+		const char	*var;
+		int tempInt;
+		char tempChar[64];
+
+		var = va( "session%i", client - level.clients );
+		trap_Cvar_VariableStringBuffer( var, s, sizeof(s) );
+		//[ExpSys]
+		sscanf( s, "%i %i %i %i %i %i %i %i %i %i %i %i %s %s %s %f",
+		//sscanf( s, "%i %i %i %i %i %i %i %i %i %i %i %i %s %s %s",
+		//[ExpSys]
+			&tempInt,                 // bk010221 - format
+			&tempInt,
+			&tempInt,              // bk010221 - format
+			&tempInt,
+			&tempInt,
+			&tempInt,
+			&tempInt,                   // bk010221 - format
+			&tempInt,
+			&tempInt,
+			&tempInt,
+			&tempInt,
+			&tempInt,
+			&tempChar,
+			&tempChar,
+			&tempChar,
+			&client->sess.skillPoints
+			);
+	}
 	//[/ExpSys]
 
 	G_WriteClientSessionData( client );
