@@ -128,7 +128,7 @@
 //[/ExpSys]
 
 //[Flamethrower]
-#define FLAMETHROWER_FUELCOST 2		//fuel cost of flamethrower per hit trace
+#define FLAMETHROWER_FUELCOST 3		//fuel cost of flamethrower per hit trace
 //[/Flamethrower]
 
 //[BUGFIX12]

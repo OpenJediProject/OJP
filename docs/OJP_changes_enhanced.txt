@@ -25,6 +25,9 @@ Version 0.0.9s:
 		Experience System:
 			- Fixed problem where skill points weren't being saved between gametypes.
 
+		Flamethrower:
+			- Boosted fuel cost to 3.
+
 		Improved Seeker Item:
 			- Fixed problem with seekers not attacking other players outside of CoOp.
 
