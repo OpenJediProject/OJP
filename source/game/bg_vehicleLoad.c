@@ -1642,7 +1642,11 @@ void BG_VehicleLoadParms( void )
 		len = trap_FS_FOpenFile(va( "ext_data/vehicles/%s", holdChar), &f, FS_READ);
 		if(!f)
 			continue;
-		maxLen += len;
+		trap_FS_FCloseFile(f);
+		//[VehFixes]
+		maxLen += len + 1; //we can strcat() a space on if it ends in '}'
+		//maxLen += len;
+		//[/VehFixes]
 	}
 	maxLen++; //for null char
 	trap_TrueMalloc(&VehicleParms, maxLen);
@@ -1697,6 +1701,9 @@ void BG_VehicleLoadParms( void )
 #ifdef _JK2MP
 			trap_FS_Read(tempReadBuffer, len, f);
 			tempReadBuffer[len] = 0;
+			//[VehFixes]
+			trap_FS_FCloseFile(f);
+			//[/VehFixes]
 #else
 			gi.FS_Read(tempReadBuffer, len, f);
 			tempReadBuffer[len] = 0;
@@ -1721,11 +1728,15 @@ void BG_VehicleLoadParms( void )
 			}
 #endif
 			strcat( marker, tempReadBuffer );
+			//[VehFixes]
+			/*
 #ifdef _JK2MP
 			trap_FS_FCloseFile( f );
 #else
 			gi.FS_FCloseFile( f );
 #endif
+			*/
+			//[/VehFixes]
 
 			totallen += len;
 			marker = VehicleParms+totallen;
