@@ -336,7 +336,7 @@ void Seeker_Hunt( qboolean visible, qboolean advance )
 }
 
 //------------------------------------
-void Seeker_Fire( void )
+qboolean Seeker_Fire( void )
 {
 
 	//[SeekerItemNpc]
@@ -345,9 +345,11 @@ void Seeker_Fire( void )
 
 	vec3_t		dir, enemy_org, muzzle;
 	gentity_t	*missile;
+	trace_t tr;
 
 	CalcEntitySpot( NPC->enemy, SPOT_HEAD, enemy_org );
 
+	
 	//calculate everything based on our model offset
 	VectorCopy(NPC->r.currentOrigin, muzzle);
 	//correct for our model offset
@@ -359,10 +361,22 @@ void Seeker_Fire( void )
 	// move a bit forward in the direction we shall shoot in so that the bolt doesn't poke out the other side of the seeker
 	VectorMA( muzzle, 15, dir, muzzle );
 
+	trap_Trace(&tr, muzzle, NULL, NULL, enemy_org, NPC->s.number, MASK_PLAYERSOLID);
+	//tr.fraction wont be 1.0f, since we hit our enemy.
+	if(tr.entityNum != NPC->enemy->s.number)
+	//if(tr.fraction >= 1.0f)
+		//we cant reach our target
+		return qfalse;
+
 
 	//our player should get the kill, if any
-	if(NPC->activator)
-		missile = CreateMissile( muzzle, dir, 1000, 10000, NPC->activator, qfalse );
+	//FIXME: we have a special case here.  we want the kill to be given to the activator, BUT we want the missile to NOT hurt the player
+	//attempting to leave missile->parent == NPC, but missile->r.ownerNum to NPC->activator->s.number, no idea if it will work, just doing a guess.
+	//if(NPC->activator)
+	//	missile = CreateMissile( muzzle, dir, 1000, 10000, NPC->activator, qfalse );
+	//else
+		missile = CreateMissile( muzzle, dir, 1000, 10000, NPC, qfalse );
+
 	//missile = CreateMissile( muzzle, dir, 1000, 10000, NPC, qfalse );
 
 	G_PlayEffectID( G_EffectIndex("blaster/muzzle_flash"), muzzle, dir );
@@ -382,6 +396,17 @@ void Seeker_Fire( void )
 	}
 	*/
 	//[/CoOp]
+
+	////no, it isnt in SP version, but will it let the player get the kill but not let the seeker shoot itself?
+	//if(NPC->activator)
+	//	missile->r.ownerNum = NPC->activator->s.number;
+
+	//according to the old q3 source, if the missile has the activators ownerNum and the seeker also has that ownerNum, 
+	//the seeker shouldnt shoot itself.
+	//wait... the silly thing wasnt shooting itself, but was out of ammo (and self destructed)!
+
+
+	return qtrue;
 
 #else
 	vec3_t		dir, enemy_org, muzzle;
@@ -421,7 +446,7 @@ void Seeker_Ranged( qboolean visible, qboolean advance )
 {
 	if ( NPC->client->NPC_class != CLASS_BOBAFETT )
 	{//racc - boba fett doesn't run out of ammo.
-		if ( NPC->count > 0 )
+		if ( NPC->count > 0 || NPC->count == -1)
 		{
 			//[SeekerItemNpc]
 			//better than using the timer, and if the dynamic music is ever used, then we can apply it to them using the shootTime
@@ -432,7 +457,8 @@ void Seeker_Ranged( qboolean visible, qboolean advance )
 				//NPCInfo->shotTime = level.time + NPC->delay + Q_irand(0, NPC->random);
 				TIMER_Set( NPC, "attackDelay", Q_irand(NPC->genericValue1, NPC->genericValue2));
 				Seeker_Fire();
-				NPC->count--;
+				if(NPC->count != -1)
+					NPC->count--;
 			}
 			/*
 			if ( TIMER_Done( NPC, "attackDelay" ))	// Attack?
