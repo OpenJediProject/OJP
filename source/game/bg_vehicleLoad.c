@@ -124,7 +124,7 @@ void BG_ClearVehicleParseParms(void)
 #ifdef DYNAMICMEMORY_VEHICLES
 	//trap_TrueFree(&VehWeaponParms);
 	VehWeaponParms[0] = 0;
-	trap_TrueFree(&VehicleParms);
+	trap_TrueFree((void **)&VehicleParms);
 #else
 	//You can't strcat to these forever without clearing them!
 	VehWeaponParms[0] = 0;
@@ -1649,7 +1649,7 @@ void BG_VehicleLoadParms( void )
 		//[/VehFixes]
 	}
 	maxLen++; //for null char
-	trap_TrueMalloc(&VehicleParms, maxLen);
+	trap_TrueMalloc((void **)&VehicleParms, maxLen);
 	if(!VehicleParms){
 		Com_Error(ERR_DROP, "Unable to alloc memory for vehicles.");
 		return;
