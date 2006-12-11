@@ -2019,9 +2019,27 @@ void PM_SetVelocityforLedgeMove( playerState_t *ps, int anim )
 }
 			
 //[LedgeGrab]
+qboolean LedgeGrabableEntity(int entityNum)
+{//indicates if the given entity is an entity that can be ledgegrabbed.
+	bgEntity_t *ent = PM_BGEntForNum(entityNum);
+
+	switch(ent->s.eType)
+	{
+	case ET_PLAYER:
+	case ET_ITEM:
+	case ET_MISSILE:
+	case ET_SPECIAL:
+	case ET_HOLOCRON:
+	case ET_NPC:
+			return qfalse;
+	default:
+			return qtrue;
+	};
+}
+
+
 //Switch to this animation and keep repeating this animation while updating its timers
 #define	AFLAG_PACE (SETANIM_FLAG_OVERRIDE|SETANIM_FLAG_HOLD|SETANIM_FLAG_HOLDLESS|SETANIM_FLAG_PACE)
-
 void PM_AdjustAngleForWallGrap( playerState_t *ps, usercmd_t *ucmd )
 {
 	if(ps->pm_flags & PMF_STUCK_TO_WALL && BG_InLedgeMove( ps->legsAnim ))
@@ -2042,7 +2060,7 @@ void PM_AdjustAngleForWallGrap( playerState_t *ps, usercmd_t *ucmd )
 
 			pm->trace( &trace, traceFrom, NULL, NULL, traceTo, ps->clientNum, pm->tracemask );
 
-			if(trace.fraction == 1)
+			if(trace.fraction == 1 || !LedgeGrabableEntity(trace.entityNum))
 			{//that's not good, we lost the ledge so let go.
 				BG_LetGoofLedge(ps);
 				return;
@@ -3344,7 +3362,7 @@ qboolean LedgeTrace( trace_t *trace, vec3_t dir, float *lerpup, float *lerpfwd, 
 
 	pm->trace( trace, traceFrom, NULL, NULL, traceTo, pm->ps->clientNum, pm->tracemask );
 
-	if(trace->fraction < 1)
+	if(trace->fraction < 1 && LedgeGrabableEntity(trace->entityNum))
 	{//hit a wall, pop into the wall and fire down to find top of wall
 		VectorMA(trace->endpos, 0.5, dir, traceTo);
 
@@ -3354,7 +3372,7 @@ qboolean LedgeTrace( trace_t *trace, vec3_t dir, float *lerpup, float *lerpfwd, 
 
 		pm->trace( trace, traceFrom, NULL, NULL, traceTo, pm->ps->clientNum, pm->tracemask );
 
-		if(trace->fraction == 1.0 || trace->startsolid)
+		if(trace->fraction == 1.0 || trace->startsolid || !LedgeGrabableEntity(trace->entityNum))
 		{
 			return qfalse;
 		}
@@ -3380,7 +3398,9 @@ qboolean LedgeTrace( trace_t *trace, vec3_t dir, float *lerpup, float *lerpfwd, 
 		pm->trace( trace, traceFrom, NULL, NULL, traceTo, pm->ps->clientNum, pm->tracemask );
 
 		vectoangles(trace->plane.normal, wallangles);
-		if(trace->fraction == 1.0 || wallangles[PITCH] > 20 || wallangles[PITCH] < -20)
+		if(trace->fraction == 1.0 
+			|| wallangles[PITCH] > 20 || wallangles[PITCH] < -20
+			|| !LedgeGrabableEntity(trace->entityNum))
 		{//no ledge or too steep of a ledge
 			return qfalse;
 		}
