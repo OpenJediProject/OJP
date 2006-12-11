@@ -2021,7 +2021,6 @@ void PM_SetVelocityforLedgeMove( playerState_t *ps, int anim )
 //[LedgeGrab]
 //Switch to this animation and keep repeating this animation while updating its timers
 #define	AFLAG_PACE (SETANIM_FLAG_OVERRIDE|SETANIM_FLAG_HOLD|SETANIM_FLAG_HOLDLESS|SETANIM_FLAG_PACE)
-//[/LedgeGrab]
 
 void PM_AdjustAngleForWallGrap( playerState_t *ps, usercmd_t *ucmd )
 {
@@ -2041,10 +2040,7 @@ void PM_AdjustAngleForWallGrap( playerState_t *ps, usercmd_t *ucmd )
 
 			VectorMA( traceFrom, LEDGEGRABDISTANCE, fwd, traceTo );
 
-			//[LedgeGrabNonBushFix]: q3 is programmed to only accept non-brushmodel solidity if it has CONTENTS_BODY set (see ravensoft note in SP_misc_model_breakable)
-			pm->trace( &trace, traceFrom, NULL, NULL, traceTo, ps->clientNum, MASK_SOLID | CONTENTS_BODY );
-			//pm->trace( &trace, traceFrom, NULL, NULL, traceTo, ps->clientNum, MASK_SOLID );
-			//[/LedgeGrabNonBushFix]
+			pm->trace( &trace, traceFrom, NULL, NULL, traceTo, ps->clientNum, pm->tracemask );
 
 			if(trace.fraction == 1)
 			{//that's not good, we lost the ledge so let go.
@@ -3346,10 +3342,7 @@ qboolean LedgeTrace( trace_t *trace, vec3_t dir, float *lerpup, float *lerpfwd, 
 	traceFrom[2] += LEDGEGRABMINHEIGHT;
 	traceTo[2] += LEDGEGRABMINHEIGHT;
 
-	//[LedgeGrabNonBushFix]: q3 is programmed to only accept non-brushmodel solidity if it has CONTENTS_BODY set (see ravensoft note in SP_misc_model_breakable)
-	pm->trace( trace, traceFrom, NULL, NULL, traceTo, pm->ps->clientNum, MASK_SOLID | CONTENTS_BODY );
-	//pm->trace( trace, traceFrom, NULL, NULL, traceTo, pm->ps->clientNum, MASK_DEADSOLID );
-	//[/LedgeGrabNonBushFix]
+	pm->trace( trace, traceFrom, NULL, NULL, traceTo, pm->ps->clientNum, pm->tracemask );
 
 	if(trace->fraction < 1)
 	{//hit a wall, pop into the wall and fire down to find top of wall
@@ -3359,38 +3352,14 @@ qboolean LedgeTrace( trace_t *trace, vec3_t dir, float *lerpup, float *lerpfwd, 
 
 		traceFrom[2] += (LEDGEGRABMAXHEIGHT - LEDGEGRABMINHEIGHT);
 
-		//[LedgeGrabNonBushFix]: q3 is programmed to only accept non-brushmodel solidity if it has CONTENTS_BODY set (see ravensoft note in SP_misc_model_breakable)
-		pm->trace( trace, traceFrom, NULL, NULL, traceTo, pm->ps->clientNum, MASK_SOLID | CONTENTS_BODY );
-		//pm->trace( trace, traceFrom, NULL, NULL, traceTo, pm->ps->clientNum, MASK_DEADSOLID );
-		//[/LedgeGrabNonBrushFix]
+		pm->trace( trace, traceFrom, NULL, NULL, traceTo, pm->ps->clientNum, pm->tracemask );
 
-		if(trace->fraction == 1.0 || trace->startsolid)
-		{
-		return qfalse;
-	}
-
-	}
-	/*
-	else
-	{//ok,
-		VectorCopy(traceTo, traceFrom);
-		traceFrom[2] += (LEDGEGRABMAXHEIGHT - LEDGEGRABMINHEIGHT);
-
-		pm->trace( trace, traceFrom, NULL, NULL, traceTo, pm->ps->clientNum, MASK_DEADSOLID );
-		
 		if(trace->fraction == 1.0 || trace->startsolid)
 		{
 			return qfalse;
 		}
 
-		//found something, let's try to find the top face.
-		VectorCopy( trace->endpos, traceFrom );
-		traceFrom[2]++;
-
-		pm->trace( trace, traceFrom, NULL, NULL, traceTo, pm->ps->clientNum, MASK_DEADSOLID );
-	
 	}
-	*/
 
 	//check to make sure we found a good top surface and go from there
 	vectoangles(trace->plane.normal, wallangles);
@@ -3408,10 +3377,8 @@ qboolean LedgeTrace( trace_t *trace, vec3_t dir, float *lerpup, float *lerpfwd, 
 
 		traceFrom[2] = traceTo[2];
 
-		//[LedgeGrabNonBushFix]: q3 is programmed to only accept non-brushmodel solidity if it has CONTENTS_BODY set (see ravensoft note in SP_misc_model_breakable)
-		pm->trace( trace, traceFrom, NULL, NULL, traceTo, pm->ps->clientNum, MASK_SOLID | CONTENTS_BODY );
-		//pm->trace( trace, traceFrom, NULL, NULL, traceTo, pm->ps->clientNum, MASK_DEADSOLID );
-		//[/LedgeGrabNonBushFix]
+		pm->trace( trace, traceFrom, NULL, NULL, traceTo, pm->ps->clientNum, pm->tracemask );
+
 		vectoangles(trace->plane.normal, wallangles);
 		if(trace->fraction == 1.0 || wallangles[PITCH] > 20 || wallangles[PITCH] < -20)
 		{//no ledge or too steep of a ledge
