@@ -15,7 +15,15 @@
 #define	CONTENTS_MONSTERCLIP	0x00000020	// Physically block bots
 #define CONTENTS_BOTCLIP		0x00000040	// A hint for bots - do not enter this brush by navigation (if possible)
 #define CONTENTS_SHOTCLIP		0x00000080
-#define	CONTENTS_BODY			0x00000100	// should never be on a brush, only in game
+/*
+racc - non-brush entities have to have this flag to count as a "solid" object for client prediction.  
+In addition, you have to include this as part of your trace mask to hit non-brush models.  
+This is very weird and apprenently a "fix" done by Raven to prevent non-brush models counting 
+as solid on the server and not on the clients (by not having CONTENTS_BODY).  We've tested this 
+and it's at least true for misc_breakable's 
+CONTENTS_SOLID|CONTENTS_OPAQUE|CONTENTS_BODY|CONTENTS_MONSTERCLIP|CONTENTS_BOTCLIP tags.
+*/
+#define	CONTENTS_BODY			0x00000100	// should never be on a brush, only in game 
 #define	CONTENTS_CORPSE			0x00000200	// should never be on a brush, only in game
 #define	CONTENTS_TRIGGER		0x00000400
 #define	CONTENTS_NODROP			0x00000800	// don't leave bodies or items (death fog, lava)

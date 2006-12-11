@@ -4272,6 +4272,26 @@ void ClientCommand( int clientNum ) {
 			}
 		}
 	}
+	//[Test]
+#ifndef FINAL_BUILD
+	else if (Q_stricmp(cmd, "testtrace") == 0)
+	{
+		trace_t tr;
+		vec3_t traceTo, traceFrom, traceDir;
+
+		AngleVectors(ent->client->ps.viewangles, traceDir, 0, 0);
+		VectorCopy(ent->client->ps.origin, traceFrom);
+		VectorMA( traceFrom, 30, traceDir, traceTo );
+
+		trap_Trace( &tr, traceFrom, NULL, NULL, traceTo, ent->s.number, MASK_SHOT );
+
+		if(tr.fraction < 1.0f)
+		{
+			G_Printf("%i", tr.entityNum);
+		}
+	}
+#endif
+	//[/Test]
 	else if (Q_stricmp(cmd, "lamercheck") == 0)
 	{
 		trap_SendServerCommand( -1, va("cp \"This mod is based on code taken from the\nOpen Jedi Project. If the supposed author doesn't\ngive proper credit to OJP,\nplease contact us and we\n will deal with it.\nEmail: razorace@hotmail.com\n\""));
