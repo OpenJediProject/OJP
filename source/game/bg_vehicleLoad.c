@@ -1638,15 +1638,14 @@ void BG_VehicleLoadParms( void )
 //[DynamicMemory_Vehicles]
 #ifdef DYNAMICMEMORY_VEHICLES
 	maxLen = 0;
-	for(i = 0;i<fileCnt;i++){
+	vehExtFNLen = -1; //to counter the +1 we do 
+	for(i = 0;i<fileCnt;i++, holdChar += vehExtFNLen + 1){
 		len = trap_FS_FOpenFile(va( "ext_data/vehicles/%s", holdChar), &f, FS_READ);
 		if(!f)
 			continue;
 		trap_FS_FCloseFile(f);
-		//[VehFixes]
 		maxLen += len + 1; //we can strcat() a space on if it ends in '}'
 		//maxLen += len;
-		//[/VehFixes]
 	}
 	maxLen++; //for null char
 	trap_TrueMalloc((void **)&VehicleParms, maxLen);
@@ -1679,6 +1678,10 @@ void BG_VehicleLoadParms( void )
 	//Make ABSOLUTELY CERTAIN that BG_Alloc/etc. is not used before
 	//the subsequent BG_TempFree or the pool will be screwed. 
 
+	//[DynamicMemory_Vehicles]
+	vehExtFNLen = -1; //to counter the +1 we do on first loop
+	//[/DynamicMemory_Vehicles]
+
 	for ( i = 0; i < fileCnt; i++, holdChar += vehExtFNLen + 1 ) 
 	{
 		vehExtFNLen = strlen( holdChar );
@@ -1701,9 +1704,7 @@ void BG_VehicleLoadParms( void )
 #ifdef _JK2MP
 			trap_FS_Read(tempReadBuffer, len, f);
 			tempReadBuffer[len] = 0;
-			//[VehFixes]
 			trap_FS_FCloseFile(f);
-			//[/VehFixes]
 #else
 			gi.FS_Read(tempReadBuffer, len, f);
 			tempReadBuffer[len] = 0;
@@ -1728,7 +1729,6 @@ void BG_VehicleLoadParms( void )
 			}
 #endif
 			strcat( marker, tempReadBuffer );
-			//[VehFixes]
 			/*
 #ifdef _JK2MP
 			trap_FS_FCloseFile( f );
@@ -1736,7 +1736,6 @@ void BG_VehicleLoadParms( void )
 			gi.FS_FCloseFile( f );
 #endif
 			*/
-			//[/VehFixes]
 
 			totallen += len;
 			marker = VehicleParms+totallen;

@@ -18,7 +18,7 @@ USER INTERFACE SABER LOADING & DISPLAY CODE
 //NOTE: this is working 100% up to the point where trap_TrueMalloc is ONLY defined for game and cgame, NOT ui
 //thousand curses upon that.
 
-//#define DYNAMICMEMORY_SABERS
+#define DYNAMICMEMORY_SABERS
 
 
 #ifndef DYNAMICMEMORY_SABERS
@@ -35,8 +35,17 @@ USER INTERFACE SABER LOADING & DISPLAY CODE
 //[DynamicMemory_Sabers]
 #ifdef DYNAMICMEMORY_SABERS
 char *SaberParms;
-void trap_TrueMalloc(void **ptr, int size);
-void trap_TrueFree(void **ptr);
+//void trap_TrueMalloc(void **ptr, int size);
+//void trap_TrueFree(void **ptr);
+void UI_AllocMem(void **ptr, int sze);
+void UI_FreeMem(void *ptr);
+void UI_ReaAllocMem(void **ptr, int sze, int count);
+
+int saberSingleHiltCount;
+char **saberSingleHiltInfo;
+
+int saberStaffHiltCount;
+char **saberStaffHiltInfo;
 #else
 static char	SaberParms[MAX_SABER_DATA_SIZE];
 #endif
@@ -369,6 +378,15 @@ qboolean UI_SaberValidForPlayerInMP( const char *saberName )
 	}
 }
 
+//[DynamicMemory_Sabers]
+void UI_FreeSabers(void){
+#ifdef DYNAMICMEMORY_SABERS
+	UI_FreeMem(SaberParms);
+	SaberParms = NULL;
+#endif
+}
+//[/DynamicMemory_Sabers]
+
 void UI_SaberLoadParms( void ) 
 {
 	int			len, totallen, saberExtFNLen, fileCnt, i;
@@ -376,6 +394,12 @@ void UI_SaberLoadParms( void )
 	char		saberExtensionListBuf[2048];			//	The list of file names read in
 	fileHandle_t f;
 	char buffer[MAX_MENUFILE];
+	
+	//[DynamicMemory_Sabers]
+#ifdef DYNAMICMEMORY_SABERS
+	int maxLen;
+#endif
+	//[/DynamicMemory_Sabers]
 
 	//ui.Printf( "UI Parsing *.sab saber definitions\n" );
 	
@@ -403,15 +427,20 @@ void UI_SaberLoadParms( void )
 
 //[DynamicMemory_Sabers]
 #ifdef DYNAMICMEMORY_SABERS
-	totallen = 0;
+	maxLen = 0;
+	saberExtFNLen = -1;
 	for ( i = 0; i < fileCnt; i++, holdChar += saberExtFNLen + 1 ) {
+		saberExtFNLen = strlen( holdChar );
 		len = trap_FS_FOpenFile( va( "ext_data/sabers/%s", holdChar), &f, FS_READ );
 		if(!f)
 			continue;
-		totallen += len;
+		trap_FS_FCloseFile(f);
+		maxLen += len;
 	}
 	//what do we do if totallen is zero?  will never happen, but COULD happen in theory...
-	trap_TrueMalloc(&SaberParms, totallen+1); //+1 for null char, needed?
+	//trap_TrueMalloc(&SaberParms, totallen+1); //+1 for null char, needed?
+	maxLen++; //for ending null char
+	UI_AllocMem(&SaberParms, maxLen);
 	if(!SaberParms)
 		//ERR_FATAL or any level isnt used with Com_Error
 		Com_Error(ERR_FATAL, "Saber parsing: Out of memory!");
@@ -424,6 +453,8 @@ void UI_SaberLoadParms( void )
 	totallen = 0;
 	marker = SaberParms;
 	marker[0] = '\0';
+
+	saberExtFNLen = -1;
 ///[DynamicMemory_Sabers]
 
 	for ( i = 0; i < fileCnt; i++, holdChar += saberExtFNLen + 1 ) 
@@ -463,6 +494,10 @@ void UI_SaberLoadParms( void )
 #ifndef DYNAMICMEMORY_SABERS
 			if ( totallen + len >= MAX_SABER_DATA_SIZE ) {
 				Com_Error( ERR_FATAL, "UI_SaberLoadParms: ran out of space before reading %s\n(you must make the .sab files smaller)", holdChar );
+			}
+#else
+			if ( totallen + len >= maxLen ) {
+				Com_Error( ERR_FATAL, "UI_SaberLoadParms: ran out of space before reading %s\n(This should never happen)", holdChar );
 			}
 #endif
 //[/DynamicMemory_Sabers]
@@ -1424,11 +1459,52 @@ void UI_SaberAttachToChar( itemDef_t *item )
 	}
 }
 
-#define MAX_SABER_HILTS	64
 
-// Fill in with saber hilts
-void UI_SaberGetHiltInfo( const char *singleHilts[MAX_SABER_HILTS], const char *staffHilts[MAX_SABER_HILTS] )
-{
+
+//[DynamicMemory_Sabers]
+char *UI_GetSaberHiltInfo(qboolean TwoHanded, int index){
+	if(TwoHanded)
+		return saberStaffHiltInfo[index];
+	else
+		return saberSingleHiltInfo[index];
+}
+
+int UI_GetSaberCount(qboolean TwoHanded){
+	int count = 0, i;
+	if(TwoHanded == qfalse){
+		for (i=0;i<saberSingleHiltCount;i++)
+		{
+			if (saberSingleHiltInfo[i])
+			{
+				count++;
+			}
+			else
+			{//done
+				break;
+			}
+		}
+		return count;
+	}
+	else{
+		for (i=0;i<saberStaffHiltCount;i++)
+		{
+			if (saberStaffHiltInfo[i])
+			{
+				count++;
+			}
+			else
+			{//done
+				break;
+			}
+		}
+		return count;
+	}
+}
+
+//#define MAX_SABER_HILTS	64
+
+//void UI_SaberGetHiltInfo( const char *singleHilts[MAX_SABER_HILTS], const char *staffHilts[MAX_SABER_HILTS] )
+void UI_SaberGetHiltInfo(void){
 	int	numSingleHilts = 0, numStaffHilts = 0;
 	const char	*saberName;
 	const char	*token;
@@ -1464,6 +1540,7 @@ void UI_SaberGetHiltInfo( const char *singleHilts[MAX_SABER_HILTS], const char *
 
 		if ( UI_IsSaberTwoHanded( saberName ) )
 		{
+#ifndef DYNAMICMEMORY_SABERS
 			if ( numStaffHilts < MAX_SABER_HILTS-1 )//-1 because we have to NULL terminate the list
 			{
 				staffHilts[numStaffHilts++] = saberName;
@@ -1472,9 +1549,14 @@ void UI_SaberGetHiltInfo( const char *singleHilts[MAX_SABER_HILTS], const char *
 			{
 				Com_Printf( "WARNING: too many two-handed sabers, ignoring saber '%s'\n", saberName );
 			}
+#else
+			UI_ReaAllocMem((void *)&saberStaffHiltInfo, sizeof(char *), numStaffHilts+1);
+			saberStaffHiltInfo[numStaffHilts++] = saberName;
+#endif
 		}
 		else
 		{
+#ifndef DYNAMICMEMORY_SABERS
 			if ( numSingleHilts < MAX_SABER_HILTS-1 )//-1 because we have to NULL terminate the list
 			{
 				singleHilts[numSingleHilts++] = saberName;
@@ -1483,12 +1565,21 @@ void UI_SaberGetHiltInfo( const char *singleHilts[MAX_SABER_HILTS], const char *
 			{
 				Com_Printf( "WARNING: too many one-handed sabers, ignoring saber '%s'\n", saberName );
 			}
+#else
+			UI_ReaAllocMem((void *)&saberSingleHiltInfo, sizeof(char *), numSingleHilts+1);
+			saberSingleHiltInfo[numSingleHilts++] = saberName;
+#endif
 		}
 		//skip the whole braced section and move on to the next entry
 		SkipBracedSection( &p );
 	}
 	//null terminate the list so the UI code knows where to stop listing them
+#ifndef DYNAMICMEMORY_SABERS
 	singleHilts[numSingleHilts] = NULL;
 	staffHilts[numStaffHilts] = NULL;
+#else
+	saberSingleHiltCount = numSingleHilts;
+	saberStaffHiltCount = numStaffHilts;
+#endif
 }
-
+//[/DynamicMemory_Sabers]

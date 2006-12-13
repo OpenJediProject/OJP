@@ -579,6 +579,13 @@ static void UI_CheckServerName( void );
 static qboolean UI_CheckPassword( void );
 static void UI_JoinServer( void );
 
+//[DynamicMemory_Sabers]
+void UI_AllocMem(void **ptr, int sze);
+void UI_FreeMem(void *ptr);
+void UI_ReaAllocMem(void **ptr, int sze, int count);
+char *UI_GetSaberHiltInfo(qboolean TwoHanded, int index);
+//[/DynamicMemory_Sabers]
+
 #include "../namespace_begin.h"
 // Functions in BG or ui_shared
 void Menu_ShowGroup (menuDef_t *menu, char *itemName, qboolean showFlag);
@@ -1550,9 +1557,17 @@ _UI_Shutdown
 void UI_CleanupGhoul2(void);
 #include "../namespace_end.h"
 
+//[DynamicMemory_Sabers]
+void UI_FreeSabers(void);
+//[/DynamicMemory_Sabers]
+
 void _UI_Shutdown( void ) {
 	trap_LAN_SaveCachedServers();
 	UI_CleanupGhoul2();
+
+	//[DynamicMemory_Sabers]
+	UI_FreeSabers();
+	//[/DynamicMemory_Sabers]
 }
 
 char *defaultMenu = NULL;
@@ -6591,14 +6606,17 @@ static void UI_ResetCharacterListBoxes( void )
 	}
 }
 
+//[DynamicMemory_Sabers]
+/*moved all saber code into ui_saber.c
 #define MAX_SABER_HILTS	64
 
 char *saberSingleHiltInfo [MAX_SABER_HILTS];
 char *saberStaffHiltInfo [MAX_SABER_HILTS];
+*/
 
+void UI_SaberGetHiltInfo(void);
 qboolean UI_SaberProperNameForSaber( const char *saberName, char *saberProperName );
-void UI_SaberGetHiltInfo( char *singleHilts[MAX_SABER_HILTS],char *staffHilts[MAX_SABER_HILTS] );
-
+//[/DynamicMemory_Sabers]
 
 static void UI_UpdateCharacter( qboolean changedModel )
 {
@@ -6917,7 +6935,10 @@ static void UI_RunMenuScript(char **args)
 		}
 		else if (Q_stricmp(name, "getsaberhiltinfo") == 0) 
 		{
-			UI_SaberGetHiltInfo(saberSingleHiltInfo,saberStaffHiltInfo);
+			//[DynamicMemory_Sabers]
+			UI_SaberGetHiltInfo();
+			//UI_SaberGetHiltInfo(saberSingleHiltInfo,saberStaffHiltInfo);
+			///[DynamicMemory_Sabers]
 		}
 		// On the solo game creation screen, we can't see siege maps
 		else if (Q_stricmp(name, "checkforsiege") == 0) 
@@ -7547,10 +7568,14 @@ static void UI_RunMenuScript(char **args)
 				item = (itemDef_t *) Menu_FindItemByName((menuDef_t *) menu, "hiltbut");
 				if (item)
 				{
-					if (saberSingleHiltInfo[item->cursorPos])
+					//[DynamicMemory_Sabers]
+					if (UI_GetSaberHiltInfo(qfalse, item->cursorPos))
+					//if (saberSingleHiltInfo[item->cursorPos])
 					{
-						trap_Cvar_Set( "ui_saber", saberSingleHiltInfo[item->cursorPos] );
+						trap_Cvar_Set( "ui_saber", UI_GetSaberHiltInfo(qfalse, item->cursorPos));
+						//trap_Cvar_Set( "ui_saber", saberSingleHiltInfo[item->cursorPos] );
 					}
+					//[/DynamicMemory_Sabers]
 				}
 			}
 		}
@@ -7565,10 +7590,14 @@ static void UI_RunMenuScript(char **args)
 				item = (itemDef_t *) Menu_FindItemByName((menuDef_t *) menu, "hiltbut1");
 				if (item)
 				{
-					if (saberSingleHiltInfo[item->cursorPos])
+					//[DynamicMemory_Sabers]
+					if (UI_GetSaberHiltInfo(qfalse, item->cursorPos))
+					//if (saberSingleHiltInfo[item->cursorPos])
 					{
-						trap_Cvar_Set( "ui_saber", saberSingleHiltInfo[item->cursorPos] );
+						trap_Cvar_Set( "ui_saber", UI_GetSaberHiltInfo(qfalse, item->cursorPos));
+						//trap_Cvar_Set( "ui_saber", saberSingleHiltInfo[item->cursorPos] );
 					}
+					//[/DynamicMemory_Sabers]
 				}
 			}
 		}
@@ -7583,10 +7612,14 @@ static void UI_RunMenuScript(char **args)
 				item = (itemDef_t *) Menu_FindItemByName((menuDef_t *) menu, "hiltbut2");
 				if (item)
 				{
-					if (saberSingleHiltInfo[item->cursorPos])
+					//[DynamicMemory_Sabers]
+					if (UI_GetSaberHiltInfo(qfalse, item->cursorPos))
+					//if (saberSingleHiltInfo[item->cursorPos])
 					{
-						trap_Cvar_Set( "ui_saber2", saberSingleHiltInfo[item->cursorPos] );
+						trap_Cvar_Set( "ui_saber2", UI_GetSaberHiltInfo(qfalse, item->cursorPos));
+						//trap_Cvar_Set( "ui_saber2", saberSingleHiltInfo[item->cursorPos] );
 					}
+					//[/DynamicMemory_Sabers]
 				}
 			}
 		}
@@ -7601,10 +7634,15 @@ static void UI_RunMenuScript(char **args)
 				item = (itemDef_t *) Menu_FindItemByName((menuDef_t *) menu, "hiltbut_staves");
 				if (item)
 				{
-					if (saberSingleHiltInfo[item->cursorPos])
+					//[DynamicMemory_Sabers]
+					if (UI_GetSaberHiltInfo(qtrue, item->cursorPos))
+					//there was a bug here, we were checking for a single hilt, but we ment to check for staff
+					//if (saberSingleHiltInfo[item->cursorPos])
 					{
-						trap_Cvar_Set( "ui_saber", saberStaffHiltInfo[item->cursorPos] );
+						trap_Cvar_Set( "ui_saber", UI_GetSaberHiltInfo(qtrue, item->cursorPos));
+						//trap_Cvar_Set( "ui_saber", saberStaffHiltInfo[item->cursorPos] );
 					}
+					//[/DynamicMemory_Sabers]
 				}
 			}
 		}
@@ -9052,6 +9090,10 @@ void UI_SetSiegeTeams(void)
 UI_FeederCount
 ==================
 */
+
+//[DynamicMemory_Sabers]
+int UI_GetSaberCount(qboolean TwoHanded);
+//[/DynamicMemory_Sabers]
 static int UI_FeederCount(float feederID) 
 {
 	int team,baseClass,count=0,i; 
@@ -9061,7 +9103,8 @@ static int UI_FeederCount(float feederID)
 	{
 
 		case FEEDER_SABER_SINGLE_INFO:
-
+			//[DynamicMemory_Sabers]
+			/*
 			for (i=0;i<MAX_SABER_HILTS;i++)
 			{
 				if (saberSingleHiltInfo[i])
@@ -9074,9 +9117,12 @@ static int UI_FeederCount(float feederID)
 				}
 			}
 			return count;
-
+			*/
+			return UI_GetSaberCount(qfalse);
+			//[/DynamicMemory_Sabers]
 		case FEEDER_SABER_STAFF_INFO:
-
+			//[DynamicMemory_Sabers]
+			/*
 			for (i=0;i<MAX_SABER_HILTS;i++)
 			{
 				if (saberStaffHiltInfo[i])
@@ -9089,7 +9135,9 @@ static int UI_FeederCount(float feederID)
 				}
 			}
 			return count;
-
+			*/
+			return UI_GetSaberCount(qtrue);
+			//[/DynamicMemory_Sabers]
 		case FEEDER_Q3HEADS:
 			return UI_HeadCountByColor();
 
@@ -9383,13 +9431,19 @@ static const char *UI_FeederItemText(float feederID, int index, int column,
 	if (feederID == FEEDER_SABER_SINGLE_INFO)
 	{
 		//char *saberProperName=0;
-		UI_SaberProperNameForSaber( saberSingleHiltInfo[index], info );
+		//[DynamicMemory_Sabers]
+		UI_SaberProperNameForSaber( UI_GetSaberHiltInfo(qfalse, index), info );
+		//UI_SaberProperNameForSaber( saberSingleHiltInfo[index], info );
+		//[/DynamicMemory_Sabers]
 		return info;
 	}
 	else if	(feederID == FEEDER_SABER_STAFF_INFO)
 	{
 		//char *saberProperName=0;
-		UI_SaberProperNameForSaber( saberStaffHiltInfo[index], info );
+		//[DynamicMemory_Sabers]
+		UI_SaberProperNameForSaber( UI_GetSaberHiltInfo(qtrue, index), info );
+		//UI_SaberProperNameForSaber( saberStaffHiltInfo[index], info );
+		//[/DynamicMemory_Sabers]
 		return info;
 	}
 	else if (feederID == FEEDER_Q3HEADS) {
@@ -12409,3 +12463,14 @@ static void UI_StartServerRefresh(qboolean full)
 #endif
 }
 
+//[DynamicMemory_Sabers]
+void UI_AllocMem(void **ptr, int sze){
+	*ptr = malloc(sze);
+}
+void UI_FreeMem(void *ptr){
+	free(ptr);
+}
+void UI_ReaAllocMem(void **ptr, int sze, int count){
+	*ptr = realloc(*ptr, sze * count);
+}
+//[/DynamicMemory_Sabers]
