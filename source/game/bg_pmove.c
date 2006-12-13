@@ -7841,11 +7841,15 @@ int PM_ItemUsable(playerState_t *ps, int forcedUse)
 
 		return 1;
 	case HI_SENTRY_GUN:
+		//[SentryGun]
+		/*
 		if (ps->fd.sentryDeployed)
 		{
 			PM_AddEventWithParm(EV_ITEMUSEFAIL, SENTRY_ALREADYPLACED);
 			return 0;
 		}
+		*/
+		//[/SentryGun]
 
 		yawonly[ROLL] = 0;
 		yawonly[PITCH] = 0;

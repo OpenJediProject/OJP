@@ -631,9 +631,18 @@ static qboolean pas_find_enemies( gentity_t *self )
 			continue;
 		}
 		if (self->genericValue3 == target->s.number)
-		{
+		{//racc - don't attack owner
 			continue;
 		}
+
+		//[ExpSys]
+		//don't allow sentry gun to attack our own stuff (specifically our seeker item)
+		if(target->r.ownerNum == self->genericValue3)
+		{//something owned by our owner, don't attack it.
+			continue;
+		}
+		//[/ExpSys]
+
 		if ( !trap_InPVS( org2, target->r.currentOrigin ))
 		{
 			continue;
@@ -752,7 +761,7 @@ void sentryExpire(gentity_t *self)
 //---------------------------------
 void pas_think( gentity_t *ent )
 //---------------------------------
-{
+{//racc - sentry gun think
 	qboolean	moved;
 	float		diffYaw, diffPitch;
 	vec3_t		enemyDir, org;
@@ -810,9 +819,9 @@ void pas_think( gentity_t *ent )
 		ent->r.contents = CONTENTS_SOLID;
 	}
 
-	if (!g_entities[ent->genericValue3].inuse || !g_entities[ent->genericValue3].client ||
-		g_entities[ent->genericValue3].client->sess.sessionTeam != ent->genericValue2)
-	{
+	if (!g_entities[ent->genericValue3].inuse || !g_entities[ent->genericValue3].client || //racc - owner is in bad state
+		g_entities[ent->genericValue3].client->sess.sessionTeam != ent->genericValue2) //racc - owner isn't on the same team as we remember
+	{//delete self
 		ent->think = G_FreeEntity;
 		ent->nextthink = level.time;
 		return;
@@ -827,6 +836,9 @@ void pas_think( gentity_t *ent )
 		return;
 	}
 
+	//[ExpSys]
+	//don't selfdistruct from age
+	/*
 	if ((ent->genericValue8+TURRET_LIFETIME) < level.time)
 	{
 		G_Sound( ent, CHAN_BODY, G_SoundIndex( "sound/chars/turret/shutdown.wav" ));
@@ -837,6 +849,8 @@ void pas_think( gentity_t *ent )
 		ent->nextthink = level.time + TURRET_DEATH_DELAY;
 		return;
 	}
+	*/
+	//[/ExpSys]
 
 	ent->nextthink = level.time + FRAMETIME;
 
@@ -1011,7 +1025,10 @@ void turret_die(gentity_t *self, gentity_t *inflictor, gentity_t *attacker, int 
 	G_PlayEffect(EFFECT_EXPLOSION_PAS, self->s.pos.trBase, self->s.angles);
 	G_RadiusDamage(self->s.pos.trBase, &g_entities[self->genericValue3], 30, 256, self, self, MOD_UNKNOWN);
 
-	g_entities[self->genericValue3].client->ps.fd.sentryDeployed = qfalse;
+	//[ExpSys]
+	//not used anymore since we allow multiple sentry guns now.
+	//g_entities[self->genericValue3].client->ps.fd.sentryDeployed = qfalse;
+	//[/ExpSys]
 
 	//ExplodeDeath( self );
 	G_FreeEntity( self );
@@ -1023,10 +1040,15 @@ void turret_die(gentity_t *self, gentity_t *inflictor, gentity_t *attacker, int 
 void SP_PAS( gentity_t *base )
 //---------------------------------
 {
+	//racc - give ammo to the unit
 	if ( base->count == 0 )
 	{
 		// give ammo
-		base->count = TURRET_AMMO_COUNT;
+		//[ExpSys]
+		//racc - these things carry as much ammo as players do.
+		base->count = ammoData[AMMO_BLASTER].max;
+		//base->count = TURRET_AMMO_COUNT;
+		//[/ExpSys]
 	}
 
 	base->s.bolt1 = 1; //This is a sort of hack to indicate that this model needs special turret things done to it
@@ -1119,7 +1141,10 @@ void ItemUse_Sentry( gentity_t *ent )
 
 	sentry->alliedTeam = ent->client->sess.sessionTeam;
 
-	ent->client->ps.fd.sentryDeployed = qtrue;
+	//[ExpSys]
+	//not used anymore since we allow multiple sentry guns now.
+	//ent->client->ps.fd.sentryDeployed = qtrue;
+	//[/ExpSys]
 
 	trap_LinkEntity(sentry);
 

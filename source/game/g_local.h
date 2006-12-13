@@ -412,9 +412,9 @@ struct gentity_s {
 
 	//generic values used by various entities for different purposes.
 	int			genericValue1;
-	int			genericValue2;
-	int			genericValue3;
-	int			genericValue4;
+	int			genericValue2;			//racc - Sentry Guns: Owner's team, so can self-destruct if owner switches teams
+	int			genericValue3;			//racc - Sentry Guns: Owner's entity number
+	int			genericValue4;			//racc - Sentry Guns: Enemy entityNum
 	int			genericValue5;
 	int			genericValue6;
 	int			genericValue7;

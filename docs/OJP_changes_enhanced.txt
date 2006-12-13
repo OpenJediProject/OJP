@@ -40,6 +40,12 @@ Version 0.0.9s:
 				- Having Saber Defense 3 allows players to block back attacks without the extra DP cost.
 				- Players can now saber block while in a stumble.
 
+		Sentry Gun (SentryGun):
+			- Can now have multiple sentry guns.
+			- Doesn't target player's seekers. 
+			- Has larger ammo supply.
+			- Doesn't self-destruct from old age.
+
 
 Version 0.0.9r:
 

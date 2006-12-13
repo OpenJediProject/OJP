@@ -3143,11 +3143,15 @@ int G_ItemUsable(playerState_t *ps, int forcedUse)
 
 		return 1;
 	case HI_SENTRY_GUN:
+		//[SentryGun]
+		/*
 		if (ps->fd.sentryDeployed)
 		{
 			G_AddEvent(&g_entities[ps->clientNum], EV_ITEMUSEFAIL, SENTRY_ALREADYPLACED);
 			return 0;
 		}
+		*/
+		//[/SentryGun]
 
 		yawonly[ROLL] = 0;
 		yawonly[PITCH] = 0;

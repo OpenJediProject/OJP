@@ -2215,7 +2215,11 @@ typedef struct forcedata_s {
 
 	int			killSoundEntIndex[TRACK_CHANNEL_MAX]; //this goes here so it doesn't get wiped over respawn
 
-	qboolean	sentryDeployed;
+	//[SentryGun]
+	//racc - This variable isn't used anymore since we allow multiple sentry guns now.
+	//[/SentryGun]
+	//racc - flag for indicating when a player has a sentry gun deployed.  This prevents the player from deploying multiple sentry guns.
+	qboolean	sentryDeployed;	
 
 	int			saberAnimLevelBase;//sigh...
 	int			saberAnimLevel;
