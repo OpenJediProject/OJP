@@ -635,13 +635,13 @@ static qboolean pas_find_enemies( gentity_t *self )
 			continue;
 		}
 
-		//[ExpSys]
+		//[SentryGun]
 		//don't allow sentry gun to attack our own stuff (specifically our seeker item)
 		if(target->r.ownerNum == self->genericValue3)
 		{//something owned by our owner, don't attack it.
 			continue;
 		}
-		//[/ExpSys]
+		//[/SentryGun]
 
 		if ( !trap_InPVS( org2, target->r.currentOrigin ))
 		{
@@ -821,7 +821,7 @@ void pas_think( gentity_t *ent )
 
 	if (!g_entities[ent->genericValue3].inuse || !g_entities[ent->genericValue3].client || //racc - owner is in bad state
 		g_entities[ent->genericValue3].client->sess.sessionTeam != ent->genericValue2) //racc - owner isn't on the same team as we remember
-	{//delete self
+	{//racc - delete self
 		ent->think = G_FreeEntity;
 		ent->nextthink = level.time;
 		return;
@@ -836,8 +836,8 @@ void pas_think( gentity_t *ent )
 		return;
 	}
 
-	//[ExpSys]
-	//don't selfdistruct from age
+	//[SentryGun]
+	//don't self-destruct from age
 	/*
 	if ((ent->genericValue8+TURRET_LIFETIME) < level.time)
 	{
@@ -850,7 +850,7 @@ void pas_think( gentity_t *ent )
 		return;
 	}
 	*/
-	//[/ExpSys]
+	//[/SentryGun]
 
 	ent->nextthink = level.time + FRAMETIME;
 
@@ -1025,10 +1025,10 @@ void turret_die(gentity_t *self, gentity_t *inflictor, gentity_t *attacker, int 
 	G_PlayEffect(EFFECT_EXPLOSION_PAS, self->s.pos.trBase, self->s.angles);
 	G_RadiusDamage(self->s.pos.trBase, &g_entities[self->genericValue3], 30, 256, self, self, MOD_UNKNOWN);
 
-	//[ExpSys]
+	//[SentryGun]
 	//not used anymore since we allow multiple sentry guns now.
 	//g_entities[self->genericValue3].client->ps.fd.sentryDeployed = qfalse;
-	//[/ExpSys]
+	//[/SentryGun]
 
 	//ExplodeDeath( self );
 	G_FreeEntity( self );
@@ -1044,11 +1044,11 @@ void SP_PAS( gentity_t *base )
 	if ( base->count == 0 )
 	{
 		// give ammo
-		//[ExpSys]
+		//[SentryGun]
 		//racc - these things carry as much ammo as players do.
 		base->count = ammoData[AMMO_BLASTER].max;
 		//base->count = TURRET_AMMO_COUNT;
-		//[/ExpSys]
+		//[/SentryGun]
 	}
 
 	base->s.bolt1 = 1; //This is a sort of hack to indicate that this model needs special turret things done to it
@@ -1141,10 +1141,10 @@ void ItemUse_Sentry( gentity_t *ent )
 
 	sentry->alliedTeam = ent->client->sess.sessionTeam;
 
-	//[ExpSys]
+	//[SentryGun]
 	//not used anymore since we allow multiple sentry guns now.
 	//ent->client->ps.fd.sentryDeployed = qtrue;
-	//[/ExpSys]
+	//[/SentryGun]
 
 	trap_LinkEntity(sentry);
 
