@@ -1551,7 +1551,7 @@ void UI_SaberGetHiltInfo(void){
 			}
 #else
 			UI_ReaAllocMem((void *)&saberStaffHiltInfo, sizeof(char *), numStaffHilts+1);
-			saberStaffHiltInfo[numStaffHilts++] = saberName;
+			saberStaffHiltInfo[numStaffHilts++] = (char *) saberName;
 #endif
 		}
 		else
@@ -1567,7 +1567,7 @@ void UI_SaberGetHiltInfo(void){
 			}
 #else
 			UI_ReaAllocMem((void *)&saberSingleHiltInfo, sizeof(char *), numSingleHilts+1);
-			saberSingleHiltInfo[numSingleHilts++] = saberName;
+			saberSingleHiltInfo[numSingleHilts++] = (char *) saberName;
 #endif
 		}
 		//skip the whole braced section and move on to the next entry
