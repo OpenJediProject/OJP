@@ -1640,6 +1640,7 @@ void BG_VehicleLoadParms( void )
 	maxLen = 0;
 	vehExtFNLen = -1; //to counter the +1 we do 
 	for(i = 0;i<fileCnt;i++, holdChar += vehExtFNLen + 1){
+		vehExtFNLen = strlen( holdChar );
 		len = trap_FS_FOpenFile(va( "ext_data/vehicles/%s", holdChar), &f, FS_READ);
 		if(!f)
 			continue;
