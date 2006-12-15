@@ -1654,6 +1654,7 @@ void BG_VehicleLoadParms( void )
 		Com_Error(ERR_DROP, "Unable to alloc memory for vehicles.");
 		return;
 	}
+	holdChar = vehExtensionListBuf;
 #endif
 
 
