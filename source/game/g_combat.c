@@ -6992,7 +6992,9 @@ void G_DodgeDrain(gentity_t *victim, gentity_t *attacker, int amount)
 	{//attacker gets experience for causing damage.
 			
 		//don't want a divide by zero errors
-		assert(!attacker->client->sess.skillPoints);
+		//Bug fix: double negitive here, was firing only if skillPoints is NOT equal to zero.
+		assert(attacker->client->sess.skillPoints);
+		//assert(!attacker->client->sess.skillPoints);
 
 		//scale skill points based on the ratio between skills
 		AddSkill(attacker, 

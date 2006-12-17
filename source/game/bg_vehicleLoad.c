@@ -1502,7 +1502,7 @@ int VEH_VehicleIndexForName( const char *vehicleName )
 
 void BG_VehWeaponLoadParms( void ) 
 {
-	int			len, totallen, vehExtFNLen, mainBlockLen, fileCnt, i;
+	int			len, totallen, vehExtFNLen = 0, mainBlockLen, fileCnt, i;
 	char		*holdChar, *marker;
 	char		vehWeaponExtensionListBuf[2048];			//	The list of file names read in
 	fileHandle_t	f;
@@ -1600,7 +1600,7 @@ void BG_VehicleUnloadParms( void ){
 
 void BG_VehicleLoadParms( void ) 
 {//HMM... only do this if there's a vehicle on the level?
-	int			len, totallen, vehExtFNLen, mainBlockLen, fileCnt, i;
+	int			len, totallen, vehExtFNLen = 0, mainBlockLen, fileCnt, i;
 //	const char	*filename = "ext_data/vehicles.dat";
 	char		*holdChar, *marker;
 	char		vehExtensionListBuf[2048];			//	The list of file names read in
