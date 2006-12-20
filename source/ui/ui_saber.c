@@ -1460,7 +1460,6 @@ void UI_SaberAttachToChar( itemDef_t *item )
 }
 
 
-
 //[DynamicMemory_Sabers]
 char *UI_GetSaberHiltInfo(qboolean TwoHanded, int index){
 	if(TwoHanded)
@@ -1470,34 +1469,11 @@ char *UI_GetSaberHiltInfo(qboolean TwoHanded, int index){
 }
 
 int UI_GetSaberCount(qboolean TwoHanded){
-	int count = 0, i;
 	if(TwoHanded == qfalse){
-		for (i=0;i<saberSingleHiltCount;i++)
-		{
-			if (saberSingleHiltInfo[i])
-			{
-				count++;
-			}
-			else
-			{//done
-				break;
-			}
-		}
-		return count;
+		return saberSingleHiltCount;
 	}
 	else{
-		for (i=0;i<saberStaffHiltCount;i++)
-		{
-			if (saberStaffHiltInfo[i])
-			{
-				count++;
-			}
-			else
-			{//done
-				break;
-			}
-		}
-		return count;
+		return saberStaffHiltCount;
 	}
 }
 
