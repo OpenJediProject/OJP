@@ -1469,12 +1469,44 @@ char *UI_GetSaberHiltInfo(qboolean TwoHanded, int index){
 }
 
 int UI_GetSaberCount(qboolean TwoHanded){
+	//[UITweaks]
 	if(TwoHanded == qfalse){
 		return saberSingleHiltCount;
 	}
 	else{
 		return saberStaffHiltCount;
 	}
+	/* basejka code
+		int count = 0, i;
+	if(TwoHanded == qfalse){
+		for (i=0;i<saberSingleHiltCount;i++)
+		{
+			if (saberSingleHiltInfo[i])
+			{
+				count++;
+			}
+			else
+			{//done
+				break;
+			}
+		}
+		return count;
+	}
+	else{
+		for (i=0;i<saberStaffHiltCount;i++)
+		{
+			if (saberStaffHiltInfo[i])
+			{
+				count++;
+			}
+			else
+			{//done
+				break;
+			}
+		}
+		return count;
+	*/
+	//[/UITweaks]
 }
 
 //#define MAX_SABER_HILTS	64
