@@ -6369,7 +6369,9 @@ void WP_ForcePowersUpdate( gentity_t *self, usercmd_t *ucmd )
 				WP_ForcePowerRegenerate(self, holoregen);
 			}
 
-
+			//[FatigueSys]
+			//we're disabled siege specific force regen code since it screws up FP balancing in Enhanced.
+			/*
 			if (g_gametype.integer == GT_SIEGE)
 			{
 				//[FatigueSys]
@@ -6382,7 +6384,7 @@ void WP_ForcePowersUpdate( gentity_t *self, usercmd_t *ucmd )
 				{ //1 point per 7 seconds.. super slow
 					self->client->ps.fd.forcePowerRegenDebounceTime = level.time + 7000;
 				}
-				*/
+				*//*
 
 				if (self->client->siegeClass != -1 &&
 				//else if (self->client->siegeClass != -1 &&
@@ -6393,10 +6395,12 @@ void WP_ForcePowersUpdate( gentity_t *self, usercmd_t *ucmd )
 				}
 				else
 				{
-					self->client->ps.fd.forcePowerRegenDebounceTime = level.time + g_forceRegenTime.integer;
+						self->client->ps.fd.forcePowerRegenDebounceTime = level.time + g_forceRegenTime.integer;
 				}
 			}
 			else
+			*/
+			//[/FatigueSys]
 			{
 				if ( g_gametype.integer == GT_POWERDUEL && self->client->sess.duelTeam == DUELTEAM_LONE )
 				{
