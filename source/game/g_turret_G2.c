@@ -654,8 +654,12 @@ static void turretG2_turnoff( gentity_t *self )
 //-----------------------------------------------------
 {
 	//[CoOp]
-	if ( self->enemy != NULL )
-	//if ( self->enemy == NULL )
+	//what if the turret is part of a custom map that lets you turn on/off the turrets?
+	//we should turn off when we are told to turn off, dont continue going after the enemy.
+	//the "if ( self->enemy == NULL )" was used to prevent spamming the shutdown noise as well, so we need a new way to detect if we are off
+	if(self->s.frame == 0) //dont turn off if we are already off
+	//if ( self->enemy != NULL ) //CoOp
+	//if ( self->enemy == NULL ) //basejka
 	//[/CoOp]
 	{
 		// we don't need to turnoff
