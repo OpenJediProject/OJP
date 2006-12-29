@@ -12146,6 +12146,9 @@ void SaberBallisticsThink(gentity_t *saberEnt)
 			gentity_t *saberOwn = &g_entities[saberEnt->r.ownerNum];
 			saberKnockDown(saberEnt, saberOwn, saberOwn);
 		}
+		//Bug fix: sabers were falling through certain solid objects
+		else
+			G_RunObject(saberEnt);
 	}
 }
 
