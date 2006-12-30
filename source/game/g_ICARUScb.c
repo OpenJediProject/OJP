@@ -49,7 +49,6 @@ void GCam_Follow( int cameraGroup[MAX_CAMERA_GROUP_SUBJECTS], float speed, float
 
 extern void LogExit( const char *string );
 
-int VariableDeclared( const char *name );
 int GetStringDeclaredVariable( const char *name, char **value );
 int GetFloatDeclaredVariable( const char *name, float *value );
 int GetVectorDeclaredVariable( const char *name, vec3_t value );
@@ -64,12 +63,12 @@ struct DeclaredVariable_s
 	char name[2048];	//name of the varible
 	qboolean inuse;		//variable is currently being used or not
 	char Data[2048];	//string data for this variable
-	int type;			// type for this variable
 };
 
 typedef struct DeclaredVariable_s DeclaredVariable_t;
 
 DeclaredVariable_t DeclaredVariables[MAX_DECLAREDVARIABLES] = { 0 };
+int numDeclaredVariables = 0;
 //[/CoOp]
 
 //This is a hack I guess. It's because we can't include the file this enum is in
@@ -395,18 +394,21 @@ void G_DebugPrint( int level, const char *format, ... )
 //[/SuperDindon]
 
 	va_start (argptr, format);
-	vsprintf (text, format, argptr);
+	//[OverflowProtection]
+	Q_vsnprintf(text, sizeof(text), format, argptr);
+	//vsprintf( text, format, argptr );
+	//[/OverflowProtection]
 	va_end (argptr);
 
 	//Add the color formatting
 	switch ( level )
 	{
 		case WL_ERROR:
-			Com_Printf ( S_COLOR_RED"ERROR: %s", text );
+			G_Printf ( S_COLOR_RED"ERROR: %s", text );
 			break;
 		
 		case WL_WARNING:
-			Com_Printf ( S_COLOR_YELLOW"WARNING: %s", text );
+			G_Printf ( S_COLOR_YELLOW"WARNING: %s", text );
 			break;
 		
 		case WL_DEBUG:
@@ -425,12 +427,12 @@ void G_DebugPrint( int level, const char *format, ... )
 				if ( ( entNum < 0 ) || ( entNum > MAX_GENTITIES ) )
 					entNum = 0;
 
-				Com_Printf ( S_COLOR_BLUE"DEBUG: %s(%d): %s\n", g_entities[entNum].script_targetname, entNum, buffer );
+				G_Printf ( S_COLOR_BLUE"DEBUG: %s(%d): %s\n", g_entities[entNum].script_targetname, entNum, buffer );
 				break;
 			}
 		default:
 		case WL_VERBOSE:
-			Com_Printf ( S_COLOR_GREEN"INFO: %s", text );
+			G_Printf ( S_COLOR_GREEN"INFO: %s", text );
 			break;
 	}
 }
@@ -1139,11 +1141,7 @@ int	Q3_GetTag( int entID, const char *name, int lookup, vec3_t info )
 {
 	gentity_t	*ent = &g_entities[entID];
 
-	if (!ent->inuse)
-	{
-		assert(0);
-		return 0;
-	}
+	VALIDATEB( ent );
 
 	switch ( lookup )
 	{
@@ -1838,9 +1836,6 @@ int Q3_GetFloat( int entID, int type, const char *name, float *value )
 	default:
 		//[CoOp]
 		//fixing all the varibledeclared stuff
-		if ( VariableDeclared( name ) != VTYPE_FLOAT )
-			return 0;
-
 		return GetFloatDeclaredVariable( name, value );
 
 		/*
@@ -1918,9 +1913,6 @@ int Q3_GetVector( int entID, int type, const char *name, vec3_t value )
 
 		//[CoOp]
 		//fixing all the varibledeclared stuff
-		if ( VariableDeclared( name ) != VTYPE_VECTOR )
-			return 0;
-
 		return GetVectorDeclaredVariable( name, value );
 
 		/*
@@ -2208,9 +2200,6 @@ int Q3_GetString( int entID, int type, const char *name, char **value )
 
 		//[CoOp]
 		//fixing all the varibledeclared stuff
-		if ( VariableDeclared( name ) != VTYPE_STRING )
-			return 0;
-
 		return GetStringDeclaredVariable( name, value );
 
 		/*
@@ -2435,6 +2424,8 @@ static void Q3_SetAngles( int entID, vec3_t angles )
 	trap_LinkEntity( ent );
 }
 
+//[CoOp]
+//[SPPortComplete]
 /*
 ============
 Q3_SetAdjustAreaPortals
@@ -3987,7 +3978,12 @@ void G_SetWeapon( gentity_t *self, int wp )
 		{//make sure the cgame-side knows this
 			//RAFIXME - need to impliment this?
 			//CG_ChangeWeapon( wp );
-			self->client->ps.stats[STAT_WEAPONS] = WP_NONE;	//remove all the player's weapons.
+			self->client->ps.weapon = WP_MELEE;
+			self->client->ps.stats[STAT_WEAPONS] = WP_MELEE;	//remove all the player's weapons.
+			SetSpawnWeapon(WP_MELEE);
+		} else {
+			self->client->ps.weapon = WP_NONE;
+			self->client->ps.stats[STAT_WEAPONS] = WP_NONE; // remove all the npc's weapons.
 			SetSpawnWeapon(WP_NONE);
 		}
 		return;
@@ -4086,7 +4082,6 @@ static void Q3_SetWeapon (int entID, const char *wp_name)
 	{//since a script sets a weapon, we presume we don't want to auto-match the player's weapon anymore
 		ent->NPC->aiFlags &= ~NPCAI_MATCHPLAYERWEAPON;
 	}
-
 
 	//account for the "drop" weapon command
 	if(!Q_stricmp("drop", wp_name))
@@ -4924,8 +4919,18 @@ static void Q3_SetIgnoreEnemies( int entID, qboolean data)
 	//[CoOp]
 	//reenabling the IGNORE_ENEMIES flag
 	gentity_t *ent = &g_entities[entID];
-	if(!ent->NPC)
+
+	if ( !ent )
+	{
+		G_DebugPrint( WL_WARNING, "Q3_SetIgnoreEnemies: invalid entID %d\n", entID);
 		return;
+	}
+	
+	if ( !ent->NPC )
+	{
+		G_DebugPrint( WL_ERROR, "Q3_SetIgnoreEnemies: '%s' is not an NPC!\n", ent->targetname );
+		return;
+	}
 
 	if(data)
 		ent->NPC->scriptFlags |= SCF_IGNORE_ENEMIES;
@@ -4959,8 +4964,17 @@ static void Q3_SetIgnoreAlerts( int entID, qboolean data)
 	//G_DebugPrint( WL_WARNING, "Q3_SetIgnoreAlerts: NOT SUPPORTED IN MP\n");
 	gentity_t	*ent = &g_entities[entID];
 
-	if (!ent->NPC)
+	if ( !ent )
+	{
+		G_DebugPrint( WL_WARNING, "Q3_SetIgnoreAlerts: invalid entID %d\n", entID);
 		return;
+	}
+	
+	if ( !ent->NPC )
+	{
+		G_DebugPrint( WL_ERROR, "Q3_SetIgnoreAlerts: '%s' is not an NPC!\n", ent->targetname );
+		return;
+	}
 
 	if (data)
 		ent->NPC->scriptFlags |= SCF_IGNORE_ALERTS;
@@ -5006,11 +5020,19 @@ static void Q3_SetDontShoot( int entID, qboolean add)
 {
 //[CoOp]
 //[SuperDindon]
-	//G_DebugPrint( WL_WARNING, "Q3_SetDontShoot: NOT SUPPORTED IN MP\n");
+	gentity_t	*ent  = &g_entities[entID];
+
+	if ( !ent )
+	{
+		G_DebugPrint( WL_WARNING, "Q3_SetDontShoot: invalid entID %d\n", entID);
+		return;
+	}
+
 	if (add)
-		g_entities[entID].flags |= FL_DONT_SHOOT;
+		ent->flags |= FL_DONT_SHOOT;
 	else
-		g_entities[entID].flags &= ~FL_DONT_SHOOT;
+		ent->flags &= ~FL_DONT_SHOOT;
+	//G_DebugPrint( WL_WARNING, "Q3_SetDontShoot: NOT SUPPORTED IN MP\n");
 //[/CoOp]
 //[/SuperDindon]
 	return;
@@ -5030,8 +5052,17 @@ static void Q3_SetDontFire( int entID, qboolean add)
 	//G_DebugPrint( WL_WARNING, "Q3_SetDontFire: NOT SUPPORTED IN MP\n");
 	gentity_t	*ent = &g_entities[entID];
 
-	if (!ent->NPC)
+	if ( !ent )
+	{
+		G_DebugPrint( WL_WARNING, "Q3_SetDontFire: invalid entID %d\n", entID);
 		return;
+	}
+	
+	if ( !ent->NPC )
+	{
+		G_DebugPrint( WL_ERROR, "Q3_SetDontFire: '%s' is not an NPC!\n", ent->targetname );
+		return;
+	}
 
 	if (add)
 		ent->NPC->scriptFlags |= SCF_DONT_FIRE;
@@ -5050,6 +5081,39 @@ Q3_SetFireWeapon
 ============
 */
 static void Q3_SetFireWeapon(int entID, qboolean add)
+{
+	gentity_t	*ent  = &g_entities[entID];
+
+	if ( !ent )
+	{
+		G_DebugPrint( WL_WARNING, "Q3_FireWeapon: invalid entID %d\n", entID);
+		return;
+	}
+	
+	if ( !ent->NPC )
+	{
+		G_DebugPrint( WL_ERROR, "Q3_SetFireWeapon: '%s' is not an NPC!\n", ent->targetname );
+		return;
+	}
+
+	if(add)
+	{
+		ent->NPC->scriptFlags |= SCF_FIRE_WEAPON;
+	}
+	else
+	{
+		ent->NPC->scriptFlags &= ~SCF_FIRE_WEAPON;
+	}
+}
+
+/*
+============
+Q3_SetFireWeapon
+
+?
+============
+*/
+/*static void Q3_SetFireWeapon(int entID, qboolean add)
 {
 //[CoOp]
 //[SuperDindon]
@@ -5089,7 +5153,7 @@ static void Q3_SetFireWeapon(int entID, qboolean add)
 //[/CoOp]
 //[/SuperDindon]
 	return;
-}
+}*/
 
 
 //[CoOp]
@@ -6897,7 +6961,6 @@ qboolean Q3_Set( int taskID, int entID, const char *type_name, const char *data 
 	char		char_data[1000]; 
 	//[/CoOp]
 
-
 	//Set this for callbacks
 	toSet = GetIDForString( setTable, type_name );
 
@@ -8588,6 +8651,11 @@ ICARUS Declared Variable Code
 -------------------------------------------------------------------------------------------
 */
 
+/*
+-------------------------
+GetDeclaredVariableFromName
+-------------------------
+*/
 DeclaredVariable_t *GetDeclaredVariableFromName( const char *name ) {
 	int i = 0;
 	for(i = 0; i < MAX_DECLAREDVARIABLES; i++) {
@@ -8600,27 +8668,9 @@ DeclaredVariable_t *GetDeclaredVariableFromName( const char *name ) {
 
 /*
 -------------------------
-VariableDeclared
+GetStringDeclaredVariable
 -------------------------
 */
-int VariableDeclared( const char *name ) {
-	DeclaredVariable_t *var = GetDeclaredVariableFromName( name );
-
-	if ( var != NULL )
-		return var->type;
-	else
-		return VTYPE_NONE;
-}
-
-int NumDeclaredVariables( void ) {
-	int i=0,cnt=0;
-
-	for(i = 0; i < MAX_DECLAREDVARIABLES; i++) {
-		if(DeclaredVariables[i].inuse) cnt++;
-	}
-	return cnt;
-}
-
 int GetStringDeclaredVariable( const char *name, char **value )
 {//returns 1 for success; 0 for fail
 	DeclaredVariable_t *strVar = GetDeclaredVariableFromName( name );
@@ -8630,10 +8680,15 @@ int GetStringDeclaredVariable( const char *name, char **value )
 		return 1;
 	}
 
-	G_DebugPrint( WL_ERROR, "ICARUS Declared Variable %s not found.\n", name);
+	G_DebugPrint( WL_ERROR, "ICARUS Declared Variable %s not found!\n", name);
 	return 0;
 }
 
+/*
+-------------------------
+GetFloatDeclaredVariable
+-------------------------
+*/
 int GetFloatDeclaredVariable( const char *name, float *value )
 {//returns 1 for success; 0 for fail
 	DeclaredVariable_t *floatVar = GetDeclaredVariableFromName( name );
@@ -8643,10 +8698,15 @@ int GetFloatDeclaredVariable( const char *name, float *value )
 		return 1;
 	}
 
-	G_DebugPrint( WL_ERROR, "ICARUS Declared Variable %s not found.\n", name);
+	G_DebugPrint( WL_ERROR, "ICARUS Declared Variable %s not found!\n", name);
 	return 0;
 }
 
+/*
+-------------------------
+GetVectorDeclaredVariable
+-------------------------
+*/
 int GetVectorDeclaredVariable( const char *name, vec3_t value )
 {//returns 1 for success; 0 for fail
 	DeclaredVariable_t *vectorVar = GetDeclaredVariableFromName( name );
@@ -8657,65 +8717,13 @@ int GetVectorDeclaredVariable( const char *name, vec3_t value )
 		if ( sscanf ( str, "%f %f %f", &value[0], &value[1], &value[2] ) == 3 ) {
 			return 1;
 		} else {
-			G_DebugPrint( WL_ERROR, "ICARUS Declared Variable %s failed parse vector.\n", name);
+			G_DebugPrint( WL_ERROR, "ICARUS Declared Variable %s failed parse vector!\n", name);
 			return 0;
 		}
 	}
 
-	G_DebugPrint( WL_ERROR, "ICARUS Declared Variable %s not found.\n", name);
+	G_DebugPrint( WL_ERROR, "ICARUS Declared Variable %s not found!\n", name);
 	return 0;
-}
-
-/*
--------------------------
-SetVarReal
--------------------------
-*/
-void SetVarReal( const char *name, const char *value, int type )
-{
-	DeclaredVariable_t *var = GetDeclaredVariableFromName( name );
-	if ( var != NULL ) {
-		Q_strncpyz(var->Data, value, sizeof(var->Data));
-		return;
-	} else {
-		if ( NumDeclaredVariables() > MAX_DECLAREDVARIABLES ) {
-			G_DebugPrint( WL_ERROR, "Too many variables already declared, maximum is %d\n", MAX_DECLAREDVARIABLES );
-			return;
-		}
-		if ( !var->inuse ) {
-			Q_strncpyz(var->name, name, sizeof(var->name));
-			Q_strncpyz(var->Data, value, sizeof(var->Data));
-			var->type = type;
-			var->inuse = qtrue;
-			return;
-		}
-	}
-}
-
-/*
--------------------------
-SetFloatVarReal
--------------------------
-*/
-void SetFloatVarReal( const char *name, float value )
-{
-	DeclaredVariable_t *var = GetDeclaredVariableFromName( name );
-	if ( var != NULL ) {
-		Q_strncpyz(var->Data, va("%f", value), sizeof(var->Data));
-		return;
-	} else {
-		if ( NumDeclaredVariables() > MAX_DECLAREDVARIABLES ) {
-			G_DebugPrint( WL_ERROR, "Too many variables already declared, maximum is %d\n", MAX_DECLAREDVARIABLES );
-			return;
-		}
-		if ( !var->inuse ) {
-			Q_strncpyz(var->name, name, sizeof(var->name));
-			Q_strncpyz(var->Data, va("%f", value), sizeof(var->Data));
-			var->type = VTYPE_FLOAT;
-			var->inuse = qtrue;
-			return;
-		}
-	}
 }
 
 /*
@@ -8724,35 +8732,25 @@ SetVar
 -------------------------
 */
 void SetVar( const char *type_name, const char *data ) {
-	int		vret = VariableDeclared( type_name ) ;
-	float	float_data;
-	float	val = 0.0f;
-	
-	if ( vret != VTYPE_NONE ) {
-		switch ( vret ) {
-			case VTYPE_FLOAT:
-				//Check to see if increment command
-				if ( (val = Q3_GameSideCheckStringCounterIncrement( data )) ) {
-					GetFloatDeclaredVariable( type_name, &float_data );
-					float_data += val;
-				} else {
-					float_data = atof(data);
-				}
-				SetFloatVarReal( type_name, float_data );
-				break;
-
-			case VTYPE_STRING:
-				SetVarReal( type_name, data, VTYPE_STRING );
-				break;
-
-			case VTYPE_VECTOR:
-				SetVarReal( type_name, data, VTYPE_VECTOR );
-				break;
-		}
+	DeclaredVariable_t *var = GetDeclaredVariableFromName( type_name );
+	if ( var != NULL ) {
+		Q_strncpyz(var->Data, data, sizeof(var->Data));
 		return;
+	} else {
+		if ( numDeclaredVariables >= MAX_DECLAREDVARIABLES ) {
+			G_DebugPrint( WL_ERROR, "Too many variables already declared, maximum is %d!\n", MAX_DECLAREDVARIABLES );
+			return;
+		}
+		if ( !DeclaredVariables[numDeclaredVariables].inuse ) {
+			DeclaredVariable_t *var = &DeclaredVariables[numDeclaredVariables];
+			Q_strncpyz(var->name, type_name, sizeof(var->name));
+			Q_strncpyz(var->Data, data, sizeof(var->Data));
+			var->inuse = qtrue;
+			numDeclaredVariables++;
+			return;
+		}
 	}
-
-	G_DebugPrint( WL_ERROR, "%s variable or field not found!\n", type_name );
+	G_DebugPrint( WL_ERROR, "ICARUS Declared Variable %s could not be created!\n", type_name );
 }
 
 /*
@@ -8761,7 +8759,3 @@ End of ICARUS Declared Variable Code
 -------------------------------------------------------------------------------------------
 */
 //[/CoOp]
-
-
-
-
