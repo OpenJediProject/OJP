@@ -2077,11 +2077,7 @@ void ClientUserinfoChanged( int clientNum ) {
 		if(skinname)
 		{//we're using a species player model, try to use their hoth clothes.
 			skinname++;
-			skinname = strstr(skinname, "|");
-			if(skinname)
-			{//this should always be true for good specie skins I think
-				strcpy( skinname, "torso_g1|lower_e1\0" );
-			}
+			strcpy( skinname, "torso_g1|lower_e1\0" );
 		}
 	}
 	//[/CoOp]
