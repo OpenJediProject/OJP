@@ -3575,6 +3575,10 @@ void CG_EntityEvent( centity_t *cent, vec3_t position ) {
 		DEBUGNAME("EV_PLAY_EFFECT_BOLTED");
 		{
 			centity_t *effectOn = &cg_entities[es->owner];
+
+			if( !effectOn->ghoul2 )					// don't play bolted effect if no ghoul on the entity
+				break;
+
 			eID = 0;
 
 			//if the effect is already registered go ahead grab it
