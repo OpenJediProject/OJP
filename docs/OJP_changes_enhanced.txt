@@ -24,9 +24,14 @@ Version 0.0.9s:
 
 		Experience System:
 			- Fixed problem where skill points weren't being saved between gametypes.
+			- Tweaked force absorb skill cost.
+			- Tweaked bowcaster skill cost.
+			- Added Disruptor weapon skill.
+			- Added repeater (Clone Rifle) weapon skill.
 
 		Fatigue System:
 			- Fatigue in Siege now behaves the same as in the other gametypes.
+			- Decreased fatigue lose from getting kicked to 5.
 
 		Flamethrower:
 			- Boosted fuel cost to 3.
@@ -42,6 +47,9 @@ Version 0.0.9s:
 			Blocking:
 				- Having Saber Defense 3 allows players to block back attacks without the extra DP cost.
 				- Players can now saber block while in a stumble.
+
+			Misc:
+				- Made heavy mishaps happen more often.
 
 			Saber fix:
 				- Saber will no longer fall though some solid objects when thrown.

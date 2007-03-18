@@ -106,6 +106,18 @@ LANG_ENGLISH	    "Detpack:"
 
 REFERENCE	    DESC_SKILL_DETPACK
 LANG_ENGLISH	"Gains the user detpacks."
+
+REFERENCE	    SKILL_REPEATER
+LANG_ENGLISH	"Clone Rifle:"
+
+REFERENCE	    DESC_SKILL_REPEATER
+LANG_ENGLISH	"Gains the user the Clone Rifle."
+
+REFERENCE	    SKILL_DISRUPTOR
+LANG_ENGLISH	"Disruptor:"
+
+REFERENCE	    DESC_SKILL_DISRUPTOR
+LANG_ENGLISH	"Gains the user the Disruptor."
 //[/ExpSys]
 
 //[Flamethrower]

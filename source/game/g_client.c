@@ -3857,6 +3857,14 @@ void ClientSpawn(gentity_t *ent) {
 			{
 				client->ps.stats[STAT_WEAPONS] |= ( 1 << WP_BOWCASTER );
 			}
+			if (!wDisable || !(wDisable & (1 << WP_REPEATER)))
+			{
+				client->ps.stats[STAT_WEAPONS] |= ( 1 << WP_REPEATER );
+			}
+			if (!wDisable || !(wDisable & (1 << WP_DISRUPTOR)))//JRHockney
+			{
+				client->ps.stats[STAT_WEAPONS] |= ( 1 << WP_DISRUPTOR );
+			}
 			client->ps.stats[STAT_WEAPONS] &= ~(1 << WP_SABER);
 			client->ps.stats[STAT_WEAPONS] |= (1 << WP_MELEE);
 			client->ps.ammo[AMMO_POWERCELL] = ammoData[AMMO_POWERCELL].max;
@@ -3950,6 +3958,20 @@ void ClientSpawn(gentity_t *ent) {
 				if (!wDisable || !(wDisable & (1 << WP_DET_PACK)))
 				{
 					client->ps.stats[STAT_WEAPONS] |= ( 1 << WP_DET_PACK );
+				}
+			}
+			if(client->skillLevel[SK_REPEATER])
+			{//player has repeater
+				if (!wDisable || !(wDisable & (1 << WP_REPEATER)))
+				{
+					client->ps.stats[STAT_WEAPONS] |= ( 1 << WP_REPEATER );
+				}
+			}
+			if(client->skillLevel[SK_DISRUPTOR])
+			{//player has disruptor
+				if (!wDisable || !(wDisable & (1 << WP_DISRUPTOR)))
+				{
+					client->ps.stats[STAT_WEAPONS] |= ( 1 << WP_DISRUPTOR );
 				}
 			}
 			//[/ExpSys]
@@ -4177,7 +4199,9 @@ void ClientSpawn(gentity_t *ent) {
 	if ( inSiegeWithClass == qfalse )
 	{//racc - not playing siege, assign ammo levels.
 		//[ExpSys]
-		client->ps.ammo[AMMO_POWERCELL] = ammoData[AMMO_POWERCELL].max * (float) client->skillLevel[SK_BOWCASTER]/FORCE_LEVEL_3;
+		client->ps.ammo[AMMO_POWERCELL] = ammoData[AMMO_POWERCELL].max * (float) (client->skillLevel[SK_BOWCASTER] < client->skillLevel[SK_DISRUPTOR] ? client->skillLevel[SK_DISRUPTOR] : client->skillLevel[SK_BOWCASTER])/FORCE_LEVEL_3;
+
+		client->ps.ammo[AMMO_METAL_BOLTS] = ammoData[AMMO_METAL_BOLTS].max * (float) client->skillLevel[SK_REPEATER]/FORCE_LEVEL_3;
 
 		client->ps.ammo[AMMO_BLASTER] = ammoData[AMMO_BLASTER].max * (float) client->skillLevel[SK_BLASTER]/FORCE_LEVEL_3;
 

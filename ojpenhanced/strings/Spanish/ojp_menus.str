@@ -137,6 +137,22 @@ LANG_SPANISH		"#same"
 REFERENCE	    DESC_SKILL_DETPACK
 LANG_ENGLISH	"Gains the user detpacks."
 LANG_SPANISH		"#same"
+
+REFERENCE	    SKILL_REPEATER
+LANG_ENGLISH	"Clone Rifle:"
+LANG_SPANISH		"#same"
+
+REFERENCE	    DESC_SKILL_REPEATER
+LANG_ENGLISH	"Gains the user the Clone Rifle."
+LANG_SPANISH		"#same"
+
+REFERENCE	    SKILL_DISRUPTOR
+LANG_ENGLISH	"Disruptor:"
+LANG_SPANISH		"#same"
+
+REFERENCE	    DESC_SKILL_DISRUPTOR
+LANG_ENGLISH	"Gains the user the Disruptor."
+LANG_SPANISH		"#same"
 //[/ExpSys]
 
 //[Flamethrower]

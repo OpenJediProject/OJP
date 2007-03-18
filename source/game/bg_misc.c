@@ -210,7 +210,7 @@ int bgForcePowerCost[NUM_TOTAL_SKILLS][NUM_FORCE_POWER_LEVELS] = //0 == neutral
 	{	0,	2,	5,	8	},	// Lightning	//FP_LIGHTNING,//hold/duration
 	{	0,	4,	6,	8	},	// Dark Rage	//FP_RAGE,//duration
 	{	0,	2,	5,	8	},	// Protection	//FP_PROTECT,//duration
-	{	0,	1,	3,	6	},	// Absorb		//FP_ABSORB,//duration
+	{	0,	4,	4,	4	},	// Absorb		//FP_ABSORB,//duration
 	{	0,	1,	3,	6	},	// Team Heal	//FP_TEAM_HEAL,//instant
 	{	0,	1,	3,	6	},	// Team Force	//FP_TEAM_FORCE,//instant
 	{	0,	2,	4,	6	},	// Drain		//FP_DRAIN,//hold/duration
@@ -228,12 +228,14 @@ int bgForcePowerCost[NUM_TOTAL_SKILLS][NUM_FORCE_POWER_LEVELS] = //0 == neutral
 	{	0,	8,	8,	8	},	//SK_ROCKET,		//rocket launcher skill
 	{	0,	3,	3,	0	},	//SK_BACTA			//bacta medikits skill
 	{	0,	8,	0,	0	},	//SK_FLAMETHROWER	//flamethrower skill
-	{	0,	2,	1,	1	},	//SK_BOWCASTER,		//bowcaster skill
+	{	0,	2,	2,	2	},	//SK_BOWCASTER,		//bowcaster skill
 	{	0,	3,	0,	0	},	//SK_FORCEFIELD,	//forcefield skill
 	{	0,	8,	0,	0	},	//SK_CLOAK,		//cloaking device skill
 	{	0,	6,	0,	0	},	//SK_SEEKER,		//seeker droid skill
 	{	0,  5,  0,  0	},	//SK_SENTRY,		//sentry gun skill
 	{	0,  8,  8,  0	},	//SK_DETPACK,		//detpack skill
+	{   0,  8,  8,  8   },  //SK_REPEATER,      // repeater/clone rifle skill
+	{   0,  8,  8,  8   }	//SK_DISRUPTOR,      // Disruptor/sniper rifle skill
 	//[/ExpSys]
 };
 

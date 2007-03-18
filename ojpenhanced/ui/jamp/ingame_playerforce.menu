@@ -812,7 +812,7 @@
 			group					lightpowers
 			style					0	
 			text					@MENUS_FORCE_ABSORB
-			rect					230 223 110 15
+			rect					230 215 110 15
 			textalign				ITEM_ALIGN_RIGHT	
 			textalignx				105
 			textaligny				0
@@ -834,7 +834,7 @@
 			group					lightpowers
 			style					0	
 			ownerdraw				UI_FORCE_RANK_ABSORB
-			rect					230 223 175 15
+			rect					230 215 175 15
 			textalign				ITEM_ALIGN_LEFT		
 			textalignx				115
 			textaligny				-6
@@ -974,7 +974,7 @@
 				setitemcolor	setfp_protect forecolor 0.5 0.5 1 1
 			}
 		}
-
+        */
 		// Force Mind Trick title
 		itemDef 
 		{
@@ -982,7 +982,7 @@
 			group					lightpowers
 			style					0	
 			text					@MENUS_FORCE_MINDTRICK
-			rect					230 274 110 15
+			rect					230 232 110 15
 			textalign				ITEM_ALIGN_RIGHT
 			textalignx				105
 			textaligny				0
@@ -1004,7 +1004,7 @@
 			group					lightpowers
 			style					0	
 			ownerdraw				UI_FORCE_RANK_TELEPATHY
-			rect					230 274 175 15
+			rect					230 232 175 15
 			textalign				ITEM_ALIGN_LEFT		
 			textalignx				115
 			textaligny				-6
@@ -1030,7 +1030,7 @@
 				setitemcolor	setfp_mindtrick forecolor  0.5 0.5 1 1
 			}
 		}
-
+        /*
 		// Force Team Heal title
 		itemDef 
 		{
@@ -1151,7 +1151,7 @@
 			forecolor				1 0.2 0.2 1
 			border					0
 			bordercolor				0 0 0 0
-			descText				@OJP_MENUS_DESC_SKILL_JETPACK
+			descText				@OJP_MENUS_DESC_SKILL_BACTA
 			visible					1 
 			action 
 			{ 
@@ -1844,6 +1844,118 @@
 			mouseexit 
 			{ 
 				setitemcolor	setsk_detpack forecolor .2 1 .2 1
+			}
+		}
+	    
+		// repeater title
+		itemDef 
+		{
+			name					setsk_repeater
+			group					gunpowers
+			style					0	
+			text					@OJP_MENUS_SKILL_REPEATER
+			rect					30 348 110 15
+			textalign				ITEM_ALIGN_RIGHT												
+			textalignx				105
+			textaligny				0
+			font					4
+			textscale				1
+			forecolor				.2 1 .2 1
+			outlinecolor			1 .5 .5 .5
+			backcolor				0 0 0 0
+			border					0
+			bordercolor				0 0 0 0
+			visible					1 
+			decoration
+		}
+		
+		// repeater assign
+		itemDef 
+		{
+			name					setsk_repeater
+			group					gunpowers
+			style					0	
+			ownerdraw				UI_FORCE_RANK_REPEATER
+			rect					30 348 175 15
+			textalign				ITEM_ALIGN_LEFT		
+			textalignx				115
+			textaligny				-6
+			textscale				.25        
+			forecolor				.2 1 .2 1
+			backcolor				0 0 0 0
+			forecolor				1 0.2 0.2 1
+			border					0
+			bordercolor				0 0 0 0
+			descText				@OJP_MENUS_DESC_SKILL_REPEATER
+			visible					1 
+			action 
+			{ 
+				play			"sound/interface/button1.wav" ;
+			}
+
+			mouseenter 
+			{ 
+				setitemcolor	setsk_repeater forecolor .7 1 2. 1
+			}
+			mouseexit 
+			{ 
+				setitemcolor	setsk_repeater forecolor .2 1 .2 1
+			}
+		}
+		
+		// disruptor title by JRHockney
+		itemDef 
+		{
+			name					setsk_disruptor
+			group					gunpowers
+			style					0	
+			text					@OJP_MENUS_SKILL_DISRUPTOR
+			rect					30 362 110 15
+			textalign				ITEM_ALIGN_RIGHT												
+			textalignx				105
+			textaligny				0
+			font					4
+			textscale				1
+			forecolor				.2 1 .2 1
+			outlinecolor			1 .5 .5 .5
+			backcolor				0 0 0 0
+			border					0
+			bordercolor				0 0 0 0
+			visible					1 
+			decoration
+		}
+	
+		// diruptor assign by JRHockney
+		itemDef 
+		{
+			name					setsk_disruptor
+			group					gunpowers
+			style					0	
+			ownerdraw				UI_FORCE_RANK_DISRUPTOR   
+			rect					30 362 175 15
+			textalign				ITEM_ALIGN_LEFT		
+			textalignx				115
+			textaligny				-6
+			textscale				.25        
+			forecolor				.2 1 .2 1
+			backcolor				0 0 0 0
+			forecolor				1 0.2 0.2 1
+			border					0
+			bordercolor				0 0 0 0
+			descText				@OJP_MENUS_DESC_SKILL_DISRUPTOR
+			visible					1 
+			action 
+			{ 
+				play			"sound/interface/button1.wav" ;
+			}
+
+			mouseenter 
+			{ 
+				setitemcolor	setsk_disruptor forecolor .7 1 2. 1
+			}
+			mouseexit 
+			{ 
+				setitemcolor	setsk_disruptor forecolor .2 1 .2 1
 			}
 		}
 		//[/ExpSys]

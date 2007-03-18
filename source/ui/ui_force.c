@@ -67,6 +67,8 @@ qboolean uiForcePowersDisabled[NUM_TOTAL_SKILLS] = {
 	qfalse,//SK_SEEKER,		//seeker droid skill
 	qfalse,//SK_SENTRY,		//sentry gun skill
 	qfalse,//SK_DETPACK,		//detpack skill
+	qfalse,//SK_REPEATER,       //repeater/clone rifle skill added by JRHockney
+	qfalse //SK_DISRUPTOR,      //Disruptor/sniper rifle skill added by JRHockney
 	//[/ExpSys]
 };
 
@@ -116,6 +118,8 @@ int uiForcePowersRank[NUM_TOTAL_SKILLS] = {
 	0,//SK_SEEKER,		//seeker droid skill
 	0,//SK_SENTRY,		//sentry gun skill
 	0,//SK_DETPACK,		//detpack skill
+	0,//SK_REPEATER,       //repeater/clone rifle skill added by JRHockney
+	0,//SK_DISRUPTOR,      //Disruptor/sniper rifle skill added by JRHockney
 	//[/ExpSys]
 };
 
@@ -160,6 +164,8 @@ int uiForcePowerDarkLight[NUM_TOTAL_SKILLS] = //0 == neutral
 	0,//SK_SEEKER,		//seeker droid skill
 	0,//SK_SENTRY,		//sentry gun skill
 	0,//SK_DETPACK,		//detpack skill
+	0,//SK_REPEATER,       //repeater/clone rifle skill added by JRHockney
+	0,//SK_DISRUPTOR,      //Disruptor/sniper rifle skill added by JRHockney
 	//[/ExpSys]
 };
 
@@ -289,7 +295,7 @@ void UI_DrawForceStars(rectDef_t *rect, float scale, vec4_t color, int textStyle
 void UI_UpdateClientForcePowers(const char *teamArg)
 {
 	//[ExpSys]
-	trap_Cvar_Set( "forcepowers", va("%i-%i-%i%i%i%i%i%i%i%i%i%i%i%i%i%i%i%i%i%i%i%i%i%i%i%i%i%i%i%i%i%i%i",
+	trap_Cvar_Set( "forcepowers", va("%i-%i-%i%i%i%i%i%i%i%i%i%i%i%i%i%i%i%i%i%i%i%i%i%i%i%i%i%i%i%i%i%i%i%i%i",
 	//trap_Cvar_Set( "forcepowers", va("%i-%i-%i%i%i%i%i%i%i%i%i%i%i%i%i%i%i%i%i%i",
 	//[/ExpSys]
 		uiForceRank, uiForceSide, uiForcePowersRank[0], uiForcePowersRank[1],
@@ -303,8 +309,8 @@ void UI_UpdateClientForcePowers(const char *teamArg)
 		uiForcePowersRank[20], uiForcePowersRank[21], uiForcePowersRank[22],
 		uiForcePowersRank[23], uiForcePowersRank[24], uiForcePowersRank[25],
 		uiForcePowersRank[26], uiForcePowersRank[27], uiForcePowersRank[28],
-		uiForcePowersRank[29], uiForcePowersRank[30]) );
-		//uiForcePowersRank[17]) );
+		uiForcePowersRank[29], uiForcePowersRank[30], uiForcePowersRank[31],
+		uiForcePowersRank[32]) );
 		//[/ExpSys]
 
 	if (gTouchedForce)

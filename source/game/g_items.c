@@ -3405,6 +3405,8 @@ void ClearRegisteredItems( void ) {
 	RegisterItem( BG_FindItemForWeapon( WP_THERMAL ) );
 	RegisterItem( BG_FindItemForWeapon( WP_ROCKET_LAUNCHER ) );
 	RegisterItem( BG_FindItemForWeapon( WP_BOWCASTER ) );
+	RegisterItem( BG_FindItemForWeapon( WP_REPEATER ) );
+	RegisterItem( BG_FindItemForWeapon( WP_DISRUPTOR ) );
 	//[/ExpSys]
 
 	if (g_gametype.integer == GT_SIEGE)

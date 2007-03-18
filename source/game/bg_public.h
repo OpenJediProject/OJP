@@ -23,7 +23,7 @@
 //This is the current keyword used to denote the current OJP Basic and Enhanced client plugins.  
 //These values should be changed whenever something is changed that would make the new clients 
 //incompatiable with previous versions of OJP Basic or Enhanced (on individual basis).
-#define CURRENT_OJPENHANCED_CLIENTVERSION		"OJP Enhanced v0.0.9r"
+#define CURRENT_OJPENHANCED_CLIENTVERSION		"OJP Enhanced v0.0.9s"
 //[/ClientPlugInDetect]
 
 #define	STEPSIZE		18
@@ -100,21 +100,22 @@
 #define FATIGUEDTHRESHHOLD		.1
 
 //the fatigue caused by getting hit by a kick.
-#define FATIGUE_KICKHIT			20
+#define FATIGUE_KICKHIT			5
 //[/FatigueDefines]
 //[/FatigueSys]
 
 //[SaberSys]
 #define MISHAPLEVEL_FULL		14  //the point at which full mishaps occur on the balance bar.
-#define MISHAPLEVEL_HEAVY		10
-#define MISHAPLEVEL_LIGHT		6
+#define MISHAPLEVEL_FORCEVULN	11
+#define MISHAPLEVEL_HEAVY		8
+#define MISHAPLEVEL_LIGHT		5
 #define MISHAPLEVEL_NONE		0
 //[/SaberSys]
 
 //[DodgeSys]
 //[DodgeDefines]
 //the level below which DP is critical (for the DP meterand desperation regen, etc)
-#define	DODGE_CRITICALLEVEL				35
+#define	DODGE_CRITICALLEVEL	   35
 //[/DodgeDefines]
 //[/DodgeSys]
 
@@ -532,7 +533,7 @@ extern int forceMasteryPoints[NUM_FORCE_MASTERY_LEVELS];
 //[ExpSys]
 //more skills makes this thingy longer
 //moved from ai_main.h since we need now need it in other areas as well.
-#define DEFAULT_FORCEPOWERS		"5-1-000000000000000000000000000"
+#define DEFAULT_FORCEPOWERS		"5-1-00000000000000000000000000000"
 //[/ExpSys]
 
 //Made defines for saber offense/defense level 1 since UpdateForceUsed() manually changes this values based on if sabers are given for free or not.

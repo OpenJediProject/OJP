@@ -659,6 +659,8 @@ typedef enum
 	SK_SEEKER,		//seeker droid skill
 	SK_SENTRY,		//sentry gun skill
 	SK_DETPACK,		//detpack skill
+	SK_REPEATER,	//Repeater/clone Rifle skill
+	SK_DISRUPTOR,	//Disruptor/sniper rifle skill
 	NUM_SKILLS
 } skills_t;
 
