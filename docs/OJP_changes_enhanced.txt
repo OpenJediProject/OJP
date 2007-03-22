@@ -20,8 +20,8 @@ Version 0.0.9s:
 	Improvements/Fixes:
 
 		Cvars:
-			- Changed g_minForceRank to g_minExpLevel
-		 	- Changed g_maxForceRank to g_maxExpLevel
+			- Changed g_minForceRank to g_minExpLevel default is now 20
+		 	- Changed g_maxForceRank to g_maxExpLevel default is now 250
 			- g_saberLockfactor changed default from 2 to 0
 
 		CoOp:
