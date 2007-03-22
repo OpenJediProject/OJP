@@ -389,8 +389,8 @@ static cvarTable_t		gameCvarTable[] = {
 	
 	//[ExpSys]
 	//sets the initial skill points that players get.
-	{ &g_minForceRank, "g_minForceRank", "16", CVAR_ARCHIVE, 0, qfalse  },
-	{ &g_maxForceRank, "g_maxForceRank", "200", CVAR_ARCHIVE, 0, qfalse  },
+	{ &g_minForceRank, "g_minExpLevel", "16", CVAR_ARCHIVE, 0, qfalse  },
+	{ &g_maxForceRank, "g_maxExpLevel", "200", CVAR_ARCHIVE, 0, qfalse  },
 	//{ &g_maxForceRank, "g_maxForceRank", "6", CVAR_SERVERINFO | CVAR_ARCHIVE | CVAR_LATCH, 0, qfalse  },
 	//[/ExpSys]
 	{ &g_forceBasedTeams, "g_forceBasedTeams", "0", CVAR_SERVERINFO | CVAR_ARCHIVE | CVAR_LATCH, 0, qfalse  },

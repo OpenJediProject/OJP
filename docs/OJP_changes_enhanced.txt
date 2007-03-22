@@ -19,6 +19,11 @@ Version 0.0.9s:
 
 	Improvements/Fixes:
 
+		Cvars:
+			- Changed g_minForceRank to g_minExpLevel
+		 	- Changed g_maxForceRank to g_maxExpLevel
+			- g_saberLockfactor changed default from 2 to 0
+
 		CoOp:
 			- Fixed time limits for CoOp maps.
 
@@ -50,7 +55,6 @@ Version 0.0.9s:
 
 			Misc:
 				- Made heavy mishaps happen more often.
-				- g_saberLockfactor changed default from 2 to 0
 
 			Saber fix:
 				- Saber will no longer fall though some solid objects when thrown.
