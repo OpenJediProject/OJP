@@ -405,7 +405,8 @@ static cvarTable_t		gameCvarTable[] = {
 	{ &g_armBreakage, "g_armBreakage", "0", 0, 0, qtrue  },
 
 	{ &g_saberLocking, "g_saberLocking", "1", CVAR_SERVERINFO | CVAR_ARCHIVE, 0, qtrue  },
-	{ &g_saberLockFactor, "g_saberLockFactor", "2", CVAR_ARCHIVE, 0, qtrue  },
+	//Changed g_saberlockFactor from 2 to 0 
+	{ &g_saberLockFactor, "g_saberLockFactor", "0", CVAR_ARCHIVE, 0, qtrue  },
 	{ &g_saberTraceSaberFirst, "g_saberTraceSaberFirst", "0", CVAR_ARCHIVE, 0, qtrue  },
 
 	{ &d_saberKickTweak, "d_saberKickTweak", "1", 0, 0, qtrue  },
