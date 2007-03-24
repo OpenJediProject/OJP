@@ -48,6 +48,12 @@ Version 0.0.9s:
 		Improved Seeker Item:
 			- Fixed problem with seekers not attacking other players outside of CoOp.
 
+		Melee System:
+			Kicks:
+				- Players can't autoblock kicks if they're low on DP.
+				- Getting kicked while at critical DP now causes knockdown (unless blocked).
+				- Players can avoid getting knocked down by a kick by holding down alt attack.
+
 		Ledge Grab:
 			- You can now grab onto ledges created by solid non-brush entities such as a misc_model_breakable.
 
@@ -55,17 +61,31 @@ Version 0.0.9s:
 
 			Blocking:
 				- Having Saber Defense 3 allows players to block back attacks without the extra DP cost.
-				- Players can now saber block while in a stumble.
+				- Players can now saber block while in a stumble, but at %150 normal DP cost.
+				- The block cost of the staff and dual lunge moves is 75% of the normal DP.
+				- Reduced the amount of rounding error in calculating saber block DP costs.
+				- Kicking increases block costs by 50%.
+				- can't parry while kicking.
+				- Attack Parries are performed by pressing both attack and alt-attack while performing a normal parry.
 
 			Misc:
 				- Made heavy mishaps happen more often.
 				- Slowed down blue style's slow bounce and return animations.
+				- Changed how the collision stops work. They now occur when a player does a normal block without parrying, on an attack swing when they have less than %50 DP, or when running.
 
 			Saber fix:
 				- Saber will no longer fall though some solid objects when thrown.
 
-		Ledge Grab:
-			- You can now grab onto ledges created by solid non-brush entities such as a misc_model_breakable
+			Style Balancing:
+				- Dual style has a base DP damage of 13.
+				- Staff style has a base DP damage of 13.
+				- Cyan style has a base DP damage of 14.
+				- Blue style has a base DP damage of 12.
+				- Yellow style has a base DP damage of 15.
+				- Purple style has a base DP damage of 16.
+				- Red style has a base DP damage of 17. 
+				- Red style does 10% more DP damage with attack fakes that aren't parried by the defender.
+				- Blue style parries attacks 25% cheaper than normal. 
 
 		Sentry Gun (SentryGun):
 			- Can now have multiple sentry guns.

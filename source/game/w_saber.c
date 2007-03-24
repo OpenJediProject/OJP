@@ -725,7 +725,7 @@ static GAME_INLINE void SetSaberBoxSize(gentity_t *saberent)
 							}
 						}
 					}
-				}
+				}			
 				if ( forceBlock )
 				{//only do blocking with blades that are marked to block
 					if ( !alwaysBlock[j][k] )
@@ -3325,22 +3325,19 @@ static GAME_INLINE qboolean G_SaberCollide(gentity_t *atk, gentity_t *def, vec3_
 //[SaberSys]
 int BasicSaberBlockCost(int attackerStyle)
 {//returns the basic saber block cost of blocking an attack from the given saber style.
-	return 15;
-
-	/*
 	switch(attackerStyle)
 	{
 	case SS_DUAL:
-		return 12;
-		break;
-	case SS_STAFF:
-		return 12;
-		break;
-	case SS_TAVION:
 		return 13;
 		break;
-	case SS_FAST:
+	case SS_STAFF:
+		return 13;
+		break;
+	case SS_TAVION:
 		return 14;
+		break;
+	case SS_FAST:
+		return 12;
 		break;
 	case SS_MEDIUM:
 		return 15;
@@ -3356,8 +3353,6 @@ int BasicSaberBlockCost(int attackerStyle)
 		return 0;
 		break;
 	};
-	*/
-
 }
 
 
@@ -3365,7 +3360,11 @@ qboolean GAME_INLINE WalkCheck( gentity_t * self );
 qboolean G_BlockIsParry( gentity_t *self, gentity_t *attacker, vec3_t hitLoc );
 int OJP_SaberBlockCost(gentity_t *defender, gentity_t *attacker, vec3_t hitLoc)
 {//returns the DP cost to block this attack for this attacker/defender combo.
-	int saberBlockCost = 0;
+	float saberBlockCost = 0;
+
+	//===========================
+	// Determine Base Block Cost
+	//===========================
 
 	if(!attacker	//don't have attacker
 		|| !attacker->client	//attacker isn't a NPC/player
@@ -3380,13 +3379,14 @@ int OJP_SaberBlockCost(gentity_t *defender, gentity_t *attacker, vec3_t hitLoc)
 			saberBlockCost = DODGE_BOLTBLOCK;
 		}
 	}
-	else if(attacker->client->ps.saberMove == LS_A_LUNGE)
-	{
+	else if(attacker->client->ps.saberMove == LS_A_LUNGE
+		|| attacker->client->ps.saberMove == LS_SPINATTACK
+		|| attacker->client->ps.saberMove == LS_SPINATTACK_DUAL)
+	{//lunge attacks
 		saberBlockCost = .75*BasicSaberBlockCost(attacker->client->ps.fd.saberAnimLevel);
 	}
-	else if(attacker->client->ps.saberMove == LS_ROLL_STAB
-		|| attacker->client->ps.saberMove == LS_SPINATTACK)
-	{//roll stab/lunge moves
+	else if(attacker->client->ps.saberMove == LS_ROLL_STAB)
+	{//roll stab
 		saberBlockCost = 2*BasicSaberBlockCost(attacker->client->ps.fd.saberAnimLevel);
 	}
 	else if(attacker->client->ps.saberMove == LS_A_JUMP_T__B_)
@@ -3400,18 +3400,38 @@ int OJP_SaberBlockCost(gentity_t *defender, gentity_t *attacker, vec3_t hitLoc)
 	}
 	else if(attacker->client->ps.userInt3 & (1 << FLAG_ATTACKFAKE)) 
 	{//attacker is in an attack fake
-		saberBlockCost = (int) (BasicSaberBlockCost(attacker->client->ps.fd.saberAnimLevel) * 1.25);
+		if(attacker->client->ps.fd.saberAnimLevel == SS_STRONG
+			&& !G_BlockIsParry(defender, attacker, hitLoc))
+		{//Red does additional DP damage with attack fakes if they aren't parried.
+			saberBlockCost = (BasicSaberBlockCost(attacker->client->ps.fd.saberAnimLevel) * 1.35);
+		}
+		else
+		{
+			saberBlockCost = (BasicSaberBlockCost(attacker->client->ps.fd.saberAnimLevel) * 1.25);
+		}
 	}
 	else
 	{//normal saber block
 		saberBlockCost = BasicSaberBlockCost(attacker->client->ps.fd.saberAnimLevel);
 	}
 
+
+	//======================
+	// Block Cost Modifiers
+	//======================
+
 	if(attacker && attacker->client)
 	{//attacker is a player so he must have just hit you with a saber blow.
 		if(G_BlockIsParry(defender, attacker, hitLoc))
 		{//parried this attack, cost is less
-			saberBlockCost = (int) (saberBlockCost/3);
+			if(defender->client->ps.fd.saberAnimLevel == SS_FAST)
+			{//blue parries cheaper
+				saberBlockCost = (saberBlockCost/3.25);
+			}
+			else
+			{
+				saberBlockCost = (saberBlockCost/3);
+			}
 		}
 
 		if(!InFront(attacker->client->ps.origin, defender->client->ps.origin, defender->client->ps.viewangles, -.7f))
@@ -3431,13 +3451,21 @@ int OJP_SaberBlockCost(gentity_t *defender, gentity_t *attacker, vec3_t hitLoc)
 			saberBlockCost = BasicDodgeCosts[MOD_SABER];
 		}
 	}
+    if(PM_SaberInBrokenParry(defender->client->ps.saberMove))
+	{//we're stunned/stumbling, increase DP cost
+		saberBlockCost *= 1.5;
+	}
 
+	if(BG_KickingAnim(defender->client->ps.legsAnim))
+	{//kicking
+		saberBlockCost *= 1.5;
+	}
 	if(!WalkCheck(defender))
 	{//we're running, increase DP cost
 		saberBlockCost *= 2;
 	}
 
-	return saberBlockCost;
+	return (int) saberBlockCost;
 }
 
 
@@ -4932,6 +4960,7 @@ static int saberClashEventParm = 1;
 //[SaberSys]
 static int saberClashOther = -1;  //the clientNum for the other player involved in the saber clash.
 static GAME_INLINE void G_SetViewLock( gentity_t *self, vec3_t impactPos, vec3_t impactNormal );
+static GAME_INLINE void G_SetViewLockDebounce( gentity_t *self );
 //[/SaberSys]
 void WP_SaberDoClash( gentity_t *self, int saberNum, int bladeNum )
 {
@@ -4952,25 +4981,12 @@ void WP_SaberDoClash( gentity_t *self, int saberNum, int bladeNum )
 		if(saberClashOther != -1)
 		{//only viewlock if we're passed valid other otherOwner
 			otherOwner = &g_entities[saberClashOther];
+
 			G_SetViewLock(self, saberClashPos, saberClashNorm);
-			if(!WalkCheck(self))
-			{//running pauses you longer
-				self->client->viewLockTime = level.time + 500;
-			}
-			else
-			{
-				self->client->viewLockTime = level.time + 300;
-			}
+			G_SetViewLockDebounce(self);
 
 			G_SetViewLock(otherOwner, saberClashPos, saberClashNorm);
-			if(!WalkCheck(otherOwner))
-			{//running pauses you longer
-				otherOwner->client->viewLockTime = level.time + 500;
-			}
-			else
-			{
-				otherOwner->client->viewLockTime = level.time + 300;
-			}
+			G_SetViewLockDebounce(otherOwner);
 		}
 		//[/SaberSys]
 	}
@@ -5039,6 +5055,25 @@ qboolean BG_SuperBreakWinAnim( int anim );
 //[/SaberSys]
 
 //[SaberSys]
+static GAME_INLINE void G_SetViewLockDebounce( gentity_t *self )
+{
+	if(!WalkCheck(self))
+	{//running pauses you longer
+		self->client->viewLockTime = level.time + 500;
+	}
+	else if( PM_SaberInParry(self->client->ps.saberMove) //normal block
+		|| (!PM_SaberInKnockaway(self->client->ps.saberMove) //didn't parry
+		&& self->client->ps.stats[STAT_DODGE] < self->client->ps.stats[STAT_MAX_DODGE]*.50) )
+	{//normal block or attacked with less than %50 DP
+		self->client->viewLockTime = level.time + 300;
+	}
+	else
+	{
+        self->client->viewLockTime = level.time;
+	}
+}
+
+
 static GAME_INLINE void G_SetViewLock( gentity_t *self, vec3_t impactPos, vec3_t impactNormal )
 {//Sets the view/movement lock flags based on the given information
 	vec3_t	cross;
@@ -9270,14 +9305,15 @@ qboolean OJP_DodgeKick( gentity_t *self, gentity_t *pusher, const vec3_t pushDir
 	{//can't knock me down when I'm flying
 		return qfalse;
 	}
-
+    
 	if (self->client->ps.saberAttackChainCount >= MISHAPLEVEL_HEAVY)
 	{
 		return qfalse;
 	}
 
-	if(self->client->ps.saberAttackChainCount >= MISHAPLEVEL_LIGHT)
-	{//above the light mishap level, you don't automatically do dodge kicks.
+	if(self->client->ps.saberAttackChainCount >= MISHAPLEVEL_LIGHT
+		|| self->client->ps.stats[STAT_DODGE] <= DODGE_CRITICALLEVEL )
+	{//above the light mishap level or at low DP, you don't automatically do dodge kicks.
 		if(self->r.svFlags & SVF_BOT)
 		{//bots cheat and auto counter kicks.
 			if(Q_irand(0, 2))
@@ -9494,18 +9530,20 @@ static gentity_t *G_KickTrace( gentity_t *ent, vec3_t kickDir, float kickDist, v
 					G_Throw( hitEnt, kickDir, kickPush );
 
 					//[SaberSys]
-					//made the knockdown behavior of kicks be based on the player's mishap level.
-					if (hitEnt->client->ps.saberAttackChainCount >= MISHAPLEVEL_HEAVY)
+					//made the knockdown behavior of kicks be based on the player's mishap level or low DP and not hold alt attack.
+					if ((hitEnt->client->ps.saberAttackChainCount >= MISHAPLEVEL_HEAVY
+						|| hitEnt->client->ps.stats[STAT_DODGE] <= DODGE_CRITICALLEVEL)
+						&& !(hitEnt->client->buttons & BUTTON_ALT_ATTACK))
 					{//knockdown
-					if ( kickPush >= 75.0f && !Q_irand( 0, 2 ) )
-					{
-						G_Knockdown( hitEnt, ent, kickDir, 300, qtrue );
-					}
-					else
-					{
-						G_Knockdown( hitEnt, ent, kickDir, kickPush, qtrue );
-					}
-					}
+						if ( kickPush >= 75.0f && !Q_irand( 0, 2 ) )
+							{
+								G_Knockdown( hitEnt, ent, kickDir, 300, qtrue );
+							}
+						else
+							{
+								G_Knockdown( hitEnt, ent, kickDir, kickPush, qtrue );
+							}
+						}
 					else
 					{//stumble
 						AnimateStun(hitEnt, ent, trace.endpos);   
@@ -11983,6 +12021,11 @@ qboolean G_BlockIsParry( gentity_t *self, gentity_t *attacker, vec3_t hitLoc )
 		return qtrue;
 	}
 
+	if(BG_KickingAnim(self->client->ps.legsAnim))
+	{//can't parry in kick.
+		return qfalse;
+	}
+
 	if(BG_SaberInNonIdleDamageMove(&self->client->ps, self->localAnimIndex)
 		|| PM_SaberInBounce(self->client->ps.saberMove) || BG_InSlowBounce(&self->client->ps))
 	{//can't parry if we're transitioning into a block from an attack state.
@@ -12273,7 +12316,7 @@ qboolean G_InAttackParry(gentity_t *self)
 
 	//must be holding attack and not pressing alt attack
 	if(!(self->client->pers.cmd.buttons & BUTTON_ATTACK)			//not pressing attack
-		|| (self->client->pers.cmd.buttons & BUTTON_ALT_ATTACK))	//holding alt attack
+		|| !(self->client->pers.cmd.buttons & BUTTON_ALT_ATTACK))	//not holding alt attack
 	{//not holding the right buttons
 		return qfalse;
 	}
