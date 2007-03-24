@@ -55,6 +55,7 @@ Version 0.0.9s:
 
 			Misc:
 				- Made heavy mishaps happen more often.
+				- Slowed down blue style's slow bounce and return animations.
 
 			Saber fix:
 				- Saber will no longer fall though some solid objects when thrown.

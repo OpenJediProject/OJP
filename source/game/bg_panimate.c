@@ -471,7 +471,7 @@ qboolean BG_KickMove( int move )
 {
 	switch( move )
 	{
-	case LS_KICK_F:
+	case LS_KICK_F: 
 	case LS_KICK_B:
 	case LS_KICK_R:
 	case LS_KICK_L:
@@ -764,7 +764,7 @@ qboolean BG_KickingAnim( int anim )
 {
 	switch ( anim )
 	{
-	case BOTH_A7_KICK_F:
+	case BOTH_A7_KICK_F: 
 	case BOTH_A7_KICK_B:
 	case BOTH_A7_KICK_R:
 	case BOTH_A7_KICK_L:
@@ -821,7 +821,7 @@ int BG_BrokenParryForAttack( int move )
 	switch ( saberMoveData[move].startQuad )
 	{
 	case Q_B:
-		return LS_V1_B_;
+		return LS_V1_B_; 
 		break;
 	case Q_BR:
 		return LS_V1_BR;
@@ -3346,6 +3346,11 @@ void BG_SaberStartTransAnim( int clientNum, int saberAnimLevel, int weapon, int 
 	if( anim >= BOTH_A1_T__B_ && anim <= BOTH_A1_TR_BL )
 	{//slowed down the blue attacks a little.
 		*animSpeed *= .8f;
+	}
+
+    if( anim >= BOTH_R1_B__S1 && anim <= BOTH_R1_TR_S1 )
+	{//making the blue slowbounces not be too fast.  Hey, it worked!
+		*animSpeed *= .75f;
 	}
 
 	if( anim >= BOTH_S3_S1_T_ && anim <= BOTH_S3_S1_TR )
