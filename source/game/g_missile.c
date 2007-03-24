@@ -1158,9 +1158,9 @@ passthrough:
 int BoltReflectRate[NUM_FORCE_POWER_LEVELS] =
 {
 	0,	//FORCE_LEVEL_0
-	20,	//FORCE_LEVEL_1
-	35, //FORCE_LEVEL_2
-	50
+	33,	//FORCE_LEVEL_1
+	50, //FORCE_LEVEL_2
+	66
 };
 qboolean PM_SaberInStart( int move );
 extern int OJP_SaberBlockCost(gentity_t *defender, gentity_t *attacker, vec3_t hitLoc);
@@ -1183,11 +1183,6 @@ void OJP_HandleBoltBlock(gentity_t *bolt, gentity_t *player, trace_t *trace)
 	te->s.weapon = 0;//saberNum
 	te->s.legsAnim = 0;//bladeNum
 
-	if(BG_SaberInAttack(player->client->ps.saberMove))
-	{//when slashing only reflect bolts.
-		otherDefLevel = FORCE_LEVEL_1;
-	}
-
 	//retooled the conditions under which we lose deflection ability
 	if(player->client->ps.groundEntityNum == ENTITYNUM_NONE || //while in the air
 		!WalkCheck( player ) ) //while running
@@ -1202,8 +1197,11 @@ void OJP_HandleBoltBlock(gentity_t *bolt, gentity_t *player, trace_t *trace)
 	}
 
 	if(otherDefLevel < FORCE_LEVEL_2 
-		&& (PM_SaberInStart(player->client->ps.saberMove) || PM_SaberInReturn(player->client->ps.saberMove)) )
-	{//manually blocked the bolt as it impacted, cause aimmed reflection.
+		&& (BG_SaberInAttack(player->client->ps.saberMove)
+		|| PM_SaberInStart(player->client->ps.saberMove)
+		|| PM_SaberInReturn(player->client->ps.saberMove)) )
+	{//only "deflected" the shot, but we did a manual block so we're boosting this up to a reflection.
+		//G_Printf("%i: %i manually reflected a bolt.\n", level.time, player->s.number);
 		otherDefLevel = FORCE_LEVEL_2;
 	}
 

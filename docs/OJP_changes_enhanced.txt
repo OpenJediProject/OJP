@@ -19,6 +19,10 @@ Version 0.0.9s:
 
 	Improvements/Fixes:
 
+		Blaster Bolt Block System:
+			- Players now perform manual bolt reflections by swinging their saber.
+			- Increased L3 reflection rate.
+
 		Cvars:
 			- Changed g_minForceRank to g_minExpLevel default is now 20
 		 	- Changed g_maxForceRank to g_maxExpLevel default is now 250
