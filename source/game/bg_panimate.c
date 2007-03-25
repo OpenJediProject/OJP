@@ -3549,15 +3549,19 @@ void BG_SetAnimFinal(playerState_t *ps, animation_t *animations,
 				//int speedDif;
 				if( editAnimSpeed > 0 )
 				{
-					ps->torsoTimer = (animations[anim].numFrames-1) * fabs((float)(animations[anim].frameLerp)) * (1/editAnimSpeed);
+					if(animations[anim].numFrames < 2)
+					{//single frame animations should just run with one frame worth of animation.
+						ps->torsoTimer = fabs((float)(animations[anim].frameLerp)) * (1/editAnimSpeed);
+					}
+					else
+					{
+						ps->torsoTimer = (animations[anim].numFrames-1) * fabs((float)(animations[anim].frameLerp)) * (1/editAnimSpeed);
+					}
+
 					if(ps->torsoTimer > 1)
 					{	
 						//set the timer to be one unit of time less than the actual animation time so the timer will expire on the frame at which the animation finishes.
 						ps->torsoTimer--;
-					}
-					else
-					{//this animation is either one frame long or faster than one millisecond with the speed scale.  Make sure that it plays for at least one framelerp.
-						ps->torsoTimer = fabs((float)(animations[anim].frameLerp));
 					}
 				}
 				
@@ -3628,15 +3632,19 @@ setAnimLegs:
 				
 				if( editAnimSpeed > 0 )
 				{
-					ps->legsTimer = (animations[anim].numFrames-1) * fabs((float)(animations[anim].frameLerp)) * (1/editAnimSpeed);
+					if(animations[anim].numFrames < 2)
+					{//single frame animations should just run with one frame worth of animation.
+						ps->legsTimer = fabs((float)(animations[anim].frameLerp)) * (1/editAnimSpeed);
+					}
+					else
+					{
+						ps->legsTimer = (animations[anim].numFrames-1) * fabs((float)(animations[anim].frameLerp)) * (1/editAnimSpeed);
+					}
+
 					if(ps->legsTimer > 1)
 					{	
 						//set the timer to be one unit of time less than the actual animation time so the timer will expire on the frame at which the animation finishes.
 						ps->legsTimer--;
-					}
-					else
-					{//this animation is either one frame long or faster than one millisecond with the speed scale.  Make sure that it plays for at least one framelerp.
-						ps->legsTimer = fabs((float)(animations[anim].frameLerp));
 					}
 				}
 
@@ -3836,15 +3844,19 @@ float BG_GetTorsoAnimPoint(playerState_t * ps, int AnimIndex)
 
 	if( animSpeedFactor > 0 )
 	{
-		attackAnimLength = (bgAllAnims[AnimIndex].anims[ps->torsoAnim].numFrames-1) * fabs((float)(bgAllAnims[AnimIndex].anims[ps->torsoAnim].frameLerp)) * (1/animSpeedFactor);
+		if(bgAllAnims[AnimIndex].anims[ps->torsoAnim].numFrames < 2)
+		{//single frame animations should just run with one frame worth of animation.
+			attackAnimLength = fabs((float)(bgAllAnims[AnimIndex].anims[ps->torsoAnim].frameLerp)) * (1/animSpeedFactor);
+		}
+		else
+		{
+			attackAnimLength = (bgAllAnims[AnimIndex].anims[ps->torsoAnim].numFrames-1) * fabs((float)(bgAllAnims[AnimIndex].anims[ps->torsoAnim].frameLerp)) * (1/animSpeedFactor);
+		}
+
 		if(attackAnimLength > 1)
 		{	
 			//set the timer to be one unit of time less than the actual animation time so the timer will expire on the frame at which the animation finishes.
 			attackAnimLength--;
-		}
-		else
-		{//this animation is either one frame long or faster than one millisecond with the speed scale.  Make sure that it plays for at least one framelerp.
-			attackAnimLength = fabs((float)(bgAllAnims[AnimIndex].anims[ps->torsoAnim].frameLerp));
 		}
 	}
 
@@ -3871,15 +3883,19 @@ float BG_GetLegsAnimPoint(playerState_t * ps, int AnimIndex)
 
 	if( animSpeedFactor > 0 )
 	{
-		attackAnimLength = (bgAllAnims[AnimIndex].anims[ps->legsAnim].numFrames-1) * fabs((float)(bgAllAnims[AnimIndex].anims[ps->legsAnim].frameLerp)) * (1/animSpeedFactor);
+		if(bgAllAnims[AnimIndex].anims[ps->legsAnim].numFrames < 2)
+		{//single frame animations should just run with one frame worth of animation.
+			attackAnimLength = fabs((float)(bgAllAnims[AnimIndex].anims[ps->legsAnim].frameLerp)) * (1/animSpeedFactor);
+		}
+		else
+		{
+			attackAnimLength = (bgAllAnims[AnimIndex].anims[ps->legsAnim].numFrames-1) * fabs((float)(bgAllAnims[AnimIndex].anims[ps->legsAnim].frameLerp)) * (1/animSpeedFactor);
+		}
+		
 		if(attackAnimLength > 1)
 		{	
 			//set the timer to be one unit of time less than the actual animation time so the timer will expire on the frame at which the animation finishes.
 			attackAnimLength--;
-		}
-		else
-		{//this animation is either one frame long or faster than one millisecond with the speed scale.  Make sure that it plays for at least one framelerp.
-			attackAnimLength = fabs((float)(bgAllAnims[AnimIndex].anims[ps->legsAnim].frameLerp));
 		}
 	}
 
