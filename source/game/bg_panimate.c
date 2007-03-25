@@ -3543,14 +3543,22 @@ void BG_SetAnimFinal(playerState_t *ps, animation_t *animations,
 			if (setAnimFlags & SETANIM_FLAG_HOLDLESS)
 			{	// Make sure to only wait in full 1/20 sec server frame intervals.
 
-				//[BUGFIX2]
+				//[BugFix2]
 				//Yeah, I don't think this was working correctly before
 				//int dur;
 				//int speedDif;
 				if( editAnimSpeed > 0 )
 				{
 					ps->torsoTimer = (animations[anim].numFrames-1) * fabs((float)(animations[anim].frameLerp)) * (1/editAnimSpeed);
-					ps->torsoTimer--;
+					if(ps->torsoTimer > 1)
+					{	
+						//set the timer to be one unit of time less than the actual animation time so the timer will expire on the frame at which the animation finishes.
+						ps->torsoTimer--;
+					}
+					else
+					{//this animation is either one frame long or faster than one millisecond with the speed scale.  Make sure that it plays for at least one framelerp.
+						ps->torsoTimer = fabs((float)(animations[anim].frameLerp));
+					}
 				}
 				
 				/*
@@ -3566,7 +3574,7 @@ void BG_SetAnimFinal(playerState_t *ps, animation_t *animations,
 					ps->torsoTimer = fabs((float)(animations[anim].frameLerp));
 				}
 				*/
-				//[/BUGFIX2]
+				//[/BugFix2]
 			}
 			else
 			{
@@ -3613,7 +3621,7 @@ setAnimLegs:
 			if (setAnimFlags & SETANIM_FLAG_HOLDLESS)
 			{	// Make sure to only wait in full 1/20 sec server frame intervals.
 
-				//[/BUGFIX2]
+				//[BugFix2]
 				//Yeah, I don't think this was working correctly before
 				//int dur;
 				//int speedDif;
@@ -3621,7 +3629,15 @@ setAnimLegs:
 				if( editAnimSpeed > 0 )
 				{
 					ps->legsTimer = (animations[anim].numFrames-1) * fabs((float)(animations[anim].frameLerp)) * (1/editAnimSpeed);
-					ps->legsTimer--;
+					if(ps->legsTimer > 1)
+					{	
+						//set the timer to be one unit of time less than the actual animation time so the timer will expire on the frame at which the animation finishes.
+						ps->legsTimer--;
+					}
+					else
+					{//this animation is either one frame long or faster than one millisecond with the speed scale.  Make sure that it plays for at least one framelerp.
+						ps->legsTimer = fabs((float)(animations[anim].frameLerp));
+					}
 				}
 
 				/*
@@ -3637,7 +3653,7 @@ setAnimLegs:
 					ps->legsTimer = fabs((float)(animations[anim].frameLerp));
 				}
 				*/
-				//[/BUGFIX2]
+				//[/BugFix2]
 
 			}
 			else
@@ -3820,8 +3836,16 @@ float BG_GetTorsoAnimPoint(playerState_t * ps, int AnimIndex)
 
 	if( animSpeedFactor > 0 )
 	{
-		attackAnimLength = (bgAllAnims[AnimIndex].anims[ps->legsAnim].numFrames-1) * fabs((float)(bgAllAnims[AnimIndex].anims[ps->legsAnim].frameLerp)) * (1/animSpeedFactor);
-		attackAnimLength--;
+		attackAnimLength = (bgAllAnims[AnimIndex].anims[ps->torsoAnim].numFrames-1) * fabs((float)(bgAllAnims[AnimIndex].anims[ps->torsoAnim].frameLerp)) * (1/animSpeedFactor);
+		if(attackAnimLength > 1)
+		{	
+			//set the timer to be one unit of time less than the actual animation time so the timer will expire on the frame at which the animation finishes.
+			attackAnimLength--;
+		}
+		else
+		{//this animation is either one frame long or faster than one millisecond with the speed scale.  Make sure that it plays for at least one framelerp.
+			attackAnimLength = fabs((float)(bgAllAnims[AnimIndex].anims[ps->torsoAnim].frameLerp));
+		}
 	}
 
 	currentPoint = ps->torsoTimer;
@@ -3848,7 +3872,15 @@ float BG_GetLegsAnimPoint(playerState_t * ps, int AnimIndex)
 	if( animSpeedFactor > 0 )
 	{
 		attackAnimLength = (bgAllAnims[AnimIndex].anims[ps->legsAnim].numFrames-1) * fabs((float)(bgAllAnims[AnimIndex].anims[ps->legsAnim].frameLerp)) * (1/animSpeedFactor);
-		attackAnimLength--;
+		if(attackAnimLength > 1)
+		{	
+			//set the timer to be one unit of time less than the actual animation time so the timer will expire on the frame at which the animation finishes.
+			attackAnimLength--;
+		}
+		else
+		{//this animation is either one frame long or faster than one millisecond with the speed scale.  Make sure that it plays for at least one framelerp.
+			attackAnimLength = fabs((float)(bgAllAnims[AnimIndex].anims[ps->legsAnim].frameLerp));
+		}
 	}
 
 	currentPoint = ps->legsTimer;
