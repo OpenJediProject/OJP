@@ -31,6 +31,9 @@ Version 0.0.9s:
 		CoOp:
 			- Fixed time limits for CoOp maps.
 
+		Dodge System:
+			- Can't regen Dodge while running.
+
 		Experience System:
 			- Fixed problem where skill points weren't being saved between gametypes.
 			- Tweaked force absorb skill cost.
@@ -41,6 +44,10 @@ Version 0.0.9s:
 		Fatigue System:
 			- Fatigue in Siege now behaves the same as in the other gametypes.
 			- Decreased fatigue lose from getting kicked to 5.
+
+		Force System:
+			- Can't block Force powers when holding the rocket launcher or using the flamethrower.
+			- Can't use Force Lightning while in midair.
 
 		Flamethrower:
 			- Boosted fuel cost to 3.
@@ -86,6 +93,7 @@ Version 0.0.9s:
 				- Red style has a base DP damage of 17. 
 				- Red style does 10% more DP damage with attack fakes that aren't parried by the defender.
 				- Blue style parries attacks 25% cheaper than normal. 
+				- Yellow style is more "centered" and recovers MP %25 faster.
 
 		Sentry Gun (SentryGun):
 			- Can now have multiple sentry guns.

@@ -106,7 +106,6 @@
 
 //[SaberSys]
 #define MISHAPLEVEL_FULL		14  //the point at which full mishaps occur on the balance bar.
-#define MISHAPLEVEL_FORCEVULN	11
 #define MISHAPLEVEL_HEAVY		8
 #define MISHAPLEVEL_LIGHT		5
 #define MISHAPLEVEL_NONE		0

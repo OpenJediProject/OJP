@@ -2036,6 +2036,12 @@ qboolean OJP_CounterForce(gentity_t *attacker, gentity_t *defender, int attackPo
 {//generically checks to see if the defender is able to block an attack from this attacker 
 	int abilityDef;		//the difference in skill between the defender's defend power and the attacker's attack power.
 
+	if(attacker->client->ps.userInt3 & (1 << FLAG_FLAMETHROWER)
+		|| attacker->client->ps.weapon == WP_ROCKET_LAUNCHER)
+	{//can't block force powers while using the rocket launcher or flamethrower.
+		return qfalse;
+	}
+
 	if( !(defender->client->ps.fd.forcePowersKnown & (1 << attackPower)) 
 		&& !(defender->client->ps.fd.forcePowersKnown & (1 << FP_ABSORB)) )
 	{//doesn't have absorb or same power as the attack power.
@@ -2086,8 +2092,8 @@ qboolean OJP_CounterForce(gentity_t *attacker, gentity_t *defender, int attackPo
 
 //[ForceSys]
 #define DODGE_SABERBLOCKLIGHTNING	1 //the DP cost to block lightning
-qboolean OJP_SaberBlockLightning(gentity_t *attacker, gentity_t *defender, vec3_t impactPoint, int damage)
-{//defender is attempting to use their saber to block lightning.  Try to do it.
+qboolean OJP_BlockLightning(gentity_t *attacker, gentity_t *defender, vec3_t impactPoint, int damage)
+{//defender is attempting to block lightning.  Try to do it.
 	int dpBlockCost;
 	qboolean saberLightBlock = qtrue;
 
@@ -2223,8 +2229,7 @@ void ForceLightningDamage( gentity_t *self, gentity_t *traceEnt, vec3_t dir, vec
 				}
 
 				//[ForceSys]
-				//saberers can now block lightning using their sabers
-				saberBlocked = OJP_SaberBlockLightning(self, traceEnt, impactPoint, dmg);
+				saberBlocked = OJP_BlockLightning(self, traceEnt, impactPoint, dmg);
 
 				if (dmg && !saberBlocked)
 				//if (dmg)
@@ -3323,7 +3328,7 @@ qboolean CanCounterThrow(gentity_t *self, gentity_t *thrower, qboolean pull)
 	{//not facing the attacker and low on DP!
 		return qfalse;
 	}
-
+	
 	/* replaced with general arc check similar to the counter lightning stuff
 	if (g_gametype.integer == GT_SIEGE &&
 		pull &&
@@ -5023,7 +5028,7 @@ static void WP_ForcePowerRun( gentity_t *self, forcePowers_t forcePower, usercmd
 		}
 		// OVERRIDEFIXME
 		if ( !WP_ForcePowerAvailable( self, forcePower, 0 ) || self->client->ps.fd.forcePowerDuration[FP_LIGHTNING] < level.time ||
-			self->client->ps.fd.forcePower < 25)
+			self->client->ps.fd.forcePower < 25 || self->client->ps.groundEntityNum == ENTITYNUM_NONE)
 		{
 			WP_ForcePowerStop( self, forcePower );
 		}
@@ -5721,7 +5726,7 @@ static GAME_INLINE qboolean MeditateCheck( gentity_t * self )
 	}
 	else
 	{
-		anim = BOTH_MEDITATE;
+		anim = BOTH_MEDITATE; 
 	}
 
 	//we don't use a HANDEXTEND_TAUNT check anymore since 
@@ -6008,7 +6013,6 @@ void WP_ForcePowersUpdate( gentity_t *self, usercmd_t *ucmd )
 				
 				//[ExpSys]
 				if(i == FP_HEAL 
-					|| i == FP_TELEPATHY 
 					|| i == FP_RAGE 
 					|| i == FP_PROTECT 
 					|| i == FP_TEAM_HEAL
@@ -6182,7 +6186,7 @@ void WP_ForcePowersUpdate( gentity_t *self, usercmd_t *ucmd )
 				LightningDebounceTime = level.time;
 				
 				self->client->ps.jetpackFuel -= FLAMETHROWER_FUELCOST;
-			}	
+			}
 		}
 	}
 	else
@@ -6470,7 +6474,9 @@ void WP_ForcePowersUpdate( gentity_t *self, usercmd_t *ucmd )
 		&& !BG_InSlowBounce(&self->client->ps) && !PM_SaberInBrokenParry(self->client->ps.saberMove)
 		&& !PM_InKnockDown(&self->client->ps) && self->client->ps.forceHandExtend != HANDEXTEND_DODGE
 		&& self->client->ps.saberLockTime < level.time	//not in a saber lock.
-		&& self->client->ps.groundEntityNum != ENTITYNUM_NONE)  //can't regen while in the air.
+		&& self->client->ps.groundEntityNum != ENTITYNUM_NONE //can't regen while in the air.
+		&& WalkCheck(self)
+		)
 	{
 		if((self->client->ps.fd.forcePower > (self->client->ps.fd.forcePowerMax * FATIGUEDTHRESHHOLD)+1)
 			&& self->client->ps.stats[STAT_DODGE] < self->client->ps.stats[STAT_MAX_DODGE])
@@ -6501,10 +6507,17 @@ void WP_ForcePowersUpdate( gentity_t *self, usercmd_t *ucmd )
 			self->client->ps.saberAttackChainCount--;
 		}
 		
-		self->client->MishapDebounce = level.time + g_mishapRegenTime.integer;
+		if(self->client->ps.weapon == WP_SABER && self->client->ps.fd.saberAnimLevel == SS_MEDIUM)
+		{//yellow style is more "centered" and recovers MP faster.
+			self->client->MishapDebounce = level.time + (g_mishapRegenTime.integer*.75);
+		}
+		else
+		{
+			self->client->MishapDebounce = level.time + g_mishapRegenTime.integer;
+		}
 	}
 	//[/SaberSys]
-
+	
 powersetcheck:
 
 	if (prepower && self->client->ps.fd.forcePower < prepower)
