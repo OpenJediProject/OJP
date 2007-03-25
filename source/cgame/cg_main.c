@@ -909,6 +909,10 @@ vmCvar_t	rgb_script2;
 vmCvar_t	ojp_teamrgbsabers;
 //[/RGBSabers]
 
+//[SFXSabers]
+vmCvar_t        sfx_sabers;
+//[/SFXSabers]
+
 //[ClientPlugInDetect]
 vmCvar_t	ojp_clientplugin;
 //[/ClientPlugInDetect]
@@ -1140,6 +1144,10 @@ Ghoul2 Insert End
 	//	2 = Everyone has custom colors.
 	{ &ojp_teamrgbsabers,	"ojp_teamrgbsabers", "0", CVAR_ARCHIVE },
 //[/RGBSabers]
+        
+//[SFXSabers]
+	{ &sfx_sabers,	"sfx_sabers", "0", CVAR_ARCHIVE },
+//[/SFXSabers]
 
 	//[ClientPlugInDetect]
 	//this cvar is a dummy cvar used to determine if the client has the OJP client plug in or not.
@@ -1652,6 +1660,14 @@ static void CG_RegisterSounds( void ) {
 	cgs.media.blackSaberGlowShader		= trap_R_RegisterShader( "gfx/effects/sabers/black_glow" );
 	cgs.media.blackSaberTrail			= trap_R_RegisterShader( "gfx/effects/sabers/blacksaberBlur" );
 	//[/RGBSabers]
+
+    //[SFXSabers]
+    cgs.media.sfxSaberTrailShader = trap_R_RegisterShader( "SFX_Sabers/saber_trail" );
+    cgs.media.sfxSaberBladeShader = trap_R_RegisterShader( "SFX_Sabers/saber_blade" );
+    cgs.media.sfxSaberBlade2Shader = trap_R_RegisterShader( "SFX_Sabers/saber_blade_rgb" );
+    cgs.media.sfxSaberEndShader = trap_R_RegisterShader( "SFX_Sabers/saber_end" );
+    cgs.media.sfxSaberEnd2Shader = trap_R_RegisterShader( "SFX_Sabers/saber_end_rgb" );
+    //[/SFXSabers]
 
 	cgs.media.saberBlurShader			= trap_R_RegisterShader( "gfx/effects/sabers/saberBlur" );
 	cgs.media.swordTrailShader			= trap_R_RegisterShader( "gfx/effects/sabers/swordTrail" );

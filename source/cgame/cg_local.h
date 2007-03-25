@@ -1232,6 +1232,14 @@ typedef struct {
 	qhandle_t	blackSaberGlowShader;
 	qhandle_t	blackSaberTrail;
 	//[/RGBSabers]
+        
+	//[SFXSabers]
+	qhandle_t sfxSaberTrailShader;
+	qhandle_t sfxSaberBladeShader;
+	qhandle_t sfxSaberBlade2Shader;
+	qhandle_t sfxSaberEndShader;
+	qhandle_t sfxSaberEnd2Shader;
+	//[/SFXSabers]
 
 	qhandle_t	saberBlurShader;
 	qhandle_t	swordTrailShader;
@@ -1952,6 +1960,10 @@ extern vmCvar_t	rgb_script1;
 extern vmCvar_t	rgb_script2;
 extern vmCvar_t ojp_teamrgbsabers;
 //[/RGBSabers]
+
+//[SFXSabers]
+extern vmCvar_t sfx_sabers;
+//[/SFXSabers]
 
 //[VisualWeapons]
 extern vmCvar_t	ojp_holsteredweapons;
