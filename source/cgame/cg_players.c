@@ -8700,8 +8700,10 @@ JustDoIt:
 		return;
 	}
 
+	//[SFXSabers]
     if(sfx_sabers.integer < 1)
     {// Draw the Raven blade.
+	//[/SFXSabers]
         // Pass in the renderfx flags attached to the saber weapon model...this is done so that saber glows
         //	will get rendered properly in a mirror...not sure if this is necessary??
         //CG_DoSaber( org_, axis_[0], saberLen, client->saber[saberNum].blade[bladeNum].lengthMax, client->saber[saberNum].blade[bladeNum].radius,
@@ -8711,6 +8713,7 @@ JustDoIt:
                 scolor, renderfx, (qboolean)(client->saber[saberNum].numBlades < 3 && !(client->saber[saberNum].saberFlags2&SFL2_NO_DLIGHT)),
                 cent->currentState.clientNum, saberNum);
                 //[/RGBSabers]
+	//[SFXSabers]
     }
     else
     {// Draw the SFX blade. Yeah, it has to be here. Yes, the person who wrote this should be shot.
@@ -8763,6 +8766,7 @@ JustDoIt:
 			trap_FX_AddPrimitive(&fx);
 		}
     }
+	//[/SFXSabers]
 }
 
 int CG_IsMindTricked(int trickIndex1, int trickIndex2, int trickIndex3, int trickIndex4, int client)
