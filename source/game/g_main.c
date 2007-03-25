@@ -55,6 +55,9 @@ vmCvar_t	g_allowNPC;
 //[ROQFILES]
 vmCvar_t	g_allowROQ;
 //[/ROQFILES]
+//[LastManStanding]
+vmCvar_t	ojp_lms;
+//[/LastManStanding]
 
 vmCvar_t	g_armBreakage;
 
@@ -401,6 +404,10 @@ static cvarTable_t		gameCvarTable[] = {
 	//[ROQFILES]
 	{ &g_allowROQ, "g_allowROQ", "0", 0, 0, qtrue  },
 	//[/ROQFILES]
+
+	//[LastManStanding]
+	{ &ojp_lms,"ojp_lastmanstanding","0",CVAR_ARCHIVE | CVAR_LATCH,0,qfalse},
+	//[/LastManStanding]
 
 	{ &g_armBreakage, "g_armBreakage", "0", 0, 0, qtrue  },
 

@@ -18,6 +18,21 @@ extern qboolean WP_UseFirstValidSaberStyle( saberInfo_t *saber1, saberInfo_t *sa
 
 forcedata_t Client_Force[MAX_CLIENTS];
 
+//[LastManStanding]
+void OJP_TempSpectate(gentity_t *ent, int time)
+{
+	ent->client->tempSpectate = level.time + time * 20000;
+		ent->health = ent->client->ps.stats[STAT_HEALTH] = 1;
+				ent->client->ps.weapon = WP_NONE;
+				ent->client->ps.stats[STAT_WEAPONS] = 0;
+				ent->client->ps.stats[STAT_HOLDABLE_ITEMS] = 0;
+				ent->client->ps.stats[STAT_HOLDABLE_ITEM] = 0;
+				ent->takedamage = qfalse;
+				trap_LinkEntity(ent);
+}
+//[/LastManStanding]
+
+
 /*QUAKED info_player_duel (1 0 1) (-16 -16 -24) (16 16 32) initial
 potential spawning position for duelists in duel.
 Targets will be fired when someone spawns in on them.
@@ -1213,6 +1228,15 @@ void SiegeRespawn(gentity_t *ent);
 void respawn( gentity_t *ent ) {
 	MaintainBodyQueue(ent);
 
+	//[LastManStanding]
+	if (ent->client->ps.persistant[PERS_SPAWN_COUNT] == 1)
+	{}
+	else if ( ojp_lms.integer == 1)
+	{
+		ent->lives--;
+	}
+	//[/LastManStanding]
+
 	if (gEscaping || g_gametype.integer == GT_POWERDUEL)
 	{
 		ent->client->sess.sessionTeam = TEAM_SPECTATOR;
@@ -1265,11 +1289,25 @@ void respawn( gentity_t *ent ) {
 	{
 		gentity_t	*tent;
 
+		if (g_gametype.integer == GT_SIEGE || g_gametype.integer == GT_DUEL || g_gametype.integer == GT_POWERDUEL)
+		{
 		ClientSpawn(ent);
-
 		// add a teleportation effect
 		tent = G_TempEntity( ent->client->ps.origin, EV_PLAYER_TELEPORT_IN );
 		tent->s.clientNum = ent->s.clientNum;
+		}
+		else if (ent->lives >= 1)
+		{
+		ClientSpawn(ent);
+		// add a teleportation effect
+		tent = G_TempEntity( ent->client->ps.origin, EV_PLAYER_TELEPORT_IN );
+		tent->s.clientNum = ent->s.clientNum;
+		}
+		else
+		{
+			OJP_TempSpectate(ent,999);
+		}
+
 	}
 }
 
@@ -2584,6 +2622,9 @@ char *ClientConnect( int clientNum, qboolean firstTime, qboolean isBot ) {
 //	client->areabits = areabits;
 //	if ( !client->areabits )
 //		client->areabits = G_Alloc( (trap_AAS_PointReachabilityAreaIndex( NULL ) + 7) / 8 );
+
+	ent->lives = 3;
+
 
 	return NULL;
 }

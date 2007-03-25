@@ -27,6 +27,7 @@ Version 0.0.9s:
 			- Changed g_minForceRank to g_minExpLevel default is now 20
 		 	- Changed g_maxForceRank to g_maxExpLevel default is now 250
 			- g_saberLockfactor changed default from 2 to 0
+			- Added ojp_lastmanstanding for LMS(last man standing) mode
 
 		CoOp:
 			- Fixed time limits for CoOp maps.

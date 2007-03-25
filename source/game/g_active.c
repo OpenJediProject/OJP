@@ -2184,6 +2184,13 @@ void ClientThink_real( gentity_t *ent ) {
 	}
 	//[/ROQFILES]
 
+	//[LastManStanding]
+	if (ent->lives <= 0 && ent->client->tempSpectate <= 100 && ojp_lms.integer == 1)
+	{
+		ent->client->tempSpectate += 250;
+	}
+	//[/LastManStanding]
+
 	if (ent->s.eType == ET_NPC)
 	{
 		isNPC = qtrue;

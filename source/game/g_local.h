@@ -380,6 +380,10 @@ struct gentity_s {
 	qboolean	takedamage;
 	material_t	material;
 
+	//[LastManStanding]
+	int			lives;
+	//[/LastManStanding]
+
 	int			damage;
 	int			dflags;
 	int			splashDamage;	// quad will increase this without increasing radius
@@ -1803,6 +1807,10 @@ extern	vmCvar_t	g_allowNPC;
 //[ROQFILES]
 extern  vmCvar_t	g_allowROQ;
 //[/ROQFILES]
+
+//[LastManStanding]
+extern vmCvar_t		ojp_lms;
+//[/LastManStanding]
 
 extern	vmCvar_t	g_armBreakage;
 
