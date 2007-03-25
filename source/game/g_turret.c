@@ -672,7 +672,9 @@ void SP_misc_turret( gentity_t *base )
 	char* s;
 
 	//[CoOp]
-	if(g_gametype.integer == GT_SINGLE_PLAYER)
+	//wahoo ojp bug fix - on top of being single player gametype, the spawnflag also should
+	//not be set to 5 as single player calls both types of turrets
+	if( !(base->spawnflags & 5) && g_gametype.integer == GT_SINGLE_PLAYER)
 	{//SP uses this same map entity name for the ceiling turrets.  Override to use them
 		//in CoOp.
 		SP_misc_turretG2( base );
