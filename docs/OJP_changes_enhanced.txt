@@ -75,6 +75,10 @@ Version 0.0.9s:
 				- can't parry while kicking.
 				- Attack Parries are performed by pressing both attack and alt-attack while performing a normal parry.
 
+			Mishaps:
+				- Landing a saber hit on a player who doesn't parry the attack reduces the attacker's MP by 1.
+				- Having critical level DP makes all mishap be heavy or full mishaps.
+
 			Misc:
 				- Made heavy mishaps happen more often.
 				- Slowed down blue style's slow bounce and return animations.
@@ -86,7 +90,7 @@ Version 0.0.9s:
 			Style Balancing:
 				- Dual style has a base DP damage of 13.
 				- Staff style has a base DP damage of 13.
-				- Cyan style has a base DP damage of 14.
+				- Aqua style has a base DP damage of 14.
 				- Blue style has a base DP damage of 12.
 				- Yellow style has a base DP damage of 15.
 				- Purple style has a base DP damage of 16.
@@ -94,6 +98,7 @@ Version 0.0.9s:
 				- Red style does 10% more DP damage with attack fakes that aren't parried by the defender.
 				- Blue style parries attacks 25% cheaper than normal. 
 				- Yellow style is more "centered" and recovers MP %25 faster.
+				- Aqua style deals MP to defenders who block its attack but fail to parry it.
 
 		Sentry Gun (SentryGun):
 			- Can now have multiple sentry guns.

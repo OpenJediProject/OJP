@@ -23,22 +23,19 @@ qboolean SabBeh_RollBalance(gentity_t *self, sabmech_t *mechSelf, qboolean force
 {
 	int randNum; 
 	if( self->client->ps.saberAttackChainCount >= MISHAPLEVEL_FULL )
-	{//hard mishap
-		randNum = Q_irand(0, 2);
-		switch (randNum)
-		{
-		case 0:
-			mechSelf->doStun = qtrue;
-			break;
-		case 1:
-			mechSelf->doKnockdown = qtrue;
-			break;
-		case 2:
-			mechSelf->doButterFingers = qtrue;
-			break;
-		};
+	{//hard mishap.
+		mechSelf->doKnockdown = qtrue;	
 		self->client->ps.saberAttackChainCount = MISHAPLEVEL_HEAVY;
 		return qtrue;
+	}
+	else if( self->client->ps.stats[STAT_DODGE] < DODGE_CRITICALLEVEL )//added by JRHockney to do more heavybounces like old times
+	{//heavy slow bounce
+		randNum = Q_irand(0, 99);
+		if(randNum < 0 || forceMishap)
+		{
+			mechSelf->doHeavySlowBounce = qtrue;
+			return qtrue;
+		}
 	}
 	else if( self->client->ps.saberAttackChainCount >= MISHAPLEVEL_HEAVY )
 	{//heavy slow bounce
@@ -273,20 +270,20 @@ void SabBeh_AttackVsBlock( gentity_t *attacker, sabmech_t *mechAttacker,
 		if(parried)
 		{//defender parried the attack fake.
 			*attackerMishap = SabBeh_RollBalance(attacker, mechAttacker, atkparry);
-			SabBeh_AddBalance(attacker, mechAttacker, 1, qtrue);
+			SabBeh_AddBalance(attacker, mechAttacker, 2, qtrue);
 #ifdef _DEBUG
 			mechAttacker->behaveMode = SABBEHAVE_ATTACK;
 #endif
 			attacker->client->ps.userInt3 |= ( 1 << FLAG_PARRIED );
 
-			SabBeh_AddBalance(blocker, mechBlocker, -1, qfalse);
+			SabBeh_AddBalance(blocker, mechBlocker, -3, qfalse);
 #ifdef _DEBUG
 			mechBlocker->behaveMode = SABBEHAVE_BLOCK;
 #endif
 		}
 		else
-		{//otherwise, the defender stands a good chance of having his defensives broken.
-			SabBeh_AddBalance(attacker, mechAttacker, 1, qtrue);
+		{//otherwise, the defender stands a good chance of having his defensives broken.	
+			SabBeh_AddBalance(attacker, mechAttacker, -1, qtrue);
 #ifdef _DEBUG
 			mechAttacker->behaveMode = SABBEHAVE_ATTACK;
 #endif
@@ -343,11 +340,16 @@ void SabBeh_AttackVsBlock( gentity_t *attacker, sabmech_t *mechAttacker,
 			attacker->client->ps.userInt3 |= ( 1 << FLAG_PARRIED );
 
 			SabBeh_AddBalance(blocker, mechBlocker, -3, qfalse);
-
+			
 		}
 		else
 		{//blocked values
-			SabBeh_AddBalance(attacker, mechAttacker, 1, qtrue);
+			SabBeh_AddBalance(attacker, mechAttacker, -1, qtrue);
+			if(attacker->client->ps.fd.saberAnimLevel == SS_TAVION)
+			{//aqua styles deals MP to players that don't parry it.
+				SabBeh_AddBalance(blocker, mechBlocker, 2, qfalse);
+			}
+			
 #ifdef _DEBUG
 			mechAttacker->behaveMode = SABBEHAVE_ATTACKBLOCKED;
 #endif
