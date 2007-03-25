@@ -416,7 +416,7 @@
 			style				0			
 			text				@OJP_MENUS_STARTINGSKILLPOINTS
 			descText			@MENUS_FORCE_MASTERY_INFO
-			cvar 				"g_minForceRank"
+			cvar 				"g_minExpLevel"
 			maxchars 			10
 			maxPaintChars 		10 
 			rect 				5 170 240 20
