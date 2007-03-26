@@ -1,0 +1,738 @@
+// Note to translators:
+// If a sentence is the same in your language then please change it to "#same"
+//
+// eg:
+// LANG_ENGLISH  "HALT"
+// LANG_GERMAN   "#same"
+//
+// (This is so we can tell which strings have been signed-off as ok to be the same words for QA
+//  and because we do not store duplicate strings, which will then get exported again next time
+//  as being untranslated.)
+//
+VERSION             "1"
+CONFIG              "W:\bin\stringed.cfg"
+FILENOTES           "in game text for single player and MP items"
+
+REFERENCE           OBJECTIVES
+LANG_ENGLISH        "Mission Objectives:"
+
+REFERENCE           OBJNONE
+LANG_ENGLISH        "No objectives currently specified."
+
+REFERENCE           INSUFFICIENTENERGY
+LANG_ENGLISH        "Weapon ammo depleted."
+
+REFERENCE           MISSIONFAILED
+LANG_ENGLISH        "MISSION FAILED"
+
+REFERENCE           MISSIONFAILED_PLAYER
+LANG_ENGLISH        "YOU HAVE DIED."
+
+REFERENCE           MISSIONFAILED_LUKE
+LANG_ENGLISH        "LUKE SKYWALKER HAS DIED."
+
+REFERENCE           MISSIONFAILED_CHEWIE
+LANG_ENGLISH        "CHEWBACCA HAS DIED."
+
+REFERENCE           MISSIONFAILED_KYLE
+LANG_ENGLISH        "KYLE KATARN HAS DIED."
+
+REFERENCE           MISSIONFAILED_ROSH
+LANG_ENGLISH        "ROSH PENIN HAS DIED."
+
+REFERENCE           MISSIONFAILED_WEDGE
+LANG_ENGLISH        "WEDGE ANTILLES HAS DIED."
+
+REFERENCE           MISSIONFAILED_TURNED
+LANG_ENGLISH        "YOU'VE TURNED ON YOUR FRIENDS."
+
+REFERENCE           MISSIONFAILED_R5D2
+LANG_ENGLISH        "THE R5 UNIT WAS DESTROYED."
+
+REFERENCE           MISSIONFAILED_PRISONERS
+LANG_ENGLISH        "TOO MANY PRISONERS HAVE DIED."
+
+REFERENCE           MISSIONFAILED_EMPLACEDGUNS
+LANG_ENGLISH        "ALL EMPLACED GUNS WERE DESTROYED."
+
+REFERENCE           MISSIONFAILED_KYLECAPTURE
+LANG_ENGLISH        "YOU HAVE BEEN CAPTURED."
+
+REFERENCE           MISSIONFAILED_LADYLUCK
+LANG_ENGLISH        "THE DREADNAUGHT HAS BEEN DESTROYED."
+
+REFERENCE           MISSIONFAILED_UNKNOWN
+LANG_ENGLISH        " "
+
+REFERENCE           MISSIONFAILED_TOOMANYALLIESDIED
+LANG_ENGLISH        "YOU KILLED TOO MANY ALLIES."
+
+REFERENCE           RELOADMISSION
+LANG_ENGLISH        "Press fire button to restart or ESCAPE to access menu."
+
+REFERENCE           CONTINUE
+LANG_ENGLISH        "Press fire button to continue."
+
+REFERENCE           LSDS_CHOICE
+LANG_ENGLISH        "Deactivate your lightsaber remain on the path of light.\n\nAttack Rosh to turn to the dark side."
+
+REFERENCE           MISSIONCOMPLETION
+LANG_ENGLISH        "LEVEL STATS"
+
+REFERENCE           SECRETAREAS
+LANG_ENGLISH        "Secret Areas Found: "
+
+REFERENCE           ENEMIESKILLED
+LANG_ENGLISH        "Enemies Killed: "
+
+REFERENCE           FAVORITEWEAPON
+LANG_ENGLISH        "Favorite Weapon: "
+
+REFERENCE           SHOTSFIRED
+LANG_ENGLISH        "Shots Fired: "
+
+REFERENCE           HITS
+LANG_ENGLISH        "Hits: "
+
+REFERENCE           ACCURACY
+LANG_ENGLISH        "Accuracy: "
+
+REFERENCE           FORCEUSE
+LANG_ENGLISH        "Force Use"
+
+REFERENCE           HEAL
+LANG_ENGLISH        "Heal: "
+
+REFERENCE           SPEED
+LANG_ENGLISH        "Speed: "
+
+REFERENCE           ABSORB
+LANG_ENGLISH        "Absorb:"
+
+REFERENCE           PULL
+LANG_ENGLISH        "Pull: "
+
+REFERENCE           PUSH
+LANG_ENGLISH        "Push: "
+
+REFERENCE           PROTECTION
+LANG_ENGLISH        "Protection:"
+
+REFERENCE           MINDTRICK
+LANG_ENGLISH        "Mind Trick: "
+
+REFERENCE           GRIP
+LANG_ENGLISH        "Grip: "
+
+REFERENCE           LIGHTNING
+LANG_ENGLISH        "Lightning: "
+
+REFERENCE           LIGHTSABERUSE
+LANG_ENGLISH        "Lightsaber Use "
+
+REFERENCE           THROWN
+LANG_ENGLISH        "Thrown: "
+
+REFERENCE           BLOCKS
+LANG_ENGLISH        "Blocks: "
+
+REFERENCE           LEGATTACKS
+LANG_ENGLISH        "Leg Attacks: "
+
+REFERENCE           ARMATTACKS
+LANG_ENGLISH        "Arm Attacks: "
+
+REFERENCE           BODYATTACKS
+LANG_ENGLISH        "Body Attacks: "
+
+REFERENCE           OTHERATTACKS
+LANG_ENGLISH        "Other Attacks: "
+
+REFERENCE           CURRENTFORCEPOWERS
+LANG_ENGLISH        "CURRENT FORCE POWER LEVELS"
+
+REFERENCE           HEAL2
+LANG_ENGLISH        "Heal"
+
+REFERENCE           JUMP2
+LANG_ENGLISH        "Jump"
+
+REFERENCE           SPEED2
+LANG_ENGLISH        "Speed"
+
+REFERENCE           PUSH2
+LANG_ENGLISH        "Push"
+
+REFERENCE           MINDTRICK2
+LANG_ENGLISH        "Mind Trick"
+
+REFERENCE           GRIP2
+LANG_ENGLISH        "Grip"
+
+REFERENCE           LIGHTNING2
+LANG_ENGLISH        "Lightning"
+
+REFERENCE           SABER_THROW2
+LANG_ENGLISH        "Saber Throw"
+
+REFERENCE           SABER_OFFENSE2
+LANG_ENGLISH        "Saber Offense"
+
+REFERENCE           SABER_DEFENSE2
+LANG_ENGLISH        "Saber Defense"
+
+REFERENCE           PULL2
+LANG_ENGLISH        "Pull"
+
+REFERENCE           NONE
+LANG_ENGLISH        "NONE"
+
+REFERENCE           DATAPAD_UPDATED
+LANG_ENGLISH        "Datapad updated"
+
+REFERENCE           PICKUPLINE
+NOTES               "Printed before item name when pick is obtained"
+LANG_ENGLISH        "Obtained"
+
+REFERENCE           SABER_DESC
+LANG_ENGLISH        "Lightsaber\nAn elegant weapon for a more civilized age, the lightsaber is the preferred weapon of the Jedi Knight.  The lightsaber is an energy blade of great power that can be used by the wielder for both attack and defense.\nPrimary Fire - Slashing and swinging attacks\nSecondary Fire - Force powered saber throw\nDefensive Ability - Deflects blaster and energy weapon fire, parries enemy lightsaber attacks\nAmmo Type - N/A"
+
+REFERENCE           NEW_BLASTER_PISTOL_DESC
+LANG_ENGLISH        "DL-44 Heavy Blaster Pistol \nOne of the most common firearms in the galaxy, the DL-44 Heavy Blaster Pistol is a hand-held energy weapon with a slow rate of fire and incredible accuracy.\nPrimary Fire - Slow, single shot with great accuracy and damage\nSecondary Fire - Charged energy buildup for increased damage blast attack\nAmmo Type - Blaster Pack"
+
+REFERENCE           ALONGTIME
+LANG_ENGLISH        "A long time ago in a galaxy far,\nfar away...."
+
+REFERENCE           BLASTER_PISTOL_DESC
+LANG_ENGLISH        "Bryar Blaster Pistol \nKyle Katarn's weapon of choice, the Bryar Blaster Pistol is a common hand-held energy weapon with a slow rate of fire and incredible accuracy.\nPrimary Fire - Slow, single shot with great accuracy and damage\nSecondary Fire - Charged energy buildup for increased damage blast attack\nAmmo Type - Blaster Pack"
+
+REFERENCE           BLASTER_RIFLE_DESC
+LANG_ENGLISH        "E-11 Blaster Rifle \nThe primary weapon of the Imperial forces, the E-11 is a sturdy and deadly blaster rifle capable of inflicting great damage despite its small size.  The E-11's compact design makes it easy to carry and conceal.\nPrimary Fire - Slow, single shot with moderate accuracy and great damage\nSecondary Fire - Rapid, burst fire with low accuracy and expanded firing area\nAmmo Type - Blaster Pack"
+
+REFERENCE           DISRUPTOR_RIFLE_DESC
+LANG_ENGLISH        "Tenloss DXR-6 Disruptor rifle \nThis nefarious weapon affects matter at the molecular level, ripping apart living material with ease.   Because of the weapon's inhumane nature, the DXR-6 is outlawed throughout the galaxy and is generally only used by scattered droid and Remnant forces.\nPrimary Fire - Single shot with slow fire rate, fast projectile and small radius damage\nSecondary Fire - Scoped mode: Single shot with slow fire rate, increased damage and high weapon energy consumption\nAmmo Type - Power cell"
+
+REFERENCE           BOWCASTER_DESC
+LANG_ENGLISH        "Wookiee Bowcaster\nThis archaic-looking weapon fires powerful bolts of metal enveloped in pockets of energy.  Capable of inflicting incredible damage, the bowcaster requires tremendous physical strength to fire.  Most bowcasters sold outside the Wookiee homeworld come equipped with self-cocking actions that allow physically weaker creatures to fire them.\nPrimary Fire - Slow, single shot with radius damage.  Hold FIRE to charge weapon for spread attack\nSecondary Fire - Unleashes a reflective shot that bounces off solid surfaces\nAmmo Type - Power cell"
+
+REFERENCE           HEAVYREPEATER_DESC
+LANG_ENGLISH        "Imperial Heavy Repeater with Concussion Launcher\nThis destructive projectile weapon is extremely deadly, firing rapid streams of metal bullets.  Imperial forces use the Heavy Repeater's deadly suppressive fire and concussion launcher for crowd control and to spread heavy fire over large areas.\nPrimary Fire - Fully automatic projectile fire \nSecondary Fire - Single shot, concussion explosive round\nAmmo type - Metallic bolts"
+
+REFERENCE           DEMP2_DESC
+LANG_ENGLISH        "Destructive Electro-Magnetic Pulse 2 Gun\nCommonly referred to as the DEMP 2, this pulse rifle is primarily used against droids and electrical devices.  The DEMP 2 fires high-powered ion bursts that disrupt electrical systems.  Unlike previous incarnations of the weapon, the DEMP 2's ion charges are capable of damaging living material.\nPrimary Fire - Single shot, stuns humans, damages droids\nSecondary Fire - Charged energy attack that creates an expanding shell of electromagnetic energy on impact that damages humanoids, droids and turrets\nAmmo Type - Power cell"
+
+REFERENCE           FLECHETTE_DESC
+LANG_ENGLISH        "Golan Arms FC1 Flechette Weapon \nWidely used by the Corporate Sector Authority's police squads, the FC1 fires shards of metal in a widespread pattern.   The weapon is designed to hit multiple targets in close proximity, but great care must be taken to avoid ricochet damage.\nPrimary Fire - Single shot, spread fire\nSecondary Fire - Fires two bouncing proximity mines which explode after a short time\nAmmo Type - Metallic Bolts"
+
+REFERENCE           CONCUSSION_DESC
+LANG_ENGLISH        "Stouker Concussion Rifle  \nThe Stouker fires a concussive blast creating an explosion that spreads about 4 meters in diameter.\nPrimary Fire - Single shot, large explosive effect that damages everything, slow firing rate\nSecondary Fire - Fires a smaller projectile shot that has a smaller explosive radius but does much more damage in that radius and has a more severe recoil\nAmmo Type - Metallic Bolts"
+
+REFERENCE           MERR_SONN_DESC
+LANG_ENGLISH        "Merr-Sonn PLX-2M Portable Missile System   \nThe PLX-2M is an extremely powerful weapon that fires Arakyd 3T3 missiles.  The sheer explosive power of the PLX-2M makes it dangerous to fire blindly in close quarters, but is extremely effective when used as a 'smart' tracking weapon.\nPrimary Fire - Fires a single, forward-firing explosive missile\nSecondary Fire - Fires a single 'smart' missile that tracks acquired and locked targets\nAmmo Type - Rockets"
+
+REFERENCE           THERMAL_DETONATOR_DESC
+LANG_ENGLISH        "Thermal Detonator \nThe thermal detonator is a radius-damage grenade that releases a barrage of thermal energy capable of disintegrating all matter around it.\nPrimary Fire - Detonator explodes after a short time.  Press FIRE longer for longer throw\nSecondary Fire - Detonator explodes on impact.  Press ALT-FIRE longer for longer throw"
+
+REFERENCE           TRIP_MINE_DESC
+LANG_ENGLISH        "Trip Mines \nTrip mines consist of a beam projector affixed to a shaped explosive casing.  The laser activates when the mine is placed and extends a beam from the charge to the nearest surface that intersects its path.  If the beam is broken or the charge is fired upon, the mine detonates and causes radius damage to anything in range.\nPrimary Fire - Once placed, triggered by breaking the beam\nSecondary Fire - Once placed, the mine acts as a proximity device, waiting until an enemy comes within blast radius, then detonates, damaging any enemies in the area"
+
+REFERENCE           DET_PACK_DESC
+LANG_ENGLISH        "Detonation Packs \nA detonation pack is essentially a small explosive device with a remote detonation trigger.  The pack is placed or thrown and can be detonated at will by the user.  Detonation packs are commonly used to ambush enemies or open sealed doors.\nPrimary Fire - Sets charge at the user's feet\nSecondary Fire - Explodes all set charges"
+
+REFERENCE           STUN_BATON_DESC
+LANG_ENGLISH        "Stun Baton \nCommonly used to subdue unruly prisoners, the stun baton was designed for use in melee combat where killing your opponent is not necessarily the desired outcome.\nPrimary Fire - Short range jabbing electrical stun attack\nSecondary Fire - None"
+
+REFERENCE           NEURO_SAAV_DESC
+LANG_ENGLISH        "Neuro-Saav Model TD2.3 Electrobinoculars\nElectrobinoculars operate in low-light and normal light conditions to magnify distant objects and provide a heads-up display that features detailed information on the area viewed.  The heads-up display measures distances and offers various telemetry readouts on the object or area in view. Powered by normal battery cells that drain power at a minimal rate."
+
+REFERENCE           BACTA_DESC
+LANG_ENGLISH        "BioTech Bacta Canister\nBacta canisters are portable, disposable packs of bacta ointments and emergency care tools.  Designed for use in the field, bacta canisters can be used to heal wounds and restore vitality during medical recovery.  No field medic should be without them."
+
+REFERENCE           INQUISITOR_DESC
+LANG_ENGLISH        "Seeker Drone\nAn attack drone similar to the training drones used by Jedi to practice their lightsaber skills, the Seeker hovers around its user and attacks any enemy the user fires upon.  The drone operates automatically for a limited time and then self-destructs\nwhen its power is depleted."
+
+REFERENCE           LA_GOGGLES_DESC
+LANG_ENGLISH        "Light Amplification Goggles\nAlso known as infra-goggles, this helpful device creates a balance of light levels that allows the user to see well in most situations. The resulting effect enhances the overall brightness but casts everything in a greenish hue. The goggles require batteries to function, draining them at roughly the same rate as Electrobinoculars.   Light Amplification Goggles can be worn during combat, but will not function without an available power source."
+
+REFERENCE           PORTABLE_SENTRY_DESC
+LANG_ENGLISH        "Portable Assault Sentry  \nThis deadly weapon is roughly the size of a large backpack, but don't let its size fool you. Once activated, the weapon unfurls and is set to auto-target any enemy threat. The Sentry drains battery life at an accelerated rate and, once it's deployed, can't be restored to its original portable condition."
+
+REFERENCE           SECURITY_KEY_DESC
+LANG_ENGLISH        "Security Key"
+
+REFERENCE           EMPTY_INV
+LANG_ENGLISH        "EMPTY INVENTORY"
+
+REFERENCE           FORCE_HEAL_DESC
+LANG_ENGLISH        "Force Heal\nDuration: Instantaneous effect\nArea Of Effect: Jedi only\nEffect: Jedi have the ability to heal themselves after injury\n\n"
+
+REFERENCE           FORCE_JUMP_DESC
+LANG_ENGLISH        "Force Jump\nDuration: Immediate\nArea Of Effect: Jedi only\nEffect: Allows Jedi to make a tremendous vertical leap\n\n"
+
+REFERENCE           FORCE_SPEED_DESC
+LANG_ENGLISH        "Force Speed\nDuration: 10 seconds\nArea of Effect: Jedi and surroundings\nEffect:  A Jedi speeds up and the world appears to slow down around them\n\n"
+
+REFERENCE           FORCE_PUSH_DESC
+LANG_ENGLISH        "Force Push\nDuration: Instantaneous effect\nArea Of Effect: Objects or Persons\nEffect: Allows Jedi to push objects away from themselves and defend from missile and Force Grip attacks\n\n"
+
+REFERENCE           FORCE_PULL_DESC
+LANG_ENGLISH        "Force Pull\nDuration: Instantaneous effect\nArea Of Effect: Objects or Persons\nEffect: Allows Jedi to pull specific world objects to themselves\n\n"
+
+REFERENCE           FORCE_MIND_TRICK_DESC
+LANG_ENGLISH        "Mind Trick\nDuration: Variable\nArea Of Effect: Humanoids\nEffect: Allows Jedi to confuse and/or misdirect attention \n\n"
+
+REFERENCE           FORCE_GRIP_DESC
+LANG_ENGLISH        "Force Grip\nDuration: Instantaneous\nArea Of Effect: Living persons only\nEffect: Allows Jedi to choke or constrict the organs of a living being\n\n"
+
+REFERENCE           FORCE_LIGHTNING_DESC
+LANG_ENGLISH        "Force Lightning\nDuration: Variable\nArea Of Effect: Living persons only\nEffect: Allows Jedi to hurl a devastating electrical attack against enemies\n\n"
+
+REFERENCE           FORCE_SABER_DEFENSE_DESC
+LANG_ENGLISH        "Lightsaber Defense\nDuration: Always on\nArea Of Effect: N/A\nEffect: Jedi can block damage with a lightsaber  \n\n"
+
+REFERENCE           FORCE_SABER_OFFENSE_DESC
+LANG_ENGLISH        "Lightsaber Offense\nDuration: Always on\nArea Of Effect: N/A\nEffect: As a Jedi gains combat experience, their lightsaber attack effectiveness increases\n\n"
+
+REFERENCE           FORCE_SABER_THROW_DESC
+LANG_ENGLISH        "Lightsaber Throw\nDuration: Instant\nArea Of Effect: Player arc\nEffect:  A Jedi can throw a lightsaber and use it as a missile weapon\n\n"
+
+REFERENCE           FORCE_ABSORB_DESC
+LANG_ENGLISH        "Force Absorption\nDuration: 20 seconds\nArea Of Effect: Jedi only\nEffect: Jedi can absorb dark Force power, Force Push and Force Pull directed at them\n\n"
+
+REFERENCE           FORCE_PROTECT_DESC
+LANG_ENGLISH        "Force Protection\nDuration: Variable\nArea Of Effect: Jedi only\nEffect: Allows Jedi to decrease incoming damage from energy, physical, projectile, and explosive sources\n\n"
+
+REFERENCE           FORCE_SENSE_DESC
+LANG_ENGLISH        "Force Sense\nDuration: Variable\nArea Of Effect: Objects or persons\nEffect: Allows Jedi to see people and objects that are invisible or behind solids\n\n"
+
+REFERENCE           FORCE_DRAIN_DESC
+LANG_ENGLISH        "Force Drain\nDuration: Variable\nArea Of Effect: Living persons only\nEffect: Allows Jedi to transfer the life essence of a person to themselves\n\n"
+
+REFERENCE           FORCE_RAGE_DESC
+LANG_ENGLISH        "Force Rage\nDuration: 10 seconds\nArea Of Effect: Jedi only\nEffect: Affords Jedi protection against damage, an increase in speed, and an increase in damage potential, at the expense of health.  The Jedi needs some recovery time after a Rage ends\n\n"
+
+REFERENCE           INCORRECT_KEY
+LANG_ENGLISH        "Incorrect security key"
+
+REFERENCE           CANT_CARRY_SECURITY_KEY
+LANG_ENGLISH        "You can't carry any more security keys"
+
+REFERENCE           TOOK_IMPERIAL_SECURITY_KEY
+LANG_ENGLISH        "You took the security key"
+
+REFERENCE           CANT_CARRY_GOODIE_KEY
+LANG_ENGLISH        "You can't carry any more supply keys"
+
+REFERENCE           TOOK_IMPERIAL_GOODIE_KEY
+LANG_ENGLISH        "You took the supply key"
+
+REFERENCE           SECURITY_KEY_UNLOCKEDDOOR
+LANG_ENGLISH        "Your security key unlocked the door"
+
+REFERENCE           NEED_SECURITY_KEY
+LANG_ENGLISH        "You need a security key!"
+
+REFERENCE           WEAPON_MELEE
+LANG_ENGLISH        "Melee"
+
+REFERENCE           WEAPON_STUN_BATON
+LANG_ENGLISH        "Stun Baton"
+
+REFERENCE           WEAPON_SABER
+LANG_ENGLISH        "Lightsaber"
+
+REFERENCE           WEAPON_BRYAR_PISTOL
+LANG_ENGLISH        "Bryar Blaster Pistol"
+
+REFERENCE           WEAPON_BLASTER
+LANG_ENGLISH        "E11-Blaster Rifle"
+
+REFERENCE           WEAPON_DISRUPTOR
+LANG_ENGLISH        "Tenloss DXR-6 Disruptor rifle"
+
+REFERENCE           WEAPON_BOWCASTER
+LANG_ENGLISH        "Wookiee Bowcaster"
+
+REFERENCE           WEAPON_REPEATER
+LANG_ENGLISH        "Imperial Heavy Repeater"
+
+REFERENCE           WEAPON_DEMP2
+LANG_ENGLISH        "Destructive Electro-Magnetic Pulse 2 Gun"
+
+REFERENCE           WEAPON_FLECHETTE
+LANG_ENGLISH        "Golan Arms FC1 Flechette Weapon"
+
+REFERENCE           WEAPON_ROCKET_LAUNCHER
+LANG_ENGLISH        "Merr-Sonn PLX-2M Portable Missile System"
+
+REFERENCE           WEAPON_THERMAL
+LANG_ENGLISH        "Thermal Detonator"
+
+REFERENCE           WEAPON_TRIP_MINE
+LANG_ENGLISH        "Trip Mines"
+
+REFERENCE           WEAPON_DET_PACK
+LANG_ENGLISH        "Detonation Packs"
+
+REFERENCE           ITEM_BINOCULARS
+LANG_ENGLISH        "Neuro-Saav Model TD2.3 Electrobinoculars"
+
+REFERENCE           ITEM_BACTA
+LANG_ENGLISH        "BioTech Bacta Canister"
+
+REFERENCE           ITEM_SEEKER
+LANG_ENGLISH        "Seeker Drone"
+
+REFERENCE           ITEM_LA_GOGGLES
+LANG_ENGLISH        "Light Amplification Goggles"
+
+REFERENCE           ITEM_SENTRY_GUN
+LANG_ENGLISH        "Portable Assault Sentry"
+
+REFERENCE           WEAPON_ATST_MAIN
+LANG_ENGLISH        "ATST Main Cannon"
+
+REFERENCE           WEAPON_ATST_SIDE
+LANG_ENGLISH        "ATST Side Cannons"
+
+REFERENCE           AMMO_FORCE
+LANG_ENGLISH        "Force Crystal"
+
+REFERENCE           AMMO_BLASTER
+LANG_ENGLISH        "Blaster Pack Ammo"
+
+REFERENCE           AMMO_POWERCELL
+LANG_ENGLISH        "Power Cell Ammo"
+
+REFERENCE           AMMO_METALLIC_BOLTS
+LANG_ENGLISH        "Metallic Bolt Ammo"
+
+REFERENCE           AMMO_ROCKETS
+LANG_ENGLISH        "Rocket Ammo"
+
+REFERENCE           AMMO_THERMAL
+LANG_ENGLISH        "Belt of Thermal Detonators"
+
+REFERENCE           AMMO_TRIPMINE
+LANG_ENGLISH        "Pack of Trip Mines"
+
+REFERENCE           ITEM_BATTERY
+LANG_ENGLISH        "Batteries"
+
+REFERENCE           ITEM_MEDPAK_INSTANT
+LANG_ENGLISH        "Instant use Medpack"
+
+REFERENCE           ITEM_SHIELD_SM_INSTANT
+LANG_ENGLISH        "Small Shield Booster"
+
+REFERENCE           ITM_SHIELD_LRG_PICKUP
+LANG_ENGLISH        "Large Shield Booster"
+
+REFERENCE           AMMO_DETPACK
+LANG_ENGLISH        "Pack of Detonation Packs"
+
+REFERENCE           FORCE_HEAL_LVL1_DESC
+LANG_ENGLISH        "Rank 1 - Jedi goes into a meditative stance for a short time and must remain stationary.  Any movement or attack will prevent healing.  Healing rate depends on game difficulty.\n"
+
+REFERENCE           FORCE_HEAL_LVL2_DESC
+LANG_ENGLISH        "Rank 2 - Jedi no longer needs to be stationary.  The Jedi will heal over a short period of time.  Healing rate depends on game difficulty.\n"
+
+REFERENCE           FORCE_HEAL_LVL3_DESC
+LANG_ENGLISH        "Rank 3 - Jedi heals more rapidly than rank 2.  Healing rate depends on game difficulty."
+
+REFERENCE           FORCE_JUMP_LVL1_DESC
+LANG_ENGLISH        "Rank 1 - Jedi can leap up to three times their normal jump height."
+
+REFERENCE           FORCE_JUMP_LVL2_DESC
+LANG_ENGLISH        "Rank 2 - Jedi can leap up to six times their normal jump height."
+
+REFERENCE           FORCE_JUMP_LVL3_DESC
+LANG_ENGLISH        "Rank 3 - Jedi can leap up to twelve times their normal jump height."
+
+REFERENCE           FORCE_SPEED_LVL1_DESC
+LANG_ENGLISH        "Rank 1 - Jedi moves 33% faster than normal"
+
+REFERENCE           FORCE_SPEED_LVL2_DESC
+LANG_ENGLISH        "Rank 2 - Jedi moves 100% faster than normal"
+
+REFERENCE           FORCE_SPEED_LVL3_DESC
+LANG_ENGLISH        "Rank 3 - Jedi moves 400% faster than normal"
+
+REFERENCE           FORCE_PUSH_LVL1_DESC
+LANG_ENGLISH        "Rank 1 - Jedi uses the Force to push a specific enemy or object focused on.  They can also use it to get out of a Force Grip or Drain."
+
+REFERENCE           FORCE_PUSH_LVL2_DESC
+LANG_ENGLISH        "Rank 2 - Jedi uses the Force to push back multiple enemies or objects in a limited arc."
+
+REFERENCE           FORCE_PUSH_LVL3_DESC
+LANG_ENGLISH        "Rank 3 - Jedi can push back multiple enemies with enough force to do damage by pushing the enemies into solid surfaces or off ledges. They can also use it to attempt to break saber locks."
+
+REFERENCE           FORCE_PULL_LVL1_DESC
+LANG_ENGLISH        "Rank 1 - Jedi can pull certain levers and objects in the targeting reticle; can also pull one enemy.\n"
+
+REFERENCE           FORCE_PULL_LVL2_DESC
+LANG_ENGLISH        "Rank 2 - Jedi can pull the weapon out of the hands of an enemy, providing the enemy is facing them."
+
+REFERENCE           FORCE_PULL_LVL3_DESC
+LANG_ENGLISH        "Rank 3 - Jedi can pull multiple enemies and their weapons."
+
+REFERENCE           FORCE_MIND_TRICK_LVL1_DESC
+LANG_ENGLISH        "Rank 1 - Jedi can confuse one enemy for 10 seconds by directly targeting that enemy.\nNote:  A direct attack made by the Jedi on a confused enemy will cancel the effect.  Mind trick does not work on some, more powerful enemies such as Cultists and Reborn."
+
+REFERENCE           FORCE_MIND_TRICK_LVL2_DESC
+LANG_ENGLISH        "Rank 2 - Jedi can confuse one enemy for 15 seconds by directly targeting that enemy or distract multiple enemies that have not noticed them by using mind trick on a nearby surface."
+
+REFERENCE           FORCE_MIND_TRICK_LVL3_DESC
+LANG_ENGLISH        "Rank 3 - Jedi can turn one enemy into an ally for 30 seconds by directly targeting that enemy or distract multiple enemies that have not noticed them by using mind trick on a nearby surface.  An ally will not respond to direct attacks by the Jedi."
+
+REFERENCE           FORCE_GRIP_LVL1_DESC
+LANG_ENGLISH        "Rank 1 - Jedi can grip and hold one enemy immobile, but undamaged for 5 seconds."
+
+REFERENCE           FORCE_GRIP_LVL2_DESC
+LANG_ENGLISH        "Rank 2 - Jedi can lift one enemy off the ground and do damage, with the effect lasting as long as there is Force power."
+
+REFERENCE           FORCE_GRIP_LVL3_DESC
+LANG_ENGLISH        "Rank 3 - Jedi can lift one enemy off the ground and do damage as with rank 2, but can also smash the enemy into surfaces or use the enemy as a shield."
+
+REFERENCE           FORCE_LIGHTNING_LVL1_DESC
+LANG_ENGLISH        "Rank 1 - Jedi launches a single bolt that fires forward, doing instant damage.\n"
+
+REFERENCE           FORCE_LIGHTNING_LVL2_DESC
+LANG_ENGLISH        "Rank 2 - Jedi can maintain the Force Lightning for a sustained forward attack.\n"
+
+REFERENCE           FORCE_LIGHTNING_LVL3_DESC
+LANG_ENGLISH        "Rank 3 - Jedi emanates a sustained fan of electricity in a large forward arc, damaging anything in front of them."
+
+REFERENCE           FORCE_SABER_DEFENSE_LVL1_DESC
+LANG_ENGLISH        "Rank 1 - Jedi can deflect projectiles and melee attacks in a small arc directly in front of them.  Deflected projectiles go in a random direction.\n"
+
+REFERENCE           FORCE_SABER_DEFENSE_LVL2_DESC
+LANG_ENGLISH        "Rank 2 - Jedi can deflect projectiles and melee attacks in a larger arc directly in front of them.  Increased deflection speed.  Deflected projectiles go in the general direction of their origin.\n"
+
+REFERENCE           FORCE_SABER_DEFENSE_LVL3_DESC
+LANG_ENGLISH        "Rank 3 - Jedi has a larger defense area and can deflect projectiles back at the attacker. Increased deflection speed."
+
+REFERENCE           FORCE_ABSORB_LVL1_DESC
+LANG_ENGLISH        "Rank 1 - Jedi can absorb minor amounts of Force power directed at them with no ill effects and gain some Force power back as a result."
+
+REFERENCE           FORCE_ABSORB_LVL2_DESC
+LANG_ENGLISH        "Rank 2 - Jedi can absorb moderate amounts of Force power directed at them with no ill effects and gain a modest amount of Force power back as a result."
+
+REFERENCE           FORCE_ABSORB_LVL3_DESC
+LANG_ENGLISH        "Rank 3 - Jedi can absorb a great amount of Force power directed at them with no ill effects and gain a large amount of Force power back as a result."
+
+REFERENCE           FORCE_PROTECT_LVL1_DESC
+LANG_ENGLISH        "Rank 1 - Jedi is protected against 25% of the damage from physical and energy and projectile based attacks, but not from Force based attacks."
+
+REFERENCE           FORCE_PROTECT_LVL2_DESC
+LANG_ENGLISH        "Rank 2 - Jedi is protected against 50% of the damage from physical and energy and projectile based attacks, but not from Force based attacks."
+
+REFERENCE           FORCE_PROTECT_LVL3_DESC
+LANG_ENGLISH        "Rank 3 - Jedi is protected against 75% of the damage from physical and energy and projectile based attacks, but not from Force based attacks."
+
+REFERENCE           FORCE_SENSE_LVL1_DESC
+LANG_ENGLISH        "Rank 1 - Jedi can sense people and invisible markers at short range for 5 seconds."
+
+REFERENCE           FORCE_SENSE_LVL2_DESC
+LANG_ENGLISH        "Rank 2 - Jedi can sense people, objects, and invisible markers at medium range for 10 seconds."
+
+REFERENCE           FORCE_SENSE_LVL3_DESC
+LANG_ENGLISH        "Rank 3 - Jedi can sense people, objects, invisible markers, and the health of living beings at long range for 20 seconds."
+
+REFERENCE           FORCE_DRAIN_LVL1_DESC
+LANG_ENGLISH        "Rank 1 - Jedi can drain life essence from another person and transfer it to themselves by making direct physical contact with that person."
+
+REFERENCE           FORCE_DRAIN_LVL2_DESC
+LANG_ENGLISH        "Rank 2 - Jedi can drain life essence from another person and transfer it to themselves by making direct physical contact with them or from a short distance away."
+
+REFERENCE           FORCE_DRAIN_LVL3_DESC
+LANG_ENGLISH        "Rank 3 - Jedi can drain life essence from another person and transfer it to themselves by making direct physical contact with them or from a safe distance away.  From a distance, multiple people can be drained at one time."
+
+REFERENCE           FORCE_RAGE_LVL1_DESC
+LANG_ENGLISH        "Rank 1 - Jedi is protected against 50% of all damage, has stronger attacks, and cannot die.  However, the Jedi loses health rapidly and must wait for 10 seconds after the rage before it can be used again.  The Jedi must have at least 25 health to use this power."
+
+REFERENCE           FORCE_RAGE_LVL2_DESC
+LANG_ENGLISH        "Rank 2 - Jedi is protected against 75% of all damage, is 25% faster, has stronger attacks, and cannot die.  However, the Jedi loses health and must wait for 10 seconds after the rage before it can be used again.  The Jedi must have at least 25 health to use this power."
+
+REFERENCE           FORCE_RAGE_LVL3_DESC
+LANG_ENGLISH        "Rank 3 - Jedi is protected against 90% of all damage, is 50% faster, has stronger attacks, and cannot die.  The Jedi loses only a small amount of health but still must wait for 10 seconds after the rage before it can be used again.  The Jedi must have at least 25 health to use this power."
+
+REFERENCE           FORCE_SABER_OFFENSE_LVL1_DESC
+LANG_ENGLISH        "Rank 1 - Jedi is proficient in the use of a lightsaber and has a chance to break saber locks and parrys against other Jedi of similar proficiency."
+
+REFERENCE           FORCE_SABER_OFFENSE_LVL2_DESC
+LANG_ENGLISH        "Rank 2 - Jedi is proficient in the use of a lightsaber and has a chance to break saber locks and parrys against other Jedi of similar proficiency and will break saber locks and parrys against weaker opponents."
+
+REFERENCE           FORCE_SABER_OFFENSE_LVL3_DESC
+LANG_ENGLISH        "Rank 3 - Jedi is proficient in the use of a lightsaber and has a chance to break saber locks and parrys against other Jedi of similar proficiency and will break saber locks and parrys against weaker opponents."
+
+REFERENCE           FORCE_SABER_THROW_LVL1_DESC
+LANG_ENGLISH        "Rank 1 - Lightsaber flies straight from the player and returns.\n"
+
+REFERENCE           FORCE_SABER_THROW_LVL2_DESC
+LANG_ENGLISH        "Rank 2 - Jedi can exert control over the flying lightsaber as it arcs out, but the lightsaber still returns directly to the player.  "
+
+REFERENCE           FORCE_SABER_THROW_LVL3_DESC
+LANG_ENGLISH        "Rank 3 - Jedi will automatically steer the saber into nearby enemies."
+
+REFERENCE           ITEM_GOODIE_KEY
+LANG_ENGLISH        "Supply Key"
+
+REFERENCE           GOODIE_KEY_DESC
+LANG_ENGLISH        "Supply Key\nAn electronic security pass used by Imperial officers to access secure cargo shipment containers"
+
+REFERENCE           YOU_TOOK_SUPPLY_KEY
+LANG_ENGLISH        "You took the supply key"
+
+REFERENCE           SECURITY_KEY_DP_DESC
+LANG_ENGLISH        "Security Key\nAn electronic Level 2 clearance security pass used to access secure areas\n"
+
+REFERENCE           ITEM_SECURITY_KEY
+LANG_ENGLISH        "Security Key"
+
+REFERENCE           YOU_TOOK_SECURITY_KEY
+LANG_ENGLISH        "You took the security key"
+
+REFERENCE           NEW_FORCE_POWER_INFO
+LANG_ENGLISH        "New Force Power Information"
+
+REFERENCE           NEW_OBJECTIVE_INFO
+LANG_ENGLISH        "New Objective Information"
+
+REFERENCE           SECRET_AREA
+LANG_ENGLISH        "Secret Area!"
+
+REFERENCE           NEED_KEY_TO_OPEN
+LANG_ENGLISH        "You need a key to open this."
+
+REFERENCE           ONE_KILL_PER_5_SECONDS
+LANG_ENGLISH        "Only one kill per 5 seconds!"
+
+REFERENCE           CHECKPOINT
+LANG_ENGLISH        "Checkpoint!"
+
+REFERENCE           SECRETAREAS_OF
+NOTES               "used to display "0 of 3" secret-areas-found string."
+LANG_ENGLISH        "of"
+
+REFERENCE           EXIT_VIEW
+LANG_ENGLISH        "Press 'JUMP' to exit."
+
+REFERENCE           LIGHTSABERCOMBATSTYLE_FAST
+LANG_ENGLISH        "Lightsaber Combat Style: Fast"
+
+REFERENCE           LIGHTSABERCOMBATSTYLE_MEDIUM
+LANG_ENGLISH        "Lightsaber Combat Style: Medium"
+
+REFERENCE           LIGHTSABERCOMBATSTYLE_STRONG
+LANG_ENGLISH        "Lightsaber Combat Style: Strong"
+
+REFERENCE           LIGHTSABERCOMBATSTYLE_DESANN
+LANG_ENGLISH        "Lightsaber Combat Style: Desann"
+
+REFERENCE           LIGHTSABERCOMBATSTYLE_TAVION
+LANG_ENGLISH        "Lightsaber Combat Style: Tavion"
+
+REFERENCE           ITEM_MEDPAC
+NOTES               "MP version of ITEM_BACTA"
+LANG_ENGLISH        "BioTech Bacta Canister"
+
+REFERENCE           ITEM_SHIELD
+NOTES               "MP force field item"
+LANG_ENGLISH        "Forcefield"
+
+REFERENCE           ITEM_SHIELD_LRG_INSTANT
+NOTES               "MP item"
+LANG_ENGLISH        "Large Shield Booster"
+
+REFERENCE           ITEM_FORCE_ENLIGHTEN_LIGHT
+LANG_ENGLISH        "Light Force Enlightenment"
+
+REFERENCE           ITEM_FORCE_ENLIGHTEN_DARK
+LANG_ENGLISH        "Dark Force Enlightenment"
+
+REFERENCE           ITEM_FORCE_BOON
+LANG_ENGLISH        "Force Boon"
+
+REFERENCE           ITEM_YSALIMARI
+LANG_ENGLISH        "Ysalamiri"
+
+REFERENCE           WEAPON_EMPLACED
+LANG_ENGLISH        "Emplaced Gun"
+
+REFERENCE           WEAPON_TURRETWP
+LANG_ENGLISH        "Turret Gun"
+
+REFERENCE           DARK_RAGE2
+LANG_ENGLISH        "Dark Rage"
+
+REFERENCE           TEAM_CTF_REDFLAG
+LANG_ENGLISH        "Red Flag"
+
+REFERENCE           TEAM_CTF_BLUEFLAG
+LANG_ENGLISH        "Blue Flag"
+
+REFERENCE           TEAM_CTF_NEUTRALFLAG
+LANG_ENGLISH        "Neutral Flag"
+
+REFERENCE           ITEM_REDCUBE
+LANG_ENGLISH        "Red Cube"
+
+REFERENCE           ITEM_BLUECUBE
+LANG_ENGLISH        "Blue Cube"
+
+REFERENCE           ITEM_DATAPAD
+LANG_ENGLISH        "Datapad"
+
+REFERENCE           PROTECT2
+LANG_ENGLISH        "Protect"
+
+REFERENCE           ABSORB2
+LANG_ENGLISH        "Absorb"
+
+REFERENCE           TEAM_HEAL2
+LANG_ENGLISH        "Team Heal"
+
+REFERENCE           SEEING2
+LANG_ENGLISH        "Sense"
+
+REFERENCE           DRAIN2
+LANG_ENGLISH        "Drain"
+
+REFERENCE           TEAM_REPLENISH2
+LANG_ENGLISH        "Team Energize"
+
+REFERENCE           DOOR_OPENED_ELSEWHERE
+LANG_ENGLISH        "This door is opened elsewhere."
+
+REFERENCE           WEAPON_BLASTER_PISTOL
+LANG_ENGLISH        "DL-44 Heavy Blaster Pistol"
+
+REFERENCE           WEAPON_CONCUSSION_RIFLE
+LANG_ENGLISH        "Stouker Concussion Rifle"
+
+REFERENCE           AMMO_ALL
+LANG_ENGLISH        "Ammo Dispenser"
+
+REFERENCE           ITEM_MEDPAC_BIG
+LANG_ENGLISH        "Big Bacta"
+
+REFERENCE           ITEM_EWEB_HOLDABLE
+LANG_ENGLISH        "E-Web"
+
+REFERENCE           ITEM_CLOAK
+LANG_ENGLISH        "Cloak"
+
+REFERENCE           FAST_STYLE
+LANG_ENGLISH        "Fast Style\n\nFast and efficient, but with limited range.  Short, quick motions allow for multiple attacks but with minimum damage.  This style can be chained indefinitely.  It utilizes a defensive stance in which the Jedi holds his saber across his front in a ready position to fend off attacks or make quick jabs.   Represented by a blue bar on the right side of the HUD."
+
+REFERENCE           STRONG_STYLE
+LANG_ENGLISH        "Strong Style\n\nUses powerful strikes to batter through defenses.  This style incorporates great range and power, but often leaves the Jedi open for counter attack.  It utilizes a powerful, aggressive stance in which the Jedi holds his saber high and back, ready to go into a heavy swing.  Represented by a red bar  on the right side of the HUD."
+
+REFERENCE           CANT_SAVE_DEAD
+LANG_ENGLISH        "Can't save game while dead!"
+
+
+ENDMARKER
+
+
