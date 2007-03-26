@@ -1,0 +1,87 @@
+Particle
+{
+	flags				useAlpha
+
+	count				10
+
+	life				650 900
+
+	delay				0 1000
+
+	origin				6 -1 -1 8 1 1
+
+	rotation			-180 180
+
+	rotationDelta		-4 4
+
+	velocity			10 -2 -2 20 2 2
+
+	gravity				5 35
+
+	alpha
+	{
+		start			0.9 1
+		end				0.2
+		parm			50
+		flags			nonlinear
+	}
+
+	size
+	{
+		start			1.5 2
+		end				3 4
+		flags			linear
+	}
+
+	shaders
+	[
+		gfx/misc/black_smoke
+	]
+}
+
+Particle
+{
+	name				Particle 3
+
+	count				8
+
+	life				400 550
+
+	delay				0 600
+
+	origin				6 -1 -1 8 1 1
+
+	rotation			-180 180
+
+	rotationDelta		-4 4
+
+	velocity			10 -2 -2 20 2 2
+
+	acceleration		-5 -5 -5 5 5 5
+
+	gravity				25 70
+
+	rgb
+	{
+		start			1 0.6078 0 1 1 0
+	}
+
+	alpha
+	{
+		end				0
+		parm			60
+		flags			linear nonlinear
+	}
+
+	size
+	{
+		start			0.1 0.15
+		end				0.15 0.2
+		flags			linear
+	}
+
+	shaders
+	[
+		gfx/effects/whiteFlare
+	]
+}

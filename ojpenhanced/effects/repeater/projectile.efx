@@ -1,0 +1,75 @@
+repeatDelay				50
+
+Line
+{
+	name				Core
+
+	flags				useAlpha
+
+	life				10
+
+	origin				5 0 0
+
+	origin2				-60 0 0
+
+	rgb
+	{
+		start			0.502 1 1
+	}
+
+	shaders
+	[
+		gfx/misc/spark3
+	]
+}
+
+Line
+{
+	name				Glow
+
+	life				10
+
+	origin				5 0 0
+
+	origin2				-70 0 0
+
+	rgb
+	{
+		start			0.007843 0.3529 1
+	}
+
+	alpha
+	{
+		start			0.8 1
+	}
+
+	size
+	{
+		start			4
+	}
+
+	shaders
+	[
+		gfx/effects/whiteGlow
+	]
+}
+
+Particle
+{
+	origin				-10 0 0
+
+	rgb
+	{
+		start			0 0.5216 1
+	}
+
+	alpha
+	{
+		start			0.6 0.8
+	}
+
+	shaders
+	[
+		gfx/effects/saberFlare
+	]
+}

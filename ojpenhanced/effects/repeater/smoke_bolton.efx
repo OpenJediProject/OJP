@@ -1,0 +1,36 @@
+// Smoke bolton effect when you hit a ghoul2 model--note this is not an efficient way to do this.
+
+Particle
+{
+	count	80
+	life	700	900
+
+	// this is really NOT a good thing to be doing because it has the potential to choke up the scheduler
+	delay	0	1500
+
+	rotation	0	360
+
+	vel		25 0 0	30 0 0
+	accel		-5 -5 -5	5 5 5
+	gravity	50	120
+	flags		usealpha
+
+	size
+	{
+		start 	1.0	3.0
+		end	7.0	9.0
+		flags	linear
+	}
+
+	alpha
+	{
+		start	0.4	0.6
+		end 	0.0
+		flags	linear
+	}
+
+	shader
+	[
+		gfx/misc/black_smoke
+	]
+}

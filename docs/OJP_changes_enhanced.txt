@@ -9,6 +9,9 @@ Version 0.0.9s:
 
 	New Features:
 
+		Clone Rifle (CloneRifle):
+			- Replaced the heavy repeater with a Clone Rifle.
+
 		Stun Shield (StunShield):
 			- Force field item now acts like stun shield.  Enemies that touch the field are knocked to the ground. 
 

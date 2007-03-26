@@ -1,0 +1,14 @@
+//Bullet Shell Casing, falling from the approximate realistic place
+//Also bounces on architecture.
+
+Emitter
+{
+	flags				useModel usePhysics
+
+	count				1
+
+	models
+	[
+		models/ammo/m203.md3
+	]
+}

@@ -1,0 +1,71 @@
+Line
+{
+	count				4 8
+
+	life				100 200
+
+	origin2				12 -10 -10 18 10 10
+
+	alpha
+	{
+		start			0.25 1
+		end				0
+		flags			linear
+	}
+
+	size
+	{
+		start			0.2 0.5
+	}
+
+	shaders
+	[
+		gfx/misc/spark
+		gfx/misc/spark2
+	]
+}
+
+Tail
+{
+	flags				usePhysics
+
+	count				4 6
+
+	life				500 900
+
+	bounce				0.25 0.4
+
+	velocity			120 -80 -80 250 80 80
+
+	gravity				-350 -450
+
+	size
+	{
+		start			0.3 0.4
+	}
+
+	length
+	{
+		start			4 10
+		end				0.1 1
+		flags			linear
+	}
+
+	shaders
+	[
+		gfx/misc/spark
+	]
+}
+
+FxRunner
+{
+	count				1 2
+
+	delay				0 100
+
+	playfx
+	[
+		volumetric/black_smoke
+		volumetric/smoke
+	]
+}

@@ -1,0 +1,93 @@
+repeatDelay				300
+
+Line
+{
+	life				30
+
+	origin2				24 0 0 30 0 0
+
+	rgb
+	{
+		start			0.1725 0.6784 0.9529
+	}
+
+	alpha
+	{
+		start			0.5 0.6
+		end				0.35
+		flags			linear
+	}
+
+	size
+	{
+		start			6.25 8.5
+		end				6
+		flags			linear
+	}
+
+	shaders
+	[
+		gfx/effects/dc-15sideFlash
+	]
+}
+
+Particle
+{
+	life				30
+
+	origin				5 0 0
+
+	rotation			0 360
+
+	rgb
+	{
+		start			0.651 0.7922 0.9412
+	}
+
+	alpha
+	{
+		start			0.8 1
+		end				0.5
+		flags			linear
+	}
+
+	size
+	{
+		start			8 10.5
+		end				7
+		flags			linear
+	}
+
+	shaders
+	[
+		gfx/effects/dc-15FrontFlash
+	]
+}
+
+Light
+{
+	rgb
+	{
+		start			0 0.5216 1
+	}
+
+	size
+	{
+		start			75
+	}
+}
+
+Sound
+{
+	sounds
+	[
+		sound/weapons/blaster/fire.wav
+	]
+}
+
+CameraShake
+{
+	intensity			0.3 0.4
+
+	radius				60
+}

@@ -1,0 +1,186 @@
+repeatDelay				300
+
+Line
+{
+	flags				depthHack
+
+	life				10
+
+	origin2				24 0 0 30 0 0
+
+	alpha
+	{
+		start			0.3
+		end				0.1
+		flags			linear
+	}
+
+	size
+	{
+		start			4.75 6.25
+		end				4
+		flags			linear
+	}
+
+	shaders
+	[
+		gfx/effects/dc-15sideflash.jpg
+	]
+}
+
+OrientedParticle
+{
+	flags				depthHack
+
+	life				10
+
+	origin				5 0 0
+
+	rotation			0 360
+
+	alpha
+	{
+		start			0.2
+		end				0.1
+		flags			linear
+	}
+
+	size
+	{
+		start			8 10.5
+		end				7
+		flags			linear
+	}
+
+	shaders
+	[
+		gfx/effects/dc-15frontflash.jpg
+	]
+}
+
+Particle
+{
+	flags				depthHack useAlpha
+
+	count				3 4
+
+	life				450 800
+
+	origin				5 -1 -1 5 1 1
+
+	rotation			-180 180
+
+	velocity			10 -10 -10 20 10 10
+
+	gravity				-20 20
+
+	rgb
+	{
+		start			0.5804 0.7255 0.9961
+		flags			linear
+	}
+
+	alpha
+	{
+		start			0.6 0.7
+		end				0.2
+		flags			linear
+	}
+
+	size
+	{
+		start			4 5
+		end				6 10
+		flags			linear
+	}
+
+	shaders
+	[
+		gfx/effects/alpha_smoke
+	]
+}
+
+Light
+{
+	flags				depthHack
+
+	rgb
+	{
+		start			0 0.5216 1
+	}
+
+	size
+	{
+		start			300 350
+	}
+}
+
+CameraShake
+{
+	flags				depthHack
+
+	life				120
+
+	intensity			0.9 1.1
+
+	radius				60
+}
+
+Sound
+{
+	flags				depthHack
+
+	sounds
+	[
+		sound/weapons/repeater/alt_fire.mp3
+	]
+}
+
+Particle
+{
+	flags				depthHack
+
+	origin				5 0 0
+
+	rgb
+	{
+		start			0.5804 0.7255 0.9961 1 1 1
+	}
+
+	size
+	{
+		start			5
+	}
+
+	shaders
+	[
+		gfx/effects/flare1
+	]
+}
+
+Particle
+{
+	flags				depthHack
+
+	origin				5 0 0
+
+	rgb
+	{
+		start			0.5804 0.7255 0.9961
+	}
+
+	alpha
+	{
+		start			0.5
+	}
+
+	size
+	{
+		start			5
+	}
+
+	shaders
+	[
+		gfx/effects/whiteFlare
+	]
+}

@@ -1,0 +1,281 @@
+repeatDelay				1250
+
+Electricity
+{
+	flags				useModel useBBox usePhysics
+
+	count				5 8
+
+	life				200 300
+
+	delay				0 250
+
+	bounce				5 8
+
+	origin2				20 -150 -10 80 150 50
+
+	rgb
+	{
+		start			0 0.5216 1
+		end				0.5804 0.7255 0.9961 1 1 1
+		flags			linear
+	}
+
+	size
+	{
+		start			3 5
+		end				0.2
+		parm			70
+		flags			nonlinear
+	}
+
+	shaders
+	[
+		gfx/misc/blueLine
+	]
+}
+
+Flash
+{
+	spawnFlags			rgbComponentInterpolation
+
+	life				120
+
+	delay				50
+
+	rgb
+	{
+		start			0 0.5216 1
+		end				0 0.5216 1 0.5804 0.7255 0.9961
+		parm			50
+		flags			random linear nonlinear
+	}
+
+	alpha
+	{
+		parm			80
+	}
+
+	size
+	{
+		start			2048
+	}
+
+	shaders
+	[
+		gfx/effects/whiteFlash
+	]
+}
+
+Decal
+{
+	count				2
+
+	rotation			0 360
+
+	size
+	{
+		start			30 50
+	}
+
+	shaders
+	[
+		gfx/damage/burnmark1
+		gfx/damage/burnmark4
+	]
+}
+
+OrientedParticle
+{
+	count				2 3
+
+	life				500
+
+	delay				20 200
+
+	rgb
+	{
+		start			0.5804 0.7255 0.9961
+	}
+
+	alpha
+	{
+		start			0.1 0.3
+	}
+
+	size
+	{
+		end				100
+		flags			linear
+	}
+
+	shaders
+	[
+		gfx/effects/gcircle
+	]
+}
+
+OrientedParticle
+{
+	spawnFlags			evenDistribution
+
+	count				2 3
+
+	life				500 700
+
+	delay				100 200
+
+	rgb
+	{
+		start			0.5804 0.7255 0.9961 1 1 1
+	}
+
+	alpha
+	{
+		start			0.1 0.3
+	}
+
+	size
+	{
+		start			10
+		end				150
+		flags			linear
+	}
+
+	shaders
+	[
+		gfx/hud/force_swirl
+	]
+}
+
+Particle
+{
+	name				Explosion
+
+	life				200
+
+	rgb
+	{
+		start			1 1 1 0.5804 0.7255 0.9961
+		end				0.5804 0.7255 0.9961 0 0.5216 1
+		flags			linear
+	}
+
+	alpha
+	{
+		start			0.8 1
+	}
+
+	size
+	{
+		start			10
+		end				30
+		flags			linear
+	}
+
+	shaders
+	[
+		gfx/misc/lightningFlash
+	]
+}
+
+Particle
+{
+	name				smoke
+
+	count				12
+
+	life				500 1000
+
+	delay				0 50
+
+	origin				0 0 0 0 0 10
+
+	rotation			0 360
+
+	rotationDelta		-4 4
+
+	velocity			0 -25 -25 20 25 25
+
+	acceleration		0 0 2 4 0 8
+
+	gravity				0 40
+
+	rgb
+	{
+		start			0.5804 0.7255 0.9961 0 0.5216 1
+		end				0.5804 0.7255 0.9961 1 1 1
+		flags			linear
+	}
+
+	alpha
+	{
+		start			0.1
+	}
+
+	size
+	{
+		start			3 4
+		end				40 60
+		flags			linear
+	}
+
+	shaders
+	[
+		gfx/misc/steam
+		gfx/misc/steam2
+	]
+}
+
+CameraShake
+{
+	life				500 700
+
+	intensity			6 9
+
+	radius				100 200
+}
+
+Particle
+{
+	name				smoke2
+
+	count				12
+
+	life				500 700
+
+	rotation			0 360
+
+	gravity				0 5
+
+	rgb
+	{
+		end				0 0.5216 1 0.5804 0.7255 0.9961
+		flags			linear
+	}
+
+	alpha
+	{
+		start			0.1
+	}
+
+	size
+	{
+		start			3 5
+		end				50 60
+		flags			linear
+	}
+
+	shaders
+	[
+		gfx/effects/smokeTrail
+	]
+}
+
+Sound
+{
+	sounds
+	[
+		sound/weapons/repeater/alt_explode.mp3
+	]
+}

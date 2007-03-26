@@ -216,7 +216,10 @@ REFERENCE           BOWCASTER_DESC
 LANG_ENGLISH        "Wookiee Bowcaster\nThis archaic-looking weapon fires powerful bolts of metal enveloped in pockets of energy.  Capable of inflicting incredible damage, the bowcaster requires tremendous physical strength to fire.  Most bowcasters sold outside the Wookiee homeworld come equipped with self-cocking actions that allow physically weaker creatures to fire them.\nPrimary Fire - Slow, single shot with radius damage.  Hold FIRE to charge weapon for spread attack\nSecondary Fire - Unleashes a reflective shot that bounces off solid surfaces\nAmmo Type - Power cell"
 
 REFERENCE           HEAVYREPEATER_DESC
-LANG_ENGLISH        "Imperial Heavy Repeater with Concussion Launcher\nThis destructive projectile weapon is extremely deadly, firing rapid streams of metal bullets.  Imperial forces use the Heavy Repeater's deadly suppressive fire and concussion launcher for crowd control and to spread heavy fire over large areas.\nPrimary Fire - Fully automatic projectile fire \nSecondary Fire - Single shot, concussion explosive round\nAmmo type - Metallic bolts"
+//[CloneRifle]
+LANG_ENGLISH        "Blastech DC-15A Rifle\nThis destructive energy weapon is extremely deadly, firing rapid streams of tibanna gas powered projectiles.  This rifle was invented for the Republic Clone Troopers during the Clone Wars and was the main weapon in most of the early battles.\nPrimary Fire - Fully automatic projectile fire \nSecondary Fire - Single shot, concussion explosive round\nAmmo type - Metallic bolts"
+//LANG_ENGLISH        "Imperial Heavy Repeater with Concussion Launcher\nThis destructive projectile weapon is extremely deadly, firing rapid streams of metal bullets.  Imperial forces use the Heavy Repeater's deadly suppressive fire and concussion launcher for crowd control and to spread heavy fire over large areas.\nPrimary Fire - Fully automatic projectile fire \nSecondary Fire - Single shot, concussion explosive round\nAmmo type - Metallic bolts"
+//[/CloneRifle]
 
 REFERENCE           DEMP2_DESC
 LANG_ENGLISH        "Destructive Electro-Magnetic Pulse 2 Gun\nCommonly referred to as the DEMP 2, this pulse rifle is primarily used against droids and electrical devices.  The DEMP 2 fires high-powered ion bursts that disrupt electrical systems.  Unlike previous incarnations of the weapon, the DEMP 2's ion charges are capable of damaging living material.\nPrimary Fire - Single shot, stuns humans, damages droids\nSecondary Fire - Charged energy attack that creates an expanding shell of electromagnetic energy on impact that damages humanoids, droids and turrets\nAmmo Type - Power cell"
@@ -354,7 +357,10 @@ REFERENCE           WEAPON_BOWCASTER
 LANG_ENGLISH        "Wookiee Bowcaster"
 
 REFERENCE           WEAPON_REPEATER
-LANG_ENGLISH        "Imperial Heavy Repeater"
+//[CloneRifle]
+LANG_ENGLISH        "Blastech DC-15A Rifle"
+//LANG_ENGLISH        "Imperial Heavy Repeater"
+//[/CloneRifle]
 
 REFERENCE           WEAPON_DEMP2
 LANG_ENGLISH        "Destructive Electro-Magnetic Pulse 2 Gun"
