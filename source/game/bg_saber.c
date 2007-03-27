@@ -4954,31 +4954,15 @@ weapChecks:
 					if ( PM_SaberInBounce( curmove )
 						&& newmove >= LS_A_TL2BR && newmove <= LS_A_T2B )
 					{//prevent similar attack directions to prevent lightning-like bounce attacks.
-						int newQuad = -1;
 						if(saberMoveData[newmove].startQuad >= saberMoveData[curmove].endQuad
 							&& saberMoveData[newmove].startQuad < saberMoveData[curmove].endQuad + 2)
 						{
-							newQuad = saberMoveData[curmove].endQuad + 2;
+							newmove = LS_READY;
 						}
 						else if(saberMoveData[newmove].startQuad <= saberMoveData[curmove].endQuad
 							&& saberMoveData[newmove].startQuad > saberMoveData[curmove].endQuad - 2)
 						{
-							newQuad = saberMoveData[curmove].endQuad - 2;
-						}
-
-						if(newQuad != -1)
-						{
-							//clamp new quad
-							if(newQuad < Q_BR)
-							{
-								newQuad += Q_B;
-							}
-							else if(newQuad > Q_B)
-							{
-								newQuad -= Q_B;
-							}
-
-							newmove = PM_AttackMoveForQuad(newQuad);
+							newmove = LS_READY;
 						}
 					}
 					

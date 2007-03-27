@@ -3438,6 +3438,13 @@ void BG_SaberStartTransAnim( int clientNum, int saberAnimLevel, int weapon, int 
 			*animSpeed *= .5f;
 		}	
 	}
+
+	if((anim >= BOTH_K1_S1_T_ && anim <= BOTH_K1_S1_BR)
+		|| (anim >= BOTH_K6_S6_T_ && anim <= BOTH_K6_S6_BR)
+		|| (anim >= BOTH_K7_S7_T_ && anim <= BOTH_K7_S7_BR))
+	{//speed up the knockaways so that defenders have a chance to launch a counter attack.
+		*animSpeed *= 1.5f;
+	}
 	//[/SaberSys]
 
 	//[FatigueSys]
