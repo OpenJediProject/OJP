@@ -57,6 +57,7 @@ vmCvar_t	g_allowROQ;
 //[/ROQFILES]
 //[LastManStanding]
 vmCvar_t	ojp_lms;
+vmCvar_t	ojp_lmslives;
 //[/LastManStanding]
 
 vmCvar_t	g_armBreakage;
@@ -407,6 +408,7 @@ static cvarTable_t		gameCvarTable[] = {
 
 	//[LastManStanding]
 	{ &ojp_lms,"ojp_lastmanstanding","0",CVAR_ARCHIVE | CVAR_LATCH,0,qfalse},
+	{ &ojp_lmslives,"ojp_lmslives","0",CVAR_ARCHIVE | CVAR_LATCH,0,qfalse},
 	//[/LastManStanding]
 
 	{ &g_armBreakage, "g_armBreakage", "0", 0, 0, qtrue  },
@@ -1872,6 +1874,7 @@ void RemovePowerDuelLosers(void)
 	int remNum = 0;
 	int i = 0;
 	gclient_t *cl;
+	
 
 	while (i < MAX_CLIENTS && remNum < 3)
 	{
@@ -1908,6 +1911,7 @@ void RemovePowerDuelLosers(void)
 
 	//recalculate stuff now that we have reset teams.
 	CalculateRanks();
+
 }
 
 void RemoveDuelDrawLoser(void)
@@ -2197,6 +2201,7 @@ void CalculateRanks( void ) {
 	//int		nonSpecIndex = -1;
 	gclient_t	*cl;
 
+
 	preNumSpec = level.numNonSpectatorClients;
 
 	level.follow1 = -1;
@@ -2352,6 +2357,7 @@ void CalculateRanks( void ) {
 		//rww - Made this operate on a "queue" system because it was causing large overflows
 	}
 }
+
 
 
 /*
@@ -2964,6 +2970,8 @@ void CheckIntermissionExit( void ) {
 			}
 		}
 	}
+
+
 
 	if ((g_gametype.integer == GT_DUEL || g_gametype.integer == GT_POWERDUEL) && !gDuelExit)
 	{ //in duel, we have different behaviour for between-round intermissions
@@ -3873,7 +3881,7 @@ CheckTeamLeader
 ==================
 */
 void CheckTeamLeader( int team ) {
-	int i;
+int i;
 
 	for ( i = 0 ; i < level.maxclients ; i++ ) {
 		if (level.clients[i].sess.sessionTeam != team)

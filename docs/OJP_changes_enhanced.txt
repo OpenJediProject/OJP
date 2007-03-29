@@ -9,6 +9,20 @@ Version 0.0.9t:
 
 	Improvements/Fixes:
 
+		Last Man Standing:
+			- Fixed where numNonSpectatorClients wouldn't subtract after first death(added a new integer and am using that now)
+			- Added ojp_lmslives 3 cvar that controls amount of lives player have
+			
+		Experience System:
+
+			Flamethrower:
+				- Fixed where you could use flamethrower in grapple
+
+		Misc Bugs:
+			- Added Soh Rauns speeder lag fix
+			- Fixed if (!token) bugs and changed them to if (!token[0])
+			- Fixed where raven forgot to close the file
+
 		Saber Combat System:
 
 			Misc:
@@ -19,6 +33,10 @@ Version 0.0.9t:
 Version 0.0.9s:
 
 	New Features:
+
+		Last Man Standing:
+			- When last man stands it goes to intermission then respawns
+			- Fixed bug where you could rejoin after you lost lives.
 
 		Clone Rifle (CloneRifle):
 			- Replaced the heavy repeater with a Clone Rifle.

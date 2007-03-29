@@ -1051,6 +1051,7 @@ typedef struct {
 
 	int			numConnectedClients;
 	int			numNonSpectatorClients;	// includes connecting clients
+	int			numNonDead;				// LastManStanding
 	int			numPlayingClients;		// connected, non-spectators
 	int			sortedClients[MAX_CLIENTS];		// sorted by score
 	int			follow1, follow2;		// clientNums for auto-follow spectators
@@ -1810,6 +1811,7 @@ extern  vmCvar_t	g_allowROQ;
 
 //[LastManStanding]
 extern vmCvar_t		ojp_lms;
+extern vmCvar_t		ojp_lmslives;
 //[/LastManStanding]
 
 extern	vmCvar_t	g_armBreakage;

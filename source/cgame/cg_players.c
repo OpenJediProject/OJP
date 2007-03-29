@@ -386,7 +386,7 @@ void ParseAnimationEvtBlock(const char *aeb_filename, animevent_t *animEvents, a
 
 			//Lets grab the time intervals
 			token = COM_Parse( text_p );
-			if ( !token ) 
+			if ( !token[0] ) //[TicketFix143] 
 			{
 				break;
 			}
@@ -394,7 +394,7 @@ void ParseAnimationEvtBlock(const char *aeb_filename, animevent_t *animEvents, a
 
 			//Lets grab the random factor
 			token = COM_Parse( text_p );
-			if ( !token ) 
+			if ( !token[0] ) //[TicketFix143] 
 			{
 				break;
 			}
@@ -402,7 +402,7 @@ void ParseAnimationEvtBlock(const char *aeb_filename, animevent_t *animEvents, a
 
 			//set sound channel
 			token = COM_Parse( text_p );
-			if ( !token ) 
+			if ( !token[0] ) //[TicketFix143] 
 			{
 				break;
 			}
@@ -437,21 +437,21 @@ void ParseAnimationEvtBlock(const char *aeb_filename, animevent_t *animEvents, a
 
 			//get soundstring
 			token = COM_Parse( text_p );
-			if ( !token ) 
+			if ( !token[0] ) //[TicketFix143] 
 			{
 				break;
 			}		
 			strcpy(stringData, token);
 			//get lowest value
 			token = COM_Parse( text_p );
-			if ( !token ) 
+			if ( !token[0] ) //[TicketFix143] 
 			{//WARNING!  BAD TABLE!
 				break;
 			}
 			lowestVal = atoi( token );
 			//get highest value
 			token = COM_Parse( text_p );
-			if ( !token ) 
+			if ( !token[0] ) //[TicketFix143] 
 			{//WARNING!  BAD TABLE!
 				break;
 			}
@@ -504,7 +504,7 @@ void ParseAnimationEvtBlock(const char *aeb_filename, animevent_t *animEvents, a
 
 			//get probability
 			token = COM_Parse( text_p );
-			if ( !token ) 
+			if ( !token[0] ) //[TicketFix143] 
 			{//WARNING!  BAD TABLE!
 				break;
 			}
@@ -557,7 +557,7 @@ void ParseAnimationEvtBlock(const char *aeb_filename, animevent_t *animEvents, a
 		keyFrame = animations[animNum].firstFrame;
 		// Get offset to frame within sequence
 		token = COM_Parse( text_p );
-		if ( !token ) 
+		if ( !token[0] ) //[TicketFix143] 
 		{
 			break;
 		}
@@ -579,7 +579,7 @@ void ParseAnimationEvtBlock(const char *aeb_filename, animevent_t *animEvents, a
 		{
 		case AEV_SOUNDCHAN:		//# animID AEV_SOUNDCHAN framenum CHANNEL soundpath randomlow randomhi chancetoplay
 			token = COM_Parse( text_p );
-			if ( !token ) 
+			if ( !token[0] ) //[TicketFix143] 
 			{
 				break;
 			}
@@ -615,21 +615,21 @@ void ParseAnimationEvtBlock(const char *aeb_filename, animevent_t *animEvents, a
 		case AEV_SOUND:			//# animID AEV_SOUND framenum soundpath randomlow randomhi chancetoplay
 			//get soundstring
 			token = COM_Parse( text_p );
-			if ( !token ) 
+			if ( !token[0] ) //[TicketFix143] 
 			{
 				break;
 			}		
 			strcpy(stringData, token);
 			//get lowest value
 			token = COM_Parse( text_p );
-			if ( !token ) 
+			if ( !token[0] ) //[TicketFix143] 
 			{//WARNING!  BAD TABLE!
 				break;
 			}
 			lowestVal = atoi( token );
 			//get highest value
 			token = COM_Parse( text_p );
-			if ( !token ) 
+			if ( !token[0] ) //[TicketFix143] 
 			{//WARNING!  BAD TABLE!
 				break;
 			}
@@ -692,7 +692,7 @@ void ParseAnimationEvtBlock(const char *aeb_filename, animevent_t *animEvents, a
 			}
 			//get probability
 			token = COM_Parse( text_p );
-			if ( !token ) 
+			if ( !token[0] ) //[TicketFix143]
 			{//WARNING!  BAD TABLE!
 				break;
 			}
@@ -751,14 +751,14 @@ void ParseAnimationEvtBlock(const char *aeb_filename, animevent_t *animEvents, a
 		case AEV_FOOTSTEP:		//# animID AEV_FOOTSTEP framenum footstepType
 			//get footstep type
 			token = COM_Parse( text_p );
-			if ( !token ) 
+			if ( !token[0] )  //[TicketFix143]
 			{
 				break;
 			}		
 			animEvents[curAnimEvent].eventData[AED_FOOTSTEP_TYPE] = GetIDForString(footstepTypeTable, token);
 			//get probability
 			token = COM_Parse( text_p );
-			if ( !token ) 
+			if ( !token[0] )  //[TicketFix143]
 			{//WARNING!  BAD TABLE!
 				break;
 			}
@@ -767,14 +767,14 @@ void ParseAnimationEvtBlock(const char *aeb_filename, animevent_t *animEvents, a
 		case AEV_EFFECT:		//# animID AEV_EFFECT framenum effectpath boltName
 			//get effect index
 			token = COM_Parse( text_p );
-			if ( !token ) 
+			if ( !token[0] )  //[TicketFix143]
 			{
 				break;
 			}
 			animEvents[curAnimEvent].eventData[AED_EFFECTINDEX] = trap_FX_RegisterEffect( token );
 			//get bolt index
 			token = COM_Parse( text_p );
-			if ( !token ) 
+			if ( !token[0] )  //[TicketFix143]
 			{
 				break;
 			}		
@@ -790,7 +790,7 @@ void ParseAnimationEvtBlock(const char *aeb_filename, animevent_t *animEvents, a
 			//animEvent->eventData[AED_BOLTINDEX] = gi.G2API_AddBolt( &cent->gent->ghoul2[cent->gent->playerModel], animEvent->stringData );
 			//get probability
 			token = COM_Parse( text_p );
-			if ( !token ) 
+			if ( !token[0] )  //[TicketFix143]
 			{//WARNING!  BAD TABLE!
 				break;
 			}
@@ -799,14 +799,14 @@ void ParseAnimationEvtBlock(const char *aeb_filename, animevent_t *animEvents, a
 		case AEV_FIRE:			//# animID AEV_FIRE framenum altfire chancetofire
 			//get altfire
 			token = COM_Parse( text_p );
-			if ( !token ) 
+			if ( !token[0] )  //[TicketFix143]
 			{//WARNING!  BAD TABLE!
 				break;
 			}
 			animEvents[curAnimEvent].eventData[AED_FIRE_ALT] = atoi( token );
 			//get probability
 			token = COM_Parse( text_p );
-			if ( !token ) 
+			if ( !token[0] )  //[TicketFix143]
 			{//WARNING!  BAD TABLE!
 				break;
 			}
@@ -815,21 +815,21 @@ void ParseAnimationEvtBlock(const char *aeb_filename, animevent_t *animEvents, a
 		case AEV_MOVE:			//# animID AEV_MOVE framenum forwardpush rightpush uppush
 			//get forward push
 			token = COM_Parse( text_p );
-			if ( !token ) 
+			if ( !token[0] )  //[TicketFix143]
 			{//WARNING!  BAD TABLE!
 				break;
 			}
 			animEvents[curAnimEvent].eventData[AED_MOVE_FWD] = atoi( token );
 			//get right push
 			token = COM_Parse( text_p );
-			if ( !token ) 
+			if ( !token[0] )  //[TicketFix143]
 			{//WARNING!  BAD TABLE!
 				break;
 			}
 			animEvents[curAnimEvent].eventData[AED_MOVE_RT] = atoi( token );
 			//get upwards push
 			token = COM_Parse( text_p );
-			if ( !token ) 
+			if ( !token[0] )  //[TicketFix143]
 			{//WARNING!  BAD TABLE!
 				break;
 			}
@@ -1250,13 +1250,20 @@ qboolean CG_ParseSurfsFile( const char *modelName, const char *skinName, char *s
 
 	// load the file
 	len = trap_FS_FOpenFile( sfilename, &f, FS_READ );
-	if ( len <= 0 ) 
+	if ( !f) //[TicketFix143]
 	{//no file
 		return qfalse;
 	}
 	if ( len >= sizeof( text ) - 1 ) 
 	{
 		Com_Printf( "File %s too long\n", sfilename );
+
+//[TicketFix143]
+    // Though too big to read, this was still a valid
+    // file, so we need to close it!
+    trap_FS_FCloseFile( f ); 
+//[/TicketFix143]
+
 		return qfalse;
 	}
 

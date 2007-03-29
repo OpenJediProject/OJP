@@ -159,7 +159,7 @@ qboolean G_OkayToRemoveCorpse( gentity_t *self )
 				return qfalse;
 			}
 		}
-		else
+		else 
 		{//racc - this is bad.  We're on a vehicle, but the vehicle doesn't exist.
 			assert(0);
 #ifndef FINAL_BUILD

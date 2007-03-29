@@ -2957,28 +2957,28 @@ int BG_ParseAnimationFile(const char *filename, animation_t *animset, qboolean i
 		}
 
 		token = COM_Parse( (const char **)(&text_p) );
-		if ( !token ) 
+		if ( !token[0] )//[TicketFix143] 
 		{
 			break;
 		}
 		animset[animNum].firstFrame = atoi( token );
 
 		token = COM_Parse( (const char **)(&text_p) );
-		if ( !token ) 
+		if ( !token[0] ) //[TicketFix143] 
 		{
 			break;
 		}
 		animset[animNum].numFrames = atoi( token );
 
 		token = COM_Parse( (const char **)(&text_p) );
-		if ( !token ) 
+		if ( !token[0] ) //[TicketFix143] 
 		{
 			break;
 		}
 		animset[animNum].loopFrames = atoi( token );
 
 		token = COM_Parse( (const char **)(&text_p) );
-		if ( !token ) 
+		if ( !token[0] ) //[TicketFix143] 
 		{
 			break;
 		}

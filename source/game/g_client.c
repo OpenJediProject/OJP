@@ -19,16 +19,12 @@ extern qboolean WP_UseFirstValidSaberStyle( saberInfo_t *saber1, saberInfo_t *sa
 forcedata_t Client_Force[MAX_CLIENTS];
 
 //[LastManStanding]
-void OJP_TempSpectate(gentity_t *ent, int time)
+void OJP_Spectator(gentity_t *ent)
 {
-	ent->client->tempSpectate = level.time + time * 20000;
-		ent->health = ent->client->ps.stats[STAT_HEALTH] = 1;
-				ent->client->ps.weapon = WP_NONE;
-				ent->client->ps.stats[STAT_WEAPONS] = 0;
-				ent->client->ps.stats[STAT_HOLDABLE_ITEMS] = 0;
-				ent->client->ps.stats[STAT_HOLDABLE_ITEM] = 0;
-				ent->takedamage = qfalse;
-				trap_LinkEntity(ent);
+	if (ent->client->sess.sessionTeam != TEAM_SPECTATOR)
+	{
+		ent->client->tempSpectate = level.time + 999 *2000;
+	}
 }
 //[/LastManStanding]
 
@@ -1230,7 +1226,9 @@ void respawn( gentity_t *ent ) {
 
 	//[LastManStanding]
 	if (ent->client->ps.persistant[PERS_SPAWN_COUNT] == 1)
-	{}
+	{
+		ent->lives--;
+	}
 	else if ( ojp_lms.integer == 1)
 	{
 		ent->lives--;
@@ -1288,8 +1286,9 @@ void respawn( gentity_t *ent ) {
 	else
 	{
 		gentity_t	*tent;
-
-		if (g_gametype.integer == GT_SIEGE || g_gametype.integer == GT_DUEL || g_gametype.integer == GT_POWERDUEL)
+	
+		//[LastManStanding]
+	    if (g_gametype.integer == GT_SIEGE || g_gametype.integer == GT_DUEL || g_gametype.integer == GT_POWERDUEL)
 		{
 		ClientSpawn(ent);
 		// add a teleportation effect
@@ -1305,8 +1304,11 @@ void respawn( gentity_t *ent ) {
 		}
 		else
 		{
-			OJP_TempSpectate(ent,999);
+			OJP_Spectator(ent);
+			level.numNonDead--;
+			G_Printf("%i",level.numNonDead);
 		}
+		//[/LastManStanding]
 
 	}
 }
@@ -2484,6 +2486,13 @@ char *ClientConnect( int clientNum, qboolean firstTime, qboolean isBot ) {
 	ent = &g_entities[ clientNum ];
 
 	trap_GetUserinfo( clientNum, userinfo, sizeof( userinfo ) );
+	level.numNonDead++;
+	//[LastManStanding]
+	if (ent->client->ps.persistant[PERS_SPAWN_COUNT] == 0)
+	{
+		ent->lives = ojp_lmslives.integer;
+	}
+	//[/LastManStanding]
 
 	// check to see if they are on the banned IP list
 	value = Info_ValueForKey (userinfo, "ip");
@@ -2614,6 +2623,7 @@ char *ClientConnect( int clientNum, qboolean firstTime, qboolean isBot ) {
 	// count current clients and rank for scoreboard
 	CalculateRanks();
 
+
 	te = G_TempEntity( vec3_origin, EV_CLIENTJOIN );
 	te->r.svFlags |= SVF_BROADCAST;
 	te->s.eventParm = clientNum;
@@ -2623,7 +2633,6 @@ char *ClientConnect( int clientNum, qboolean firstTime, qboolean isBot ) {
 //	if ( !client->areabits )
 //		client->areabits = G_Alloc( (trap_AAS_PointReachabilityAreaIndex( NULL ) + 7) / 8 );
 
-	ent->lives = 3;
 
 
 	return NULL;
@@ -2836,7 +2845,20 @@ void ClientBegin( int clientNum, qboolean allowTeamReset ) {
 		}
 
 		// locate ent at a spawn point
-		ClientSpawn( ent );
+//[LastManStanding]
+	    if (g_gametype.integer == GT_SIEGE || g_gametype.integer == GT_DUEL || g_gametype.integer == GT_POWERDUEL)
+		{
+		ClientSpawn(ent);
+		}
+		else if (ent->lives >= 1)
+		{
+		ClientSpawn(ent);
+		}
+		else
+		{
+			OJP_Spectator(ent);
+		}
+		//[/LastManStanding]
 	}
 
 	if ( client->sess.sessionTeam != TEAM_SPECTATOR ) {
@@ -4617,8 +4639,10 @@ void ClientDisconnect( int clientNum ) {
 	// if we are playing in tourney mode, give a win to the other player and clear his frags for this round
 	if ( (g_gametype.integer == GT_DUEL )
 		&& !level.intermissiontime
-		&& !level.warmupTime ) {
-		if ( level.sortedClients[1] == clientNum ) {
+		&& !level.warmupTime ) 
+	{
+		if ( level.sortedClients[1] == clientNum ) 
+		{
 			level.clients[ level.sortedClients[0] ].ps.persistant[PERS_SCORE] = 0;
 			level.clients[ level.sortedClients[0] ].sess.wins++;
 			ClientUserinfoChanged( level.sortedClients[0] );

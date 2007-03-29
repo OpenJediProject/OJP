@@ -821,6 +821,7 @@ void BG_SiegeParseClassFile(const char *filename, siegeClassDesc_t *descBuffer)
 
 	if (!f || len >= 4096)
 	{
+trap_FS_FCloseFile(f);//[CloseFile]
 		return;
 	}
 
@@ -1299,6 +1300,7 @@ void BG_SiegeParseTeamFile(const char *filename)
 
 	if (!f || len >= 2048)
 	{
+trap_FS_FCloseFile(f);//[CloseFile]
 		return;
 	}
 

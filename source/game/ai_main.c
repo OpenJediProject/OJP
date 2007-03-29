@@ -8540,9 +8540,7 @@ int BotAISetup( int restart ) {
 	trap_Cvar_Register(&bot_forgimmick, "bot_forgimmick", "0", CVAR_CHEAT);
 	trap_Cvar_Register(&bot_honorableduelacceptance, "bot_honorableduelacceptance", "0", CVAR_CHEAT);
 	trap_Cvar_Register(&bot_pvstype, "bot_pvstype", "1", CVAR_CHEAT);
-#ifndef FINAL_BUILD
 	trap_Cvar_Register(&bot_getinthecarrr, "bot_getinthecarrr", "0", 0);
-#endif
 
 #ifdef _DEBUG
 	trap_Cvar_Register(&bot_nogoals, "bot_nogoals", "0", CVAR_CHEAT);

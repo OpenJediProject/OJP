@@ -7918,6 +7918,10 @@ int PM_ItemUsable(playerState_t *ps, int forcedUse)
 		{//not enough fuel to fire the weapon.
 			return 0;
 		}
+		if (BG_InGrappleMove(pm->ps->torsoAnim))
+		{ //In grapple
+		return 0;
+		}
 		else
 		{
 			return 1;

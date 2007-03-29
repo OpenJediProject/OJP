@@ -822,6 +822,7 @@ void ClientTimerActions( gentity_t *ent, int msec ) {
 		}
 		*/
 		//[/ExpSys]
+
 	}
 }
 
@@ -2177,6 +2178,37 @@ void ClientThink_real( gentity_t *ent ) {
 
 	client = ent->client;
 
+//[LastManStanding]
+if (g_gametype.integer != GT_DUEL || g_gametype.integer != GT_SIEGE || g_gametype.integer != GT_POWERDUEL)
+{
+		if (level.numConnectedClients > 1)
+		{
+			
+			if (level.numNonDead == 1)
+			{
+				ent->client->sess.spectatorState = SPECTATOR_NOT;
+				ent->client->sess.spectatorTime = -1;
+				ent->client->sess.sessionTeam = TEAM_FREE;
+				BeginIntermission();
+				if (ent->client->sess.spectatorState == SPECTATOR_FOLLOW)
+				{
+
+				}
+				}
+				else
+				{
+
+				}
+			}
+			else if (level.numNonSpectatorClients == 1)
+			{
+//BeginIntermission();
+			}
+		
+	}
+//[/LastManStanding]
+
+
 	//[ROQFILES]
 	if(inGameCinematic)
 	{//don't update the game world if an ROQ files is running.
@@ -2185,7 +2217,7 @@ void ClientThink_real( gentity_t *ent ) {
 	//[/ROQFILES]
 
 	//[LastManStanding]
-	if (ent->lives <= 0 && ent->client->tempSpectate <= 100 && ojp_lms.integer == 1)
+	if (ent->lives <= 0 && ent->client->tempSpectate <= 910 && ojp_lms.integer == 1)
 	{
 		ent->client->tempSpectate += 250;
 	}

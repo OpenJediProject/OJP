@@ -239,7 +239,9 @@ void CG_CheckPlayerstateEvents( playerState_t *ps, playerState_t *ops ) {
 			cent->currentState.event = event;
 			cent->currentState.eventParm = ps->eventParms[ i & (MAX_PS_EVENTS-1) ];
 //JLF ADDED to hopefully mark events as player event
-			cent->playerState = ps;
+			//[SpeedLagFix] - Thanks to Soh Raun
+			//cent->playerState = ps;
+			//[SpeederLagFix]
 			CG_EntityEvent( cent, cent->lerpOrigin );
 
 			cg.predictableEvents[ i & (MAX_PREDICTED_EVENTS-1) ] = event;

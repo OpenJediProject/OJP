@@ -855,6 +855,7 @@ int Team_TouchOurFlag( gentity_t *ent, gentity_t *other, int team ) {
 
 	CalculateRanks();
 
+
 	return 0; // Do not respawn this automatically
 }
 
