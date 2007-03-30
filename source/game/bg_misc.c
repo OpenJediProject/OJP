@@ -3627,4 +3627,15 @@ qboolean BG_IsWhiteSpace(char c)
 }
 //[/ExpandedMOTD]
 
+//[LastManStanding]
+qboolean BG_IsLMSGametype(int gametype)
+{//indicates if this is a Last Man Standing compatible gametype or not.
+	if(gametype != GT_DUEL && gametype != GT_POWERDUEL && gametype != GT_SIEGE)
+	{
+		return qtrue;
+	}
+
+	return qfalse;
+}
+//[/LastManStanding]
 #include "../namespace_end.h"

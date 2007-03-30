@@ -892,7 +892,7 @@ struct gclient_s {
 
 	sabimpact_t	sabimpact[MAX_SABERS][MAX_BLADES];
 
-	//racc - used to debounce saber projectile blocks.  NUAM in Enhanced since I retooled the bolt blocking system.
+	//racc - used to debounce saber projectile blocks.
 	int			SaberBlockTime;
 	//[/SaberSys]
 
@@ -1051,7 +1051,6 @@ typedef struct {
 
 	int			numConnectedClients;
 	int			numNonSpectatorClients;	// includes connecting clients
-	int			numNonDead;				// LastManStanding
 	int			numPlayingClients;		// connected, non-spectators
 	int			sortedClients[MAX_CLIENTS];		// sorted by score
 	int			follow1, follow2;		// clientNums for auto-follow spectators

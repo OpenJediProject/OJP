@@ -408,7 +408,7 @@ static cvarTable_t		gameCvarTable[] = {
 
 	//[LastManStanding]
 	{ &ojp_lms,"ojp_lastmanstanding","0",CVAR_ARCHIVE | CVAR_LATCH,0,qfalse},
-	{ &ojp_lmslives,"ojp_lmslives","0",CVAR_ARCHIVE | CVAR_LATCH,0,qfalse},
+	{ &ojp_lmslives,"ojp_lmslives","1",CVAR_ARCHIVE | CVAR_LATCH,0,qfalse},
 	//[/LastManStanding]
 
 	{ &g_armBreakage, "g_armBreakage", "0", 0, 0, qtrue  },
@@ -3409,6 +3409,53 @@ void CheckExitRules( void ) {
 			return;
 		}
 	}
+
+	//[LastManStanding]
+	if (ojp_lms.integer > 0 && BG_IsLMSGametype(g_gametype.integer) && level.numNonSpectatorClients > 1)
+	{//check to see if there's only one LAST MAN STANDING!
+		int i;
+		qboolean lastManStanding = qfalse;
+		int		counts[TEAM_NUM_TEAMS];
+
+		for ( i = 0; i < level.numNonSpectatorClients; i ++ )
+		{
+			gentity_t *ent = &g_entities[level.sortedClients[i]];
+			if(ent->health > 0)
+			{//this dude is alive
+				counts[ent->client->sess.sessionTeam]++;
+			}
+		}
+
+		if(g_gametype.integer >= GT_TEAM)
+		{//either team must have no players
+			if(counts[TEAM_RED] > 0 && counts[TEAM_BLUE] > 0)
+			{
+				lastManStanding = qfalse;
+			}
+			else
+			{//one side has no players alive.
+				lastManStanding = qtrue;
+			}
+		}
+		else
+		{
+			if(counts[TEAM_FREE] <= 1)
+			{//one or fewer left, LMS!
+				lastManStanding = qtrue;
+			}
+		}
+
+		if(lastManStanding)
+		{//reset all the players
+			for ( i = 0; i < level.numNonSpectatorClients; i ++ )
+			{
+				gentity_t *ent = &g_entities[level.sortedClients[i]];
+				ent->lives = (ojp_lmslives.integer > 0) ? ojp_lmslives.integer : 1;
+				respawn(ent);
+			}
+		}
+	}
+	//[/LastManStanding]
 }
 
 

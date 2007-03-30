@@ -105,11 +105,16 @@
 //[/FatigueSys]
 
 //[SaberSys]
+#define MISHAPLEVEL_MAX			15  //the max possible amount of MP.  This is currently dictated by network variable size limits.
 #define MISHAPLEVEL_FULL		14  //the point at which full mishaps occur on the balance bar.
 #define MISHAPLEVEL_HEAVY		8
 #define MISHAPLEVEL_LIGHT		5
 #define MISHAPLEVEL_NONE		0
 //[/SaberSys]
+
+//[WeaponSys]
+#define MISHAP_MAXINACCURACY	20  //maximum possible offset angle for weapon accuracy. 
+//[/WeaponSys]
 
 //[DodgeSys]
 //[DodgeDefines]
@@ -1901,6 +1906,9 @@ qboolean BG_OutOfMemory ( void );
 //[ExpandedMOTD]
 qboolean BG_IsWhiteSpace(char c);
 //[/ExpandedMOTD]
+//[LastManStanding]
+qboolean BG_IsLMSGametype(int gametype);
+//[/LastManStanding]
 
 void BG_BLADE_ActivateTrail ( bladeInfo_t *blade, float duration );
 void BG_BLADE_DeactivateTrail ( bladeInfo_t *blade, float duration );

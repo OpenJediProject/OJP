@@ -1224,17 +1224,6 @@ void SiegeRespawn(gentity_t *ent);
 void respawn( gentity_t *ent ) {
 	MaintainBodyQueue(ent);
 
-	//[LastManStanding]
-	if (ent->client->ps.persistant[PERS_SPAWN_COUNT] == 1)
-	{
-		ent->lives--;
-	}
-	else if ( ojp_lms.integer == 1)
-	{
-		ent->lives--;
-	}
-	//[/LastManStanding]
-
 	if (gEscaping || g_gametype.integer == GT_POWERDUEL)
 	{
 		ent->client->sess.sessionTeam = TEAM_SPECTATOR;
@@ -1250,7 +1239,14 @@ void respawn( gentity_t *ent ) {
 
 	trap_UnlinkEntity (ent);
 
-	if (g_gametype.integer == GT_SIEGE)
+	//[LastManStanding]
+	if (ojp_lms.integer > 0 && ent->lives < 1 && BG_IsLMSGametype(g_gametype.integer))
+	{//playing LMS and we're DEAD!  Just start chillin in tempSpec.
+		OJP_Spectator(ent);
+	}
+	else if (g_gametype.integer == GT_SIEGE)
+	//if (g_gametype.integer == GT_SIEGE)
+	//[/LastManStanding]
 	{
 		if (g_siegeRespawn.integer)
 		{
@@ -1286,30 +1282,18 @@ void respawn( gentity_t *ent ) {
 	else
 	{
 		gentity_t	*tent;
-	
+
+		ClientSpawn(ent);
+		// add a teleportation effect
+		tent = G_TempEntity( ent->client->ps.origin, EV_PLAYER_TELEPORT_IN );
+		tent->s.clientNum = ent->s.clientNum;
+
 		//[LastManStanding]
-	    if (g_gametype.integer == GT_SIEGE || g_gametype.integer == GT_DUEL || g_gametype.integer == GT_POWERDUEL)
-		{
-		ClientSpawn(ent);
-		// add a teleportation effect
-		tent = G_TempEntity( ent->client->ps.origin, EV_PLAYER_TELEPORT_IN );
-		tent->s.clientNum = ent->s.clientNum;
-		}
-		else if (ent->lives >= 1)
-		{
-		ClientSpawn(ent);
-		// add a teleportation effect
-		tent = G_TempEntity( ent->client->ps.origin, EV_PLAYER_TELEPORT_IN );
-		tent->s.clientNum = ent->s.clientNum;
-		}
-		else
-		{
-			OJP_Spectator(ent);
-			level.numNonDead--;
-			G_Printf("%i",level.numNonDead);
+		if ( ojp_lms.integer > 0 && BG_IsLMSGametype(g_gametype.integer) && level.numPlayingClients > 1)
+		{//reduce our number of lives since we respawned and we're not the only player.
+			ent->lives--;
 		}
 		//[/LastManStanding]
-
 	}
 }
 
@@ -2486,11 +2470,10 @@ char *ClientConnect( int clientNum, qboolean firstTime, qboolean isBot ) {
 	ent = &g_entities[ clientNum ];
 
 	trap_GetUserinfo( clientNum, userinfo, sizeof( userinfo ) );
-	level.numNonDead++;
 	//[LastManStanding]
-	if (ent->client->ps.persistant[PERS_SPAWN_COUNT] == 0)
-	{
-		ent->lives = ojp_lmslives.integer;
+	if(ojp_lms.integer > 0 && BG_IsLMSGametype(g_gametype.integer) )
+	{//LMS mode, set up lives.
+		ent->lives = (ojp_lmslives.integer > 0) ? ojp_lmslives.integer : 1;
 	}
 	//[/LastManStanding]
 
@@ -2845,26 +2828,29 @@ void ClientBegin( int clientNum, qboolean allowTeamReset ) {
 		}
 
 		// locate ent at a spawn point
-//[LastManStanding]
-	    if (g_gametype.integer == GT_SIEGE || g_gametype.integer == GT_DUEL || g_gametype.integer == GT_POWERDUEL)
-		{
-		ClientSpawn(ent);
-		}
-		else if (ent->lives >= 1)
-		{
-		ClientSpawn(ent);
+		//[LastManStanding]
+		if (ojp_lms.integer > 0 && ent->lives < 1 && BG_IsLMSGametype(g_gametype.integer) && client->sess.sessionTeam != TEAM_SPECTATOR)
+		{//don't allow players to respawn in LMS by switching teams.
+			OJP_Spectator(ent);
 		}
 		else
 		{
-			OJP_Spectator(ent);
+			ClientSpawn(ent);
 		}
 		//[/LastManStanding]
 	}
 
 	if ( client->sess.sessionTeam != TEAM_SPECTATOR ) {
 		// send event
-		tent = G_TempEntity( ent->client->ps.origin, EV_PLAYER_TELEPORT_IN );
-		tent->s.clientNum = ent->s.clientNum;
+		//[LastManStanding]
+		if (ojp_lms.integer <= 0 || ent->lives >= 1 || !BG_IsLMSGametype(g_gametype.integer))
+		{//don't do the "teleport in" effect if we're playing LMS and we're "out"
+			tent = G_TempEntity( ent->client->ps.origin, EV_PLAYER_TELEPORT_IN );
+			tent->s.clientNum = ent->s.clientNum;
+		}
+		//tent = G_TempEntity( ent->client->ps.origin, EV_PLAYER_TELEPORT_IN );
+		//tent->s.clientNum = ent->s.clientNum;
+		//[/LastManStanding]
 
 		if ( g_gametype.integer != GT_DUEL || g_gametype.integer == GT_POWERDUEL ) {
 			trap_SendServerCommand( -1, va("print \"%s" S_COLOR_WHITE " %s\n\"", client->pers.netname, G_GetStringEdString("MP_SVGAME", "PLENTER")) );
