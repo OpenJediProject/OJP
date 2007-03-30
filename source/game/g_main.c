@@ -3416,12 +3416,15 @@ void CheckExitRules( void ) {
 		int i;
 		qboolean lastManStanding = qfalse;
 		int		counts[TEAM_NUM_TEAMS];
+		counts[TEAM_FREE] = 0;
+		counts[TEAM_RED] = 0;
+		counts[TEAM_BLUE] = 0;
 
 		for ( i = 0; i < level.numNonSpectatorClients; i ++ )
 		{
 			gentity_t *ent = &g_entities[level.sortedClients[i]];
-			if(ent->health > 0)
-			{//this dude is alive
+			if(ent->health > 0 || ent->lives >= 1) 
+			{//this dude is alive and has lives
 				counts[ent->client->sess.sessionTeam]++;
 			}
 		}
