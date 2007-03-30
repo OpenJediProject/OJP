@@ -648,7 +648,7 @@ void BotUtilizePersonality(bot_state_t *bs)
 	if (len >= 131072)
 	{
 		G_Printf(S_COLOR_RED "Personality file exceeds maximum length\n");
-trap_FS_FCloseFile(f);//[CloseFile]
+trap_FS_FCloseFile(f);//[TicketFix143]
 		B_TempFree(131072); //buf
 		return;
 	}

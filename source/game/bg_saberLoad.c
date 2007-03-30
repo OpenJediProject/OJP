@@ -2790,7 +2790,7 @@ void WP_SaberLoadParms( void )
 		{
 			if ( (totallen + len + 1/*for the endline*/) >= MAX_SABER_DATA_SIZE ) {
 				Com_Error(ERR_DROP, "Saber extensions (*.sab) are too large" );
-				trap_FS_FCloseFile(f);//[CloseFile] May be too large but close the file
+				trap_FS_FCloseFile(f);//[TicketFix143] May be too large but close the file
 			}
 
 			trap_FS_Read(bgSaberParseTBuffer, len, f);
