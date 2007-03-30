@@ -1890,14 +1890,14 @@ void CG_DrawHUD(centity_t	*cent)
 		//[DodgeSys]
 		CG_DrawDodge(menuHUD);
 		//[/DodgeSys]
+		//[SaberSys]
+		CG_DrawBalance(cent, menuHUD);
+		//[/SaberSys]
 
 		// Draw ammo tics or saber style
 		if ( cent->currentState.weapon == WP_SABER )
 		{
 			CG_DrawSaberStyle(cent,menuHUD);
-			//[SaberSys]
-			CG_DrawBalance(cent, menuHUD);
-			//[/SaberSys]
 		}
 		else
 		{
