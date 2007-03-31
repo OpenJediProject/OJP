@@ -84,7 +84,7 @@ void G_AddMercBalance(gentity_t *self, int amount)
 		}
 	}
 
-	G_Printf("%i: %i: %i Mishap Points\n", level.time, self->s.number, amount);
+	//G_Printf("%i: %i: %i Mishap Points\n", level.time, self->s.number, amount);
 
 	self->client->ps.saberAttackChainCount += amount;
 

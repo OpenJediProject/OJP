@@ -552,10 +552,7 @@ qboolean G_MissileImpact( gentity_t *ent, trace_t *trace ) {
 		ent->methodOfDeath != MOD_FLECHETTE_ALT_SPLASH &&
 		ent->methodOfDeath != MOD_CONC &&
 		ent->methodOfDeath != MOD_CONC_ALT &&
-		//[BoltBlockSys]
-		//don't want a debounce time on blocks since blocks drain DP now.
-		//other->client->ps.saberBlockTime < level.time &&
-		//[/BoltBlockSys]
+		other->client->ps.saberBlockTime < level.time &&
 		!isKnockedSaber &&
 		//[BoltBlockSys]
 		//use the OJP version of the sabercanblock.
@@ -571,7 +568,7 @@ qboolean G_MissileImpact( gentity_t *ent, trace_t *trace ) {
 		WP_SaberBlockNonRandom(other, ent->r.currentOrigin, qtrue);
 
 		OJP_HandleBoltBlock(ent, other, trace);
-
+		//G_Printf("%i: Auto bolt block.\n", other->s.number);
 		/*
 		vec3_t fwd;
 		gentity_t *te;
@@ -669,6 +666,7 @@ qboolean G_MissileImpact( gentity_t *ent, trace_t *trace ) {
 
 			//[BoltBlockSys]
 			OJP_HandleBoltBlock(ent, otherOwner, trace);
+			//G_Printf("%i: Bolt deflected since it hit the actual saber\n", other->s.number);
 
 			/*
 			te = G_TempEntity( ent->r.currentOrigin, EV_SABER_BLOCK );
@@ -917,6 +915,11 @@ killProj:
 G_RunMissile
 ================
 */
+//[RealTrace]
+extern int G_RealTrace(gentity_t *SaberAttacker, trace_t *tr, vec3_t start, vec3_t mins, 
+										vec3_t maxs, vec3_t end, int passEntityNum, 
+										int contentmask );
+//[/RealTrace]
 void G_RunMissile( gentity_t *ent ) {
 	vec3_t		origin, groundSpot;
 	trace_t		tr;
@@ -956,6 +959,10 @@ void G_RunMissile( gentity_t *ent ) {
 		}
 	}
 	// trace a line from the previous position to the current position
+	//[RealTrace]
+	G_RealTrace( NULL, &tr, ent->r.currentOrigin, ent->r.mins, ent->r.maxs, origin, passent, ent->clipmask );
+
+	/*
 	if (d_projectileGhoul2Collision.integer)
 	{
 		trap_G2Trace( &tr, ent->r.currentOrigin, ent->r.mins, ent->r.maxs, origin, passent, ent->clipmask, G2TRFLAG_DOGHOULTRACE|G2TRFLAG_GETSURFINDEX|G2TRFLAG_THICK|G2TRFLAG_HITCORPSES, g_g2TraceLod.integer );
@@ -986,11 +993,15 @@ void G_RunMissile( gentity_t *ent ) {
 	{
 		trap_Trace( &tr, ent->r.currentOrigin, ent->r.mins, ent->r.maxs, origin, passent, ent->clipmask );
 	}
+	*/
+	//[/RealTrace]
 
 	if ( tr.startsolid || tr.allsolid ) {
 		// make sure the tr.entityNum is set to the entity we're stuck in
-		trap_Trace( &tr, ent->r.currentOrigin, ent->r.mins, ent->r.maxs, ent->r.currentOrigin, passent, ent->clipmask );
-		tr.fraction = 0;
+		//[RealTrace]
+		//trap_Trace( &tr, ent->r.currentOrigin, ent->r.mins, ent->r.maxs, ent->r.currentOrigin, passent, ent->clipmask );
+		//tr.fraction = 0;
+		//[/RealTrace]
 	}
 	else {
 		VectorCopy( tr.endpos, ent->r.currentOrigin );
@@ -1004,7 +1015,7 @@ void G_RunMissile( gentity_t *ent ) {
 	}
 
 	trap_LinkEntity( ent );
-
+	//racc - assign groundEntityNum for body parts.
 	if (ent->s.weapon == G2_MODEL_PART && !ent->bounceCount)
 	{
 		vec3_t lowerOrg;
@@ -1034,11 +1045,13 @@ void G_RunMissile( gentity_t *ent ) {
 				ent->parent->client->hook = NULL;
 			}
 
+			//racc - make dropped sabers think when they hit a non-impact surface.
 			if ((ent->s.weapon == WP_SABER && ent->isSaberEntity) || isKnockedSaber)
 			{
 				G_RunThink( ent );
 				return;
 			}
+			//just kill off other weapon shots when they hit a non-impact surface.
 			else if (ent->s.weapon != G2_MODEL_PART)
 			{
 				G_FreeEntity( ent );
@@ -1090,7 +1103,7 @@ void G_RunMissile( gentity_t *ent ) {
 			BG_EvaluateTrajectory( &ent->s.pos, level.time, ent->s.origin2 );
 
 			if (VectorCompare(ent->s.origin, ent->s.origin2))
-			{
+			{//racc - don't allow the current origin/predicted origin be the same.
 				ent->s.origin2[2] += 2.0f; //whatever, at least it won't mess up.
 			}
 		}
@@ -1100,7 +1113,7 @@ void G_RunMissile( gentity_t *ent ) {
 		//changed G_MissileImpact to qboolean so that dodges will cause passthru behavor.
 		if(!G_MissileImpact( ent, &tr ))
 		{//target dodged the damage.
-			VectorCopy( origin, ent->r.currentOrigin );
+			VectorCopy( origin, ent->r.currentOrigin );  
 			trap_LinkEntity( ent );
 			return;
 		}
@@ -1196,14 +1209,15 @@ void OJP_HandleBoltBlock(gentity_t *bolt, gentity_t *player, trace_t *trace)
 		otherDefLevel = FORCE_LEVEL_1;
 	}
 
-	if(otherDefLevel < FORCE_LEVEL_2 
-		&& (BG_SaberInAttack(player->client->ps.saberMove)
+	if((BG_SaberInAttack(player->client->ps.saberMove)
 		|| PM_SaberInStart(player->client->ps.saberMove)
 		|| PM_SaberInReturn(player->client->ps.saberMove)) )
 	{//only "deflected" the shot, but we did a manual block so we're boosting this up to a reflection.
 		//G_Printf("%i: %i manually reflected a bolt.\n", level.time, player->s.number);
-		otherDefLevel = FORCE_LEVEL_2;
+		otherDefLevel = player->client->ps.fd.forcePowerLevel[FP_SABER_DEFENSE];
 	}
+
+	//G_Printf("%i: Bounced Bolt @ Level %i\n", player->s.number, otherDefLevel);
 
 	AngleVectors(player->client->ps.viewangles, fwd, NULL, NULL);
 	if (otherDefLevel <= FORCE_LEVEL_1)
@@ -1261,6 +1275,9 @@ void OJP_HandleBoltBlock(gentity_t *bolt, gentity_t *player, trace_t *trace)
 	}
 	*/
 	//[ExpSys]
+
+	//debounce time between blocks.
+	player->client->ps.saberBlockTime = level.time + (600 - (player->client->ps.fd.forcePowerLevel[FP_SABER_DEFENSE]*200));
 }
 //[/BoltBlockSys]
 

@@ -4,7 +4,7 @@ Open Jedi Project Change Log (Enhanced Distribution)
 
 This file stores all the information about what has changed from release version to release version for OJP Enhanced.  OJP Enhanced contains all the changes of OJP Basic plus a library of gameplay alterations made by OJP's contributors.
 
-
+ 
 Version 0.0.9t:
 	New Features:
 
@@ -18,6 +18,10 @@ Version 0.0.9t:
 			Gunner weapon accuracy is now based on gunner's MP level.  MP increases based on the gunner's skill with that weapon.  Gunners regen MP faster than saberers and do not suffer from MP overflow.
 			
 	Improvements/Fixes:
+
+		Blaster Bolt Blocking:
+			- Saber bolt blocking now has a slight delay between blocks so that well-aimed, rapid fire can break thru a Jedi's defenses.  This delay is smaller with higher levels of saber defense.
+			- Saber swinging now guarantees a reflection of the player's saber defense level.
 
 		Last Man Standing:
 			- Fixed where numNonSpectatorClients wouldn't subtract after first death(added a new integer and am using that now)
@@ -35,6 +39,9 @@ Version 0.0.9t:
 			- Added Soh Rauns speeder lag fix
 			- Fixed if (!token) bugs and changed them to if (!token[0])
 			- Fixed where raven forgot to close the file
+
+		Real Trace:
+			- Fixed trace fraction miscalculation that was resulting in some hit detection passthru.  Missiles now use RealTrace hit detection.
 
 		Saber Combat System:
 

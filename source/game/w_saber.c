@@ -3806,6 +3806,11 @@ int G_RealTrace(gentity_t *SaberAttacker, trace_t *tr, vec3_t start, vec3_t mins
 			}
 			else 
 			{//this object doesn't have a ghoul2 or saber internal trace.  
+				if(!VectorCompare(start, currentStart))
+				{//didn't do trace with original start point.  Recalculate the real fraction before we do our comparision.
+					tr->fraction = CalcTraceFraction(start, end, tr->endpos);
+				}
+
 				//As such, it's the last trace on our layered trace.
 				if(tr->fraction < closestFraction)
 				{//this is the closest hit, make it so.
@@ -3817,6 +3822,11 @@ int G_RealTrace(gentity_t *SaberAttacker, trace_t *tr, vec3_t start, vec3_t mins
 		}
 		else
 		{//world hit.  We either hit something closer or this is the final trace of our layered tracing.
+			if(!VectorCompare(start, currentStart))
+			{//didn't do trace with original start point.  Recalculate the real fraction before we do our comparision.
+				tr->fraction = CalcTraceFraction(start, end, tr->endpos);
+			}
+
 			if(tr->fraction < closestFraction)
 			{//this is the closest hit, make it so.
 				TraceCopy(tr, &closestTrace);
@@ -3830,6 +3840,10 @@ int G_RealTrace(gentity_t *SaberAttacker, trace_t *tr, vec3_t start, vec3_t mins
 		//We do this since this ghoul2/saber entities have true impact positions that aren't the same as their bounding box
 		//exterier impact position.  As such, another entity could be slightly inside that bounding box but have a closest
 		//actual impact position.
+		if(!VectorCompare(start, currentStart))
+		{//didn't do trace with original start point.  Recalculate the real fraction before we do our comparision.
+			tr->fraction = CalcTraceFraction(start, end, tr->endpos);
+		}
 
 		if(tr->fraction < closestFraction)
 		{//current impact was the closest impact.
