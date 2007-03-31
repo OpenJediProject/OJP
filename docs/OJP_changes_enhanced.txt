@@ -12,7 +12,10 @@ Version 0.0.9t:
 			- Players can now aim, fire weapons, and use items while getting knocked down or while standing up.
 
 		Mishaps:
-			- Gunners regen MP faster.
+			- 
+
+		Weapon Accuracy (WeapAccuracy):
+			Gunner weapon accuracy is now based on gunner's MP level.  MP increases based on the gunner's skill with that weapon.  Gunners regen MP faster than saberers and do not suffer from MP overflow.
 			
 	Improvements/Fixes:
 

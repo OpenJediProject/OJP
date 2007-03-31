@@ -514,6 +514,10 @@ void WP_FireEmplacedMissile( gentity_t *ent, vec3_t start, vec3_t dir, qboolean 
 static void WP_FireBlaster( gentity_t *ent, qboolean altFire )
 //---------------------------------------------------------
 {
+	//[WeapAccuracy]
+	WP_FireBlasterMissile( ent, muzzle, forward, altFire );
+
+	/* Don't want slop since our mishap inacurracy handles that now.
 	vec3_t	dir, angs;
 
 	vectoangles( forward, angs );
@@ -536,6 +540,8 @@ static void WP_FireBlaster( gentity_t *ent, qboolean altFire )
 
 	// FIXME: if temp_org does not have clear trace to inside the bbox, don't shoot!
 	WP_FireBlasterMissile( ent, muzzle, dir, altFire );
+	*/
+	//[/WeapAccuracy]
 }
 
 
@@ -4703,6 +4709,27 @@ tryFire:
 	}
 }
 
+//[WeapAccuracy]
+int SkillLevelforWeapon(gentity_t *ent, int weapon)
+{
+	if(!ent || !ent->inuse || !ent->client)
+	{
+		return 0;
+	}
+
+	switch(weapon)
+	{
+		case WP_REPEATER:
+			return ent->client->skillLevel[SK_REPEATER];
+			break;
+		default:
+			return ent->client->skillLevel[SK_BLASTER];
+			break;
+	};
+}
+//[/WeapAccuracy]
+
+
 /*
 ===============
 FireWeapon
@@ -4712,6 +4739,9 @@ FireWeapon
 int BG_EmplacedView(vec3_t baseAngles, vec3_t angles, float *newYaw, float constraint);
 #include "../namespace_end.h"
 
+//[WeapAccuracy]
+extern void G_AddMercBalance(gentity_t *self, int amount);
+//[/WeapAccuracy]
 void FireWeapon( gentity_t *ent, qboolean altFire ) 
 {
 	//[CoOp]
@@ -4806,6 +4836,27 @@ void FireWeapon( gentity_t *ent, qboolean altFire )
 		}
 
 		CalcMuzzlePoint ( ent, forward, vright, up, muzzle );
+
+		//[WeapAccuracy]
+		//bump accuracy based on MP level.
+		if(ent && ent->client)
+		{
+			vec3_t angs; //used for adding in mishap inaccuracy.
+			float slopFactor = MISHAP_MAXINACCURACY * ent->client->ps.saberAttackChainCount/MISHAPLEVEL_MAX;
+
+			vectoangles( forward, angs );
+			angs[PITCH] += flrand(-slopFactor, slopFactor);
+			angs[YAW] += flrand(-slopFactor, slopFactor);
+			AngleVectors( angs, forward, NULL, NULL );
+
+			//increase mishap level
+			if(!Q_irand(0, SkillLevelforWeapon(ent, ent->s.weapon)) )
+			{//failed skill roll, add mishap.
+				G_AddMercBalance(ent, 1);
+			}
+		}
+		//[/WeapAccuracy]
+
 
 		// fire the specific weapon
 		switch( ent->s.weapon ) {

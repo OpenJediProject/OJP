@@ -68,6 +68,38 @@ qboolean SabBeh_RollBalance(gentity_t *self, sabmech_t *mechSelf, qboolean force
 }
 
 
+//[WeapAccuracy]
+extern qboolean GAME_INLINE WalkCheck( gentity_t * self );
+void G_AddMercBalance(gentity_t *self, int amount)
+{//mercs don't suffer mishaps, but they do lose/gain MP
+	if(!WalkCheck(self))
+	{//running or moving very fast, can't balance as well
+		if(amount > 0)
+		{
+			amount *= 2;
+		}
+		else
+		{
+			amount = amount * .5f;
+		}
+	}
+
+	G_Printf("%i: %i: %i Mishap Points\n", level.time, self->s.number, amount);
+
+	self->client->ps.saberAttackChainCount += amount;
+
+	if(self->client->ps.saberAttackChainCount < 0)
+	{
+		self->client->ps.saberAttackChainCount = MISHAPLEVEL_NONE;
+	}
+	else if(self->client->ps.saberAttackChainCount > MISHAPLEVEL_MAX)
+	{
+		self->client->ps.saberAttackChainCount = MISHAPLEVEL_MAX;
+	}
+}
+//[/WeapAccuracy]
+
+
 extern qboolean saberKnockOutOfHand(gentity_t *saberent, gentity_t *saberOwner, vec3_t velocity);
 extern void AnimateKnockdown( gentity_t * self, gentity_t * inflictor );
 extern void AnimateStun( gentity_t *self, gentity_t * inflictor, vec3_t impact );
@@ -107,7 +139,6 @@ void G_RollBalance(gentity_t *self, gentity_t *inflictor, qboolean forceMishap)
 }
 
 
-extern qboolean GAME_INLINE WalkCheck( gentity_t * self );
 void SabBeh_AddBalance(gentity_t *self, sabmech_t *mechSelf, int amount, qboolean attack)
 {
 	if(!WalkCheck(self))
@@ -130,7 +161,7 @@ void SabBeh_AddBalance(gentity_t *self, sabmech_t *mechSelf, int amount, qboolea
 	{
 		self->client->ps.saberAttackChainCount = MISHAPLEVEL_NONE;
 	}
-	else if(self->client->ps.saberAttackChainCount > 15)
+	else if(self->client->ps.saberAttackChainCount > MISHAPLEVEL_MAX)
 	{//overflowing causes a full mishap.
 		int randNum = Q_irand(0, 2);
 		switch (randNum)
