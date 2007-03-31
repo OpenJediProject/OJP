@@ -2185,13 +2185,6 @@ void ClientThink_real( gentity_t *ent ) {
 	}
 	//[/ROQFILES]
 
-	//[LastManStanding]
-	if (ojp_lms.integer > 0 && ent->lives <= 0 && BG_IsLMSGametype(g_gametype.integer) && ent->client->tempSpectate <= 910)
-	{//refreash LMS tempSpectator mode.
-		ent->client->tempSpectate += 250;
-	}
-	//[/LastManStanding]
-
 	if (ent->s.eType == ET_NPC)
 	{
 		isNPC = qtrue;

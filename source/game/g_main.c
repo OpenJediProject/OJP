@@ -3453,8 +3453,12 @@ void CheckExitRules( void ) {
 			for ( i = 0; i < level.numNonSpectatorClients; i ++ )
 			{
 				gentity_t *ent = &g_entities[level.sortedClients[i]];
-				ent->lives = (ojp_lmslives.integer > 0) ? ojp_lmslives.integer : 1;
-				respawn(ent);
+				ent->lives = (ojp_lmslives.integer >= 1) ? ojp_lmslives.integer : 1;
+				if(ent->health <= 0)
+				{
+					respawn(ent);
+					ent->client->tempSpectate = 0;
+				}
 			}
 		}
 	}
