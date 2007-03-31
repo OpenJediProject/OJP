@@ -407,8 +407,8 @@ static cvarTable_t		gameCvarTable[] = {
 	//[/ROQFILES]
 
 	//[LastManStanding]
-	{ &ojp_lms,"ojp_lastmanstanding","0",CVAR_ARCHIVE | CVAR_LATCH,0,qfalse},
-	{ &ojp_lmslives,"ojp_lmslives","1",CVAR_ARCHIVE | CVAR_LATCH,0,qfalse},
+	{ &ojp_lms,"ojp_lastmanstanding","0", CVAR_LATCH,0,qfalse},
+	{ &ojp_lmslives,"ojp_lmslives","1", CVAR_LATCH,0,qfalse},
 	//[/LastManStanding]
 
 	{ &g_armBreakage, "g_armBreakage", "0", 0, 0, qtrue  },
