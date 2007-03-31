@@ -6507,13 +6507,20 @@ void WP_ForcePowersUpdate( gentity_t *self, usercmd_t *ucmd )
 			self->client->ps.saberAttackChainCount--;
 		}
 		
-		if(self->client->ps.weapon == WP_SABER && self->client->ps.fd.saberAnimLevel == SS_MEDIUM)
-		{//yellow style is more "centered" and recovers MP faster.
-			self->client->MishapDebounce = level.time + (g_mishapRegenTime.integer*.75);
+		if(self->client->ps.weapon == WP_SABER)
+		{//saberer regens slower since they use MP differently
+			if(self->client->ps.fd.saberAnimLevel == SS_MEDIUM)
+			{//yellow style is more "centered" and recovers MP faster.
+				self->client->MishapDebounce = level.time + (g_mishapRegenTime.integer*.75);
+			}
+			else
+			{
+				self->client->MishapDebounce = level.time + g_mishapRegenTime.integer;
+			}
 		}
 		else
-		{
-			self->client->MishapDebounce = level.time + g_mishapRegenTime.integer;
+		{//gunner regen faster
+				self->client->MishapDebounce = level.time + g_mishapRegenTime.integer/5;
 		}
 	}
 	//[/SaberSys]

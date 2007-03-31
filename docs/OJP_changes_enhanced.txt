@@ -6,6 +6,10 @@ This file stores all the information about what has changed from release version
 
 
 Version 0.0.9t:
+	New Features:
+
+		Weapon Accuracy:
+			- Gunners regen MP faster.
 
 	Improvements/Fixes:
 
