@@ -2170,14 +2170,22 @@ qboolean PM_AdjustAnglesForKnockdown( playerState_t *ps, usercmd_t *ucmd )
 		}
 		//you can jump up out of a knockdown and you get get up into a crouch from a knockdown
 		//ucmd->upmove = 0;
+
+		//[MoveSys]
+		//allow players to continue to be able to attack while on the ground.
+		/*
 		//if ( !PM_InForceGetUp( &ent->client->ps ) || ent->client->ps.torsoAnimTimer > 800 || ent->s.weapon != WP_SABER )
 		if(ps->stats[STAT_HEALTH] > 0)
 		//if ( ent->health > 0 ) //SP version
 		{//can only attack if you've started a force-getup and are using the saber
 			ucmd->buttons = 0;
 		}
+		*/
 
-		if ( !PM_InForceGetUp( ps ) )
+		//allow players to continue to move unless they're actually on lying on the ground.
+		if ( !PM_InForceGetUp( ps ) && BG_GetTorsoAnimPoint(ps, pm_entSelf->localAnimIndex) < .9f )
+		//if ( !PM_InForceGetUp( ps ) )
+		//[/MoveSys]
 		{//can't turn unless in a force getup
 			//KNOCKDOWNFIXME RAFIXME - impliment viewEntity?
 			//if ( ent->client->ps.viewEntity <= 0 || ent->client->ps.viewEntity >= ENTITYNUM_WORLD )
