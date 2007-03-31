@@ -3716,9 +3716,9 @@ static GAME_INLINE int Finish_RealTrace( trace_t *results, trace_t *closestTrace
 //return:	REALTRACE_MISS = didn't hit anything	
 //			REALTRACE_HIT = hit object normally
 //			REALTRACE_SABERBLOCKHIT = hit a player who used a bounding box dodge saber block
-static GAME_INLINE int G_RealTrace(gentity_t *atk, trace_t *tr, vec3_t start, vec3_t mins, 
+int G_RealTrace(gentity_t *SaberAttacker, trace_t *tr, vec3_t start, vec3_t mins, 
 										vec3_t maxs, vec3_t end, int passEntityNum, 
-										int contentmask, int rSaberNum, int rBladeNum )
+										int contentmask )
 {
 	//the current start position of the traces.  
 	//This is advanced to the edge of each bound box after each saber/ghoul2 entity is processed.
@@ -3728,10 +3728,10 @@ static GAME_INLINE int G_RealTrace(gentity_t *atk, trace_t *tr, vec3_t start, ve
 	int misses = 0;
 	InitRealTraceContent();
 
-	if( atk && atk->client )
+	if( SaberAttacker && SaberAttacker->client )
 	{//blank out the enemy saber/blade data so we have a fresh start for this trace.
-		atk->client->lastSaberCollided = -1;
-		atk->client->lastBladeCollided = -1;
+		SaberAttacker->client->lastSaberCollided = -1;
+		SaberAttacker->client->lastBladeCollided = -1;
 	}
 
 	//make the default closestTrace be nothing
@@ -3796,7 +3796,7 @@ static GAME_INLINE int G_RealTrace(gentity_t *atk, trace_t *tr, vec3_t start, ve
 		{//hit a lightsaber, do the approprate collision detection checks.
 			gentity_t* saberOwner = &g_entities[currentEnt->r.ownerNum];
 
-			G_SaberCollide( atk, saberOwner, currentStart, end, mins, maxs, tr);
+			G_SaberCollide( SaberAttacker, saberOwner, currentStart, end, mins, maxs, tr);
 		}
 		else if (tr->entityNum < ENTITYNUM_WORLD)
 		{
@@ -5972,7 +5972,7 @@ static GAME_INLINE qboolean CheckSaberDamage(gentity_t *self, int rSaberNum, int
 
 
 	realTraceResult = G_RealTrace(self, &tr, saberStart, saberTrMins, saberTrMaxs, saberEnd, 
-		self->s.number, trMask, rSaberNum, rBladeNum);
+		self->s.number, trMask);
 
 
 	if ( tr.fraction == 1 && !tr.startsolid )
