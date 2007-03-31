@@ -25,6 +25,9 @@ Version 0.0.9t:
 			Flamethrower:
 				- Fixed where you could use flamethrower in grapple
 
+		Knockdown:
+			- /DebugKnockMeDown debug command now uses SP knockdown system.
+
 		Misc Bugs:
 			- Added Soh Rauns speeder lag fix
 			- Fixed if (!token) bugs and changed them to if (!token[0])

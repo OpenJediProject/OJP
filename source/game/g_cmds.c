@@ -4004,6 +4004,9 @@ extern void Create_Autosave( vec3_t origin, int size, qboolean teleportPlayers )
 extern void Save_Autosaves(void);
 extern void Delete_Autosaves(gentity_t* ent);
 //[/CoOpEditor]
+//[KnockdownSys]
+extern void G_Knockdown( gentity_t *self, gentity_t *attacker, const vec3_t pushDir, float strength, qboolean breakSaberLock );
+//[/KnockdownSys]
 void ClientCommand( int clientNum ) {
 	gentity_t *ent;
 	char	cmd[MAX_TOKEN_CHARS];
@@ -4670,6 +4673,9 @@ void ClientCommand( int clientNum ) {
 	}
 	else if (Q_stricmp(cmd, "debugKnockMeDown") == 0)
 	{
+		//[KnockdownSys]
+		G_Knockdown(self, NULL, vec3_origin, 300, qtrue);
+		/*
 		if (BG_KnockDownable(&ent->client->ps))
 		{
 			ent->client->ps.forceHandExtend = HANDEXTEND_KNOCKDOWN;
@@ -4685,6 +4691,8 @@ void ClientCommand( int clientNum ) {
 				ent->client->ps.quickerGetup = qtrue;
 			}
 		}
+		*/
+		//[/KnockdownSys]
 	}
 	else if (Q_stricmp(cmd, "debugSaberSwitch") == 0)
 	{
