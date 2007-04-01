@@ -180,7 +180,6 @@ void CG_LoadHolsterData (clientInfo_t *ci)
 
 	if ( !f || !fLen )
 	{//couldn't open file or it was empty, just use the defaults
-trap_FS_FCloseFile(f);//[TicketFix143]
 		return;
 	}
 

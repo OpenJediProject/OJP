@@ -58,6 +58,9 @@ vmCvar_t	g_allowROQ;
 //[LastManStanding]
 vmCvar_t	ojp_lms;
 vmCvar_t	ojp_lmslives;
+//[Coop]
+vmCvar_t	ojp_liveExp;
+//[/Coop]
 //[/LastManStanding]
 
 vmCvar_t	g_armBreakage;
@@ -409,6 +412,9 @@ static cvarTable_t		gameCvarTable[] = {
 	//[LastManStanding]
 	{ &ojp_lms,"ojp_lastmanstanding","0", CVAR_LATCH,0,qfalse},
 	{ &ojp_lmslives,"ojp_lmslives","1", CVAR_LATCH,0,qfalse},
+	//[Coop]
+	{ &ojp_liveExp, "ojp_liveExp","5",CVAR_LATCH,0,qfalse},
+	//[/Coop]
 	//[/LastManStanding]
 
 	{ &g_armBreakage, "g_armBreakage", "0", 0, 0, qtrue  },

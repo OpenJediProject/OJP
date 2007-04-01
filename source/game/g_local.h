@@ -1811,6 +1811,9 @@ extern  vmCvar_t	g_allowROQ;
 //[LastManStanding]
 extern vmCvar_t		ojp_lms;
 extern vmCvar_t		ojp_lmslives;
+//[Coop]
+extern vmCvar_t		ojp_liveExp;
+//[/Coop]
 //[/LastManStanding]
 
 extern	vmCvar_t	g_armBreakage;
