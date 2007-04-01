@@ -1106,7 +1106,7 @@ static void CG_DrawBalance( centity_t *cent, menuDef_t *menuHUD)
 		return;
 	}
 
-	for (i = cent->playerState->saberAttackChainCount-1; i >= 0; i--)
+	for (i = cg.snap->ps.saberAttackChainCount-1; i >= 0; i--)
 	{
 		focusItem = Menu_FindItemByName(menuHUD, mishapTicName[i]);
 
