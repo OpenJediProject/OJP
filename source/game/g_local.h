@@ -382,6 +382,9 @@ struct gentity_s {
 
 	//[LastManStanding]
 	int			lives;
+	//[Coop]
+	int			liveExp;
+	//[/Coop]
 	//[/LastManStanding]
 
 	int			damage;

@@ -2503,6 +2503,25 @@ void player_die( gentity_t *self, gentity_t *inflictor, gentity_t *attacker, int
 
 	//check player stuff
 	g_dontFrickinCheck = qfalse;
+	
+	//[LastManStanding]
+	//[Coop]
+	if (g_gametype.integer == GT_SINGLE_PLAYER && ojp_lms.integer == 1)
+	{
+			gentity_t *murderer = NULL;
+			murderer = &g_entities[self->client->ps.otherKiller];
+			murderer->liveExp++;
+			if (murderer->liveExp >= ojp_liveExp.integer)
+			{
+				murderer->lives++;
+				murderer->liveExp = 0;
+				#ifdef _DEBUG
+				G_Printf("You now have %i lives.",murderer->lives);
+				#endif
+			}
+	}
+	//[Coop]
+	//[LastManStanding]
 
 	if (g_gametype.integer == GT_POWERDUEL)
 	{ //don't want to wait til later in the frame if this is the case

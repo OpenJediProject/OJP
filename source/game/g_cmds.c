@@ -4674,7 +4674,7 @@ void ClientCommand( int clientNum ) {
 	else if (Q_stricmp(cmd, "debugKnockMeDown") == 0)
 	{
 		//[KnockdownSys]
-		G_Knockdown(self, NULL, vec3_origin, 300, qtrue);
+		G_Knockdown(ent, NULL, vec3_origin, 300, qtrue);
 		/*
 		if (BG_KnockDownable(&ent->client->ps))
 		{

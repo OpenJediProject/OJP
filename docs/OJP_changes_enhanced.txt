@@ -7,6 +7,10 @@ This file stores all the information about what has changed from release version
  
 Version 0.0.9t:
 	New Features:
+	
+		Live System( Lastmanstanding for Coop)
+			- Added the live system
+			- Added ojp_liveexp cvar
 
 		Movement:
 			- Players can now aim, fire weapons, and use items while getting knocked down or while standing up.

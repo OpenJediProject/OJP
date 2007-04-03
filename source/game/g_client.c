@@ -2473,7 +2473,13 @@ char *ClientConnect( int clientNum, qboolean firstTime, qboolean isBot ) {
 	//[LastManStanding]
 	if(ojp_lms.integer > 0 && BG_IsLMSGametype(g_gametype.integer) )
 	{//LMS mode, set up lives.
-		ent->lives = (ojp_lmslives.integer-1 >= 0) ? ojp_lmslives.integer-1 : 0; 
+		ent->lives = (ojp_lmslives.integer >= 1) ? ojp_lmslives.integer : 1; 
+		//[Coop]
+		if (g_gametype.integer == GT_SINGLE_PLAYER)
+		{//LMS mode, playing Coop, setup liveExp
+			ent->liveExp = 0;
+		}
+		//[/Coop]
 	}
 	//[/LastManStanding]
 

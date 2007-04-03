@@ -4722,6 +4722,18 @@ int SkillLevelforWeapon(gentity_t *ent, int weapon)
 		case WP_REPEATER:
 			return ent->client->skillLevel[SK_REPEATER];
 			break;
+		case WP_ROCKET_LAUNCHER:
+			return ent->client->skillLevel[SK_ROCKET];
+			break;
+		case WP_BOWCASTER:
+			return ent->client->skillLevel[SK_BOWCASTER];
+			break;
+		case WP_DISRUPTOR:
+			return ent->client->skillLevel[SK_DISRUPTOR];
+			break;
+		case WP_THERMAL:
+			return ent->client->skillLevel[SK_THERMAL];
+			break;
 		default:
 			return ent->client->skillLevel[SK_BLASTER];
 			break;

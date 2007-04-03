@@ -413,7 +413,7 @@ static cvarTable_t		gameCvarTable[] = {
 	{ &ojp_lms,"ojp_lastmanstanding","0", CVAR_LATCH,0,qfalse},
 	{ &ojp_lmslives,"ojp_lmslives","1", CVAR_LATCH,0,qfalse},
 	//[Coop]
-	{ &ojp_liveExp, "ojp_liveExp","5",CVAR_LATCH,0,qfalse},
+	{ &ojp_liveExp, "ojp_liveexp","5",CVAR_LATCH,0,qfalse},
 	//[/Coop]
 	//[/LastManStanding]
 
