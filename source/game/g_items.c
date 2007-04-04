@@ -91,9 +91,9 @@ int adjustRespawnTime(float preRespawnTime, int itemType, int itemTag)
 	return ((int)respawnTime);
 }
 
-
-#define SHIELD_HEALTH				250
-#define SHIELD_HEALTH_DEC			10		// 25 seconds	
+//[TicketFix234]
+#define SHIELD_HEALTH				800//Was 250
+//[/TicketFix234]
 #define MAX_SHIELD_HEIGHT			254
 #define MAX_SHIELD_HALFWIDTH		255
 #define SHIELD_HALFTHICKNESS		4
@@ -128,14 +128,6 @@ void ShieldThink(gentity_t *self)
 {
 	self->s.trickedentindex = 0;
 
-	if ( g_gametype.integer == GT_SIEGE )
-	{
-		self->health -= SHIELD_SIEGE_HEALTH_DEC;
-	}
-	else
-	{
-		self->health -= SHIELD_HEALTH_DEC;
-	}
 	self->nextthink = level.time + 1000;
 	if (self->health <= 0)
 	{

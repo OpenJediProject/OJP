@@ -35,6 +35,9 @@ Version 0.0.9t:
 
 			Flamethrower:
 				- Fixed where you could use flamethrower in grapple
+			ForceField:
+				- Changed health from 250 to 800
+				- Removed health degeneration
 
 		Knockdown:
 			- /DebugKnockMeDown debug command now uses SP knockdown system.
