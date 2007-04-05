@@ -2014,7 +2014,10 @@ void ClientUserinfoChanged( int clientNum ) {
 	char	*s;
 	char	model[MAX_QPATH];
 	//char	headModel[MAX_QPATH];
-	char	forcePowers[MAX_QPATH];
+	//[GameTweaks]
+	//not used.
+	//char	forcePowers[MAX_QPATH];
+	//[/GameTweaks]
 	char	oldname[MAX_STRING_CHARS];
 	gclient_t	*client;
 	char	c1[MAX_INFO_STRING];
@@ -2174,7 +2177,10 @@ void ClientUserinfoChanged( int clientNum ) {
 	}
 	//[/BugFix32]
 
-	Q_strncpyz( forcePowers, Info_ValueForKey (userinfo, "forcepowers"), sizeof( forcePowers ) );
+	//[GameTweaks]
+	//not used.
+	//Q_strncpyz( forcePowers, Info_ValueForKey (userinfo, "forcepowers"), sizeof( forcePowers ) );
+	//[/GameTweaks]
 
 	//[BugFix14]
 	//Testing to see if this fixes the problem with a bot's team getting set incorrectly.
@@ -4082,6 +4088,26 @@ void ClientSpawn(gentity_t *ent) {
 			//[/MOREWEAPOPTIONS]
 		}
 
+		//[ExpSys]
+		//racc - set initial weapon selected.
+		if (client->ps.stats[STAT_WEAPONS] & (1 << WP_SABER))
+		{//sabers auto selected if we have them.
+			client->ps.weapon = WP_SABER;
+		}
+		else
+		{
+			int i;
+			for ( i = LAST_USEABLE_WEAPON ; i > WP_NONE ; i-- )
+			{
+				if(client->ps.stats[STAT_WEAPONS] & (1 << i) )
+				{//have this one, equip it.
+					client->ps.weapon = i;
+					break;
+				}
+			}
+		}
+
+		/* 
 		if (client->ps.stats[STAT_WEAPONS] & (1 << WP_SABER))
 		{
 			client->ps.weapon = WP_SABER;
@@ -4094,6 +4120,8 @@ void ClientSpawn(gentity_t *ent) {
 		{
 			client->ps.weapon = WP_MELEE;
 		}
+		*/
+		//[/ExpSys]
 	}
 
 	/*
