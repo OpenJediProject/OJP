@@ -5722,11 +5722,12 @@ qboolean BG_SaberInNonIdleDamageMove(playerState_t *ps, int AnimIndex)
 }
 
 
-extern qboolean BG_SaberInReturn( int move );
+extern qboolean BG_BounceAnim( int anim );
+extern qboolean PM_SaberReturnAnim( int anim );
 qboolean BG_InSlowBounce(playerState_t *ps)
 {//checks for a bounce/return animation in combination with the slow bounce flag
 	if(ps->userInt3 & (1 << FLAG_SLOWBOUNCE)
-		&& (PM_SaberInBounce(ps->saberMove) || BG_SaberInReturn(ps->saberMove)) )
+		&& (BG_BounceAnim(ps->torsoAnim) || PM_SaberReturnAnim(ps->torsoAnim)) )
 	{//in slow bounce
 		return qtrue;
 	}
