@@ -4,7 +4,19 @@ Open Jedi Project Change Log (Enhanced Distribution)
 
 This file stores all the information about what has changed from release version to release version for OJP Enhanced.  OJP Enhanced contains all the changes of OJP Basic plus a library of gameplay alterations made by OJP's contributors.
 
- 
+
+Version 0.0.9u:
+	New Features:
+
+	Improvements/Fixes:
+
+		Force Powers:  
+			- Getting pushed/pulled during a slow bounce no longer screws up the player's movement for a few seconds.
+
+		Mishaps:
+			- Can't regen MP during saberlocks.
+
+
 Version 0.0.9t:
 	New Features:
 	
