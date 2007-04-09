@@ -2656,6 +2656,9 @@ void ClientBegin( int clientNum, qboolean allowTeamReset ) {
 	gclient_t	*client;
 	gentity_t	*tent;
 	int			flags, i;
+	//[BugFix48]
+	int			spawnCount;
+	//[/BugFix48]
 	char		userinfo[MAX_INFO_VALUE], *modelname;
 
 	//[ExpandedMOTD]
@@ -2731,6 +2734,9 @@ void ClientBegin( int clientNum, qboolean allowTeamReset ) {
 	// so the viewpoint doesn't interpolate through the
 	// world to the new position
 	flags = client->ps.eFlags;
+	//[BugFix48]
+	spawnCount = client->ps.persistant[PERS_SPAWN_COUNT];
+	//[/BugFix48]
 
 	i = 0;
 
@@ -2757,6 +2763,10 @@ void ClientBegin( int clientNum, qboolean allowTeamReset ) {
 
 	memset( &client->ps, 0, sizeof( client->ps ) );
 	client->ps.eFlags = flags;
+
+	//[BugFix48]
+	client->ps.persistant[PERS_SPAWN_COUNT] = spawnCount;
+	//[/BugFix48]
 
 	client->ps.hasDetPackPlanted = qfalse;
 
