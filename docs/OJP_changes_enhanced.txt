@@ -16,6 +16,9 @@ Version 0.0.9u:
 		Mishaps:
 			- Can't regen MP during saberlocks.
 
+		Weapons:
+			- Slowed down the bowcaster secondary's rate of fire.
+
 
 Version 0.0.9t:
 	New Features:

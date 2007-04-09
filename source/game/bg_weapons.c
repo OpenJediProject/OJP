@@ -183,7 +183,7 @@ weaponData_t weaponData[WP_NUM_WEAPONS] =
 		8192,					//	int		range;				// Range of weapon
 		//[WeaponSys]
 		1,						//	int		altEnergyPerShot;	// Amount of energy used for alt-fire was 5
-		250,					//	int		altFireTime;		// Amount of time between alt-firings was 750
+		350,					//	int		altFireTime;		// Amount of time between alt-firings was 750
 		//5,						//	int		altEnergyPerShot;	// Amount of energy used for alt-fire
 		//750,					//	int		altFireTime;		// Amount of time between alt-firings
 		//[/WeaponSys]
