@@ -10,6 +10,9 @@ Version 0.0.9u:
 
 	Improvements/Fixes:
 
+		JediMaster:
+			- Re-enabled map weapons and ammo pickups for JediMaster games.
+
 		Force Powers:  
 			- Getting pushed/pulled during a slow bounce no longer screws up the player's movement for a few seconds.
 
