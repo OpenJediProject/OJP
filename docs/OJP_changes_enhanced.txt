@@ -10,6 +10,9 @@ Version 0.0.9u:
 
 	Improvements/Fixes:
 
+		Animation Tweaks:
+			- Fixed Juyo/Makashi animation stalls/freezes.
+
 		JediMaster:
 			- Re-enabled map weapons and ammo pickups for JediMaster games.
 
@@ -21,13 +24,6 @@ Version 0.0.9u:
 
 		Weapons:
 			- Slowed down the bowcaster secondary's rate of fire.
-
-		
-	Saber Combat System:
-		
-		
-		Animations:
-			- Fixed Juyo/Makashi animation stalls/freezes.
 
 
 Version 0.0.9t:
