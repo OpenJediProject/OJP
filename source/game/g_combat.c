@@ -2784,6 +2784,20 @@ void player_die( gentity_t *self, gentity_t *inflictor, gentity_t *attacker, int
 			G_FreeEntity( self->NPC->tempGoal );
 			self->NPC->tempGoal = NULL;
 		}
+
+		//[SeekerItemNPC]
+		//if this is a player's seeker droid, remove the item from their inv
+		if(self->client && self->client->NPC_class == CLASS_SEEKER)
+		{//this could be a player's seeker item
+			if(self->client->leader //has leader
+				&& self->client->leader->client //leader is a client
+				&& self->client->leader->client->remote == self) //has us as their remote.
+			{//yep, this is a player's seeker, switch the attacker entity pointer
+				self->client->leader->client->ps.stats[STAT_HOLDABLE_ITEMS] &= ~(1 << HI_SEEKER);
+			}
+		}
+		//[/SeekerItemNPC]
+
 		/*
 		if ( self->s.eFlags & EF_LOCKED_TO_WEAPON )
 		{
@@ -3027,6 +3041,22 @@ extern void RunEmplacedWeapon( gentity_t *ent, usercmd_t **ucmd );
 	*/
 	if (attacker && attacker->client) 
 	{//killed by a client of some kind (player, NPC or vehicle)
+		//[SeekerItemNPC]
+		gentity_t *realAttacker = NULL;
+
+		if(attacker->NPC && attacker->client->NPC_class == CLASS_SEEKER)
+		{//this could be a player's seeker item, as such all point score should go to them.
+			if(attacker->client->leader //has leader
+				&& attacker->client->leader->client //leader is a client
+				&& attacker->client->leader->client->remote == attacker) //has us as their remote.
+			{//yep, this is a player's seeker, switch the attacker entity pointer
+				realAttacker = attacker;
+				attacker = attacker->client->leader;
+			}
+		}
+		//[/SeekerItemNPC]
+
+
 		if ( self->s.number < MAX_CLIENTS )
 		{//only remember real clients
 			attacker->client->lastkilled_client = self->s.number;
@@ -3161,6 +3191,12 @@ extern void RunEmplacedWeapon( gentity_t *ent, usercmd_t **ucmd );
 			}
 			attacker->client->lastKillTime = level.time;
 
+			//[SeekerItemNPC]
+			if(realAttacker)
+			{//gave score to a seeker's player owner, switch the attacker pointer back to the seeker.
+				attacker = realAttacker;
+			}
+			//[/SeekerItemNPC]
 		}
 
 	//[Asteroids]

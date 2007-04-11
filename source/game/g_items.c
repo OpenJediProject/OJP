@@ -1182,8 +1182,7 @@ void ItemUse_Seeker(gentity_t *ent)
 			//remote->NPC->followDist = 200;
 			ent->client->remote = remote;
 
-
-			//TODO: set 'remote->count' to the ammo for this seeker according to the player skill
+			//seeker's ammo count is set in NPC_SetMiscDefaultData();
 
 			//TODO: set 'remote->health' according to player skill
 			//remember, demp2 pwns seekers
@@ -1193,7 +1192,7 @@ void ItemUse_Seeker(gentity_t *ent)
 			remote->genericValue2 = 1000; //maximum time between shots
 
 			//TODO: set this based on player skill
-			remote->damage = 10; //damage per shot
+			remote->damage = 97; //damage per shot (does damage at bryer level)
 
 			//TODO: should beeping on seeing enemy change based on skill?
 			//disabling this for now, but the code to beep every 900 ms while attacking an enemy is still active, 

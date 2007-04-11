@@ -527,7 +527,20 @@ void NPC_SetMiscDefaultData( gentity_t *ent )
 		ent->client->ps.gravity = 0;
 		ent->NPC->aiFlags |= NPCAI_CUSTOM_GRAVITY;
 		ent->client->ps.eFlags2 |= EF2_FLYING;
-		ent->count = 30; // SEEKER shot ammo count
+
+		//[SeekerItemNPC]
+		if(ent->client->leader //has leader
+				&& ent->client->leader->client //leader is a client
+				&& ent->client->leader->client->remote == ent) //has us as their remote.
+		{//player's seeker item
+			ent->count = -1;
+		}
+		else
+		{//normal NPC seeker
+			ent->count = 30; // SEEKER shot ammo count
+		}
+		//ent->count = 30; // SEEKER shot ammo count
+		//[/SeekerItemNPC]
 	}
 	//***I'm not sure whether I should leave this as a TEAM_ switch, I think NPC_class may be more appropriate - dmv
 	switch(ent->client->playerTeam)

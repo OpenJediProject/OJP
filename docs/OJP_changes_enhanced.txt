@@ -10,8 +10,16 @@ Version 0.0.9u:
 
 	Improvements/Fixes:
 
+
+
 		Animation Tweaks:
 			- Fixed Juyo/Makashi animation stalls/freezes.
+
+		Improved Seeker Item:
+			- Seeker item now disappears when the player's seeker dies.
+			- Seeker now has unlimited ammo.
+			- A player's seeker kills now count toward's the player's score.
+			- Seeker does the same amount of damage as a pistol.
 
 		JediMaster:
 			- Re-enabled map weapons and ammo pickups for JediMaster games.
