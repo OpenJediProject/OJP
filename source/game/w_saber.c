@@ -5082,7 +5082,7 @@ static GAME_INLINE void G_SetViewLockDebounce( gentity_t *self )
 	{//running pauses you longer
 		self->client->viewLockTime = level.time + 500;
 	}
-	else if( PM_SaberInParry(self->client->ps.saberMove) //normal block
+	else if( PM_SaberInParry(G_GetParryForBlock(self->client->ps.saberBlocked)) //normal block (not a parry)
 		|| (!PM_SaberInKnockaway(self->client->ps.saberMove) //didn't parry
 		&& self->client->ps.stats[STAT_DODGE] < self->client->ps.stats[STAT_MAX_DODGE]*.50) )
 	{//normal block or attacked with less than %50 DP

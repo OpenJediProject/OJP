@@ -33,6 +33,10 @@ Version 0.0.9u:
 		Mishaps:
 			- Can't regen MP during saberlocks.
 
+		Saber Combat System:
+			Misc:
+				- Fixed problem with collision stops not being long enough for normal (unparried) saber blocks.
+
 		Weapons:
 			- Slowed down the bowcaster secondary's rate of fire.
 
