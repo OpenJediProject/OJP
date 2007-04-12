@@ -657,6 +657,12 @@ clientkilled:
 			vehMessage = qtrue;
 			break;
 		//[/Asteroids]
+		//[SeekerItemNPC]
+		case MOD_SEEKER:
+			message = "KILLED_SEEKER";
+			vehMessage = qtrue;
+			break;
+		//[/SeekerItemNPC]
 		default:
 			message = "KILLED_GENERIC";
 			break;

@@ -1308,6 +1308,9 @@ typedef enum {
 	MOD_COLLISION,
 	MOD_VEH_EXPLOSION,
 	//[/Asteroids]
+	//[SeekerItemNPC]
+	MOD_SEEKER,	//death by player's seeker droid.
+	//[/SeekerItemNPC]
 	//AURELIO: when/if you put this back in, remember to make a case for it in all the other places where
 	//mod's are checked. Also, it probably isn't the most elegant solution for what you want - just add
 	//a frag back to the player after you call the player_die (and keep a local of his pre-death score to

@@ -211,11 +211,11 @@ int BasicDodgeCosts[MOD_MAX] =
 	35,		//MOD_TRIP_MINE_SPLASH,
 	35,		//MOD_TIMED_MINE_SPLASH,
 	35,		//MOD_DET_PACK_SPLASH,
-	35,		//MOD_VEHICLE,
+	-1,		//MOD_VEHICLE,
 	35,		//MOD_CONC,
 	35,		//MOD_CONC_ALT,
 	-1,		//MOD_FORCE_DARK,
-	-1,		//MOD_SENTRY,
+	35,		//MOD_SENTRY,
 	-1,		//MOD_WATER,
 	-1,		//MOD_SLIME,
 	-1,		//MOD_LAVA,
@@ -225,7 +225,14 @@ int BasicDodgeCosts[MOD_MAX] =
 	-1,		//MOD_SUICIDE,
 	-1,		//MOD_TARGET_LASER,
 	-1,		//MOD_TRIGGER_HURT,
-	-1		//MOD_TEAM_CHANGE,
+	-1,		//MOD_TEAM_CHANGE,
+	//[Asteroids]
+	-1,		//MOD_COLLISION,
+	-1,		//MOD_VEH_EXPLOSION,
+	//[/Asteroids]
+	//[SeekerItemNPC]
+	35,		//MOD_SEEKER,	//death by player's seeker droid.
+	//[/SeekerItemNPC]
 	//MOD_MAX
 };
 

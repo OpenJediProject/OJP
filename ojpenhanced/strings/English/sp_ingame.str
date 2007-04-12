@@ -387,7 +387,10 @@ REFERENCE           ITEM_BACTA
 LANG_ENGLISH        "BioTech Bacta Canister"
 
 REFERENCE           ITEM_SEEKER
-LANG_ENGLISH        "Seeker Drone"
+//[SeekerItemNPC]
+LANG_ENGLISH        "Seeker Droid"
+//LANG_ENGLISH        "Seeker Drone"
+//[/SeekerItemNPC]
 
 REFERENCE           ITEM_LA_GOGGLES
 LANG_ENGLISH        "Light Amplification Goggles"

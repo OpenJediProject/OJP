@@ -386,7 +386,21 @@ qboolean Seeker_Fire( void )
 
 	missile->damage = NPC->damage;
 	missile->dflags = DAMAGE_DEATH_KNOCKBACK;
-	missile->methodOfDeath = MOD_BLASTER;
+
+	//[SeekerItemNPC]
+	//seeker items have different MOD 
+	if(NPC->client->leader //has leader
+		&& NPC->client->leader->client //leader is a client
+		&& NPC->client->leader->client->remote == NPC) //has us as their remote.
+	{//yep, this is a player's seeker, use different MOD
+		missile->methodOfDeath = MOD_SEEKER;
+	}
+	else
+	{
+		missile->methodOfDeath = MOD_BLASTER;
+	}
+	//missile->methodOfDeath = MOD_BLASTER;
+	//[/SeekerItemNPC]
 	missile->clipmask = MASK_SHOT | CONTENTS_LIGHTSABER;
 	//[CoOp]
 	/* Not in SP version of code.
