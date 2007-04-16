@@ -207,7 +207,6 @@ int NumberOfSkillRanks(int skill)
 	switch(skill)
 	{
 		case NUM_FORCE_POWERS+SK_JETPACK:
-		case NUM_FORCE_POWERS+SK_PISTOL:		//blaster pistol
 		case NUM_FORCE_POWERS+SK_FLAMETHROWER:
 		case NUM_FORCE_POWERS+SK_FORCEFIELD:	//forcefield skill
 		case NUM_FORCE_POWERS+SK_CLOAK:			//cloaking device skill

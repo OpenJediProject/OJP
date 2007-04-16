@@ -17,7 +17,9 @@ Version 0.0.9u:
 			- Fixed issue in G_DoDodge() where players could in theory dodge vehicle MOD.
 
 		Experience:
+			- Rescaled the skill point costs to better reflect gradual skill advancement.
 			- In JM mode, the JM gets 100 DP.  The other players get max skills in all the gunner skills, but without starting weapons and items.
+			- Pistol now has 3 skill ranks.  Higher ranks have better weapon accuracy.
 
 		Improved Seeker Item:
 			- Seeker item now disappears when the player's seeker dies.
@@ -45,6 +47,10 @@ Version 0.0.9u:
 
 		Weapons:
 			- Slowed down the bowcaster secondary's rate of fire.
+
+	Cvar Improvements:
+		
+		- g_minExpLevel's default has been set to 3. 
 
 
 Version 0.0.9t:

@@ -182,7 +182,7 @@ int bgForcePowerCost[NUM_TOTAL_SKILLS][NUM_FORCE_POWER_LEVELS] = //0 == neutral
 {
 	//[ExpSys]
 	{	0,	2,	4,	6	},	// Heal			// FP_HEAL
-	{	0,	4,	4,	4	},	// Jump			//FP_LEVITATION,//hold/duration
+	{	0,	1,	4,	4	},	// Jump			//FP_LEVITATION,//hold/duration
 	{	0,	4,	4,	4	},	// Speed		//FP_SPEED,//duration
 	{	0,	4,	4,	4	},	// Push			//FP_PUSH,//hold/duration
 	{	0,	4,	4,	4	},	// Pull			//FP_PULL,//hold/duration
@@ -195,7 +195,7 @@ int bgForcePowerCost[NUM_TOTAL_SKILLS][NUM_FORCE_POWER_LEVELS] = //0 == neutral
 	{	0,	1,	3,	6	},	// Team Heal	//FP_TEAM_HEAL,//instant
 	{	0,	1,	3,	6	},	// Team Force	//FP_TEAM_FORCE,//instant
 	{	0,	2,	4,	6	},	// Drain		//FP_DRAIN,//hold/duration
-	{	0,	4,	4,	4	},	// Sight		//FP_SEE,//duration
+	{	0,	1,	4,	4	},	// Sight		//FP_SEE,//duration
 	{	0,	SABER_OFFENSE_L1,	4,	4	},	// Saber Attack	//FP_SABER_OFFENSE,
 	{	0,	SABER_DEFENSE_L1,	4,	4	},	// Saber Defend	//FP_SABER_DEFENSE,
 	{	0,	4,	6,	8	},	// Saber Throw	//FP_SABERTHROW,
@@ -222,8 +222,8 @@ int bgForcePowerCost[NUM_TOTAL_SKILLS][NUM_FORCE_POWER_LEVELS] = //0 == neutral
 	//NUM_FORCE_POWERS
 	//racc - additional skills
 	{	0,	8,	0,	0	},	//SK_JETPACK,		// Jetpack Skill	
-	{	0,	1,	0,	0	},	//SK_PISTOL,		//blaster pistol
-	{	0,	2,	1,	1	},	//SK_BLASTER,		//blaster rifle skill
+	{	0,	1,	2,	8	},	//SK_PISTOL,		//blaster pistol
+	{	0,	3,	1,	1	},	//SK_BLASTER,		//blaster rifle skill
 	{	0,	8,	8,	8	},	//SK_THERMAL,		//thermal detenator skill
 	{	0,	8,	8,	8	},	//SK_ROCKET,		//rocket launcher skill
 	{	0,	3,	3,	0	},	//SK_BACTA			//bacta medikits skill
