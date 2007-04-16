@@ -399,6 +399,10 @@ void JMSaberThink(gentity_t *ent)
 	G_RunObject(ent);
 }
 
+
+//[ExpSys]
+void DetermineDodgeMax(gentity_t *ent);
+//[/ExpSys]
 void JMSaberTouch(gentity_t *self, gentity_t *other, trace_t *trace)
 {
 	int i = 0;
@@ -466,6 +470,13 @@ void JMSaberTouch(gentity_t *self, gentity_t *other, trace_t *trace)
 
 		i++;
 	}
+
+	//[ExpSys]
+	//recalc DP
+	DetermineDodgeMax(other);
+	//set dp to max.
+	other->client->ps.stats[STAT_DODGE] = other->client->ps.stats[STAT_MAX_DODGE]; 
+	//[/ExpSys]
 
 	self->pos2[0] = 1;
 	self->pos2[1] = level.time + JMSABER_RESPAWN_TIME;
@@ -3956,6 +3967,19 @@ void ClientSpawn(gentity_t *ent) {
 			//client->ps.stats[STAT_WEAPONS] |= ( 1 << WP_SABER );	//these are precached in g_items, ClearRegisteredItems()
 			//[/MOREWEAPOPTIONS]
 		}
+		//[ExpSys]
+		else if(g_gametype.integer == GT_JEDIMASTER)
+		{//don't have selectable starting weapons, but we do have max max gun skills so 
+			//people can actually fight well, when they get a gun.
+				client->skillLevel[SK_PISTOL] = FORCE_LEVEL_3;
+				client->skillLevel[SK_BLASTER] = FORCE_LEVEL_3;
+				client->skillLevel[SK_THERMAL] = FORCE_LEVEL_3;
+				client->skillLevel[SK_BOWCASTER] = FORCE_LEVEL_3;
+				client->skillLevel[SK_DETPACK] = FORCE_LEVEL_3;
+				client->skillLevel[SK_REPEATER] = FORCE_LEVEL_3;
+				client->skillLevel[SK_DISRUPTOR] = FORCE_LEVEL_3;
+		}
+		//[/ExpSys]
 		else
 		{
 			if (client->ps.fd.forcePowerLevel[FP_SABER_OFFENSE])

@@ -16,6 +16,9 @@ Version 0.0.9u:
 		Dodge:
 			- Fixed issue in G_DoDodge() where players could in theory dodge vehicle MOD.
 
+		Experience:
+			- In JM mode, the JM gets 100 DP.  The other players get max skills in all the gunner skills, but without starting weapons and items.
+
 		Improved Seeker Item:
 			- Seeker item now disappears when the player's seeker dies.
 			- Seeker now has unlimited ammo.
@@ -33,9 +36,12 @@ Version 0.0.9u:
 		Mishaps:
 			- Can't regen MP during saberlocks.
 
-		Saber Combat System:
+		Saber Combat:
 			Misc:
 				- Fixed problem with collision stops not being long enough for normal (unparried) saber blocks.
+
+		TABBots:
+			- TABBot gunners will now hold their fire if their MP level is too high.
 
 		Weapons:
 			- Slowed down the bowcaster secondary's rate of fire.

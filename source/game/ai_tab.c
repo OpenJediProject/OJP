@@ -2751,6 +2751,13 @@ void TAB_BotBehave_AttackMove(bot_state_t *bs)
 		&& (InFieldOfVision(bs->viewangles, 30, ang) 
 			|| (bs->virtualWeapon == WP_SABER && InFieldOfVision(bs->viewangles, 100, ang))) )
 	{//don't attack unless you're inside your AttackDistance band and actually pointing at your enemy.  
+		//[ExpSys]
+		if(bs->virtualWeapon != WP_SABER && bs->cur_ps.saberAttackChainCount >= MISHAPLEVEL_HEAVY)
+		{//don't shoot like a retard if you're not going to hit anything
+			return;
+		}
+		//[/ExpSys]
+
 		//This is to prevent the bots from attackmoving with the saber @ 500 meters. :)
 		trap_EA_Attack(bs->client);
 

@@ -160,7 +160,14 @@ void DetermineDodgeMax(gentity_t *ent)
 	int skillCount;
 	float dodgeMax = 0;
 
-	if(ent->s.number < MAX_CLIENTS)
+	assert(ent && ent->client);
+
+	if(ent->client->ps.isJediMaster)
+	{//jedi masters have much more DP and don't actually have skills.
+		ent->client->ps.stats[STAT_MAX_DODGE] = 100;
+		return;
+	}
+	else if(ent->s.number < MAX_CLIENTS)
 	{//players get a initial DP bonus.
 		dodgeMax = 50;
 	}
