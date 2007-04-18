@@ -20,6 +20,7 @@ Version 0.0.9u:
 			- Rescaled the skill point costs to better reflect gradual skill advancement.
 			- In JM mode, the JM gets 100 DP.  The other players get max skills in all the gunner skills, but without starting weapons and items.
 			- Pistol now has 3 skill ranks.  Higher ranks have better weapon accuracy.
+			- Re-enabled weapon pickups in Holocron so that gunners can play.  All pickups give max gunner skills in their weapons.
 
 		Improved Seeker Item:
 			- Seeker item now disappears when the player's seeker dies.

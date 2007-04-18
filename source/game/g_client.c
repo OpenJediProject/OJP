@@ -3968,7 +3968,7 @@ void ClientSpawn(gentity_t *ent) {
 			//[/MOREWEAPOPTIONS]
 		}
 		//[ExpSys]
-		else if(g_gametype.integer == GT_JEDIMASTER)
+		else if(g_gametype.integer == GT_JEDIMASTER || g_gametype.integer == GT_HOLOCRON)
 		{//don't have selectable starting weapons, but we do have max max gun skills so 
 			//people can actually fight well, when they get a gun.
 				client->skillLevel[SK_PISTOL] = FORCE_LEVEL_3;
