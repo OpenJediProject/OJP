@@ -2229,7 +2229,8 @@ void ForceLightningDamage( gentity_t *self, gentity_t *traceEnt, vec3_t dir, vec
 				//[/ForceSys]
 
 				if ( self->client->ps.weapon == WP_MELEE
-					&& self->client->ps.fd.forcePowerLevel[FP_LIGHTNING] > FORCE_LEVEL_2 )
+					&& self->client->ps.fd.forcePowerLevel[FP_LIGHTNING] > FORCE_LEVEL_2
+					&& !Q_irand(0, 1) )
 				{//2-handed lightning
 					//jackin' 'em up, Palpatine-style
 					dmg *= 2;
