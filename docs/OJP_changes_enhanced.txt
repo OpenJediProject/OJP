@@ -39,8 +39,16 @@ Version 0.0.9u:
 			- Can't regen MP during saberlocks.
 
 		Saber Combat:
+			Attack Parries:
+				- Attack parries are now performed by tapping the attack button right before an impact while performing a standard parry.  Attack parries can only be performed while not attacking.
+		
 			Misc:
 				- Fixed problem with collision stops not being long enough for normal (unparried) saber blocks.
+				- Players can now chain into an attack from a saber block.
+
+			PreBlock:
+				- Improved the visuals of the preblocks.
+				- Preblocks are now interruptable.
 
 		TABBots:
 			- TABBot gunners will now hold their fire if their MP level is too high.

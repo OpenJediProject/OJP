@@ -2709,6 +2709,9 @@ typedef struct siegePers_s
 //They won't be able to launch into a combo from the bounce.
 #define FLAG_PARRIED		8
 
+//flag indicates that this block is a pre-block and interruptable
+#define FLAG_PREBLOCK		9
+
 
 //[SaberDefines]
 //scaler to the walkspeed

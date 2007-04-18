@@ -3995,6 +3995,14 @@ void PM_WeaponLightsaber(void)
 	}
 
 	//[SaberSys]
+	//preblocks can be interrupted
+	if(PM_SaberInParry(pm->ps->saberMove) && pm->ps->userInt3 & (1 << FLAG_PREBLOCK) // in a pre-block
+		&& ((pm->cmd.buttons & BUTTON_ALT_ATTACK) || (pm->cmd.buttons & BUTTON_ATTACK)) ) //and attempting an attack
+	{//interrupting a preblock
+		pm->ps->weaponTime = 0;
+		pm->ps->torsoTimer = 0;
+	}
+
 	//Added additional ways of using saber throw.
 	if ( (pm->cmd.buttons & BUTTON_SABERTHROW) || ((pm->cmd.buttons & BUTTON_FORCEPOWER) && pm->ps->fd.forcePowerSelected == FP_SABERTHROW) )
 	//if ( (pm->cmd.buttons & BUTTON_ALT_ATTACK) )
@@ -4920,11 +4928,11 @@ weapChecks:
 				{//can't combo if we were parried.
 					newmove = LS_READY;
 				}
+				/*
 				else if ( PM_SaberInParry( curmove ) )
 				{//can't attack straight from a block animation.
 					newmove = LS_READY;
 				}
-				/*
 				else if ( PM_SaberInBrokenParry( curmove ) )
 				{//broken parries must always return to ready
 					newmove = LS_READY;
@@ -4951,7 +4959,7 @@ weapChecks:
 					//[/SaberLockSys]
 
 					//[SaberSys]
-					if ( PM_SaberInBounce( curmove )
+					if ( (PM_SaberInBounce( curmove ) || PM_SaberInParry( curmove ))
 						&& newmove >= LS_A_TL2BR && newmove <= LS_A_T2B )
 					{//prevent similar attack directions to prevent lightning-like bounce attacks.
 						if(saberMoveData[newmove].startQuad >= saberMoveData[curmove].endQuad
@@ -4964,13 +4972,6 @@ weapChecks:
 						{
 							newmove = LS_READY;
 						}
-					}
-					
-					if ( PM_SaberInParry( curmove )
-						&& saberMoveData[newmove].startQuad == saberMoveData[curmove].endQuad )
-					{//an attack in this direction would be an instant attack for the parrier, 
-						//which is a bit unfair, so return to start position.
-						newmove = LS_READY;
 					}
 
 					//starting a new attack, as such, remove the attack fake flag.
@@ -5488,6 +5489,11 @@ void PM_SetSaberMove(short newMove)
 			pm->ps->userInt3 &= ~( 1 << FLAG_SLOWBOUNCE );
 			pm->ps->userInt3 &= ~( 1 << FLAG_OLDSLOWBOUNCE );
 			pm->ps->userInt3 &= ~( 1 << FLAG_PARRIED );
+		}
+
+		if(!PM_SaberInParry(newMove))
+		{//cancel out pre-block flag
+			pm->ps->userInt3 &= ~( 1 << FLAG_PREBLOCK );
 		}
 		//[/SaberSys]
 

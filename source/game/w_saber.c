@@ -6808,7 +6808,11 @@ void WP_SaberStartMissileBlockCheck( gentity_t *self, usercmd_t *ucmd  )
 		doFullRoutine = qfalse;
 	}
 	
-	if (self->client->ps.weaponTime > 0)
+	//[SaberSys]
+	//you should be able to update block positioning if you're already in a block.
+	if (self->client->ps.weaponTime > 0 && !PM_SaberInParry(self->client->ps.saberMove))
+	//if (self->client->ps.weaponTime > 0)
+	//[/SaberSys]
 	{ //don't autoblock while busy with stuff
 		return;
 	}
@@ -6980,7 +6984,7 @@ void WP_SaberStartMissileBlockCheck( gentity_t *self, usercmd_t *ucmd  )
 		dist = VectorNormalize( dir );
 
 		//[SaberSys]
-		if(dist > 75 && swingBlock)
+		if(dist > 150 && swingBlock)
 		{//don't block swings that are too far away.
 			continue;
 		}
@@ -7123,13 +7127,23 @@ void WP_SaberStartMissileBlockCheck( gentity_t *self, usercmd_t *ucmd  )
 			continue;
 		}//NPCs always try to block sabers coming from behind!
 		*/
-		//[/SaberSys]
 
 		//see if they're heading towards me
+		if(!swingBlock)
+		{
+			VectorCopy( ent->s.pos.trDelta, missile_dir );
+			VectorNormalize( missile_dir );
+			if ( (dot2 = DotProduct( dir, missile_dir )) > 0 )
+				continue;
+		}
+
+		/* basejka
 		VectorCopy( ent->s.pos.trDelta, missile_dir );
 		VectorNormalize( missile_dir );
 		if ( (dot2 = DotProduct( dir, missile_dir )) > 0 )
 			continue;
+		*/
+		//[/SaberSys]
 
 		//FIXME: must have a clear trace to me, too...
 		if ( dist < closestDist )
@@ -7238,6 +7252,7 @@ void WP_SaberStartMissileBlockCheck( gentity_t *self, usercmd_t *ucmd  )
 			if(closestSwingBlock)
 			{
 				self->client->ps.saberBlocked = BlockedforQuad(closestSwingQuad);
+				self->client->ps.userInt3 |= ( 1 << FLAG_PREBLOCK );
 			}
 			else
 			{
@@ -11577,6 +11592,11 @@ void WP_SaberBlockNonRandom( gentity_t *self, vec3_t hitloc, qboolean missileBlo
 	{
 		self->client->ps.saberBlocked = WP_MissileBlockForBlock( self->client->ps.saberBlocked );
 	}
+
+	//[SaberSys]
+	//this is a "real" block so don't allow it to be interrupted
+	self->client->ps.userInt3 &= ~( 1 << FLAG_PREBLOCK );
+	//[/SaberSys]
 }
 
 void WP_SaberBlock( gentity_t *playerent, vec3_t hitloc, qboolean missileBlock )
@@ -12336,18 +12356,14 @@ qboolean G_InAttackParry(gentity_t *self)
 {//checks to see if a player is doing an attack parry
 
 	//must be holding attack and not pressing alt attack
-	if(!(self->client->pers.cmd.buttons & BUTTON_ATTACK)			//not pressing attack
-		|| !(self->client->pers.cmd.buttons & BUTTON_ALT_ATTACK))	//not holding alt attack
-	{//not holding the right buttons
+	if((self->client->pers.cmd.buttons & BUTTON_ATTACK)
+		|| (self->client->pers.cmd.buttons & BUTTON_ALT_ATTACK))
+	{//can't be pressing an attack button.
 		return qfalse;
 	}
 
-	if(PM_SaberInStart(self->client->ps.saberMove) //in windup
-		//|| PM_SaberInReturn(self->client->ps.saberMove)
-		|| PM_SaberInParry(self->client->ps.torsoAnim) // in block animation
-		|| (self->client->ps.saberBlocked >= BLOCKED_UPPER_RIGHT	//started a saber block this turn.
-			&& self->client->ps.saberBlocked < BLOCKED_UPPER_RIGHT_PROJ)) 
-	{
+	if(BG_SaberInTransitionAny(self->client->ps.saberMove))
+	{//in transition, start, or return
 		return qtrue;
 	}
 
