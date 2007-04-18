@@ -12023,24 +12023,6 @@ qboolean G_CanKickEntity( gentity_t *self, gentity_t *target )
 //[/CoOp]
 
 //[SaberSys]
-/* Unified into OJP_SaberCanBlock.  Left for reference.
-qboolean G_SaberInBlock( gentity_t *blocker, gentity_t *attacker )
-{//player is in a state were he can do a saber block.
-	if( (PM_SaberInParry(G_GetParryForBlock(blocker->client->ps.saberBlocked))
-			|| PM_SaberInReflect(G_GetParryForBlock(blocker->client->ps.saberBlocked))
-			|| PM_SaberInKnockaway(blocker->client->ps.saberMove)
-			|| BG_SaberInIdle(blocker->client->ps.saberMove))
-			&& blocker->client->ps.forceHandExtend == HANDEXTEND_NONE //we're not doing some force special
-			&& (blocker->client->ps.stats[STAT_DODGE] >= OJP_SaberBlockCost(blocker, attacker))
-			&& !(attacker->client->ps.saberMove == LS_A_LUNGE && blocker->client->ps.userInt3 & (1 << FLAG_FATIGUED)) ) //can't block lunge attacks while fatigued. 
-	{
-		return qtrue;
-	}
-	return qfalse;
-}
-*/
-
-
 qboolean G_BlockIsParry( gentity_t *self, gentity_t *attacker, vec3_t hitLoc )
 {//determines if self (who is blocking) is activing blocking (parrying)
 	vec3_t pAngles;

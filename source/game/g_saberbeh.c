@@ -414,7 +414,6 @@ void SabBeh_AttackVsBlock( gentity_t *attacker, sabmech_t *mechAttacker,
 
 	//[ExpSys]
 	G_DodgeDrain(blocker, attacker, OJP_SaberBlockCost(blocker, attacker, hitLoc));
-	//blocker->client->ps.stats[STAT_DODGE] -= OJP_SaberBlockCost(blocker, attacker, hitLoc);
 	//[/ExpSys]
 
 	//costs FP as well.

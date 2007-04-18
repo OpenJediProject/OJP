@@ -1264,16 +1264,6 @@ void OJP_HandleBoltBlock(gentity_t *bolt, gentity_t *player, trace_t *trace)
 	//deduce DP cost
 	//[ExpSys]
 	G_DodgeDrain(player, prevOwner, OJP_SaberBlockCost(player, bolt, trace->endpos));
-	//player->client->ps.stats[STAT_DODGE] -= OJP_SaberBlockCost(player, bolt, trace->endpos);
-
-	/* handled by G_DodgeDrain now
-	//since the bolt might have just hit the saber blade on its own, we have to account for the possibility that
-	//the player is just running on empty.
-	if(player->client->ps.stats[STAT_DODGE] < 0)
-	{
-		player->client->ps.stats[STAT_DODGE] = 0;
-	}
-	*/
 	//[ExpSys]
 
 	//debounce time between blocks.

@@ -655,7 +655,6 @@ static void WP_DisruptorMainFire( gentity_t *ent )
 			//reduce DP cost of the block
 			//[ExpSys]
 			G_DodgeDrain(traceEnt, ent, OJP_SaberBlockCost(traceEnt, ent, tr.endpos));
-			//traceEnt->client->ps.stats[STAT_DODGE] -= OJP_SaberBlockCost(traceEnt, ent, tr.endpos);
 			//[/ExpSys]
 
 			//force player into a projective block move.
@@ -912,7 +911,6 @@ void WP_DisruptorAltFire( gentity_t *ent )
 			//reduce DP cost of the block
 			//[ExpSys]
 			G_DodgeDrain(traceEnt, ent, OJP_SaberBlockCost(traceEnt, ent, tr.endpos));
-			//traceEnt->client->ps.stats[STAT_DODGE] -= OJP_SaberBlockCost(traceEnt, ent, tr.endpos);
 			//[/ExpSys]
 
 			//force player into a projective block move.
