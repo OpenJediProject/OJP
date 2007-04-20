@@ -770,43 +770,19 @@ qboolean G_CanDisruptify(gentity_t *ent)
 	return qfalse;
 }
 
-//---------------------------------------------------------
-void WP_DisruptorAltFire( gentity_t *ent )
-//---------------------------------------------------------
-{
-	int			damage = 0, skip;
-	qboolean	render_impact = qtrue;
-	vec3_t		start, end;
-	vec3_t		muzzle2;
-	trace_t		tr;
-	gentity_t	*traceEnt, *tent;
-	float		shotRange = 8192.0f;
-	int			i;
-	int			count, maxCount = 60;
-	int			traces = DISRUPTOR_ALT_TRACES;
-	qboolean	fullCharge = qfalse;
 
-	damage = DISRUPTOR_ALT_DAMAGE-30;
-
-	VectorCopy( muzzle, muzzle2 ); // making a backup copy
-
+//[DodgeSys]
+int DetermineDisruptorCharge(gentity_t *ent)
+{//returns the current charge level of the disruptor.  
+//WARNING: This function doesn't check ent to see if it is using a disruptor or if it is in alt-fire mode.
+	int count; 
+	int maxCount = DISRUPTOR_MAX_CHARGE;
 	if (ent->client)
 	{
-		VectorCopy( ent->client->ps.origin, start );
-		start[2] += ent->client->ps.viewheight;//By eyes
-
 		count = ( level.time - ent->client->ps.weaponChargeTime ) / DISRUPTOR_CHARGE_UNIT;
-		if ( g_gametype.integer == GT_SIEGE )
-		{//maybe a full alt-charge should be a *bit* more dangerous in Siege mode?
-			//maxCount = ceil((200.0f-(float)damage)/2.0f);//cap at 200 damage total
-			maxCount = 200;//the previous line ALWAYS evaluated to 135 - was that on purpose?
-		}
 	}
 	else
 	{
-		VectorCopy( ent->r.currentOrigin, start );
-		start[2] += 24;
-
 		count = ( 100 ) / DISRUPTOR_CHARGE_UNIT;
 	}
 
@@ -819,8 +795,84 @@ void WP_DisruptorAltFire( gentity_t *ent )
 	else if ( count >= maxCount )
 	{
 		count = maxCount;
+	}
+
+	return count;
+}
+//[/DodgeSys]
+
+//---------------------------------------------------------
+void WP_DisruptorAltFire( gentity_t *ent )
+//---------------------------------------------------------
+{
+	int			damage = 0, skip;
+	qboolean	render_impact = qtrue;
+	vec3_t		start, end;
+	vec3_t		muzzle2;
+	trace_t		tr;
+	gentity_t	*traceEnt, *tent;
+	float		shotRange = 8192.0f;
+	int			i;
+	//[DodgeSys]
+	int			count;
+	//int			count, maxCount = 60;
+	//[/DodgeSys]
+	int			traces = DISRUPTOR_ALT_TRACES;
+	qboolean	fullCharge = qfalse;
+
+	damage = DISRUPTOR_ALT_DAMAGE-30;
+
+	VectorCopy( muzzle, muzzle2 ); // making a backup copy
+
+	if (ent->client)
+	{
+		VectorCopy( ent->client->ps.origin, start );
+		start[2] += ent->client->ps.viewheight;//By eyes
+
+		//[DodgeSys]
+		//moved into DetermineDisruptorCharge so we can use it for Dodge cost calcs
+		/*
+		count = ( level.time - ent->client->ps.weaponChargeTime ) / DISRUPTOR_CHARGE_UNIT;
+		if ( g_gametype.integer == GT_SIEGE )
+		{//maybe a full alt-charge should be a *bit* more dangerous in Siege mode?
+			//maxCount = ceil((200.0f-(float)damage)/2.0f);//cap at 200 damage total
+			maxCount = 200;//the previous line ALWAYS evaluated to 135 - was that on purpose?
+		}
+		*/
+		//[/DodgeSys]
+	}
+	else
+	{
+		VectorCopy( ent->r.currentOrigin, start );
+		start[2] += 24;
+		//[DodgeSys]
+		//moved into DetermineDisruptorCharge so we can use it for Dodge cost calcs
+		//count = ( 100 ) / DISRUPTOR_CHARGE_UNIT;
+		//[/DodgeSys]
+	}
+
+	//[DodgeSys]
+	//moved into DetermineDisruptorCharge so we can use it for Dodge cost calcs
+	count = DetermineDisruptorCharge(ent);
+
+	if(count >= DISRUPTOR_MAX_CHARGE)
+	{
 		fullCharge = qtrue;
 	}
+	/* basejka code
+	count *= 2;
+
+	if ( count < 1 )
+	{
+		count = 1;
+	}
+	else if ( count >= maxCount )
+	{
+		count = maxCount;
+		fullCharge = qtrue;
+	}
+	*/
+	//[/DodgeSys]
 
 	// more powerful charges go through more things
 	if ( count < 10 )
@@ -886,6 +938,7 @@ void WP_DisruptorAltFire( gentity_t *ent )
 
 		//[BoltBlockSys]
 		//players can block or dodge disruptor shots.
+		/*  can't saber block alt fire shots.
 		if(OJP_SaberCanBlock(traceEnt, ent, qfalse, tr.endpos, -1, -1) )
 		{//saber can be used to block the shot.
 
@@ -919,7 +972,7 @@ void WP_DisruptorAltFire( gentity_t *ent )
 		}
 		//[/BoltBlockSys]
 		//[DodgeSys]
-		else if(G_DoDodge(traceEnt, ent, tr.endpos, -1, &damage, MOD_DISRUPTOR))
+		else*/ if(G_DoDodge(traceEnt, ent, tr.endpos, -1, &damage, MOD_DISRUPTOR_SNIPER))
 		{//player physically dodged the damage.  Act like we didn't hit him.
 			skip = tr.entityNum;
 			VectorCopy(tr.endpos, start);

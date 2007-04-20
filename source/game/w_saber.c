@@ -3377,7 +3377,7 @@ int OJP_SaberBlockCost(gentity_t *defender, gentity_t *attacker, vec3_t hitLoc)
 		|| !attacker->client	//attacker isn't a NPC/player
 		|| attacker->client->ps.weapon != WP_SABER ) //or the player that is attacking isn't using a saber
 	{//some sort of missile attack
-		if(attacker->s.weapon == WP_REPEATER)
+		if(attacker && attacker->s.weapon == WP_REPEATER)
 		{//repeaters shot faster so they cost much less to block
 			saberBlockCost = DODGE_REPEATERBLOCK;
 		}
@@ -5419,6 +5419,7 @@ qboolean DodgeRollCheck(gentity_t *self, int dodgeAnim, vec3_t forward, vec3_t r
 
 extern qboolean BG_HopAnim( int anim );
 extern qboolean PM_InKnockDown( playerState_t *ps );
+extern int DetermineDisruptorCharge(gentity_t *ent);
 //Returns qfalse if hit effects/damage is still suppose to be applied.
 qboolean G_DoDodge( gentity_t *self, gentity_t *shooter, vec3_t dmgOrigin, int hitLoc, int * dmg, int mod )
 {
@@ -5521,6 +5522,10 @@ qboolean G_DoDodge( gentity_t *self, gentity_t *shooter, vec3_t dmgOrigin, int h
 			G_Printf("%i: Client %i Can't dodge melee damage\n", level.time, self->s.number);
 		}
 		return qfalse;
+	}
+	else if(mod == MOD_DISRUPTOR_SNIPER && shooter && shooter->client)
+	{//charging a sniper shot can double the DP cost.
+		dpcost *= 2 * DetermineDisruptorCharge(shooter)/DISRUPTOR_MAX_CHARGE;
 	}
 
 	if(self->client->ps.legsAnim == BOTH_MEDITATE)

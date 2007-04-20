@@ -18,6 +18,7 @@ Version 0.0.9u:
 
 		Dodge:
 			- Fixed issue in G_DoDodge() where players could in theory dodge vehicle MOD.
+			- Charged disruptor shots can increase the DP cost of Dodging by up to x2 the normal cost.
 
 		Experience:
 			- Rescaled the skill point costs to better reflect gradual skill advancement.
