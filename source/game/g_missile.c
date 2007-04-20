@@ -1215,6 +1215,8 @@ void OJP_HandleBoltBlock(gentity_t *bolt, gentity_t *player, trace_t *trace)
 	{//only "deflected" the shot, but we did a manual block so we're boosting this up to a reflection.
 		//G_Printf("%i: %i manually reflected a bolt.\n", level.time, player->s.number);
 		otherDefLevel = player->client->ps.fd.forcePowerLevel[FP_SABER_DEFENSE];
+		//manual reflections tire the player.
+		BG_AddFatigue(&player->client->ps, 1);
 	}
 
 	//G_Printf("%i: Bounced Bolt @ Level %i\n", player->s.number, otherDefLevel);

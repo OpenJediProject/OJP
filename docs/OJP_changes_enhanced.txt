@@ -13,6 +13,9 @@ Version 0.0.9u:
 		Animation Tweaks:
 			- Fixed Juyo/Makashi animation stalls/freezes.
 
+		Blaster Bolt Blocking:
+			- Added an additional FP cost of 1 to manual reflections.
+
 		Dodge:
 			- Fixed issue in G_DoDodge() where players could in theory dodge vehicle MOD.
 
