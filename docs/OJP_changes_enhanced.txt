@@ -38,6 +38,9 @@ Version 0.0.9u:
 		JediMaster:
 			- Re-enabled map weapons and ammo pickups for JediMaster games.
 
+		Fatigue:
+			- Boosted the FP cost of jumps to 10.
+
 		Force Powers: 
 			- Can't use offensive Force powers while using heavy (Disruptor, Clone Rifle, Rocket Launcher, Flamethrower, and Detpack) or medium (blaster/bowcaster) weapons. 
 			- Can't block Force powers when using heavy weapons.
