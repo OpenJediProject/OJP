@@ -68,6 +68,7 @@ Version 0.0.9u:
 
 		Weapons:
 			- Slowed down the bowcaster secondary's rate of fire.
+			- Increased the width of disruptor shots.
 
 	Cvar Improvements:
 		

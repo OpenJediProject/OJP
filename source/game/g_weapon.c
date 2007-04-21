@@ -60,6 +60,10 @@ static	vec3_t	muzzle;
 #define DISRUPTOR_NPC_ALT_DAMAGE_CUT	0.2f
 #define DISRUPTOR_ALT_TRACES			3		// can go through a max of 3 damageable(sp?) entities
 #define DISRUPTOR_CHARGE_UNIT			50.0f	// distruptor charging gives us one more unit every 50ms--if you change this, you'll have to do the same in bg_pmove
+//[WeaponSys]
+#define DISRUPTOR_SHOT_SIZE				1		//disruptor shot size.  Was originally NULL (IE, 0)
+//[/WeaponSys]
+
 
 // Wookiee Bowcaster
 //----------
@@ -591,11 +595,17 @@ static void WP_DisruptorMainFire( gentity_t *ent )
 	{//need to loop this in case we hit a Jedi who dodges the shot
 		if (d_projectileGhoul2Collision.integer)
 		{
-			trap_G2Trace( &tr, start, NULL, NULL, end, ignore, MASK_SHOT, G2TRFLAG_DOGHOULTRACE|G2TRFLAG_GETSURFINDEX|G2TRFLAG_THICK|G2TRFLAG_HITCORPSES, g_g2TraceLod.integer );
+			//[WeaponSys]
+			trap_G2Trace( &tr, start, DISRUPTOR_SHOT_SIZE, DISRUPTOR_SHOT_SIZE, end, ignore, MASK_SHOT, G2TRFLAG_DOGHOULTRACE|G2TRFLAG_GETSURFINDEX|G2TRFLAG_THICK|G2TRFLAG_HITCORPSES, g_g2TraceLod.integer );
+			//trap_G2Trace( &tr, start, NULL, NULL, end, ignore, MASK_SHOT, G2TRFLAG_DOGHOULTRACE|G2TRFLAG_GETSURFINDEX|G2TRFLAG_THICK|G2TRFLAG_HITCORPSES, g_g2TraceLod.integer );
+			//[/WeaponSys]
 		}
 		else
 		{
-			trap_Trace( &tr, start, NULL, NULL, end, ignore, MASK_SHOT );
+			//[WeaponSys]
+			trap_Trace( &tr, start, DISRUPTOR_SHOT_SIZE, DISRUPTOR_SHOT_SIZE, end, ignore, MASK_SHOT );
+			//trap_Trace( &tr, start, NULL, NULL, end, ignore, MASK_SHOT );
+			//[/WeaponSys]
 		}
 
 		traceEnt = &g_entities[tr.entityNum];
@@ -894,11 +904,17 @@ void WP_DisruptorAltFire( gentity_t *ent )
 
 		if (d_projectileGhoul2Collision.integer)
 		{
-			trap_G2Trace( &tr, start, NULL, NULL, end, skip, MASK_SHOT, G2TRFLAG_DOGHOULTRACE|G2TRFLAG_GETSURFINDEX|G2TRFLAG_THICK|G2TRFLAG_HITCORPSES, g_g2TraceLod.integer );
+			//[WeaponSys]
+			trap_G2Trace( &tr, start, DISRUPTOR_SHOT_SIZE, DISRUPTOR_SHOT_SIZE, end, skip, MASK_SHOT, G2TRFLAG_DOGHOULTRACE|G2TRFLAG_GETSURFINDEX|G2TRFLAG_THICK|G2TRFLAG_HITCORPSES, g_g2TraceLod.integer );
+			//trap_G2Trace( &tr, start, NULL, NULL, end, skip, MASK_SHOT, G2TRFLAG_DOGHOULTRACE|G2TRFLAG_GETSURFINDEX|G2TRFLAG_THICK|G2TRFLAG_HITCORPSES, g_g2TraceLod.integer );
+			//[/WeaponSys]
 		}
 		else
 		{
-			trap_Trace( &tr, start, NULL, NULL, end, skip, MASK_SHOT );
+			//[WeaponSys]
+			trap_Trace( &tr, start, DISRUPTOR_SHOT_SIZE, DISRUPTOR_SHOT_SIZE, end, skip, MASK_SHOT );
+			//trap_Trace( &tr, start, NULL, NULL, end, skip, MASK_SHOT );
+			//[/WeaponSys]
 		}
 
 		traceEnt = &g_entities[tr.entityNum];
