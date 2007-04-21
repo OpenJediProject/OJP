@@ -1916,6 +1916,11 @@ qboolean BG_IsWhiteSpace(char c);
 //[LastManStanding]
 qboolean BG_IsLMSGametype(int gametype);
 //[/LastManStanding]
+//[ForceSys]
+qboolean BG_IsUsingMediumWeap (playerState_t *ps);
+qboolean BG_IsUsingHeavyWeap (playerState_t *ps);
+//[/ForceSys]
+
 
 void BG_BLADE_ActivateTrail ( bladeInfo_t *blade, float duration );
 void BG_BLADE_DeactivateTrail ( bladeInfo_t *blade, float duration );

@@ -2033,6 +2033,25 @@ qboolean BG_CanUseFPNow(int gametype, playerState_t *ps, int time, forcePowers_t
 		return qfalse;
 	}
 
+	//[ForceSys]
+	if(BG_IsUsingHeavyWeap(ps) //heavy weapons
+		|| BG_IsUsingMediumWeap(ps)) //medium weapons
+	{//can't use offensive powers while holding medium/heavy weapons
+        switch (power)
+		{
+		case FP_PUSH:
+		case FP_PULL:
+		case FP_GRIP:
+		case FP_TELEPATHY:
+		case FP_LIGHTNING:
+		case FP_DRAIN:
+			return qfalse;
+		default:
+			break;
+		};
+	}
+	//[/ForceSys]
+
 	if ((ps->brokenLimbs & (1 << BROKENLIMB_RARM)) ||
 		(ps->brokenLimbs & (1 << BROKENLIMB_LARM)))
 	{ //powers we can't use with a broken arm
@@ -3638,4 +3657,40 @@ qboolean BG_IsLMSGametype(int gametype)
 	return qfalse;
 }
 //[/LastManStanding]
+
+
+//[ForceSys]
+qboolean BG_IsUsingMediumWeap (playerState_t *ps)
+{//checks to see if the player is using a "medium" class weapon, which prevent offensive Force powers, but not defensive ones.
+	assert(ps);
+	switch(ps->weapon)
+	{
+	case WP_BLASTER:
+	case WP_BOWCASTER:
+		return qtrue;
+	default:
+		return qfalse;
+	};
+}
+
+qboolean BG_IsUsingHeavyWeap (playerState_t *ps)
+{//checks to see if the player is using a "heavy" class weapon, which is too unweildy to be able to use offensive or defense Force powers.
+	assert(ps);
+	if(ps->userInt3 & (1 << FLAG_FLAMETHROWER))
+	{
+		return qtrue;
+	}
+
+	switch(ps->weapon)
+	{
+	case WP_DISRUPTOR:
+	case WP_REPEATER:
+	case WP_ROCKET_LAUNCHER:
+	case WP_DET_PACK:
+		return qtrue;
+	default:
+		return qfalse;
+	};
+}
+//[/ForceSys]
 #include "../namespace_end.h"

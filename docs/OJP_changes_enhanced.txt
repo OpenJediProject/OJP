@@ -15,6 +15,7 @@ Version 0.0.9u:
 
 		Blaster Bolt Blocking:
 			- Added an additional FP cost of 1 to manual reflections.
+			- Can't saber block charged disruptor shots.
 
 		Dodge:
 			- Fixed issue in G_DoDodge() where players could in theory dodge vehicle MOD.
@@ -37,7 +38,10 @@ Version 0.0.9u:
 		JediMaster:
 			- Re-enabled map weapons and ammo pickups for JediMaster games.
 
-		Force Powers:  
+		Force Powers: 
+			- Can't use offensive Force powers while using heavy (Disruptor, Clone Rifle, Rocket Launcher, Flamethrower, and Detpack) or medium (blaster/bowcaster) weapons. 
+			- Can't block Force powers when using heavy weapons.
+			- Fixed bug where Force Users using flamethrowers or rocket launchers couldn't be blocked.
 			- Getting pushed/pulled during a slow bounce no longer screws up the player's movement for a few seconds.
 			- Decreased the double handed lightning damage to 1.5.
 

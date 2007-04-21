@@ -2043,9 +2043,8 @@ qboolean OJP_CounterForce(gentity_t *attacker, gentity_t *defender, int attackPo
 {//generically checks to see if the defender is able to block an attack from this attacker 
 	int abilityDef;		//the difference in skill between the defender's defend power and the attacker's attack power.
 
-	if(attacker->client->ps.userInt3 & (1 << FLAG_FLAMETHROWER)
-		|| attacker->client->ps.weapon == WP_ROCKET_LAUNCHER)
-	{//can't block force powers while using the rocket launcher or flamethrower.
+	if(BG_IsUsingHeavyWeap(&defender->client->ps))
+	{//can't block force powers while using heavy weapons
 		return qfalse;
 	}
 
