@@ -3472,6 +3472,11 @@ int OJP_SaberBlockCost(gentity_t *defender, gentity_t *attacker, vec3_t hitLoc)
 		saberBlockCost *= 2;
 	}
 
+	if(defender->client->ps.groundEntityNum == ENTITYNUM_NONE)
+	{//in mid-air
+		saberBlockCost *= 2;
+	}
+
 	return (int) saberBlockCost;
 }
 

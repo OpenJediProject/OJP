@@ -54,6 +54,9 @@ Version 0.0.9u:
 		Saber Combat:
 			Attack Parries:
 				- Attack parries are now performed by tapping the attack button right before an impact while performing a standard parry.  Attack parries can only be performed while not attacking.
+
+			Blocking:
+				- Saber blocking in mid-air costs double DP.
 		
 			Misc:
 				- Fixed problem with collision stops not being long enough for normal (unparried) saber blocks.
