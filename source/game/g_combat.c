@@ -538,7 +538,7 @@ void TossClientWeapon(gentity_t *self, vec3_t direction, float speed)
 	launched->s.generic1 = self->s.number;
 	launched->s.powerups = level.time + 1500;
 
-	//[WeapSys]
+	//[WeaponSys]
 	launched->count = self->client->ps.ammo[weaponData[weapon].ammoIndex];
 
 	self->client->ps.ammo[weaponData[weapon].ammoIndex] = 0;
@@ -553,7 +553,7 @@ void TossClientWeapon(gentity_t *self, vec3_t direction, float speed)
 		self->client->ps.ammo[weaponData[weapon].ammoIndex] = 0;
 	}
 	*/
-	//[/WeapSys]
+	//[/WeaponSys]
 
 	if ((self->client->ps.ammo[weaponData[weapon].ammoIndex] < 1 && weapon != WP_DET_PACK) ||
 		(weapon != WP_THERMAL && weapon != WP_DET_PACK && weapon != WP_TRIP_MINE))
@@ -724,7 +724,7 @@ void TossClientItems( gentity_t *self ) {
 			}
 			else
 			*/
-			//[WeapSys]
+			//[WeaponSys]
 			//give it ammo based on how much ammo the entity had
 			dropped->count = self->client->ps.ammo[weaponData[item->giTag].ammoIndex];
 
@@ -778,7 +778,7 @@ void TossClientItems( gentity_t *self ) {
 				}
 			}
 			*/
-			//[/WeapSys]
+			//[/WeaponSys]
 
 			//MP version
 			// tell all clients to remove the weapon model on this guy until he respawns

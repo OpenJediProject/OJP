@@ -61,7 +61,7 @@ static	vec3_t	muzzle;
 #define DISRUPTOR_ALT_TRACES			3		// can go through a max of 3 damageable(sp?) entities
 #define DISRUPTOR_CHARGE_UNIT			50.0f	// distruptor charging gives us one more unit every 50ms--if you change this, you'll have to do the same in bg_pmove
 //[WeaponSys]
-#define DISRUPTOR_SHOT_SIZE				1		//disruptor shot size.  Was originally NULL (IE, 0)
+#define DISRUPTOR_SHOT_SIZE				1		//disruptor shot size.  Was originally 0
 //[/WeaponSys]
 
 
@@ -576,6 +576,10 @@ static void WP_DisruptorMainFire( gentity_t *ent )
 	gentity_t	*traceEnt, *tent;
 	float		shotRange = 8192;
 	int			ignore, traces;
+	//[WeaponSys]
+	vec3_t		shotMaxs = { DISRUPTOR_SHOT_SIZE, DISRUPTOR_SHOT_SIZE, DISRUPTOR_SHOT_SIZE };
+	vec3_t		shotMins = { -DISRUPTOR_SHOT_SIZE, -DISRUPTOR_SHOT_SIZE, -DISRUPTOR_SHOT_SIZE };
+	//[/WeaponSys]
 
 	if ( g_gametype.integer == GT_SIEGE )
 	{
@@ -596,14 +600,14 @@ static void WP_DisruptorMainFire( gentity_t *ent )
 		if (d_projectileGhoul2Collision.integer)
 		{
 			//[WeaponSys]
-			trap_G2Trace( &tr, start, DISRUPTOR_SHOT_SIZE, DISRUPTOR_SHOT_SIZE, end, ignore, MASK_SHOT, G2TRFLAG_DOGHOULTRACE|G2TRFLAG_GETSURFINDEX|G2TRFLAG_THICK|G2TRFLAG_HITCORPSES, g_g2TraceLod.integer );
+			trap_G2Trace( &tr, start, shotMins, shotMaxs, end, ignore, MASK_SHOT, G2TRFLAG_DOGHOULTRACE|G2TRFLAG_GETSURFINDEX|G2TRFLAG_THICK|G2TRFLAG_HITCORPSES, g_g2TraceLod.integer );
 			//trap_G2Trace( &tr, start, NULL, NULL, end, ignore, MASK_SHOT, G2TRFLAG_DOGHOULTRACE|G2TRFLAG_GETSURFINDEX|G2TRFLAG_THICK|G2TRFLAG_HITCORPSES, g_g2TraceLod.integer );
 			//[/WeaponSys]
 		}
 		else
 		{
 			//[WeaponSys]
-			trap_Trace( &tr, start, DISRUPTOR_SHOT_SIZE, DISRUPTOR_SHOT_SIZE, end, ignore, MASK_SHOT );
+			trap_Trace( &tr, start, shotMins, shotMaxs, end, ignore, MASK_SHOT );
 			//trap_Trace( &tr, start, NULL, NULL, end, ignore, MASK_SHOT );
 			//[/WeaponSys]
 		}
@@ -830,6 +834,11 @@ void WP_DisruptorAltFire( gentity_t *ent )
 	int			traces = DISRUPTOR_ALT_TRACES;
 	qboolean	fullCharge = qfalse;
 
+	//[WeaponSys]
+	vec3_t	shotMaxs = { DISRUPTOR_SHOT_SIZE, DISRUPTOR_SHOT_SIZE, DISRUPTOR_SHOT_SIZE };
+	vec3_t	shotMins = { -DISRUPTOR_SHOT_SIZE, -DISRUPTOR_SHOT_SIZE, -DISRUPTOR_SHOT_SIZE };
+	//[/WeaponSys]
+
 	damage = DISRUPTOR_ALT_DAMAGE-30;
 
 	VectorCopy( muzzle, muzzle2 ); // making a backup copy
@@ -905,14 +914,14 @@ void WP_DisruptorAltFire( gentity_t *ent )
 		if (d_projectileGhoul2Collision.integer)
 		{
 			//[WeaponSys]
-			trap_G2Trace( &tr, start, DISRUPTOR_SHOT_SIZE, DISRUPTOR_SHOT_SIZE, end, skip, MASK_SHOT, G2TRFLAG_DOGHOULTRACE|G2TRFLAG_GETSURFINDEX|G2TRFLAG_THICK|G2TRFLAG_HITCORPSES, g_g2TraceLod.integer );
+			trap_G2Trace( &tr, start, shotMins, shotMaxs, end, skip, MASK_SHOT, G2TRFLAG_DOGHOULTRACE|G2TRFLAG_GETSURFINDEX|G2TRFLAG_THICK|G2TRFLAG_HITCORPSES, g_g2TraceLod.integer );
 			//trap_G2Trace( &tr, start, NULL, NULL, end, skip, MASK_SHOT, G2TRFLAG_DOGHOULTRACE|G2TRFLAG_GETSURFINDEX|G2TRFLAG_THICK|G2TRFLAG_HITCORPSES, g_g2TraceLod.integer );
 			//[/WeaponSys]
 		}
 		else
 		{
 			//[WeaponSys]
-			trap_Trace( &tr, start, DISRUPTOR_SHOT_SIZE, DISRUPTOR_SHOT_SIZE, end, skip, MASK_SHOT );
+			trap_Trace( &tr, start, shotMins, shotMaxs, end, skip, MASK_SHOT );
 			//trap_Trace( &tr, start, NULL, NULL, end, skip, MASK_SHOT );
 			//[/WeaponSys]
 		}
