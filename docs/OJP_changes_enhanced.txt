@@ -5,6 +5,18 @@ Open Jedi Project Change Log (Enhanced Distribution)
 This file stores all the information about what has changed from release version to release version for OJP Enhanced.  OJP Enhanced contains all the changes of OJP Basic plus a library of gameplay alterations made by OJP's contributors.
 
 
+Version 0.0.9v:
+	Improvements/Fixes:
+
+		Force Powers:
+			Pull:
+				- To pull a weapon out of a player's hands, the Force users must target them directly with their crosshairs.
+
+		Saber Combat:
+			Saber Locks:
+				- Can't use Force Push in saberlocks.
+
+
 Version 0.0.9u:
 	New Features:
 

@@ -3547,15 +3547,19 @@ void ForceThrow( gentity_t *self, qboolean pull )
 
 	if (!pull && self->client->ps.saberLockTime > level.time && self->client->ps.saberLockFrame)
 	{//RACC - used force push in a saber lock.
+		//[SaberLockSys]
+		/* can't use push in saberlocks anymore.
 		G_Sound( self, CHAN_BODY, G_SoundIndex( "sound/weapons/force/push.wav" ) );
 		self->client->ps.powerups[PW_DISINT_4] = level.time + 1500;
 
 		self->client->ps.saberLockHits += self->client->ps.fd.forcePowerLevel[FP_PUSH]*2;
 
 		WP_ForcePowerStart( self, FP_PUSH, 0 );
+		*/
+		//[/SaberLockSys]
 		return;
 	}
-
+	
 	WP_ForcePowerStart( self, powerUse, 0 );
 
 	//make sure this plays and that you cannot press fire for about 1 second after this
@@ -4109,7 +4113,29 @@ void ForceThrow( gentity_t *self, qboolean pull )
 						//[/ForceSys]
 						{//racc - pull the weapon out of the player's hand.
 							vec3_t uorg, vecnorm;
+							//[ForceSys]
+							VectorCopy(self->client->ps.origin, tfrom);
+							tfrom[2] += self->client->ps.viewheight;
+							AngleVectors(self->client->ps.viewangles, fwd, NULL, NULL);
+							tto[0] = tfrom[0] + fwd[0]*radius/2;
+							tto[1] = tfrom[1] + fwd[1]*radius/2;
+							tto[2] = tfrom[2] + fwd[2]*radius/2;
 
+							trap_Trace(&tr, tfrom, NULL, NULL, tto, self->s.number, MASK_PLAYERSOLID);
+
+							if (tr.fraction != 1.0 
+								&& tr.entityNum == push_list[x]->s.number)
+							{
+								VectorCopy(self->client->ps.origin, uorg);
+								uorg[2] += 64;
+
+								VectorSubtract(uorg, thispush_org, vecnorm);
+								VectorNormalize(vecnorm);
+
+								TossClientWeapon(push_list[x], vecnorm, 500);
+							}
+
+							/* basejka code
 							VectorCopy(self->client->ps.origin, uorg);
 							uorg[2] += 64;
 
@@ -4117,6 +4143,8 @@ void ForceThrow( gentity_t *self, qboolean pull )
 							VectorNormalize(vecnorm);
 
 							TossClientWeapon(push_list[x], vecnorm, 500);
+							*/
+							//[/ForceSys]
 						}
 					}
 				}
