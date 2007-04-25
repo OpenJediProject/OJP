@@ -1,3 +1,4 @@
+//[NewMenus]
 //-----------------------------------------
 // SETUP MENU
 //-----------------------------------------
@@ -9,13 +10,13 @@
 		fullscreen				0
 		outOfBoundsClick									// this closes the window if it gets a click out of the rectangle
 		rect					45 35 550 335
-		focusColor				1 1 1 1								// Focus color for text and items
+		focusColor				0 0.4 0.8 1							// Focus color for text and items
 		style					1
 		border					1
 		descX					305
 		descY					360
 		descScale				1
-		descColor				1 .682 0 .8					// Focus color for text and items
+		descColor				0 0.4 0.8 1					// Focus color for text and items
 		descAlignment				ITEM_ALIGN_CENTER		
 
 		onClose 
@@ -44,13 +45,13 @@
 			hide			forcecontrols2 ;
 			hide			joycontrols ;
 			hide			othercontrols ;
-			setitemcolor		movementcontrolbutton 		forecolor 1 1 1 1 ;
-			setitemcolor		attackcontrolbutton 		forecolor 1 .682 0 1
-			setitemcolor		weaponscontrolbutton 		forecolor 1 .682 0 1 ;
-			setitemcolor		forcecontrolbutton 		forecolor 1 .682 0 1 ;
-			setitemcolor		forcecontrolbutton2 		forecolor 1 .682 0 1 ;
-			setitemcolor		mousejoystickcontrolbutton 	forecolor 1 .682 0 1 ;
-			setitemcolor		othercontrolbutton 		forecolor 1 .682 0 1 ;
+			setitemcolor		movementcontrolbutton 		forecolor 0 0.4 0.8 1 ;
+			setitemcolor		attackcontrolbutton 		forecolor 0.8 0.8 0.8 1
+			setitemcolor		weaponscontrolbutton 		forecolor 0.8 0.8 0.8 1 ;
+			setitemcolor		forcecontrolbutton 		forecolor 0.8 0.8 0.8 1 ;
+			setitemcolor		forcecontrolbutton2 		forecolor 0.8 0.8 0.8 1 ;
+			setitemcolor		mousejoystickcontrolbutton 	forecolor 0.8 0.8 0.8 1 ;
+			setitemcolor		othercontrolbutton 		forecolor 0.8 0.8 0.8 1 ;
 		}
 
 		// Overall window backdrop
@@ -58,9 +59,11 @@
 		{
 			name				background_pic
 			group				none
-			style				WINDOW_STYLE_SHADER
+			style				WINDOW_STYLE_FILLED
 			rect				0 0 550 345
-			background			"gfx/menus/menu_box_ingame"
+			border				1
+			bordercolor			0 0 0 1
+			backcolor			0.1 0.1 0.1 0.5
 			forecolor			1 1 1 1
 			visible				1
 			decoration
@@ -69,36 +72,23 @@
 		itemDef 
 		{
 			name				playerconfigtitle
-			style				WINDOW_STYLE_SHADER
-			background			"gfx/menus/menu_blendbox"
+			style				WINDOW_STYLE_FILLED
 			text				@MENUS_CONFIGURE_CONTROLS
 			rect				20 5 510 28
 			textalign			ITEM_ALIGN_CENTER		
 			textalignx			255
 			textaligny			2
-			outlinecolor			1 .5 .5 .5
-			backcolor			0 0 0 0
+			outlinecolor		1 .5 .5 .5
+			backcolor			0 0 0 1
 			font				3
 			textscale			0.9
-			forecolor			.549 .854 1 1
+			forecolor			1 1 1 1
 			border				0
 			bordercolor			0 0 0 0
 			visible				1 
 		}
 
 // movement  button
-		itemDef 
-		{
-			name				movementcontrolbutton_glow
-			group				mods
-			style				WINDOW_STYLE_SHADER
-			rect				20 43 185 30
-			background			"gfx/menus/menu_blendbox2"			// Frame around button
-			forecolor			1 1 1 1
-			visible				0
-			decoration
-		}
-
 		itemDef 
 		{
 			name				movementcontrolbutton
@@ -113,17 +103,15 @@
 			textaligny			5
 			textalign			ITEM_ALIGN_RIGHT
 			textstyle			3
-			forecolor			0.65 0.65 1 1
+			forecolor			0.8 0.8 0.8 1
 			visible			1
 			descText			@MENUS_CONFIGURE_MOVEMENT_KEYS
 
 			mouseEnter 
 			{ 
-				show			movementcontrolbutton_glow
 			}
 			mouseExit 
 			{ 
-				hide			movementcontrolbutton_glow
 			}	  	  
 			action 
 			{ 
@@ -136,29 +124,17 @@
 				hide			forcecontrols2 ;
 				hide			joycontrols ;
 				hide			othercontrols ;
-				setitemcolor		movementcontrolbutton 		forecolor 1 1 1 1 ;
-				setitemcolor		attackcontrolbutton 		forecolor 1 .682 0 1 ;
-				setitemcolor		weaponscontrolbutton 		forecolor 1 .682 0 1 ;
-				setitemcolor		forcecontrolbutton 		forecolor 1 .682 0 1 ;
-				setitemcolor		forcecontrolbutton2 		forecolor 1 .682 0 1 ;
-				setitemcolor		mousejoystickcontrolbutton 	forecolor 1 .682 0 1 ;
-				setitemcolor		othercontrolbutton 		forecolor 1 .682 0 1 ;
+				setitemcolor		movementcontrolbutton 		forecolor 0 0.4 0.8 1 ;
+				setitemcolor		attackcontrolbutton 		forecolor 0.8 0.8 0.8 1 ;
+				setitemcolor		weaponscontrolbutton 		forecolor 0.8 0.8 0.8 1 ;
+				setitemcolor		forcecontrolbutton 		forecolor 0.8 0.8 0.8 1 ;
+				setitemcolor		forcecontrolbutton2 		forecolor 0.8 0.8 0.8 1 ;
+				setitemcolor		mousejoystickcontrolbutton 	forecolor 0.8 0.8 0.8 1 ;
+				setitemcolor		othercontrolbutton 		forecolor 0.8 0.8 0.8 1 ;
 			}
 		}
 
 // interaction  button
-		itemDef 
-		{
-			name				attackcontrolbutton_glow
-			group				mods
-			style				WINDOW_STYLE_SHADER
-			rect				20 73 185 30
-			background			"gfx/menus/menu_blendbox2"			// Frame around button
-			forecolor			1 1 1 1
-			visible			0
-			decoration
-		}
-
 		itemDef 
 		{
 			name				attackcontrolbutton
@@ -173,17 +149,15 @@
 			textaligny			5
 			textalign			ITEM_ALIGN_RIGHT
 			textstyle			3
-			forecolor			0.65 0.65 1 1
+			forecolor			0.8 0.8 0.8 1
 			visible			1
 			descText			@MENUS_INTERACTION_DESC
 
 			mouseEnter 
 			{ 
-				show			attackcontrolbutton_glow
 			}
 			mouseExit 
 			{ 
-				hide			attackcontrolbutton_glow
 			}	  	  
 			action 
 			{ 
@@ -196,29 +170,17 @@
 				hide			forcecontrols2 ;
 				hide			joycontrols ;
 				hide			othercontrols ;
-				setitemcolor		movementcontrolbutton 		forecolor 1 .682 0 1 ;
-				setitemcolor		attackcontrolbutton 		forecolor 1 1 1 1 ;
-				setitemcolor		weaponscontrolbutton 		forecolor 1 .682 0 1 ;
-				setitemcolor		forcecontrolbutton 		forecolor 1 .682 0 1 ;
-				setitemcolor		forcecontrolbutton2 		forecolor 1 .682 0 1 ;
-				setitemcolor		mousejoystickcontrolbutton 	forecolor 1 .682 0 1 ;
-				setitemcolor		othercontrolbutton 		forecolor 1 .682 0 1 ;
+				setitemcolor		movementcontrolbutton 		forecolor 0.8 0.8 0.8 1 ;
+				setitemcolor		attackcontrolbutton 		forecolor 0 0.4 0.8 1 ;
+				setitemcolor		weaponscontrolbutton 		forecolor 0.8 0.8 0.8 1 ;
+				setitemcolor		forcecontrolbutton 		forecolor 0.8 0.8 0.8 1 ;
+				setitemcolor		forcecontrolbutton2 		forecolor 0.8 0.8 0.8 1 ;
+				setitemcolor		mousejoystickcontrolbutton 	forecolor 0.8 0.8 0.8 1 ;
+				setitemcolor		othercontrolbutton 		forecolor 0.8 0.8 0.8 1 ;
 			}
 		}
 
 		// Weapons button
-		itemDef 
-		{
-			name				weaponscontrolbutton_glow
-			group				mods
-			style				WINDOW_STYLE_SHADER
-			rect				20 103 185 30
-			background			"gfx/menus/menu_blendbox2"			// Frame around button
-			forecolor			1 1 1 1
-			visible				0
-			decoration
-		}
-
 		itemDef 
 		{
 			name				weaponscontrolbutton
@@ -233,17 +195,15 @@
 			textaligny			5
 			textalign			ITEM_ALIGN_RIGHT
 			textstyle			3
-			forecolor			1 .682 0 1
+			forecolor			0.8 0.8 0.8 1
 			visible				1
 			descText			@MENUS_CONFIGURE_WEAPON_CONTROLS
 
 			mouseEnter 
 			{ 
-				show			weaponscontrolbutton_glow
 			}
 			mouseExit 
 			{ 
-				hide			weaponscontrolbutton_glow
 			}	  	  
 			action 
 			{ 
@@ -256,29 +216,17 @@
 				hide			forcecontrols2 ;
 				hide			joycontrols ;
 				hide			othercontrols ;
-				setitemcolor		movementcontrolbutton 		forecolor 1 .682 0 1 ;
-				setitemcolor		attackcontrolbutton 		forecolor 1 .682 0 1 ;
-				setitemcolor		weaponscontrolbutton 		forecolor 1 1 1 1 ;
-				setitemcolor		forcecontrolbutton 		forecolor 1 .682 0 1 ;
-				setitemcolor		forcecontrolbutton2 		forecolor 1 .682 0 1 ;
-				setitemcolor		mousejoystickcontrolbutton 	forecolor 1 .682 0 1 ;
-				setitemcolor		othercontrolbutton 		forecolor 1 .682 0 1 ;
+				setitemcolor		movementcontrolbutton 		forecolor 0.8 0.8 0.8 1 ;
+				setitemcolor		attackcontrolbutton 		forecolor 0.8 0.8 0.8 1 ;
+				setitemcolor		weaponscontrolbutton 		forecolor 0 0.4 0.8 1 ;
+				setitemcolor		forcecontrolbutton 		forecolor 0.8 0.8 0.8 1 ;
+				setitemcolor		forcecontrolbutton2 		forecolor 0.8 0.8 0.8 1 ;
+				setitemcolor		mousejoystickcontrolbutton 	forecolor 0.8 0.8 0.8 1 ;
+				setitemcolor		othercontrolbutton 		forecolor 0.8 0.8 0.8 1 ;
 			}
 		}
 
 		// Force Powers button
-		itemDef 
-		{
-			name				forcecontrolbutton_glow
-			group				mods
-			style				WINDOW_STYLE_SHADER
-			rect				20 133 185 30
-			background			"gfx/menus/menu_blendbox2"			// Frame around button
-			forecolor			1 1 1 1
-			visible			0
-			decoration
-		}
-
 		itemDef 
 		{
 			name				forcecontrolbutton
@@ -293,17 +241,15 @@
 			textaligny			5
 			textalign			ITEM_ALIGN_RIGHT
 			textstyle			3
-			forecolor			0.65 0.65 1 1
+			forecolor			0.8 0.8 0.8 1
 			visible			1
 			descText			@MENUS_CONFIGURE_FORCE_POWER
 
 			mouseEnter 
 			{ 
-				show			forcecontrolbutton_glow
 			}
 			mouseExit 
 			{ 
-				hide			forcecontrolbutton_glow
 			}	  	  
 			action 
 			{ 
@@ -316,29 +262,17 @@
 				hide			forcecontrols2 ;
 				hide			joycontrols ;
 				hide			othercontrols ;
-				setitemcolor		movementcontrolbutton 		forecolor 1 .682 0 1 ;
-				setitemcolor		attackcontrolbutton 		forecolor 1 .682 0 1 ;
-				setitemcolor		weaponscontrolbutton 		forecolor 1 .682 0 1 ;
-				setitemcolor		forcecontrolbutton 		forecolor 1 1 1 1 ;
-				setitemcolor		forcecontrolbutton2 		forecolor 1 .682 0 1 ;
-				setitemcolor		mousejoystickcontrolbutton 	forecolor 1 .682 0 1 ;
-				setitemcolor		othercontrolbutton 		forecolor 1 .682 0 1 ;
+				setitemcolor		movementcontrolbutton 		forecolor 0.8 0.8 0.8 1 ;
+				setitemcolor		attackcontrolbutton 		forecolor 0.8 0.8 0.8 1 ;
+				setitemcolor		weaponscontrolbutton 		forecolor 0.8 0.8 0.8 1 ;
+				setitemcolor		forcecontrolbutton 		forecolor 0 0.4 0.8 1 ;
+				setitemcolor		forcecontrolbutton2 		forecolor 0.8 0.8 0.8 1 ;
+				setitemcolor		mousejoystickcontrolbutton 	forecolor 0.8 0.8 0.8 1 ;
+				setitemcolor		othercontrolbutton 		forecolor 0.8 0.8 0.8 1 ;
 			}
 		}
 
 		// Force Powers button 2
-		itemDef 
-		{
-			name				forcecontrolbutton2_glow
-			group				mods
-			style				WINDOW_STYLE_SHADER
-			rect				20 163 185 30
-			background			"gfx/menus/menu_blendbox2"			// Frame around button
-			forecolor			1 1 1 1
-			visible			0
-			decoration
-		}
-
 		itemDef 
 		{
 			name				forcecontrolbutton2
@@ -352,17 +286,15 @@
 			textaligny			5
 			textalign			ITEM_ALIGN_RIGHT
 			textstyle			3
-			forecolor			0.65 0.65 1 1
+			forecolor			0.8 0.8 0.8 1
 			visible				1
 			descText			@MENUS_CONFIGURE_FORCE_POWER
 
 			mouseEnter 
 			{ 
-				show			forcecontrolbutton2_glow
 			}
 			mouseExit 
 			{ 
-				hide			forcecontrolbutton2_glow
 			}	  	  
 			action 
 			{ 
@@ -375,29 +307,17 @@
 				show			forcecontrols2 ;
 				hide			joycontrols ;
 				hide			othercontrols ;
-				setitemcolor		movementcontrolbutton 		forecolor 1 .682 0 1 ;
-				setitemcolor		attackcontrolbutton 		forecolor 1 .682 0 1 ;
-				setitemcolor		weaponscontrolbutton 		forecolor 1 .682 0 1 ;
-				setitemcolor		forcecontrolbutton 		forecolor 1 .682 0 1 ;
-				setitemcolor		forcecontrolbutton2 		forecolor 1 1 1 1 ;
-				setitemcolor		mousejoystickcontrolbutton 	forecolor 1 .682 0 1 ;
-				setitemcolor		othercontrolbutton 		forecolor 1 .682 0 1 ;
+				setitemcolor		movementcontrolbutton 		forecolor 0.8 0.8 0.8 1 ;
+				setitemcolor		attackcontrolbutton 		forecolor 0.8 0.8 0.8 1 ;
+				setitemcolor		weaponscontrolbutton 		forecolor 0.8 0.8 0.8 1 ;
+				setitemcolor		forcecontrolbutton 		forecolor 0.8 0.8 0.8 1 ;
+				setitemcolor		forcecontrolbutton2 		forecolor 0 0.4 0.8 1 ;
+				setitemcolor		mousejoystickcontrolbutton 	forecolor 0.8 0.8 0.8 1 ;
+				setitemcolor		othercontrolbutton 		forecolor 0.8 0.8 0.8 1 ;
 			}
 		}
 
 		// mousejoystick  button
-		itemDef 
-		{
-			name				mousejoystickcontrolbutton_glow
-			group				mods
-			style				WINDOW_STYLE_SHADER
-			rect				20 193 185 30
-			background			"gfx/menus/menu_blendbox2"			// Frame around button
-			forecolor			1 1 1 1
-			visible			0
-			decoration
-		}
-
 		itemDef 
 		{
 			name				mousejoystickcontrolbutton
@@ -412,17 +332,15 @@
 			textaligny			5
 			textalign			ITEM_ALIGN_RIGHT
 			textstyle			3
-			forecolor			0.65 0.65 1 1
+			forecolor			0.8 0.8 0.8 1
 			visible			1
 			descText			@MENUS_CONFIGURE_MOUSE_AND_JOYSTICK
 
 			mouseEnter 
 			{ 
-				show			mousejoystickcontrolbutton_glow
 			}
 			mouseExit 
 			{ 
-				hide			mousejoystickcontrolbutton_glow
 			}	  	  
 			action 
 			{ 
@@ -435,29 +353,17 @@
 				hide			forcecontrols2 ;
 				show			joycontrols ;
 				hide			othercontrols ;
-				setitemcolor		movementcontrolbutton 		forecolor 1 .682 0 1 ;
-				setitemcolor		attackcontrolbutton 		forecolor 1 .682 0 1 ;
-				setitemcolor		weaponscontrolbutton 		forecolor 1 .682 0 1 ;
-				setitemcolor		forcecontrolbutton 		forecolor 1 .682 0 1 ;
-				setitemcolor		forcecontrolbutton2 		forecolor 1 .682 0 1 ;
-				setitemcolor		mousejoystickcontrolbutton 	forecolor 1 1 1 1 ;
-				setitemcolor		othercontrolbutton 		forecolor 1 .682 0 1 ;
+				setitemcolor		movementcontrolbutton 		forecolor 0.8 0.8 0.8 1 ;
+				setitemcolor		attackcontrolbutton 		forecolor 0.8 0.8 0.8 1 ;
+				setitemcolor		weaponscontrolbutton 		forecolor 0.8 0.8 0.8 1 ;
+				setitemcolor		forcecontrolbutton 		forecolor 0.8 0.8 0.8 1 ;
+				setitemcolor		forcecontrolbutton2 		forecolor 0.8 0.8 0.8 1 ;
+				setitemcolor		mousejoystickcontrolbutton 	forecolor 0 0.4 0.8 1 ;
+				setitemcolor		othercontrolbutton 		forecolor 0.8 0.8 0.8 1 ;
 			}
 		}
 
 		// other  button
-		itemDef 
-		{
-			name				othercontrolbutton_glow
-			group				mods
-			style				WINDOW_STYLE_SHADER
-			rect				20 223 185 30
-			background			"gfx/menus/menu_blendbox2"			// Frame around button
-			forecolor			1 1 1 1
-			visible			0
-			decoration
-		}
-
 		itemDef 
 		{
 			name				othercontrolbutton
@@ -472,17 +378,15 @@
 			textaligny			5
 			textalign			ITEM_ALIGN_RIGHT
 			textstyle			3
-			forecolor			0.65 0.65 1 1
+			forecolor			0.8 0.8 0.8 1
 			visible			1
 			descText			@MENUS_CONFIGURE_ADDITIONAL
 
 			mouseEnter 
 			{ 
-				show			othercontrolbutton_glow
 			}
 			mouseExit 
 			{ 
-				hide			othercontrolbutton_glow
 			}	  	  
 			action 
 			{ 
@@ -495,13 +399,13 @@
 				hide			forcecontrols2 ;
 				hide			joycontrols ;
 				show			othercontrols ;
-				setitemcolor		movementcontrolbutton 		forecolor 1 .682 0 1 ;
-				setitemcolor		attackcontrolbutton 		forecolor 1 .682 0 1 ;
-				setitemcolor		weaponscontrolbutton 		forecolor 1 .682 0 1 ;
-				setitemcolor		forcecontrolbutton 		forecolor 1 .682 0 1 ;
-				setitemcolor		forcecontrolbutton2 		forecolor 1 .682 0 1 ;
-				setitemcolor		mousejoystickcontrolbutton 	forecolor 1 .682 0 1 ;
-				setitemcolor		othercontrolbutton 		forecolor 1 1 1 1 ;
+				setitemcolor		movementcontrolbutton 		forecolor 0.8 0.8 0.8 1 ;
+				setitemcolor		attackcontrolbutton 		forecolor 0.8 0.8 0.8 1 ;
+				setitemcolor		weaponscontrolbutton 		forecolor 0.8 0.8 0.8 1 ;
+				setitemcolor		forcecontrolbutton 		forecolor 0.8 0.8 0.8 1 ;
+				setitemcolor		forcecontrolbutton2 		forecolor 0.8 0.8 0.8 1 ;
+				setitemcolor		mousejoystickcontrolbutton 	forecolor 0.8 0.8 0.8 1 ;
+				setitemcolor		othercontrolbutton 		forecolor 0 0.4 0.8 1 ;
 			}
 		}
 		
@@ -511,188 +415,15 @@
 			group				none
 			style				WINDOW_STYLE_FILLED
 			rect				210 41 320 280	
-			backcolor			0 0 .6 .5
+			backcolor			0 0 0 .6
 			forecolor			1 1 1 1
 			border				1
-			bordercolor			0 0 .6 1
+			bordercolor			0 0 0 1
 			visible				0
 			decoration
 		}
 		
 
-		//----------------------------------------------------------------------------------------------
-		//
-		//	HIGHLIGHT BARS
-		//
-		//----------------------------------------------------------------------------------------------
-		itemDef
-		{
-			name				highlight1
-			group				highlights
-			style				WINDOW_STYLE_SHADER
-			rect				220 40 300 20
-			background			"gfx/menus/menu_blendbox"
-			forecolor			1 1 1 1
-			visible			0
-			decoration
-		}
-		
-		itemDef
-		{
-			name				highlight2
-			group				highlights
-			style				WINDOW_STYLE_SHADER
-			rect				220 60 300 20
-			background			"gfx/menus/menu_blendbox"
-			forecolor			1 1 1 1
-			visible			0
-			decoration
-		}
-		
-		itemDef
-		{
-			name				highlight3
-			group				highlights
-			style				WINDOW_STYLE_SHADER
-			rect				220 80 300 20
-			background			"gfx/menus/menu_blendbox"
-			forecolor			1 1 1 1
-			visible			0
-			decoration
-		}
-		
-		itemDef
-		{
-			name				highlight4
-			group				highlights
-			style				WINDOW_STYLE_SHADER
-			rect				220 100 300 20
-			background			"gfx/menus/menu_blendbox"
-			forecolor			1 1 1 1
-			visible			0
-			decoration
-		}
-		
-		itemDef
-		{
-			name				highlight5
-			group				highlights
-			style				WINDOW_STYLE_SHADER
-			rect				220 120 300 20
-			background			"gfx/menus/menu_blendbox"
-			forecolor			1 1 1 1
-			visible			0
-			decoration
-		}
-		
-		itemDef
-		{
-			name				highlight6
-			group				highlights
-			style				WINDOW_STYLE_SHADER
-			rect				220 140 300 20
-			background			"gfx/menus/menu_blendbox"
-			forecolor			1 1 1 1
-			visible			0
-			decoration
-		}
-		
-		itemDef
-		{
-			name				highlight7
-			group				highlights
-			style				WINDOW_STYLE_SHADER
-			rect				220 160 300 20
-			background			"gfx/menus/menu_blendbox"
-			forecolor			1 1 1 1
-			visible			0
-			decoration
-		}
-		
-		itemDef
-		{
-			name				highlight8
-			group				highlights
-			style				WINDOW_STYLE_SHADER
-			rect				220 180 300 20
-			background			"gfx/menus/menu_blendbox"
-			forecolor			1 1 1 1
-			visible			0
-			decoration
-		}
-		
-		itemDef
-		{
-			name				highlight9
-			group				highlights
-			style				WINDOW_STYLE_SHADER
-			rect				220 200 300 20
-			background			"gfx/menus/menu_blendbox"
-			forecolor			1 1 1 1
-			visible			0
-			decoration
-		}
-		
-		itemDef
-		{
-			name				highlight10
-			group				highlights
-			style				WINDOW_STYLE_SHADER
-			rect				220 220 300 20
-			background			"gfx/menus/menu_blendbox"
-			forecolor			1 1 1 1
-			visible			0
-			decoration
-		}
-		
-		itemDef
-		{
-			name				highlight11
-			group				highlights
-			style				WINDOW_STYLE_SHADER
-			rect				220 240 300 20
-			background			"gfx/menus/menu_blendbox"
-			forecolor			1 1 1 1
-			visible			0
-			decoration
-		}
-		
-		itemDef
-		{
-			name				highlight12
-			group				highlights
-			style				WINDOW_STYLE_SHADER
-			rect				220 260 300 20
-			background			"gfx/menus/menu_blendbox"
-			forecolor			1 1 1 1
-			visible			0
-			decoration
-		}
-		
-		itemDef
-		{
-			name				highlight13
-			group				highlights
-			style				WINDOW_STYLE_SHADER
-			rect				220 280 300 20
-			background			"gfx/menus/menu_blendbox"
-			forecolor			1 1 1 1
-			visible			0
-			decoration
-		}
-		
-		itemDef
-		{
-			name				highlight14
-			group				highlights
-			style				WINDOW_STYLE_SHADER
-			rect				220 300 300 20
-			background			"gfx/menus/menu_blendbox"
-			forecolor			1 1 1 1
-			visible			0
-			decoration
-		}
-		
 //----------------------------------------------------------------------------------------------
 //
 //	MOVEMENT BINDING
@@ -722,12 +453,10 @@
 
 			mouseenter 
 			{
-				show			highlight2
 				show			keybindstatus
 			}
 			mouseexit 
 			{ 
-				hide			highlight2
 				hide			keybindstatus
 			}
 		}
@@ -757,12 +486,10 @@
 
 			mouseenter 
 			{
-				show			highlight3
 				show			keybindstatus
 			}
 			mouseexit 
 			{ 
-				hide			highlight3
 				hide			keybindstatus
 			}
 		}
@@ -791,12 +518,10 @@
 
 			mouseenter 
 			{
-				show			highlight4
 				show			keybindstatus
 			}
 			mouseexit 
 			{ 
-				hide			highlight4
 				hide			keybindstatus
 			}
 		}
@@ -825,12 +550,10 @@
 
 			mouseenter 
 			{
-				show			highlight5
 				show			keybindstatus
 			}
 			mouseexit 
 			{ 
-				hide			highlight5
 				hide			keybindstatus
 			}
 		}
@@ -859,12 +582,10 @@
 
 			mouseenter 
 			{
-				show			highlight6
 				show			keybindstatus
 			}
 			mouseexit 
 			{ 
-				hide			highlight6
 				hide			keybindstatus
 			}
 		}
@@ -893,12 +614,10 @@
 
 			mouseenter 
 			{
-				show			highlight7
 				show			keybindstatus
 			}
 			mouseexit 
 			{ 
-				hide			highlight7
 				hide			keybindstatus
 			}
 		}
@@ -927,12 +646,10 @@
 
 			mouseenter 
 			{
-				show			highlight8
 				show			keybindstatus
 			}
 			mouseexit 
 			{ 
-				hide			highlight8
 				hide			keybindstatus
 			}
 		}
@@ -961,12 +678,10 @@
 
 			mouseenter 
 			{
-				show			highlight9
 				show			keybindstatus
 			}
 			mouseexit 
 			{ 
-				hide			highlight9
 				hide			keybindstatus
 			}
 		}
@@ -995,12 +710,10 @@
 
 			mouseenter 
 			{
-				show			highlight10
 				show			keybindstatus
 			}
 			mouseexit 
 			{ 
-				hide			highlight10
 				hide			keybindstatus
 			}
 		}
@@ -1029,12 +742,10 @@
 
 			mouseenter 
 			{
-				show			highlight11
 				show			keybindstatus
 			}
 			mouseexit 
 			{ 
-				hide			highlight11
 				hide			keybindstatus
 			}
 		}
@@ -1068,12 +779,10 @@
 
 			mouseenter 
 			{
-				show			highlight2
 				show			keybindstatus
 			}
 			mouseexit 
 			{ 
-				hide			highlight2
 				hide			keybindstatus
 			}
 		}
@@ -1102,12 +811,10 @@
 
 			mouseenter 
 			{ 
-				show			highlight3
 				show			keybindstatus
 			}
 			mouseexit 
 			{ 
-				hide			highlight3
 				hide			keybindstatus
 			}
 		}
@@ -1136,12 +843,10 @@
 
 			mouseenter 
 			{ 
-				show			highlight4
 				show			keybindstatus
 			}
 			mouseexit 
 			{ 
-				hide			highlight4
 				hide			keybindstatus
 			}
 		}
@@ -1170,12 +875,10 @@
 
 			mouseenter 
 			{ 
-				show			highlight6
 				show			keybindstatus
 			}
 			mouseexit 
 			{ 
-				hide			highlight6
 				hide			keybindstatus
 			}
 		}
@@ -1204,12 +907,10 @@
 
 			mouseenter 
 			{ 
-				show			highlight7
 				show			keybindstatus
 			}
 			mouseexit 
 			{ 
-				hide			highlight7
 				hide			keybindstatus
 			}
 		}
@@ -1238,12 +939,10 @@
 
 			mouseenter 
 			{ 
-				show			highlight8
 				show			keybindstatus
 			}
 			mouseexit 
 			{ 
-				hide			highlight8
 				hide			keybindstatus
 			}
 		}
@@ -1272,12 +971,10 @@
 
 			mouseenter 
 			{ 
-				show			highlight9
 				show			keybindstatus
 			}
 			mouseexit 
 			{ 
-				hide			highlight9
 				hide			keybindstatus
 			}
 		}
@@ -1306,12 +1003,10 @@
 
 			mouseenter 
 			{ 
-				show			highlight10
 				show			keybindstatus
 			}
 			mouseexit 
 			{ 
-				hide			highlight10
 				hide			keybindstatus
 			}
 		}
@@ -1341,12 +1036,10 @@
 
 			mouseenter 
 			{ 
-				show			highlight11
 				show			keybindstatus
 			}
 			mouseexit 
 			{ 
-				hide			highlight11
 				hide			keybindstatus
 			}
 		}
@@ -1375,12 +1068,10 @@
 
 			mouseenter 
 			{ 
-				show			highlight12
 				show			keybindstatus
 			}
 			mouseexit 
 			{ 
-				hide			highlight12
 				hide			keybindstatus
 			}
 		}
@@ -1409,12 +1100,10 @@
 
 			mouseenter 
 			{ 
-				show			highlight13
 				show			keybindstatus
 			}
 			mouseexit 
 			{ 
-				hide			highlight13
 				hide			keybindstatus
 			}
 		}
@@ -1446,12 +1135,10 @@
 			}
 			mouseenter 
 			{ 
-				show			highlight1
 				show			keybindstatus
 			}
 			mouseexit 
 			{ 
-				hide			highlight1
 				hide			keybindstatus
 			} 
 		}
@@ -1478,12 +1165,10 @@
 			}
 			mouseenter 
 			{ 
-				show			highlight2
 				show			keybindstatus
 			}
 			mouseexit 
 			{ 
-				hide			highlight2
 				hide			keybindstatus
 			}
 		}
@@ -1510,12 +1195,10 @@
 			}
 			mouseenter 
 			{ 
-				show			highlight3
 				show			keybindstatus
 			}
 			mouseexit 
 			{ 
-				hide			highlight3
 				hide			keybindstatus
 			}
 		}
@@ -1543,12 +1226,10 @@
 
 			mouseenter 
 			{ 
-				show			highlight4
 				show			keybindstatus
 			}
 			mouseexit 
 			{ 
-				hide			highlight4
 				hide			keybindstatus
 			}
 		}
@@ -1576,12 +1257,10 @@
 
 			mouseenter 
 			{ 
-				show			highlight5
 				show			keybindstatus
 			}
 			mouseexit 
 			{ 
-				hide			highlight5
 				hide			keybindstatus
 			}
 		}
@@ -1609,12 +1288,10 @@
 
 			mouseenter 
 			{ 
-				show			highlight6
 				show			keybindstatus
 			}
 			mouseexit 
 			{ 
-				hide			highlight6
 				hide			keybindstatus
 			}
 		}
@@ -1642,12 +1319,10 @@
 
 			mouseenter 
 			{ 
-				show			highlight7
 				show			keybindstatus
 			}
 			mouseexit 
 			{ 
-				hide			highlight7
 				hide			keybindstatus
 			}
 		}
@@ -1675,12 +1350,10 @@
 
 			mouseenter 
 			{ 
-				show			highlight8
 				show			keybindstatus
 			}
 			mouseexit 
 			{ 
-				hide			keybindstatus
 				hide			highlight8
 			} 
 		}
@@ -1708,12 +1381,10 @@
 
 			mouseenter 
 			{ 
-				show			highlight9
 				show			keybindstatus
 			}
 			mouseexit 
 			{ 
-				hide			keybindstatus
 				hide			highlight9
 			} 
 		}
@@ -1741,12 +1412,10 @@
 
 			mouseenter 
 			{ 
-				show			highlight10
 				show			keybindstatus
 			}
 			mouseexit 
 			{ 
-				hide			highlight10
 				hide			keybindstatus
 			} 
 		}
@@ -1774,12 +1443,10 @@
 
 			mouseenter 
 			{ 
-				show			highlight11
 				show			keybindstatus
 			}
 			mouseexit 
 			{ 
-				hide			highlight11
 				hide			keybindstatus
 			} 
 		}
@@ -1808,12 +1475,10 @@
 
 			mouseenter 
 			{ 
-				show			highlight12
 				show			keybindstatus
 			}
 			mouseexit 
 			{ 
-				hide			highlight12
 				hide			keybindstatus
 			} 
 		}
@@ -1842,12 +1507,10 @@
 
 			mouseenter 
 			{ 
-				show			highlight13
 				show			keybindstatus
 			}
 			mouseexit 
 			{ 
-				hide			highlight13
 				hide			keybindstatus
 			} 
 		}
@@ -1881,12 +1544,10 @@
 
 			mouseenter 
 			{ 
-				show			highlight2
 				show			keybindstatus
 			}
 			mouseexit 
 			{ 
-				hide			highlight2
 				hide			keybindstatus
 			}
 		}
@@ -1915,12 +1576,10 @@
 
 			mouseenter 
 			{ 
-				show			highlight3
 				show			keybindstatus
 			}
 			mouseexit 
 			{ 
-				hide			highlight3
 				hide			keybindstatus
 			}
 		}
@@ -1949,12 +1608,10 @@
 
 			mouseenter 
 			{ 
-				show			highlight4
 				show			keybindstatus
 			}
 			mouseexit 
 			{ 
-				hide			highlight4
 				hide			keybindstatus
 			}
 		}
@@ -1982,12 +1639,10 @@
 
 			mouseenter 
 			{ 
-				show			highlight5
 				show			keybindstatus
 			}
 			mouseexit 
 			{ 
-				hide			highlight5
 				hide			keybindstatus
 			}
 		}
@@ -2012,12 +1667,10 @@
 
 			mouseenter 
 			{ 
-				show			highlight6
 				show			keybindstatus
 			}
 			mouseexit 
 			{ 
-				hide			highlight6
 				hide			keybindstatus
 			}
 			action 
@@ -2051,12 +1704,10 @@
 
 			mouseenter 
 			{ 
-				show			highlight7
 				show			keybindstatus
 			}
 			mouseexit 
 			{ 
-				hide			highlight7
 				hide			keybindstatus
 			}
 		}
@@ -2085,12 +1736,10 @@
 
 			mouseenter 
 			{ 
-				show			highlight8
 				show			keybindstatus
 			}
 			mouseexit 
 			{ 
-				hide			highlight8
 				hide			keybindstatus
 			}
 		}
@@ -2119,12 +1768,10 @@
 
 			mouseenter 
 			{ 
-				show			highlight9
 				show			keybindstatus
 			}
 			mouseexit 
 			{ 
-				hide			highlight9
 				hide			keybindstatus
 			}
 		}
@@ -2156,12 +1803,10 @@
 
 			mouseenter 
 			{ 
-				show			highlight2
 				show			keybindstatus
 			}
 			mouseexit 
 			{ 
-				hide			highlight2
 				hide			keybindstatus
 			}
 		}
@@ -2188,12 +1833,10 @@
 
 			mouseenter 
 			{ 
-				show			highlight3
 				show			keybindstatus
 			}
 			mouseexit 
 			{ 
-				hide			highlight3
 				hide			keybindstatus
 			}
 		}
@@ -2220,12 +1863,10 @@
 
 			mouseenter 
 			{ 
-				show			highlight4
 				show			keybindstatus
 			}
 			mouseexit 
 			{ 
-				hide			highlight4
 				hide			keybindstatus
 			}
 		}
@@ -2252,12 +1893,10 @@
 
 			mouseenter 
 			{ 
-				show			highlight5
 				show			keybindstatus
 			}
 			mouseexit 
 			{ 
-				hide			highlight5
 				hide			keybindstatus
 			}
 		}
@@ -2284,12 +1923,10 @@
 
 			mouseenter 
 			{ 
-				show			highlight6
 				show			keybindstatus
 			}
 			mouseexit 
 			{ 
-				hide			highlight6
 				hide			keybindstatus
 			}
 		}
@@ -2316,12 +1953,10 @@
 
 			mouseenter 
 			{ 
-				show			highlight7
 				show			keybindstatus
 			}
 			mouseexit 
 			{ 
-				hide			highlight7
 				hide			keybindstatus
 			}
 		}
@@ -2348,12 +1983,10 @@
 
 			mouseenter 
 			{ 
-				show			highlight8
 				show			keybindstatus
 			}
 			mouseexit 
 			{ 
-				hide			highlight8
 				hide			keybindstatus
 			}
 		}
@@ -2380,12 +2013,10 @@
 
 			mouseenter 
 			{ 
-				show			highlight9
 				show			keybindstatus
 			}
 			mouseexit 
 			{ 
-				hide			highlight9
 				hide			keybindstatus
 			}
 		}
@@ -2412,12 +2043,10 @@
 
 			mouseenter 
 			{ 
-				show			highlight10
 				show			keybindstatus
 			}
 			mouseexit 
 			{ 
-				hide			highlight10
 				hide			keybindstatus
 			}
 		}
@@ -2444,12 +2073,10 @@
 
 			mouseenter 
 			{ 
-				show			highlight11
 				show			keybindstatus
 			}
 			mouseexit 
 			{ 
-				hide			highlight11
 				hide			keybindstatus
 			}
 		}
@@ -2483,12 +2110,10 @@
 		
 			mouseenter 
 			{ 
-				show			highlight2
 			}
 
 			mouseexit 
 			{ 
-				hide			highlight2
 			}			
 		}
 
@@ -2516,11 +2141,9 @@
 
 			mouseenter 
 			{ 
-				show			highlight3
 			}
 			mouseexit 
 			{ 
-				hide			highlight3
 			} 
 		}
 
@@ -2548,12 +2171,10 @@
 
 			mouseenter 
 			{ 
-				show			highlight4
 			}
 
 			mouseexit 
 			{ 
-				hide			highlight4
 			}			
 		}
 
@@ -2581,12 +2202,10 @@
 
 			mouseenter 
 			{ 
-				show			highlight5
 			}
 
 			mouseexit 
 			{ 
-				hide			highlight5
 			}			
 		}
 
@@ -2617,12 +2236,10 @@
 		
 			mouseenter 
 			{ 
-				show			highlight6
 			}
 
 			mouseexit 
 			{ 
-				hide			highlight6
 			}			
 		}
 
@@ -2651,12 +2268,10 @@
 
 			mouseenter 
 			{ 
-				show			highlight8
 			}
 
 			mouseexit 
 			{ 
-				hide			highlight8
 			}			
 		}
 
@@ -2684,11 +2299,9 @@
 
 			mouseenter 
 			{ 
-				show			highlight9
 			}
 			mouseexit 
 			{ 
-				hide			highlight9
 			} 
 		}
 
@@ -2716,12 +2329,10 @@
 		
 			mouseenter 
 			{ 
-				show			highlight10
 			}
 
 			mouseexit 
 			{ 
-				hide			highlight10
 			}			
 		}
 
@@ -2749,12 +2360,10 @@
 		
 			mouseenter 
 			{ 
-				show			highlight11
 			}
 
 			mouseexit 
 			{ 
-				hide			highlight11
 			}			
 		}
 
@@ -2787,12 +2396,10 @@
 		
 			mouseenter 
 			{ 
-				show			highlight1
 			}
 
 			mouseexit 
 			{ 
-				hide			highlight1
 			}			
 		}
 
@@ -2826,12 +2433,10 @@
 
 			mouseenter 
 			{ 
-				show			highlight2
 			}
 
 			mouseexit 
 			{ 
-				hide			highlight2
 			}			
 
 		}
@@ -2858,12 +2463,10 @@
 
 			mouseenter 
 			{ 
-				show			highlight3
 				show			keybindstatus
 			}
 			mouseexit 
 			{ 
-				hide			highlight3
 				hide			keybindstatus
 			}
 		}
@@ -2890,12 +2493,10 @@
 
 			mouseenter 
 			{ 
-				show			highlight4
 				show			keybindstatus
 			}
 			mouseexit 
 			{ 
-				hide			highlight4
 				hide			keybindstatus
 			}
 		}
@@ -2922,12 +2523,10 @@
 
 			mouseenter 
 			{ 
-				show			highlight5
 				show			keybindstatus
 			}
 			mouseexit 
 			{ 
-				hide			highlight5
 				hide			keybindstatus
 			}
 		}
@@ -2954,12 +2553,10 @@
 
 			mouseenter 
 			{ 
-				show			highlight6
 				show			keybindstatus
 			}
 			mouseexit 
 			{ 
-				hide			highlight6
 				hide			keybindstatus
 			}
 		}
@@ -2986,12 +2583,10 @@
 
 			mouseenter 
 			{ 
-				show			highlight7
 				show			keybindstatus
 			}
 			mouseexit 
 			{ 
-				hide			highlight7
 				hide			keybindstatus
 			}
 		}
@@ -3018,12 +2613,10 @@
 
 			mouseenter 
 			{ 
-				show			highlight8
 				show			keybindstatus
 			}
 			mouseexit 
 			{ 
-				hide			highlight8
 				hide			keybindstatus
 			}
 		}
@@ -3050,12 +2643,10 @@
 
 			mouseenter 
 			{ 
-				show			highlight9
 				show			keybindstatus
 			}
 			mouseexit 
 			{ 
-				hide			highlight9
 				hide			keybindstatus
 			}
 		}
@@ -3078,12 +2669,10 @@
 
 			mouseenter 
 			{ 
-				show			highlight10
 				show			keybindstatus
 			}
 			mouseexit 
 			{ 
-				hide			highlight10
 				hide			keybindstatus
 			}
 			action 
@@ -3110,12 +2699,10 @@
 
 			mouseenter 
 			{ 
-				show			highlight11
 				show			keybindstatus
 			}
 			mouseexit 
 			{ 
-				hide			highlight11
 				hide			keybindstatus
 			}
 			action 
@@ -3142,12 +2729,10 @@
 
 			mouseenter 
 			{ 
-				show			highlight12
 				show			keybindstatus
 			}
 			mouseexit 
 			{ 
-				hide			highlight12
 				hide			keybindstatus
 			}
 			action 
@@ -3174,12 +2759,10 @@
 
 			mouseenter 
 			{ 
-				show			highlight13
 				show			keybindstatus
 			}
 			mouseexit 
 			{ 
-				hide			highlight13
 				hide			keybindstatus
 			}
 			action 
@@ -3206,12 +2789,10 @@
 
 			mouseenter 
 			{ 
-				show			highlight14
 				show			keybindstatus
 			}
 			mouseexit 
 			{ 
-				hide			highlight14
 				hide			keybindstatus
 			}
 			action 
@@ -3284,6 +2865,7 @@
 		}
 	}
 }
+//[/NewMenus]
 
 
 

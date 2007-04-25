@@ -1,3 +1,4 @@
+//[NewMenus]
 //----------------------------------------------------------------------------------------------
 // INGAME_JOIN MENU 
 //----------------------------------------------------------------------------------------------
@@ -9,7 +10,7 @@
 		fullScreen				0
 		outOfBoundsClick						// this closes the window if it gets a click out of the rectangle
 		rect					55 40 128 128
-		focusColor				1 1 1 1
+		focusColor				0 0.4 0.8 1
 
 
 		// Overall window backdrop
@@ -17,65 +18,16 @@
 		{
 			name				background_pic
 			group				none
-			style				WINDOW_STYLE_SHADER
+			style				WINDOW_STYLE_FILLED
 			rect				0 0 128 128
-			background			"gfx/menus/menu_box_ingame"
+			border				1
+			bordercolor			0 0 0 1
+			backcolor			0.1 0.1 0.1 0.5
 			forecolor			1 1 1 1
 			visible				1
 			decoration
 		}
 		
-		//---------------------------------
-		// BUTTONS
-		//---------------------------------
-		itemDef 
-		{
-			name				button1
-			group				buttons
-			style				WINDOW_STYLE_SHADER
-			rect				2 4 124 30   
-			background			"gfx/menus/menu_buttonback"			// Frame around button
-			forecolor			1 1 1 1
-			decoration
-			visible				0
-		}
-
-		itemDef 
-		{
-			name				button2
-			group				buttons
-			style				WINDOW_STYLE_SHADER
-			rect				2 34 124 30   
-			background			"gfx/menus/menu_buttonback"			// Frame around button
-			forecolor			1 1 1 1
-			decoration
-			visible				0
-		}
-
-		itemDef 
-		{
-			name				button3
-			group				buttons
-			style				WINDOW_STYLE_SHADER
-			rect				2 64 124 30   
-			background			"gfx/menus/menu_buttonback"			// Frame around button
-			forecolor			1 1 1 1
-			decoration
-			visible				0
-		}
-
-		itemDef 
-		{
-			name				button4
-			group				buttons
-			style				WINDOW_STYLE_SHADER
-			rect				2 94 124 30   
-			background			"gfx/menus/menu_buttonback"			// Frame around button
-			forecolor			1 1 1 1
-			decoration
-			visible				0
-		}
-
 		//---------------------------------
 		// TEAM JOIN
 		//---------------------------------
@@ -90,8 +42,8 @@
 			textalignx			62
 			textaligny			0     
 			font				2
-			textscale			1
-			forecolor			1 .682 0 1
+			textscale			0.7
+			forecolor			0.8 0.8 0.8 1
 			cvarTest			"ui_about_gametype"
 			showCvar 
 			{ 
@@ -109,11 +61,9 @@
 			}
 			mouseEnter 
 			{ 
-				show			button1
 			}
 			mouseExit 
 			{ 
-				hide			button1
 			}
 		}
 
@@ -128,7 +78,7 @@
 			textalignx			62
 			textaligny			0     
 			font				2
-			textscale			1
+			textscale			0.7
 			forecolor			1 0.2 0.2 1
 			cvarTest			"ui_about_gametype"
 			showCvar 
@@ -147,11 +97,9 @@
 			}
 			mouseEnter 
 			{ 
-				show			button2
 			}
 			mouseExit 
 			{ 
-				hide			button2
 			}
 		}
 
@@ -166,7 +114,7 @@
 			textalignx			62
 			textaligny			0     
 			font				2
-			textscale			1
+			textscale			0.7
 			forecolor			0.2 0.2 1 1
 			cvarTest			"ui_about_gametype"
 			showCvar 
@@ -185,11 +133,9 @@
 			}
 			mouseEnter 
 			{ 
-				show			button3
 			}
 			mouseExit 
 			{ 
-				hide			button3
 			}
 		}
 
@@ -205,7 +151,7 @@
 			textalignx			62
 			textaligny			0     
 			font				2
-			textscale			1
+			textscale			0.7
 			forecolor			1 0.2 0.2 1
 			cvarTest			"ui_about_gametype"
 			showCvar 
@@ -221,11 +167,9 @@
 			}
 			mouseEnter 
 			{ 
-				show			button2
 			}
 			mouseExit 
 			{ 
-				hide			button2
 			}
 		}
 
@@ -240,7 +184,7 @@
 			textalignx			62
 			textaligny			0     
 			font				2
-			textscale			1
+			textscale			0.7
 			forecolor			0.2 0.2 1 1
 			cvarTest			"ui_about_gametype"
 			showCvar 
@@ -256,11 +200,9 @@
 			}
 			mouseEnter 
 			{ 
-				show			button3
 			}
 			mouseExit 
 			{ 
-				hide			button3
 			}
 		}
  
@@ -276,8 +218,8 @@
 			textalignx			62
 			textaligny			0     
 			font				2
-			textscale			1
-			forecolor			1 .682 0 1
+			textscale			0.7
+			forecolor			0.8 0.8 0.8 1
 			cvarTest			"ui_about_gametype"
 			showCvar 
 			{ 
@@ -295,11 +237,9 @@
 			}
 			mouseEnter 
 			{ 
-				show			button4
 			}
 			mouseExit 
 			{ 
-				hide			button4
 			}
 		}
 
@@ -317,8 +257,8 @@
 			textalignx			62
 			textaligny			0     
 			font				2
-			textscale			1
-			forecolor			1 .682 0 1
+			textscale			0.7
+			forecolor			0.8 0.8 0.8 1
 			cvarTest			"ui_about_gametype"
 			hideCvar 
 			{ 
@@ -337,11 +277,9 @@
 			}
 			mouseEnter 
 			{ 
-				show			button2
 			}
 			mouseExit 
 			{ 
-				hide			button2
 			}
 		}
  
@@ -356,8 +294,8 @@
 			textalignx			62
 			textaligny			0     
 			font				2
-			textscale			1
-			forecolor			1 .682 0 1
+			textscale			0.7
+			forecolor			0.8 0.8 0.8 1
 			cvarTest			"ui_about_gametype"
 			hideCvar 
 			{
@@ -376,16 +314,15 @@
 			}
 			mouseEnter 
 			{ 
-				show			button3
 			}
 			mouseExit 
 			{ 
-				hide			button3
 			}
 		}
 
 	}
 }
+//[/NewMenus]
 
 
 

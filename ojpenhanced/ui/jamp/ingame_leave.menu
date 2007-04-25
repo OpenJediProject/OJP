@@ -1,3 +1,4 @@
+//[NewMenus]
 \\ INGAME_LEAVE MENU \\
 {
 	menuDef 
@@ -7,7 +8,7 @@
 		fullScreen				0
 		outOfBoundsClick							// this closes the window if it gets a click out of the rectangle
 		rect					474 40 156 100
-		focusColor				1 1 1 1
+		focusColor				0 0.4 0.8 1
 		onOpen 
 		{ 
 			show				grpMenu ; 
@@ -19,9 +20,11 @@
 		{
 			name				background_pic
 			group				none
-			style				WINDOW_STYLE_SHADER
+			style				WINDOW_STYLE_FILLED
 			rect				0 0 156 100
-			background			"gfx/menus/menu_box_ingame"
+			border				1
+			bordercolor			0 0 0 1
+			backcolor			0.1 0.1 0.1 0.5
 			forecolor			1 1 1 1
 			visible				1
 			decoration
@@ -30,43 +33,6 @@
 //
 // BUTTONS
 //
-		itemDef 
-		{
-			name				button1
-			group				buttons
-			style				WINDOW_STYLE_SHADER
-			rect				2 5 152 30
-			background			"gfx/menus/menu_buttonback"			// Frame around button
-			forecolor			1 1 1 1
-			decoration
-			visible			0
-		}
-
-		itemDef 
-		{
-			name				button2
-			group				buttons
-			style				WINDOW_STYLE_SHADER
-			rect				2 35 152 30
-			background			"gfx/menus/menu_buttonback"			// Frame around button
-			forecolor			1 1 1 1
-			decoration
-			visible			0
-		}
-
-		itemDef 
-		{
-			name				button3
-			group				buttons
-			style				WINDOW_STYLE_SHADER
-			rect				2 65 152 30
-			background			"gfx/menus/menu_buttonback"			// Frame around button
-			forecolor			1 1 1 1
-			decoration
-			visible			0
-		}
-
-
 //
 // LEAVE MAIN MENU
 //
@@ -83,8 +49,8 @@
 			textalignx			76 
 			textaligny			0
 			font				2
-			textscale			1
-			forecolor			1 .682 0 1
+			textscale			0.7
+			forecolor			0.8 0.8 0.8 1
 			visible				1 
 			action 
 			{ 
@@ -95,11 +61,9 @@
 			}
 			mouseEnter 
 			{ 
-				show			button1
 			}
 			mouseExit 
 			{ 
-				hide			button1
 			}
 		}
 
@@ -115,8 +79,8 @@
 			textalignx			76 
 			textaligny			0
 			font				2
-			textscale			1
-			forecolor			1 .682 0 1
+			textscale			0.7
+			forecolor			0.8 0.8 0.8 1
 			cvarTest			"cl_currentServerAddress"
 			enableCvar 
 			{ 
@@ -132,11 +96,9 @@
 			}
 			mouseEnter 
 			{ 
-				show			button2
 			}
 			mouseExit 
 			{ 
-				hide			button2
 			}
 		}
 
@@ -152,8 +114,8 @@
 			textalignx			76
 			textaligny			0
 			font				2
-			textscale			1
-			forecolor			1 .682 0 1
+			textscale			0.7
+			forecolor			0.8 0.8 0.8 1
 			visible				1 
 			action 
 			{ 
@@ -164,11 +126,9 @@
 			}
 			mouseEnter 
 			{ 
-				show			button3
 			}
 			mouseExit 
 			{ 
-				hide			button3
 			}
 		}
 
@@ -189,7 +149,7 @@
 			textaligny			0
 			font				2
 			textscale			1
-			forecolor			.549 .854 1 1
+			forecolor			1 1 1 1
 			decoration
 			visible				1 
 		}
@@ -207,8 +167,8 @@
 			textalignx			76 
 			textaligny			0
 			font				2
-			textscale			1
-			forecolor			1 .682 0 1
+			textscale			0.7
+			forecolor			0.8 0.8 0.8 1
 			visible				1
 			action 
 			{
@@ -217,11 +177,9 @@
 			}
 			mouseEnter 
 			{ 
-				show			button2
 			}
 			mouseExit 
 			{ 
-				hide			button2
 			}
 		}
 
@@ -237,8 +195,8 @@
 			textalignx			76 
 			textaligny			0
 			font				2
-			textscale			1
-			forecolor			1 .682 0 1
+			textscale			0.7
+			forecolor			0.8 0.8 0.8 1
 			visible				1
 			action 
 			{ 
@@ -273,7 +231,7 @@
 			textaligny			0
 			font				2
 			textscale			1
-			forecolor			.549 .854 1 1
+			forecolor			1 1 1 1
 			decoration
 			visible				1 
 		}
@@ -289,8 +247,8 @@
 			textalignx			76 
 			textaligny			0
 			font				2
-			textscale			1
-			forecolor			1 .682 0 1
+			textscale			0.7
+			forecolor			0.8 0.8 0.8 1
 			visible			1
 			action 
 			{ 
@@ -301,11 +259,9 @@
 			}
 			mouseEnter 
 			{ 
-				show			button2
 			}
 			mouseExit 
 			{ 
-				hide			button2
 			}
 		}
 
@@ -320,8 +276,8 @@
 			textalignx			76 
 			textaligny			0
 			font				2
-			textscale			1
-			forecolor			1 .682 0 1
+			textscale			0.7
+			forecolor			0.8 0.8 0.8 1
 			visible			1
 			action 
 			{ 
@@ -331,11 +287,9 @@
 			}
 			mouseEnter 
 			{ 
-				show			button3
 			}
 			mouseExit 
 			{ 
-				hide			button3
 			}
 		}
 
@@ -356,7 +310,7 @@
 			textaligny			0
 			font				2
 			textscale			1
-			forecolor			.549 .854 1 1
+			forecolor			1 1 1 1
 			decoration
 			visible				1 
 		}
@@ -372,8 +326,8 @@
 			textalignx			76 
 			textaligny			0
 			font				2
-			textscale			1
-			forecolor			1 .682 0 1
+			textscale			0.7
+			forecolor			0.8 0.8 0.8 1
 			visible			1
 			action 
 			{ 
@@ -382,11 +336,9 @@
 			}
 			mouseEnter 
 			{ 
-				show			button2
 			}
 			mouseExit 
 			{ 
-				hide			button2
 			}
 		}
 
@@ -401,8 +353,8 @@
 			textalignx			76
 			textaligny			0
 			font				2
-			textscale			1
-			forecolor			1 .682 0 1
+			textscale			0.7
+			forecolor			0.8 0.8 0.8 1
 			visible			1
 			action 
 			{ 
@@ -412,12 +364,11 @@
 			}
 			mouseEnter 
 			{ 
-				show			button3
 			}
 			mouseExit 
 			{ 
-				hide			button3
 			}
 		}
 	}
 }
+//[/NewMenus]

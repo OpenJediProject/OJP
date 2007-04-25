@@ -1,3 +1,4 @@
+//[NewMenus]
 //----------------------------------------------------------------------------------------------
 // INGAME ABOUT BOX 
 //----------------------------------------------------------------------------------------------
@@ -9,7 +10,7 @@
 		fullscreen				0
 		outOfBoundsClick							// this closes the window if it gets a click out of the rectangle
 		rect					10 40 380 280
-		focusColor				1 .75 0 1
+		focusColor				0 0.4 0.8 1
 		style					1
 		border					1
 
@@ -19,9 +20,11 @@
 		{
 			name				background_pic
 			group				none
-			style				WINDOW_STYLE_SHADER
+			style				WINDOW_STYLE_FILLED
 			rect				0 0 500 240
-			background			"gfx/menus/menu_box_ingame"
+			border				1
+			bordercolor			0 0 0 1
+			backcolor			0.1 0.1 0.1 0.5
 			forecolor			1 1 1 1
 			visible				1
 			decoration
@@ -31,17 +34,17 @@
 		{
 			name				about
 			rect				10 5 360 20
-			style				WINDOW_STYLE_SHADER	
-			background			"gfx/menus/menu_blendbox"
+			style				WINDOW_STYLE_FILLED	
 			type				4
 			text				@MENUS_HOST_NAME
 			cvar				"ui_about_hostname" 
-			maxPaintChars			40
+			maxPaintChars		40
 			textalign			ITEM_ALIGN_RIGHT		
 			textalignx			150
 			textaligny			-2    
 			font				2
-			textscale			1
+			textscale			0.7
+			backcolor			0 0 0 1
 			forecolor			1 1 1 1
 			visible				1
 			decoration
@@ -55,13 +58,13 @@
 			type				4
 			text				@MENUS_ADDRESS
 			cvar				"cl_currentServerAddress" 
-			maxPaintChars			24
+			maxPaintChars		24
 			textalign			ITEM_ALIGN_RIGHT		
 			textalignx			150
 			textaligny			-3    
-			forecolor			1 .682 0 1
+			forecolor			0.8 0.8 0.8 1
 			font				2
-			textscale			1
+			textscale			0.7
 			visible				1
 			decoration
 		}
@@ -74,13 +77,13 @@
 			style				0	
 			text				@MENUS_MAP_NAME
 			cvar				"ui_about_mapname"
-			maxPaintChars			20
+			maxPaintChars		20
 			textalign			ITEM_ALIGN_RIGHT		
 			textalignx			150
 			textaligny			-3   
 			font				2
-			textscale			1
-			forecolor			1 .682 0 1
+			textscale			0.7
+			forecolor			0.8 0.8 0.8 1
 			visible				1
 			decoration
 		}
@@ -111,8 +114,8 @@
 			textalignx			150
 			textaligny			-3    
 			font				2
-			textscale			1
-			forecolor			1 .682 0 1
+			textscale			0.7
+			forecolor			0.8 0.8 0.8 1
 			backcolor			0 0 .75 .25
 			visible				1
 			decoration
@@ -133,8 +136,8 @@
 			textalignx			150
 			textaligny			-3    
 			font				2
-			textscale			1
-			forecolor			1 .682 0 1
+			textscale			0.7
+			forecolor			0.8 0.8 0.8 0 1
 			visible				1
 			decoration
 		}
@@ -152,8 +155,8 @@
 			textalignx			150
 			textaligny			-3   
 			font				2
-			textscale			1
-			forecolor			1 .682 0 1
+			textscale			0.7
+			forecolor			0.8 0.8 0.8 1
 			visible				1
 			decoration
 		}
@@ -182,8 +185,8 @@
 			textalignx			150
 			textaligny			-3    
 			font				2
-			textscale			1
-			forecolor			1 .682 0 1
+			textscale			0.7
+			forecolor			0.8 0.8 0.8 1
 			visible				1
 			decoration
 		}
@@ -207,8 +210,8 @@
 			textalignx			150
 			textaligny			-3    
 			font				2
-			textscale			1
-			forecolor			1 .682 0 1
+			textscale			0.7
+			forecolor			0.8 0.8 0.8 1
 			visible				1
 			decoration
 		}
@@ -232,8 +235,8 @@
 			textalignx			150
 			textaligny			-3    
 			font				2
-			textscale			1
-			forecolor			1 .682 0 1
+			textscale			0.7
+			forecolor			0.8 0.8 0.8 1
 			visible				1
 			decoration
 		}
@@ -251,8 +254,8 @@
 			textalignx			150
 			textaligny			-3   
 			font				2
-			textscale			1
-			forecolor			1 .682 0 1
+			textscale			0.7
+			forecolor			0.8 0.8 0.8 1
 			visible				1
 			decoration
 		}
@@ -270,15 +273,15 @@
 			textalignx			180
 			textaligny			14  
 			font				4
-			textscale			1
-			forecolor			1 .682 0 1
+			textscale			0.7
+			forecolor			0.8 0.8 0.8 1
 			visible				1
 			decoration
 		}
 
 	}
 }
-
+//[/NewMenus]
 
 
 

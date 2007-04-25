@@ -1,3 +1,4 @@
+//[NewMenus]
 \\ CALL VOTE MENU \\
 {
 	menuDef  
@@ -7,7 +8,7 @@
 		fullscreen				0
 		outOfBoundsClick									// this closes the window if it gets a click out of the rectangle
 		rect					270 40 360 216
-		focusColor				1 1 1 1								// Focus color for text and items
+		focusColor				0 0.4 0.8 1								// Focus color for text and items
 		style					1
 		border					1
 		descX					450
@@ -16,8 +17,8 @@
 		//descY					210
 		//[/AdminSys]
 		descScale				1
-		descColor				1 .682 0 .8					// Focus color for text and items
-		descAlignment				ITEM_ALIGN_CENTER		
+		descColor				0 0.4 0.8 1				// Focus color for text and items
+		descAlignment			ITEM_ALIGN_CENTER		
 		onopen 
 		{ 
 			uiscript 			clearmouseover	map ;
@@ -30,8 +31,8 @@
 			hide				grpcallVote ; 
 			show				misc ; 
 			uiScript			loadArenas ;
-			setitemcolor			grpbutton	forecolor	1 .682 0 1 ;
-			setitemcolor			miscbutton	forecolor	1 1 1 1 ;
+			setitemcolor			grpbutton	forecolor	0.8 0.8 0.8 1 ;
+			setitemcolor			miscbutton	forecolor	0 0.4 0.8 1 ;
 			uiscript			resetmaplist ;
 		}
 
@@ -41,9 +42,11 @@
 		{
 			name				background_pic
 			group				none
-			style				WINDOW_STYLE_SHADER
+			style				WINDOW_STYLE_FILLED
 			rect				0 0 360 210
-			background			"gfx/menus/menu_box_ingame"
+			border				1
+			bordercolor			0 0 0 1
+			backcolor			0.1 0.1 0.1 0.5
 			forecolor			1 1 1 1
 			visible				1
 			decoration
@@ -52,18 +55,17 @@
 		itemDef 
 		{
 			name				playerconfigtitle
-			style				WINDOW_STYLE_SHADER
-			background			"gfx/menus/menu_blendbox"
+			style				WINDOW_STYLE_FILLED
 			text				@MENUS_CALL_FOR_VOTES
 			rect				10 5 340 15
 			textalign			ITEM_ALIGN_CENTER		
 			textalignx			170
 			textaligny			-2
-			outlinecolor			1 .5 .5 .5
-			backcolor			0 0 0 0
+			outlinecolor		1 .5 .5 .5
+			backcolor			0 0 0 1
 			font				3
 			textscale			0.8
-			forecolor			.549 .854 1 1
+			forecolor			1 1 1 1
 			border				0
 			bordercolor			0 0 0 0
 			visible				1 
@@ -88,10 +90,10 @@
 			group				none
 			style				WINDOW_STYLE_FILLED
 			rect				120 35 235 135
-			backcolor			0 0 .6 .5
+			backcolor			0 0 0 .6
 			forecolor			1 1 1 1
 			border				1
-			bordercolor			0 0 .6 1
+			bordercolor			0 0 0 1
 			visible				1
 			decoration
 		}
@@ -99,31 +101,7 @@
 		
 		// DONE GLOW, used for several buttons
 
-		itemDef 
-		{
-			name				doneButton
-			group				none
-			style				WINDOW_STYLE_SHADER
-			rect				140 186 80 30
-			background			"gfx/menus/menu_buttonback"			// Frame around button
-			forecolor			1 1 1 1
-			decoration
-			visible				0
-		}
-
 		// 	BUTTONS	//
-		itemDef 
-		{
-			name				misc_glow
-			group				glows
-			style				WINDOW_STYLE_SHADER
-			rect				0 35 120 30
-			background			"gfx/menus/menu_blendbox2"			// Frame around button
-			forecolor			1 1 1 1
-			visible			0
-			decoration
-		}
-
 		itemDef 
 		{
 			name				miscbutton
@@ -134,42 +112,27 @@
 			style				WINDOW_STYLE_EMPTY
 			rect				10 35 103 30
 			font				3
-			textscale			0.9
+			textscale			0.7
 			textalignx			100
 			textaligny			5
 			textstyle			3
 			textalign			ITEM_ALIGN_RIGHT
-			forecolor			1 .682 0 1
+			forecolor			0.8 0.8 0.8 1
 			visible				1
 			action 
 			{ 
 				play			"sound/interface/button1.wav" ;
 				hide			grpCallVote ; 
 				show			misc ;
-				setitemcolor	grpbutton	forecolor	1 .682 0 1 ;
-				setitemcolor	miscbutton	forecolor	1	1	1	1 ;
+				setitemcolor	grpbutton	forecolor	0.8 0.8 0.8 1 ;
+				setitemcolor	miscbutton	forecolor	0 0.4 0.8 1;
 			}
 			mouseEnter 
 			{ 
-				show			misc_glow
 			}
 			mouseExit 
 			{ 
-				hide			misc_glow
 			}	  	  
-		}
-
-
-		itemDef 
-		{
-			name				gametype_glow
-			group				glows
-			style				WINDOW_STYLE_SHADER
-			rect				0 65 120 30
-			background			"gfx/menus/menu_blendbox2"			// Frame around button
-			forecolor			1 1 1 1
-			visible			0
-			decoration
 		}
 
 		itemDef 
@@ -182,44 +145,30 @@
 			style				WINDOW_STYLE_EMPTY
 			rect				10 65 103 30
 			font				3
-			textscale			0.9
+			textscale			0.7
 			textalignx			100
 			textaligny			5
 			textstyle			3
 			textalign			ITEM_ALIGN_RIGHT
-			forecolor			1 .682 0 1
+			forecolor			0.8 0.8 0.8 1
 			visible				1
 			action 
 			{ 
 				play			"sound/interface/button1.wav" ;
 				hide			grpCallVote ; 
 				show			type ;
-				setitemcolor		grpbutton	forecolor	1 .682 0 1 ;
-				setitemcolor		gametypebutton	forecolor	1	1	1	1 ;
+				setitemcolor		grpbutton	forecolor	0.8 0.8 0.8 1 ;
+				setitemcolor		gametypebutton	forecolor	0 0.4 0.8 1 ;
 			}
 			
 			forecolor			.615 .615 .956 1
 			
 			mouseEnter 
 			{ 
-				show			gametype_glow
 			}
 			mouseExit 
 			{ 
-				hide			gametype_glow
 			}	  	  
-		}
-
-		itemDef 
-		{
-			name				changemap_glow
-			group				glows
-			style				WINDOW_STYLE_SHADER
-			rect				0 95 120 30
-			background			"gfx/menus/menu_blendbox2"			// Frame around button
-			forecolor			1 1 1 1
-			visible			0
-			decoration
 		}
 
 		itemDef 
@@ -232,12 +181,12 @@
 			style				WINDOW_STYLE_EMPTY
 			rect				10 95 103 30
 			font				3
-			textscale			0.9
+			textscale			0.7
 			textalignx			100
 			textaligny			5
 			textstyle			3
 			textalign			ITEM_ALIGN_RIGHT
-			forecolor			1 .682 0 1
+			forecolor			0.8 0.8 0.8 1
 			visible				1
 			action 
 			{ 
@@ -245,29 +194,15 @@
 				hide			grpCallVote ; 
 				show			maplist ;
 				show			map ;
-				setitemcolor		grpbutton		forecolor	1 .682 0 1 ;
-				setitemcolor		changemapbutton	forecolor	1	1	1	1 ;
+				setitemcolor		grpbutton		forecolor	0.8 0.8 0.8 1 ;
+				setitemcolor		changemapbutton	forecolor	0 0.4 0.8 1 ;
 			}
 			mouseEnter 
 			{ 
-				show			changemap_glow
 			}
 			mouseExit 
 			{ 
-				hide			changemap_glow
 			}	  	  
-		}
-
-		itemDef 
-		{
-			name				kick_glow
-			group				glows
-			style				WINDOW_STYLE_SHADER
-			rect				0 125 120 30
-			background			"gfx/menus/menu_blendbox2"			// Frame around button
-			forecolor			1 1 1 1
-			visible				0
-			decoration
 		}
 
 		itemDef 
@@ -280,44 +215,30 @@
 			style				WINDOW_STYLE_EMPTY
 			rect				10 125 103 30
 			font				3
-			textscale			0.9
+			textscale			0.7
 			textalignx			100
 			textaligny			5
 			textstyle			3
 			textalign			ITEM_ALIGN_RIGHT
-			forecolor			1 .682 0 1
+			forecolor			0.8 0.8 0.8 1
 			visible				1
 			action 
 			{ 
 				play			"sound/interface/button1.wav" ;
 				hide			grpCallVote ; 
 				show			kick ;
-				setitemcolor		grpbutton	forecolor	1 .682 0 1 ;
-				setitemcolor		kickbutton	forecolor	1	1	1	1 ;
+				setitemcolor		grpbutton	forecolor	0.8 0.8 0.8 1 ;
+				setitemcolor		kickbutton	forecolor	0 0.4 0.8 1 ;
 			}
 			mouseEnter 
 			{ 
-				show			kick_glow
 			}
 			mouseExit 
 			{ 
-				hide			kick_glow
 			}	  	  
 		}
 
 		//[AdminSys]
-		itemDef 
-		{
-			name				kickally_glow
-			group				glows
-			style				WINDOW_STYLE_SHADER
-			rect				0 155 120 30
-			background			"gfx/menus/menu_blendbox2"			// Frame around button
-			forecolor			1 1 1 1
-			visible				0
-			decoration
-		}
-
 		itemDef 
 		{
 			name				kickallybutton
@@ -328,20 +249,20 @@
 			style				WINDOW_STYLE_EMPTY
 			rect				10 155 103 30
 			font				3
-			textscale			0.9
+			textscale			0.7
 			textalignx			100
 			textaligny			5
 			textstyle			3
 			textalign			ITEM_ALIGN_RIGHT
-			forecolor			1 .682 0 1
+			forecolor			0.8 0.8 0.8 1
 			visible				1
 			action 
 			{ 
 				play			"sound/interface/button1.wav" ;
 				hide			grpCallVote ; 
 				show			kickally ;
-				setitemcolor		grpbutton	forecolor	1 .682 0 1 ;
-				setitemcolor		kickallybutton	forecolor	1	1	1	1 ;
+				setitemcolor		grpbutton	forecolor	0.8 0.8 0.8 1 ;
+				setitemcolor		kickallybutton	forecolor	0 0.4 0.8 1 ;
 			}
 			mouseEnter 
 			{ 
@@ -369,8 +290,8 @@
 			textalignx			122
 			textaligny			2
 			font				2
-			textscale			1
-			forecolor			1 .682 0 1
+			textscale			0.7
+			forecolor			0.8 0.8 0.8 1
 			visible				0
 			action 
 			{ 
@@ -392,8 +313,8 @@
 			textalignx			122
 			textaligny			2
 			font				2
-			textscale			1
-			forecolor			1 .682 0 1
+			textscale			0.7
+			forecolor			0.8 0.8 0.8 1
 			visible				0
 			action 
 			{ 
@@ -415,8 +336,8 @@
 			textalignx			122
 			textaligny			2
 			font				2
-			textscale			1
-			forecolor			1 .682 0 1
+			textscale			0.7
+			forecolor			0.8 0.8 0.8 1
 			visible				0
 			action 
 			{ 
@@ -442,8 +363,8 @@
 			textalignx			50
 			textaligny			2
 			font				2
-			textscale			1
-			forecolor			1 .682 0 1
+			textscale			0.7
+			forecolor			0.8 0.8 0.8 1
 			visible				0
 		}
 
@@ -461,8 +382,8 @@
 			textalignx			40
 			textaligny			0
 			font				3
-			textscale			1
-			forecolor			1 .682 0 1
+			textscale			0.7
+			forecolor			0.8 0.8 0.8 1
 			visible				1
 			action 
 			{ 
@@ -472,11 +393,9 @@
 			}
 			mouseEnter 
 			{ 
-				show				doneButton
 			}
 			mouseExit 
 			{ 
-				hide				doneButton
 			}	  	  
 		}
 
@@ -495,8 +414,8 @@
 			textalignx			5
 			textaligny			-2
 			font				2
-			textscale			.8
-			forecolor			.549 .854 1 1
+			textscale			.7
+			forecolor			1 1 1 1
 			decoration
 			visible				0
 			action
@@ -513,14 +432,14 @@
 			rect				120 55 230 108
 			type				ITEM_TYPE_LISTBOX
 			style				WINDOW_STYLE_FILLED
-			elementwidth			120
-			elementheight			15
+			elementwidth		120
+			elementheight		15
 			elementtype			LISTBOX_TEXT
 			feeder				FEEDER_ALLMAPS
 			border				1
-			bordercolor			1 .682 0 .8
-			backcolor			0 0 .5 .25
-			outlinecolor			.1 .1 .7 .5
+			bordercolor			0 0 0 1
+			backcolor			0 0 0 .6
+			outlinecolor		.1 .1 .7 .5
 			visible				0
 			font				2
 			textaligny			12
@@ -529,12 +448,12 @@
 			mouseEnter 
 			{ 
 				fadein message_arena ; 
-				setitemcolor map bordercolor .7 0 0 1 
+				setitemcolor map bordercolor 0 0.4 0.8 1 
 			} 
 			mouseExit 
 			{ 
 				fadeout message_arena ; 
-				setitemcolor map bordercolor .5 .5 .5 .5 
+				setitemcolor map bordercolor 0 0 0 1 
 			} 
 			action
 			{
@@ -558,8 +477,8 @@
 			textalignx			40
 			textaligny			0
 			font				3
-			textscale			1
-			forecolor			1 .682 0 1
+			textscale			0.7
+			forecolor			0.8 0.8 0.8 1
 			visible				1
 			action 
 			{ 
@@ -569,11 +488,9 @@
 			}
 			mouseEnter 
 			{ 
-				show				doneButton
 			}
 			mouseExit 
 			{ 
-				hide				doneButton
 			}	  	  
 		}
 
@@ -591,8 +508,8 @@
 			textalignx			5
 			textaligny			-2
 			font				2
-			textscale			.8
-			forecolor			.549 .854 1 1
+			textscale			.7
+			forecolor			1 1 1 1
 			visible				0
 			decoration
 			action
@@ -609,14 +526,14 @@
 			rect				120 55 230 108
 			style				WINDOW_STYLE_FILLED
 			type				ITEM_TYPE_LISTBOX
-			elementwidth			120
-			elementheight			15
+			elementwidth		120
+			elementheight		15
 			elementtype			LISTBOX_TEXT
 			feeder				FEEDER_PLAYER_LIST
 			border				1
-			bordercolor			1 .682 0 .8
-			backcolor			0 0 .5 .25
-			outlinecolor			.1 .1 .7 .5
+			bordercolor			0 0 0 1
+			backcolor			0 0 0 0.6
+			outlinecolor		.1 .1 .7 .5
 			font				2
 			textaligny			12
 			textscale			.8
@@ -625,12 +542,12 @@
 			mouseEnter 
 			{ 
 				fadein message_arena ; 
-				setitemcolor kick bordercolor .7 0 0 1 
+				setitemcolor kick bordercolor 0 0.4 0.8 1 
 			} 
 			mouseExit 
 			{ 
 				fadeout message_arena ; 
-				setitemcolor kick bordercolor .5 .5 .5 1 
+				setitemcolor kick bordercolor 0 0 0 1 
 			}
 			action
 			{
@@ -652,8 +569,8 @@
 			textalignx			40
 			textaligny			0
 			font				3
-			textscale			1
-			forecolor			1 .682 0 1
+			textscale			0.7
+			forecolor			0.8 0.8 0.8 1
 			visible				1
 			action 
 			{ 
@@ -663,11 +580,9 @@
 			}
 			mouseEnter 
 			{ 
-				show				doneButton
 			}
 			mouseExit 
 			{ 
-				hide				doneButton
 			}	  	  
 		}
 
@@ -685,8 +600,8 @@
 			textalignx			5
 			textaligny			-2
 			font				2
-			textscale			.8
-			forecolor			.549 .854 1 1
+			textscale			.7
+			forecolor			1 1 1 1
 			visible				0
 			decoration
 			action
@@ -708,9 +623,9 @@
 			elementtype			LISTBOX_TEXT
 			feeder				FEEDER_PLAYER_LIST
 			border				1
-			bordercolor			1 .682 0 .8
-			backcolor			0 0 .5 .25
-			outlinecolor			.1 .1 .7 .5
+			bordercolor			0 0 0 1
+			backcolor			0 0 0 0.6
+			outlinecolor		.1 .1 .7 .5
 			font				2
 			textaligny			12
 			textscale			.8
@@ -719,12 +634,12 @@
 			mouseEnter 
 			{ 
 				fadein message_arena ; 
-				setitemcolor kickally bordercolor .7 0 0 1 
+				setitemcolor kickally bordercolor 0 0.4 0.8 1 
 			} 
 			mouseExit 
 			{ 
 				fadeout message_arena ; 
-				setitemcolor kickally bordercolor .5 .5 .5 1 
+				setitemcolor kickally bordercolor 0 0 0 1 
 			}
 			action
 			{
@@ -746,8 +661,8 @@
 			textalignx			40
 			textaligny			0
 			font				3
-			textscale			1
-			forecolor			1 .682 0 1
+			textscale			0.7
+			forecolor			0.8 0.8 0.8 1
 			visible				1
 			action 
 			{ 
@@ -757,16 +672,15 @@
 			}
 			mouseEnter 
 			{ 
-				show				doneButton
 			}
 			mouseExit 
 			{ 
-				hide				doneButton
 			}	  	  
 		}
 		//[/AdminSys]
 	}
 }
+//[/NewMenus]
 
 
 

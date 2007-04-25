@@ -1,3 +1,4 @@
+//[NewMenus]
 //--------------------------------------------------------------
 //
 // SETUP MENU
@@ -11,13 +12,13 @@
 		fullscreen				0
 		outOfBoundsClick									// this closes the window if it gets a click out of the rectangle
 		rect					45 35 550 335
-		focusColor				1 1 1 1								// Focus color for text and items
+		focusColor				0 0.4 0.8 1								// Focus color for text and items
 		style					1
 		border					1
 		descX					305
 		descY					347
 		descScale				1
-		descColor				1 .682 0 .8					// Focus color for text and items
+		descColor				0 0.4 0.8 1					// Focus color for text and items
 		descAlignment				ITEM_ALIGN_CENTER		
 
 		onOpen 
@@ -38,8 +39,8 @@
 			//[UITweaks]
 			hide			advanced
 			//[/UITweaks]
-			setitemcolor	setup_submenu	 forecolor	1 .682 0 1
-			setitemcolor	videomenubutton forecolor	1 1 1 1
+			setitemcolor	setup_submenu	 forecolor	0.8 0.8 0.8 1
+			setitemcolor	videomenubutton forecolor	0 0.4 0.8 1
 		}
 			
 		onESC 
@@ -57,9 +58,11 @@
 		{
 			name				background_pic
 			group				none
-			style				WINDOW_STYLE_SHADER
+			style				WINDOW_STYLE_FILLED
 			rect				0 0 570 335
-			background			"gfx/menus/menu_box_ingame"
+			border				1
+			bordercolor			0 0 0 1
+			backcolor			0.1 0.1 0.1 0.5
 			forecolor			1 1 1 1
 			visible				1
 			decoration
@@ -67,36 +70,23 @@
 		itemDef 
 		{
 			name				playerconfigtitle
-			style				WINDOW_STYLE_SHADER
-			background			"gfx/menus/menu_blendbox"
+			style				WINDOW_STYLE_FILLED
 			text				@MENUS_SETUP
 			rect				20 5 510 28
 			textalign			ITEM_ALIGN_CENTER		
 			textalignx			255
 			textaligny			2
 			outlinecolor		1 .5 .5 .5
-			backcolor			0 0 0 0
+			backcolor			0 0 0 1
 			font				3
 			textscale			0.9
-			forecolor			.549 .854 1 1
+			forecolor			1 1 1 1
 			border				0
 			bordercolor			0 0 0 0
 			visible				1 
 		}
 
 		// video1 button
-		itemDef 
-		{
-			name				video1button_glow
-			style				WINDOW_STYLE_SHADER
-			rect				20 43 185 30
-			background			"gfx/menus/menu_blendbox2"			// Frame around button
-			forecolor			1 1 1 1
-			visible			0
-			// appearance_slot		1
-			decoration
-		}
-
 		itemDef 
 		{
 			name				video1menubutton
@@ -111,17 +101,15 @@
 			textaligny			5
 			textstyle			3
 			textalign			ITEM_ALIGN_RIGHT
-			forecolor			1 .682 0 1
+			forecolor			0.8 0.8 0.8 1
 			visible				1
 			descText			@MENUS_CONFIGURE_VIDEO_SETTINGS
 
 			mouseEnter 
 			{ 
-				show			video1button_glow
 			}
 			mouseExit 
 			{ 
-				hide			video1button_glow
 			}	  	  
 			action 
 			{ 
@@ -143,24 +131,12 @@
 				//[UITweaks]
 				hide			advanced
 				//[/UITweaks]
-				setitemcolor	setup_submenu		forecolor	1 .682 0 1
-				setitemcolor	video1menubutton	forecolor	1 1 1 1
+				setitemcolor	setup_submenu		forecolor	0.8 0.8 0.8 1
+				setitemcolor	video1menubutton	forecolor	0 0.4 0.8 1
 			}
 		}
 
 		// video2 button
-		itemDef 
-		{
-			name				video2button_glow
-			style				WINDOW_STYLE_SHADER
-			rect				20 73 185 30
-			background			"gfx/menus/menu_blendbox2"			// Frame around button
-			forecolor			1 1 1 1
-			visible			0
-			// appearance_slot		1
-			decoration
-		}
-
 		itemDef 
 		{
 			name				video2menubutton
@@ -175,17 +151,15 @@
 			textaligny			5
 			textalign			ITEM_ALIGN_RIGHT
 			textstyle			3
-			forecolor			1 .682 0 1
+			forecolor			0.8 0.8 0.8 1
 			visible			1
 			descText			@MENUS_CONFIGUE_MORE_VIDEO_SETTINGS
 
 			mouseEnter 
 			{ 
-				show			video2button_glow
 			}
 			mouseExit 
 			{ 
-				hide			video2button_glow
 			}	  	  
 			action 
 			{ 
@@ -205,24 +179,12 @@
 				//[UITweaks]
 				hide			advanced
 				//[/UITweaks]
-				setitemcolor	setup_submenu		forecolor	1 .682 0 1
-				setitemcolor	video2menubutton	forecolor	1 1 1 1
+				setitemcolor	setup_submenu		forecolor	0.8 0.8 0.8 1
+				setitemcolor	video2menubutton	forecolor	0 0.4 0.8 1
 			}
 		}
 
 		// sound  button
-		itemDef 
-		{
-			name				soundbutton_glow
-			style				WINDOW_STYLE_SHADER
-			rect				20 103 185 30
-			background			"gfx/menus/menu_blendbox2"			// Frame around button
-			forecolor			1 1 1 1
-			visible			0
-			// appearance_slot		1
-			decoration
-		}
-
 		itemDef 
 		{
 			name				soundmenubutton
@@ -237,17 +199,15 @@
 			textaligny			5
 			textalign			ITEM_ALIGN_RIGHT
 			textstyle			3
-			forecolor			1 .682 0 1
+			forecolor			0.8 0.8 0.8 1
 			visible			1
 			descText			@MENUS_CONFIGURE_SOUND_SETTINGS
 
 			mouseEnter 
 			{ 
-				show			soundbutton_glow
 			}
 			mouseExit 
 			{ 
-				hide			soundbutton_glow
 			}	  	  
 			action 
 			{ 
@@ -267,24 +227,12 @@
 				//[UITweaks]
 				hide			advanced
 				//[/UITweaks]
-				setitemcolor	setup_submenu		forecolor	1 .682 0 1
-				setitemcolor	soundmenubutton		forecolor	1 1 1 1
+				setitemcolor	setup_submenu		forecolor	0.8 0.8 0.8 1
+				setitemcolor	soundmenubutton		forecolor	0 0.4 0.8 1
 			}
 		}
 
 		// gameoptions  button
-		itemDef 
-		{
-			name				gameoptionsbutton_glow
-			style				WINDOW_STYLE_SHADER
-			rect				20 133 185 30
-			background			"gfx/menus/menu_blendbox2"			// Frame around button
-			forecolor			1 1 1 1
-			visible			0
-			// appearance_slot		1
-			decoration
-		}
-
 		itemDef 
 		{
 			name				gameoptionmenubutton
@@ -299,17 +247,15 @@
 			textaligny			5
 			textalign			ITEM_ALIGN_RIGHT
 			textstyle			3
-			forecolor			1 .682 0 1
+			forecolor			0.8 0.8 0.8 1
 			visible			1
 			descText			@MENUS_CONFIGURE_GAME_OPTIONS
 
 			mouseEnter 
 			{ 
-				show			gameoptionsbutton_glow
 			}
 			mouseExit 
 			{ 
-				hide			gameoptionsbutton_glow
 			}	  	  
 			action 
 			{ 
@@ -330,23 +276,13 @@
 				//[UITweaks]
 				hide			advanced
 				//[/UITweaks]
-				setitemcolor	setup_submenu			forecolor	1 .682 0 1
-				setitemcolor	gameoptionmenubutton	forecolor	1 1 1 1
+				setitemcolor	setup_submenu			forecolor	0.8 0.8 0.8 1
+				setitemcolor	gameoptionmenubutton	forecolor	0 0.4 0.8 1
 			}
 		}
 
 		//[UITweaks]
 		// advanced button
-		itemDef 
-		{
-			name				advancedbutton_glow
-			style				WINDOW_STYLE_SHADER
-			rect				20 163 185 30
-			background			"gfx/menus/menu_blendbox2"	// Frame around button
-			forecolor			1 1 1 1
-			visible				0
-			decoration
-		}
 		itemDef 
 		{
 			name				advancedmenubutton
@@ -361,16 +297,14 @@
 			textaligny			5
 			textalign			ITEM_ALIGN_RIGHT
 			textstyle			3
-			forecolor			1 .682 0 1
+			forecolor			0.8 0.8 0.8 1
 			visible				1
 			descText			@OJP_MENUS_ADVANCED_DESC
 			mouseEnter 
 			{ 
-				show			advancedbutton_glow
 			}
 			mouseExit 
 			{ 
-				hide			advancedbutton_glow
 			}	  	  
 			action 
 			{ 
@@ -386,8 +320,8 @@
 				hide			mods
 				hide			defaults
 				show			advanced
-				setitemcolor	setup_submenu			forecolor	1 .682 0 1
-				setitemcolor	advancedmenubutton		forecolor	1 1 1 1
+				setitemcolor	setup_submenu			forecolor	0.8 0.8 0.8 1
+				setitemcolor	advancedmenubutton		forecolor	0 0.4 0.8 1
 			}
 		}
 		//[/UITweaks]
@@ -409,21 +343,6 @@
 		// gamedefaults button
 		itemDef 
 		{
-			name				gamedefaultsbutton_glow
-			style				WINDOW_STYLE_SHADER
-			//[UITweaks]
-			rect				20 193 185 30
-			//rect				20 163 185 30
-			//[UITweaks]
-			background			"gfx/menus/menu_blendbox2"			// Frame around button
-			forecolor			1 1 1 1
-			visible			0
-			// appearance_slot		1
-			decoration
-		}
-
-		itemDef 
-		{
 			name				gamedefaultsmenubutton
 			group				setup_submenu
 			text				@MENUS_DEFAULTS
@@ -439,17 +358,15 @@
 			textaligny			5
 			textalign			ITEM_ALIGN_RIGHT
 			textstyle			3
-			forecolor			1 .682 0 1
+			forecolor			0.8 0.8 0.8 1
 			visible			1
 			descText			@MENUS_RESTORE_DEFAULT_SETTINGS
 
 			mouseEnter 
 			{ 
-				show			gamedefaultsbutton_glow
 			}
 			mouseExit 
 			{ 
-				hide			gamedefaultsbutton_glow
 			}	  	  
 			action 
 			{ 
@@ -469,8 +386,8 @@
 				//[UITweaks]
 				hide			advanced
 				//[/UITweaks]
-				setitemcolor	setup_submenu			forecolor	1 .682 0 1
-				setitemcolor	gamedefaultsmenubutton	forecolor	1 1 1 1
+				setitemcolor	setup_submenu			forecolor	0.8 0.8 0.8 1
+				setitemcolor	gamedefaultsmenubutton	forecolor	0 0.4 0.8 1
 			}
 		}
 		
@@ -480,260 +397,15 @@
 			group				none
 			style				WINDOW_STYLE_FILLED
 			rect				210 41 350 250	
-			backcolor			0 0 .6 .5
+			backcolor			0 0 0 .6
 			forecolor			1 1 1 1
 			border				1
-			bordercolor			0 0 .6 1
+			bordercolor			0 0 0 1
 			visible				0
 			decoration
 		}
 		
 
-		//----------------------------------------------------------------------------------------------
-		//
-		//	HIGHLIGHT BARS
-		//
-		//----------------------------------------------------------------------------------------------
-		itemDef
-		{
-			name				highlight1
-			group				highlights
-			style				WINDOW_STYLE_SHADER
-			rect				220 43 300 20
-			background			"gfx/menus/menu_blendbox"
-			forecolor			1 1 1 1
-			visible			0
-			decoration
-		}
-		
-		itemDef
-		{
-			name				highlight2
-			group				highlights
-			style				WINDOW_STYLE_SHADER
-			rect				220 63 300 20
-			background			"gfx/menus/menu_blendbox"
-			forecolor			1 1 1 1
-			visible			0
-			decoration
-		}
-		
-		itemDef
-		{
-			name				highlight3
-			group				highlights
-			style				WINDOW_STYLE_SHADER
-			rect				220 83 300 20
-			background			"gfx/menus/menu_blendbox"
-			forecolor			1 1 1 1
-			visible			0
-			decoration
-		}
-		
-		itemDef
-		{
-			name				highlight4
-			group				highlights
-			style				WINDOW_STYLE_SHADER
-			rect				220 103 300 20
-			background			"gfx/menus/menu_blendbox"
-			forecolor			1 1 1 1
-			visible			0
-			decoration
-		}
-		
-		itemDef
-		{
-			name				highlight5
-			group				highlights
-			style				WINDOW_STYLE_SHADER
-			rect				220 123 300 20
-			background			"gfx/menus/menu_blendbox"
-			forecolor			1 1 1 1
-			visible			0
-			decoration
-		}
-		
-		itemDef
-		{
-			name				highlight6
-			group				highlights
-			style				WINDOW_STYLE_SHADER
-			rect				220 143 300 20
-			background			"gfx/menus/menu_blendbox"
-			forecolor			1 1 1 1
-			visible			0
-			decoration
-		}
-		
-		itemDef
-		{
-			name				highlight7
-			group				highlights
-			style				WINDOW_STYLE_SHADER
-			rect				220 163 300 20
-			background			"gfx/menus/menu_blendbox"
-			forecolor			1 1 1 1
-			visible			0
-			decoration
-		}
-		
-		itemDef
-		{
-			name				highlight8
-			group				highlights
-			style				WINDOW_STYLE_SHADER
-			rect				220 183 300 20
-			background			"gfx/menus/menu_blendbox"
-			forecolor			1 1 1 1
-			visible			0
-			decoration
-		}
-		
-		itemDef
-		{
-			name				highlight9
-			group				highlights
-			style				WINDOW_STYLE_SHADER
-			rect				220 203 300 20
-			background			"gfx/menus/menu_blendbox"
-			forecolor			1 1 1 1
-			visible			0
-			decoration
-		}
-		
-		itemDef
-		{
-			name				highlight10
-			group				highlights
-			style				WINDOW_STYLE_SHADER
-			rect				220 223 300 20
-			background			"gfx/menus/menu_blendbox"
-			forecolor			1 1 1 1
-			visible			0
-			decoration
-		}
-		
-		itemDef
-		{
-			name				highlight11
-			group				highlights
-			style				WINDOW_STYLE_SHADER
-			rect				220 243 300 20
-			background			"gfx/menus/menu_blendbox"
-			forecolor			1 1 1 1
-			visible			0
-			decoration
-		}
-
-		itemDef
-		{
-			name				highlight12
-			group				highlights
-			style				WINDOW_STYLE_SHADER
-			rect				220 263 300 20
-			background			"gfx/menus/menu_blendbox"
-			forecolor			1 1 1 1
-			visible			0
-			decoration
-		}
-
-		itemDef
-		{
-			name				highlight13
-			group				highlights
-			style				WINDOW_STYLE_SHADER
-			rect				365 283 120 32
-			background			"gfx/menus/menu_blendbox"
-			forecolor			1 1 1 1
-			visible			0
-			decoration
-		}
-
-		itemDef
-		{
-			name				highlight14
-			group				highlights
-			style				WINDOW_STYLE_SHADER
-			rect				220 141 300 20
-			background			"gfx/menus/menu_blendbox"
-			forecolor			1 1 1 1
-			visible			0
-			decoration
-		}
-
-		itemDef
-		{
-			name				highlight15
-			group				highlights
-			style				WINDOW_STYLE_SHADER
-			rect				220 161 300 20
-			background			"gfx/menus/menu_blendbox"
-			forecolor			1 1 1 1
-			visible			0
-			decoration
-		}
-
-		itemDef
-		{
-			name				highlight16
-			group				highlights
-			style				WINDOW_STYLE_SHADER
-			rect				220 181 300 20
-			background			"gfx/menus/menu_blendbox"
-			forecolor			1 1 1 1
-			visible			0
-			decoration
-		}
-
-		itemDef
-		{
-			name				highlight17
-			group				highlights
-			style				WINDOW_STYLE_SHADER
-			rect				220 201 300 20
-			background			"gfx/menus/menu_blendbox"
-			forecolor			1 1 1 1
-			visible			0
-			decoration
-		}
-
-		itemDef
-		{
-			name				highlight18
-			group				highlights
-			style				WINDOW_STYLE_SHADER
-			rect				220 221 300 20
-			background			"gfx/menus/menu_blendbox"
-			forecolor			1 1 1 1
-			visible			0
-			decoration
-		}
-
-		itemDef
-		{
-			name				highlight19
-			group				highlights
-			style				WINDOW_STYLE_SHADER
-			rect				220 241 300 20
-			background			"gfx/menus/menu_blendbox"
-			forecolor			1 1 1 1
-			visible			0
-			decoration
-		}
-
-		itemDef
-		{
-			name				highlight20
-			group				highlights
-			style				WINDOW_STYLE_SHADER
-			rect				220 261 300 20
-			background			"gfx/menus/menu_blendbox"
-			forecolor			1 1 1 1
-			visible			0
-			decoration
-		}
-		
 		//----------------------------------------------------------------------------------------------
 		//
 		//	VIDEO 1 MENU BUTTONS
@@ -769,11 +441,9 @@
 
 			mouseenter 
 			{ 
-				show			highlight1
 			}
 			mouseexit 
 			{ 
-				hide			highlight1
 			} 
 			action 
 			{ 
@@ -806,11 +476,9 @@
 
 			mouseenter 
 			{ 
-				show			highlight3
 			}
 			mouseexit 
 			{ 
-				hide			highlight3
 			} 
 			action 
 			{
@@ -843,11 +511,9 @@
 
 			mouseenter 
 			{ 
-				show			highlight4
 			}
 			mouseexit 
 			{ 
-				hide			highlight4
 			} 
 			action 
 			{
@@ -881,11 +547,9 @@
 
 			mouseenter 
 			{ 
-				show			highlight5
 			}
 			mouseexit 
 			{ 
-				hide			highlight5
 			} 
 			action 
 			{
@@ -917,11 +581,9 @@
 
 			mouseenter 
 			{ 
-				show			highlight6
 			}
 			mouseexit 
 			{ 
-				hide			highlight6
 			} 
 			action 
 			{
@@ -954,11 +616,9 @@
 
 			mouseenter 
 			{ 
-				show			highlight7
 			}
 			mouseexit 
 			{ 
-				hide			highlight7
 			} 
 			action 
 			{
@@ -990,11 +650,9 @@
 
 			mouseenter 
 			{ 
-				show			highlight8
 			}
 			mouseexit 
 			{ 
-				hide			highlight8
 			} 
 			action 
 			{
@@ -1026,11 +684,9 @@
 
 			mouseenter 
 			{ 
-				show			highlight9
 			}
 			mouseexit 
 			{ 
-				hide			highlight9
 			} 
 			action 
 			{
@@ -1062,11 +718,9 @@
 
 			mouseenter 
 			{ 
-				show			highlight10
 			}
 			mouseexit 
 			{ 
-				hide			highlight10
 			} 
 			action 
 			{
@@ -1106,11 +760,9 @@
 
 			mouseenter 
 			{ 
-				show			highlight11
 			}
 			mouseexit 
 			{ 
-				hide			highlight11
 			} 
 		}
 
@@ -1143,14 +795,12 @@
 			mouseenter 
 			{ 
 				//[UITweaks]
-				show			highlight2
 				//show			highlight11
 				//[/UITweaks]
 			}
 			mouseexit 
 			{ 
 				//[UITweaks]
-				hide			highlight2
 				//hide			highlight11
 				//[/UITweaks]
 			} 
@@ -1166,18 +816,6 @@
 		// APPLY CHANGES BUTTON
 		itemDef 
 		{
-			name				applybutton_glow
-			style				WINDOW_STYLE_SHADER
-			rect				260 265 200 18
-			background			"gfx/menus/menu_blendbox"
-			forecolor			1 0.5 0.5 1
-			visible			0
-			// appearance_slot		1
-			decoration
-		}
-
-		itemDef 
-		{
 			name				applyChanges
 			text				@MENUS_APPLY_CHANGES
 			type				ITEM_TYPE_BUTTON
@@ -1189,17 +827,15 @@
 			textaligny			5
 			textalign			ITEM_ALIGN_CENTER
 			textstyle			3
-			forecolor			1 0 0 1
+			forecolor			1 1 1 1
 			backcolor			0 0 1 0
 			visible				0
 
 			mouseEnter 
 			{ 
-				show			applybutton_glow
 			}
 			mouseExit 
 			{ 
-				hide			applybutton_glow
 			}	  	  
 			action
 			{
@@ -1241,7 +877,7 @@
 			textalignx			150
 			font				2
 			textscale			1        
-			forecolor			1 1 0 1
+			forecolor			1 1 1 1
 			visible			0
 			decoration
 		}
@@ -1256,23 +892,11 @@
 			textalignx			150
 			font				2
 			textscale			1        
-			forecolor			1 1 0 1
+			forecolor			1 1 1 1
 			visible			0
 		}
 
 
-
-		itemDef 
-		{
-			name			vidrestart_yes_button
-			style			WINDOW_STYLE_SHADER
-			rect			367 241 120 32 
-			background		"gfx/menus/menu_buttonback"			// Frame around button
-			forecolor		1 1 1 1
-			decoration
-			visible		0 
-			// appearance_slot	4
-		}
 
 		// YES button
 		itemDef 
@@ -1289,7 +913,7 @@
 			textalignx			60
 			textaligny			0
 			descText			@MENUS_APPLY_CHANGES_AND_THEN
-			forecolor			1 .682 0 1
+			forecolor			0.8 0.8 0.8 1
 			visible			-1
 			// appearance_slot		5
 
@@ -1301,27 +925,13 @@
 			}
 			mouseEnter 
 			{ 
-				show			vidrestart_yes_button
 			}
 			mouseExit 
 			{ 
-				hide			vidrestart_yes_button
 			}	  	  
 
 		}
 	
-		itemDef 
-		{
-			name			vidrestart_no_button
-			style			WINDOW_STYLE_SHADER
-			rect			240 241 120 32 
-			background		"gfx/menus/menu_buttonback"			// Frame around button
-			forecolor		1 1 1 1
-			decoration
-			visible		0
-			// appearance_slot 3
-		}
-
 		// CANCEL button
 		itemDef 
 		{
@@ -1337,7 +947,7 @@
 			textalignx			60
 			textaligny			-1
 			descText			@MENUS_DO_NOT_APPLY_CHANGES
-			forecolor			1 .682 0 1
+			forecolor			0.8 0.8 0.8 1
 			visible			0
 			// appearance_slot		6
 			action 
@@ -1353,11 +963,9 @@
 			}
 			mouseEnter 
 			{ 
-				show			vidrestart_no_button 
 			}
 			mouseExit 
 			{ 
-				hide			vidrestart_no_button 
 			}	  	  
 
 		}
@@ -1425,11 +1033,9 @@
 
 			mouseenter 
 			{ 
-				show			highlight14
 			}
 			mouseexit 
 			{ 
-				hide			highlight14
 			} 
 		}
 
@@ -1463,11 +1069,9 @@
 			}
 			mouseenter 
 			{ 
-				show			highlight15
 			}
 			mouseexit 
 			{ 
-				hide			highlight15
 			}  
 		}
 
@@ -1500,11 +1104,9 @@
 
 			mouseenter 
 			{ 
-				show			highlight16
 			}
 			mouseexit 
 			{ 
-				hide			highlight16
 			} 
 		}
 
@@ -1535,11 +1137,9 @@
 			}
 			mouseenter 
 			{ 
-				show			highlight17
 			}
 			mouseexit 
 			{ 
-				hide			highlight17
 			} 
 		}
 
@@ -1570,11 +1170,9 @@
 			}
 			mouseenter 
 			{ 
-				show			highlight18
 			}
 			mouseexit 
 			{ 
-				hide			highlight18
 			} 
 		}
 
@@ -1607,11 +1205,9 @@
 
 			mouseenter 
 			{ 
-				show			highlight19
 			}
 			mouseexit 
 			{ 
-				hide			highlight19
 			} 
 		}
 
@@ -1642,11 +1238,9 @@
 
 			mouseenter 
 			{ 
-				show			highlight20
 			}
 			mouseexit 
 			{ 
-				hide			highlight20
 			} 
 		}
 
@@ -1680,11 +1274,9 @@
 
 			mouseenter 
 			{ 
-				show			highlight2
 			}
 			mouseexit 
 			{ 
-				hide			highlight2
 			} 
 		}
 
@@ -1712,11 +1304,9 @@
 
 			mouseenter 
 			{ 
-				show			highlight3
 			}
 			mouseexit 
 			{ 
-				hide			highlight3
 			} 
 		}
 
@@ -1743,11 +1333,9 @@
 
 			mouseenter 
 			{ 
-				show			highlight4
 			}
 			mouseexit 
 			{ 
-				hide			highlight4
 			} 
 		}
 
@@ -1774,11 +1362,9 @@
 
 			mouseenter 
 			{ 
-				show			highlight6
 			}
 			mouseexit 
 			{ 
-				hide			highlight6
 			} 
 			action 
 			{
@@ -1811,11 +1397,9 @@
 
 			mouseenter 
 			{ 
-				show			highlight8
 			}
 			mouseexit 
 			{ 
-				hide			highlight8
 			} 
 		}
 
@@ -1880,11 +1464,9 @@
 
 			mouseenter 
 			{ 
-				show			highlight1
 			}
 			mouseexit 
 			{ 
-				hide			highlight1
 			} 
 		}
 
@@ -1919,11 +1501,9 @@
 
 			mouseenter 
 			{ 
-				show			highlight2
 			}
 			mouseexit 
 			{ 
-				hide			highlight2
 			} 
 		}
 
@@ -1956,11 +1536,9 @@
 			}
 			mouseenter 
 			{ 
-				show			highlight3
 			}
 			mouseexit 
 			{ 
-				hide			highlight3
 			} 
 		}
 
@@ -1993,11 +1571,9 @@
 
 			mouseenter 
 			{ 
-				show			highlight3
 			}
 			mouseexit 
 			{ 
-				hide			highlight3
 			} 
 		}
 		*/
@@ -2031,11 +1607,9 @@
 
 			mouseenter 
 			{ 
-				show			highlight4
 			}
 			mouseexit 
 			{ 
-				hide			highlight4
 			} 
 		}
 
@@ -2067,11 +1641,9 @@
 
 			mouseenter 
 			{ 
-				show			highlight5
 			}
 			mouseexit 
 			{ 
-				hide			highlight5
 			} 
 		}
 
@@ -2103,11 +1675,9 @@
 
 			mouseenter 
 			{ 
-				show			highlight6
 			}
 			mouseexit 
 			{ 
-				hide			highlight6
 			} 
 		}
 
@@ -2139,11 +1709,9 @@
 
 			mouseenter 
 			{ 
-				show			highlight7
 			}
 			mouseexit 
 			{ 
-				hide			highlight7
 			} 
 		}
 
@@ -2184,11 +1752,9 @@
 			}
 			mouseenter 
 			{ 
-				show			highlight8
 			}
 			mouseexit 
 			{ 
-				hide			highlight8
 			} 
 		}
 
@@ -2228,11 +1794,9 @@
 			}
 			mouseenter 
 			{ 
-				show			highlight8
 			}
 			mouseexit 
 			{ 
-				hide			highlight8
 			} 
 		}
 
@@ -2265,11 +1829,9 @@
 			}
 			mouseenter 
 			{ 
-				show			highlight9
 			}
 			mouseexit 
 			{ 
-				hide			highlight9
 			} 
 		}
 
@@ -2299,11 +1861,9 @@
 
 			mouseenter 
 			{ 
-				show			highlight10
 			}
 			mouseexit 
 			{ 
-				hide			highlight10
 			} 
 		}
 		
@@ -2338,11 +1898,9 @@
 			}
 			mouseenter 
 			{ 
-				show			highlight11
 			}
 			mouseexit 
 			{ 
-				hide			highlight11
 			} 
 		}
 
@@ -2375,11 +1933,9 @@
 
 			mouseenter 
 			{ 
-				show			highlight12
 			}
 			mouseexit 
 			{ 
-				hide			highlight12
 			} 
 		}
 		//[/UITweaks]		
@@ -2399,7 +1955,7 @@
 			textalignx			60
 			textaligny			0
 			descText			@MENUS_SET_LANGUAGE_INFO
-			forecolor			1 .682 0 1
+			forecolor			1 1 1 1
 			visible				0
 			// appearance_slot		5
 
@@ -2411,11 +1967,9 @@
 			}
 			mouseEnter 
 			{ 
-				show			highlight12
 			}
 			mouseExit 
 			{ 
-				hide			highlight12
 			}	  	  
 
 		}
@@ -2448,7 +2002,7 @@
 			textscale			1    
 			textalign			ITEM_ALIGN_CENTER
 			textalignx			176
-			forecolor			1 .682 0 1
+			forecolor			1 1 1 1
 			visible				0
 			decoration
 		}
@@ -2464,7 +2018,7 @@
 			textscale			.9
 			textalign			ITEM_ALIGN_CENTER
 			textalignx			176
-			forecolor			1 .682 0 1
+			forecolor			0 0.4 0.8 1
 			visible				0
 			decoration
 		}
@@ -2480,7 +2034,7 @@
 			textscale			.9
 			textalign			ITEM_ALIGN_CENTER
 			textalignx			176
-			forecolor			1 .682 0 1
+			forecolor			0 0.4 0.8 1
 			visible				0
 			decoration
 		}
@@ -2490,30 +2044,17 @@
 			name				options
 			group				defaults
 			text				@MENUS_VID_RESTART3
-			rect				220 191 352 20
+			rect				215 191 352 20
 			font				2
 			textscale			1    
 			textalign			ITEM_ALIGN_CENTER
 			textalignx			176
-			forecolor			1 .682 0 1
+			forecolor			0 0.4 0.8 1
 			visible				0
 			decoration
 		}
 
 
-		itemDef 
-		{
-			name			default_yes_button
-			group			default_glow
-			style			WINDOW_STYLE_SHADER
-			rect			430 241 120 32 
-			background		"gfx/menus/menu_buttonback"			// Frame around button
-			forecolor		1 1 1 1
-			decoration
-			visible			0
-			// appearance_slot	4
-		}
-	
 		// YES button - lose reset defaults
 		itemDef 
 		{
@@ -2530,7 +2071,7 @@
 			textalignx			60
 			textaligny			0
 			descText			@MENUS_USE_DEFAULT_SETTINGS
-			forecolor			1 .682 0 1
+			forecolor			0.8 0.8 0.8 1
 			visible			0
 			// appearance_slot		5
 
@@ -2542,28 +2083,13 @@
 			}
 			mouseEnter 
 			{ 
-				show			default_yes_button 
 			}
 			mouseExit 
 			{ 
-				hide			default_yes_button
 			}	  	  
 
 		}
 	
-		itemDef 
-		{
-			name			default_no_button
-			group			default_glow
-			style			WINDOW_STYLE_SHADER
-			rect			220 241 120 32 
-			background		"gfx/menus/menu_buttonback"			// Frame around button
-			forecolor		1 1 1 1
-			decoration
-			visible		0
-			// appearance_slot 3
-		}
-
 		// NO button - return to Main Menu
 		itemDef 
 		{
@@ -2580,7 +2106,7 @@
 			textalignx			60
 			textaligny			0
 			descText			@MENUS_DO_NOT_RESET_DEFAULT
-			forecolor			1 .682 0 1
+			forecolor			0.8 0.8 0.8 1
 			visible			0
 			// appearance_slot		6
 			action 
@@ -2594,11 +2120,9 @@
 			}
 			mouseEnter 
 			{ 
-				show			default_no_button 
 			}
 			mouseExit 
 			{ 
-				hide			default_no_button
 			}	  	  
 		}
 
@@ -2633,11 +2157,9 @@
 			}
 			mouseenter 
 			{ 
-				show			highlight1
 			}
 			mouseexit 
 			{ 
-				hide			highlight1
 			}
 		}
 
@@ -2668,11 +2190,9 @@
 			}
 			mouseenter 
 			{ 
-				show			highlight2
 			}
 			mouseexit 
 			{ 
-				hide			highlight2
 			}
 		}
 //[/UITweaks]
@@ -2706,11 +2226,9 @@
 			}
 			mouseenter 
 			{ 
-				show			highlight3
 			}
 			mouseexit 
 			{ 
-				hide			highlight3
 			}
 		}
 		//[/RGBSabers]
@@ -2744,11 +2262,9 @@
 			}
 			mouseenter 
 			{ 
-				show			highlight4
 			}
 			mouseexit 
 			{ 
-				hide			highlight4
 			}
 		}
 		//[/VisualWeapons]
@@ -2782,13 +2298,13 @@
 			}
 			mouseenter 
 			{ 
-				show			highlight5
 			}
 			mouseexit 
 			{ 
-				hide			highlight5
 			}
 		}
 		//[/TrueView]
 	}
 }
+//[/NewMenus]
+

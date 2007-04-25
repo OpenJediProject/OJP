@@ -1,21 +1,29 @@
+//[NewMenus]
 //-----------------------------------
 // SETUP MENU 
 //-----------------------------------
+//
+// This menu has no background, only the text and the Force Powers. This is actually 'pasted' over top the ingame_player.menu. This is done,
+// because otherwise, the Force Powers would not appear/dissapear correctly when selecting/deselecting Force Sense.
+//
+// The 'outOfBoundsClick' has been commented out, otherwise, the whole menu would close if you would accidentically misclick
+// inbetween the options on the left hand part of the screen.
+//
 {
 	menuDef 
 	{
 		name						"ingame_playerforce"
-		visible						0
+		visible						1
 		fullscreen					0
-		outOfBoundsClick									// this closes the window if it gets a click out of the rectangle
-		rect						105 40 430 425
-		focusColor					1 1 1 1								// Focus color for text and items
+//		outOfBoundsClick									// this closes the window if it gets a click out of the rectangle
+		rect						120 40 510 400
+		focusColor					0 0.4 0.8 1								// Focus color for text and items
 		style						1
 		border						1
-		descX						320
-		descY						450
+		descX						383
+		descY						422
 		descScale					1
-		descColor				1 .682 0 .8
+		descColor					0 0.4 0.8 1
 		descAlignment				ITEM_ALIGN_CENTER		
 		onOpen  
 		{ 
@@ -30,351 +38,105 @@
 		{
 			close ingame_playerforce ;
 		}
+		
+//------------------------------------------------------------------------------------------------
+// The Force
+//------------------------------------------------------------------------------------------------
 
-		// Overall window backdrop
-		itemDef 
+		// Force Title
+		itemDef
 		{
-			name				background_pic
-			group				none
-			style				WINDOW_STYLE_SHADER
-			rect				0 0 430 425
-			background			"gfx/menus/menu_box_ingame"
-			forecolor			1 1 1 1
-			visible				1
-			decoration
-		}
-
-		//----------------------------------------
-		// Force Configuration
-		//----------------------------------------
-		// Player Configuration title		
-		itemDef 
-		{
-			name				playerconfigtitle
-			style				WINDOW_STYLE_SHADER
-			background			"gfx/menus/menu_blendbox"
+			name 				forcetitle
+			style				WINDOW_STYLE_FILLED
 			text				@MENUS_CHOOSE_YOUR_FORCE_TRAINING
-			rect				20 5 390 28
+			rect				1 1 510 25
 			textalign			ITEM_ALIGN_CENTER		
-			textalignx			195
-			textaligny			2
-			outlinecolor			1 .5 .5 .5
-			backcolor			0 0 0 0
+			textalignx			255
+			textaligny			0
+			outlinecolor		1 .5 .5 .5
+			backcolor			0 0 0 1
 			font				3
-			textscale			0.9
-			forecolor			.549 .854 1 1
+			textscale			1
+			forecolor			1 1 1 1
 			border				0
 			bordercolor			0 0 0 0
 			visible				1 
-			decoration
 		}
-
+		
+		itemDef
+		{
+			name				descbackground
+			style				WINDOW_STYLE_FILLED
+			rect				1 380 510 20
+			backcolor			0 0 0 1
+			forecolor			1 1 1 1
+			border				0
+			visible				1
+		}
+		
 		// Force Rank display
 		itemDef 
 		{
 			name				siderank
 			group				"playersettingforcegroup"
-			style				0	
+			style				WINDOW_STYLE_EMPTY	
 			text				@MENUS_FORCE_MASTERY
 			ownerdraw			UI_FORCE_RANK
-			rect				220 40 0 0
-			textalign			ITEM_ALIGN_CENTER
-			textalignx			0
-			textaligny			-6
-			font				2
-			textscale			1
-			forecolor			1 .682 0 1
-			backcolor			0 0 0 0
-			visible				1 
-			decoration
-		}
-
-		// Force Configuration title		
-		itemDef 
-		{
-			name				playerconfigtitle
-			style				0	
-			text				@MENUS_SPEND_YOUR_POINTS_BY
-			rect				220 60 0 0
-			textalign			ITEM_ALIGN_CENTER		
-			textalignx			0
-			textaligny			0
-			outlinecolor			1 .5 .5 .5
-			backcolor			0 0 0 0
-			font				4
-			textscale			1
-			forecolor			1 .682 0 1
-			border				0
-			bordercolor			0 0 0 0
-			visible				1 
-			decoration
-		}
-
-		//[ForceSys]
-		/*
-		// Force background light
-		itemDef 
-		{
-			name				forcedivlight
-			group				lightpowers
-			style				WINDOW_STYLE_SHADER
-			rect				0 85 225 20
-			background			"gfx/menus/menu_blendbox"
-			forecolor			1 1 1 1
-			visible				1
-			decoration
-		}
-
-		// Force background dark
-		itemDef 
-		{
-			name				forcedivdark
-			group				darkpowers
-			style				WINDOW_STYLE_SHADER
-			rect				00 85 225 20
-			background			"gfx/menus/menu_blendboxr"
-			forecolor			1 1 1 1
-			visible				1
-			decoration
-		}
-
-		
-		// Force Side Chooser
-		itemDef 
-		{
-			name				setside
-			group				"playersettingforcegroup"
-			style				0	
-			text				@MENUS_FORCE_SIDE
-			ownerdraw			UI_FORCE_SIDE
-			rect				26 85 175 16
+			rect				10 30 0 0
 			textalign			ITEM_ALIGN_LEFT
 			textalignx			0
-			textaligny			-5
-			outlinecolor			1 .5 .5 .5
-			backcolor			0 0 0 0
+			textaligny			0
 			font				2
-			textscale			1
-			forecolor			.615 .615 .956 1
-			border				0
-			bordercolor			0 0 0 0
-			descText			@MENUS_CHOOSE_THE_PATH_OF_THE
+			textscale			0.7
+			forecolor			1 1 1 1
+			backcolor			0 0 0 0
 			visible				1 
-			action 
-			{ 
-				play			"sound/interface/button1.wav" ;  
-			}
+			decoration
 		}
-		*/
-		//[/ForceSys]
-
+		
 		// Force points remaining
 		itemDef 
 		{
 			name				siderank
 			group				"playersettingforcegroup"
-			style				0	
+			style				WINDOW_STYLE_EMPTY	
 			text				@MENUS_POINTS_REMAINING
 			ownerdraw			UI_FORCE_POINTS
-			rect				250 85 0 0
-			textalign			ITEM_ALIGN_CENTER
-			textalignx			60
-			textaligny			-5
-			font				2
-			textscale			1
-			forecolor			.549 .854 1 1
-			outlinecolor			1 .5 .5 .5
-			backcolor			0 0 0 0
-			border				0
-			bordercolor			0 0 0 0
-			visible				1 
-			decoration
-		}
-
-
-		//[ExpSys]
-		//Don't allow force templates until we figure out how to do them with the new experience system.
-		/* basejka code
-		//----------------------------------------
-		// FORCE TEMPLATES
-		//----------------------------------------
-		// Force Template title		
-		itemDef 
-		{
-			name				fcflist
-			group				"playersettingforcegroup"
-			style				0	
-			text				@MENUS_FORCE_TEMPLATES
-			rect				16 113 0 0
-			textalign			ITEM_ALIGN_LEFT		
-			textalignx			4
+			rect				10 45 0 0
+			textalign			ITEM_ALIGN_LEFT
+			textalignx			0
 			textaligny			0
-			outlinecolor			1 .5 .5 .5
+			font				2
+			textscale			0.7
+			forecolor			1 1 1 1
+			outlinecolor		1 .5 .5 .5
 			backcolor			0 0 0 0
-			font				4
-			textscale			1
-			forecolor			.549 .854 1 1
 			border				0
 			bordercolor			0 0 0 0
 			visible				1 
 			decoration
-		}
-
-		// Force Template picker
-		itemDef 
-		{
-			name				fcflist
-			rect				16 130 185 110
-			type				ITEM_TYPE_LISTBOX
-			style				WINDOW_STYLE_FILLED
-			elementwidth			155
-			elementheight			17
-			font				2
-			textscale			.75
-			elementtype			LISTBOX_TEXT
-			feeder				FEEDER_FORCECFG
-			textstyle			6
-			textalign			3
-			textaligny			2
-			border				1
-			bordercolor			.5 .5 .5 1
-			forecolor			.615 .615 .956 1
-			backcolor			0 0 .5 .25
-			outlinecolor			.25 .464 .578 .5
-			descText			@MENUS_CHOOSE_A_PRE_MADE_ALLOCATION
-			visible				1
-			columns				1 2 190 250
-			mouseenter 
-			{ 
-				setitemcolor fcflist bordercolor 1 0 0 1 
-			}
-			mouseexit 
-			{ 
-				setitemcolor fcflist bordercolor .5 .5 .5 1 
-			}
-			action 
-			{ 
-				play			"sound/interface/button1.wav" ;  
-			}
-		}
-
-
-		//----------------------------------------
-		// SAVE TEMPLATE
-		//----------------------------------------
-
-		//Save template title entry field
-		itemDef 
-		{
-			name 				namefield
-			type 				ITEM_TYPE_EDITFIELD
-			style 				0
-			text 				@MENUS_FILENAME
-			cvar 				"ui_SaveFCF"
-			maxchars 			12
-			rect 				5 250 185 32
-			textalign			ITEM_ALIGN_LEFT		
-			textalignx 			0
-			textaligny 			0
-			font				4
-			textscale			1
-			forecolor			.615 .615 .956 1
-			outlinecolor 			1 .5 .5 .5
-			backcolor 			0 0 0 0
-			border 				0
-			bordercolor 			0 0 0 0
-			descText			@MENUS_ENTER_THE_TITLE_FOR_YOUR
-			visible 			1 
-		}
-
-		//Save template button
-		itemDef 
-		{
-			name				templatesavebutton
-			group				"playerforcetemplatesave"
-			style				WINDOW_STYLE_SHADER
-			rect				16 280 185 32
-			background			"gfx/menus/menu_buttonback"
-			forecolor			1 1 1 1
-			decoration
-			visible				0
-		}
-
-		//Save template button
-		itemDef 
-		{
-			name				templatesavetext
-			group				"playerforcetemplatesave"
-			style				WINDOW_STYLE_EMPTY
-			textalign			ITEM_ALIGN_LEFT		
-			rect				16 320 185 32
-			forecolor			1 .682 0 .8
-			font				4
-			textscale			1
-			text				@MENUS_MATCHING_NAMES
-			decoration
-			visible				0
 		}
 		
-		itemDef 
-		{
-			name				templatesave
-			group				"playerforcetemplatesave"
-			text				@MENUS_SAVE_FILE
-			type				1
-			style				WINDOW_STYLE_EMPTY
-			rect				16 280 185 32
-			textalign			1
-			textalignx			92
-			textaligny			2
-			font				2
-			textscale			1
-			forecolor			1 .682 0 1
-			descText			@MENUS_SAVE_CURRENT_FORCE_SETUP
-			visible				1
-			action 
-			{ 
-				play			"sound/interface/button1.wav" ;
-				uiScript 		saveTemplate;
-			}
-			mouseEnter 
-			{ 
-				show			templatesavetext
-				show			templatesavebutton
-			}
-			mouseExit 
-			{ 
-				hide			templatesavetext
-				hide			templatesavebutton
-			}
-		}
-		*/
-		//[/ExpSys]
-
-		//----------------------------------------
-		// FORCE POWER HEADERS
-		//----------------------------------------
-
-		//----------------------------------------
-		// NEUTRAL POWERS
-		//----------------------------------------
-
+		////////////////////////////////////////////////////////////////////////////////
+		// The Neutral Force Powers
+		////////////////////////////////////////////////////////////////////////////////
+		
 		// Force Ranks title		
 		itemDef 
 		{
 			name				forceranktitle
 			group				"playersettingforcegroup"
 			style				0	
-			text				@MENUS_POWER
-			rect				230 112 0 0
-			textalign			ITEM_ALIGN_RIGHT		
-			textalignx			104
+			text				"Neutral Powers"
+			rect				20 75 0 0
+			textalign			ITEM_ALIGN_LEFT		
+			textalignx			0
 			textaligny			0
-			outlinecolor			1 .5 .5 .5
+			outlinecolor		1 .5 .5 .5
 			backcolor			0.3 0.3 0.3 1
 			font				4
-			textscale		     	1 
-			forecolor			.549 .854 1 1
+			textscale		   	1 
+			forecolor			0 0.4 0.8 1
 			border				0
 			bordercolor			0 0 0 0
 			visible				1 
@@ -387,67 +149,22 @@
 			group				"playersettingforcegroup"
 			style				0	
 			text				@MENUS_1_2_3
-			rect				230 112 0 0
+			rect				20 75 0 0
 			textalign			ITEM_ALIGN_LEFT
 			textalignx			115
 			textaligny			0
-			outlinecolor			1 .5 .5 .5
+			outlinecolor		1 .5 .5 .5
 			backcolor			0.3 0.3 0.3 1
 			font				4
-			textscale		      	1
-			forecolor			.549 .854 1 1
+			textscale		    1
+			forecolor			0 0.4 0.8 1
 			border				0
 			bordercolor			0 0 0 0
 			visible				1 
 			decoration
 		}
 		
-	//[ExpSys]
-		//need power rank titles for the mercs column as well.
-		itemDef 
-		{
-			name				forceranktitle
-			group				"playersettingforcegroup"
-			style				0	
-			text				@MENUS_POWER
-			rect				30 112 0 0
-			textalign			ITEM_ALIGN_RIGHT		
-			textalignx			104
-			textaligny			0
-			outlinecolor			1 .5 .5 .5
-			backcolor			0.3 0.3 0.3 1
-			font				4
-			textscale		     	1 
-			forecolor			.549 .854 1 1
-			border				0
-			bordercolor			0 0 0 0
-			visible				1 
-			decoration
-		}
-
-		itemDef 
-		{
-			name				forceranktitle2
-			group				"playersettingforcegroup"
-			style				0	
-			text				@MENUS_1_2_3
-			rect				30 112 0 0
-			textalign			ITEM_ALIGN_LEFT
-			textalignx			115
-			textaligny			0
-			outlinecolor			1 .5 .5 .5
-			backcolor			0.3 0.3 0.3 1
-			font				4
-			textscale		      	1
-			forecolor			.549 .854 1 1
-			border				0
-			bordercolor			0 0 0 0
-			visible				1 
-			decoration
-		}
-	
-	
-	//Made Force Seeing Level 1 a pre-req to taking any additional force powers, except in the case of free sabers.
+		//Made Force Seeing Level 1 a pre-req to taking any additional force powers, except in the case of free sabers.
 		itemDef 
 		{
 			name				notforcesensitive
@@ -455,14 +172,14 @@
 			text				@OJP_MENUS_NOTFORCESENSITIVE
 			type				1
 			style				0	
-			rect				253 248 0 0
+			rect				43 115 0 0
 			textalign			ITEM_ALIGN_CENTER	 	
 			textalignx			65
-			textaligny				0
-			font					4
-			textscale				1
+			textaligny			0
+			font				4
+			textscale			1
 			forecolor			0.5 0.5 0.5 1
-			outlinecolor			1 .5 .5 .5
+			outlinecolor		1 .5 .5 .5
 			backcolor			0 0 0 0
 			border				0
 			bordercolor			0 0 0 0
@@ -474,17 +191,16 @@
 		// Invisible description box for notforcesensitive
 		itemDef 
 		{
-			name					notforcesensitive
-			group					"playersettinggroup"
-			style					0
-			rect					230 248 175 34
-			forecolor				.7 .7 .7 1
+			name				notforcesensitive
+			group				"playersettinggroup"
+			style				0
+			rect				230 248 175 34
+			forecolor			.7 .7 .7 1
 			decoration
-			descText				@OJP_MENUS_DESC_NOTFORCESENSITIVE
-			visible					0
+			descText			@OJP_MENUS_DESC_NOTFORCESENSITIVE
+			visible				0
 		}
-	//[/ExpSys]
-
+		
 		// Force Jump Title
 		itemDef 
 		{
@@ -492,14 +208,13 @@
 			//[ExpSys]
 			//Made Force Seeing Level 1 a pre-req to taking any additional force powers, except in the case of free sabers.
 			group					neutralpowers
-			//group					"playersettingforcegroup"
 			//[/ExpSys]
 			style					0	
 			text					@MENUS_FORCE_JUMP
 			//descText				@MENUS_DESCRIPTION_OF_A_FORCE
-			rect					230 130 110 15
-			textalign				ITEM_ALIGN_RIGHT		
-			textalignx				105
+			rect					20 90 110 15
+			textalign				ITEM_ALIGN_LEFT		
+			textalignx				0
 			textaligny				0
 			font					4
 			textscale				1
@@ -519,16 +234,15 @@
 			//[ExpSys]
 			//Made Force Seeing Level 1 a pre-req to taking any additional force powers, except in the case of free sabers.
 			group					neutralpowers
-			//group					"playersettingforcegroup"
 			//[/ExpSys]
 			style					0	
 			ownerdraw				UI_FORCE_RANK_LEVITATION
-			rect					230 130 175 15
+			rect					20 90 175 15
 			textalign				ITEM_ALIGN_LEFT		
 			textalignx				115
-			textaligny				-6
+			textaligny				-5
 			textscale				.25        
-			outlinecolor				1 .5 .5 .5
+			outlinecolor			1 .5 .5 .5
 			backcolor				0 0 0 0
 			forecolor				0.8 0.8 0.8 1
 			border					0
@@ -549,7 +263,7 @@
 				setitemcolor	setfp_jump forecolor 0.8 0.8 0.8 1
 			}
 		}
-
+		
 		// Force Push title
 		itemDef 
 		{
@@ -557,14 +271,13 @@
 			//[ExpSys]
 			//Made Force Seeing Level 1 a pre-req to taking any additional force powers, except in the case of free sabers.
 			group					neutralpowers
-			//group					"playersettingforcegroup"
 			//[/ExpSys]
 			style					0	
 			text					@MENUS_FORCE_PUSH
 			//descText				@MENUS_DESCRIPTION_OF_A_FORCE
-			rect					230 147 110 15
-			textalign				ITEM_ALIGN_RIGHT	
-			textalignx				105
+			rect					20 105 110 15
+			textalign				ITEM_ALIGN_LEFT	
+			textalignx				0
 			textaligny				0
 			font					4
 			textscale				1
@@ -584,14 +297,13 @@
 			//[ExpSys]
 			//Made Force Seeing Level 1 a pre-req to taking any additional force powers, except in the case of free sabers.
 			group					neutralpowers
-			//group					"playersettingforcegroup"
 			//[/ExpSys]
 			style					0	
 			ownerdraw				UI_FORCE_RANK_PUSH
-			rect					230 147 175 15
+			rect					20 105 175 15
 			textalign				ITEM_ALIGN_LEFT
 			textalignx				115
-			textaligny				-6
+			textaligny				-5
 			textscale				.25        
 			outlinecolor			1 .5 .5 .5
 			backcolor				0 0 0 0
@@ -622,14 +334,13 @@
 			//[ExpSys]
 			//Made Force Seeing Level 1 a pre-req to taking any additional force powers, except in the case of free sabers.
 			group					neutralpowers
-			//group					"playersettingforcegroup"
 			//[/ExpSys]
 			style					0	
 			text					@MENUS_FORCE_PULL
 			//descText				@MENUS_DESCRIPTION_OF_A_FORCE
-			rect					230 164 110 15 
-			textalign				ITEM_ALIGN_RIGHT	
-			textalignx				105
+			rect					20 120 110 15 
+			textalign				ITEM_ALIGN_LEFT	
+			textalignx				0
 			textaligny				0
 			font					4
 			textscale				1
@@ -649,16 +360,15 @@
 			//[ExpSys]
 			//Made Force Seeing Level 1 a pre-req to taking any additional force powers, except in the case of free sabers.
 			group					neutralpowers
-			//group					"playersettingforcegroup"
 			//[/ExpSys]
 			style					0	
 			ownerdraw				UI_FORCE_RANK_PULL
-			rect					230 164 175 15
+			rect					20 120 175 15
 			textalign				ITEM_ALIGN_LEFT		
 			textalignx				115
-			textaligny				-6
+			textaligny				-5
 			textscale				.25        
-			outlinecolor				1 .5 .5 .5
+			outlinecolor			1 .5 .5 .5
 			backcolor				0 0 0 0
 			forecolor				0.8 0.8 0.8 1
 			border					0
@@ -687,14 +397,13 @@
 			//[ExpSys]
 			//Made Force Seeing Level 1 a pre-req to taking any additional force powers, except in the case of free sabers.
 			group					neutralpowers
-			//group					"playersettingforcegroup"
 			//[/ExpSys]
 			style					0	
 			text					@MENUS_FORCE_SPEED
 			//descText				@MENUS_DESCRIPTION_OF_A_FORCE
-			rect					230 181 110 15
-			textalign				ITEM_ALIGN_RIGHT
-			textalignx				105
+			rect					20 135 110 15
+			textalign				ITEM_ALIGN_LEFT
+			textalignx				0
 			textaligny				0
 			font					4
 			textscale				1
@@ -714,22 +423,21 @@
 			//[ExpSys]
 			//Made Force Seeing Level 1 a pre-req to taking any additional force powers, except in the case of free sabers.
 			group					neutralpowers
-			//group					"playersettingforcegroup"
 			//[/ExpSys]
 			style					0	
 			ownerdraw				UI_FORCE_RANK_SPEED
-			rect					230 181 175 15
+			rect					20 135 175 15
 			textalign				ITEM_ALIGN_LEFT		
 			textalignx				115
-			textaligny				-6
+			textaligny				-5
 			textscale				.25        
 			outlinecolor			1 .5 .5 .5
 			backcolor				0 0 0 0
 			forecolor				0.8 0.8 0.8 1
-			border				0
+			border					0
 			bordercolor				0 0 0 0
 			descText				@MENUS_MOVE_AT_AN_ACCELERATED
-			visible				1 
+			visible					1 
 			action 
 			{ 
 				play			"sound/interface/button1.wav" ;
@@ -752,18 +460,18 @@
 			group					"playersettingforcegroup"
 			style					0	
 			text					@MENUS_FORCE_SIGHT
-			rect					230 198 110 15
-			textalign				ITEM_ALIGN_RIGHT	
-			textalignx				105
+			rect					20 150 110 15
+			textalign				ITEM_ALIGN_LEFT	
+			textalignx				0
 			textaligny				0
 			font					4
 			textscale				1
 			forecolor				0.8 0.8 0.8 1
 			outlinecolor			1 .5 .5 .5
 			backcolor				0 0 0 0
-			border				0
+			border					0
 			bordercolor				0 0 0 0
-			visible				1 
+			visible					1 
 			decoration
 		}
 
@@ -774,18 +482,18 @@
 			group					"playersettingforcegroup"
 			style					0	
 			ownerdraw				UI_FORCE_RANK_SEE
-			rect					230 198 175 15
+			rect					20 150 175 15
 			textalign				ITEM_ALIGN_LEFT		
 			textalignx				115
-			textaligny				-6
+			textaligny				-5
 			textscale				.25        
 			outlinecolor			1 .5 .5 .5
 			backcolor				0 0 0 0
 			forecolor				0.8 0.8 0.8 1
-			border				0
+			border					0
 			bordercolor				0 0 0 0
 			descText				@MENUS_SEE_ENEMIES_AT_ALL_TIMES
-			visible				1 
+			visible					1 
 			action 
 			{ 
 				play			"sound/interface/button1.wav" ;
@@ -800,1686 +508,55 @@
 				setitemcolor	setfp_see forecolor 0.8 0.8 0.8 1
 			}
 		}
+		
+		////////////////////////////////////////////////////////////////////////////////
+		// The Lightsaber Skills
+		////////////////////////////////////////////////////////////////////////////////
 
-		//----------------------------------------
-		// LIGHTSIDE POWERS
-		//----------------------------------------
-
-		// Force Absorb title
+		// Force Ranks title		
 		itemDef 
 		{
-			name					setfp_absorb
-			group					lightpowers
-			style					0	
-			text					@MENUS_FORCE_ABSORB
-			rect					230 215 110 15
-			textalign				ITEM_ALIGN_RIGHT	
-			textalignx				105
-			textaligny				0
-			font					4
-			textscale				1
-			forecolor				0.5 0.5 1 1
-			outlinecolor			1 .5 .5 .5
-			backcolor				0 0 0 0
-			border					0
-			bordercolor				0 0 0 0
-			visible					1 
-			decoration
-		}
-
-		// Force Absorb assign
-		itemDef 
-		{
-			name					setfp_absorb
-			group					lightpowers
-			style					0	
-			ownerdraw				UI_FORCE_RANK_ABSORB
-			rect					230 215 175 15
-			textalign				ITEM_ALIGN_LEFT		
-			textalignx				115
-			textaligny				-6
-			outlinecolor			1 .5 .5 .5
-			backcolor				0 0 0 0
-			forecolor				0.5 0.5 1 1
-			border					0
-			bordercolor				0 0 0 0
-			descText				@MENUS_PROTECT_AGAINST_FORCE
-			visible				1 
-			action 
-			{ 
-				play			"sound/interface/button1.wav" ;
-			}
-
-			mouseenter 
-			{ 
-				setitemcolor	setfp_absorb forecolor 0.75 0.75 1 1
-			}
-			mouseexit 
-			{ 
-				setitemcolor	setfp_absorb forecolor 0.5 0.5 1 1
-			}
-		}
-
-		//[ForceSys]
-		/*
-		// Force Heal title
-		itemDef 
-		{
-			name					setfp_healself
-			group					lightpowers
-			style					0	
-			text					@MENUS_FORCE_HEAL
-			//descText				@MENUS_DESCRIPTION_OF_A_FORCE
-			rect					230 240 110 15
-			textalign				ITEM_ALIGN_RIGHT	
-			textalignx				105
-			textaligny				0
-			font					4
-			textscale				1
-			forecolor				0.5 0.5 1 1
-			outlinecolor			1 .5 .5 .5
-			backcolor				0 0 0 0
-			border					0
-			bordercolor				0 0 0 0
-			visible					1 
-			decoration
-		}
-
-		// Force Heal title
-		itemDef 
-		{
-			name					setfp_healself
-			group					lightpowers
-			style					0	
-			ownerdraw				UI_FORCE_RANK_HEAL
-			rect					230 240 175 15
-			textalign				ITEM_ALIGN_LEFT		
-			textalignx				115
-			textaligny				-6
-			textscale				.9
-			outlinecolor			1 .5 .5 .5
-			backcolor				0 0 0 0
-			forecolor				0.5 0.5 1 1
+			name				forceranktitle
+			group				"playersettingforcegroup"
+			style				0	
+			text				"Lightsaber Skills"
+			rect				20 270 0 0
+			textalign			ITEM_ALIGN_LEFT		
+			textalignx			0
+			textaligny			0
+			outlinecolor		1 .5 .5 .5
+			backcolor			0.3 0.3 0.3 1
+			font				4
+			textscale		   	1 
+			forecolor			0 0.8 0.4 1
 			border				0
-			bordercolor				0 0 0 0
-			descText				@MENUS_HEAL_YOUR_BODY_WITH_THE
+			bordercolor			0 0 0 0
 			visible				1 
-			action 
-			{ 
-				play			"sound/interface/button1.wav" ;
-			}
-
-			mouseenter 
-			{ 
-				setitemcolor	setfp_healself forecolor 0.75 0.75 1 1
-			}
-			mouseexit 
-			{ 
-				setitemcolor	setfp_healself forecolor 0.5 0.5 1 1
-			}
+			decoration
 		}
 
-		// Force Protection title
 		itemDef 
 		{
-			name					setfp_protect
-			group					lightpowers
-			style					0	
-			text					@MENUS_FORCE_PROTECT
-			rect					230 257 110 15
-			textalign				ITEM_ALIGN_RIGHT	
-			textalignx				105
-			outlinecolor			1 .5 .5 .5
-			backcolor				0 0 0 0
-			textaligny				0
-			font					4
-			textscale				1
-			forecolor				0.5 0.5 1 1
+			name				forceranktitle2
+			group				"playersettingforcegroup"
+			style				0	
+			text				@MENUS_1_2_3
+			rect				20 270 0 0
+			textalign			ITEM_ALIGN_LEFT
+			textalignx			115
+			textaligny			0
+			outlinecolor		1 .5 .5 .5
+			backcolor			0.3 0.3 0.3 1
+			font				4
+			textscale		    1
+			forecolor			0 0.8 0.4 1
 			border				0
-			bordercolor				0 0 0 0
+			bordercolor			0 0 0 0
 			visible				1 
 			decoration
 		}
-
-		// Force Protection assign
-		itemDef 
-		{
-			name					setfp_protect
-			group					lightpowers
-			style					0	
-			ownerdraw				UI_FORCE_RANK_PROTECT
-			rect					230 257 175 15
-			textalign				ITEM_ALIGN_LEFT		
-			textalignx				115
-			textaligny				-6
-			textscale				.25        
-			outlinecolor			1 .5 .5 .5
-			backcolor				0 0 0 0
-			forecolor				0.5 0.5 1 1
-			border				0
-			bordercolor				0 0 0 0
-			descText				@MENUS_CREATE_AN_AURA_THAT_PROTECTS
-			visible				1 
-			action 
-			{ 
-				play			"sound/interface/button1.wav" ;
-			}
-
-			mouseenter 
-			{ 
-				setitemcolor	setfp_protect forecolor 0.75 0.75 1 1
-			}
-			mouseexit 
-			{ 
-				setitemcolor	setfp_protect forecolor 0.5 0.5 1 1
-			}
-		}
-        */
-		// Force Mind Trick title
-		itemDef 
-		{
-			name					setfp_mindtrick
-			group					lightpowers
-			style					0	
-			text					@MENUS_FORCE_MINDTRICK
-			rect					230 232 110 15
-			textalign				ITEM_ALIGN_RIGHT
-			textalignx				105
-			textaligny				0
-			font					4
-			textscale				1
-			forecolor				0.5 0.5 1 1
-			outlinecolor			1 .5 .5 .5
-			backcolor				0 0 0 0
-			border					0
-			bordercolor				0 0 0 0
-			visible					1 
-			decoration
-		}
-	
-		// Force Mind Trick assign
-		itemDef 
-		{
-			name					setfp_mindtrick
-			group					lightpowers
-			style					0	
-			ownerdraw				UI_FORCE_RANK_TELEPATHY
-			rect					230 232 175 15
-			textalign				ITEM_ALIGN_LEFT		
-			textalignx				115
-			textaligny				-6
-			textscale				.9
-			outlinecolor			1 .5 .5 .5
-			backcolor				0 0 0 0
-			forecolor				0.5 0.5 1 1
-			border					0
-			bordercolor				0 0 0 0
-			descText				@MENUS_RENDER_YOURSELF_INVISIBLE
-			visible					1 
-			action 
-			{ 
-				play			"sound/interface/button1.wav" ;
-			}
-
-			mouseenter 
-			{ 
-				setitemcolor	setfp_mindtrick forecolor 0.75 0.75 1 1
-			}
-			mouseexit 
-			{ 
-				setitemcolor	setfp_mindtrick forecolor  0.5 0.5 1 1
-			}
-		}
-        /*
-		// Force Team Heal title
-		itemDef 
-		{
-			name					setfp_teamheal
-			group					lightpowers_team
-			style					0	
-			text					@MENUS_FORCE_TEAM_HEAL
-			rect					230 291 110 15
-			textalign				ITEM_ALIGN_RIGHT	
-			textalignx				105
-			outlinecolor			1 .5 .5 .5
-			backcolor				0 0 0 0
-			textaligny				0
-			font					4
-			textscale				1
-			forecolor				0.5 0.5 1 1
-			border					0
-			bordercolor				0 0 0 0
-			visible					1 
-			decoration
-			cvarTest				"ui_about_gametype"
-			hideCvar 
-			{ 
-				"0" ; 
-				"1" ; 
-				"2" ; 
-				"3" ;
-				"4"
-			}
-		}
-
-		// Force Team Heal assign
-		itemDef 
-		{
-			name					setfp_teamheal
-			group					lightpowers_team
-			style					0	
-			ownerdraw				UI_FORCE_RANK_TEAM_HEAL
-			rect					230 291 175 15
-			textalign				ITEM_ALIGN_LEFT		
-			textalignx				115
-			textaligny				-6
-			textscale				.25        
-			outlinecolor			1 .5 .5 .5
-			backcolor				0 0 0 0
-			forecolor				0.5 0.5 1 1
-			border					0
-			bordercolor				0 0 0 0
-			descText				@MENUS_CHANNEL_THE_FORCE_TO
-			visible					1 
-			cvarTest				"ui_about_gametype"
-			hideCvar 
-			{ 
-				"0" ; 
-				"1" ; 
-				"2" ; 
-				"3" ;
-				"4"
-			}
-			action 
-			{ 
-				play			"sound/interface/button1.wav" ;
-			}
-
-			mouseenter 
-			{ 
-				setitemcolor	setfp_teamheal forecolor 0.75 0.75 1 1
-			}
-			mouseexit 
-			{ 
-				setitemcolor	setfp_teamheal forecolor 0.5 0.5 1 1
-			}
-		}
-		*/
-		//[/ForceSys]
 		
-		//[ExpSys]
-		//----------------------------------------
-		// ADDITIONAL SKILLS
-		//----------------------------------------
-		
-		// Bacta title
-		itemDef 
-		{
-			name					setsk_bacta
-			group					gunpowers
-			style					0	
-			text					@OJP_MENUS_SKILL_BACTA
-			rect					30 130 110 15
-			textalign				ITEM_ALIGN_RIGHT												
-			textalignx				105
-			textaligny				0
-			font					4
-			textscale				1
-			forecolor				.2 1 .2 1
-			outlinecolor			1 .5 .5 .5
-			backcolor				0 0 0 0
-			border					0
-			bordercolor				0 0 0 0
-			visible					1 
-			decoration
-		}
-	
-		// Bacta assign
-		itemDef 
-		{
-			name					setsk_bacta
-			group					gunpowers
-			style					0	
-			ownerdraw				UI_FORCE_RANK_BACTA
-			rect					30 130 175 15
-			textalign				ITEM_ALIGN_LEFT		
-			textalignx				115
-			textaligny				-6
-			textscale				.25        
-			forecolor				.2 1 .2 1
-			backcolor				0 0 0 0
-			forecolor				1 0.2 0.2 1
-			border					0
-			bordercolor				0 0 0 0
-			descText				@OJP_MENUS_DESC_SKILL_BACTA
-			visible					1 
-			action 
-			{ 
-				play			"sound/interface/button1.wav" ;
-			}
-
-			mouseenter 
-			{ 
-				setitemcolor	setsk_bacta forecolor .7 1 2. 1
-			}
-			mouseexit 
-			{ 
-				setitemcolor	setsk_bacta forecolor .2 1 .2 1
-			}
-		}
-		
-		// Jetpack title
-		itemDef 
-		{
-			name					setsk_jetpack
-			group					gunpowers
-			style					0	
-			text					@OJP_MENUS_SKILL_JETPACK
-			rect					30 147 110 15
-			textalign				ITEM_ALIGN_RIGHT												
-			textalignx				105
-			textaligny				0
-			font					4
-			textscale				1
-			forecolor				.2 1 .2 1
-			outlinecolor			1 .5 .5 .5
-			backcolor				0 0 0 0
-			border					0
-			bordercolor				0 0 0 0
-			visible					1 
-			decoration
-		}
-	
-		// Jetpack assign
-		itemDef 
-		{
-			name					setsk_jetpack
-			group					gunpowers
-			style					0	
-			ownerdraw				UI_FORCE_RANK_JETPACK
-			rect					30 147 175 15
-			textalign				ITEM_ALIGN_LEFT		
-			textalignx				115
-			textaligny				-6
-			textscale				.25        
-			forecolor				.2 1 .2 1
-			backcolor				0 0 0 0
-			forecolor				1 0.2 0.2 1
-			border					0
-			bordercolor				0 0 0 0
-			descText				@OJP_MENUS_DESC_SKILL_JETPACK
-			visible					1 
-			action 
-			{ 
-				play			"sound/interface/button1.wav" ;
-			}
-
-			mouseenter 
-			{ 
-				setitemcolor	setsk_jetpack forecolor .7 1 2. 1
-			}
-			mouseexit 
-			{ 
-				setitemcolor	setsk_jetpack forecolor .2 1 .2 1
-			}
-		}
-		
-		// force field title
-		itemDef 
-		{
-			name					setsk_forcefield
-			group					gunpowers
-			style					0	
-			text					@OJP_MENUS_SKILL_FORCEFIELD
-			rect					30 164 110 15
-			textalign				ITEM_ALIGN_RIGHT												
-			textalignx				105
-			textaligny				0
-			font					4
-			textscale				1
-			forecolor				.2 1 .2 1
-			outlinecolor			1 .5 .5 .5
-			backcolor				0 0 0 0
-			border					0
-			bordercolor				0 0 0 0
-			visible					1 
-			decoration
-		}
-	
-		// force field assign
-		itemDef 
-		{
-			name					setsk_forcefield
-			group					gunpowers
-			style					0	
-			ownerdraw				UI_FORCE_RANK_FORCEFIELD
-			rect					30 164 175 15
-			textalign				ITEM_ALIGN_LEFT		
-			textalignx				115
-			textaligny				-6
-			textscale				.25        
-			forecolor				.2 1 .2 1
-			backcolor				0 0 0 0
-			forecolor				1 0.2 0.2 1
-			border					0
-			bordercolor				0 0 0 0
-			descText				@OJP_MENUS_DESC_SKILL_FORCEFIELD
-			visible					1 
-			action 
-			{ 
-				play			"sound/interface/button1.wav" ;
-			}
-
-			mouseenter 
-			{ 
-				setitemcolor	setsk_forcefield forecolor .7 1 2. 1
-			}
-			mouseexit 
-			{ 
-				setitemcolor	setsk_forcefield forecolor .2 1 .2 1
-			}
-		}
-		
-		// cloak title
-		itemDef 
-		{
-			name					setsk_cloak
-			group					gunpowers
-			style					0	
-			text					@OJP_MENUS_SKILL_CLOAK
-			rect					30 181 110 15
-			textalign				ITEM_ALIGN_RIGHT												
-			textalignx				105
-			textaligny				0
-			font					4
-			textscale				1
-			forecolor				.2 1 .2 1
-			outlinecolor			1 .5 .5 .5
-			backcolor				0 0 0 0
-			border					0
-			bordercolor				0 0 0 0
-			visible					1 
-			decoration
-		}
-	
-		// cloak assign
-		itemDef 
-		{
-			name					setsk_cloak
-			group					gunpowers
-			style					0	
-			ownerdraw				UI_FORCE_RANK_CLOAK
-			rect					30 181 175 15
-			textalign				ITEM_ALIGN_LEFT		
-			textalignx				115
-			textaligny				-6
-			textscale				.25        
-			forecolor				.2 1 .2 1
-			backcolor				0 0 0 0
-			forecolor				1 0.2 0.2 1
-			border					0
-			bordercolor				0 0 0 0
-			descText				@OJP_MENUS_DESC_SKILL_CLOAK
-			visible					1 
-			action 
-			{ 
-				play			"sound/interface/button1.wav" ;
-			}
-
-			mouseenter 
-			{ 
-				setitemcolor	setsk_cloak forecolor .7 1 2. 1
-			}
-			mouseexit 
-			{ 
-				setitemcolor	setsk_cloak forecolor .2 1 .2 1
-			}
-		}
-		
-		//[Flamethrower]
-		// flamethrower title
-		itemDef 
-		{
-			name					setsk_flamethrower
-			group					gunpowers
-			style					0	
-			text					@OJP_MENUS_SKILL_FLAMETHROWER
-			rect					30 198 110 15
-			//rect					30 232 110 15
-			textalign				ITEM_ALIGN_RIGHT												
-			textalignx				105
-			textaligny				0
-			font					4
-			textscale				1
-			forecolor				.2 1 .2 1
-			outlinecolor			1 .5 .5 .5
-			backcolor				0 0 0 0
-			border					0
-			bordercolor				0 0 0 0
-			visible					1 
-			decoration
-		}
-	
-		// flamethrower assign
-		itemDef 
-		{
-			name					setsk_flamethrower
-			group					gunpowers
-			style					0	
-			ownerdraw				UI_FORCE_RANK_FLAMETHROWER
-			rect					30 198 175 15
-			//rect					30 232 175 15
-			textalign				ITEM_ALIGN_LEFT		
-			textalignx				115
-			textaligny				-6
-			textscale				.25        
-			forecolor				.2 1 .2 1
-			backcolor				0 0 0 0
-			forecolor				1 0.2 0.2 1
-			border					0
-			bordercolor				0 0 0 0
-			descText				@OJP_MENUS_DESC_SKILL_FLAMETHROWER
-			visible					1 
-			action 
-			{ 
-				play			"sound/interface/button1.wav" ;
-			}
-
-			mouseenter 
-			{ 
-				setitemcolor	setsk_flamethrower forecolor .7 1 2. 1
-			}
-			mouseexit 
-			{ 
-				setitemcolor	setsk_flamethrower forecolor .2 1 .2 1
-			}
-		}
-		//[/Flamethrower]
-		
-		// pistol title
-		itemDef 
-		{
-			name					setsk_pistol
-			group					gunpowers
-			style					0	
-			text					@OJP_MENUS_SKILL_PISTOL
-			rect					30 215 110 15
-			//rect					30 164 110 15
-			textalign				ITEM_ALIGN_RIGHT												
-			textalignx				105
-			textaligny				0
-			font					4
-			textscale				1
-			forecolor				.2 1 .2 1
-			outlinecolor			1 .5 .5 .5
-			backcolor				0 0 0 0
-			border					0
-			bordercolor				0 0 0 0
-			visible					1 
-			decoration
-		}
-	
-		// pistol assign
-		itemDef 
-		{
-			name					setsk_pistol
-			group					gunpowers
-			style					0	
-			ownerdraw				UI_FORCE_RANK_PISTOL
-			rect					30 215 175 15
-			//rect					30 164 175 15
-			textalign				ITEM_ALIGN_LEFT		
-			textalignx				115
-			textaligny				-6
-			textscale				.25        
-			forecolor				.2 1 .2 1
-			backcolor				0 0 0 0
-			forecolor				1 0.2 0.2 1
-			border					0
-			bordercolor				0 0 0 0
-			descText				@OJP_MENUS_DESC_SKILL_PISTOL
-			visible					1 
-			action 
-			{ 
-				play			"sound/interface/button1.wav" ;
-			}
-
-			mouseenter 
-			{ 
-				setitemcolor	setsk_pistol forecolor .7 1 2. 1
-			}
-			mouseexit 
-			{ 
-				setitemcolor	setsk_pistol forecolor .2 1 .2 1
-			}
-		}
-		
-		// blaster title
-		itemDef 
-		{
-			name					setsk_blaster
-			group					gunpowers
-			style					0	
-			text					@OJP_MENUS_SKILL_BLASTER
-			rect					30 232 110 15
-			//rect					30 181 110 15
-			textalign				ITEM_ALIGN_RIGHT												
-			textalignx				105
-			textaligny				0
-			font					4
-			textscale				1
-			forecolor				.2 1 .2 1
-			outlinecolor			1 .5 .5 .5
-			backcolor				0 0 0 0
-			border					0
-			bordercolor				0 0 0 0
-			visible					1 
-			decoration
-		}
-	
-		// blaster assign
-		itemDef 
-		{
-			name					setsk_blaster
-			group					gunpowers
-			style					0	
-			ownerdraw				UI_FORCE_RANK_BLASTER
-			rect					30 232 175 15
-			textalign				ITEM_ALIGN_LEFT		
-			textalignx				115
-			textaligny				-6
-			textscale				.25        
-			forecolor				.2 1 .2 1
-			backcolor				0 0 0 0
-			forecolor				1 0.2 0.2 1
-			border					0
-			bordercolor				0 0 0 0
-			descText				@OJP_MENUS_DESC_SKILL_BLASTER
-			visible					1 
-			action 
-			{ 
-				play			"sound/interface/button1.wav" ;
-			}
-
-			mouseenter 
-			{ 
-				setitemcolor	setsk_blaster forecolor .7 1 2. 1
-			}
-			mouseexit 
-			{ 
-				setitemcolor	setsk_blaster forecolor .2 1 .2 1
-			}
-		}
-
-		// thermal title
-		itemDef 
-		{
-			name					setsk_thermal
-			group					gunpowers
-			style					0	
-			text					@OJP_MENUS_SKILL_THERMALS
-			rect					30 249 110 10
-			textalign				ITEM_ALIGN_RIGHT												
-			textalignx				105
-			textaligny				0
-			font					4
-			textscale				1
-			forecolor				.2 1 .2 1
-			outlinecolor			1 .5 .5 .5
-			backcolor				0 0 0 0
-			border					0
-			bordercolor				0 0 0 0
-			visible					1 
-			decoration
-		}
-	
-		// thermal assign
-		itemDef 
-		{
-			name					setsk_thermal
-			group					gunpowers
-			style					0	
-			ownerdraw				UI_FORCE_RANK_THERMALS
-			rect					30 249 175 15
-			textalign				ITEM_ALIGN_LEFT		
-			textalignx				115
-			textaligny				-6
-			textscale				.25        
-			forecolor				.2 1 .2 1
-			backcolor				0 0 0 0
-			forecolor				1 0.2 0.2 1
-			border					0
-			bordercolor				0 0 0 0
-			descText				@OJP_MENUS_DESC_SKILL_THERMALS
-			visible					1 
-			action 
-			{ 
-				play			"sound/interface/button1.wav" ;
-			}
-
-			mouseenter 
-			{ 
-				setitemcolor	setsk_thermal forecolor .7 1 2. 1
-			}
-			mouseexit 
-			{ 
-				setitemcolor	setsk_thermal forecolor .2 1 .2 1
-			}
-		}
-		
-		// rocket title
-		itemDef 
-		{
-			name					setsk_rocket
-			group					gunpowers
-			style					0	
-			text					@OJP_MENUS_SKILL_ROCKET
-			rect					30 266 110 15
-			textalign				ITEM_ALIGN_RIGHT												
-			textalignx				105
-			textaligny				0
-			font					4
-			textscale				1
-			forecolor				.2 1 .2 1
-			outlinecolor			1 .5 .5 .5
-			backcolor				0 0 0 0
-			border					0
-			bordercolor				0 0 0 0
-			visible					1 
-			decoration
-		}
-	
-		// rocket assign
-		itemDef 
-		{
-			name					setsk_rocket
-			group					gunpowers
-			style					0	
-			ownerdraw				UI_FORCE_RANK_ROCKETS
-			rect					30 266 175 15
-			textalign				ITEM_ALIGN_LEFT		
-			textalignx				115
-			textaligny				-6
-			textscale				.25        
-			forecolor				.2 1 .2 1
-			backcolor				0 0 0 0
-			forecolor				1 0.2 0.2 1
-			border					0
-			bordercolor				0 0 0 0
-			descText				@OJP_MENUS_DESC_SKILL_ROCKET
-			visible					1 
-			action 
-			{ 
-				play			"sound/interface/button1.wav" ;
-			}
-
-			mouseenter 
-			{ 
-				setitemcolor	setsk_rocket forecolor .7 1 2. 1
-			}
-			mouseexit 
-			{ 
-				setitemcolor	setsk_rocket forecolor .2 1 .2 1
-			}
-		}
-
-		// bowcaster title
-		itemDef 
-		{
-			name					setsk_bowcaster
-			group					gunpowers
-			style					0	
-			text					@OJP_MENUS_SKILL_BOWCASTER
-			rect					30 283 110 15
-			textalign				ITEM_ALIGN_RIGHT												
-			textalignx				105
-			textaligny				0
-			font					4
-			textscale				1
-			forecolor				.2 1 .2 1
-			outlinecolor			1 .5 .5 .5
-			backcolor				0 0 0 0
-			border					0
-			bordercolor				0 0 0 0
-			visible					1 
-			decoration
-		}
-	
-		// bowcaster assign
-		itemDef 
-		{
-			name					setsk_bowcaster
-			group					gunpowers
-			style					0	
-			ownerdraw				UI_FORCE_RANK_BOWCASTER
-			rect					30 283 175 15
-			textalign				ITEM_ALIGN_LEFT		
-			textalignx				115
-			textaligny				-6
-			textscale				.25        
-			forecolor				.2 1 .2 1
-			backcolor				0 0 0 0
-			forecolor				1 0.2 0.2 1
-			border					0
-			bordercolor				0 0 0 0
-			descText				@OJP_MENUS_DESC_SKILL_BOWCASTER
-			visible					1 
-			action 
-			{ 
-				play			"sound/interface/button1.wav" ;
-			}
-
-			mouseenter 
-			{ 
-				setitemcolor	setsk_bowcaster forecolor .7 1 2. 1
-			}
-			mouseexit 
-			{ 
-				setitemcolor	setsk_bowcaster forecolor .2 1 .2 1
-			}
-		}
-		
-		// seeker title
-		itemDef 
-		{
-			name					setsk_seeker
-			group					gunpowers
-			style					0	
-			text					@OJP_MENUS_SKILL_SEEKER
-			rect					30 300 110 15
-			textalign				ITEM_ALIGN_RIGHT												
-			textalignx				105
-			textaligny				0
-			font					4
-			textscale				1
-			forecolor				.2 1 .2 1
-			outlinecolor			1 .5 .5 .5
-			backcolor				0 0 0 0
-			border					0
-			bordercolor				0 0 0 0
-			visible					1 
-			decoration
-		}
-	
-		// seeker assign
-		itemDef 
-		{
-			name					setsk_seeker
-			group					gunpowers
-			style					0	
-			ownerdraw				UI_FORCE_RANK_SEEKER
-			rect					30 300 175 15
-			textalign				ITEM_ALIGN_LEFT		
-			textalignx				115
-			textaligny				-6
-			textscale				.25        
-			forecolor				.2 1 .2 1
-			backcolor				0 0 0 0
-			forecolor				1 0.2 0.2 1
-			border					0
-			bordercolor				0 0 0 0
-			descText				@OJP_MENUS_DESC_SKILL_SEEKER
-			visible					1 
-			action 
-			{ 
-				play			"sound/interface/button1.wav" ;
-			}
-
-			mouseenter 
-			{ 
-				setitemcolor	setsk_seeker forecolor .7 1 2. 1
-			}
-			mouseexit 
-			{ 
-				setitemcolor	setsk_seeker forecolor .2 1 .2 1
-			}
-		}
-		
-		// sentry title
-		itemDef 
-		{
-			name					setsk_sentry
-			group					gunpowers
-			style					0	
-			text					@OJP_MENUS_SKILL_SENTRY
-			rect					30 317 110 15
-			textalign				ITEM_ALIGN_RIGHT												
-			textalignx				105
-			textaligny				0
-			font					4
-			textscale				1
-			forecolor				.2 1 .2 1
-			outlinecolor			1 .5 .5 .5
-			backcolor				0 0 0 0
-			border					0
-			bordercolor				0 0 0 0
-			visible					1 
-			decoration
-		}
-	
-		// sentry assign
-		itemDef 
-		{
-			name					setsk_sentry
-			group					gunpowers
-			style					0	
-			ownerdraw				UI_FORCE_RANK_SENTRY
-			rect					30 317 175 15
-			textalign				ITEM_ALIGN_LEFT		
-			textalignx				115
-			textaligny				-6
-			textscale				.25        
-			forecolor				.2 1 .2 1
-			backcolor				0 0 0 0
-			forecolor				1 0.2 0.2 1
-			border					0
-			bordercolor				0 0 0 0
-			descText				@OJP_MENUS_DESC_SKILL_SENTRY
-			visible					1 
-			action 
-			{ 
-				play			"sound/interface/button1.wav" ;
-			}
-
-			mouseenter 
-			{ 
-				setitemcolor	setsk_sentry forecolor .7 1 2. 1
-			}
-			mouseexit 
-			{ 
-				setitemcolor	setsk_sentry forecolor .2 1 .2 1
-			}
-		}
-		
-		// detpack title
-		itemDef 
-		{
-			name					setsk_detpack
-			group					gunpowers
-			style					0	
-			text					@OJP_MENUS_SKILL_DETPACK
-			rect					30 334 110 15
-			textalign				ITEM_ALIGN_RIGHT												
-			textalignx				105
-			textaligny				0
-			font					4
-			textscale				1
-			forecolor				.2 1 .2 1
-			outlinecolor			1 .5 .5 .5
-			backcolor				0 0 0 0
-			border					0
-			bordercolor				0 0 0 0
-			visible					1 
-			decoration
-		}
-	
-		// detpack assign
-		itemDef 
-		{
-			name					setsk_detpack
-			group					gunpowers
-			style					0	
-			ownerdraw				UI_FORCE_RANK_DETPACK
-			rect					30 334 175 15
-			textalign				ITEM_ALIGN_LEFT		
-			textalignx				115
-			textaligny				-6
-			textscale				.25        
-			forecolor				.2 1 .2 1
-			backcolor				0 0 0 0
-			forecolor				1 0.2 0.2 1
-			border					0
-			bordercolor				0 0 0 0
-			descText				@OJP_MENUS_DESC_SKILL_DETPACK
-			visible					1 
-			action 
-			{ 
-				play			"sound/interface/button1.wav" ;
-			}
-
-			mouseenter 
-			{ 
-				setitemcolor	setsk_detpack forecolor .7 1 2. 1
-			}
-			mouseexit 
-			{ 
-				setitemcolor	setsk_detpack forecolor .2 1 .2 1
-			}
-		}
-	    
-		// repeater title
-		itemDef 
-		{
-			name					setsk_repeater
-			group					gunpowers
-			style					0	
-			text					@OJP_MENUS_SKILL_REPEATER
-			rect					30 348 110 15
-			textalign				ITEM_ALIGN_RIGHT												
-			textalignx				105
-			textaligny				0
-			font					4
-			textscale				1
-			forecolor				.2 1 .2 1
-			outlinecolor			1 .5 .5 .5
-			backcolor				0 0 0 0
-			border					0
-			bordercolor				0 0 0 0
-			visible					1 
-			decoration
-		}
-		
-		// repeater assign
-		itemDef 
-		{
-			name					setsk_repeater
-			group					gunpowers
-			style					0	
-			ownerdraw				UI_FORCE_RANK_REPEATER
-			rect					30 348 175 15
-			textalign				ITEM_ALIGN_LEFT		
-			textalignx				115
-			textaligny				-6
-			textscale				.25        
-			forecolor				.2 1 .2 1
-			backcolor				0 0 0 0
-			forecolor				1 0.2 0.2 1
-			border					0
-			bordercolor				0 0 0 0
-			descText				@OJP_MENUS_DESC_SKILL_REPEATER
-			visible					1 
-			action 
-			{ 
-				play			"sound/interface/button1.wav" ;
-			}
-
-			mouseenter 
-			{ 
-				setitemcolor	setsk_repeater forecolor .7 1 2. 1
-			}
-			mouseexit 
-			{ 
-				setitemcolor	setsk_repeater forecolor .2 1 .2 1
-			}
-		}
-		
-		// disruptor title by JRHockney
-		itemDef 
-		{
-			name					setsk_disruptor
-			group					gunpowers
-			style					0	
-			text					@OJP_MENUS_SKILL_DISRUPTOR
-			rect					30 362 110 15
-			textalign				ITEM_ALIGN_RIGHT												
-			textalignx				105
-			textaligny				0
-			font					4
-			textscale				1
-			forecolor				.2 1 .2 1
-			outlinecolor			1 .5 .5 .5
-			backcolor				0 0 0 0
-			border					0
-			bordercolor				0 0 0 0
-			visible					1 
-			decoration
-		}
-	
-		// diruptor assign by JRHockney
-		itemDef 
-		{
-			name					setsk_disruptor
-			group					gunpowers
-			style					0	
-			ownerdraw				UI_FORCE_RANK_DISRUPTOR   
-			rect					30 362 175 15
-			textalign				ITEM_ALIGN_LEFT		
-			textalignx				115
-			textaligny				-6
-			textscale				.25        
-			forecolor				.2 1 .2 1
-			backcolor				0 0 0 0
-			forecolor				1 0.2 0.2 1
-			border					0
-			bordercolor				0 0 0 0
-			descText				@OJP_MENUS_DESC_SKILL_DISRUPTOR
-			visible					1 
-			action 
-			{ 
-				play			"sound/interface/button1.wav" ;
-			}
-
-			mouseenter 
-			{ 
-				setitemcolor	setsk_disruptor forecolor .7 1 2. 1
-			}
-			mouseexit 
-			{ 
-				setitemcolor	setsk_disruptor forecolor .2 1 .2 1
-			}
-		}
-		//[/ExpSys]
-
-		//----------------------------------------
-		// DARKSIDE POWERS
-		//----------------------------------------
-
-		// Force Grip title
-		itemDef 
-		{
-			name					setfp_grip
-			group					darkpowers
-			style					0	
-			text					@MENUS_FORCE_GRIP
-			//descText				@MENUS_DESCRIPTION_OF_A_FORCE
-			//[ForceSys]
-			rect					230 265 110 15
-			//rect					230 223 110 15
-			//[/ForceSys]
-			textalign				ITEM_ALIGN_RIGHT												
-			textalignx				105
-			textaligny				0
-			font					4
-			textscale				1
-			forecolor				1 0.2 0.2 1
-			outlinecolor			1 .5 .5 .5
-			backcolor				0 0 0 0
-			border					0
-			bordercolor				0 0 0 0
-			visible					1 
-			decoration
-		}
-	
-		// Force Grip assign
-		itemDef 
-		{
-			name					setfp_grip
-			group					darkpowers
-			style					0	
-			ownerdraw				UI_FORCE_RANK_GRIP
-			//[ForceSys]
-			rect					230 265 175 15
-			//rect					230 223 175 15
-			//[/ForceSys]
-			textalign				ITEM_ALIGN_LEFT		
-			textalignx				115
-			textaligny				-6
-			textscale				.25        
-			outlinecolor			1 .5 .5 .5
-			backcolor				0 0 0 0
-			forecolor				1 0.2 0.2 1
-			border					0
-			bordercolor				0 0 0 0
-			descText			@MENUS_IMMOBILIZE_OPPONENTS
-			visible					1 
-			action 
-			{ 
-				play			"sound/interface/button1.wav" ;
-			}
-
-			mouseenter 
-			{ 
-				setitemcolor	setfp_grip forecolor 1 0.7 0.7 1
-			}
-			mouseexit 
-			{ 
-				setitemcolor	setfp_grip forecolor 1 0.2 0.2 1
-			}
-		}
-
-		//[ForceSys]
-		/*
-		// Force Drain title
-		itemDef 
-		{
-			name					setfp_drain
-			group					darkpowers
-			style					0	
-			text					@MENUS_FORCE_DRAIN
-			//descText				@MENUS_DESCRIPTION_OF_A_FORCE
-			//[ForceSys]
-			rect					30 240 110 15
-			//rect					230 240 110 15
-			//[/ForceSys]
-			textalign				ITEM_ALIGN_RIGHT												
-			textalignx				105
-			textaligny				0
-			font					4
-			textscale				1
-			forecolor				1 0.2 0.2 1
-			outlinecolor			1 .5 .5 .5
-			backcolor				0 0 0 0
-			border					0
-			bordercolor				0 0 0 0
-			visible					1 
-			decoration
-		}
-
-		// Force Drain assign
-		itemDef 
-		{
-			name					setfp_drain
-			group					darkpowers
-			style					0	
-			ownerdraw				UI_FORCE_RANK_DRAIN
-			//[ForceSys]
-			rect					30 240 175 15
-			//rect					230 240 175 15
-			//[/ForceSys]
-			textalign				ITEM_ALIGN_LEFT		
-			textalignx				115
-			textaligny				-6
-			outlinecolor			1 .5 .5 .5
-			backcolor				0 0 0 0
-			forecolor				1 0.2 0.2 1
-			border					0
-			bordercolor				0 0 0 0
-			descText			@MENUS_DRAIN_THE_FORCE_POWER
-			visible					1 
-			action 
-			{ 
-				play			"sound/interface/button1.wav" ;
-			}
-
-			mouseenter 
-			{ 
-				setitemcolor	setfp_drain forecolor 1 0.7 0.7 1
-			}
-			mouseexit 
-			{ 
-				setitemcolor	setfp_drain forecolor 1 0.2 0.2 1
-			}
-		}
-		*/
-		//[/ForceSys]
-
-		// Force Lightning title
-		itemDef 
-		{
-			name					setfp_lightning
-			group					darkpowers
-			style					0	
-			text					@MENUS_FORCE_LIGHTNING
-			//descText				@MENUS_DESCRIPTION_OF_A_FORCE
-			//[ForceSys]
-			rect					230 248 110 15
-			//rect					230 257 110 15
-			//[/ForceSys]
-			textalign				ITEM_ALIGN_RIGHT												
-			textalignx				105
-			textaligny				0
-			font					4
-			textscale				1
-			forecolor				1 0.2 0.2 1
-			outlinecolor			1 .5 .5 .5
-			backcolor				0 0 0 0
-			border					0
-			bordercolor				0 0 0 0
-			visible					1 
-			decoration
-		}
-
-		// Force Lightning assign
-		itemDef 
-		{
-			name					setfp_lightning
-			group					darkpowers
-			style					0	
-			ownerdraw				UI_FORCE_RANK_LIGHTNING
-			//[ForceSys]
-			rect					230 248 175 15
-			//rect					230 257 175 15
-			//[/ForceSys]
-			textalign				ITEM_ALIGN_LEFT										
-			textalignx				115
-			textaligny				-6
-			textscale				.25        
-			outlinecolor			1 .5 .5 .5
-			backcolor				0 0 0 0
-			forecolor				1 0.2 0.2 1
-			border					0
-			bordercolor				0 0 0 0
-			descText			@MENUS_UNLEASH_DEADLY_ELECTRICAL
-			visible					1 
-			action 
-			{ 
-				play			"sound/interface/button1.wav" ;
-			}
-
-			mouseenter 
-			{ 
-				setitemcolor	setfp_lightning forecolor 1 0.7 0.7 1
-			}
-			mouseexit 
-			{ 
-				setitemcolor	setfp_lightning forecolor 1 0.2 0.2 1
-			}
-		}
-
-		//[ForceSys]
-		/*
-		// Force Rage title
-		itemDef 
-		{
-			name					setfp_rage
-			group					darkpowers
-			style					0	
-			text					@MENUS_DARK_RAGE
-			//descText				@MENUS_DESCRIPTION_OF_A_FORCE
-			//[ForceSys]
-			rect					30 274 110 15
-			//rect					230 274 110 15
-			//[/ForceSys]
-			textalign				ITEM_ALIGN_RIGHT
-			textalignx				105
-			textaligny				0
-			font					4
-			textscale				1
-			forecolor				1 0.2 0.2 1
-			outlinecolor			1 .5 .5 .5
-			backcolor				0 0 0 0
-			border					0
-			bordercolor				0 0 0 0
-			visible					1 
-			decoration
-		}
-
-		// Force Rage assign
-		itemDef 
-		{
-			name					setfp_rage
-			group					darkpowers
-			style					0	
-			ownerdraw				UI_FORCE_RANK_RAGE
-			//[ForceSys]
-			rect					30 274 175 15
-			//rect					230 274 175 15
-			//[/ForceSys]
-			textalign				ITEM_ALIGN_LEFT										
-			textalignx				115
-			textaligny				-6
-			textscale				.25        
-			outlinecolor			1 .5 .5 .5
-			backcolor				0 0 0 0
-			forecolor				1 0.2 0.2 1
-			border					0
-			bordercolor				0 0 0 0
-			descText				@MENUS_BECOME_A_NEARLY_UNSTOPPABLE
-			visible					1 
-			action 
-			{ 
-				play			"sound/interface/button1.wav" ;
-			}
-
-			mouseenter 
-			{ 
-				setitemcolor	setfp_rage forecolor 1 0.7 0.7 1
-			}
-			mouseexit 
-			{ 
-				setitemcolor	setfp_rage forecolor 1 0.2 0.2 1
-			}
-		}
-
-		// Force Team Energize title
-		itemDef 
-		{
-			name					setfp_powerother
-			group					darkpowers_team
-			style					0	
-			text					@MENUS_FORCE_TEAM_REPLENISH
-			//descText				@MENUS_DESCRIPTION_OF_A_FORCE
-			//[ForceSys]
-			rect					30 291 110 15
-			//rect					230 291 110 15
-			//[/ForceSys]
-			textalign				ITEM_ALIGN_RIGHT										
-			textalignx				105
-			textaligny				0
-			font					4
-			textscale				1
-			forecolor				1 0.2 0.2 1
-			outlinecolor			1 .5 .5 .5
-			backcolor				0 0 0 0
-			border					0
-			bordercolor				0 0 0 0
-			visible					1 
-			decoration
-			cvarTest				"ui_about_gametype"
-			hideCvar 
-			{ 
-				"0" ; 
-				"1" ; 
-				"2" ; 
-				"3" ;
-				"4"
-			}
-		}
-
-		// Force Team Energize assign
-		itemDef 
-		{
-			name					setfp_powerother
-			group					darkpowers_team
-			style					0	
-			ownerdraw				UI_FORCE_RANK_TEAM_FORCE
-			//[ForceSys]
-			rect					30 291 175 15
-			//rect					230 291 175 15
-			//[/ForceSys]
-			textalign				ITEM_ALIGN_LEFT										
-			textalignx				115
-			textaligny				-6
-			textscale				.25        
-			outlinecolor			1 .5 .5 .5
-			backcolor				0 0 0 0
-			forecolor				1 0.2 0.2 1
-			border					0
-			bordercolor				0 0 0 0
-			descText				@MENUS_THE_FORCE_TO_BOOST_THE
-			visible					1 
-			cvarTest				"ui_about_gametype"
-			hideCvar 
-			{ 
-				"0" ; 
-				"1" ; 
-				"2" ; 
-				"3" ;
-				"4"
-			}
-			action 
-			{ 
-				play			"sound/interface/button1.wav" ;
-			}
-
-			mouseenter 
-			{ 
-				setitemcolor	setfp_powerother forecolor 1 0.7 0.7 1
-			}
-			mouseexit 
-			{ 
-				setitemcolor	setfp_powerother forecolor 1 0.2 0.2 1
-			}
-		}
-		*/
-		//[/ForceSys]
-
-		//----------------------------------------
-		// SABER POWERS
-		//----------------------------------------
-
-		// Saber attack title
-		itemDef 
-		{
-			name					setfp_saberattack
-			group					"playersettingforcegroup"
-			style					0	
-			text					@MENUS_SABER_ATTACK
-			//descText				@MENUS_DESCRIPTION_OF_A_FORCE
-			rect					230 316 110 15
-			textalign				ITEM_ALIGN_RIGHT		
-			textalignx				105
-			textaligny				0
-			font					4
-			textscale				1
-			forecolor				0.8 0.8 0.8 1
-			outlinecolor			1 .5 .5 .5
-			backcolor				0 0 0 0
-			border					0
-			bordercolor				0 0 0 0
-			visible					1 
-			decoration
-		}
-
-		// Saber attack assign
-		itemDef 
-		{
-			name					setfp_saberattack
-			group					"playersettingforcegroup"
-			style					0	
-			ownerdraw				UI_FORCE_RANK_SABERATTACK
-			rect					230 316 175 15
-			textalign				ITEM_ALIGN_LEFT		
-			textalignx				115
-			textaligny				-6
-			textscale				.25        
-			outlinecolor			1 .5 .5 .5
-			backcolor				0 0 0 0
-			forecolor				0.8 0.8 0.8 1
-			border					0
-			bordercolor				0 0 0 0
-			descText				@MENUS_USE_MORE_POWERFUL_LIGHTSABER
-			visible					1 
-			action 
-			{ 
-				play			"sound/interface/button1.wav" ;
-			}
-
-			mouseenter 
-			{ 
-				setitemcolor	setfp_saberattack forecolor 1 1 1 1
-			}
-			mouseexit 
-			{ 
-				setitemcolor	setfp_saberattack forecolor  0.8 0.8 0.8 1
-			}
-		}
-
-		// Saber Defend title
-		itemDef 
-		{
-			name					setfp_saberdefend
-			group					"playersettingforcegroup"
-			style					0	
-			text					@MENUS_SABER_DEFEND
-			//descText				@MENUS_DESCRIPTION_OF_A_FORCE
-			rect					230 333 110 15
-			textalign				ITEM_ALIGN_RIGHT		
-			textalignx				105
-			textaligny				0
-			font					4
-			textscale				1
-			forecolor				0.8 0.8 0.8 1
-			outlinecolor			1 .5 .5 .5
-			backcolor				0 0 0 0
-			border					0
-			bordercolor				0 0 0 0
-			visible					1 
-			decoration
-		}
-
-		// Saber Defend assign
-		itemDef 
-		{
-			name					setfp_saberdefend
-			group					"playersettingforcegroup"
-			style					0	
-			ownerdraw				UI_FORCE_RANK_SABERDEFEND
-			rect					230 333 175 15
-			textalign				ITEM_ALIGN_LEFT		
-			textalignx				115
-			textaligny				-6
-			textscale				.25        
-			outlinecolor			1 .5 .5 .5
-			backcolor				0 0 0 0
-			forecolor				0.8 0.8 0.8 1
-			border					0
-			bordercolor				0 0 0 0
-			descText			@MENUS_USE_THE_LIGHTSABER_TO
-			visible					1 
-			action 
-			{ 
-				play			"sound/interface/button1.wav" ;
-			}
-
-			mouseenter 
-			{ 
-				setitemcolor	setfp_saberdefend forecolor 1 1 1 1
-			}
-			mouseexit 
-			{ 
-				setitemcolor	setfp_saberdefend forecolor   0.8 0.8 0.8 1
-			}
-		}
-
-		// Saber Throw title
-		itemDef 
-		{
-			name					setfp_saberthrow
-			group					"playersettingforcegroup"
-			style					0	
-			text					@MENUS_SABER_THROW
-			//descText				@MENUS_DESCRIPTION_OF_A_FORCE
-			rect					230 350 110 15
-			textalign				ITEM_ALIGN_RIGHT		
-			textalignx				105
-			textaligny				0
-			font					4
-			textscale				1
-			forecolor				0.8 0.8 0.8 1
-			outlinecolor			1 .5 .5 .5
-			backcolor				0 0 0 0
-			border					0
-			bordercolor				0 0 0 0
-			visible					1 
-			decoration
-		}
-
-		// Saber Throw assign
-		itemDef 
-		{
-			name					setfp_saberthrow
-			group					"playersettingforcegroup"
-			style					0	
-			ownerdraw				UI_FORCE_RANK_SABERTHROW
-			rect					230 350 175 15
-			textalign				ITEM_ALIGN_LEFT		
-			textalignx				115
-			textaligny				-6
-			textscale				.25        
-			outlinecolor			1 .5 .5 .5
-			background				"forcecirclegray"					
-			backcolor				0 0 0 0
-			forecolor				0.8 0.8 0.8 1
-			border					0
-			bordercolor				0 0 0 0
-			descText			@MENUS_THROW_YOUR_LIGHTSABER
-			visible					1 
-			action 
-			{ 
-				play			"sound/interface/button1.wav" ;
-			}
-
-			mouseenter 
-			{ 
-				setitemcolor	setfp_saberthrow forecolor 1 1 1 1
-			}
-			mouseexit 
-			{ 
-				setitemcolor	setfp_saberthrow forecolor 0.8 0.8 0.8 1
-			}
-		}
-
+		// No Lightsaber
 		itemDef 
 		{
 			name				nosaber
@@ -2487,14 +564,14 @@
 			text				@MENUS_NO_LIGHTSABER
 			type				1
 			style				0	
-			rect				253 338 0 0
+			rect				43 305 0 0
 			textalign			ITEM_ALIGN_CENTER	 	
 			textalignx			65
-			textaligny				0
-			font					4
-			textscale				1
+			textaligny			0
+			font				4
+			textscale			1
 			forecolor			0.5 0.5 0.5 1
-			outlinecolor			1 .5 .5 .5
+			outlinecolor		1 .5 .5 .5
 			backcolor			0 0 0 0
 			border				0
 			bordercolor			0 0 0 0
@@ -2511,10 +588,10 @@
 			text					@MENUS__REQUIRES_SABER_ATTACK
 			type					1
 			style					0	
-			rect					253 355 0 0
+			rect					43 322 0 0
 			textalign				ITEM_ALIGN_CENTER		
 			textalignx				65
-			outlinecolor				1 .5 .5 .5
+			outlinecolor			1 .5 .5 .5
 			backcolor				0 0 0 0
 			textaligny				0
 			font					4
@@ -2539,56 +616,513 @@
 			descText				@MENUS_MUST_ACQUIRE_A_MINIMUM
 			visible					0
 		}
-
-		//---------------------------------------------
-		//	APPLY BUTTON
-		//---------------------------------------------
+		
+		// Saber attack title
 		itemDef 
 		{
-			name					applyjoinbutton
-			group					"playerforcejoin"
-			style					WINDOW_STYLE_SHADER
-			rect					140 370 150 32
-			background				"gfx/menus/menu_buttonback"
-			forecolor				1 1 1 1
+			name					setfp_saberattack
+			group					"playersettingforcegroup"
+			style					0	
+			text					@MENUS_SABER_ATTACK
+			//descText				@MENUS_DESCRIPTION_OF_A_FORCE
+			rect					20 285 110 15
+			textalign				ITEM_ALIGN_LEFT		
+			textalignx				0
+			textaligny				0
+			font					4
+			textscale				1
+			forecolor				0.8 0.8 0.8 1
+			outlinecolor			1 .5 .5 .5
+			backcolor				0 0 0 0
+			border					0
+			bordercolor				0 0 0 0
+			visible					1 
 			decoration
-			visible				0
+		}
+
+		// Saber attack assign
+		itemDef 
+		{
+			name					setfp_saberattack
+			group					"playersettingforcegroup"
+			style					0	
+			ownerdraw				UI_FORCE_RANK_SABERATTACK
+			rect					20 285 175 15
+			textalign				ITEM_ALIGN_LEFT		
+			textalignx				115
+			textaligny				-5
+			textscale				.25        
+			outlinecolor			1 .5 .5 .5
+			backcolor				0 0 0 0
+			forecolor				0.8 0.8 0.8 1
+			border					0
+			bordercolor				0 0 0 0
+			descText				@MENUS_USE_MORE_POWERFUL_LIGHTSABER
+			visible					1 
+			action 
+			{ 
+				play			"sound/interface/button1.wav" ;
+			}
+
+			mouseenter 
+			{ 
+				setitemcolor	setfp_saberattack forecolor 1 1 1 1
+			}
+			mouseexit 
+			{ 
+				setitemcolor	setfp_saberattack forecolor  0.8 0.8 0.8 1
+			}
+		}
+		
+		// Saber Defend title
+		itemDef 
+		{
+			name					setfp_saberdefend
+			group					"playersettingforcegroup"
+			style					0	
+			text					@MENUS_SABER_DEFEND
+			//descText				@MENUS_DESCRIPTION_OF_A_FORCE
+			rect					20 300 110 15
+			textalign				ITEM_ALIGN_LEFT		
+			textalignx				0
+			textaligny				0
+			font					4
+			textscale				1
+			forecolor				0.8 0.8 0.8 1
+			outlinecolor			1 .5 .5 .5
+			backcolor				0 0 0 0
+			border					0
+			bordercolor				0 0 0 0
+			visible					1 
+			decoration
+		}
+
+		// Saber Defend assign
+		itemDef 
+		{
+			name					setfp_saberdefend
+			group					"playersettingforcegroup"
+			style					0	
+			ownerdraw				UI_FORCE_RANK_SABERDEFEND
+			rect					20 300 175 15
+			textalign				ITEM_ALIGN_LEFT		
+			textalignx				115
+			textaligny				-5
+			textscale				.25        
+			outlinecolor			1 .5 .5 .5
+			backcolor				0 0 0 0
+			forecolor				0.8 0.8 0.8 1
+			border					0
+			bordercolor				0 0 0 0
+			descText				@MENUS_USE_THE_LIGHTSABER_TO
+			visible					1 
+			action 
+			{ 
+				play			"sound/interface/button1.wav" ;
+			}
+
+			mouseenter 
+			{ 
+				setitemcolor	setfp_saberdefend forecolor 1 1 1 1
+			}
+			mouseexit 
+			{ 
+				setitemcolor	setfp_saberdefend forecolor   0.8 0.8 0.8 1
+			}
+		}
+		
+		// Saber Throw title
+		itemDef 
+		{
+			name					setfp_saberthrow
+			group					"playersettingforcegroup"
+			style					0	
+			text					@MENUS_SABER_THROW
+			//descText				@MENUS_DESCRIPTION_OF_A_FORCE
+			rect					20 315 110 15
+			textalign				ITEM_ALIGN_LEFT		
+			textalignx				0
+			textaligny				0
+			font					4
+			textscale				1
+			forecolor				0.8 0.8 0.8 1
+			outlinecolor			1 .5 .5 .5
+			backcolor				0 0 0 0
+			border					0
+			bordercolor				0 0 0 0
+			visible					1 
+			decoration
+		}
+
+		// Saber Throw assign
+		itemDef 
+		{
+			name					setfp_saberthrow
+			group					"playersettingforcegroup"
+			style					0	
+			ownerdraw				UI_FORCE_RANK_SABERTHROW
+			rect					20 315 175 15
+			textalign				ITEM_ALIGN_LEFT		
+			textalignx				115
+			textaligny				-5
+			textscale				.25        
+			outlinecolor			1 .5 .5 .5
+			background				"forcecirclegray"					
+			backcolor				0 0 0 0
+			forecolor				0.8 0.8 0.8 1
+			border					0
+			bordercolor				0 0 0 0
+			descText				@MENUS_THROW_YOUR_LIGHTSABER
+			visible					1 
+			action 
+			{ 
+				play			"sound/interface/button1.wav" ;
+			}
+
+			mouseenter 
+			{ 
+				setitemcolor	setfp_saberthrow forecolor 1 1 1 1
+			}
+			mouseexit 
+			{ 
+				setitemcolor	setfp_saberthrow forecolor 0.8 0.8 0.8 1
+			}
+		}
+		
+	// Second Column
+	
+	////////////////////////////////////////////////////////////////////////////////
+	// The Light Side Force Powers
+	////////////////////////////////////////////////////////////////////////////////
+		
+	// Force Ranks title		
+		itemDef 
+		{
+			name				forceranktitle
+			group				"playersettingforcegroup"
+			style				0	
+			text				"Light Side Powers"
+			rect				270 75 0 0
+			textalign			ITEM_ALIGN_LEFT		
+			textalignx			0
+			textaligny			0
+			outlinecolor		1 .5 .5 .5
+			backcolor			0.3 0.3 0.3 1
+			font				4
+			textscale		   	1 
+			forecolor			0.7 0.7 1 1
+			border				0
+			bordercolor			0 0 0 0
+			visible				1 
+			decoration
 		}
 
 		itemDef 
 		{
-			name				applyjoin
-			group				"playerforcejoin"
-			text				@MENUS_APPLY_POWERS
-			type				1
-			style				WINDOW_STYLE_EMPTY
-			rect				140 370 150 32
-			textalign			1
-			textalignx			75
-			textaligny			2
-			font				2
-			textscale			1
-			forecolor			1 .682 0 1
-			descText			@MENUS_MAKE_THESE_CHANGES_TO
-			visible				1
+			name				forceranktitle2
+			group				"playersettingforcegroup"
+			style				0	
+			text				@MENUS_1_2_3
+			rect				270 75 0 0
+			textalign			ITEM_ALIGN_LEFT
+			textalignx			115
+			textaligny			0
+			outlinecolor		1 .5 .5 .5
+			backcolor			0.3 0.3 0.3 1
+			font				4
+			textscale		    1
+			forecolor			0.7 0.7 1 1
+			border				0
+			bordercolor			0 0 0 0
+			visible				1 
+			decoration
+		}
+		
+		// Force Absorb title
+		itemDef 
+		{
+			name					setfp_absorb
+			group					lightpowers
+			style					0	
+			text					@MENUS_FORCE_ABSORB
+			rect					270 90 110 15
+			textalign				ITEM_ALIGN_LEFT	
+			textalignx				0
+			textaligny				0
+			font					4
+			textscale				1
+			forecolor				0.5 0.5 1 1
+			outlinecolor			1 .5 .5 .5
+			backcolor				0 0 0 0
+			border					0
+			bordercolor				0 0 0 0
+			visible					1 
+			decoration
+		}
+
+		// Force Absorb assign
+		itemDef 
+		{
+			name					setfp_absorb
+			group					lightpowers
+			style					0	
+			ownerdraw				UI_FORCE_RANK_ABSORB
+			rect					270 90 175 15
+			textalign				ITEM_ALIGN_LEFT		
+			textalignx				115
+			textaligny				-5
+			outlinecolor			1 .5 .5 .5
+			backcolor				0 0 0 0
+			forecolor				0.5 0.5 1 1
+			border					0
+			bordercolor				0 0 0 0
+			descText				@MENUS_PROTECT_AGAINST_FORCE
+			visible				1 
 			action 
 			{ 
 				play			"sound/interface/button1.wav" ;
-				uiScript 		setForce "same"
-				close 			ingame_playerforce ;
-//				uiScript		updateForceStatus ;
-				open			ingame_player
 			}
-			mouseEnter 
+
+			mouseenter 
 			{ 
-				show		applyjoinbutton
+				setitemcolor	setfp_absorb forecolor 0.75 0.75 1 1
 			}
-			mouseExit 
+			mouseexit 
 			{ 
-				hide		applyjoinbutton
+				setitemcolor	setfp_absorb forecolor 0.5 0.5 1 1
+			}
+		}
+		
+		// Force Mind Trick title
+		itemDef 
+		{
+			name					setfp_mindtrick
+			group					lightpowers
+			style					0	
+			text					@MENUS_FORCE_MINDTRICK
+			rect					270 105 110 15
+			textalign				ITEM_ALIGN_LEFT
+			textalignx				0
+			textaligny				0
+			font					4
+			textscale				1
+			forecolor				0.5 0.5 1 1
+			outlinecolor			1 .5 .5 .5
+			backcolor				0 0 0 0
+			border					0
+			bordercolor				0 0 0 0
+			visible					1 
+			decoration
+		}
+	
+		// Force Mind Trick assign
+		itemDef 
+		{
+			name					setfp_mindtrick
+			group					lightpowers
+			style					0	
+			ownerdraw				UI_FORCE_RANK_TELEPATHY
+			rect					270 105 175 15
+			textalign				ITEM_ALIGN_LEFT		
+			textalignx				115
+			textaligny				-5
+			textscale				.9
+			outlinecolor			1 .5 .5 .5
+			backcolor				0 0 0 0
+			forecolor				0.5 0.5 1 1
+			border					0
+			bordercolor				0 0 0 0
+			descText				@MENUS_RENDER_YOURSELF_INVISIBLE
+			visible					1 
+			action 
+			{ 
+				play			"sound/interface/button1.wav" ;
+			}
+
+			mouseenter 
+			{ 
+				setitemcolor	setfp_mindtrick forecolor 0.75 0.75 1 1
+			}
+			mouseexit 
+			{ 
+				setitemcolor	setfp_mindtrick forecolor  0.5 0.5 1 1
+			}
+		}
+		
+	////////////////////////////////////////////////////////////////////////////////
+	// The Dark Side Force Powers
+	////////////////////////////////////////////////////////////////////////////////
+		
+	// Force Ranks title		
+		itemDef 
+		{
+			name				forceranktitle
+			group				"playersettingforcegroup"
+			style				0	
+			text				"Dark Side Powers"
+			rect				270 225 0 0
+			textalign			ITEM_ALIGN_LEFT		
+			textalignx			0
+			textaligny			0
+			outlinecolor		1 .5 .5 .5
+			backcolor			0.3 0.3 0.3 1
+			font				4
+			textscale		   	1 
+			forecolor			1 0.7 0.7 1
+			border				0
+			bordercolor			0 0 0 0
+			visible				1 
+			decoration
+		}
+
+		itemDef 
+		{
+			name				forceranktitle2
+			group				"playersettingforcegroup"
+			style				0	
+			text				@MENUS_1_2_3
+			rect				270 225 0 0
+			textalign			ITEM_ALIGN_LEFT
+			textalignx			115
+			textaligny			0
+			outlinecolor		1 .5 .5 .5
+			backcolor			0.3 0.3 0.3 1
+			font				4
+			textscale		    1
+			forecolor			1 0.7 0.7 1
+			border				0
+			bordercolor			0 0 0 0
+			visible				1 
+			decoration
+		}
+		
+		// Force Grip title
+		itemDef 
+		{
+			name					setfp_grip
+			group					darkpowers
+			style					0	
+			text					@MENUS_FORCE_GRIP
+			//descText				@MENUS_DESCRIPTION_OF_A_FORCE
+			//[ForceSys]
+			rect					270 240 110 15
+			//rect					230 223 110 15
+			//[/ForceSys]
+			textalign				ITEM_ALIGN_LEFT												
+			textalignx				0
+			textaligny				0
+			font					4
+			textscale				1
+			forecolor				1 0.2 0.2 1
+			outlinecolor			1 .5 .5 .5
+			backcolor				0 0 0 0
+			border					0
+			bordercolor				0 0 0 0
+			visible					1 
+			decoration
+		}
+	
+		// Force Grip assign
+		itemDef 
+		{
+			name					setfp_grip
+			group					darkpowers
+			style					0	
+			ownerdraw				UI_FORCE_RANK_GRIP
+			//[ForceSys]
+			rect					270 240 175 15
+			//rect					230 223 175 15
+			//[/ForceSys]
+			textalign				ITEM_ALIGN_LEFT		
+			textalignx				115
+			textaligny				-5
+			textscale				.25        
+			outlinecolor			1 .5 .5 .5
+			backcolor				0 0 0 0
+			forecolor				1 0.2 0.2 1
+			border					0
+			bordercolor				0 0 0 0
+			descText				@MENUS_IMMOBILIZE_OPPONENTS
+			visible					1 
+			action 
+			{ 
+				play			"sound/interface/button1.wav" ;
+			}
+
+			mouseenter 
+			{ 
+				setitemcolor	setfp_grip forecolor 1 0.7 0.7 1
+			}
+			mouseexit 
+			{ 
+				setitemcolor	setfp_grip forecolor 1 0.2 0.2 1
+			}
+		}
+		
+		// Force Lightning title
+		itemDef 
+		{
+			name					setfp_lightning
+			group					darkpowers
+			style					0	
+			text					@MENUS_FORCE_LIGHTNING
+			//descText				@MENUS_DESCRIPTION_OF_A_FORCE
+			//[ForceSys]
+			rect					270 255 110 15
+			//rect					230 257 110 15
+			//[/ForceSys]
+			textalign				ITEM_ALIGN_LEFT												
+			textalignx				0
+			textaligny				0
+			font					4
+			textscale				1
+			forecolor				1 0.2 0.2 1
+			outlinecolor			1 .5 .5 .5
+			backcolor				0 0 0 0
+			border					0
+			bordercolor				0 0 0 0
+			visible					1 
+			decoration
+		}
+
+		// Force Lightning assign
+		itemDef 
+		{
+			name					setfp_lightning
+			group					darkpowers
+			style					0	
+			ownerdraw				UI_FORCE_RANK_LIGHTNING
+			//[ForceSys]
+			rect					270 255 175 15
+			//rect					230 257 175 15
+			//[/ForceSys]
+			textalign				ITEM_ALIGN_LEFT										
+			textalignx				115
+			textaligny				-5
+			textscale				.25        
+			outlinecolor			1 .5 .5 .5
+			backcolor				0 0 0 0
+			forecolor				1 0.2 0.2 1
+			border					0
+			bordercolor				0 0 0 0
+			descText				@MENUS_UNLEASH_DEADLY_ELECTRICAL
+			visible					1 
+			action 
+			{ 
+				play			"sound/interface/button1.wav" ;
+			}
+
+			mouseenter 
+			{ 
+				setitemcolor	setfp_lightning forecolor 1 0.7 0.7 1
+			}
+			mouseexit 
+			{ 
+				setitemcolor	setfp_lightning forecolor 1 0.2 0.2 1
 			}
 		}
 	}
 }
+//[/NewMenus]
 
-	
+

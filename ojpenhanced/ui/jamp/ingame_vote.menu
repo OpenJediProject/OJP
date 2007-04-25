@@ -1,3 +1,4 @@
+//[NewMenus]
 // SERVER INFO MENU 
 {
 	menuDef 
@@ -7,7 +8,7 @@
 		fullscreen				0
 		outOfBoundsClick						// this closes the window if it gets a click out of the rectangle
 		rect					430 40 80 68
-		focusColor				1 1 1 1
+		focusColor				0 0.4 0.8 1
 		style					1
 		border					1
 
@@ -16,26 +17,16 @@
 		{
 			name				background_pic
 			group				none
-			style				WINDOW_STYLE_SHADER
+			style				WINDOW_STYLE_FILLED
 			rect				0 0 80 68
-			background			"gfx/menus/menu_box_ingame"
+			border				1
+			bordercolor			0 0 0 1
+			backcolor			0.1 0.1 0.1 0.5
 			forecolor			1 1 1 1
 			visible				1
 			decoration
 		}
 
-
-		itemDef 
-		{
-			name				button1
-			group				buttons
-			style				WINDOW_STYLE_SHADER
-			rect				2 4 76 30   
-			background			"gfx/menus/menu_buttonback"			// Frame around button
-			forecolor			1 1 1 1
-			decoration
-			visible				0
-		}
 
 		itemDef 
 		{
@@ -48,8 +39,8 @@
 			textalignx			38
 			textaligny			0     
 			font				2
-			textscale			1
-			forecolor			1 .682 0 1
+			textscale			0.7
+			forecolor			0.8 0.8 0.8 1
 			visible				1
 			action 
 			{ 
@@ -59,24 +50,10 @@
 			}
 			mouseEnter 
 			{ 
-				show			button1
 			}
 			mouseExit 
 			{ 
-				hide			button1
 			}
-		}
-
-		itemDef 
-		{
-			name				button2
-			group				buttons
-			style				WINDOW_STYLE_SHADER
-			rect				2 34 76 30   
-			background			"gfx/menus/menu_buttonback"			// Frame around button
-			forecolor			1 1 1 1
-			decoration
-			visible				0
 		}
 
 		itemDef 
@@ -90,8 +67,8 @@
 			textalignx			38
 			textaligny			0     
 			font				2
-			textscale			1
-			forecolor			1 .682 0 1
+			textscale			0.7
+			forecolor			0.8 0.8 0.8 1
 			visible				1
 			action 
 			{ 
@@ -101,12 +78,12 @@
 			}
 			mouseEnter 
 			{ 
-				show			button2
 			}
 			mouseExit 
 			{ 
-				hide			button2
 			}
 		}
 	}
 }
+//[/NewMenus]
+

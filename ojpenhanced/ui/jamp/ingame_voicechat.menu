@@ -1,3 +1,4 @@
+//[NewMenus]
 //----------------------------------------------------------------------------------------------
 // VOICECHAT BOX 
 //----------------------------------------------------------------------------------------------
@@ -9,7 +10,7 @@
 		fullscreen				0
 		outOfBoundsClick							// this closes the window if it gets a click out of the rectangle
 		rect					10 100 180 260
-		focusColor				1 1 1 1
+		focusColor				0 0.4 0.8 1
 		style					1
 		border					1
 		onESC
@@ -52,9 +53,11 @@
 		{
 			name				background_pic
 			group				none
-			style				WINDOW_STYLE_SHADER
+			style				WINDOW_STYLE_FILLED
 			rect				0 0 180 260
-			background			"gfx/menus/menu_box_ingame"
+			border				1
+			bordercolor			0 0 0 1
+			backcolor			0.1 0.1 0.1 0.5
 			forecolor			1 1 1 1
 			visible				1
 			decoration
@@ -62,29 +65,9 @@
 
 		itemDef 
 		{
-			name				title_small_background
-			rect				0 5 180 26
-			style				WINDOW_STYLE_SHADER	
-			background			"gfx/menus/menu_blendbox"
-			visible				1
-			decoration
-		}
-		
-		itemDef 
-		{
-			name				title_big_background
-			rect				0 5 180 48
-			style				WINDOW_STYLE_SHADER	
-			background			"gfx/menus/menu_blendbox"
-			visible				0
-			decoration
-		}
-		
-		itemDef 
-		{
 			name				title
 			rect				0 5 180 26
-			style				WINDOW_STYLE_EMPTY
+			style				WINDOW_STYLE_FILLED
 			type				4
 			text				@MENUS_VC_TITLE			
 			textalign			ITEM_ALIGN_CENTER		
@@ -92,7 +75,8 @@
 			textaligny			2    
 			font				3
 			textscale			.9
-			forecolor			.549 .854 1 1
+			backcolor			0 0 0 1
+			forecolor			1 1 1 1
 			visible				1
 			decoration
 		}
@@ -117,8 +101,8 @@ itemDef
 			textalignx			80
 			textaligny			-2   
 			font				2
-			textscale			1
-			forecolor			1 .682 0 1
+			textscale			0.7
+			forecolor			0.8 0.8 0.8 1
 			visible				1
 			cvarTest			"sv_running"
 			disableCvar 
@@ -146,8 +130,8 @@ itemDef
 			textalignx			4
 			textaligny			-2    
 			font				2
-			textscale			1
-			forecolor			1 .682 0 1
+			textscale			0.7
+			forecolor			0.8 0.8 0.8 1
 			visible				1
 			action
 			{
@@ -178,8 +162,8 @@ itemDef
 			textalignx			4
 			textaligny			-2    
 			font				2
-			textscale			1
-			forecolor			1 .682 0 1
+			textscale			0.7
+			forecolor			0.8 0.8 0.8 1
 			visible				1
 			action
 			{
@@ -209,8 +193,8 @@ itemDef
 			textalignx			4
 			textaligny			-2    
 			font				2
-			textscale			1
-			forecolor			1 .682 0 1
+			textscale			0.7
+			forecolor			0.8 0.8 0.8 1
 			visible				1
 			action
 			{
@@ -240,8 +224,8 @@ itemDef
 			textalignx			4
 			textaligny			-2    
 			font				2
-			textscale			1
-			forecolor			1 .682 0 1
+			textscale			0.7
+			forecolor			0.8 0.8 0.8 1
 			visible				1
 			action
 			{
@@ -271,8 +255,8 @@ itemDef
 			textalignx			4
 			textaligny			-2    
 			font				2
-			textscale			1
-			forecolor			1 .682 0 1
+			textscale			0.7
+			forecolor			0.8 0.8 0.8 1
 			visible				1
 			action
 			{
@@ -302,8 +286,8 @@ itemDef
 			textalignx			4
 			textaligny			-2    
 			font				2
-			textscale			1
-			forecolor			1 .682 0 1
+			textscale			0.7
+			forecolor			0.8 0.8 0.8 1
 			visible				1
 			action
 			{
@@ -332,8 +316,8 @@ itemDef
 			textalignx			80
 			textaligny			-2    
 			font				2
-			textscale			1
-			forecolor			1 .682 0 1
+			textscale			0.7
+			forecolor			0.8 0.8 0.8 1
 			visible				1
 			action
 			{
@@ -366,7 +350,7 @@ itemDef
 			textaligny			2    
 			font				3
 			textscale			.9
-			forecolor			.549 .854 1 1
+			forecolor			1 1 1 1
 			visible				0
 			decoration
 		}
@@ -383,7 +367,7 @@ itemDef
 			textaligny			12    
 			font				4
 			textscale			1
-			forecolor			1 .682 0 1
+			forecolor			0.8 0.8 0.8 1
 			visible				0
 			ownerdraw			UI_CHAT_ATTACK
 			action
@@ -408,7 +392,7 @@ itemDef
 			textaligny			12    
 			font				4
 			textscale			1
-			forecolor			1 .682 0 1
+			forecolor			0.8 0.8 0.8 1
 			visible				0
 			ownerdraw			UI_CHAT_ATTACK
 			action
@@ -433,7 +417,7 @@ itemDef
 			textaligny			12    
 			font				4
 			textscale			1
-			forecolor			1 .682 0 1
+			forecolor			0.8 0.8 0.8 1
 			visible				0
 			ownerdraw			UI_CHAT_ATTACK
 			action
@@ -464,7 +448,7 @@ itemDef
 			textaligny			2    
 			font				3
 			textscale			.9
-			forecolor			.549 .854 1 1
+			forecolor			1 1 1 1
 			visible				0
 			decoration
 		}
@@ -481,7 +465,7 @@ itemDef
 			textaligny			12    
 			font				4
 			textscale			1
-			forecolor			1 .682 0 1
+			forecolor			0.8 0.8 0.8 1
 			visible				0
 			ownerdraw			UI_CHAT_DEFEND
 			action
@@ -506,7 +490,7 @@ itemDef
 			textaligny			12    
 			font				4
 			textscale			1
-			forecolor			1 .682 0 1
+			forecolor			0.8 0.8 0.8 1
 			visible				0
 			ownerdraw			UI_CHAT_DEFEND
 			action
@@ -531,7 +515,7 @@ itemDef
 			textaligny			12    
 			font				4
 			textscale			1
-			forecolor			1 .682 0 1
+			forecolor			0.8 0.8 0.8 1
 			visible				0
 			ownerdraw			UI_CHAT_DEFEND
 			action
@@ -556,7 +540,7 @@ itemDef
 			textaligny			12    
 			font				4
 			textscale			1
-			forecolor			1 .682 0 1
+			forecolor			0.8 0.8 0.8 1
 			visible				0
 			ownerdraw			UI_CHAT_DEFEND
 			action
@@ -587,7 +571,7 @@ itemDef
 			textaligny			2    
 			font				3
 			textscale			.9
-			forecolor			.549 .854 1 1
+			forecolor			1 1 1 1
 			visible				0
 			decoration
 		}
@@ -604,7 +588,7 @@ itemDef
 			textaligny			12    
 			font				4
 			textscale			1
-			forecolor			1 .682 0 1
+			forecolor			0.8 0.8 0.8 1
 			visible				0
 			ownerdraw			UI_CHAT_REQUEST
 			action
@@ -629,7 +613,7 @@ itemDef
 			textaligny			12    
 			font				4
 			textscale			1
-			forecolor			1 .682 0 1
+			forecolor			0.8 0.8 0.8 1
 			visible				0
 			ownerdraw			UI_CHAT_REQUEST
 			action
@@ -654,7 +638,7 @@ itemDef
 			textaligny			12    
 			font				4
 			textscale			1
-			forecolor			1 .682 0 1
+			forecolor			0.8 0.8 0.8 1
 			visible				0
 			ownerdraw			UI_CHAT_REQUEST
 			action
@@ -679,7 +663,7 @@ itemDef
 			textaligny			12    
 			font				4
 			textscale			1
-			forecolor			1 .682 0 1
+			forecolor			0.8 0.8 0.8 1
 			visible				0
 			ownerdraw			UI_CHAT_REQUEST
 			action
@@ -704,7 +688,7 @@ itemDef
 			textaligny			12    
 			font				4
 			textscale			1
-			forecolor			1 .682 0 1
+			forecolor			0.8 0.8 0.8 1
 			visible				0
 			ownerdraw			UI_CHAT_REQUEST
 			action
@@ -729,7 +713,7 @@ itemDef
 			textaligny			12    
 			font				4
 			textscale			1
-			forecolor			1 .682 0 1
+			forecolor			0.8 0.8 0.8 1
 			visible				0
 			ownerdraw			UI_CHAT_REQUEST
 			action
@@ -760,7 +744,7 @@ itemDef
 			textaligny			2    
 			font				3
 			textscale			.9
-			forecolor			.549 .854 1 1
+			forecolor			1 1 1 1
 			visible				0
 			decoration
 		}
@@ -777,7 +761,7 @@ itemDef
 			textaligny			12    
 			font				4
 			textscale			1
-			forecolor			1 .682 0 1
+			forecolor			0.8 0.8 0.8 1
 			visible				0
 			ownerdraw			UI_CHAT_REPLY
 			action
@@ -802,7 +786,7 @@ itemDef
 			textaligny			12    
 			font				4
 			textscale			1
-			forecolor			1 .682 0 1
+			forecolor			0.8 0.8 0.8 1
 			visible				0
 			ownerdraw			UI_CHAT_REPLY
 			action
@@ -827,7 +811,7 @@ itemDef
 			textaligny			12    
 			font				4
 			textscale			1
-			forecolor			1 .682 0 1
+			forecolor			0.8 0.8 0.8 1
 			visible				0
 			ownerdraw			UI_CHAT_REPLY
 			action
@@ -852,7 +836,7 @@ itemDef
 			textaligny			12    
 			font				4
 			textscale			1
-			forecolor			1 .682 0 1
+			forecolor			0.8 0.8 0.8 1
 			visible				0
 			ownerdraw			UI_CHAT_REPLY
 			action
@@ -877,7 +861,7 @@ itemDef
 			textaligny			12    
 			font				4
 			textscale			1
-			forecolor			1 .682 0 1
+			forecolor			0.8 0.8 0.8 1
 			visible				0
 			ownerdraw			UI_CHAT_REPLY
 			action
@@ -908,7 +892,7 @@ itemDef
 			textaligny			2    
 			font				3
 			textscale			.9
-			forecolor			.549 .854 1 1
+			forecolor			1 1 1 1
 			visible				0
 			decoration
 		}
@@ -925,7 +909,7 @@ itemDef
 			textaligny			12    
 			font				4
 			textscale			1
-			forecolor			1 .682 0 1
+			forecolor			0.8 0.8 0.8 1
 			visible				0
 			ownerdraw			UI_CHAT_SPOT
 			action
@@ -950,7 +934,7 @@ itemDef
 			textaligny			12    
 			font				4
 			textscale			1
-			forecolor			1 .682 0 1
+			forecolor			0.8 0.8 0.8 1
 			visible				0
 			ownerdraw			UI_CHAT_SPOT
 			action
@@ -975,7 +959,7 @@ itemDef
 			textaligny			12    
 			font				4
 			textscale			1
-			forecolor			1 .682 0 1
+			forecolor			0.8 0.8 0.8 1
 			visible				0
 			ownerdraw			UI_CHAT_SPOT
 			action
@@ -1000,7 +984,7 @@ itemDef
 			textaligny			12    
 			font				4
 			textscale			1
-			forecolor			1 .682 0 1
+			forecolor			0.8 0.8 0.8 1
 			visible				0
 			ownerdraw			UI_CHAT_SPOT
 			action
@@ -1031,7 +1015,7 @@ itemDef
 			textaligny			2    
 			font				3
 			textscale			.9
-			forecolor			.549 .854 1 1
+			forecolor			1 1 1 1
 			visible				0
 			decoration
 		}
@@ -1048,7 +1032,7 @@ itemDef
 			textaligny			12    
 			font				4
 			textscale			1
-			forecolor			1 .682 0 1
+			forecolor			0.8 0.8 0.8 1
 			visible				0
 			ownerdraw			UI_CHAT_TACTICAL
 			action
@@ -1073,7 +1057,7 @@ itemDef
 			textaligny			12    
 			font				4
 			textscale			1
-			forecolor			1 .682 0 1
+			forecolor			0.8 0.8 0.8 1
 			visible				0
 			ownerdraw			UI_CHAT_TACTICAL
 			action
@@ -1098,7 +1082,7 @@ itemDef
 			textaligny			12    
 			font				4
 			textscale			1
-			forecolor			1 .682 0 1
+			forecolor			0.8 0.8 0.8 1
 			visible				0
 			ownerdraw			UI_CHAT_TACTICAL
 			action
@@ -1123,7 +1107,7 @@ itemDef
 			textaligny			12    
 			font				4
 			textscale			1
-			forecolor			1 .682 0 1
+			forecolor			0.8 0.8 0.8 1
 			visible				0
 			ownerdraw			UI_CHAT_TACTICAL
 			action
@@ -1148,7 +1132,7 @@ itemDef
 			textaligny			12    
 			font				4
 			textscale			1
-			forecolor			1 .682 0 1
+			forecolor			0.8 0.8 0.8 1
 			visible				0
 			ownerdraw			UI_CHAT_TACTICAL
 			action
@@ -1173,7 +1157,7 @@ itemDef
 			textaligny			12    
 			font				4
 			textscale			1
-			forecolor			1 .682 0 1
+			forecolor			0.8 0.8 0.8 1
 			visible				0
 			ownerdraw			UI_CHAT_TACTICAL
 			action
@@ -1188,6 +1172,9 @@ itemDef
 
 	}
 }
+//[/NewMenus]
+
+
 
 
 

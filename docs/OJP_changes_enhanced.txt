@@ -6,6 +6,12 @@ This file stores all the information about what has changed from release version
 
 
 Version 0.0.9v:
+
+	New Features:
+
+		New Menus (NewMenus):  
+			Brand new ingame menus and console background!  Thanks to Bjusterbaarlik!
+
 	Improvements/Fixes:
 
 		Force Powers:

@@ -1,3 +1,4 @@
+//[NewMenus]
 //-------------------------------------------
 // INGAME MENU 
 //
@@ -13,7 +14,7 @@
 		small2Font				"arialnb" 	14	
 		cursor					"cursor"				// cursor	
 		gradientBar				"ui/assets/gradientbar2.tga"	// gradient bar
-		itemFocusSound				"sound/interface/menuroam.wav"		// sound for item getting focus (via keyboard or mouse )
+		itemFocusSound			"sound/interface/menuroam.wav"		// sound for item getting focus (via keyboard or mouse )
 
 		fadeClamp				1.0					// sets the fadeup alpha
 		fadeCycle				1					// how often fade happens in milliseconds
@@ -41,8 +42,8 @@
 		fullScreen				0
 		outOfBoundsClick			// this closes the window if it gets a click out of the rectangle
 		rect					0 0 640 480
-		focusColor				1 1 1 1
-		disableColor				0.5 0.5 0.5 1
+		focusColor				0 0.4 0.8 1
+		disableColor			0.5 0.5 0.5 1
 
 		onOpen  
 		{ 
@@ -52,28 +53,18 @@
 
 
 
-		itemDef 
+		itemDef
 		{
 			name				background_pic
 			group				none
-			style				WINDOW_STYLE_SHADER
+			style				WINDOW_STYLE_FILLED
 			rect				0 0 640 32
-			background			"gfx/menus/menu_top_mp"
+			backcolor			0.1 0.1 0.1 0.5
+			border				1
+			bordercolor			0 0 0 1
 			forecolor			1 1 1 1
-			visible				1
+			visible 			1
 			decoration
-		}
-
-		itemDef 
-		{
-			name				aboutButton
-			group				none
-			style				WINDOW_STYLE_SHADER
-			rect				5 0 70 32
-			background			"gfx/menus/menu_buttonback"			// Frame around button
-			forecolor			1 1 1 1
-			decoration
-			visible			0
 		}
 
 		itemdef
@@ -88,35 +79,20 @@
 			textstyle			3
 			textalign			ITEM_ALIGN_CENTER
 			textalignx			35
-			textaligny			2
-			forecolor			1 .682 0 1
+			textaligny			3
+			forecolor			0.8 0.8 0.8 1
 			backcolor			0 0 0 0
 			visible				1
 			action 
 			{ 
 				play			"sound/interface/button1.wav" ;
-				open			ingame_about 
+				open			ingame_about ;
+				close			ingame_playerforce ;
+				close			ingame_player2 ;
+				close			ingame_player ;
+				close			ingame_playergunnery ;
+				close			ingame_saber ;
 			}
-			mouseenter 
-			{ 
-				show			aboutButton
-			}
-			mouseexit 
-			{ 
-				hide			aboutButton
-			}
-		}
-
-		itemDef 
-		{
-			name				joinButton
-			group				none
-			style				WINDOW_STYLE_SHADER
-			rect				75 0 70 32
-			background			"gfx/menus/menu_buttonback"			// Frame around button
-			forecolor			1 1 1 1
-			decoration
-			visible			0
 		}
 
 		itemDef 
@@ -136,8 +112,8 @@
 			textstyle			3
 			textalign			ITEM_ALIGN_CENTER
 			textalignx          	35
-			textaligny			2
-			forecolor			1 .682 0 1
+			textaligny			3
+			forecolor			0.8 0.8 0.8 1
 			backcolor			0 0 0 0
 			visible			1
 			cvartest			"g_gametype"
@@ -148,15 +124,12 @@
 			action 
 			{ 
 				play			"sound/interface/button1.wav" ;
-				open			ingame_join 
-			}
-			mouseenter 
-			{ 
-				show			joinButton
-			}
-			mouseexit 
-			{ 
-				hide			joinButton
+				open			ingame_join ;
+				close			ingame_playerforce ;
+				close			ingame_player2 ;
+				close			ingame_player ;
+				close			ingame_playergunnery ;
+				close			ingame_saber ;
 			}
 		}
 
@@ -172,8 +145,8 @@
 			textstyle			3
 			textalign			ITEM_ALIGN_CENTER
 			textalignx         	35
-			textaligny			2
-			forecolor			1 .682 0 1
+			textaligny			3
+			forecolor			0.8 0.8 0.8 1
 			backcolor			0 0 0 0
 			visible			1
 			cvartest			"g_gametype"
@@ -181,28 +154,13 @@
 			action 
 			{ 
 				play			"sound/interface/button1.wav" ;
-				open			ingame_siegeclass
+				open			ingame_siegeclass ;
+				close			ingame_playerforce ;
+				close			ingame_player2 ;
+				close			ingame_player ;
+				close			ingame_playergunnery ;
+				close			ingame_saber ;
 			} 
-			mouseenter 
-			{ 
-				show			joinButton
-			}
-			mouseexit 
-			{ 
-				hide			joinButton
-			}
-		}
-
-		itemDef 
-		{
-			name				playerButton
-			group				none
-			style				WINDOW_STYLE_SHADER
-			rect				145 0 70 32
-			background			"gfx/menus/menu_buttonback"			// Frame around button
-			forecolor			1 1 1 1
-			decoration
-			visible			0
 		}
 
 		itemDef 
@@ -217,8 +175,8 @@
 			textstyle			3
 			textalign			ITEM_ALIGN_CENTER
 			textalignx         	35
-			textaligny			2
-			forecolor			1 .682 0 1
+			textaligny			3
+			forecolor			0.8 0.8 0.8 1
 			backcolor			0 0 0 0
 			visible				1
 			cvartest			"g_gametype"
@@ -229,28 +187,12 @@
 			action 
 			{ 
 				play			"sound/interface/button1.wav" ;
-				open			ingame_player 
+				open			ingame_player ;
+				close			ingame_playerforce ;
+				close			ingame_player2 ; 
+				close			ingame_playergunnery ;
+				close			ingame_saber ;
 			} 
-			mouseenter 
-			{ 
-				show			playerButton
-			}
-			mouseexit 
-			{ 
-				hide			playerButton
-			}
-		}
-
-		itemDef 
-		{
-			name				objectivesButton
-			group				none
-			style				WINDOW_STYLE_SHADER
-			rect				145 0 70 32
-			background			"gfx/menus/menu_buttonback"			// Frame around button
-			forecolor			1 1 1 1
-			decoration
-			visible			0
 		}
 
 		itemDef 
@@ -265,8 +207,8 @@
 			textstyle			3
 			textalign			ITEM_ALIGN_CENTER
 			textalignx         	35
-			textaligny			2
-			forecolor			1 .682 0 1
+			textaligny			3
+			forecolor			0.8 0.8 0.8 1
 			backcolor			0 0 0 0
 			visible				1
 			cvartest			"g_gametype"
@@ -274,28 +216,13 @@
 			action 
 			{ 
 				play			"sound/interface/button1.wav" ;
-				open			ingame_objectives
+				open			ingame_objectives ;
+				close			ingame_playerforce ;
+				close			ingame_player2 ;
+				close			ingame_player ;
+				close			ingame_playergunnery ;
+				close			ingame_saber ;
 			} 
-			mouseenter 
-			{ 
-				show			objectivesButton
-			}
-			mouseexit 
-			{ 
-				hide			objectivesButton
-			}
-		}
-
-		itemDef 
-		{
-			name				chatButton
-			group				none
-			style				WINDOW_STYLE_SHADER
-			rect				215 0 70 32
-			background			"gfx/menus/menu_buttonback"			// Frame around button
-			forecolor			1 1 1 1
-			decoration
-			visible			0
 		}
 
 		itemDef 
@@ -310,8 +237,8 @@
 			textstyle			3
 			textalign			ITEM_ALIGN_CENTER
 			textalignx         	35
-			textaligny			2
-			forecolor			1 .682 0 1
+			textaligny			3
+			forecolor			0.8 0.8 0.8 1
 			backcolor			0 0 0 0
 			visible				1
 //[BotTweaks]
@@ -331,28 +258,13 @@
 			action 
 			{ 
 				play			"sound/interface/button1.wav" ;
-				open			ingame_voicechat
+				open			ingame_voicechat ;
+				close			ingame_playerforce ;
+				close			ingame_player2 ;
+				close			ingame_player ;
+				close			ingame_playergunnery ;
+				close			ingame_saber ;
 			} 
-			mouseenter 
-			{ 
-				show			chatButton
-			}
-			mouseexit 
-			{ 
-				hide			chatButton
-			}
-		}
-
-		itemDef 
-		{
-			name				addBotButton
-			group				none
-			style				WINDOW_STYLE_SHADER
-			rect				215 0 70 32
-			background			"gfx/menus/menu_buttonback"			// Frame around button
-			forecolor			1 1 1 1
-			decoration
-			visible			0
 		}
 
 		// do not change the name of this, the uiScript setBotButton looks 
@@ -369,8 +281,8 @@
 			textstyle			3
 			textalign			ITEM_ALIGN_CENTER
 			textalignx          	35
-			textaligny			2
-			forecolor			1 .682 0 1
+			textaligny			3
+			forecolor			0.8 0.8 0.8 1
 			backcolor			0 0 0 0
 			visible				1
 			cvarTest			"sv_running"
@@ -381,28 +293,13 @@
 			action 
 			{ 
 				play			"sound/interface/button1.wav" ;
-				open			ingame_addbot 
+				open			ingame_addbot ;
+				close			ingame_playerforce ;
+				close			ingame_player2 ;
+				close			ingame_player ;
+				close			ingame_playergunnery ;
+				close			ingame_saber ;
 			}
-			mouseenter 
-			{ 
-				show			addBotButton
-			}
-			mouseexit 
-			{ 
-				hide			addBotButton
-			}
-		}
-
-		itemDef 
-		{
-			name				controlsButton
-			group				none
-			style				WINDOW_STYLE_SHADER
-			rect				285 0 70 32
-			background		"gfx/menus/menu_buttonback"			// Frame around button
-			forecolor			1 1 1 1
-			decoration
-			visible			0
 		}
 
 		itemDef 
@@ -417,35 +314,20 @@
 			textstyle			3
 			textalign			ITEM_ALIGN_CENTER
 			textalignx          35
-			textaligny			2
-			forecolor			1 .682 0 1
+			textaligny			3
+			forecolor			0.8 0.8 0.8 1
 			backcolor			0 0 0 0
 			visible				1
 			action 
 			{ 
 				play			"sound/interface/button1.wav" ;
-				open			ingame_controls 
+				open			ingame_controls ;
+				close			ingame_playerforce ;
+				close			ingame_player2 ;
+				close			ingame_player ;
+				close			ingame_playergunnery ;
+				close			ingame_saber ;
 			}
-			mouseenter 
-			{ 
-				show			controlsButton
-			}
-			mouseexit 
-			{ 
-				hide			controlsButton
-			}
-		}
-
-		itemDef 
-		{
-			name				setupButton
-			group				none
-			style				WINDOW_STYLE_SHADER
-			rect				355 0 70 32
-			background		"gfx/menus/menu_buttonback"			// Frame around button
-			forecolor			1 1 1 1
-			decoration
-			visible			0
 		}
 
 		itemDef 
@@ -460,35 +342,20 @@
 			textstyle			3
 			textalign			ITEM_ALIGN_CENTER
 			textalignx          35
-			textaligny			2
-			forecolor			1 .682 0 1
+			textaligny			3
+			forecolor			0.8 0.8 0.8 1
 			backcolor			0 0 0 0
 			visible				1
 			action 
 			{ 
 				play			"sound/interface/button1.wav" ;
-				open			ingame_setup 
+				open			ingame_setup ;
+				close			ingame_playerforce ;
+				close			ingame_player2 ;
+				close			ingame_player ;
+				close			ingame_playergunnery ;
+				close			ingame_saber ;
 			}
-			mouseenter 
-			{ 
-				show			setupButton
-			}
-			mouseexit 
-			{ 
-				hide			setupButton
-			}
-		}
-
-		itemDef 
-		{
-			name				voteButton
-			group				none
-			style				WINDOW_STYLE_SHADER
-			rect				425 0 70 32
-			background		"gfx/menus/menu_buttonback"			// Frame around button
-			forecolor			1 1 1 1
-			decoration
-			visible			0
 		}
 
 		itemDef 
@@ -508,35 +375,20 @@
 			textstyle			3
 			textalign			ITEM_ALIGN_CENTER
 			textalignx          35
-			textaligny			2
-			forecolor			1 .682 0 1
+			textaligny			3
+			forecolor			0.8 0.8 0.8 1
 			backcolor			0 0 0 0
 			visible				1
 			action 
 			{ 
 				play			"sound/interface/button1.wav" ;
-				open			ingame_vote 
+				open			ingame_vote ;
+				close			ingame_playerforce ;
+				close			ingame_player2 ;
+				close			ingame_player ;
+				close			ingame_playergunnery ;
+				close			ingame_saber ;
 			}
-			mouseenter 
-			{ 
-				show			voteButton
-			}
-			mouseexit 
-			{ 
-				hide			voteButton
-			}
-		}
-
-		itemDef 
-		{
-			name				callvoteButton
-			group				none
-			style				WINDOW_STYLE_SHADER
-			rect				495 0 70 32
-			background		"gfx/menus/menu_buttonback"			// Frame around button
-			forecolor			1 1 1 1
-			decoration
-			visible			0
 		}
 
 		itemDef 
@@ -557,35 +409,20 @@
 			textstyle			3
 			textalign			ITEM_ALIGN_CENTER
 			textalignx          35
-			textaligny			2
-			forecolor			1 .682 0 1
+			textaligny			3
+			forecolor			0.8 0.8 0.8 1
 			backcolor			0 0 0 0
 			visible				1
 			action 
 			{ 
 				play			"sound/interface/button1.wav" ;
-				open			ingame_callvote 
+				open			ingame_callvote ;
+				close			ingame_playerforce ;
+				close			ingame_player2 ;
+				close			ingame_player ;
+				close			ingame_playergunnery ;
+				close			ingame_saber ;
 			}
-			mouseenter 
-			{ 
-				show			callvoteButton
-			}
-			mouseexit 
-			{ 
-				hide			callvoteButton
-			}
-		}
-
-		itemDef 
-		{
-			name				leaveButton
-			group				none
-			style				WINDOW_STYLE_SHADER
-			rect				565 0 70 32
-			background		"gfx/menus/menu_buttonback"			// Frame around button
-			forecolor			1 1 1 1
-			decoration
-			visible			0
 		}
 
 		itemDef 
@@ -600,23 +437,23 @@
 			textstyle			3
 			textalign			ITEM_ALIGN_CENTER
 			textalignx          35
-			textaligny			2
-			forecolor			1 .682 0 1
+			textaligny			3
+			forecolor			0.8 0.8 0.8 1
 			backcolor			0 0 0 0
 			visible				1
 			action 
 			{ 
 				play			"sound/interface/button1.wav" ;
-				open			ingame_leave 
-			}
-			mouseenter 
-			{ 
-				show			leaveButton
-			}
-			mouseexit 
-			{ 
-				hide			leaveButton
+				open			ingame_leave ;
+				close			ingame_playerforce ;
+				close			ingame_player2 ;
+				close			ingame_player ;
+				close			ingame_playergunnery ;
+				close			ingame_saber ;
 			}
 		} 
 	}
 }
+//[/NewMenus]
+
+
