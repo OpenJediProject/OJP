@@ -60,6 +60,7 @@ vmCvar_t	ojp_lms;
 vmCvar_t	ojp_lmslives;
 //[Coop]
 vmCvar_t	ojp_liveExp;
+vmCvar_t	ojp_dodgemulti;
 //[/Coop]
 //[/LastManStanding]
 
@@ -414,6 +415,7 @@ static cvarTable_t		gameCvarTable[] = {
 	{ &ojp_lmslives,"ojp_lmslives","1", CVAR_LATCH,0,qfalse},
 	//[Coop]
 	{ &ojp_liveExp, "ojp_liveexp","5",CVAR_LATCH,0,qfalse},
+	{ &ojp_dodgemulti, "ojp_dodgemulti","10.0",CVAR_LATCH,0,qfalse},
 	//[/Coop]
 	//[/LastManStanding]
 
@@ -3464,6 +3466,25 @@ void CheckExitRules( void ) {
 				{
 					respawn(ent);
 					ent->client->tempSpectate = 0;
+				}
+				else
+				{
+					if(g_gametype.integer < GT_TEAM)
+					{
+trap_SendServerCommand(-1, va("cp \"%s^1 Was last man standing.\n\"", ent->client->pers.netname));
+					}
+					else
+					{
+						switch(ent->client->sess.sessionTeam)
+						{
+						case TEAM_BLUE:
+trap_SendServerCommand(-1, va("cp \"Blue team was last team standing.\n\""));
+						break;
+						case TEAM_RED:
+trap_SendServerCommand(-1, va("cp \"Red team was last team standing.\n\""));
+						break;
+						};
+					}
 				}
 			}
 		}
