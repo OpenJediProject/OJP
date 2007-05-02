@@ -14,6 +14,9 @@ Version 0.0.9v:
 
 	Improvements/Fixes:
 
+		Jetpack:
+			- Increased fuel consumption rate.  Decreased fuel regeneration rate.
+
 		Force Powers:
 			Pull:
 				- To pull a weapon out of a player's hands, the Force users must target them directly with their crosshairs.

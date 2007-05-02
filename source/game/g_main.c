@@ -4676,8 +4676,12 @@ void G_RunFrame( int levelTime ) {
 				}
 			}
 
-#define JETPACK_DEFUEL_RATE		200 //approx. 20 seconds of idle use from a fully charged fuel amt
-#define JETPACK_REFUEL_RATE		150 //seems fair
+//[ExpSys]
+#define JETPACK_DEFUEL_RATE		150 //approx. 20 seconds of idle use from a fully charged fuel amt
+#define JETPACK_REFUEL_RATE		300 //seems fair
+//#define JETPACK_DEFUEL_RATE		200 //approx. 20 seconds of idle use from a fully charged fuel amt
+//#define JETPACK_REFUEL_RATE		150 //seems fair
+//[/ExpSys]
 			if (ent->client->jetPackOn)
 			{ //using jetpack, drain fuel
 				if (ent->client->jetPackDebReduce < level.time)
