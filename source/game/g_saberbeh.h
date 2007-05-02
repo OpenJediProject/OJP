@@ -4,6 +4,12 @@
 
 #include "q_shared.h"
 
+//This is the attack parry rate for the bots since bots don't block intelligently
+//This is multipled by the bot's skill level (which can be 1-5) and is actually a percentage of the total parries as
+//set by BOT_PARRYRATE.
+#define BOT_ATTACKPARRYRATE		20
+#define MPCOST_PARRIED			4		//base MP cost of getting parried.	
+
 //[SaberSys]
 //This struct holds all the relivent saber mechanics data
 struct sabmech_s {
