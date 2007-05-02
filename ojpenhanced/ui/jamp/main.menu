@@ -54,7 +54,10 @@
 
 		onOpen 
 		{
-			exec				"music music/t2_dpred/ImpBaseB_Action" ;
+			//[OJPMusic]
+			exec				"music music/mp/OJP_MainMenu" ;
+			//exec				"music music/t2_dpred/ImpBaseB_Action" ;
+			//[/OJPMusic]
 		}
 									
 		onESC 

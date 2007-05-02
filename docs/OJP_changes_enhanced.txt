@@ -9,6 +9,9 @@ Version 0.0.9v:
 
 	New Features:
 
+		Original Main Menu Theme:  
+			Original, brand new music for the main menu.  Special thanks to Jed Smith of Betafish Music (www.betafish.net)!
+
 		New Menus (NewMenus):  
 			Brand new ingame menus and console background!  Thanks to Bjusterbaarlik!
 
