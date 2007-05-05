@@ -918,7 +918,7 @@ G_RunMissile
 //[RealTrace]
 extern int G_RealTrace(gentity_t *SaberAttacker, trace_t *tr, vec3_t start, vec3_t mins, 
 										vec3_t maxs, vec3_t end, int passEntityNum, 
-										int contentmask );
+										int contentmask, int rSaberNum, int rBladeNum);
 //[/RealTrace]
 void G_RunMissile( gentity_t *ent ) {
 	vec3_t		origin, groundSpot;
@@ -960,7 +960,7 @@ void G_RunMissile( gentity_t *ent ) {
 	}
 	// trace a line from the previous position to the current position
 	//[RealTrace]
-	G_RealTrace( NULL, &tr, ent->r.currentOrigin, ent->r.mins, ent->r.maxs, origin, passent, ent->clipmask );
+	G_RealTrace( NULL, &tr, ent->r.currentOrigin, ent->r.mins, ent->r.maxs, origin, passent, ent->clipmask, -1, -1 );
 
 	/*
 	if (d_projectileGhoul2Collision.integer)

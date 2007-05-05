@@ -26,6 +26,7 @@ Version 0.0.9v:
 
 		Saber Combat:
 			- Boosted the MP cost of getting Parried to 4.
+			- Reenabled the bounding box saber block to improve saber block visuals.
 
 			Saber Locks:
 				- Can't use Force Push in saberlocks.

@@ -3730,7 +3730,7 @@ static GAME_INLINE int Finish_RealTrace( trace_t *results, trace_t *closestTrace
 //			REALTRACE_SABERBLOCKHIT = hit a player who used a bounding box dodge saber block
 int G_RealTrace(gentity_t *SaberAttacker, trace_t *tr, vec3_t start, vec3_t mins, 
 										vec3_t maxs, vec3_t end, int passEntityNum, 
-										int contentmask )
+										int contentmask, int rSaberNum, int rBladeNum)
 {
 	//the current start position of the traces.  
 	//This is advanced to the edge of each bound box after each saber/ghoul2 entity is processed.
@@ -3781,9 +3781,13 @@ int G_RealTrace(gentity_t *SaberAttacker, trace_t *tr, vec3_t start, vec3_t mins
 
 		if (currentEnt->inuse && currentEnt->client)
 		{//initial trace hit a humanoid
-			/*  Replaced the bbox blocking stuff with the precog blocking in StartSaberMissileBlockCheck
-			if(OJP_SaberCanBlock(currentEnt, atk, qtrue, tr->endpos, rSaberNum, rBladeNum))
+			if(OJP_SaberCanBlock(currentEnt, SaberAttacker, qtrue, tr->endpos, rSaberNum, rBladeNum))
 			{//hit victim is willing to bbox block with their jedi saber abilities.
+				if(!VectorCompare(start, currentStart))
+				{//didn't do trace with original start point.  Recalculate the real fraction before we do our comparision.
+					tr->fraction = CalcTraceFraction(start, end, tr->endpos);
+				}
+
 				if(tr->fraction < closestFraction)
 				{//this is the closest known hit object for this trace, so go ahead and count the bbox block as the closest impact.
 					RestoreRealTraceContent();
@@ -3797,7 +3801,6 @@ int G_RealTrace(gentity_t *SaberAttacker, trace_t *tr, vec3_t start, vec3_t mins
 					return Finish_RealTrace(tr, &closestTrace, start, end);
 				}
 			}
-			*/
 
 			//ok, no bbox block this time.  So, try a ghoul2 trace then.
 			G_G2TraceCollide(tr, currentStart, end, mins, maxs);
@@ -6003,7 +6006,7 @@ static GAME_INLINE qboolean CheckSaberDamage(gentity_t *self, int rSaberNum, int
 
 
 	realTraceResult = G_RealTrace(self, &tr, saberStart, saberTrMins, saberTrMaxs, saberEnd, 
-		self->s.number, trMask);
+		self->s.number, trMask, rSaberNum, rBladeNum);
 
 
 	if ( tr.fraction == 1 && !tr.startsolid )
