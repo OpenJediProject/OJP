@@ -2497,11 +2497,11 @@ static qboolean PM_CheckEnemyPresence( int dir, float radius )
 //keep them from screwing up the fatigue system balance.
 
 //racc - force cost of doing cartwheels.
-#define SABER_ALT_ATTACK_POWER_LR	3
+#define SABER_ALT_ATTACK_POWER_LR	FATIGUE_CARTWHEEL
 //#define SABER_ALT_ATTACK_POWER_LR	10//30?
 
 //racc - force cost of doing all the special saber attacks (other than the katas and cartwheels)
-#define SABER_ALT_ATTACK_POWER_FB	3//30/50?
+//#define SABER_ALT_ATTACK_POWER_FB	3 NUAM
 //#define SABER_ALT_ATTACK_POWER_FB	25//30/50?
 //[/SaberSys]
 
@@ -2848,13 +2848,19 @@ saberMoveName_t PM_SaberAttackForMovement(saberMoveName_t curmove)
 				pm->ps->weaponTime <= 0 &&
 				pm->ps->forceHandExtend == HANDEXTEND_NONE &&
 				(pm->cmd.buttons & BUTTON_ATTACK)&&
-				BG_EnoughForcePowerForMove(SABER_ALT_ATTACK_POWER_FB) )
+				//[SaberSys]
+				BG_EnoughForcePowerForMove(FATIGUE_JUMPATTACK) )
+				//BG_EnoughForcePowerForMove(SABER_ALT_ATTACK_POWER_FB) )
+				//[/SaberSys]
 			{ //DUAL/STAFF JUMP ATTACK
 				newmove = PM_SaberJumpAttackMove2();
 				if ( newmove != LS_A_T2B 
 					&& newmove != LS_NONE )
 				{
-					BG_ForcePowerDrain(pm->ps, FP_GRIP, SABER_ALT_ATTACK_POWER_FB);
+					//[SaberSys]
+					BG_ForcePowerDrain(pm->ps, FP_GRIP, FATIGUE_JUMPATTACK);
+					//BG_ForcePowerDrain(pm->ps, FP_GRIP, SABER_ALT_ATTACK_POWER_FB);
+					//[/SaberSys]
 				}
 			}
 			else if (!noSpecials&&
@@ -2868,7 +2874,10 @@ saberMoveName_t PM_SaberAttackForMovement(saberMoveName_t curmove)
 				PM_GroundDistance() < 32 &&
 				!BG_InSpecialJump(pm->ps->legsAnim) &&
 				!BG_SaberInSpecialAttack(pm->ps->torsoAnim)&&
-				BG_EnoughForcePowerForMove(SABER_ALT_ATTACK_POWER_FB))
+				//[SaberSys]
+				BG_EnoughForcePowerForMove(FATIGUE_JUMPATTACK))
+				//BG_EnoughForcePowerForMove(SABER_ALT_ATTACK_POWER_FB))
+				//[/SaberSys]
 			{ //FLIP AND DOWNWARD ATTACK
 				//trace_t tr;
 
@@ -2878,7 +2887,10 @@ saberMoveName_t PM_SaberAttackForMovement(saberMoveName_t curmove)
 					if ( newmove != LS_A_T2B
 						&& newmove != LS_NONE )
 					{
-						BG_ForcePowerDrain(pm->ps, FP_GRIP, SABER_ALT_ATTACK_POWER_FB);
+						//[SaberSys]
+						BG_ForcePowerDrain(pm->ps, FP_GRIP, FATIGUE_JUMPATTACK);
+						//BG_ForcePowerDrain(pm->ps, FP_GRIP, SABER_ALT_ATTACK_POWER_FB);
+						//[/SaberSys]
 					}
 				}
 			}
@@ -2915,23 +2927,35 @@ saberMoveName_t PM_SaberAttackForMovement(saberMoveName_t curmove)
 				(pm->ps->pm_flags & PMF_DUCKED) &&
 				pm->ps->weaponTime <= 0 &&
 				!BG_SaberInSpecialAttack(pm->ps->torsoAnim)&&
-				BG_EnoughForcePowerForMove(SABER_ALT_ATTACK_POWER_FB))
+				//[SaberSys]
+				BG_EnoughForcePowerForMove(FATIGUE_GROUNDATTACK))
+				//BG_EnoughForcePowerForMove(SABER_ALT_ATTACK_POWER_FB))
+				//[/SaberSys]
 			{ //LUNGE (weak)
 				newmove = PM_SaberLungeAttackMove( noSpecials );
 				if ( newmove != LS_A_T2B
 					&& newmove != LS_NONE )
 				{
-					BG_ForcePowerDrain(pm->ps, FP_GRIP, SABER_ALT_ATTACK_POWER_FB);
+					//[SaberSys]
+					BG_ForcePowerDrain(pm->ps, FP_GRIP, FATIGUE_GROUNDATTACK);
+					//BG_ForcePowerDrain(pm->ps, FP_GRIP, SABER_ALT_ATTACK_POWER_FB);
+					//[/SaberSys]
 				}
 			}
 			else if ( !noSpecials )
 			{
 				saberMoveName_t stabDownMove = PM_CheckStabDown();
 				if (stabDownMove != LS_NONE 
-					&& BG_EnoughForcePowerForMove(SABER_ALT_ATTACK_POWER_FB) )
+					//[SaberSys]
+					&& BG_EnoughForcePowerForMove(FATIGUE_GROUNDATTACK) )
+					//&& BG_EnoughForcePowerForMove(SABER_ALT_ATTACK_POWER_FB) )
+					//[/SaberSys]
 				{//racc - stab down at someone on the ground.
 					newmove = stabDownMove;
-					BG_ForcePowerDrain(pm->ps, FP_GRIP, SABER_ALT_ATTACK_POWER_FB);
+					//[SaberSys]
+					BG_ForcePowerDrain(pm->ps, FP_GRIP, FATIGUE_GROUNDATTACK);
+					//BG_ForcePowerDrain(pm->ps, FP_GRIP, SABER_ALT_ATTACK_POWER_FB);
+					//[/SaberSys]
 				}
 				else
 				{
@@ -3805,7 +3829,10 @@ void PM_WeaponLightsaber(void)
 		{
 			if ( (pm->cmd.buttons&BUTTON_ATTACK) )
 			{
-				if ( BG_EnoughForcePowerForMove(SABER_ALT_ATTACK_POWER_FB) && !pm->ps->saberInFlight )
+				//[SaberSys]
+				if ( BG_EnoughForcePowerForMove(FATIGUE_GROUNDATTACK) && !pm->ps->saberInFlight )
+				//if ( BG_EnoughForcePowerForMove(SABER_ALT_ATTACK_POWER_FB) && !pm->ps->saberInFlight )
+				//[SaberSys]
 				{
 					if ( PM_CanDoRollStab() )
 					{
@@ -3816,7 +3843,10 @@ void PM_WeaponLightsaber(void)
 							PM_AddEvent(EV_SABER_UNHOLSTER);
 						}
 						PM_SetSaberMove( LS_ROLL_STAB );
-						BG_ForcePowerDrain(pm->ps, FP_GRIP, SABER_ALT_ATTACK_POWER_FB);
+						//[SaberSys]
+						BG_ForcePowerDrain(pm->ps, FP_GRIP, FATIGUE_GROUNDATTACK);
+						//BG_ForcePowerDrain(pm->ps, FP_GRIP, SABER_ALT_ATTACK_POWER_FB);
+						//[/SaberSys]
 					}
 				}
 			}
@@ -4907,13 +4937,19 @@ weapChecks:
 						//PM_GroundDistance() < 32 &&
 						!BG_InSpecialJump(pm->ps->legsAnim) &&
 						!BG_SaberInSpecialAttack(pm->ps->torsoAnim)&&
- 						BG_EnoughForcePowerForMove( SABER_ALT_ATTACK_POWER_FB ))
+						//[SaberSys]
+						BG_EnoughForcePowerForMove( FATIGUE_JUMPATTACK ))
+ 						//BG_EnoughForcePowerForMove( SABER_ALT_ATTACK_POWER_FB ))
+						//[SaberSys]
 					{ //attempt to do a DFA
 						newmove = PM_SaberJumpAttackMove();
 						if ( newmove != LS_A_T2B
 							&& newmove != LS_NONE )
 						{
-							BG_ForcePowerDrain(pm->ps, FP_GRIP, SABER_ALT_ATTACK_POWER_FB);
+							//[SaberSys]
+							BG_ForcePowerDrain(pm->ps, FP_GRIP, FATIGUE_JUMPATTACK);
+							//BG_ForcePowerDrain(pm->ps, FP_GRIP, SABER_ALT_ATTACK_POWER_FB);
+							//[/SaberSys]
 						}
 					}
 					else

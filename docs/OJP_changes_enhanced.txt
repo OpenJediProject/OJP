@@ -17,6 +17,9 @@ Version 0.0.9v:
 
 	Improvements/Fixes:
 
+		Fatigue:
+			- Fixed the cartwheel/backflips/jump attack FP costs to account for the new FP cost of jumps.
+
 		Jetpack:
 			- Increased fuel consumption rate.  Decreased fuel regeneration rate.
 

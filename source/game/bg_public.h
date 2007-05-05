@@ -82,7 +82,7 @@
 //[FatigueSys]
 //[FatigueDefines]
 //Fatigue for backflips
-#define FATIGUE_BACKFLIP		3
+#define FATIGUE_BACKFLIP		-FATIGUE_JUMP + 3
 
 //Fatigue for jumps (This is the basic cost of a jump, force jumps cost points in addition to this)
 #define FATIGUE_JUMP			10
@@ -101,6 +101,15 @@
 
 //the fatigue caused by getting hit by a kick.
 #define FATIGUE_KICKHIT			5
+
+//the fatigue for doing cartwheels.
+#define FATIGUE_CARTWHEEL		-FATIGUE_JUMP + 3
+
+//FP cost of saber ground attacks
+#define FATIGUE_GROUNDATTACK	3	
+	
+//FP cost of saber jump attacks
+#define FATIGUE_JUMPATTACK		-FATIGUE_JUMP + 3
 //[/FatigueDefines]
 //[/FatigueSys]
 
