@@ -2411,6 +2411,11 @@ static qboolean PM_CheckJump( void )
 			if( BG_InBackFlip( pm->ps->legsAnim ) )
 			{
 			}
+			else
+			{
+ 				BG_ForcePowerDrain( pm->ps, FP_LEVITATION, 1 );
+			}
+			/*
 			else if ( pm->gametype == GT_DUEL 
 			//if ( pm->gametype == GT_DUEL 
 			//[/FatigueSys]
@@ -2422,6 +2427,8 @@ static qboolean PM_CheckJump( void )
 			{
 				BG_ForcePowerDrain( pm->ps, FP_LEVITATION, 5 );
 			}
+			*/
+			//[/FatigueSys]
 			if (pm->ps->fd.forcePowerLevel[FP_LEVITATION] >= FORCE_LEVEL_2)
 			{
 				pm->ps->fd.forcePowerDebounce[FP_LEVITATION] = pm->cmd.serverTime + 300;

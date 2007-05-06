@@ -55,6 +55,13 @@ void BG_ForcePowerDrain( playerState_t *ps, forcePowers_t forcePower, int overri
 		return;
 	}
 
+	//[FatigueSys]
+	//want consistant drain now, but don't drain FP when the player is dropping from the jump
+	if (forcePower == FP_LEVITATION && ps->velocity[2] <= 0)
+	{//don't drain FP after the top of the arc since the player is just dropping anyway.
+		return;
+	}
+	/*
 	if (forcePower == FP_LEVITATION)
 	{ //special case
 		int jumpDrain = 0;
@@ -109,6 +116,8 @@ void BG_ForcePowerDrain( playerState_t *ps, forcePowers_t forcePower, int overri
 
 		return;
 	}
+	*/
+	//[/FatigueSys]
 
 	ps->fd.forcePower -= drain;
 	if ( ps->fd.forcePower < 0 )

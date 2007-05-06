@@ -20,6 +20,9 @@ Version 0.0.9v:
 		Fatigue:
 			- Fixed the cartwheel/backflips/jump attack FP costs to account for the new FP cost of jumps.
 
+		Force Powers:
+			- Dramatically reduced the continuous FP cost of Force Jump.
+
 		Jetpack:
 			- Increased fuel consumption rate.  Decreased fuel regeneration rate.
 
