@@ -783,6 +783,19 @@ trap_FS_FCloseFile(f);//[TicketFix143]
 	}
 
 	//[ExpSys]
+	//boost size of forceinfo to match the current number of skills (backwards compatibility thingy)
+	if( strlen(bs->forceinfo) < (NUM_TOTAL_SKILLS + 4) )
+	{//forceinfo isn't long enough, boost the size...
+		for(i=NUM_FORCE_POWERS+4; i < (NUM_TOTAL_SKILLS + 4); i++)
+		{
+			if(bs->forceinfo[i] < '0' || bs->forceinfo[i] > '3')
+			{//bad value, reset
+				bs->forceinfo[i] = '0';
+			}
+		}
+		bs->forceinfo[NUM_TOTAL_SKILLS + 4 + 1] = '\0';
+	}
+
 	i = 4;
 	for(i = 4; (i - 4) < NUM_FORCE_POWERS; i++)
 	{
@@ -880,6 +893,58 @@ trap_FS_FCloseFile(f);//[TicketFix143]
 			bs->botWeaponWeights[WP_DET_PACK] = atoi(readbuf);
 		}
 	}
+
+	//[ExpSys]
+	//give bots weapon skills based on their weapon weights.
+	for(i=0; i < WP_NUM_WEAPONS; i++)
+	{
+		int skillLevel = FORCE_LEVEL_0;
+		if(bs->botWeaponWeights[i] >= 11)
+		{//master level
+			skillLevel = FORCE_LEVEL_3;
+		}
+		else if(bs->botWeaponWeights[i] > 5)
+		{
+			skillLevel = FORCE_LEVEL_2;
+		}
+		else if(bs->botWeaponWeights[i] > 0)
+		{//has weapon
+			skillLevel = FORCE_LEVEL_1;
+		}
+		else
+		{//don't want this weapon.
+			continue;
+		}
+
+		switch(i)
+		{	
+		case WP_BRYAR_PISTOL:
+			bs->forceinfo[NUM_FORCE_POWERS+SK_PISTOL + 4] = '0' + skillLevel;
+			break;
+		case WP_BLASTER:
+			bs->forceinfo[NUM_FORCE_POWERS+SK_BLASTER + 4] = '0' + skillLevel;
+			break;
+		case WP_DISRUPTOR:
+			bs->forceinfo[NUM_FORCE_POWERS+SK_DISRUPTOR + 4] = '0' + skillLevel;
+			break;
+		case WP_BOWCASTER:
+			bs->forceinfo[NUM_FORCE_POWERS+SK_BOWCASTER + 4] = '0' + skillLevel;
+			break;
+		case WP_REPEATER:
+			bs->forceinfo[NUM_FORCE_POWERS+SK_REPEATER + 4] = '0' + skillLevel;
+			break;
+		case WP_ROCKET_LAUNCHER:
+			bs->forceinfo[NUM_FORCE_POWERS+SK_ROCKET + 4] = '0' + skillLevel;
+			break;
+		case WP_THERMAL:
+			bs->forceinfo[NUM_FORCE_POWERS+SK_THERMAL + 4] = '0' + skillLevel;
+			break;
+		case WP_DET_PACK:
+			bs->forceinfo[NUM_FORCE_POWERS+SK_DETPACK + 4] = '0' + skillLevel;
+			break;
+		};
+	}
+	//[/ExpSys]
 
 	bs->lovednum = 0;
 

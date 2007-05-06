@@ -17,6 +17,9 @@ Version 0.0.9v:
 
 	Improvements/Fixes:
 
+		Bots:
+			- Bots now get weapon skill points based on their botfile's BotWeaponWeights.
+
 		Fatigue:
 			- Fixed the cartwheel/backflips/jump attack FP costs to account for the new FP cost of jumps.
 
