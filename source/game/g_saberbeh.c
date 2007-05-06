@@ -246,10 +246,6 @@ void SabBeh_AttackVsAttack( gentity_t *self, sabmech_t *mechSelf,
 	}
 }
 
-//This is the attack parry rate for the bots since bots don't block intelligently
-//This is multipled by the bot's skill level (which can be 1-5) and is actually a percentage of the total parries as
-//set by BOT_PARRYRATE.
-#define BOT_ATTACKPARRYRATE		20
 extern bot_state_t *botstates[MAX_CLIENTS];
 extern qboolean BG_SuperBreakWinAnim( int anim );
 extern stringID_table_t SaberMoveTable[];
@@ -301,13 +297,13 @@ void SabBeh_AttackVsBlock( gentity_t *attacker, sabmech_t *mechAttacker,
 		if(parried)
 		{//defender parried the attack fake.
 			*attackerMishap = SabBeh_RollBalance(attacker, mechAttacker, atkparry);
-			SabBeh_AddBalance(attacker, mechAttacker, 6, qtrue);
+			SabBeh_AddBalance(attacker, mechAttacker, MPCOST_PARRIED_ATTACKFAKE, qtrue);
 #ifdef _DEBUG
 			mechAttacker->behaveMode = SABBEHAVE_ATTACK;
 #endif
 			attacker->client->ps.userInt3 |= ( 1 << FLAG_PARRIED );
 
-			SabBeh_AddBalance(blocker, mechBlocker, -4, qfalse);
+			SabBeh_AddBalance(blocker, mechBlocker, MPCOST_PARRYING_ATTACKFAKE, qfalse);
 #ifdef _DEBUG
 			mechBlocker->behaveMode = SABBEHAVE_BLOCK;
 #endif
@@ -364,13 +360,13 @@ void SabBeh_AttackVsBlock( gentity_t *attacker, sabmech_t *mechAttacker,
 			{
 				*attackerMishap = SabBeh_RollBalance(attacker, mechAttacker, atkparry);
 			}
-			SabBeh_AddBalance(attacker, mechAttacker, 3, qtrue);
+			SabBeh_AddBalance(attacker, mechAttacker, MPCOST_PARRIED, qtrue);
 #ifdef _DEBUG
 			mechAttacker->behaveMode = SABBEHAVE_ATTACKPARRIED;
 #endif
 			attacker->client->ps.userInt3 |= ( 1 << FLAG_PARRIED );
 
-			SabBeh_AddBalance(blocker, mechBlocker, -3, qfalse);
+			SabBeh_AddBalance(blocker, mechBlocker, MPCOST_PARRYING, qfalse);
 			
 		}
 		else

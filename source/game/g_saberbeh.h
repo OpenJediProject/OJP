@@ -7,9 +7,11 @@
 //This is the attack parry rate for the bots since bots don't block intelligently
 //This is multipled by the bot's skill level (which can be 1-5) and is actually a percentage of the total parries as
 //set by BOT_PARRYRATE.
-#define BOT_ATTACKPARRYRATE		20
-#define MPCOST_PARRIED			4		//base MP cost of getting parried.	
-
+#define BOT_ATTACKPARRYRATE			20
+#define MPCOST_PARRIED				3		//base MP cost of getting parried.	
+#define MPCOST_PARRIED_ATTACKFAKE	6		//base MP cost of an attack fake getting parried.
+#define MPCOST_PARRYING				-3		//MP you deplete by parrying in general
+#define MPCOST_PARRYING_ATTACKFAKE	-4		//MP you deplete by parrying an attackfake
 //[SaberSys]
 //This struct holds all the relivent saber mechanics data
 struct sabmech_s {
