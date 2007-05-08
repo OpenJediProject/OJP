@@ -15,6 +15,9 @@ Version 0.0.9v:
 		New Menus (NewMenus):  
 			Brand new ingame menus and console background!  Thanks to Bjusterbaarlik!
 
+		Windows Installer:
+			- Added Windows Installer for OJP Enhanced.  
+			- Developers, you can now make your own OJP Enhanced distros using the /Enhanced/MakeWindowsInstaller.bat file.  NOTE:  You'll still have to compile the .dlls yourself.
 	Improvements/Fixes:
 
 		Bots:
