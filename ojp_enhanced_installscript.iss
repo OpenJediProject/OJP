@@ -27,13 +27,14 @@ Source: "ojp_enhanceddlls.pk3"; DestDir: "{app}\GameData\ojpenhanced"; Flags: ig
 Source: "ojp_enhancedstuff.pk3"; DestDir: "{app}\GameData\ojpenhanced"; Flags: ignoreversion
 Source: "docs\*"; DestDir: "{app}\GameData\ojpenhanced\docs"; Flags: ignoreversion
 Source: "..\Basic\docs\*"; DestDir: "{app}\GameData\ojpenhanced\docs"; Flags: ignoreversion
+Source: "..\resources\OJP File Icon\OJP.ico"; DestDir: "{app}\GameData\ojpenhanced"; Flags: ignoreversion
 ; NOTE: Don't use "Flags: ignoreversion" on any shared system files
 
 [Icons]
-Name: "{group}\OJP Enhanced"; Filename: "{app}\GameData\jamp.exe"; Parameters: "+set fs_game ojpenhanced"
+Name: "{group}\OJP Enhanced"; Filename: "{app}\GameData\jamp.exe"; Parameters: "+set fs_game ojpenhanced"; IconFilename: "{app}\GameData\ojpenhanced\OJP.ico"
 Name: "{group}\{cm:ProgramOnTheWeb,OJP Enhanced}"; Filename: "http://ojp.jediknight.net/"
 Name: "{group}\{cm:UninstallProgram,OJP Enhanced}"; Filename: "{uninstallexe}"
-Name: "{commondesktop}\OJP Enhanced"; Filename: "{app}\GameData\jamp.exe"; Tasks: desktopicon; Parameters: "+set fs_game ojpenhanced"
+Name: "{commondesktop}\OJP Enhanced"; Filename: "{app}\GameData\jamp.exe"; Tasks: desktopicon; Parameters: "+set fs_game ojpenhanced"; IconFilename: "{app}\GameData\ojpenhanced\OJP.ico"
 
 [Run]
 Filename: "{app}\GameData\jamp.exe"; Description: "{cm:LaunchProgram,OJP Enhanced}"; Flags: nowait postinstall skipifsilent; Parameters: "+set fs_game ojpenhanced"
