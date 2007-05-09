@@ -17,7 +17,9 @@ Version 0.0.9v:
 
 		Windows Installer:
 			- Added Windows Installer for OJP Enhanced.  
-			- Developers, you can now make your own OJP Enhanced distros using the /Enhanced/MakeWindowsInstaller.bat file.  NOTE:  You'll still have to compile the .dlls yourself.
+			- Developers, you can now make your own OJP Enhanced distros using the /Enhanced/MakeWindowsInstaller.bat file.
+			- Developers can also automate the pk3 creation or dll compile process using the MakePK3.bat and MakeOJP.bat files.
+
 	Improvements/Fixes:
 
 		Bots:
