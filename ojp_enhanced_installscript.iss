@@ -8,7 +8,7 @@ AppPublisher=OJP Team
 AppPublisherURL=http://ojp.jediknight.net/
 AppSupportURL=http://ojp.jediknight.net/
 AppUpdatesURL=http://ojp.jediknight.net/
-DefaultDirName=C:\Program Files\Lucasarts\Starwars Jedi Knight Jedi Academy\
+DefaultDirName={reg:HKLM\SOFTWARE\LucasArts\Star Wars Jedi Knight Jedi Academy\1.0,Install Path|{pf}\LucasArts\Star Wars Jedi Knight Jedi Academy\}
 DefaultGroupName=OJP Enhanced
 AllowNoIcons=yes
 OutputBaseFilename=setup
@@ -25,17 +25,20 @@ Name: "desktopicon"; Description: "{cm:CreateDesktopIcon}"; GroupDescription: "{
 [Files]
 Source: "ojp_enhanceddlls.pk3"; DestDir: "{app}\GameData\ojpenhanced"; Flags: ignoreversion
 Source: "ojp_enhancedstuff.pk3"; DestDir: "{app}\GameData\ojpenhanced"; Flags: ignoreversion
+Source: "ojpenhanced\trueview.cfg"; DestDir: "{app}\GameData\ojpenhanced"; Flags: ignoreversion
 Source: "docs\*"; DestDir: "{app}\GameData\ojpenhanced\docs"; Flags: ignoreversion
 Source: "..\Basic\docs\*"; DestDir: "{app}\GameData\ojpenhanced\docs"; Flags: ignoreversion
 Source: "..\resources\OJP File Icon\OJP.ico"; DestDir: "{app}\GameData\ojpenhanced"; Flags: ignoreversion
 ; NOTE: Don't use "Flags: ignoreversion" on any shared system files
 
 [Icons]
-Name: "{group}\OJP Enhanced"; Filename: "{app}\GameData\jamp.exe"; Parameters: "+set fs_game ojpenhanced"; IconFilename: "{app}\GameData\ojpenhanced\OJP.ico"
+Name: "{group}\OJP Enhanced"; Filename: "{app}\GameData\jamp.exe"; Parameters: "+set fs_game ojpenhanced"; IconFilename: "{app}\GameData\ojpenhanced\OJP.ico"; WorkingDir: "{app}\GameData"
 Name: "{group}\{cm:ProgramOnTheWeb,OJP Enhanced}"; Filename: "http://ojp.jediknight.net/"
 Name: "{group}\{cm:UninstallProgram,OJP Enhanced}"; Filename: "{uninstallexe}"
-Name: "{commondesktop}\OJP Enhanced"; Filename: "{app}\GameData\jamp.exe"; Tasks: desktopicon; Parameters: "+set fs_game ojpenhanced"; IconFilename: "{app}\GameData\ojpenhanced\OJP.ico"
+Name: "{commondesktop}\OJP Enhanced"; Filename: "{app}\GameData\jamp.exe"; Tasks: desktopicon; Parameters: "+set fs_game ojpenhanced"; IconFilename: "{app}\GameData\ojpenhanced\OJP.ico"; WorkingDir: "{app}\GameData"
 
 [Run]
 Filename: "{app}\GameData\jamp.exe"; Description: "{cm:LaunchProgram,OJP Enhanced}"; Flags: nowait postinstall skipifsilent; Parameters: "+set fs_game ojpenhanced"
 
+[UninstallDelete]
+Type: files; Name: "{app}\GameData\ojpenhanced\*.dll"
