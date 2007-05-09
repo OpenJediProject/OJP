@@ -9,6 +9,7 @@ rem ****************
 
 set OLDDIR=%CD%
 set OJPSLN=source\OJP Enhanced.sln
+set COMPILER=devenv
 
 ECHO ================
 ECHO Starting Compile
@@ -16,7 +17,9 @@ ECHO ================
 
 chdir /d "%VS80COMNTOOLS%"
 cd ../IDE
-devenv "%OLDDIR%\%OJPSLN%" /build Final
+IF EXIST VCExpress.exe set COMPILER=VCExpress
+
+%COMPILER% "%OLDDIR%\%OJPSLN%" /build Final
 chdir /d "%OLDDIR%"
 
 ECHO.
