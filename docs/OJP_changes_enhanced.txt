@@ -30,6 +30,9 @@ Version 0.0.9v:
 
 		Force Powers:
 			- Dramatically reduced the continuous FP cost of Force Jump.
+		Weapons:
+			- Reduced the Clone Rifles alternate fire blast radius to 1/2 of what it is now.
+			- Raised the cost of the Clone Rifles alternate fire to 40 ammo cells.
 
 		Jetpack:
 			- Increased fuel consumption rate.  Decreased fuel regeneration rate.
