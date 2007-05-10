@@ -45,6 +45,9 @@ Version 0.0.9v:
 
 			Blocking:
 				- Saber block cost is doubled when a player has to block an attack during their bolt block delay.
+				- Bolt reflections now occur at a much lower rate.
+				- Manual reflecting doesn't work 100% of the time anymore.
+				- Manually reflected bolts have some aim slop based on the defender's saber defense level.
 			
 			Misc:
 				- Boosted the MP cost of getting Parried to 3.

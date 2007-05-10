@@ -1168,12 +1168,22 @@ passthrough:
 //=============================================================================
 
 //[BoltBlockSys]
-int BoltReflectRate[NUM_FORCE_POWER_LEVELS] =
+//bolt reflection rate without manual reflections being attempted.
+int NaturalBoltReflectRate[NUM_FORCE_POWER_LEVELS] =
 {
 	0,	//FORCE_LEVEL_0
-	33,	//FORCE_LEVEL_1
-	50, //FORCE_LEVEL_2
-	66
+	10,	//FORCE_LEVEL_1
+	20, //FORCE_LEVEL_2
+	25
+};
+
+//bolt reflection rate while attempting manual reflections.
+int ManualBoltReflectRate[NUM_FORCE_POWER_LEVELS] =
+{
+	0,	//FORCE_LEVEL_0
+	20,	//FORCE_LEVEL_1
+	40, //FORCE_LEVEL_2
+	50
 };
 qboolean PM_SaberInStart( int move );
 extern int OJP_SaberBlockCost(gentity_t *defender, gentity_t *attacker, vec3_t hitLoc);
@@ -1184,10 +1194,8 @@ void OJP_HandleBoltBlock(gentity_t *bolt, gentity_t *player, trace_t *trace)
 	//I created this function to unite the duplicated code in G_MissileImpact
 	vec3_t fwd;
 	gentity_t *te;
-	int otherDefLevel = player->client->ps.fd.forcePowerLevel[FP_SABER_DEFENSE];
-	//[ExpSys]
+	int otherDefLevel;
 	gentity_t *prevOwner = &g_entities[bolt->r.ownerNum]; //previous owner of the bolt.  Used for awarding experience to attacker.
-	//[/ExpSys]
 
 	//create the bolt saber block effect
 	te = G_TempEntity( bolt->r.currentOrigin, EV_SABER_BLOCK );
@@ -1197,27 +1205,21 @@ void OJP_HandleBoltBlock(gentity_t *bolt, gentity_t *player, trace_t *trace)
 	te->s.weapon = 0;//saberNum
 	te->s.legsAnim = 0;//bladeNum
 
-	//retooled the conditions under which we lose deflection ability
-	if(player->client->ps.groundEntityNum == ENTITYNUM_NONE || //while in the air
-		!WalkCheck( player ) ) //while running
-	{
-		otherDefLevel -= 1;
-	}
-
-	if(otherDefLevel > FORCE_LEVEL_1 
-		&& Q_irand(0, 99) >= BoltReflectRate[player->client->ps.fd.forcePowerLevel[FP_SABER_DEFENSE]])
-	{//player failed reflection roll, just do a deflect.
-		otherDefLevel = FORCE_LEVEL_1;
-	}
-
+	//determine reflection level.
 	if((BG_SaberInAttack(player->client->ps.saberMove)
-		|| PM_SaberInStart(player->client->ps.saberMove)
-		|| PM_SaberInReturn(player->client->ps.saberMove)) )
-	{//only "deflected" the shot, but we did a manual block so we're boosting this up to a reflection.
-		//G_Printf("%i: %i manually reflected a bolt.\n", level.time, player->s.number);
-		otherDefLevel = player->client->ps.fd.forcePowerLevel[FP_SABER_DEFENSE];
-		//manual reflections tire the player.
-		BG_AddFatigue(&player->client->ps, 1);
+	|| PM_SaberInStart(player->client->ps.saberMove)
+	|| PM_SaberInReturn(player->client->ps.saberMove)) 
+	&& Q_irand(0, 99) <  ManualBoltReflectRate[player->client->ps.fd.forcePowerLevel[FP_SABER_DEFENSE]])
+	{//manual reflection, bounce to the crosshair, roughly
+		otherDefLevel = FORCE_LEVEL_3;
+	}
+	else if(Q_irand(0, 99) <  NaturalBoltReflectRate[player->client->ps.fd.forcePowerLevel[FP_SABER_DEFENSE]])
+	{//natural reflection, bounce back to the attacker.
+		otherDefLevel = FORCE_LEVEL_2;
+	}
+	else
+	{//just deflect the attack
+		otherDefLevel = FORCE_LEVEL_1;
 	}
 
 	//G_Printf("%i: Bounced Bolt @ Level %i\n", player->s.number, otherDefLevel);
@@ -1234,10 +1236,17 @@ void OJP_HandleBoltBlock(gentity_t *bolt, gentity_t *player, trace_t *trace)
 	}
 	else
 	{//FORCE_LEVEL_3, reflect the bolt to whereever the player is aiming.
-		vec3_t	bounce_dir;
+		vec3_t	bounce_dir, angs;
 		float	speed;
 		//gentity_t	*owner = ent;
 		//int		isowner = 0;
+
+		//add some slop factor to the manual reflections.
+		float slopFactor = MISHAP_MAXINACCURACY * (FORCE_LEVEL_3 - player->client->ps.fd.forcePowerLevel[FP_SABER_DEFENSE])/FORCE_LEVEL_3;
+		vectoangles( fwd, angs );
+		angs[PITCH] += flrand(-slopFactor, slopFactor);
+		angs[YAW] += flrand(-slopFactor, slopFactor);
+		AngleVectors( angs, fwd, NULL, NULL );
 
 		//G_Printf("%i: %i: Level 3 Reflect\n", level.time, player->s.number);
 
