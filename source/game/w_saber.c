@@ -94,6 +94,7 @@ qboolean ButterFingers(gentity_t *saberent, gentity_t *saberOwner, gentity_t *ot
 
 #define DODGE_BOLTBLOCK			5	//standard DP cost to block a missile bolt
 #define DODGE_REPEATERBLOCK		2	//the cost of blocking repeater shots is lower since the repeater shoots much faster.
+
 //This is the amount of DP that a player gains from making a successful parry while low on DP
 #define DODGE_LOWDPBOOST		10
 
@@ -3404,37 +3405,34 @@ int OJP_SaberBlockCost(gentity_t *defender, gentity_t *attacker, vec3_t hitLoc)
 	{//flip stabs do more DP
 		saberBlockCost = 2*BasicSaberBlockCost(attacker->client->ps.fd.saberAnimLevel);
 	}
-	
-	else if(!WalkCheck(attacker))
-	{
-		if(!(defender->client->ps.userInt3 & ( 1 << FLAG_SLOWBOUNCE ))
-		|| !(defender->client->ps.userInt3 & ( 1 << FLAG_OLDSLOWBOUNCE )))
-		{//we're running, increase DP cost to the defender
-			saberBlockCost = 2*BasicSaberBlockCost(attacker->client->ps.fd.saberAnimLevel);
+	else
+	{//"normal" swing moves
+		if(attacker->client->ps.userInt3 & (1 << FLAG_ATTACKFAKE)) 
+		{//attacker is in an attack fake
+			if(attacker->client->ps.fd.saberAnimLevel == SS_STRONG
+				&& !G_BlockIsParry(defender, attacker, hitLoc))
+			{//Red does additional DP damage with attack fakes if they aren't parried.
+				saberBlockCost = (BasicSaberBlockCost(attacker->client->ps.fd.saberAnimLevel) * 1.35);
+			}
+			else
+			{
+				saberBlockCost = (BasicSaberBlockCost(attacker->client->ps.fd.saberAnimLevel) * 1.25);
+			}
 		}
 		else
-		{
+		{//normal saber block
 			saberBlockCost = BasicSaberBlockCost(attacker->client->ps.fd.saberAnimLevel);
 		}
-	}
-	
-	else if(attacker->client->ps.userInt3 & (1 << FLAG_ATTACKFAKE)) 
-	{//attacker is in an attack fake
-		if(attacker->client->ps.fd.saberAnimLevel == SS_STRONG
-			&& !G_BlockIsParry(defender, attacker, hitLoc))
-		{//Red does additional DP damage with attack fakes if they aren't parried.
-			saberBlockCost = (BasicSaberBlockCost(attacker->client->ps.fd.saberAnimLevel) * 1.35);
-		}
-		else
-		{
-			saberBlockCost = (BasicSaberBlockCost(attacker->client->ps.fd.saberAnimLevel) * 1.25);
+
+		//add running damage bonus to normal swings but don't apply if the defender is slowbouncing
+		if(!WalkCheck(attacker) 
+			&& !(defender->client->ps.userInt3 & ( 1 << FLAG_SLOWBOUNCE ))
+			&& !(defender->client->ps.userInt3 & ( 1 << FLAG_OLDSLOWBOUNCE ))) 
+		{//defender is slow bouncing, don't apply run bonus
+			saberBlockCost *= 2;	
 		}
 	}
-	else
-	{//normal saber block
-		saberBlockCost = BasicSaberBlockCost(attacker->client->ps.fd.saberAnimLevel);
-	}
-    
+	    
 
 	//======================
 	// Block Cost Modifiers
@@ -3480,14 +3478,19 @@ int OJP_SaberBlockCost(gentity_t *defender, gentity_t *attacker, vec3_t hitLoc)
 	{//kicking
 		saberBlockCost *= 1.5;
 	}
-	/* taken out for new running code
+
 	if(!WalkCheck(defender))
 	{//we're running, increase DP cost
 		saberBlockCost *= 2;
 	}
-    */
+
 	if(defender->client->ps.groundEntityNum == ENTITYNUM_NONE)
 	{//in mid-air
+		saberBlockCost *= 2;
+	}
+
+	if(defender->client->ps.saberBlockTime > level.time)
+	{//attempting to block something too soon after a saber bolt block
 		saberBlockCost *= 2;
 	}
 
@@ -3552,17 +3555,6 @@ int OJP_SaberCanBlock(gentity_t *self, gentity_t *atk, qboolean checkBBoxBlock, 
 	{//can't block while knocked down or getting up from knockdown.
 		return 0;
 	}
-	if(!WalkCheck(self))
-	{
-        if(atk && atk->client && atk->client->ps.weapon == WP_SABER)
-	    {//can't block while running with saber.
-            return 0;
-        }
-        else
-        {
-            return 1;
-        }
-     }
 	 
 	if(atk && atk->client && atk->client->ps.weapon == WP_SABER)
 	{//player is attacking with saber
@@ -3580,6 +3572,11 @@ int OJP_SaberCanBlock(gentity_t *self, gentity_t *atk, qboolean checkBBoxBlock, 
 
 		if(BG_SuperBreakWinAnim(atk->client->ps.torsoAnim) && self->client->ps.stats[STAT_DODGE] < DODGE_CRITICALLEVEL)
 		{//can't block super breaks when in critical DP.
+			return 0;
+		}
+
+		if(!WalkCheck(self))
+		{//can't block saber swings while running.
 			return 0;
 		}
 	}
@@ -5473,19 +5470,7 @@ qboolean G_DoDodge( gentity_t *self, gentity_t *shooter, vec3_t dmgOrigin, int h
 	{//body dodges have been disabled.  
 		return qfalse;
 	}
-	//[sabersys]
-    if(!WalkCheck(self))
-    {
-        if(mod == MOD_SABER && shooter && shooter->client)
-	        {//running players can't do this, 
-		        return qfalse;
-	        }
-	        else
-	        {
-                return qtrue;
-            }
-    }
-    //[/sabersys] 
+
 	if(self->NPC 
 		&& (self->client->NPC_class == CLASS_SABER_DROID ||
 			self->client->NPC_class == CLASS_ASSASSIN_DROID ||
@@ -5599,6 +5584,10 @@ qboolean G_DoDodge( gentity_t *self, gentity_t *shooter, vec3_t dmgOrigin, int h
 			return qfalse;
 		}
 
+		if(!WalkCheck(self))
+		{//can't Dodge saber swings while running.
+			return qfalse;
+		}
 	}
 
 	//RAFIXME - could add some location based cost adjustor here or something

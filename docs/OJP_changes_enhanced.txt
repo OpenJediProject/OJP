@@ -42,9 +42,14 @@ Version 0.0.9v:
 				- To pull a weapon out of a player's hands, the Force users must target them directly with their crosshairs.
 
 		Saber Combat:
-			- Boosted the MP cost of getting Parried to 3.
-			- Boosted the MP cost of getting Parried in attack fake (powerswing) to 6.
-			- Reenabled the bounding box saber block to improve saber block visuals.
+
+			Blocking:
+				- Saber block cost is doubled when a player has to block an attack during their bolt block delay.
+			
+			Misc:
+				- Boosted the MP cost of getting Parried to 3.
+				- Boosted the MP cost of getting Parried in attack fake (powerswing) to 6.
+				- Reenabled the bounding box saber block to improve saber block visuals.
 
 			Saber Locks:
 				- Can't use Force Push in saberlocks.
