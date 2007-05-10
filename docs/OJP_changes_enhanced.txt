@@ -48,7 +48,9 @@ Version 0.0.9v:
 				- Bolt reflections now occur at a much lower rate.
 				- Manual reflecting doesn't work 100% of the time anymore.
 				- Manually reflected bolts have some aim slop based on the defender's saber defense level.
-			
+				- You cannot block or dodge while running when you have a saber and get hit by a saber.
+			Damage:
+				- Hitting a person while you're running does double DP damage.
 			Misc:
 				- Boosted the MP cost of getting Parried to 3.
 				- Boosted the MP cost of getting Parried in attack fake (powerswing) to 6.
