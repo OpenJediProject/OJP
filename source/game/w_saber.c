@@ -94,7 +94,6 @@ qboolean ButterFingers(gentity_t *saberent, gentity_t *saberOwner, gentity_t *ot
 
 #define DODGE_BOLTBLOCK			5	//standard DP cost to block a missile bolt
 #define DODGE_REPEATERBLOCK		2	//the cost of blocking repeater shots is lower since the repeater shoots much faster.
-
 //This is the amount of DP that a player gains from making a successful parry while low on DP
 #define DODGE_LOWDPBOOST		10
 
@@ -3405,6 +3404,20 @@ int OJP_SaberBlockCost(gentity_t *defender, gentity_t *attacker, vec3_t hitLoc)
 	{//flip stabs do more DP
 		saberBlockCost = 2*BasicSaberBlockCost(attacker->client->ps.fd.saberAnimLevel);
 	}
+	
+	else if(!WalkCheck(attacker))
+	{
+		if(!(defender->client->ps.userInt3 & ( 1 << FLAG_SLOWBOUNCE ))
+		|| !(defender->client->ps.userInt3 & ( 1 << FLAG_OLDSLOWBOUNCE )))
+		{//we're running, increase DP cost to the defender
+			saberBlockCost = 2*BasicSaberBlockCost(attacker->client->ps.fd.saberAnimLevel);
+		}
+		else
+		{
+			saberBlockCost = BasicSaberBlockCost(attacker->client->ps.fd.saberAnimLevel);
+		}
+	}
+	
 	else if(attacker->client->ps.userInt3 & (1 << FLAG_ATTACKFAKE)) 
 	{//attacker is in an attack fake
 		if(attacker->client->ps.fd.saberAnimLevel == SS_STRONG
@@ -3421,7 +3434,7 @@ int OJP_SaberBlockCost(gentity_t *defender, gentity_t *attacker, vec3_t hitLoc)
 	{//normal saber block
 		saberBlockCost = BasicSaberBlockCost(attacker->client->ps.fd.saberAnimLevel);
 	}
-
+    
 
 	//======================
 	// Block Cost Modifiers
@@ -3467,11 +3480,12 @@ int OJP_SaberBlockCost(gentity_t *defender, gentity_t *attacker, vec3_t hitLoc)
 	{//kicking
 		saberBlockCost *= 1.5;
 	}
+	/* taken out for new running code
 	if(!WalkCheck(defender))
 	{//we're running, increase DP cost
 		saberBlockCost *= 2;
 	}
-
+    */
 	if(defender->client->ps.groundEntityNum == ENTITYNUM_NONE)
 	{//in mid-air
 		saberBlockCost *= 2;
@@ -3487,6 +3501,7 @@ extern qboolean BG_SaberInNonIdleDamageMove(playerState_t *ps, int AnimIndex);
 int OJP_SaberCanBlock(gentity_t *self, gentity_t *atk, qboolean checkBBoxBlock, vec3_t point, int rSaberNum, int rBladeNum)
 {//similar to WP_SaberCanBlock but without the same sorts of restrictions.
 	vec3_t bodyMin, bodyMax, closestBodyPoint, dirToBody, saberMoveDir;
+	
 	if (!self || !self->client)
 	{
 		return 0;
@@ -3537,7 +3552,18 @@ int OJP_SaberCanBlock(gentity_t *self, gentity_t *atk, qboolean checkBBoxBlock, 
 	{//can't block while knocked down or getting up from knockdown.
 		return 0;
 	}
-
+	if(!WalkCheck(self))
+	{
+        if(atk && atk->client && atk->client->ps.weapon == WP_SABER)
+	    {//can't block while running with saber.
+            return 0;
+        }
+        else
+        {
+            return 1;
+        }
+     }
+	 
 	if(atk && atk->client && atk->client->ps.weapon == WP_SABER)
 	{//player is attacking with saber
 		if( !BG_SaberInNonIdleDamageMove(&atk->client->ps, atk->localAnimIndex) )
@@ -5447,7 +5473,19 @@ qboolean G_DoDodge( gentity_t *self, gentity_t *shooter, vec3_t dmgOrigin, int h
 	{//body dodges have been disabled.  
 		return qfalse;
 	}
-
+	//[sabersys]
+    if(!WalkCheck(self))
+    {
+        if(mod == MOD_SABER && shooter && shooter->client)
+	        {//running players can't do this, 
+		        return qfalse;
+	        }
+	        else
+	        {
+                return qtrue;
+            }
+    }
+    //[/sabersys] 
 	if(self->NPC 
 		&& (self->client->NPC_class == CLASS_SABER_DROID ||
 			self->client->NPC_class == CLASS_ASSASSIN_DROID ||
@@ -12350,7 +12388,6 @@ extern qboolean PM_SaberInReturn( int move );
 qboolean G_InAttackParry(gentity_t *self)
 {//checks to see if a player is doing an attack parry
 
-	//must be holding attack and not pressing alt attack
 	if((self->client->pers.cmd.buttons & BUTTON_ATTACK)
 		|| (self->client->pers.cmd.buttons & BUTTON_ALT_ATTACK))
 	{//can't be pressing an attack button.
