@@ -23,7 +23,7 @@ Version 0.0.9v:
 	Improvements/Fixes:
 
 		Bots:
-			- Bots now get weapon skill points based on their botfile's BotWeaponWeights.
+			- Bots now get weapon skill points based on their botfile's BotWeaponWeights.  Bots with the saberspecialist flag will not take other weapons.
 
 		Fatigue:
 			- Fixed the cartwheel/backflips/jump attack FP costs to account for the new FP cost of jumps.

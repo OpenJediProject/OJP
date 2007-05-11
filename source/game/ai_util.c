@@ -895,54 +895,56 @@ trap_FS_FCloseFile(f);//[TicketFix143]
 	}
 
 	//[ExpSys]
-	//give bots weapon skills based on their weapon weights.
-	for(i=0; i < WP_NUM_WEAPONS; i++)
-	{
-		int skillLevel = FORCE_LEVEL_0;
-		if(bs->botWeaponWeights[i] >= 11)
-		{//master level
-			skillLevel = FORCE_LEVEL_3;
-		}
-		else if(bs->botWeaponWeights[i] > 5)
+	if(!bs->saberSpecialist)
+	{//give bots weapon skills based on their weapon weights if they aren't a saber specialist.
+		for(i=0; i < WP_NUM_WEAPONS; i++)
 		{
-			skillLevel = FORCE_LEVEL_2;
-		}
-		else if(bs->botWeaponWeights[i] > 0)
-		{//has weapon
-			skillLevel = FORCE_LEVEL_1;
-		}
-		else
-		{//don't want this weapon.
-			continue;
-		}
+			int skillLevel = FORCE_LEVEL_0;
+			if(bs->botWeaponWeights[i] >= 11)
+			{//master level
+				skillLevel = FORCE_LEVEL_3;
+			}
+			else if(bs->botWeaponWeights[i] > 5)
+			{
+				skillLevel = FORCE_LEVEL_2;
+			}
+			else if(bs->botWeaponWeights[i] > 0)
+			{//has weapon
+				skillLevel = FORCE_LEVEL_1;
+			}
+			else
+			{//don't want this weapon.
+				continue;
+			}
 
-		switch(i)
-		{	
-		case WP_BRYAR_PISTOL:
-			bs->forceinfo[NUM_FORCE_POWERS+SK_PISTOL + 4] = '0' + skillLevel;
-			break;
-		case WP_BLASTER:
-			bs->forceinfo[NUM_FORCE_POWERS+SK_BLASTER + 4] = '0' + skillLevel;
-			break;
-		case WP_DISRUPTOR:
-			bs->forceinfo[NUM_FORCE_POWERS+SK_DISRUPTOR + 4] = '0' + skillLevel;
-			break;
-		case WP_BOWCASTER:
-			bs->forceinfo[NUM_FORCE_POWERS+SK_BOWCASTER + 4] = '0' + skillLevel;
-			break;
-		case WP_REPEATER:
-			bs->forceinfo[NUM_FORCE_POWERS+SK_REPEATER + 4] = '0' + skillLevel;
-			break;
-		case WP_ROCKET_LAUNCHER:
-			bs->forceinfo[NUM_FORCE_POWERS+SK_ROCKET + 4] = '0' + skillLevel;
-			break;
-		case WP_THERMAL:
-			bs->forceinfo[NUM_FORCE_POWERS+SK_THERMAL + 4] = '0' + skillLevel;
-			break;
-		case WP_DET_PACK:
-			bs->forceinfo[NUM_FORCE_POWERS+SK_DETPACK + 4] = '0' + skillLevel;
-			break;
-		};
+			switch(i)
+			{	
+			case WP_BRYAR_PISTOL:
+				bs->forceinfo[NUM_FORCE_POWERS+SK_PISTOL + 4] = '0' + skillLevel;
+				break;
+			case WP_BLASTER:
+				bs->forceinfo[NUM_FORCE_POWERS+SK_BLASTER + 4] = '0' + skillLevel;
+				break;
+			case WP_DISRUPTOR:
+				bs->forceinfo[NUM_FORCE_POWERS+SK_DISRUPTOR + 4] = '0' + skillLevel;
+				break;
+			case WP_BOWCASTER:
+				bs->forceinfo[NUM_FORCE_POWERS+SK_BOWCASTER + 4] = '0' + skillLevel;
+				break;
+			case WP_REPEATER:
+				bs->forceinfo[NUM_FORCE_POWERS+SK_REPEATER + 4] = '0' + skillLevel;
+				break;
+			case WP_ROCKET_LAUNCHER:
+				bs->forceinfo[NUM_FORCE_POWERS+SK_ROCKET + 4] = '0' + skillLevel;
+				break;
+			case WP_THERMAL:
+				bs->forceinfo[NUM_FORCE_POWERS+SK_THERMAL + 4] = '0' + skillLevel;
+				break;
+			case WP_DET_PACK:
+				bs->forceinfo[NUM_FORCE_POWERS+SK_DETPACK + 4] = '0' + skillLevel;
+				break;
+			};
+		}
 	}
 	//[/ExpSys]
 
