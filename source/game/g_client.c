@@ -3484,7 +3484,11 @@ void ClientSpawn(gentity_t *ent) {
 	}
 	l = 0;
 
-	if (client->ps.fd.forceDoInit)
+	//[ExpSys]
+	//always reinit force powers for bots since they're stupid and don't change their skill points when they gain experience.
+	if (client->ps.fd.forceDoInit || ent->r.svFlags & SVF_BOT)
+	//if (client->ps.fd.forceDoInit)
+	//[/ExpSys]
 	{ //force a reread of force powers
 		WP_InitForcePowers( ent );
 		client->ps.fd.forceDoInit = 0;

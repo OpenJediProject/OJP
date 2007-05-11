@@ -24,6 +24,7 @@ Version 0.0.9v:
 
 		Bots:
 			- Bots now get weapon skill points based on their botfile's BotWeaponWeights.  Bots with the saberspecialist flag will not take other weapons.
+			- Bot's skill levels progress as they gain experience.
 		
 		Dodge:
 			- Fixed problem with explosive weapons sometimes regening player's FP.
