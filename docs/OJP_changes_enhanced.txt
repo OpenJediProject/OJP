@@ -24,6 +24,10 @@ Version 0.0.9v:
 
 		Bots:
 			- Bots now get weapon skill points based on their botfile's BotWeaponWeights.  Bots with the saberspecialist flag will not take other weapons.
+		
+		Dodge:
+			- Fixed problem with explosive weapons sometimes regening player's FP.
+			- Improved the precog Dodge behavior for explosives.
 
 		Fatigue:
 			- Fixed the cartwheel/backflips/jump attack FP costs to account for the new FP cost of jumps.
@@ -33,6 +37,7 @@ Version 0.0.9v:
 		Weapons:
 			- Reduced the Clone Rifles alternate fire blast radius to 1/2 of what it is now.
 			- Raised the cost of the Clone Rifles alternate fire to 40 ammo cells.
+			- Fixed problem with homing rockets getting stuck in mid-air.
 
 		Jetpack:
 			- Increased fuel consumption rate.  Decreased fuel regeneration rate.
@@ -40,6 +45,13 @@ Version 0.0.9v:
 		Force Powers:
 			Pull:
 				- To pull a weapon out of a player's hands, the Force users must target them directly with their crosshairs.
+
+		Misc:
+			- Changed our walk check code to check animations instead of player movement speed to make it more accurate.
+			- Removed a bit of redundent code from the saber code behavior for bound box blocks.
+
+		Real Trace:
+			- Fixed issue where realtraces where there were no collisions were setting the endpos to the trace's start point instead of the trace's end point.
 
 		Saber Combat:
 

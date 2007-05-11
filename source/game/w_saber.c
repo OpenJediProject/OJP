@@ -3428,7 +3428,7 @@ int OJP_SaberBlockCost(gentity_t *defender, gentity_t *attacker, vec3_t hitLoc)
 		if(!WalkCheck(attacker) 
 			&& !(defender->client->ps.userInt3 & ( 1 << FLAG_SLOWBOUNCE ))
 			&& !(defender->client->ps.userInt3 & ( 1 << FLAG_OLDSLOWBOUNCE ))) 
-		{//defender is slow bouncing, don't apply run bonus
+		{
 			saberBlockCost *= 2;	
 		}
 	}
@@ -3577,6 +3577,7 @@ int OJP_SaberCanBlock(gentity_t *self, gentity_t *atk, qboolean checkBBoxBlock, 
 
 		if(!WalkCheck(self))
 		{//can't block saber swings while running.
+			//G_Printf("%i: %i Can't block because I'm running.\n", level.time, self->s.number);
 			return 0;
 		}
 	}
@@ -3733,7 +3734,7 @@ static GAME_INLINE int Finish_RealTrace( trace_t *results, trace_t *closestTrace
 
 	if(VectorCompare(closestTrace->endpos, end))
 	{//No hit. Make sure that tr is correct.
-		TraceClear(results, start);
+		TraceClear(results, end);
 		return REALTRACE_MISS;
 	}
 
@@ -3759,7 +3760,7 @@ int G_RealTrace(gentity_t *SaberAttacker, trace_t *tr, vec3_t start, vec3_t mins
 	//This is advanced to the edge of each bound box after each saber/ghoul2 entity is processed.
 	vec3_t currentStart;
 	trace_t closestTrace; 		//this is the trace struct of the closest successful trace.
-	float closestFraction = 1; 	//the fraction of the closest trace so far. 
+	float closestFraction = 1.1; 	//the fraction of the closest trace so far.  Initially set higher than one so that we have an actualy tr even if the tr is clear.
 	int misses = 0;
 	InitRealTraceContent();
 
@@ -3796,6 +3797,16 @@ int G_RealTrace(gentity_t *SaberAttacker, trace_t *tr, vec3_t start, vec3_t mins
 
 		if(tr->entityNum == ENTITYNUM_NONE)
 		{//We've run out of things to hit so we're done.
+			if(!VectorCompare(start, currentStart))
+			{//didn't do trace with original start point.  Recalculate the real fraction before we do our comparision.
+				tr->fraction = CalcTraceFraction(start, end, tr->endpos);
+			}
+
+			if(tr->fraction < closestFraction)
+			{//this is the closest hit, make it so.
+				TraceCopy(tr, &closestTrace);
+				closestFraction = tr->fraction;
+			}
 			return Finish_RealTrace(tr, &closestTrace, start, end);
 		}
 
@@ -5321,9 +5332,16 @@ void AnimateKnockdown( gentity_t * self, gentity_t * inflictor )
 }
 
 
+qboolean PM_RunningAnim( int anim );
 //Check to see if the player is actually walking or just standing
 qboolean GAME_INLINE WalkCheck( gentity_t * self )
 {
+	if(PM_RunningAnim(self->client->ps.legsAnim))
+	{
+		return qfalse;
+	}
+
+	/* old method.  seems to have issues failing players when they're walking diagonally. :|
 	float velocity = VectorLength(self->client->ps.velocity);
 	if (velocity == 0)
 	{
@@ -5340,6 +5358,7 @@ qboolean GAME_INLINE WalkCheck( gentity_t * self )
 		//G_Printf("Player %i is running: %f\n", self->s.number, velocity);
 		return qfalse;
 	}
+	*/
 
 	return qtrue;
 }
@@ -6202,9 +6221,8 @@ static GAME_INLINE qboolean CheckSaberDamage(gentity_t *self, int rSaberNum, int
 	}
 	else if (((g_entities[tr.entityNum].r.contents & CONTENTS_LIGHTSABER) &&
 		g_entities[tr.entityNum].r.contents != -1 &&
-		g_entities[tr.entityNum].inuse)  //hit real saber blade
-		|| realTraceResult == REALTRACE_SABERBLOCKHIT)  //or used saber blade to block something.
-	{ //saber clash
+		g_entities[tr.entityNum].inuse))
+	{ //hit a saber blade
 		otherOwner = &g_entities[g_entities[tr.entityNum].r.ownerNum];
 
 		if (!otherOwner->inuse || !otherOwner->client)
@@ -6224,16 +6242,15 @@ static GAME_INLINE qboolean CheckSaberDamage(gentity_t *self, int rSaberNum, int
 			return qfalse;
 		}
 
-		if(otherOwner->client->ps.saberInFlight  && !OJP_UsingDualSaberAsPrimary(&otherOwner->client->ps))
+		if(otherOwner->client->ps.saberInFlight && !OJP_UsingDualSaberAsPrimary(&otherOwner->client->ps))
 		{//Hit a thrown saber, deactive it.
 			saberCheckKnockdown_Smashed(&g_entities[tr.entityNum], otherOwner, self, dmg);
 			otherOwner = NULL;
 		}
 		else if(realTraceResult == REALTRACE_SABERBLOCKHIT)
 		{//this is actually a faked lightsaber hit to make the bounding box saber blocking work.
-			//As such, set the saber owner to move into a block position
-				//also set the approprate block position for this attack.
-				WP_SaberBlockNonRandom(otherOwner, tr.endpos, qfalse);
+			//As such, we know that the player can block, set the approprate block position for this attack.
+			WP_SaberBlockNonRandom(otherOwner, tr.endpos, qfalse);
 		}
 		else if(realTraceResult == REALTRACE_HIT)
 		{//successfully hit another player's saber blade directly
@@ -6954,10 +6971,15 @@ void WP_SaberStartMissileBlockCheck( gentity_t *self, usercmd_t *ucmd  )
 			}
 		}
 
+		//[DodgeSys]
+		//moved down so the player will take defensive action even they they can't pre-block
+		/*
 		if (!doFullRoutine)
 		{ //don't care about the rest then
 			continue;
 		}
+		*/
+		//[/DodgeSys]
 
 		if (ent->r.ownerNum == self->s.number)
 			continue;
@@ -7030,6 +7052,35 @@ void WP_SaberStartMissileBlockCheck( gentity_t *self, usercmd_t *ucmd  )
 		}
 		//[/SaberSys]
 
+		//[DodgeSys]
+		//handle Dodging for explosive bad things		
+		if ( ent->splashDamage && ent->splashRadius ) 
+		{//this thingy can explode
+			if(dist < ent->splashRadius //we've in its blast radius
+				&&PreCogDodgeCosts[ent->methodOfDeath] != -1 &&  self->client->ps.stats[STAT_DODGE] > PreCogDodgeCosts[ent->methodOfDeath]) //we can Dodge this thingy
+			{//attempt to Dodge this sucker
+				if(WP_ForcePowerUsable(self, FP_PUSH)  //can use Force Push
+					&& DotProduct( dir, forward ) > SABER_REFLECT_MISSILE_CONE) //in our push field (roughly)
+				{//use force push to knock the thingy away.
+					ForceThrow( self, qfalse );
+					G_DodgeDrain(self, &g_entities[ent->r.ownerNum], PreCogDodgeCosts[ent->methodOfDeath]);
+
+					//re-add the used up FP points since this should count as a DP cost only.
+					self->client->ps.fd.forcePower += forcePowerNeeded[self->client->ps.fd.forcePowerLevel[FP_PUSH]][FP_PUSH];
+				}
+				else if(WP_ForcePowerUsable(self, FP_LEVITATION))
+				{//jump out of the way
+					self->client->ps.fd.forceJumpCharge = 480;
+					G_DodgeDrain(self, &g_entities[ent->r.ownerNum], PreCogDodgeCosts[ent->methodOfDeath]);
+				}
+			}
+		
+			//done everything we can for an explosive
+			continue;
+		}
+
+
+		/* old method.  borked and messy.
 		//FIXME: handle detpacks, proximity mines and tripmines
 		if ( ent->s.weapon == WP_THERMAL )
 		{//thermal detonator!
@@ -7088,7 +7139,7 @@ void WP_SaberStartMissileBlockCheck( gentity_t *self, usercmd_t *ucmd  )
 			}
 			else 
 			{
-			*/
+			*//*
 			if(PreCogDodgeCosts[ent->methodOfDeath] != -1 &&  self->client->ps.stats[STAT_DODGE] > PreCogDodgeCosts[ent->methodOfDeath])
 			{
 				//if ( ent->s.pos.trType == TR_STATIONARY && (ent->s.eFlags&EF_MISSILE_STICK) 
@@ -7154,6 +7205,13 @@ void WP_SaberStartMissileBlockCheck( gentity_t *self, usercmd_t *ucmd  )
 			//otherwise, can't block it, so we're screwed
 			continue;
 		}
+		*/
+		
+		if (!doFullRoutine)
+		{ //don't care about the rest then
+			continue;
+		}
+		//[/DodgeSys]
 
 		if ( ent->s.weapon != WP_SABER )
 		{//only block shots coming from behind
