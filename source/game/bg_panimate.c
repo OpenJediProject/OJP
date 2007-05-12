@@ -3343,33 +3343,13 @@ void BG_SaberStartTransAnim( int clientNum, int saberAnimLevel, int weapon, int 
 	}
 
 	//[SaberSys]
-	if( anim >= BOTH_A1_T__B_ && anim <= BOTH_A1_TR_BL )
-	{//slowed down the blue attacks a little.
-		*animSpeed *= .8f;
-	}
-
-    if( anim >= BOTH_R1_B__S1 && anim <= BOTH_R1_TR_S1 )
-	{//making the blue slowbounces not be too fast.  Hey, it worked!
-		*animSpeed *= .75f;
-	}
-
-	if( anim >= BOTH_S3_S1_T_ && anim <= BOTH_S3_S1_TR )
-	{//red style's windups were WAY too slow
-		*animSpeed *= 3.0f;
-	}
-
 	if( anim >= BOTH_S4_S1_T_ && anim <= BOTH_S4_S1_TR )
 	{//purple/desann's windups were too slow as well
 		*animSpeed *= 2.2f;
 	}
 
-	if( anim >= BOTH_R3_B__S1 && anim <= BOTH_R3_TR_S1 )
-	{//red returns were too slow
-		*animSpeed *= 2.5f;
-	}
-
 	if( anim >= BOTH_R4_B__S1 && anim <= BOTH_R4_TR_S1 )
-	{//red returns were too slow
+	{//purple returns were too slow
 		*animSpeed *= 1.5f;
 	}
 

@@ -72,6 +72,9 @@ Version 0.0.9v:
 			Saber Locks:
 				- Can't use Force Push in saberlocks.
 
+			Styles:
+				- Balanced out the swing speeds for fairness.
+
 
 Version 0.0.9u:
 	New Features:
