@@ -3575,8 +3575,11 @@ int OJP_SaberCanBlock(gentity_t *self, gentity_t *atk, qboolean checkBBoxBlock, 
 			return 0;
 		}
 
-		if(!WalkCheck(self))
-		{//can't block saber swings while running.
+		if(!WalkCheck(self)
+			&& (!InFront(atk->client->ps.origin, self->client->ps.origin, self->client->ps.viewangles, -.7f)
+			|| BG_SaberInAttack( self->client->ps.saberMove )
+			|| PM_SaberInStart( self->client->ps.saberMove )))
+		{//can't block saber swings while running and hit from behind or in swing.
 			//G_Printf("%i: %i Can't block because I'm running.\n", level.time, self->s.number);
 			return 0;
 		}
@@ -5603,8 +5606,11 @@ qboolean G_DoDodge( gentity_t *self, gentity_t *shooter, vec3_t dmgOrigin, int h
 			return qfalse;
 		}
 
-		if(!WalkCheck(self))
-		{//can't Dodge saber swings while running.
+		if(!WalkCheck(self)
+			&& (!InFront(shooter->client->ps.origin, self->client->ps.origin, self->client->ps.viewangles, -.7f)
+			|| BG_SaberInAttack( self->client->ps.saberMove )
+			|| PM_SaberInStart( self->client->ps.saberMove )))
+		{//can't Dodge saber swings while running and hit from behind or in swing.
 			return qfalse;
 		}
 	}
