@@ -352,7 +352,9 @@ void SabBeh_AttackVsBlock( gentity_t *attacker, sabmech_t *mechAttacker,
 		//set attacker
 		if(parried)
 		{//parry values
-			if(attacker->client->ps.saberMove == LS_A_LUNGE)
+			if(attacker->client->ps.saberMove == LS_A_LUNGE
+			|| attacker->client->ps.saberMove == LS_SPINATTACK
+			|| attacker->client->ps.saberMove == LS_SPINATTACK_DUAL)
 			{//attacker's lunge was parried, force mishap.
 				*attackerMishap = SabBeh_RollBalance(attacker, mechAttacker, qtrue);
 			}
