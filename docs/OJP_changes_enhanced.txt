@@ -74,6 +74,7 @@ Version 0.0.9v:
 
 			Styles:
 				- Balanced out the swing speeds for fairness.
+				- Parrying the sabertwirl for staff and duel moves now does an auto slowbounce like parrying lunge. 
 
 
 Version 0.0.9u:
