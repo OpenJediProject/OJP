@@ -1744,6 +1744,7 @@ void ForceTeamForceReplenish( gentity_t *self )
 
 
 //[ForceSys]
+extern qboolean PM_SaberInParry( int move );
 qboolean OJP_CounterForce(gentity_t *attacker, gentity_t *defender, int attackPower);
 //[/ForceSys]
 void ForceGrip( gentity_t *self )
@@ -1761,7 +1762,11 @@ void ForceGrip( gentity_t *self )
 		return;
 	}
 
-	if (self->client->ps.weaponTime > 0)
+	//[ForceSys]
+	//allow during preblocks
+	if (self->client->ps.weaponTime > 0 && (!PM_SaberInParry(pm->ps->saberMove) || !pm->ps->userInt3 & (1 << FLAG_PREBLOCK)))
+	//if (self->client->ps.weaponTime > 0)
+	//[/ForceSys]
 	{
 		return;
 	}
@@ -2023,7 +2028,11 @@ void ForceLightning( gentity_t *self )
 		return;
 	}
 
-	if (self->client->ps.weaponTime > 0)
+	//[ForceSys]
+	//allow during preblocks
+	if (self->client->ps.weaponTime > 0 && (!PM_SaberInParry(pm->ps->saberMove) || !pm->ps->userInt3 & (1 << FLAG_PREBLOCK)))
+	//if (self->client->ps.weaponTime > 0)
+	//[/ForceSys]
 	{
 		return;
 	}
@@ -3512,9 +3521,11 @@ void ForceThrow( gentity_t *self, qboolean pull )
 		return;
 	}
 	*/
-	//[/ForceSys]
 
-	if (self->client->ps.weaponTime > 0)
+	//allow push/pull during preblocks
+	if (self->client->ps.weaponTime > 0 && (!PM_SaberInParry(pm->ps->saberMove) || !pm->ps->userInt3 & (1 << FLAG_PREBLOCK)))
+	//if (self->client->ps.weaponTime > 0)
+	//[ForceSys]
 	{
 		return;
 	}
