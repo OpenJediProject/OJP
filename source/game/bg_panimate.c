@@ -3343,16 +3343,6 @@ void BG_SaberStartTransAnim( int clientNum, int saberAnimLevel, int weapon, int 
 	}
 
 	//[SaberSys]
-	if( anim >= BOTH_S4_S1_T_ && anim <= BOTH_S4_S1_TR )
-	{//purple/desann's windups were too slow as well
-		*animSpeed *= 2.2f;
-	}
-
-	if( anim >= BOTH_R4_B__S1 && anim <= BOTH_R4_TR_S1 )
-	{//purple returns were too slow
-		*animSpeed *= 1.5f;
-	}
-
 	/* racc - interesting but I think it's isn't really fair.
 	if ( ( (anim) >= BOTH_T1_BR__R && 
 		(anim) <= BOTH_T1_BL_TL ) ||
@@ -3437,8 +3427,6 @@ void BG_SaberStartTransAnim( int clientNum, int saberAnimLevel, int weapon, int 
 		&& anim != BOTH_JUMPFLIPSLASHDOWN1)
 	{//You're pooped.  Move slower
 		*animSpeed *= .5f;
-		//[test]
-		saberanimscale = 1;
 	}
 	//[/FatigueSys]
 
