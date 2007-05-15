@@ -64,6 +64,7 @@ Version 0.0.9v:
 				- You cannot block or dodge while running when you get hit in the back or are swinging. This only works when both people have sabers.
 			Damage:
 				- Hitting a person while you're running does double DP damage.
+			
 			Misc:
 				- Boosted the MP cost of getting Parried to 3.
 				- Boosted the MP cost of getting Parried in attack fake (powerswing) to 6.
