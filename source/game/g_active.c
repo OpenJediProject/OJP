@@ -3465,7 +3465,14 @@ void ClientThink_real( gentity_t *ent ) {
 			SetClientViewAngle( ent, lockAng );
 		}
 
-		if ( ent->client->ps.saberLockHitCheckTime < level.time )
+		//[SaberLockSys]
+		if(ent->client->pers.cmd.buttons & BUTTON_ALT_ATTACK && ent->client->pers.cmd.forwardmove < 0)
+		{//breaking out of the saberlock!
+			ent->client->ps.saberLockFrame = 0;
+		}
+		else if ( ent->client->ps.saberLockHitCheckTime < level.time )
+		//if ( ent->client->ps.saberLockHitCheckTime < level.time )
+		//[/SaberLockSys]
 		{//have moved to next frame since last lock push
 			//[SaberLockSys]
 			//racc - tweaked this to slow down the speed at which the saber locks advance.  I'm not sure I like this or not yet.

@@ -74,6 +74,7 @@ Version 0.0.9v:
 
 			Saber Locks:
 				- Can't use Force Push in saberlocks.
+				- Players can now break out of a saberlock by pressing alt fire + backwards.
 
 			Styles:
 				- Balanced out the swing speeds for fairness.
