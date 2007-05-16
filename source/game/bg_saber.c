@@ -1486,21 +1486,30 @@ void PM_SaberLockBreak( playerState_t *genemy, qboolean victory, int strength )
 	{ //If no one lost, then shove each player away from the other
 		vec3_t oppDir;
 
-		int strength = 4;
+		//[SaberLockSys]
+		int strength = 10;
+		//int strength = 4;
+		//[/SaberLockSys]
 
 		VectorSubtract(genemy->origin, pm->ps->origin, oppDir);
 		VectorNormalize(oppDir);
 		genemy->velocity[0] = oppDir[0]*(strength*40);
 		genemy->velocity[1] = oppDir[1]*(strength*40);
-		genemy->velocity[2] = 150;
+		//[SaberLockSys]
+		genemy->velocity[2] = 0;
+		//genemy->velocity[2] = 150;
+		//[/SaberLockSys]
 
 		VectorSubtract(pm->ps->origin, genemy->origin, oppDir);
 		VectorNormalize(oppDir);
 		pm->ps->velocity[0] = oppDir[0]*(strength*40);
 		pm->ps->velocity[1] = oppDir[1]*(strength*40);
-		pm->ps->velocity[2] = 150;
+		//[SaberLockSys]
+		pm->ps->velocity[2] = 0;
+		//pm->ps->velocity[2] = 150;
 
-		genemy->forceHandExtend = HANDEXTEND_WEAPONREADY;
+		//genemy->forceHandExtend = HANDEXTEND_WEAPONREADY;
+		//[/SaberLockSys]
 	}
 
 	//[SaberLockSys]
@@ -1514,8 +1523,10 @@ void PM_SaberLockBreak( playerState_t *genemy, qboolean victory, int strength )
 	pm->ps->saberLockTime = genemy->saberLockTime = 0;
 	pm->ps->saberLockFrame = genemy->saberLockFrame = 0;
 	pm->ps->saberLockEnemy = genemy->saberLockEnemy = 0;
-
-	pm->ps->forceHandExtend = HANDEXTEND_WEAPONREADY;
+	
+	//[SaberLockSys]
+	//pm->ps->forceHandExtend = HANDEXTEND_WEAPONREADY;
+	//[/SaberLockSys]
 
 	PM_AddEvent( EV_JUMP );
 	if ( !victory )
@@ -5742,7 +5753,7 @@ void PM_SaberFakeFlagUpdate(playerState_t *ps, int newMove, int currentMove)
 //saber status utility tools
 qboolean BG_SaberInFullDamageMove( playerState_t *ps, int AnimIndex )
 {//The player is attacking with a saber attack that does full damage
-	if( (BG_SaberInAttack(ps->saberMove) && !BG_KickMove(ps->saberMove)) 
+	if( (BG_SaberInAttack(ps->saberMove) && !BG_KickMove(ps->saberMove) && !BG_InSaberLock(ps->torsoAnim))
 		|| BG_SuperBreakWinAnim(ps->torsoAnim) )
 	{//in attack animation
 		if( (ps->saberMove == LS_A_FLIP_STAB || ps->saberMove == LS_A_FLIP_SLASH)

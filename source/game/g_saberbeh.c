@@ -260,6 +260,7 @@ void SabBeh_AttackVsBlock( gentity_t *attacker, sabmech_t *mechAttacker,
 								gentity_t *blocker, sabmech_t *mechBlocker, vec3_t hitLoc, qboolean hitSaberBlade,
 								qboolean *attackerMishap, qboolean *blockerMishap)
 {//set the saber behavior for an attacking vs blocking/parrying blade impact
+	qboolean startSaberLock = qfalse;
 	qboolean parried = G_BlockIsParry(blocker, attacker, hitLoc);
 	qboolean atkparry = G_InAttackParry(blocker);
 	qboolean atkfake = (attacker->client->ps.userInt3 & (1 << FLAG_ATTACKFAKE)) 
@@ -319,6 +320,7 @@ void SabBeh_AttackVsBlock( gentity_t *attacker, sabmech_t *mechAttacker,
 				attacker->client->ps.userInt3 |= ( 1 << FLAG_LOCKWINNER );
 				attacker->client->ps.saberBlocked = BLOCKED_NONE;
 				blocker->client->ps.saberBlocked = BLOCKED_NONE;
+				startSaberLock = qtrue;
 			}
 			SabBeh_AddBalance(blocker, mechBlocker, 2, qfalse);
 #ifdef _DEBUG
@@ -394,9 +396,10 @@ void SabBeh_AttackVsBlock( gentity_t *attacker, sabmech_t *mechAttacker,
 			//qboolean regenSound = qfalse;
 			mechBlocker->doParry = qtrue;
 		}
-		else
+		else if(!startSaberLock)
 		{//normal saber blocks
 			//update the blocker's block move
+			blocker->client->ps.saberLockFrame = 0; //break out of saberlocks.
 			WP_SaberBlockNonRandom(blocker, hitLoc, qfalse);
 		}
 	}
