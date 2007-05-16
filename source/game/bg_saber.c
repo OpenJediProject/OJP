@@ -3657,7 +3657,11 @@ int PM_ReturnforQuad( int quad )
 			break;
 		case Q_T:
 		//no attacks ever end here (IE no animation) so just wing it.
-			return LS_READY;
+			//[SaberSys]
+			//hack this to use a similar quad so that it had consistant animation timing.
+			return LS_R_BL2TR;
+			//return LS_READY;
+			//[/SaberSys]
 			break;
 		case Q_TL:
 			return LS_R_BR2TL;
@@ -5007,6 +5011,11 @@ weapChecks:
 					if ( (PM_SaberInBounce( curmove ) || PM_SaberInParry( curmove ))
 						&& newmove >= LS_A_TL2BR && newmove <= LS_A_T2B )
 					{//prevent similar attack directions to prevent lightning-like bounce attacks.
+						if(saberMoveData[newmove].startQuad == saberMoveData[curmove].endQuad)
+						{//can't attack in the same direction
+							newmove = LS_READY;
+						}
+						/* old method blocks adjacent attack quads as well.  I don't think we need this anymore.
 						if(saberMoveData[newmove].startQuad >= saberMoveData[curmove].endQuad
 							&& saberMoveData[newmove].startQuad < saberMoveData[curmove].endQuad + 2)
 						{
@@ -5017,6 +5026,7 @@ weapChecks:
 						{
 							newmove = LS_READY;
 						}
+						*/
 					}
 
 					//starting a new attack, as such, remove the attack fake flag.

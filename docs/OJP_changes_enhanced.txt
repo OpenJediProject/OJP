@@ -64,6 +64,10 @@ Version 0.0.9v:
 				- Manual reflecting doesn't work 100% of the time anymore.
 				- Manually reflected bolts have some aim slop based on the defender's saber defense level.
 				- You cannot block or dodge while running when you get hit in the back or are swinging. This only works when both people have sabers.
+
+			Comboing:
+				- Combos are now easier to do because players can now combo into any attack direction that isn't the same direction as the previous parry/attack.
+
 			Damage:
 				- Hitting a person while you're running does double DP damage.
 			
@@ -71,6 +75,7 @@ Version 0.0.9v:
 				- Boosted the MP cost of getting Parried to 3.
 				- Boosted the MP cost of getting Parried in attack fake (powerswing) to 6.
 				- Reenabled the bounding box saber block to improve saber block visuals.
+				- Fixed problem where top bounces didn't have a return animation.
 
 			Saber Locks:
 				- Can't use Force Push in saberlocks.
