@@ -3435,6 +3435,14 @@ void BG_SaberStartTransAnim( int clientNum, int saberAnimLevel, int weapon, int 
 			*animSpeed *= .3f;
 		}
 	}
+	else if( (fatigued & (1 << FLAG_PARRIED)) )
+	{//getting parried slows down your reaction
+		if(BG_BounceAnim(anim) || PM_SaberReturnAnim(anim))
+		{//only apply to bounce and returns since this flag is technically turned off immediately after the animation is set.  
+			//IE this ends up appling to the animation set after this flag is supposed to end unless we specifically target certain animations.
+			*animSpeed *= .5f;
+		}
+	}
 	//[/SaberSys]
 }
 
