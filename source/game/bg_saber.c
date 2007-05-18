@@ -623,6 +623,9 @@ int PM_SaberAnimTransitionAnim( int curmove, int newmove )
 				case LS_R_R2L:
 				case LS_R_TR2BL:
 				case LS_R_T2B:
+					//transition is the start
+					retmove = LS_S_TL2BR + (newmove-LS_A_TL2BR);
+					break;
 				//transitioning from a bounce
 				//[SaberSys]
 				//bounces should transition to transitions before attacks.
@@ -5549,8 +5552,7 @@ void PM_SetSaberMove(short newMove)
 		//update the attack fake flag
 		PM_SaberFakeFlagUpdate(pm->ps, newMove, anim);
 		
-		if(PM_SaberInBounce(pm->ps->saberMove) || PM_SaberInReturn(pm->ps->saberMove) //already did slow bounce move
-			|| (!PM_SaberInBounce(newMove) && !PM_SaberInReturn(newMove))  ) //or new move isn't slowbounce move
+		if(!PM_SaberInBounce(newMove) && !PM_SaberInReturn(newMove) ) //or new move isn't slowbounce move
 		{//switched away from a slow bounce move, remove the flags.
 			pm->ps->userInt3 &= ~( 1 << FLAG_SLOWBOUNCE );
 			pm->ps->userInt3 &= ~( 1 << FLAG_OLDSLOWBOUNCE );

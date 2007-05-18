@@ -5,6 +5,8 @@ Open Jedi Project Change Log (Enhanced Distribution)
 This file stores all the information about what has changed from release version to release version for OJP Enhanced.  OJP Enhanced contains all the changes of OJP Basic plus a library of gameplay alterations made by OJP's contributors.
 
 
+
+
 Version 0.0.9v:
 
 	New Features:
@@ -60,6 +62,7 @@ Version 0.0.9v:
 		Saber Combat:
 
 			Blocking:
+				- Getting parried forces the attacker to recover slightly slower than normal.  This gives the defender a small opening to launch a counterattack.
 				- Saber block cost is doubled when a player has to block an attack during their bolt block delay.
 				- Bolt reflections now occur at a much lower rate.
 				- Manual reflecting doesn't work 100% of the time anymore.
@@ -73,10 +76,12 @@ Version 0.0.9v:
 				- Hitting a person while you're running does double DP damage.
 			
 			Misc:
+				- Transitioning from a return animation to an attack now starts a new windup/start instead of a transition.
 				- Boosted the MP cost of getting Parried to 3.
 				- Boosted the MP cost of getting Parried in attack fake (powerswing) to 6.
 				- Reenabled the bounding box saber block to improve saber block visuals.
 				- Fixed problem where top bounces didn't have a return animation.
+				- Changed the way slow bounce/parry flags expire so that the slow bounce/parry slowdown lasts thru the bounce and return animations.
 
 			Saber Locks:
 				- Can't use Force Push in saberlocks.
