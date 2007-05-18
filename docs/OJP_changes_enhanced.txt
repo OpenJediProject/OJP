@@ -36,6 +36,7 @@ Version 0.0.9v:
 		Force Powers:
 			- Dramatically reduced the continuous FP cost of Force Jump.
 			- Players can now use offensive force powers during pre-blocks.
+			- Lightning now costs 10 FP initally and 1 FP to hold.
 			
 		Weapons:
 			- Reduced the Clone Rifles alternate fire blast radius to 1/2 of what it is now.

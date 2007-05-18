@@ -999,11 +999,17 @@ qboolean WP_ForcePowerAvailable( gentity_t *self, forcePowers_t forcePower, int 
 	{
 		return qtrue;
 	}
+
+	//[ForceSys]
+	/*
 	if ((forcePower == FP_DRAIN || forcePower == FP_LIGHTNING) &&
 		self->client->ps.fd.forcePower >= 25)
 	{ //it's ok then, drain/lightning are actually duration
 		return qtrue;
 	}
+	*/
+	//[/ForceSys]
+
 	if ( self->client->ps.fd.forcePower < drain )
 	{
 		return qfalse;
@@ -2014,7 +2020,11 @@ void ForceLightning( gentity_t *self )
 	{
 		return;
 	}
-	if ( self->client->ps.fd.forcePower < 25 || !WP_ForcePowerUsable( self, FP_LIGHTNING ) )
+
+	//[ForceSys]
+	if( !WP_ForcePowerUsable( self, FP_LIGHTNING ) )
+	//if ( self->client->ps.fd.forcePower < 25 || !WP_ForcePowerUsable( self, FP_LIGHTNING ) )
+	//[/ForceSys]
 	{//racc - can't use this power while low on force or can't use this power now.
 		return;
 	}
@@ -2044,7 +2054,10 @@ void ForceLightning( gentity_t *self )
 
 	G_Sound( self, CHAN_BODY, G_SoundIndex("sound/weapons/force/lightning") );
 	
-	WP_ForcePowerStart( self, FP_LIGHTNING, 500 );
+	//[ForceSys]
+	WP_ForcePowerStart( self, FP_LIGHTNING, 0 );
+	//WP_ForcePowerStart( self, FP_LIGHTNING, 500 );
+	//[ForceSys]
 }
 
 
@@ -5024,8 +5037,11 @@ static void WP_ForcePowerRun( gentity_t *self, forcePowers_t forcePower, usercmd
 			}
 		}
 		// OVERRIDEFIXME
-		if ( !WP_ForcePowerAvailable( self, forcePower, 0 ) || self->client->ps.fd.forcePowerDuration[FP_DRAIN] < level.time ||
-			self->client->ps.fd.forcePower < 25)
+		//[ForceSys]
+		if ( !WP_ForcePowerAvailable( self, forcePower, 1 ) || self->client->ps.fd.forcePowerDuration[FP_DRAIN] < level.time || self->client->ps.groundEntityNum == ENTITYNUM_NONE)
+		//if ( !WP_ForcePowerAvailable( self, forcePower, 0 ) || self->client->ps.fd.forcePowerDuration[FP_DRAIN] < level.time ||
+		//	self->client->ps.fd.forcePower < 25)
+		//[/ForceSys]
 		{
 			WP_ForcePowerStop( self, forcePower );
 		}
@@ -5040,7 +5056,10 @@ static void WP_ForcePowerRun( gentity_t *self, forcePowers_t forcePower, usercmd
 		//[/BugFix27]
 		{
 			ForceShootLightning( self );
-			BG_ForcePowerDrain( &self->client->ps, forcePower, 0 );
+			//[ForceSys]
+			BG_ForcePowerDrain( &self->client->ps, forcePower, 1 );
+			//BG_ForcePowerDrain( &self->client->ps, forcePower, 0 );
+			//[/ForceSys]
 
 			//show the drain lightning effect
 			self->client->ps.activeForcePass = self->client->ps.fd.forcePowerLevel[FP_DRAIN] + FORCE_LEVEL_3;
@@ -5073,8 +5092,11 @@ static void WP_ForcePowerRun( gentity_t *self, forcePowers_t forcePower, usercmd
 			}
 		}
 		// OVERRIDEFIXME
-		if ( !WP_ForcePowerAvailable( self, forcePower, 0 ) || self->client->ps.fd.forcePowerDuration[FP_LIGHTNING] < level.time ||
-			self->client->ps.fd.forcePower < 25 || self->client->ps.groundEntityNum == ENTITYNUM_NONE)
+		//[ForceSys]
+		if ( !WP_ForcePowerAvailable( self, forcePower, 1 ) || self->client->ps.fd.forcePowerDuration[FP_LIGHTNING] < level.time || self->client->ps.groundEntityNum == ENTITYNUM_NONE)
+		//if ( !WP_ForcePowerAvailable( self, forcePower, 0 ) || self->client->ps.fd.forcePowerDuration[FP_LIGHTNING] < level.time ||
+		//	self->client->ps.fd.forcePower < 25 || self->client->ps.groundEntityNum == ENTITYNUM_NONE)
+		//[/ForceSys]
 		{
 			WP_ForcePowerStop( self, forcePower );
 		}
@@ -5086,7 +5108,10 @@ static void WP_ForcePowerRun( gentity_t *self, forcePowers_t forcePower, usercmd
 		//[/BugFix27]
 		{
 			ForceShootLightning( self );
-			BG_ForcePowerDrain( &self->client->ps, forcePower, 0 );
+			//[ForceSys]
+			BG_ForcePowerDrain( &self->client->ps, forcePower, 1 ); //holding FP cost
+			//BG_ForcePowerDrain( &self->client->ps, forcePower, 0 );
+			//[/ForceSys]
 
 			//[BugFix27]
 			//update the lightning shot debouncer
