@@ -95,7 +95,10 @@ int forcePowerNeeded[NUM_FORCE_POWER_LEVELS][NUM_FORCE_POWERS] =
 		20,//FP_PULL,//hold/duration
 		20,//FP_TELEPATHY,//instant
 		30,//FP_GRIP,//hold/duration
-		1,//FP_LIGHTNING,//hold/duration
+		//[ForceSys]
+		10,//FP_LIGHTNING,//initial FP cost
+		//1,//FP_LIGHTNING,//hold/duration
+		//[/ForceSys]
 		50,//FP_RAGE,//duration
 		50,//FP_PROTECT,//duration
 		50,//FP_ABSORB,//duration
@@ -103,7 +106,7 @@ int forcePowerNeeded[NUM_FORCE_POWER_LEVELS][NUM_FORCE_POWERS] =
 		50,//FP_TEAM_FORCE,//instant
 		//[ForceSys]
 		//drain now acts like lightning.
-		1,//FP_DRAIN,//hold/duration
+		10,//FP_DRAIN, //initial FP cost
 		//20,//FP_DRAIN,//hold/duration
 		//[/ForceSys]
 		20,//FP_SEE,//duration
@@ -125,7 +128,10 @@ int forcePowerNeeded[NUM_FORCE_POWER_LEVELS][NUM_FORCE_POWERS] =
 		//[/ForceSys]
 		20,//FP_TELEPATHY,//instant
 		30,//FP_GRIP,//hold/duration
-		1,//FP_LIGHTNING,//hold/duration
+		//[ForceSys]
+		10,//FP_LIGHTNING,//initial FP cost
+		//1,//FP_LIGHTNING,//hold/duration
+		//[/ForceSys]
 		50,//FP_RAGE,//duration
 		25,//FP_PROTECT,//duration
 		25,//FP_ABSORB,//duration
@@ -133,7 +139,7 @@ int forcePowerNeeded[NUM_FORCE_POWER_LEVELS][NUM_FORCE_POWERS] =
 		33,//FP_TEAM_FORCE,//instant
 		//[ForceSys]
 		//drain now acts like lightning.
-		1,//FP_DRAIN,//hold/duration
+		10,//FP_DRAIN,//initial FP cost
 		//20,//FP_DRAIN,//hold/duration
 		//[/ForceSys]
 		20,//FP_SEE,//duration
@@ -155,7 +161,10 @@ int forcePowerNeeded[NUM_FORCE_POWER_LEVELS][NUM_FORCE_POWERS] =
 		//[/ForceSys]
 		20,//FP_TELEPATHY,//instant
 		60,//FP_GRIP,//hold/duration
-		1,//FP_LIGHTNING,//hold/duration
+		//[ForceSys]
+		10,//FP_LIGHTNING,//initial FP cost
+		//1,//FP_LIGHTNING,//hold/duration
+		//[/ForceSys]
 		50,//FP_RAGE,//duration
 		10,//FP_PROTECT,//duration
 		10,//FP_ABSORB,//duration
@@ -163,7 +172,7 @@ int forcePowerNeeded[NUM_FORCE_POWER_LEVELS][NUM_FORCE_POWERS] =
 		25,//FP_TEAM_FORCE,//instant
 		//[ForceSys]
 		//drain now acts like lightning.
-		1,//FP_DRAIN,//hold/duration
+		10,//FP_DRAIN,//initial FP cost
 		//20,//FP_DRAIN,//hold/duration
 		//[/ForceSys]
 		20,//FP_SEE,//duration
