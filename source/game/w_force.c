@@ -5038,7 +5038,8 @@ static void WP_ForcePowerRun( gentity_t *self, forcePowers_t forcePower, usercmd
 		}
 		// OVERRIDEFIXME
 		//[ForceSys]
-		if ( !WP_ForcePowerAvailable( self, forcePower, 1 ) || self->client->ps.fd.forcePowerDuration[FP_DRAIN] < level.time || self->client->ps.groundEntityNum == ENTITYNUM_NONE)
+		if ( !WP_ForcePowerAvailable( self, forcePower, 1 ) || self->client->ps.fd.forcePowerDuration[FP_DRAIN] < level.time 
+			|| self->client->ps.groundEntityNum == ENTITYNUM_NONE || self->client->ps.fd.forcePower < 1 )
 		//if ( !WP_ForcePowerAvailable( self, forcePower, 0 ) || self->client->ps.fd.forcePowerDuration[FP_DRAIN] < level.time ||
 		//	self->client->ps.fd.forcePower < 25)
 		//[/ForceSys]
@@ -5093,7 +5094,8 @@ static void WP_ForcePowerRun( gentity_t *self, forcePowers_t forcePower, usercmd
 		}
 		// OVERRIDEFIXME
 		//[ForceSys]
-		if ( !WP_ForcePowerAvailable( self, forcePower, 1 ) || self->client->ps.fd.forcePowerDuration[FP_LIGHTNING] < level.time || self->client->ps.groundEntityNum == ENTITYNUM_NONE)
+		if ( !WP_ForcePowerAvailable( self, forcePower, 1 ) || self->client->ps.fd.forcePowerDuration[FP_LIGHTNING] < level.time 
+			|| self->client->ps.groundEntityNum == ENTITYNUM_NONE || self->client->ps.fd.forcePower < 1 )
 		//if ( !WP_ForcePowerAvailable( self, forcePower, 0 ) || self->client->ps.fd.forcePowerDuration[FP_LIGHTNING] < level.time ||
 		//	self->client->ps.fd.forcePower < 25 || self->client->ps.groundEntityNum == ENTITYNUM_NONE)
 		//[/ForceSys]
