@@ -12447,6 +12447,11 @@ qboolean G_InAttackParry(gentity_t *self)
 		return qfalse;
 	}
 
+	if(self->client->ps.userInt3 & (1 << FLAG_PARRIED))
+	{//can't attack parry when parried.
+		return qfalse;
+	}
+
 	if(BG_SaberInTransitionAny(self->client->ps.saberMove))
 	{//in transition, start, or return
 		return qtrue;
