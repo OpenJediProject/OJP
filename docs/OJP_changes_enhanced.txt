@@ -11,6 +11,9 @@ Version 0.0.9v:
 
 	New Features:
 
+		Experience System:
+			- (StanceSelection) Players now buy saber styles individually instead of getting them for free with Saber Offense.
+
 		Original Main Menu Theme:  
 			Original, brand new music for the main menu.  Special thanks to Jed Smith of Betafish Music (www.betafish.net)!
 

@@ -442,6 +442,30 @@ void NPC_SetMiscDefaultData( gentity_t *ent )
 	}
 	//[/ExpSys]
 
+	//[StanceSelection]
+	//add stance skills for NPCS
+	if(ent->client->ps.fd.forcePowerLevel[FP_SABER_OFFENSE] > 0)
+	{
+		int count;
+		//just bump all the NPC's other saber styles to their saber offense skill level
+		for(count = SK_BLUESTYLE; count <= SK_STAFFSTYLE; count++)
+		{
+			ent->client->skillLevel[count] = ent->client->ps.fd.forcePowerLevel[FP_SABER_OFFENSE];
+		}
+		/*
+		if(ent->client->saber[0].model[0] && ent->client->saber[1].model[0])
+		{
+			ent->client->skillLevel[SK_DUALSTYLE] = ent->client->ps.fd.forcePowerLevel[FP_SABER_OFFENSE];
+		}
+		else if (ent->client->saber[0].numBlades > 1
+			&& WP_SaberCanTurnOffSomeBlades( &ent->client->saber[0] ))
+		{
+			ent->client->skillLevel[SK_STAFFSTYLE] = ent->client->ps.fd.forcePowerLevel[FP_SABER_OFFENSE];
+		}
+		*/
+	}
+	//[/StanceSelection]
+
 	//[DodgeSys]
 	//determine DodgeMax since NPCs kick out of InitForcePowers early.
 	DetermineDodgeMax(ent);
@@ -1132,6 +1156,9 @@ qboolean NPC_SpotWouldTelefrag( gentity_t *npc )
 	return qfalse;
 }
 
+//[StanceSelection]
+extern qboolean WP_SaberCanTurnOffSomeBlades( saberInfo_t *saber );
+//[/StanceSelection]
 //--------------------------------------------------------------
 void NPC_Begin (gentity_t *ent)
 {
@@ -1425,6 +1452,23 @@ void NPC_Begin (gentity_t *ent)
 	}
 
 	ChangeWeapon( ent, ent->client->ps.weapon );//yes, again... sigh
+
+	//[StanceSelection]
+	//set saberAnimLevelBase
+	if(ent->client->saber[0].model[0] && ent->client->saber[1].model[0])
+	{
+		ent->client->ps.fd.saberAnimLevelBase = SS_DUAL;
+	}
+	else if (ent->client->saber[0].numBlades > 1
+		&& WP_SaberCanTurnOffSomeBlades( &ent->client->saber[0] ))
+	{
+		ent->client->ps.fd.saberAnimLevelBase = SS_STAFF;
+	}
+	else
+	{
+		ent->client->ps.fd.saberAnimLevelBase = SS_MEDIUM;
+	}
+	//[/StanceSelection]
 
 	if ( !(ent->spawnflags & SFB_STARTINSOLID) )
 	{//Not okay to start in solid

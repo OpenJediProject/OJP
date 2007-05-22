@@ -3241,6 +3241,14 @@ qboolean Item_OwnerDraw_HandleKey(itemDef_t *item, int key) {
 			case UI_FORCE_RANK_DETPACK:
 			case UI_FORCE_RANK_REPEATER:
 			case UI_FORCE_RANK_DISRUPTOR:
+			//[StanceSelection]
+			case UI_FORCE_RANK_BLUESTYLE:
+			case UI_FORCE_RANK_REDSTYLE:
+			case UI_FORCE_RANK_PURPLESTYLE:
+			case UI_FORCE_RANK_GREENSTYLE:
+			case UI_FORCE_RANK_DUALSTYLE:
+			case UI_FORCE_RANK_STAFFSTYLE:
+			//[/StanceSelection]
 			//[/ExpSys]
 	  			if(!Rect_ContainsPoint(&item->window.rect, DC->cursorx, DC->cursory) )
 				{

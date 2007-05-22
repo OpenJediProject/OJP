@@ -235,7 +235,15 @@ int bgForcePowerCost[NUM_TOTAL_SKILLS][NUM_FORCE_POWER_LEVELS] = //0 == neutral
 	{	0,  6,  0,  0	},	//SK_SENTRY,		//sentry gun skill
 	{	0,  6,  6,  0	},	//SK_DETPACK,		//detpack skill
 	{   0,  6,  7,  8   },  //SK_REPEATER,      // repeater/clone rifle skill
-	{   0,  5,  6,  8   }	//SK_DISRUPTOR,      // Disruptor/sniper rifle skill
+	{   0,  5,  6,  8   },	//SK_DISRUPTOR,      // Disruptor/sniper rifle skill
+	//[StanceSelection]
+	{	0,	1,	4,	4	},	//SK_BLUESTYLE,	//Yellow lightsaber style
+	{	0,	1,	4,	4	},	//SK_REDSTYLE,	//Red lightsaber style
+	{	0,	1,	4,	4	},	//SK_PURPLESTYLE,	//Purple lightsaber style
+	{	0,	1,	4,	4	},	//SK_GREENSTYLE,	//Green lightsaber style
+	{	0,	1,	4,	4	},	//SK_DUALSTYLE,	//Dual lightsaber style
+	{	0,	1,	4,	4	},	//SK_STAFFSTYLE,	//Staff lightsaber style
+	//[/StanceSelection]
 	//[/ExpSys]
 };
 
@@ -678,7 +686,18 @@ qboolean BG_LegalizedForcePowers(char *powerOut, int maxRank, qboolean freeSaber
 				if (final_Powers[c] && final_Powers[c] < powerCycle)
 				{ //kill in order of lowest powers, because the higher powers are probably more important
 					if (c == FP_SABER_OFFENSE &&
-						(final_Powers[FP_SABER_DEFENSE] > minPow || final_Powers[FP_SABERTHROW] > 0))
+						//[StanceSelection]
+						(final_Powers[FP_SABER_DEFENSE] > minPow 
+							|| final_Powers[FP_SABERTHROW] > 0
+							|| final_Powers[NUM_FORCE_POWERS+SK_BLUESTYLE] > 0
+							|| final_Powers[NUM_FORCE_POWERS+SK_REDSTYLE] > 0
+							|| final_Powers[NUM_FORCE_POWERS+SK_PURPLESTYLE] > 0
+							|| final_Powers[NUM_FORCE_POWERS+SK_GREENSTYLE] > 0
+							|| final_Powers[NUM_FORCE_POWERS+SK_DUALSTYLE] > 0
+							|| final_Powers[NUM_FORCE_POWERS+SK_STAFFSTYLE] > 0)
+						)
+						//(final_Powers[FP_SABER_DEFENSE] > minPow || final_Powers[FP_SABERTHROW] > 0))	
+						//[/StanceSelection]
 					{ //if we're on saber attack, only suck it down if we have no def or throw either
 						int whichOne = FP_SABERTHROW; //first try throw
 
@@ -686,6 +705,38 @@ qboolean BG_LegalizedForcePowers(char *powerOut, int maxRank, qboolean freeSaber
 						{
 							whichOne = FP_SABER_DEFENSE; //if no throw, drain defense
 						}
+
+						//[StanceSelection]
+						if (!final_Powers[whichOne])
+						{
+							whichOne = NUM_FORCE_POWERS+SK_BLUESTYLE;
+						}
+
+						if (!final_Powers[whichOne])
+						{
+							whichOne = NUM_FORCE_POWERS+SK_REDSTYLE;
+						}
+
+						if (!final_Powers[whichOne])
+						{
+							whichOne = NUM_FORCE_POWERS+SK_PURPLESTYLE;
+						}
+
+						if (!final_Powers[whichOne])
+						{
+							whichOne = NUM_FORCE_POWERS+SK_GREENSTYLE;
+						}
+
+						if (!final_Powers[whichOne])
+						{
+							whichOne = NUM_FORCE_POWERS+SK_DUALSTYLE;
+						}
+
+						if (!final_Powers[whichOne])
+						{
+							whichOne = NUM_FORCE_POWERS+SK_STAFFSTYLE;
+						}
+						//[/StanceSelection]
 
 						//reduce either Saber Defense or Saberthrow to zero or until we have enough points.
 						while (final_Powers[whichOne] > 0 && usedPoints > allowedPoints)
@@ -862,6 +913,14 @@ qboolean BG_LegalizedForcePowers(char *powerOut, int maxRank, qboolean freeSaber
 				final_Powers[i] = 0;
 			}
 		}
+		//[StanceSelection]
+		final_Powers[NUM_FORCE_POWERS+SK_BLUESTYLE]=0;
+		final_Powers[NUM_FORCE_POWERS+SK_REDSTYLE]=0;
+		final_Powers[NUM_FORCE_POWERS+SK_PURPLESTYLE]=0;
+		final_Powers[NUM_FORCE_POWERS+SK_GREENSTYLE]=0;
+		final_Powers[NUM_FORCE_POWERS+SK_DUALSTYLE]=0;
+		final_Powers[NUM_FORCE_POWERS+SK_STAFFSTYLE]=0;
+		//[/StanceSelection]
 	}
 	//[/ExpSys]
 

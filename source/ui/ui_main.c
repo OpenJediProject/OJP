@@ -3388,6 +3388,14 @@ static int UI_OwnerDrawWidth(int ownerDraw, float scale) {
 	case UI_FORCE_RANK_DETPACK:
 	case UI_FORCE_RANK_REPEATER:
 	case UI_FORCE_RANK_DISRUPTOR:
+	//[StanceSelection]
+	case UI_FORCE_RANK_BLUESTYLE:
+	case UI_FORCE_RANK_REDSTYLE:
+	case UI_FORCE_RANK_PURPLESTYLE:
+	case UI_FORCE_RANK_GREENSTYLE:
+	case UI_FORCE_RANK_DUALSTYLE:
+	case UI_FORCE_RANK_STAFFSTYLE:
+	//[/StanceSelection]
 		if(ownerDraw < UI_FORCE_RANK_JETPACK)
 		{
 			findex = (ownerDraw - UI_FORCE_RANK)-1;
@@ -3888,6 +3896,14 @@ static void UI_OwnerDraw(float x, float y, float w, float h, float text_x, float
 	case UI_FORCE_RANK_DETPACK:
 	case UI_FORCE_RANK_REPEATER:
 	case UI_FORCE_RANK_DISRUPTOR:
+	//[StanceSelection]
+	case UI_FORCE_RANK_BLUESTYLE:
+	case UI_FORCE_RANK_REDSTYLE:
+	case UI_FORCE_RANK_PURPLESTYLE:
+	case UI_FORCE_RANK_GREENSTYLE:
+	case UI_FORCE_RANK_DUALSTYLE:
+	case UI_FORCE_RANK_STAFFSTYLE:
+	//[/StanceSelection]
 	//[/ExpSys]
 
 //		uiForceRank
@@ -5233,6 +5249,14 @@ static qboolean UI_OwnerDrawHandleKey(int ownerDraw, int flags, float *special, 
 	case UI_FORCE_RANK_DETPACK:
 	case UI_FORCE_RANK_REPEATER:
 	case UI_FORCE_RANK_DISRUPTOR:
+	//[StanceSelection]
+	case UI_FORCE_RANK_BLUESTYLE:
+	case UI_FORCE_RANK_REDSTYLE:
+	case UI_FORCE_RANK_PURPLESTYLE:
+	case UI_FORCE_RANK_GREENSTYLE:
+	case UI_FORCE_RANK_DUALSTYLE:
+	case UI_FORCE_RANK_STAFFSTYLE:
+	//[/StanceSelection]
 		if(ownerDraw < UI_FORCE_RANK_JETPACK)
 		{
 			findex = (ownerDraw - UI_FORCE_RANK)-1;

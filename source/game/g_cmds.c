@@ -1682,7 +1682,10 @@ argCheck:
 	}
 }
 
-extern qboolean WP_SaberStyleValidForSaber( saberInfo_t *saber1, saberInfo_t *saber2, int saberHolstered, int saberAnimLevel );
+//[StanceSelection]
+qboolean G_ValidSaberStyle(gentity_t *ent, int saberStyle);
+//extern qboolean WP_SaberStyleValidForSaber( saberInfo_t *saber1, saberInfo_t *saber2, int saberHolstered, int saberAnimLevel );
+//[/StanceSelection]
 extern qboolean WP_UseFirstValidSaberStyle( saberInfo_t *saber1, saberInfo_t *saber2, int saberHolstered, int *saberAnimLevel );
 qboolean G_SetSaber(gentity_t *ent, int saberNum, char *saberName, qboolean siegeOverride)
 {
@@ -1736,11 +1739,21 @@ qboolean G_SetSaber(gentity_t *ent, int saberNum, char *saberName, qboolean sieg
 		strcpy(ent->client->sess.saber2Type, ent->client->saber[1].name);
 	}
 
+	//[StanceSelection]
+	if ( !G_ValidSaberStyle(ent, ent->client->ps.fd.saberAnimLevel) )
+	{//had an illegal style, revert to default
+		ent->client->ps.fd.saberAnimLevel = SS_MEDIUM;
+		ent->client->saberCycleQueue = ent->client->ps.fd.saberAnimLevel;
+	}
+
+	/*
 	if ( !WP_SaberStyleValidForSaber( &ent->client->saber[0], &ent->client->saber[1], ent->client->ps.saberHolstered, ent->client->ps.fd.saberAnimLevel ) )
 	{
 		WP_UseFirstValidSaberStyle( &ent->client->saber[0], &ent->client->saber[1], ent->client->ps.saberHolstered, &ent->client->ps.fd.saberAnimLevel );
 		ent->client->ps.fd.saberAnimLevelBase = ent->client->saberCycleQueue = ent->client->ps.fd.saberAnimLevel;
 	}
+	*/
+	//[/StanceSelection]
 
 	return qtrue;
 }
@@ -3344,6 +3357,34 @@ void Cmd_ToggleSaber_f(gentity_t *ent)
 	}
 }
 
+
+qboolean G_ValidSaberStyle(gentity_t *ent, int saberStyle)
+{	
+	if(saberStyle == SS_MEDIUM)
+	{//SS_YELLOW is the default and always valid
+		return qtrue;
+	}
+	
+	//otherwise, check to see if the player has the skill to use this style
+	switch (saberStyle)
+	{
+		case SS_FAST:
+			if(ent->client->skillLevel[SK_BLUESTYLE] > 0)
+			{
+				return qtrue;
+			}
+			break;
+		default:
+			if(ent->client->skillLevel[saberStyle+SK_REDSTYLE-SS_STRONG] > 0)
+			{//valid style
+				return qtrue;
+			}
+			break;
+	};
+
+	return qfalse;
+}
+
 extern vmCvar_t		d_saberStanceDebug;
 
 extern qboolean WP_SaberCanTurnOffSomeBlades( saberInfo_t *saber );
@@ -3401,6 +3442,7 @@ void Cmd_SaberAttackCycle_f(gentity_t *ent)
 	}
 	//[/TAUNTFIX]
 
+	/* basejka code
 	if (ent->client->saber[0].model[0] && ent->client->saber[1].model[0])
 	{ //no cycling for akimbo
 		if ( WP_SaberCanTurnOffSomeBlades( &ent->client->saber[1] ) )
@@ -3507,6 +3549,7 @@ void Cmd_SaberAttackCycle_f(gentity_t *ent)
 		}
 		return;
 	}
+	*/
 
 	if (ent->client->saberCycleQueue)
 	{ //resume off of the queue if we haven't gotten a chance to update it yet
@@ -3546,8 +3589,56 @@ void Cmd_SaberAttackCycle_f(gentity_t *ent)
 		}
 	}
 	else
-	{
+	{//normal style selection
+		int attempts;
 		selectLevel++;
+
+		for(attempts = 0; attempts < SS_STAFF; attempts++)
+		{
+			if(selectLevel > SS_STAFF)
+			{
+				selectLevel = SS_FAST;
+			}
+
+			if(G_ValidSaberStyle(ent, selectLevel))
+			{
+				break;
+			}
+
+			//no dice, keep looking
+			selectLevel++;
+		}
+
+		//handle saber activation/deactivation based on the style transition
+		if (ent->client->saber[0].model[0] && ent->client->saber[1].model[0]
+			&& WP_SaberCanTurnOffSomeBlades( &ent->client->saber[1] ) )
+		{//using dual sabers
+			if(selectLevel != SS_DUAL && ent->client->ps.saberHolstered == 0 && !ent->client->ps.saberInFlight)
+			{//not using dual style, turn off the other blade
+				G_Sound(ent, CHAN_AUTO, ent->client->saber[1].soundOff);
+				ent->client->ps.saberHolstered = 1;
+			}
+			else if(selectLevel == SS_DUAL && ent->client->ps.saberHolstered == 1 && !ent->client->ps.saberInFlight)
+			{
+				G_Sound(ent, CHAN_AUTO, ent->client->saber[1].soundOn);
+				ent->client->ps.saberHolstered = 0;
+			}
+		}
+		else if (ent->client->saber[0].numBlades > 1
+			&& WP_SaberCanTurnOffSomeBlades( &ent->client->saber[0] ) )
+		{ //use staff stance then.
+			if(selectLevel != SS_STAFF && ent->client->ps.saberHolstered == 0 && !ent->client->ps.saberInFlight)
+			{
+				G_Sound(ent, CHAN_AUTO, ent->client->saber[0].soundOff);
+				ent->client->ps.saberHolstered = 1;
+			}
+			else if(selectLevel == SS_STAFF && ent->client->ps.saberHolstered == 1 && !ent->client->ps.saberInFlight)
+			{
+					G_Sound(ent, CHAN_AUTO, ent->client->saber[1].soundOn);
+					ent->client->ps.saberHolstered = 0;
+			}
+		}
+		/*
 		//[HiddenStances]
 		if ( selectLevel > ent->client->ps.fd.forcePowerLevel[FP_SABER_OFFENSE] 
 		&& ent->client->ps.fd.forcePowerLevel[FP_SABER_OFFENSE] < FORCE_LEVEL_3
@@ -3557,6 +3648,7 @@ void Cmd_SaberAttackCycle_f(gentity_t *ent)
 		{
 			selectLevel = FORCE_LEVEL_1;
 		}
+		*/
 		if (d_saberStanceDebug.integer)
 		{
 			trap_SendServerCommand( ent-g_entities, va("print \"SABERSTANCEDEBUG: Attempted to cycle stance normally.\n\"") );
@@ -3578,19 +3670,21 @@ void Cmd_SaberAttackCycle_f(gentity_t *ent)
 	}
 #endif
 */
+	/*
 	if ( !usingSiegeStyle )
 	{
 		//make sure it's valid, change it if not
 		WP_UseFirstValidSaberStyle( &ent->client->saber[0], &ent->client->saber[1], ent->client->ps.saberHolstered, &selectLevel );
 	}
+	*/
 
 	if (ent->client->ps.weaponTime <= 0)
 	{ //not busy, set it now
-		ent->client->ps.fd.saberAnimLevelBase = ent->client->ps.fd.saberAnimLevel = selectLevel;
+		ent->client->ps.fd.saberAnimLevel = selectLevel;
 	}
 	else
 	{ //can't set it now or we might cause unexpected chaining, so queue it
-		ent->client->ps.fd.saberAnimLevelBase = ent->client->saberCycleQueue = selectLevel;
+		ent->client->saberCycleQueue = selectLevel;
 	}
 }
 

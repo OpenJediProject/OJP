@@ -11,7 +11,9 @@ extern void Jedi_Decloak( gentity_t *self );
 qboolean PM_SaberInTransition( int move );
 qboolean PM_SaberInStart( int move );
 qboolean PM_SaberInReturn( int move );
-qboolean WP_SaberStyleValidForSaber( saberInfo_t *saber1, saberInfo_t *saber2, int saberHolstered, int saberAnimLevel );
+//[StanceSelection]
+//qboolean WP_SaberStyleValidForSaber( saberInfo_t *saber1, saberInfo_t *saber2, int saberHolstered, int saberAnimLevel );
+//[/StanceSelection]
 #include "../namespace_end.h"
 qboolean saberCheckKnockdown_DuelLoss(gentity_t *saberent, gentity_t *saberOwner, gentity_t *other);
 
@@ -2166,6 +2168,10 @@ extern vmCvar_t g_logDuelStats;
 extern qboolean SabBeh_ButtonforSaberLock(gentity_t* self);
 extern void G_RollBalance(gentity_t *self, gentity_t *inflictor, qboolean forceMishap);
 //[/SaberLockSys]
+//[StanceSelection]
+extern qboolean G_ValidSaberStyle(gentity_t *ent, int saberStyle);
+extern qboolean WP_SaberCanTurnOffSomeBlades( saberInfo_t *saber );
+//[/StanceSelection]
 void ClientThink_real( gentity_t *ent ) {
 	gclient_t	*client;
 	pmove_t		pm;
@@ -2260,6 +2266,35 @@ void ClientThink_real( gentity_t *ent ) {
 				}
 			}
 		}
+		//[StanceSelection]
+		else
+		{//check to see if we got a valid saber style and holster setting.
+			if ( !G_ValidSaberStyle(ent, ent->client->ps.fd.saberAnimLevel) )
+			{//had an illegal style, revert to default
+				ent->client->ps.fd.saberAnimLevel = SS_MEDIUM;
+				ent->client->saberCycleQueue = ent->client->ps.fd.saberAnimLevel;
+			}
+			
+			if(!ent->client->ps.saberInFlight)
+			{//can't switch saber holster settings if saber is out.
+				if (ent->client->saber[0].model[0] && ent->client->saber[1].model[0]
+					&& WP_SaberCanTurnOffSomeBlades( &ent->client->saber[1] ) 
+					&& ent->client->ps.fd.saberAnimLevel != SS_DUAL
+					&& ent->client->ps.saberHolstered == 0)
+				{//using dual sabers, but not the dual style, turn off blade
+					ent->client->ps.saberHolstered = 1;
+				}
+				else if (ent->client->saber[0].numBlades > 1
+					&& WP_SaberCanTurnOffSomeBlades( &ent->client->saber[0] )
+					&& ent->client->ps.fd.saberAnimLevel != SS_STAFF
+					&& ent->client->ps.saberHolstered == 0)
+				{//using staff saber, but not the staff style, turn off blade
+					ent->client->ps.saberHolstered = 1;
+				}
+			}
+		}
+
+		/*
 		else if (client->saber[0].model[0] && client->saber[1].model[0])
 		{ //with two sabs always use akimbo style
 			//[SaberThrowSys]
@@ -2271,7 +2306,7 @@ void ClientThink_real( gentity_t *ent ) {
 				client->ps.fd.saberDrawAnimLevel = client->ps.fd.saberAnimLevel;
 			}
 			else
-			*/
+			*//*
 			//[/SaberThrowSys]
 			{
 				if ( !WP_SaberStyleValidForSaber( &client->saber[0], &client->saber[1], client->ps.saberHolstered, client->ps.fd.saberAnimLevel ) )
@@ -2302,6 +2337,9 @@ void ClientThink_real( gentity_t *ent ) {
 				}
 			}
 		}
+		*/
+		//[/StanceSelection]
+
 	}
 
 	// mark the time, so the connection sprite can be removed

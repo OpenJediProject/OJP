@@ -191,7 +191,24 @@ void DetermineDodgeMax(gentity_t *ent)
 		{//has points in this skill
 			for(skillCount = FORCE_LEVEL_1; skillCount <= ent->client->skillLevel[i]; skillCount++)
 			{
-				dodgeMax += bgForcePowerCost[i][skillCount] * SK_DP_FORMERC;
+				//[StanceSelection]
+				if(i == SK_BLUESTYLE
+					|| i == SK_REDSTYLE
+					|| i == SK_PURPLESTYLE
+					|| i == SK_GREENSTYLE
+					|| i == SK_DUALSTYLE
+					|| i == SK_STAFFSTYLE)
+				{//these count as force powers
+					dodgeMax += bgForcePowerCost[i][skillCount] * SK_DP_FORFORCE;
+				}
+				
+				else
+				{
+					dodgeMax += bgForcePowerCost[i][skillCount] * SK_DP_FORMERC;
+				}
+
+				//dodgeMax += bgForcePowerCost[i][skillCount] * SK_DP_FORMERC;
+				//[/StanceSelection]
 			}
 		}
 	}

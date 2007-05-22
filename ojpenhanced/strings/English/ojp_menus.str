@@ -118,6 +118,53 @@ LANG_ENGLISH	"Disruptor:"
 
 REFERENCE	    DESC_SKILL_DISRUPTOR
 LANG_ENGLISH	"Gains the user the Disruptor."
+
+//[StanceSelection]
+REFERENCE	REQUIRES_BLUESTYLE
+LANG_ENGLISH	"(requires Shii-Cho 1)"
+
+REFERENCE	SKILL_BLUESTYLE
+LANG_ENGLISH	"Soresu:"
+
+REFERENCE	    DESC_SKILL_BLUESTYLE
+LANG_ENGLISH	"Gains the user the Soresu style of lightsaber combat."
+
+REFERENCE	SKILL_YELLOWSTYLE
+LANG_ENGLISH	"Shii-Cho:"
+
+REFERENCE	    DESC_SKILL_YELLOWSTYLE
+LANG_ENGLISH	"Gains the user a lightsaber and levels in the Shii-Cho style of lightsaber combat."
+
+REFERENCE	SKILL_REDSTYLE
+LANG_ENGLISH	"Djem So:"
+
+REFERENCE	    DESC_SKILL_REDSTYLE
+LANG_ENGLISH	"Gains the user the Djem So style of lightsaber combat."
+
+REFERENCE	SKILL_GREENSTYLE
+LANG_ENGLISH	"Makashi:"
+
+REFERENCE	    DESC_SKILL_GREENSTYLE
+LANG_ENGLISH	"Gains the user the Makashi style of lightsaber combat."
+
+REFERENCE	SKILL_PURPLESTYLE
+LANG_ENGLISH	"Juyo:"
+
+REFERENCE	    DESC_SKILL_PURPLESTYLE
+LANG_ENGLISH	"Gains the user the Juyo style of lightsaber combat."
+
+REFERENCE	SKILL_DUALSTYLE
+LANG_ENGLISH	"Dual Style:"
+
+REFERENCE	    DESC_SKILL_DUALSTYLE
+LANG_ENGLISH	"Gains the user the ability to use dual lightsabers."
+
+REFERENCE	SKILL_STAFFSTYLE
+LANG_ENGLISH	"Staff Style:"
+
+REFERENCE	    DESC_SKILL_STAFFSTYLE
+LANG_ENGLISH	"Gains the user the ability to use the staff lightsaber."
+//[/StanceSelection]
 //[/ExpSys]
 
 //[Flamethrower]

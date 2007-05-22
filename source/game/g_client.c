@@ -13,7 +13,9 @@ extern int g_siegeRespawnCheck;
 
 void WP_SaberAddG2Model( gentity_t *saberent, const char *saberModel, qhandle_t saberSkin );
 void WP_SaberRemoveG2Model( gentity_t *saberent );
-extern qboolean WP_SaberStyleValidForSaber( saberInfo_t *saber1, saberInfo_t *saber2, int saberHolstered, int saberAnimLevel );
+//[StanceSelection]
+//extern qboolean WP_SaberStyleValidForSaber( saberInfo_t *saber1, saberInfo_t *saber2, int saberHolstered, int saberAnimLevel );
+//[/StanceSelection]
 extern qboolean WP_UseFirstValidSaberStyle( saberInfo_t *saber1, saberInfo_t *saber2, int saberHolstered, int *saberAnimLevel );
 
 forcedata_t Client_Force[MAX_CLIENTS];
@@ -3319,6 +3321,10 @@ qboolean OJP_AllPlayersHaveClientPlugin(void);
 extern int FindBotType(int clientNum);
 //[/TABBots]
 extern qboolean WP_HasForcePowers( const playerState_t *ps );
+//[StanceSelection]
+extern qboolean G_ValidSaberStyle(gentity_t *ent, int saberStyle);
+extern qboolean WP_SaberCanTurnOffSomeBlades( saberInfo_t *saber );
+//[StanceSelection]
 void ClientSpawn(gentity_t *ent) {
 	int					index;
 	vec3_t				spawn_origin, spawn_angles;
@@ -3431,6 +3437,8 @@ void ClientSpawn(gentity_t *ent) {
 			l++;
 		}
 
+		//[StanceSelection]
+		/*
 		if (ent->client->saber[0].model[0] &&
 			ent->client->saber[1].model[0])
 		{ //dual
@@ -3457,7 +3465,7 @@ void ClientSpawn(gentity_t *ent) {
 			{
 				ent->client->sess.saberLevel = SS_STRONG;
 			}
-			*/
+			*//*
 			//[/SaberSys]
 			ent->client->ps.fd.saberAnimLevelBase = ent->client->ps.fd.saberAnimLevel = ent->client->ps.fd.saberDrawAnimLevel = ent->client->sess.saberLevel;
 
@@ -3469,7 +3477,7 @@ void ClientSpawn(gentity_t *ent) {
 			{
 				ent->client->ps.fd.saberAnimLevelBase = ent->client->ps.fd.saberAnimLevel = ent->client->ps.fd.saberDrawAnimLevel = ent->client->sess.saberLevel = ent->client->ps.fd.forcePowerLevel[FP_SABER_OFFENSE];
 			}
-			*/
+			*//*
 			//[/SaberSys]
 		}
 		if ( g_gametype.integer != GT_SIEGE )
@@ -3481,6 +3489,8 @@ void ClientSpawn(gentity_t *ent) {
 				ent->client->ps.fd.saberAnimLevelBase = ent->client->saberCycleQueue = ent->client->ps.fd.saberAnimLevel;
 			}
 		}
+		*/
+		//[/StanceSelection]
 	}
 	l = 0;
 
@@ -3504,6 +3514,8 @@ void ClientSpawn(gentity_t *ent) {
 	}
 	//[/TABBots]
 
+	//[StanceSelection]
+	/*
 	if (ent->client->ps.fd.saberAnimLevel != SS_STAFF &&
 		ent->client->ps.fd.saberAnimLevel != SS_DUAL &&
 		ent->client->ps.fd.saberAnimLevel == ent->client->ps.fd.saberDrawAnimLevel &&
@@ -3524,7 +3536,7 @@ void ClientSpawn(gentity_t *ent) {
 		{
 			ent->client->sess.saberLevel = SS_STRONG;
 		}
-		*/
+		*//*
 		//[/SaberSys]
 		ent->client->ps.fd.saberAnimLevel = ent->client->ps.fd.saberDrawAnimLevel = ent->client->sess.saberLevel;
 
@@ -3536,9 +3548,22 @@ void ClientSpawn(gentity_t *ent) {
 		{
 			ent->client->ps.fd.saberAnimLevel = ent->client->ps.fd.saberDrawAnimLevel = ent->client->sess.saberLevel = ent->client->ps.fd.forcePowerLevel[FP_SABER_OFFENSE];
 		}
-		*/
+		*//*
 		//[/SaberSys]
 	}
+	*/
+
+	ent->client->ps.fd.saberAnimLevel = ent->client->ps.fd.saberDrawAnimLevel = ent->client->sess.saberLevel;
+	if ( g_gametype.integer != GT_SIEGE )
+	{
+		//let's just make sure the styles we chose are cool
+		if ( !G_ValidSaberStyle(ent, ent->client->ps.fd.saberAnimLevel) )
+		{//had an illegal style, revert to default
+			ent->client->ps.fd.saberAnimLevel = SS_MEDIUM;
+			ent->client->saberCycleQueue = ent->client->ps.fd.saberAnimLevel;
+		}
+	}
+	//[/StanceSelection]
 
 	// find a spawn point
 	// do it before setting health back up, so farthest
@@ -4379,6 +4404,41 @@ void ClientSpawn(gentity_t *ent) {
 
 	//Do per-spawn force power initialization
 	WP_SpawnInitForcePowers( ent );
+
+	//[StanceSelection]
+	//set saberAnimLevelBase
+	if(ent->client->saber[0].model[0] && ent->client->saber[1].model[0])
+	{
+		ent->client->ps.fd.saberAnimLevelBase = SS_DUAL;
+	}
+	else if (ent->client->saber[0].numBlades > 1
+		&& WP_SaberCanTurnOffSomeBlades( &ent->client->saber[0] ))
+	{
+		ent->client->ps.fd.saberAnimLevelBase = SS_STAFF;
+	}
+	else
+	{
+		ent->client->ps.fd.saberAnimLevelBase = SS_MEDIUM;
+	}
+
+	//set initial saberholstered mode
+	if (ent->client->saber[0].model[0] && ent->client->saber[1].model[0]
+			&& WP_SaberCanTurnOffSomeBlades( &ent->client->saber[1] ) 
+			&& ent->client->ps.fd.saberAnimLevel != SS_DUAL)
+	{//using dual sabers, but not the dual style, turn off blade
+		ent->client->ps.saberHolstered = 1;
+	}
+	else if (ent->client->saber[0].numBlades > 1
+		&& WP_SaberCanTurnOffSomeBlades( &ent->client->saber[0] ) 
+		&& ent->client->ps.fd.saberAnimLevel != SS_STAFF)
+	{//using staff saber, but not the staff style, turn off blade
+		ent->client->ps.saberHolstered = 1;
+	}
+	else
+	{
+		ent->client->ps.saberHolstered = 0;
+	}
+	//[/StanceSelection]
 
 	// health will count down towards max_health
 	if (g_gametype.integer == GT_SIEGE &&

@@ -294,7 +294,7 @@ void UI_DrawForceStars(rectDef_t *rect, float scale, vec4_t color, int textStyle
 void UI_UpdateClientForcePowers(const char *teamArg)
 {
 	//[ExpSys]
-	trap_Cvar_Set( "forcepowers", va("%i-%i-%i%i%i%i%i%i%i%i%i%i%i%i%i%i%i%i%i%i%i%i%i%i%i%i%i%i%i%i%i%i%i%i%i",
+	trap_Cvar_Set( "forcepowers", va("%i-%i-%i%i%i%i%i%i%i%i%i%i%i%i%i%i%i%i%i%i%i%i%i%i%i%i%i%i%i%i%i%i%i%i%i%i%i%i%i%i%i",
 	//trap_Cvar_Set( "forcepowers", va("%i-%i-%i%i%i%i%i%i%i%i%i%i%i%i%i%i%i%i%i%i",
 	//[/ExpSys]
 		uiForceRank, uiForceSide, uiForcePowersRank[0], uiForcePowersRank[1],
@@ -309,7 +309,9 @@ void UI_UpdateClientForcePowers(const char *teamArg)
 		uiForcePowersRank[23], uiForcePowersRank[24], uiForcePowersRank[25],
 		uiForcePowersRank[26], uiForcePowersRank[27], uiForcePowersRank[28],
 		uiForcePowersRank[29], uiForcePowersRank[30], uiForcePowersRank[31],
-		uiForcePowersRank[32]) );
+		uiForcePowersRank[32], uiForcePowersRank[33], uiForcePowersRank[34],
+		uiForcePowersRank[35], uiForcePowersRank[36], uiForcePowersRank[37],
+		uiForcePowersRank[38]) );
 		//[/ExpSys]
 
 	if (gTouchedForce)
@@ -544,11 +546,27 @@ void UpdateForceUsed()
 		if(uiForcePowersRank[FP_SEE] <= FORCE_LEVEL_0)
 		{//can't use a saber if we're not Force sensitive!
 			uiForcePowersRank[FP_SABER_OFFENSE]=0;
+			//[StanceSelection]
+			uiForcePowersRank[NUM_FORCE_POWERS+SK_BLUESTYLE]=0;
+			uiForcePowersRank[NUM_FORCE_POWERS+SK_REDSTYLE]=0;
+			uiForcePowersRank[NUM_FORCE_POWERS+SK_PURPLESTYLE]=0;
+			uiForcePowersRank[NUM_FORCE_POWERS+SK_GREENSTYLE]=0;
+			uiForcePowersRank[NUM_FORCE_POWERS+SK_DUALSTYLE]=0;
+			uiForcePowersRank[NUM_FORCE_POWERS+SK_STAFFSTYLE]=0;
+			//[/StanceSelection]
 			uiForcePowersRank[FP_SABER_DEFENSE]=0;
 			uiForcePowersRank[FP_SABERTHROW]=0;
 			if (menu)
 			{
 				Menu_ShowItemByName(menu, "setfp_saberattack", qfalse);
+				//[StanceSelection]
+				Menu_ShowItemByName(menu, "setfp_bluestyle", qfalse);
+				Menu_ShowItemByName(menu, "setfp_redstyle", qfalse);
+				Menu_ShowItemByName(menu, "setfp_greenstyle", qfalse);
+				Menu_ShowItemByName(menu, "setfp_purplestyle", qfalse);
+				Menu_ShowItemByName(menu, "setfp_dualstyle", qfalse);
+				Menu_ShowItemByName(menu, "setfp_staffstyle", qfalse);
+				//[/StanceSelection]
 				Menu_ShowItemByName(menu, "setfp_saberdefend", qfalse);
 				Menu_ShowItemByName(menu, "setfp_saberthrow", qfalse);
 				Menu_ShowItemByName(menu, "effectentry", qfalse);
@@ -561,11 +579,27 @@ void UpdateForceUsed()
 		//if (uiForcePowersRank[FP_SABER_OFFENSE]<1)
 		{
 			Menu_ShowItemByName(menu, "setfp_saberattack", qtrue);
-		//[/ExpSys]
+			//[/ExpSys]
+			//[StanceSelection]
+			uiForcePowersRank[NUM_FORCE_POWERS+SK_BLUESTYLE]=0;
+			uiForcePowersRank[NUM_FORCE_POWERS+SK_REDSTYLE]=0;
+			uiForcePowersRank[NUM_FORCE_POWERS+SK_PURPLESTYLE]=0;
+			uiForcePowersRank[NUM_FORCE_POWERS+SK_GREENSTYLE]=0;
+			uiForcePowersRank[NUM_FORCE_POWERS+SK_DUALSTYLE]=0;
+			uiForcePowersRank[NUM_FORCE_POWERS+SK_STAFFSTYLE]=0;
+			//[/StanceSelection]
 			uiForcePowersRank[FP_SABER_DEFENSE]=0;
 			uiForcePowersRank[FP_SABERTHROW]=0;
 			if (menu)
 			{
+				//[StanceSelection]
+				Menu_ShowItemByName(menu, "setfp_bluestyle", qfalse);
+				Menu_ShowItemByName(menu, "setfp_redstyle", qfalse);
+				Menu_ShowItemByName(menu, "setfp_greenstyle", qfalse);
+				Menu_ShowItemByName(menu, "setfp_purplestyle", qfalse);
+				Menu_ShowItemByName(menu, "setfp_dualstyle", qfalse);
+				Menu_ShowItemByName(menu, "setfp_staffstyle", qfalse);
+				//[/StanceSelection]
 				Menu_ShowItemByName(menu, "setfp_saberdefend", qfalse);
 				Menu_ShowItemByName(menu, "setfp_saberthrow", qfalse);
 				Menu_ShowItemByName(menu, "effectentry", qfalse);
@@ -578,6 +612,12 @@ void UpdateForceUsed()
 			if (menu)
 			{
 				Menu_ShowItemByName(menu, "setfp_saberdefend", qtrue);
+				Menu_ShowItemByName(menu, "setfp_bluestyle", qtrue);
+				Menu_ShowItemByName(menu, "setfp_redstyle", qtrue);
+				Menu_ShowItemByName(menu, "setfp_greenstyle", qtrue);
+				Menu_ShowItemByName(menu, "setfp_purplestyle", qtrue);
+				Menu_ShowItemByName(menu, "setfp_dualstyle", qtrue);
+				Menu_ShowItemByName(menu, "setfp_staffstyle", qtrue);
 				Menu_ShowItemByName(menu, "setfp_saberthrow", qtrue);
 				Menu_ShowItemByName(menu, "effectentry", qtrue);
 				Menu_ShowItemByName(menu, "effectfield", qtrue);
@@ -1238,7 +1278,18 @@ qboolean UI_ForcePowerRank_HandleKey(int flags, float *special, int key, int num
 
 		//[ExpSys]
 		//Made Force Seeing Level 1 a pre-req to taking any additional force powers, except in the case of free sabers.
-		if (forcepower < NUM_FORCE_POWERS && forcepower != FP_SEE)
+		//[StanceSelection]
+		if (forcepower != FP_SEE 
+			&& (forcepower < NUM_FORCE_POWERS 
+				|| forcepower == NUM_FORCE_POWERS+SK_BLUESTYLE
+				|| forcepower == NUM_FORCE_POWERS+SK_REDSTYLE
+				|| forcepower == NUM_FORCE_POWERS+SK_PURPLESTYLE
+				|| forcepower == NUM_FORCE_POWERS+SK_GREENSTYLE
+				|| forcepower == NUM_FORCE_POWERS+SK_DUALSTYLE
+				|| forcepower == NUM_FORCE_POWERS+SK_STAFFSTYLE)
+			)
+		//if (forcepower < NUM_FORCE_POWERS && forcepower != FP_SEE)
+		//[/StanceSelection]
 		{//force powers can't be bought without being force sensitive
 			if (uiForcePowersRank[FP_SEE] < 1)
 			{
@@ -1257,7 +1308,17 @@ qboolean UI_ForcePowerRank_HandleKey(int flags, float *special, int key, int num
 		}
 		else if (forcepower == FP_SABER_DEFENSE || forcepower == FP_SABERTHROW)
 		*/
-		if (forcepower == FP_SABER_DEFENSE || forcepower == FP_SABERTHROW)
+		//[StanceSelection]
+		if (forcepower == FP_SABER_DEFENSE 
+			|| forcepower == FP_SABERTHROW
+			|| forcepower == NUM_FORCE_POWERS+SK_BLUESTYLE
+			|| forcepower == NUM_FORCE_POWERS+SK_REDSTYLE
+			|| forcepower == NUM_FORCE_POWERS+SK_PURPLESTYLE
+			|| forcepower == NUM_FORCE_POWERS+SK_GREENSTYLE
+			|| forcepower == NUM_FORCE_POWERS+SK_DUALSTYLE
+			|| forcepower == NUM_FORCE_POWERS+SK_STAFFSTYLE)
+		//if (forcepower == FP_SABER_DEFENSE || forcepower == FP_SABERTHROW)
+		//[/StanceSelection]
 		//[/ForceSys]
 		{	// Saberdefend and saberthrow can't be bought if there is no saberattack
 			if (uiForcePowersRank[FP_SABER_OFFENSE] < 1)

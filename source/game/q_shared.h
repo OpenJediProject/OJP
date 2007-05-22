@@ -661,6 +661,14 @@ typedef enum
 	SK_DETPACK,		//detpack skill
 	SK_REPEATER,	//Repeater/clone Rifle skill
 	SK_DISRUPTOR,	//Disruptor/sniper rifle skill
+	//[StanceSelection]
+	SK_BLUESTYLE,	//Yellow lightsaber style
+	SK_REDSTYLE,	//Red lightsaber style
+	SK_PURPLESTYLE,	//Purple lightsaber style
+	SK_GREENSTYLE,	//Green lightsaber style
+	SK_DUALSTYLE,	//Dual lightsaber style
+	SK_STAFFSTYLE,	//Staff lightsaber style
+	//[/StanceSelection]
 	NUM_SKILLS
 } skills_t;
 
@@ -2223,7 +2231,7 @@ typedef struct forcedata_s {
 	//racc - flag for indicating when a player has a sentry gun deployed.  This prevents the player from deploying multiple sentry guns.
 	qboolean	sentryDeployed;	
 
-	int			saberAnimLevelBase;//sigh...
+	int			saberAnimLevelBase;//sigh... //racc - This id's the saber style. SS_DUAL for dual sabers, SS_STAFF for staff sabers, and anything else for single saber. 
 	int			saberAnimLevel;
 	int			saberDrawAnimLevel;
 

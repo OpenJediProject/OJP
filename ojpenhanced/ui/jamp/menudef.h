@@ -370,7 +370,15 @@
 #define UI_FORCE_RANK_SENTRY		309
 #define UI_FORCE_RANK_DETPACK		310
 #define UI_FORCE_RANK_REPEATER      311    
-#define UI_FORCE_RANK_DISRUPTOR     312   
+#define UI_FORCE_RANK_DISRUPTOR     312
+//[StanceSelection]
+#define UI_FORCE_RANK_BLUESTYLE		313
+#define UI_FORCE_RANK_REDSTYLE		314
+#define UI_FORCE_RANK_PURPLESTYLE	315
+#define UI_FORCE_RANK_GREENSTYLE	316
+#define UI_FORCE_RANK_DUALSTYLE		317
+#define UI_FORCE_RANK_STAFFSTYLE	318
+//[/StanceSelection]
 //[/ExpSys]
 
 #define VOICECHAT_GETFLAG			"getflag"				// command someone to get the flag

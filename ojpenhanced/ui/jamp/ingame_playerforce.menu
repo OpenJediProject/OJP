@@ -520,7 +520,7 @@
 			group				"playersettingforcegroup"
 			style				0	
 			text				"Lightsaber Skills"
-			rect				20 270 0 0
+			rect				20 225 0 0
 			textalign			ITEM_ALIGN_LEFT		
 			textalignx			0
 			textaligny			0
@@ -541,7 +541,7 @@
 			group				"playersettingforcegroup"
 			style				0	
 			text				@MENUS_1_2_3
-			rect				20 270 0 0
+			rect				20 225 0 0
 			textalign			ITEM_ALIGN_LEFT
 			textalignx			115
 			textaligny			0
@@ -564,7 +564,7 @@
 			text				@MENUS_NO_LIGHTSABER
 			type				1
 			style				0	
-			rect				43 305 0 0
+			rect				43 255 0 0
 			textalign			ITEM_ALIGN_CENTER	 	
 			textalignx			65
 			textaligny			0
@@ -585,10 +585,13 @@
 		{
 			name					nosaber
 			group					"playersettinggroup"
-			text					@MENUS__REQUIRES_SABER_ATTACK
+			//[StanceSelection]
+			text					@OJP_MENUS_REQUIRES_BLUESTYLE
+			//text					@MENUS__REQUIRES_SABER_ATTACK
+			//[/StanceSelection]
 			type					1
 			style					0	
-			rect					43 322 0 0
+			rect					43 270 0 0
 			textalign				ITEM_ALIGN_CENTER		
 			textalignx				65
 			outlinecolor			1 .5 .5 .5
@@ -623,9 +626,12 @@
 			name					setfp_saberattack
 			group					"playersettingforcegroup"
 			style					0	
-			text					@MENUS_SABER_ATTACK
+			//[StanceSelection]
+			text					@OJP_MENUS_SKILL_YELLOWSTYLE
+			//text					@MENUS_SABER_ATTACK
+			//[/StanceSelection]
 			//descText				@MENUS_DESCRIPTION_OF_A_FORCE
-			rect					20 285 110 15
+			rect					20 240 110 15
 			textalign				ITEM_ALIGN_LEFT		
 			textalignx				0
 			textaligny				0
@@ -647,7 +653,7 @@
 			group					"playersettingforcegroup"
 			style					0	
 			ownerdraw				UI_FORCE_RANK_SABERATTACK
-			rect					20 285 175 15
+			rect					20 240 175 15
 			textalign				ITEM_ALIGN_LEFT		
 			textalignx				115
 			textaligny				-5
@@ -657,7 +663,10 @@
 			forecolor				0.8 0.8 0.8 1
 			border					0
 			bordercolor				0 0 0 0
-			descText				@MENUS_USE_MORE_POWERFUL_LIGHTSABER
+			//[StanceSelection]
+			descText				@OJP_MENUS_DESC_SKILL_YELLOWSTYLE
+			//descText				@MENUS_USE_MORE_POWERFUL_LIGHTSABER
+			//[/StanceSelection]
 			visible					1 
 			action 
 			{ 
@@ -674,6 +683,350 @@
 			}
 		}
 		
+		//[StanceSelection]
+		// Saber Blue Style title
+		itemDef 
+		{
+			name					setfp_bluestyle
+			group					"playersettingforcegroup"
+			style					0	
+			text					@OJP_MENUS_SKILL_BLUESTYLE
+			rect					20 255 110 15
+			textalign				ITEM_ALIGN_LEFT		
+			textalignx				0
+			textaligny				0
+			font					4
+			textscale				1
+			forecolor				0.8 0.8 0.8 1
+			outlinecolor			1 .5 .5 .5
+			backcolor				0 0 0 0
+			border					0
+			bordercolor				0 0 0 0
+			visible					1 
+			decoration
+		}
+
+		// Saber Blue Style assign
+		itemDef 
+		{
+			name					setfp_bluestyle
+			group					"playersettingforcegroup"
+			style					0	
+			ownerdraw				UI_FORCE_RANK_BLUESTYLE
+			rect					20 255 175 15
+			textalign				ITEM_ALIGN_LEFT		
+			textalignx				115
+			textaligny				-5
+			textscale				.25        
+			outlinecolor			1 .5 .5 .5
+			background				"forcecirclegray"					
+			backcolor				0 0 0 0
+			forecolor				0.8 0.8 0.8 1
+			border					0
+			bordercolor				0 0 0 0
+			descText				@OJP_MENUS_DESC_SKILL_BLUESTYLE
+			visible					1 
+			action 
+			{ 
+				play			"sound/interface/button1.wav" ;
+			}
+
+			mouseenter 
+			{ 
+				setitemcolor	setfp_bluestyle forecolor 1 1 1 1
+			}
+			mouseexit 
+			{ 
+				setitemcolor	setfp_bluestyle forecolor 0.8 0.8 0.8 1
+			}
+		}
+
+		// Saber Red Style title
+		itemDef 
+		{
+			name					setfp_redstyle
+			group					"playersettingforcegroup"
+			style					0	
+			text					@OJP_MENUS_SKILL_REDSTYLE
+			rect					20 270 110 15
+			textalign				ITEM_ALIGN_LEFT		
+			textalignx				0
+			textaligny				0
+			font					4
+			textscale				1
+			forecolor				0.8 0.8 0.8 1
+			outlinecolor			1 .5 .5 .5
+			backcolor				0 0 0 0
+			border					0
+			bordercolor				0 0 0 0
+			visible					1 
+			decoration
+		}
+
+		// Saber Red Style assign
+		itemDef 
+		{
+			name					setfp_redstyle
+			group					"playersettingforcegroup"
+			style					0	
+			ownerdraw				UI_FORCE_RANK_REDSTYLE
+			rect					20 270 175 15
+			textalign				ITEM_ALIGN_LEFT		
+			textalignx				115
+			textaligny				-5
+			textscale				.25        
+			outlinecolor			1 .5 .5 .5
+			background				"forcecirclegray"					
+			backcolor				0 0 0 0
+			forecolor				0.8 0.8 0.8 1
+			border					0
+			bordercolor				0 0 0 0
+			descText				@OJP_MENUS_DESC_SKILL_REDSTYLE
+			visible					1 
+			action 
+			{ 
+				play			"sound/interface/button1.wav" ;
+			}
+
+			mouseenter 
+			{ 
+				setitemcolor	setfp_redstyle forecolor 1 1 1 1
+			}
+			mouseexit 
+			{ 
+				setitemcolor	setfp_redstyle forecolor 0.8 0.8 0.8 1
+			}
+		}
+
+		// Saber Green Style title
+		itemDef 
+		{
+			name					setfp_greenstyle
+			group					"playersettingforcegroup"
+			style					0	
+			text					@OJP_MENUS_SKILL_GREENSTYLE
+			rect					20 285 110 15
+			textalign				ITEM_ALIGN_LEFT		
+			textalignx				0
+			textaligny				0
+			font					4
+			textscale				1
+			forecolor				0.8 0.8 0.8 1
+			outlinecolor			1 .5 .5 .5
+			backcolor				0 0 0 0
+			border					0
+			bordercolor				0 0 0 0
+			visible					1 
+			decoration
+		}
+
+		// Saber Green Style assign
+		itemDef 
+		{
+			name					setfp_greenstyle
+			group					"playersettingforcegroup"
+			style					0	
+			ownerdraw				UI_FORCE_RANK_GREENSTYLE
+			rect					20 285 175 15
+			textalign				ITEM_ALIGN_LEFT		
+			textalignx				115
+			textaligny				-5
+			textscale				.25        
+			outlinecolor			1 .5 .5 .5
+			background				"forcecirclegray"					
+			backcolor				0 0 0 0
+			forecolor				0.8 0.8 0.8 1
+			border					0
+			bordercolor				0 0 0 0
+			descText				@OJP_MENUS_DESC_SKILL_GREENSTYLE
+			visible					1 
+			action 
+			{ 
+				play			"sound/interface/button1.wav" ;
+			}
+
+			mouseenter 
+			{ 
+				setitemcolor	setfp_greenstyle forecolor 1 1 1 1
+			}
+			mouseexit 
+			{ 
+				setitemcolor	setfp_greenstyle forecolor 0.8 0.8 0.8 1
+			}
+		}
+
+		// Saber Purple Style title
+		itemDef 
+		{
+			name					setfp_purplestyle
+			group					"playersettingforcegroup"
+			style					0	
+			text					@OJP_MENUS_SKILL_PURPLESTYLE
+			rect					20 300 110 15
+			textalign				ITEM_ALIGN_LEFT		
+			textalignx				0
+			textaligny				0
+			font					4
+			textscale				1
+			forecolor				0.8 0.8 0.8 1
+			outlinecolor			1 .5 .5 .5
+			backcolor				0 0 0 0
+			border					0
+			bordercolor				0 0 0 0
+			visible					1 
+			decoration
+		}
+
+		// Saber Purple Style assign
+		itemDef 
+		{
+			name					setfp_purplestyle
+			group					"playersettingforcegroup"
+			style					0	
+			ownerdraw				UI_FORCE_RANK_PURPLESTYLE
+			rect					20 300 175 15
+			textalign				ITEM_ALIGN_LEFT		
+			textalignx				115
+			textaligny				-5
+			textscale				.25        
+			outlinecolor			1 .5 .5 .5
+			background				"forcecirclegray"					
+			backcolor				0 0 0 0
+			forecolor				0.8 0.8 0.8 1
+			border					0
+			bordercolor				0 0 0 0
+			descText				@OJP_MENUS_DESC_SKILL_PURPLESTYLE
+			visible					1 
+			action 
+			{ 
+				play			"sound/interface/button1.wav" ;
+			}
+
+			mouseenter 
+			{ 
+				setitemcolor	setfp_purplestyle forecolor 1 1 1 1
+			}
+			mouseexit 
+			{ 
+				setitemcolor	setfp_purplestyle forecolor 0.8 0.8 0.8 1
+			}
+		}
+
+		// Saber Dual Style title
+		itemDef 
+		{
+			name					setfp_dualstyle
+			group					"playersettingforcegroup"
+			style					0	
+			text					@OJP_MENUS_SKILL_DUALSTYLE
+			rect					20 315 110 15
+			textalign				ITEM_ALIGN_LEFT		
+			textalignx				0
+			textaligny				0
+			font					4
+			textscale				1
+			forecolor				0.8 0.8 0.8 1
+			outlinecolor			1 .5 .5 .5
+			backcolor				0 0 0 0
+			border					0
+			bordercolor				0 0 0 0
+			visible					1 
+			decoration
+		}
+
+		// Saber Dual Style assign
+		itemDef 
+		{
+			name					setfp_dualstyle
+			group					"playersettingforcegroup"
+			style					0	
+			ownerdraw				UI_FORCE_RANK_DUALSTYLE
+			rect					20 315 175 15
+			textalign				ITEM_ALIGN_LEFT		
+			textalignx				115
+			textaligny				-5
+			textscale				.25        
+			outlinecolor			1 .5 .5 .5
+			background				"forcecirclegray"					
+			backcolor				0 0 0 0
+			forecolor				0.8 0.8 0.8 1
+			border					0
+			bordercolor				0 0 0 0
+			descText				@OJP_MENUS_DESC_SKILL_DUALSTYLE
+			visible					1 
+			action 
+			{ 
+				play			"sound/interface/button1.wav" ;
+			}
+
+			mouseenter 
+			{ 
+				setitemcolor	setfp_dualstyle forecolor 1 1 1 1
+			}
+			mouseexit 
+			{ 
+				setitemcolor	setfp_dualstyle forecolor 0.8 0.8 0.8 1
+			}
+		}
+
+		// Saber Staff Style title
+		itemDef 
+		{
+			name					setfp_staffstyle
+			group					"playersettingforcegroup"
+			style					0	
+			text					@OJP_MENUS_SKILL_STAFFSTYLE
+			rect					20 330 110 15
+			textalign				ITEM_ALIGN_LEFT		
+			textalignx				0
+			textaligny				0
+			font					4
+			textscale				1
+			forecolor				0.8 0.8 0.8 1
+			outlinecolor			1 .5 .5 .5
+			backcolor				0 0 0 0
+			border					0
+			bordercolor				0 0 0 0
+			visible					1 
+			decoration
+		}
+
+		// Saber Staff Style assign
+		itemDef 
+		{
+			name					setfp_staffstyle
+			group					"playersettingforcegroup"
+			style					0	
+			ownerdraw				UI_FORCE_RANK_STAFFSTYLE
+			rect					20 330 175 15
+			textalign				ITEM_ALIGN_LEFT		
+			textalignx				115
+			textaligny				-5
+			textscale				.25        
+			outlinecolor			1 .5 .5 .5
+			background				"forcecirclegray"					
+			backcolor				0 0 0 0
+			forecolor				0.8 0.8 0.8 1
+			border					0
+			bordercolor				0 0 0 0
+			descText				@OJP_MENUS_DESC_SKILL_STAFFSTYLE
+			visible					1 
+			action 
+			{ 
+				play			"sound/interface/button1.wav" ;
+			}
+
+			mouseenter 
+			{ 
+				setitemcolor	setfp_staffstyle forecolor 1 1 1 1
+			}
+			mouseexit 
+			{ 
+				setitemcolor	setfp_staffstyle forecolor 0.8 0.8 0.8 1
+			}
+		}
+		//[/StanceSelection]
+		
 		// Saber Defend title
 		itemDef 
 		{
@@ -682,7 +1035,7 @@
 			style					0	
 			text					@MENUS_SABER_DEFEND
 			//descText				@MENUS_DESCRIPTION_OF_A_FORCE
-			rect					20 300 110 15
+			rect					20 345 110 15
 			textalign				ITEM_ALIGN_LEFT		
 			textalignx				0
 			textaligny				0
@@ -704,7 +1057,7 @@
 			group					"playersettingforcegroup"
 			style					0	
 			ownerdraw				UI_FORCE_RANK_SABERDEFEND
-			rect					20 300 175 15
+			rect					20 345 175 15
 			textalign				ITEM_ALIGN_LEFT		
 			textalignx				115
 			textaligny				-5
@@ -739,7 +1092,7 @@
 			style					0	
 			text					@MENUS_SABER_THROW
 			//descText				@MENUS_DESCRIPTION_OF_A_FORCE
-			rect					20 315 110 15
+			rect					20 360 110 15
 			textalign				ITEM_ALIGN_LEFT		
 			textalignx				0
 			textaligny				0
@@ -761,7 +1114,7 @@
 			group					"playersettingforcegroup"
 			style					0	
 			ownerdraw				UI_FORCE_RANK_SABERTHROW
-			rect					20 315 175 15
+			rect					20 360 175 15
 			textalign				ITEM_ALIGN_LEFT		
 			textalignx				115
 			textaligny				-5

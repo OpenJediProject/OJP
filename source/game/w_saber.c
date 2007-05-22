@@ -473,7 +473,11 @@ void WP_ActivateSaber( gentity_t *self )
 		return;
 	}
 
-	if ( self->client->ps.saberHolstered )
+	//[StanceSelection]
+	//NPC code calls this all the time, only whip out saber if it's not already turned on.
+	if ( self->client->ps.saberHolstered == 2)
+	//if ( self->client->ps.saberHolstered )
+	//[/StanceSelection]
 	{
 		self->client->ps.saberHolstered = 0;
 		if (self->client->saber[0].soundOn)
@@ -3383,7 +3387,7 @@ int OJP_SaberBlockCost(gentity_t *defender, gentity_t *attacker, vec3_t hitLoc)
 		}
 		else
 		{//standard bolt block!
-			saberBlockCost = DODGE_BOLTBLOCK;
+		saberBlockCost = DODGE_BOLTBLOCK;
 		}
 	}
 	else if(attacker->client->ps.saberMove == LS_A_LUNGE
