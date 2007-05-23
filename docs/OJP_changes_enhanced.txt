@@ -20,6 +20,9 @@ Version 0.0.9v:
 		New Menus (NewMenus):  
 			Brand new ingame menus and console background!  Thanks to Bjusterbaarlik!
 
+		Server Ready Out-of-Box:
+			OJP Enhanced is now server ready immediately after installation (for Windows only).  Simply click on "Start OJP Enhanced Server" shortcut or StartOJPEnhancedServer.bat.  In addition, this system will auto-restart the server if it crashes or exits.
+
 		Windows Installer:
 			- Added Windows Installer for OJP Enhanced.  
 			- Developers, you can now make your own OJP Enhanced distros using the /Enhanced/MakeWindowsInstaller.bat file.
