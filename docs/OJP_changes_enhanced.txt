@@ -89,6 +89,7 @@ Version 0.0.9v:
 				- Reenabled the bounding box saber block to improve saber block visuals.
 				- Fixed problem where top bounces didn't have a return animation.
 				- Changed the way slow bounce/parry flags expire so that the slow bounce/parry slowdown lasts thru the bounce and return animations.
+				- Being fatigued doesn't result in massive, slow lunges anymore.
 
 			Saber Locks:
 				- Can't use Force Push in saberlocks.

@@ -3417,7 +3417,10 @@ void BG_SaberStartTransAnim( int clientNum, int saberAnimLevel, int weapon, int 
 		&& anim != BOTH_FORCEWALLRUNFLIP_END
 		//not a overhead flip move
 		&& anim != BOTH_JUMPFLIPSTABDOWN  
-		&& anim != BOTH_JUMPFLIPSLASHDOWN1)
+		&& anim != BOTH_JUMPFLIPSLASHDOWN1
+		//don't slow down the lunge attack because it has movement associated with it
+		&& anim != BOTH_LUNGE2_B__T_
+		)
 	{//You're pooped.  Move slower
 		*animSpeed *= .5f;
 	}
