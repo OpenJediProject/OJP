@@ -809,6 +809,19 @@ trap_FS_FCloseFile(f);//[TicketFix143]
 	}
 	//[/ExpSys]
 
+	//[StanceSelection]
+	//add stance skills for Bots
+	if(bs->forceinfo[FP_SABER_OFFENSE + 4] > 0)
+	{
+		int count;
+		//just bump all the NPC's other saber styles to their saber offense skill level
+		for(count = SK_BLUESTYLE; count <= SK_STAFFSTYLE; count++)
+		{
+			bs->forceinfo[NUM_FORCE_POWERS + count + 4] = bs->forceinfo[FP_SABER_OFFENSE + 4];
+		}
+	}
+	//[/StanceSelection]	
+
 	i = 0;
 
 	while (i < MAX_CHAT_BUFFER_SIZE)

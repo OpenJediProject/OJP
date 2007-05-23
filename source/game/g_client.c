@@ -3509,8 +3509,34 @@ void ClientSpawn(gentity_t *ent) {
 		&& ent->client->ps.fd.saberAnimLevel != SS_STAFF 
 		&& ent->client->ps.fd.saberAnimLevel != SS_DUAL) 
 	{//TABBots randomly switch styles on respawn if not using a staff or dual
+		//[StanceSelection]
+		int newLevel = Q_irand( SS_FAST, SS_STAFF );
+
+		//new validation technique.
+		if ( !G_ValidSaberStyle(ent, newLevel) )
+		{//had an illegal style, revert to a valid one
+			int count;
+			for(count = SS_FAST; count < SS_STAFF; count++)
+			{
+				newLevel++;
+				if(newLevel > SS_STAFF)
+				{
+					newLevel = SS_FAST;
+				}
+
+				if(G_ValidSaberStyle(ent, newLevel))
+				{
+					break;
+				}
+			}
+		}
+
+		ent->client->ps.fd.saberAnimLevel = newLevel;
+		/*
 		ent->client->ps.fd.saberAnimLevel = ent->client->ps.fd.saberDrawAnimLevel 
 			= ent->client->sess.saberLevel = Q_irand(SS_FAST, SS_TAVION);
+		*/
+		//[/StanceSelection]
 	}
 	//[/TABBots]
 
