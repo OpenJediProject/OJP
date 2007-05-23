@@ -1998,6 +1998,11 @@ static void Jedi_Advance( void )
 	//TIMER_Set( NPC, "duck", 0 );
 }
 
+
+//[StanceSelection]
+extern qboolean WP_SaberCanTurnOffSomeBlades( saberInfo_t *saber );
+extern qboolean G_ValidSaberStyle(gentity_t *ent, int saberStyle);
+//[/StanceSelection]
 static void Jedi_AdjustSaberAnimLevel( gentity_t *self, int newLevel )
 {	
 	if ( !self || !self->client )
@@ -2020,6 +2025,24 @@ static void Jedi_AdjustSaberAnimLevel( gentity_t *self, int newLevel )
 	}
 	*/
 	//[/CoOp]
+
+	//[StanceSelection]
+	//override stance with special saber style if we're using special sabers
+	if(self->client->saber[0].model[0] && self->client->saber[1].model[0] 
+		&& !G_ValidSaberStyle(self, SS_DUAL) )
+	{
+		self->client->ps.fd.saberAnimLevel = SS_DUAL;
+		return;
+	}
+	else if (self->client->saber[0].numBlades > 1
+		&& WP_SaberCanTurnOffSomeBlades( &self->client->saber[0] )
+		&& !G_ValidSaberStyle(self, SS_STAFF) )
+	{
+		self->client->ps.fd.saberAnimLevel = SS_STAFF;
+		return;
+	}
+	//[/StanceSelection]
+
 	if ( self->client->playerTeam == NPCTEAM_ENEMY )
 	{//racc - force stance types based on rank or NPC class
 		//[CoOp]
@@ -2067,6 +2090,31 @@ static void Jedi_AdjustSaberAnimLevel( gentity_t *self, int newLevel )
 		}
 		//[/CoOp]
 	}
+
+	//[StanceSelection]
+	//new validation technique.
+	if ( !G_ValidSaberStyle(self, newLevel) )
+	{//had an illegal style, revert to a valid one
+		int count;
+		for(count = SS_FAST; count < SS_STAFF; count++)
+		{
+			newLevel++;
+			if(newLevel > SS_STAFF)
+			{
+				newLevel = SS_FAST;
+			}
+
+			if(G_ValidSaberStyle(self, newLevel))
+			{
+				break;
+			}
+		}
+	}
+
+	//set stance
+	self->client->ps.fd.saberAnimLevel = newLevel;
+
+	/* basejka
 	//use the different attacks, how often they switch and under what circumstances
 	if ( newLevel > self->client->ps.fd.forcePowerLevel[FP_SABER_OFFENSE] )
 	{//cap it
@@ -2080,6 +2128,8 @@ static void Jedi_AdjustSaberAnimLevel( gentity_t *self, int newLevel )
 	{//go ahead and set it
 		self->client->ps.fd.saberAnimLevel = newLevel;
 	}
+	*/
+	//[/StanceSelection]
 
 	if ( d_JediAI.integer )
 	{
@@ -2105,7 +2155,10 @@ static void Jedi_CheckDecreaseSaberAnimLevel( void )
 		if ( TIMER_Done( NPC, "saberLevelDebounce" ) && !Q_irand( 0, 10 ) )
 		{
 			//Jedi_AdjustSaberAnimLevel( NPC, (NPC->client->ps.fd.saberAnimLevel-1) );//drop
-			Jedi_AdjustSaberAnimLevel( NPC, Q_irand( FORCE_LEVEL_1, FORCE_LEVEL_3 ));//random
+			//[StanceSelection]
+			Jedi_AdjustSaberAnimLevel( NPC, Q_irand( SS_FAST, SS_STAFF ));//random
+			//Jedi_AdjustSaberAnimLevel( NPC, Q_irand( FORCE_LEVEL_1, FORCE_LEVEL_3 ));//random
+			//[/StanceSelection]
 			TIMER_Set( NPC, "saberLevelDebounce", Q_irand( 3000, 10000 ) );
 		}
 	}
@@ -7530,7 +7583,10 @@ void NPC_Jedi_Pain(gentity_t *self, gentity_t *attacker, int damage)
 		}
 		if ( !Q_irand( 0, 3 ) )
 		{//ouch... maybe switch up which saber power level we're using
-			Jedi_AdjustSaberAnimLevel( self, Q_irand( FORCE_LEVEL_1, FORCE_LEVEL_3 ) );
+			//[StanceSelection]
+			Jedi_AdjustSaberAnimLevel( self, Q_irand( SS_FAST, SS_STAFF ) );
+			//Jedi_AdjustSaberAnimLevel( self, Q_irand( FORCE_LEVEL_1, FORCE_LEVEL_3 ) );
+			//[/StanceSelection]
 		}
 		if ( !Q_irand( 0, 1 ) )//damage > 20 || self->health < 40 || 
 		{

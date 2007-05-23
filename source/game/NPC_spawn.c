@@ -1457,16 +1457,38 @@ void NPC_Begin (gentity_t *ent)
 	//set saberAnimLevelBase
 	if(ent->client->saber[0].model[0] && ent->client->saber[1].model[0])
 	{
-		ent->client->ps.fd.saberAnimLevelBase = SS_DUAL;
+		ent->client->ps.fd.saberAnimLevelBase = ent->client->ps.fd.saberAnimLevel = SS_DUAL;
 	}
 	else if (ent->client->saber[0].numBlades > 1
 		&& WP_SaberCanTurnOffSomeBlades( &ent->client->saber[0] ))
 	{
-		ent->client->ps.fd.saberAnimLevelBase = SS_STAFF;
+		ent->client->ps.fd.saberAnimLevelBase = ent->client->ps.fd.saberAnimLevel = SS_STAFF;
 	}
 	else
 	{
+		int newLevel = Q_irand( SS_FAST, SS_STAFF );
 		ent->client->ps.fd.saberAnimLevelBase = SS_MEDIUM;
+		
+		//new validation technique.
+		if ( !G_ValidSaberStyle(ent, newLevel) )
+		{//had an illegal style, revert to a valid one
+			int count;
+			for(count = SS_FAST; count < SS_STAFF; count++)
+			{
+				newLevel++;
+				if(newLevel > SS_STAFF)
+				{
+					newLevel = SS_FAST;
+				}
+
+				if(G_ValidSaberStyle(ent, newLevel))
+				{
+					break;
+				}
+			}
+		}
+
+		ent->client->ps.fd.saberAnimLevel = newLevel;
 	}
 	//[/StanceSelection]
 
