@@ -153,6 +153,68 @@ LANG_GERMAN		"#same"
 REFERENCE	    DESC_SKILL_DISRUPTOR
 LANG_ENGLISH	"Gains the user the Disruptor."
 LANG_GERMAN		"#same"
+
+//[StanceSelection]
+REFERENCE	REQUIRES_BLUESTYLE
+LANG_ENGLISH	"(requires Shii-Cho 1)"
+LANG_GERMAN		"#same"
+
+REFERENCE	SKILL_BLUESTYLE
+LANG_ENGLISH	"Soresu:"
+LANG_GERMAN		"#same"
+
+REFERENCE	    DESC_SKILL_BLUESTYLE
+LANG_ENGLISH	"Gains the user the Soresu style of lightsaber combat."
+LANG_GERMAN		"#same"
+
+REFERENCE	SKILL_YELLOWSTYLE
+LANG_ENGLISH	"Shii-Cho:"
+LANG_GERMAN		"#same"
+
+REFERENCE	    DESC_SKILL_YELLOWSTYLE
+LANG_ENGLISH	"Gains the user a lightsaber and levels in the Shii-Cho style of lightsaber combat."
+LANG_GERMAN		"#same"
+
+REFERENCE	SKILL_REDSTYLE
+LANG_ENGLISH	"Djem So:"
+LANG_GERMAN		"#same"
+
+REFERENCE	    DESC_SKILL_REDSTYLE
+LANG_ENGLISH	"Gains the user the Djem So style of lightsaber combat."
+LANG_GERMAN		"#same"
+
+REFERENCE	SKILL_GREENSTYLE
+LANG_ENGLISH	"Makashi:"
+LANG_GERMAN		"#same"
+
+REFERENCE	    DESC_SKILL_GREENSTYLE
+LANG_ENGLISH	"Gains the user the Makashi style of lightsaber combat."
+LANG_GERMAN		"#same"
+
+REFERENCE	SKILL_PURPLESTYLE
+LANG_ENGLISH	"Juyo:"
+LANG_GERMAN		"#same"
+
+REFERENCE	    DESC_SKILL_PURPLESTYLE
+LANG_ENGLISH	"Gains the user the Juyo style of lightsaber combat."
+LANG_GERMAN		"#same"
+
+REFERENCE	SKILL_DUALSTYLE
+LANG_ENGLISH	"Dual Style:"
+LANG_GERMAN		"#same"
+
+REFERENCE	    DESC_SKILL_DUALSTYLE
+LANG_ENGLISH	"Gains the user the ability to use dual lightsabers."
+LANG_GERMAN		"#same"
+
+REFERENCE	SKILL_STAFFSTYLE
+LANG_ENGLISH	"Staff Style:"
+LANG_GERMAN		"#same"
+
+REFERENCE	    DESC_SKILL_STAFFSTYLE
+LANG_ENGLISH	"Gains the user the ability to use the staff lightsaber."
+LANG_GERMAN		"#same"
+//[/StanceSelection]
 //[/ExpSys]
 
 //[Flamethrower]
