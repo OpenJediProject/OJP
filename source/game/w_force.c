@@ -3553,7 +3553,7 @@ void ForceThrow( gentity_t *self, qboolean pull )
 	*/
 
 	//allow push/pull during preblocks
-	if (self->client->ps.weaponTime > 0 && (!PM_SaberInParry(pm->ps->saberMove) || !pm->ps->userInt3 & (1 << FLAG_PREBLOCK)))
+	if (self->client->ps.weaponTime > 0 && (!PM_SaberInParry(self->client->ps.saberMove) || !pm->ps->userInt3 & (1 << FLAG_PREBLOCK)))
 	//if (self->client->ps.weaponTime > 0)
 	//[ForceSys]
 	{
