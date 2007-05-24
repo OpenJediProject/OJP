@@ -3,7 +3,7 @@
 
 [Setup]
 AppName=OJP Enhanced
-AppVerName=OJP Enhanced
+AppVerName=OJP Enhanced v0.0.9v
 AppPublisher=OJP Team
 AppPublisherURL=http://ojp.jediknight.net/
 AppSupportURL=http://ojp.jediknight.net/

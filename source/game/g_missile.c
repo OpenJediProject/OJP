@@ -1278,6 +1278,10 @@ void OJP_HandleBoltBlock(gentity_t *bolt, gentity_t *player, trace_t *trace)
 	G_DodgeDrain(player, prevOwner, OJP_SaberBlockCost(player, bolt, trace->endpos));
 	//[ExpSys]
 
+	//[SaberLockSys]
+	player->client->ps.saberLockFrame = 0; //break out of saberlocks.
+	//[/SaberLockSys]
+
 	//debounce time between blocks.
 	player->client->ps.saberBlockTime = level.time + (600 - (player->client->ps.fd.forcePowerLevel[FP_SABER_DEFENSE]*200));
 }
