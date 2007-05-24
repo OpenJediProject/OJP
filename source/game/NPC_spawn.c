@@ -1158,6 +1158,7 @@ qboolean NPC_SpotWouldTelefrag( gentity_t *npc )
 
 //[StanceSelection]
 extern qboolean WP_SaberCanTurnOffSomeBlades( saberInfo_t *saber );
+extern qboolean G_ValidSaberStyle(gentity_t *ent, int saberStyle);
 //[/StanceSelection]
 //--------------------------------------------------------------
 void NPC_Begin (gentity_t *ent)

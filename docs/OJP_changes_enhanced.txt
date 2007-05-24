@@ -49,6 +49,7 @@ Version 0.0.9v:
 		Weapons:
 			- Reduced the Clone Rifles alternate fire blast radius to 1/2 of what it is now.
 			- Raised the cost of the Clone Rifles alternate fire to 40 ammo cells.
+			- Reduced the fire rate of the Clone Rifle's primary fire.
 			- Fixed problem with homing rockets getting stuck in mid-air.
 
 		Jetpack:
