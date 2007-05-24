@@ -14,11 +14,14 @@ Version 0.0.9v:
 		Experience System:
 			- (StanceSelection) Players now buy saber styles individually instead of getting them for free with Saber Offense.
 
-		Original Main Menu Theme:  
-			Original, brand new music for the main menu.  Special thanks to Jed Smith of Betafish Music (www.betafish.net)!
+		Linux Auto-Packager:
+			- Added an autopackaging batch file (MakeLinuxPackage.bat) for Windows.  Please note that this only works if the jampgamei386.so has been compiled and placed in the \Enhanced folder.
 
 		New Menus (NewMenus):  
 			Brand new ingame menus and console background!  Thanks to Bjusterbaarlik!
+
+		Original Main Menu Theme:  
+			Original, brand new music for the main menu.  Special thanks to Jed Smith of Betafish Music (www.betafish.net)!
 
 		Server Ready Out-of-Box:
 			OJP Enhanced is now server ready immediately after installation (for Windows only).  Simply click on "Start OJP Enhanced Server" shortcut or StartOJPEnhancedServer.bat.  In addition, this system will auto-restart the server if it crashes or exits.
