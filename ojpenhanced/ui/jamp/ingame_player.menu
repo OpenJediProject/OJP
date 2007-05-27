@@ -162,6 +162,11 @@
 				close			ingame_player2 ;
 				close			ingame_playergunnery ;
 				close			ingame_saber ;
+				show			acceptandgotoname	;
+				hide			applycurrent	;
+				hide			applyjoin	;
+				hide			applyred	;
+				hide			applyblue	;
 				setitemcolor	namebutton			forecolor 0 0.4 0.8 1 ;
 				setitemcolor	characterbutton		forecolor 0.8 0.8 0.8 1 ;
 				setitemcolor	forcebutton			forecolor 0.8 0.8 0.8 1 ;
@@ -198,6 +203,11 @@
 				close			ingame_player2 ;	
 				close			ingame_playergunnery ;	
 				close			ingame_saber ;	
+				show			acceptandgotoname	;
+				hide			applycurrent	;
+				hide			applyjoin	;
+				hide			applyred	;
+				hide			applyblue	;
 				setitemcolor	namebutton			forecolor 0.8 0.8 0.8 1 ;
 				setitemcolor	characterbutton		forecolor 0 0.4 0.8 1 ;
 				setitemcolor	forcebutton			forecolor 0.8 0.8 0.8 1 ;
@@ -240,6 +250,11 @@
 				close			ingame_player2 ;
 				close			ingame_playergunnery ;
 				close			ingame_saber ;
+				show			acceptandgotoname	;
+				hide			applycurrent	;
+				hide			applyjoin	;
+				hide			applyred	;
+				hide			applyblue	;
 				setitemcolor	namebutton			forecolor 0.8 0.8 0.8 1 ;
 				setitemcolor	characterbutton		forecolor 0.8 0.8 0.8 1 ;
 				setitemcolor	forcebutton			forecolor 0 0.4 0.8 1 ;
@@ -277,6 +292,11 @@
 				close			ingame_player2 ;
 				close			ingame_playergunnery ;
 				open			ingame_saber ;
+				show			acceptandgotoname	;
+				hide			applycurrent	;
+				hide			applyjoin	;
+				hide			applyred	;
+				hide			applyblue	;
 				setitemcolor	namebutton			forecolor 0.8 0.8 0.8 1 ;
 				setitemcolor	characterbutton		forecolor 0.8 0.8 0.8 1 ;
 				setitemcolor	forcebutton			forecolor 0.8 0.8 0.8 1 ;
@@ -319,6 +339,11 @@
 				close			ingame_player2 ;
 				open			ingame_playergunnery ;
 				close			ingame_saber ;
+				show			acceptandgotoname	;
+				hide			applycurrent	;
+				hide			applyjoin	;
+				hide			applyred	;
+				hide			applyblue	;
 				setitemcolor	namebutton			forecolor 0.8 0.8 0.8 1 ;
 				setitemcolor	characterbutton		forecolor 0.8 0.8 0.8 1 ;
 				setitemcolor	forcebutton			forecolor 0.8 0.8 0.8 1 ;
@@ -659,6 +684,45 @@
 				uiScript		setForce "none"
 				hide			highlights
 				uiScript		closeingame
+			}
+			mouseEnter 
+			{ 
+			}
+			mouseExit 
+			{ 
+			}
+		}
+
+		//Apply and move to the Name menu
+		itemDef 
+		{
+			name				acceptandgotoname
+			group				"playeracceptandgotoname"
+			text				@MENUS_APPLY
+			type				1
+			style				WINDOW_STYLE_EMPTY
+			rect				415 410 105 32
+			textalign			ITEM_ALIGN_CENTER
+			textalignx			52
+			textaligny			-2
+			font				2
+			textscale			1
+			forecolor			0.8 0.8 0.8 1
+			descText			@MENUS_APPLY_CHANGES_AND_JOIN
+			visible				0
+			action 
+			{ 
+				play			"sound/interface/button1"
+				//uiScript		setForce "none" 
+				show			startpage ;
+				hide			name ;
+				hide			character ;
+				hide			acceptandgotoname ;
+				close			ingame_playerforce ;
+				close			ingame_player2 ;
+				close			ingame_playergunnery ;
+				close			ingame_saber ;
+				uiScript		updateForceStatus ;
 			}
 			mouseEnter 
 			{ 
