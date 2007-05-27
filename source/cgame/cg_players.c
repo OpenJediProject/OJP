@@ -15144,7 +15144,15 @@ stillDoSaber:
 
 	if ((cg.snap->ps.fd.forcePowersActive & (1 << FP_SEE)) && cg.snap->ps.clientNum != cent->currentState.number && cg_auraShell.integer)
 	{
-		if (cgs.gametype == GT_SIEGE)
+		//[Enhanced sight] - colors imperial officers with keys with a blue hue like in sp
+		if( cent->currentState.NPC_class == CLASS_IMPERIAL && cent->currentState.generic1 == 100 )
+		{
+			legs.shaderRGBA[0] = 255;
+			legs.shaderRGBA[1] = 255;
+			legs.shaderRGBA[2] = 0;
+		}
+		//[/Enhanced sight]
+		else if (cgs.gametype == GT_SIEGE)
 		{	// A team game
 			if ( ci->team == TEAM_SPECTATOR || ci->team == TEAM_FREE )
 			{//yellow

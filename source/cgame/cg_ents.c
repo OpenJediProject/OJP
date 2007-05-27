@@ -1858,6 +1858,28 @@ Ghoul2 Insert End
 			trap_FX_PlayEffectID( beamID, beamOrg, cent->currentState.pos.trDelta, -1, -1 );
 		}
 	}
+
+	//[Enhanced sight] - allows to see objects that the server sets as force_visible
+	if( ( cent->currentState.eFlags & EF_FORCE_VISIBLE ) &&
+		( cg.snap->ps.fd.forcePowersActive & (1 << FP_SEE) ) )
+	{
+		ent.shaderRGBA[0] = 0;
+		ent.shaderRGBA[1] = 0;
+		ent.shaderRGBA[2] = 255;
+		ent.renderfx |= RF_MINLIGHT | RF_NODEPTH;
+
+		//only level 2+ can see players through walls
+		if (cg.snap->ps.fd.forcePowerLevel[FP_SEE] < FORCE_LEVEL_2)
+				ent.renderfx &= ~RF_NODEPTH;
+
+		ent.renderfx &= ~RF_RGB_TINT;
+		ent.renderfx &= ~RF_FORCE_ENT_ALPHA;
+		ent.customShader = cgs.media.sightShell;
+
+		trap_R_AddRefEntityToScene( &ent );
+	}
+	//[/Enhanced sight]
+
 /*
 Ghoul2 Insert Start
 */

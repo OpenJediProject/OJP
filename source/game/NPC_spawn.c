@@ -1903,6 +1903,10 @@ gentity_t *NPC_Spawn_Do( gentity_t *ent )
 	{//has a key
 		newent->message = ent->message;//transfer the key name
 		newent->flags |= FL_NO_KNOCKBACK;//don't fall off ledges
+
+		//[Enhanced sight] - server hack to tell client to draw officers with keys in blue
+		newent->client->ps.generic1 = 100;
+		//[/Enhanced sight]
 	}
 
 	// If this is a vehicle we need to see what kind it is so we properlly allocate it.
