@@ -2661,11 +2661,17 @@ int nextcheck[MAX_CLIENTS]; // Next special move check.
 extern int FindBotType(int clientNum);
 #endif
 //[/AotCAI]
-
+//[SaberSys]
+extern qboolean PM_InCartwheel( int anim );
+//[/SaberSys]
 saberMoveName_t PM_SaberAttackForMovement(saberMoveName_t curmove)
 {
 	saberMoveName_t newmove = LS_NONE;
-	qboolean noSpecials = PM_InSecondaryStyle();
+	//[SaberSys]
+	//can't launch a special while in a cartwheel (prevents possible FP exploit)
+	qboolean noSpecials = PM_InSecondaryStyle() || PM_InCartwheel(pm->ps->legsAnim);
+	//qboolean noSpecials = PM_InSecondaryStyle();
+	//[/SaberSys]
 	qboolean allowCartwheels = qtrue;
 	saberMoveName_t overrideJumpRightAttackMove = LS_INVALID;
 	saberMoveName_t overrideJumpLeftAttackMove = LS_INVALID;
