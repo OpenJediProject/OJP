@@ -3568,7 +3568,8 @@ int OJP_SaberCanBlock(gentity_t *self, gentity_t *atk, qboolean checkBBoxBlock, 
 		}
 
 		if((atk->client->ps.saberMove == LS_A_LUNGE 
-			|| atk->client->ps.saberMove == LS_SPINATTACK)
+			|| atk->client->ps.saberMove == LS_SPINATTACK
+			|| atk->client->ps.saberMove == LS_SPINATTACK_DUAL)
 			&& self->client->ps.userInt3 & (1 << FLAG_FATIGUED) ) 
 		{//saber attacker, we can't block lunge attacks while fatigued. 
 			return 0;
@@ -5597,7 +5598,8 @@ qboolean G_DoDodge( gentity_t *self, gentity_t *shooter, vec3_t dmgOrigin, int h
 	if(mod == MOD_SABER && shooter && shooter->client)
 	{//special saber moves have special effects.
 		if(shooter->client->ps.saberMove == LS_A_LUNGE 
-				|| shooter->client->ps.saberMove == LS_SPINATTACK)
+				|| shooter->client->ps.saberMove == LS_SPINATTACK
+				|| shooter->client->ps.saberMove == LS_SPINATTACK_DUAL)
 		{//attacker is doing lunge special
 			if(self->client->ps.userInt3 & (1 << FLAG_FATIGUED))
 			{//can't dodge a lunge special while fatigued
