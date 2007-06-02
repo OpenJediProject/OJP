@@ -294,6 +294,24 @@ void UI_DrawForceStars(rectDef_t *rect, float scale, vec4_t color, int textStyle
 void UI_UpdateClientForcePowers(const char *teamArg)
 {
 	//[ExpSys]
+	char newForceString[MAX_INFO_STRING];
+	strncpy(newForceString, va("%i-%i-%i%i%i%i%i%i%i%i%i%i%i%i%i%i%i%i%i%i%i%i%i%i%i%i%i%i%i%i%i%i%i%i%i%i%i%i%i%i%i",
+		uiForceRank, uiForceSide, uiForcePowersRank[0], uiForcePowersRank[1],
+		uiForcePowersRank[2], uiForcePowersRank[3], uiForcePowersRank[4],
+		uiForcePowersRank[5], uiForcePowersRank[6], uiForcePowersRank[7],
+		uiForcePowersRank[8], uiForcePowersRank[9], uiForcePowersRank[10],
+		uiForcePowersRank[11], uiForcePowersRank[12], uiForcePowersRank[13],
+		uiForcePowersRank[14], uiForcePowersRank[15], uiForcePowersRank[16],
+		uiForcePowersRank[17], uiForcePowersRank[18], uiForcePowersRank[19],
+		uiForcePowersRank[20], uiForcePowersRank[21], uiForcePowersRank[22],
+		uiForcePowersRank[23], uiForcePowersRank[24], uiForcePowersRank[25],
+		uiForcePowersRank[26], uiForcePowersRank[27], uiForcePowersRank[28],
+		uiForcePowersRank[29], uiForcePowersRank[30], uiForcePowersRank[31],
+		uiForcePowersRank[32], uiForcePowersRank[33], uiForcePowersRank[34],
+		uiForcePowersRank[35], uiForcePowersRank[36], uiForcePowersRank[37],
+		uiForcePowersRank[38]), sizeof(newForceString));
+	/*
+	//[ExpSys]
 	trap_Cvar_Set( "forcepowers", va("%i-%i-%i%i%i%i%i%i%i%i%i%i%i%i%i%i%i%i%i%i%i%i%i%i%i%i%i%i%i%i%i%i%i%i%i%i%i%i%i%i%i",
 	//trap_Cvar_Set( "forcepowers", va("%i-%i-%i%i%i%i%i%i%i%i%i%i%i%i%i%i%i%i%i%i",
 	//[/ExpSys]
@@ -313,21 +331,25 @@ void UI_UpdateClientForcePowers(const char *teamArg)
 		uiForcePowersRank[35], uiForcePowersRank[36], uiForcePowersRank[37],
 		uiForcePowersRank[38]) );
 		//[/ExpSys]
+	*/
 
 	if (gTouchedForce)
 	{
 		if (teamArg && teamArg[0])
 		{
-			trap_Cmd_ExecuteText( EXEC_APPEND, va("forcechanged \"%s\"\n", teamArg) );
+			//[ExpSys]
+			trap_Cmd_ExecuteText( EXEC_APPEND, va("forcechanged \"%s\" %s\n", teamArg, newForceString ) );
+			//trap_Cmd_ExecuteText( EXEC_APPEND, va("forcechanged \"%s\"\n", teamArg) );
+			//[/ExpSys]
 		}
-		//[ExpSys]
-		/* racc - the way we do dynamic skill updates makes this redudent.
 		else
 		{
-			trap_Cmd_ExecuteText( EXEC_APPEND, "forcechanged\n" );
+			//[ExpSys]
+			trap_Cmd_ExecuteText( EXEC_APPEND, va("forcechanged x %s\n", newForceString) );
+			//trap_Cmd_ExecuteText( EXEC_APPEND, "forcechanged\n" );
+			//[/ExpSys]
 		}
-		*/
-		//[/ExpSys]
+
 	}
 
 	gTouchedForce = qfalse;

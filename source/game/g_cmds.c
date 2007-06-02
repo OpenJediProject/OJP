@@ -1329,7 +1329,11 @@ void Cmd_Team_f( gentity_t *ent ) {
 	int			oldTeam;
 	char		s[MAX_TOKEN_CHARS];
 
-	if ( trap_Argc() != 2 ) {
+	//[ExpSys]
+	//changed this so that we can link to this function thru the "forcechanged" behavior with its new design.
+	if ( trap_Argc() < 2 ) {
+	//if ( trap_Argc() != 2 ) {
+	//[/ExpSys]
 		oldTeam = ent->client->sess.sessionTeam;
 		//[CoOp]
 		if ( g_gametype.integer == GT_SINGLE_PLAYER ) {
@@ -1672,13 +1676,24 @@ argCheck:
 	if (trap_Argc() > 1)
 	{
 		char	arg[MAX_TOKEN_CHARS];
+		char	userinfo[MAX_INFO_STRING];
 
 		trap_Argv( 1, arg, sizeof( arg ) );
-
-		if (arg && arg[0])
+		if (arg && arg[0] && arg[0] != 'x')
 		{ //if there's an arg, assume it's a combo team command from the UI.
 			Cmd_Team_f(ent);
 		}
+
+
+		trap_Argv( 2, arg, sizeof( arg ) );
+		if (arg && arg[0])
+		{//new force power string, update the forcepower string.
+			trap_GetUserinfo( ent->s.number, userinfo, sizeof( userinfo ) );
+			Info_SetValueForKey( userinfo, "forcepowers", arg );
+			trap_SetUserinfo( ent->s.number, userinfo );			
+		}
+
+		//did they also send a new force power string?
 	}
 }
 

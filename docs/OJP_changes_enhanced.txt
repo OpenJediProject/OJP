@@ -41,6 +41,9 @@ Version 0.0.9v:
 			- Fixed problem with explosive weapons sometimes regening player's FP.
 			- Improved the precog Dodge behavior for explosives.
 
+		Experience System:
+			- Fixed issue where players should spawn without their selected skills and weapons.
+
 		Fatigue:
 			- Fixed the cartwheel/backflips/jump attack FP costs to account for the new FP cost of jumps.
 
