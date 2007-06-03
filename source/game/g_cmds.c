@@ -3649,7 +3649,7 @@ void Cmd_SaberAttackCycle_f(gentity_t *ent)
 			}
 			else if(selectLevel == SS_STAFF && ent->client->ps.saberHolstered == 1 && !ent->client->ps.saberInFlight)
 			{
-					G_Sound(ent, CHAN_AUTO, ent->client->saber[1].soundOn);
+					G_Sound(ent, CHAN_AUTO, ent->client->saber[0].soundOn);
 					ent->client->ps.saberHolstered = 0;
 			}
 		}
