@@ -196,7 +196,7 @@ int bgForcePowerCost[NUM_TOTAL_SKILLS][NUM_FORCE_POWER_LEVELS] = //0 == neutral
 	{	0,	1,	3,	6	},	// Team Force	//FP_TEAM_FORCE,//instant
 	{	0,	2,	4,	6	},	// Drain		//FP_DRAIN,//hold/duration
 	{	0,	1,	4,	6	},	// Sight		//FP_SEE,//duration
-	{	0,	SABER_OFFENSE_L1,	4,	4	},	// Saber Attack	//FP_SABER_OFFENSE,
+	{	0,	SABER_OFFENSE_L1,	0,	0	},	// Saber Attack	//FP_SABER_OFFENSE,
 	{	0,	SABER_DEFENSE_L1,	4,	4	},	// Saber Defend	//FP_SABER_DEFENSE,
 	{	0,	2,	4,	6	},	// Saber Throw	//FP_SABERTHROW,
 	/* basejka values
@@ -237,12 +237,12 @@ int bgForcePowerCost[NUM_TOTAL_SKILLS][NUM_FORCE_POWER_LEVELS] = //0 == neutral
 	{   0,  6,  7,  8   },  //SK_REPEATER,      // repeater/clone rifle skill
 	{   0,  5,  6,  8   },	//SK_DISRUPTOR,      // Disruptor/sniper rifle skill
 	//[StanceSelection]
-	{	0,	1,	4,	4	},	//SK_BLUESTYLE,	//Yellow lightsaber style
-	{	0,	1,	4,	4	},	//SK_REDSTYLE,	//Red lightsaber style
-	{	0,	1,	4,	4	},	//SK_PURPLESTYLE,	//Purple lightsaber style
-	{	0,	1,	4,	4	},	//SK_GREENSTYLE,	//Green lightsaber style
-	{	0,	1,	4,	4	},	//SK_DUALSTYLE,	//Dual lightsaber style
-	{	0,	1,	4,	4	},	//SK_STAFFSTYLE,	//Staff lightsaber style
+	{	0,	1,	0,	0	},	//SK_BLUESTYLE,	//Yellow lightsaber style
+	{	0,	1,	0,	0	},	//SK_REDSTYLE,	//Red lightsaber style
+	{	0,	1,	0,	0	},	//SK_PURPLESTYLE,	//Purple lightsaber style
+	{	0,	1,	0,	0	},	//SK_GREENSTYLE,	//Green lightsaber style
+	{	0,	1,	0,	0	},	//SK_DUALSTYLE,	//Dual lightsaber style
+	{	0,	1,	0,	0	},	//SK_STAFFSTYLE,	//Staff lightsaber style
 	//[/StanceSelection]
 	//[/ExpSys]
 };

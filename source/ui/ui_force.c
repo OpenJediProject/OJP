@@ -212,6 +212,13 @@ int NumberOfSkillRanks(int skill)
 		case NUM_FORCE_POWERS+SK_CLOAK:			//cloaking device skill
 		case NUM_FORCE_POWERS+SK_SEEKER:		//seeker droid skill
 		case NUM_FORCE_POWERS+SK_SENTRY:		//sentry gun skill
+		case FP_SABER_OFFENSE:
+		case NUM_FORCE_POWERS+SK_BLUESTYLE:	//Yellow lightsaber style
+		case NUM_FORCE_POWERS+SK_REDSTYLE:	//Red lightsaber style
+		case NUM_FORCE_POWERS+SK_PURPLESTYLE:	//Purple lightsaber style
+		case NUM_FORCE_POWERS+SK_GREENSTYLE:	//Green lightsaber style
+		case NUM_FORCE_POWERS+SK_DUALSTYLE:	//Dual lightsaber style
+		case NUM_FORCE_POWERS+SK_STAFFSTYLE:	//Staff lightsaber style
 			return 1;
 			break;
 		case NUM_FORCE_POWERS+SK_BACTA:
