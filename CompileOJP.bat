@@ -34,7 +34,7 @@ rem **********************
 :VSEXPRESS
 rem VS Express doesn't seem to display output to stdout, as such, we dump to a file and then read it off.
 VCExpress "%OLDDIR%\%OJPSLN%" /build Final /Out "%OLDDIR%\bob.txt"
-cat %OLDDIR%\bob.txt
+type %OLDDIR%\bob.txt
 del %OLDDIR%\bob.txt
 GOTO FINISHED
 
