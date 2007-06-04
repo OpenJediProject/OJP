@@ -9,7 +9,7 @@ rem ****************
 
 set OLDDIR=%CD%
 set OJPSLN=source\OJP Enhanced.sln
-set COMPILER=devenv
+
 
 ECHO ================
 ECHO Starting Compile
@@ -17,12 +17,46 @@ ECHO ================
 
 chdir /d "%VS80COMNTOOLS%"
 cd ../IDE
-IF EXIST VCExpress.exe set COMPILER=VCExpress
+IF EXIST VCExpress.exe GOTO VSEXPRESS
 
-%COMPILER% "%OLDDIR%\%OJPSLN%" /build Final
+
+rem *********************
+rem Normal Visual Studios
+rem *********************
+
+devenv "%OLDDIR%\%OJPSLN%" /build Final
+GOTO FINISHED
+
+
+rem **********************
+rem Visual Studios Express
+rem **********************
+:VSEXPRESS
+rem VS Express doesn't seem to display output to stdout, as such, we dump to a file and then read it off.
+VCExpress "%OLDDIR%\%OJPSLN%" /build Final /Out "%OLDDIR%\bob.txt"
+cat %OLDDIR%\bob.txt
+del %OLDDIR%\bob.txt
+GOTO FINISHED
+
+
+:FINISHED
 chdir /d "%OLDDIR%"
+
+IF ERRORLEVEL 1 GOTO ERROR
 
 ECHO.
 ECHO ================
 ECHO Compile Complete
 ECHO ================
+GOTO END
+
+
+:ERROR
+ECHO ==================================================
+ECHO Encountered Error While Compiling DLLS!  ABORTING!
+ECHO ==================================================
+GOTO END
+
+
+:END
+
