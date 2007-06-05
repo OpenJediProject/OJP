@@ -2957,7 +2957,8 @@ saberMoveName_t PM_SaberAttackForMovement(saberMoveName_t curmove)
 				pm->ps->weaponTime <= 0 &&
 				!BG_SaberInSpecialAttack(pm->ps->torsoAnim)&&
 				//[SaberSys]
-				BG_EnoughForcePowerForMove(FATIGUE_GROUNDATTACK))
+				BG_EnoughForcePowerForMove(FATIGUE_GROUNDATTACK) &&
+				!PM_SaberInBounce(curmove)) //can't combo into a lunge move 
 				//BG_EnoughForcePowerForMove(SABER_ALT_ATTACK_POWER_FB))
 				//[/SaberSys]
 			{ //LUNGE (weak)

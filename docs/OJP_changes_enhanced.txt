@@ -85,6 +85,7 @@ Version 0.0.9v:
 
 			Comboing:
 				- Combos are now easier to do because players can now combo into any attack direction that isn't the same direction as the previous parry/attack.
+				- Players can no longer combo lunge moves together.
 
 			Damage:
 				- Hitting a person while you're running does double DP damage.
