@@ -1666,34 +1666,44 @@ void Cmd_ForceChanged_f( gentity_t *ent )
 	ent->client->ps.fd.forceDoInit = 1;
 
 argCheck:
-	*/
-	//[/ExpSys]
+
 	if (g_gametype.integer == GT_DUEL || g_gametype.integer == GT_POWERDUEL)
 	{ //If this is duel, don't even bother changing team in relation to this.
 		return;
 	}
+	*/
+	//[/ExpSys]
 
 	if (trap_Argc() > 1)
 	{
 		char	arg[MAX_TOKEN_CHARS];
 		char	userinfo[MAX_INFO_STRING];
 
-		trap_Argv( 1, arg, sizeof( arg ) );
-		if (arg && arg[0] && arg[0] != 'x')
-		{ //if there's an arg, assume it's a combo team command from the UI.
-			Cmd_Team_f(ent);
-		}
-
-
 		trap_Argv( 2, arg, sizeof( arg ) );
-		if (arg && arg[0])
+		if (arg && arg[0] && ent->client)
 		{//new force power string, update the forcepower string.
 			trap_GetUserinfo( ent->s.number, userinfo, sizeof( userinfo ) );
 			Info_SetValueForKey( userinfo, "forcepowers", arg );
-			trap_SetUserinfo( ent->s.number, userinfo );			
+			trap_SetUserinfo( ent->s.number, userinfo );	
+
+			if (ent->client->sess.sessionTeam == TEAM_SPECTATOR)
+			{ //if it's a spec, just make the changes now
+				//No longer print it, as the UI calls this a lot.
+				WP_InitForcePowers( ent );
+			}
+			else
+			{//wait til respawn and tell the player that.
+				trap_SendServerCommand( ent-g_entities, va("print \"%s%s\n\n\"", S_COLOR_GREEN, G_GetStringEdString("MP_SVGAME", "FORCEPOWERCHANGED")) );
+
+				ent->client->ps.fd.forceDoInit = 1;
+			}
 		}
 
-		//did they also send a new force power string?
+		trap_Argv( 1, arg, sizeof( arg ) );
+		if (arg && arg[0] && arg[0] != 'x' && g_gametype.integer != GT_DUEL && g_gametype.integer != GT_POWERDUEL)
+		{ //if there's an arg, assume it's a combo team command from the UI.
+			Cmd_Team_f(ent);
+		}
 	}
 }
 

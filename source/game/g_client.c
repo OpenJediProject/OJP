@@ -2391,12 +2391,6 @@ void ClientUserinfoChanged( int clientNum ) {
 	}
 	//[/ClientPlugInDetect]
 
-	//[ExpSys]
-	//reinitialize our forcepowers because they might have changed.
-	WP_InitForcePowers(ent);
-	//[/ExpSys]
-
-
 	//[RGBSabers]
 	Q_strncpyz(rgb1,Info_ValueForKey(userinfo, "rgb_saber1"), sizeof(rgb1));
 	Q_strncpyz(rgb2,Info_ValueForKey(userinfo, "rgb_saber2"), sizeof(rgb2));
