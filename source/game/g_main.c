@@ -3082,6 +3082,11 @@ and the time everyone is moved to the intermission spot, so you
 can see the last frag.
 =================
 */
+//[LastManStanding]
+#define LMSRESETTIME		5000		//amount of time LMS being found and the LMS round reset.
+qboolean LMSReset = qfalse;
+int	LMSResetTime = 0;
+//[/LastManStanding]
 qboolean g_endPDuel = qfalse;
 void CheckExitRules( void ) {
  	int			i;
@@ -3190,6 +3195,83 @@ void CheckExitRules( void ) {
 			}
 		}
 	}
+
+	//[LastManStanding]
+	if (!LMSReset //not already reseting
+		&& ojp_lms.integer > 0 && BG_IsLMSGametype(g_gametype.integer) 
+		&& level.numNonSpectatorClients > 1  //have at least two players
+		&& (g_gametype.integer < GT_TEAM || (TeamCount( -1, TEAM_RED ) > 0 && TeamCount( -1, TEAM_BLUE ) > 0) ) ) //and either aren't in a team game or in a team game with a player on each team.
+	{//check to see if there's only one LAST MAN STANDING!
+		int i;
+		int		counts[TEAM_NUM_TEAMS];
+		counts[TEAM_FREE] = 0;
+		counts[TEAM_RED] = 0;
+		counts[TEAM_BLUE] = 0;
+
+		for ( i = 0; i < level.numNonSpectatorClients; i ++ )
+		{
+			gentity_t *ent = &g_entities[level.sortedClients[i]];
+			if((ent->health > 0 && ent->client->tempSpectate < level.time) //actively alive ingame
+				|| ent->lives >= 1)  //or still has lives left and can respawn
+			{//this dude is alive and has lives
+				counts[ent->client->sess.sessionTeam]++;
+			}
+		}
+
+		if(g_gametype.integer >= GT_TEAM)
+		{//either team must have no players
+			if(counts[TEAM_RED] <= 0 || counts[TEAM_BLUE] <= 0)
+			{//only one side has
+				LMSReset = qtrue;
+				LMSResetTime = level.time + LMSRESETTIME;
+			}
+		}
+		else
+		{
+			 if(counts[TEAM_FREE] <= 1)
+			{//one or fewer left, LMS!
+				LMSReset = qtrue;
+				LMSResetTime = level.time + LMSRESETTIME;
+			}
+		}
+	}
+	else if(LMSReset && LMSResetTime < level.time)
+	{//reset all the players if we've finished a LMS round.
+		for ( i = 0; i < level.numNonSpectatorClients; i ++ )
+		{
+			gentity_t *ent = &g_entities[level.sortedClients[i]];
+			ent->lives = (ojp_lmslives.integer >= 1) ? ojp_lmslives.integer : 1;
+			if(ent->health <= 0 || ent->client->tempSpectate > level.time)
+			{
+				respawn(ent);
+				ent->client->tempSpectate = 0;
+			}
+			else
+			{
+				ent->lives--; //deduct survivor's initial life since they're already alive.
+				if(g_gametype.integer < GT_TEAM)
+				{
+trap_SendServerCommand(-1, va("cp \"%s^1 was last man standing.\n\"", ent->client->pers.netname));
+				}
+				else
+				{
+					switch(ent->client->sess.sessionTeam)
+					{
+					case TEAM_BLUE:
+trap_SendServerCommand(-1, va("cp \"Blue team was last team standing.\n\""));
+					break;
+					case TEAM_RED:
+trap_SendServerCommand(-1, va("cp \"Red team was last team standing.\n\""));
+					break;
+					};
+				}
+			}
+		}
+
+		LMSReset = qfalse;
+		LMSResetTime = 0;
+	}
+	//[/LastManStanding]
 
 	//[CoOp]
 	//coop mode never exits unless level over trigger or timelimit hit.
@@ -3417,79 +3499,6 @@ void CheckExitRules( void ) {
 			return;
 		}
 	}
-
-	//[LastManStanding]
-	if (ojp_lms.integer > 0 && BG_IsLMSGametype(g_gametype.integer) && level.numNonSpectatorClients > 1)
-	{//check to see if there's only one LAST MAN STANDING!
-		int i;
-		qboolean lastManStanding = qfalse;
-		int		counts[TEAM_NUM_TEAMS];
-		counts[TEAM_FREE] = 0;
-		counts[TEAM_RED] = 0;
-		counts[TEAM_BLUE] = 0;
-
-		for ( i = 0; i < level.numNonSpectatorClients; i ++ )
-		{
-			gentity_t *ent = &g_entities[level.sortedClients[i]];
-			if(ent->health > 0 || ent->lives >= 1) 
-			{//this dude is alive and has lives
-				counts[ent->client->sess.sessionTeam]++;
-			}
-		}
-
-		if(g_gametype.integer >= GT_TEAM)
-		{//either team must have no players
-			if(counts[TEAM_RED] > 0 && counts[TEAM_BLUE] > 0)
-			{
-				lastManStanding = qfalse;
-			}
-			else
-			{//one side has no players alive.
-				lastManStanding = qtrue;
-			}
-		}
-		else
-		{
-			if(counts[TEAM_FREE] <= 1)
-			{//one or fewer left, LMS!
-				lastManStanding = qtrue;
-			}
-		}
-
-		if(lastManStanding)
-		{//reset all the players
-			for ( i = 0; i < level.numNonSpectatorClients; i ++ )
-			{
-				gentity_t *ent = &g_entities[level.sortedClients[i]];
-				ent->lives = (ojp_lmslives.integer >= 1) ? ojp_lmslives.integer : 1;
-				if(ent->health <= 0)
-				{
-					respawn(ent);
-					ent->client->tempSpectate = 0;
-				}
-				else
-				{
-					if(g_gametype.integer < GT_TEAM)
-					{
-trap_SendServerCommand(-1, va("cp \"%s^1 Was last man standing.\n\"", ent->client->pers.netname));
-					}
-					else
-					{
-						switch(ent->client->sess.sessionTeam)
-						{
-						case TEAM_BLUE:
-trap_SendServerCommand(-1, va("cp \"Blue team was last team standing.\n\""));
-						break;
-						case TEAM_RED:
-trap_SendServerCommand(-1, va("cp \"Red team was last team standing.\n\""));
-						break;
-						};
-					}
-				}
-			}
-		}
-	}
-	//[/LastManStanding]
 }
 
 

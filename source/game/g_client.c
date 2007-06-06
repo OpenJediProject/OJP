@@ -26,6 +26,13 @@ void OJP_Spectator(gentity_t *ent)
 	if (ent->client->sess.sessionTeam != TEAM_SPECTATOR)
 	{
 		ent->client->tempSpectate = Q3_INFINITE;
+		ent->health = ent->client->ps.stats[STAT_HEALTH] = 1;
+		ent->client->ps.weapon = WP_NONE;
+		ent->client->ps.stats[STAT_WEAPONS] = 0;
+		ent->client->ps.stats[STAT_HOLDABLE_ITEMS] = 0;
+		ent->client->ps.stats[STAT_HOLDABLE_ITEM] = 0;
+		ent->takedamage = qfalse;
+		trap_LinkEntity(ent);
 	}
 }
 //[/LastManStanding]
@@ -2865,6 +2872,10 @@ void ClientBegin( int clientNum, qboolean allowTeamReset ) {
 		else
 		{
 			ClientSpawn(ent);
+			if(client->sess.sessionTeam != TEAM_SPECTATOR)
+			{//costs a life to switch teams to something other than spectator.
+				ent->lives--;
+			}
 		}
 		//[/LastManStanding]
 	}
