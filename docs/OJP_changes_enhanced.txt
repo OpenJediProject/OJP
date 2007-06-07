@@ -65,6 +65,12 @@ Version 0.0.9v:
 			Pull:
 				- To pull a weapon out of a player's hands, the Force users must target them directly with their crosshairs.
 
+		Last Man Standing:
+			- Fixed issues with dead spectators' view being screwed up.
+			- Fixed animation/collision issues with dead LMS players after the LMS round respawn.
+			- Added announcer voice to LMS round ends.
+			- Redid message handling to limit the number of messages sent and prevent lag at LMS round reset.
+
 		Misc:
 			- Changed our walk check code to check animations instead of player movement speed to make it more accurate.
 			- Removed a bit of redundent code from the saber code behavior for bound box blocks.

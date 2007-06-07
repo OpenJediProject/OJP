@@ -1831,6 +1831,20 @@ static void CG_ServerCommand( void ) {
 	}
 	//[/ROQFILES]
 
+	//[LastManStanding]
+	if ( !strcmp( cmd, "LMSWin" ) )
+	{
+		trap_S_StartLocalSound( cgs.media.winnerSound, CHAN_ANNOUNCER );
+		return;
+	}
+
+	if ( !strcmp( cmd, "LMSLose" ) )
+	{
+		trap_S_StartLocalSound( cgs.media.loserSound, CHAN_ANNOUNCER );
+		return;
+	}
+	//[/LastManStanding]
+
 	CG_Printf( "Unknown client game command: %s\n", cmd );
 }
 

@@ -3221,7 +3221,7 @@ void CheckExitRules( void ) {
 		if(g_gametype.integer >= GT_TEAM)
 		{//either team must have no players
 			if(counts[TEAM_RED] <= 0 || counts[TEAM_BLUE] <= 0)
-			{//only one side has
+			{//only one side has players left
 				LMSReset = qtrue;
 				LMSResetTime = level.time + LMSRESETTIME;
 			}
@@ -3237,6 +3237,7 @@ void CheckExitRules( void ) {
 	}
 	else if(LMSReset && LMSResetTime < level.time)
 	{//reset all the players if we've finished a LMS round.
+		gentity_t* winner = NULL;
 		for ( i = 0; i < level.numNonSpectatorClients; i ++ )
 		{
 			gentity_t *ent = &g_entities[level.sortedClients[i]];
@@ -3245,26 +3246,39 @@ void CheckExitRules( void ) {
 			{
 				respawn(ent);
 				ent->client->tempSpectate = 0;
+				if(!(ent->r.svFlags & SVF_BOT))
+				{//let them know that they suck.
+					trap_SendServerCommand(ent->s.number, va("LMSLose"));
+				}
 			}
 			else
 			{
+				winner = ent;
 				ent->lives--; //deduct survivor's initial life since they're already alive.
-				if(g_gametype.integer < GT_TEAM)
-				{
-trap_SendServerCommand(-1, va("cp \"%s^1 was last man standing.\n\"", ent->client->pers.netname));
+				if(!(ent->r.svFlags & SVF_BOT))
+				{//let them know that they suck.
+					trap_SendServerCommand(ent->s.number, va("LMSWin"));
 				}
-				else
+			}
+		}
+
+		if(winner)
+		{
+			if(g_gametype.integer < GT_TEAM)
+			{
+				trap_SendServerCommand(-1, va("cp \"%s" S_COLOR_YELLOW " was the last man standing!\n\"", winner->client->pers.netname));
+			}
+			else
+			{
+				switch(winner->client->sess.sessionTeam)
 				{
-					switch(ent->client->sess.sessionTeam)
-					{
-					case TEAM_BLUE:
-trap_SendServerCommand(-1, va("cp \"Blue team was last team standing.\n\""));
-					break;
-					case TEAM_RED:
-trap_SendServerCommand(-1, va("cp \"Red team was last team standing.\n\""));
-					break;
-					};
-				}
+				case TEAM_BLUE:
+					trap_SendServerCommand(-1, va("cp \"" S_COLOR_BLUE "Blue team" S_COLOR_YELLOW " was the last team standing!\n\""));
+				break;
+				case TEAM_RED:
+					trap_SendServerCommand(-1, va("cp \"" S_COLOR_RED "Red team" S_COLOR_YELLOW " was the last team standing!\n\""));
+				break;
+				};
 			}
 		}
 
