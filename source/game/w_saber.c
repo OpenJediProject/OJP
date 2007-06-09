@@ -128,6 +128,7 @@ qboolean ButterFingers(gentity_t *saberent, gentity_t *saberOwner, gentity_t *ot
 //[DodgeSys]
 //[DodgeDefines]
 
+/*  Turned off PreCog for now.
 //The Cost of a PreCog (before the fact) Dodging each type of damage.
 //-1 = can't dodge.
 //Always use the main MOD for a weapon that has splash.
@@ -178,6 +179,7 @@ int PreCogDodgeCosts[MOD_MAX] =
 	-1		//MOD_TEAM_CHANGE,
 	//MOD_MAX
 };
+*/
 
 //The Cost of Body/Roll Dodging each type of damage.
 //-1 = can't dodge.
@@ -7065,6 +7067,7 @@ void WP_SaberStartMissileBlockCheck( gentity_t *self, usercmd_t *ucmd  )
 		//[/SaberSys]
 
 		//[DodgeSys]
+		/* disabled all this stuff for now, kind of buggy and people think it's unbalanced.
 		//handle Dodging for explosive bad things		
 		if ( ent->splashDamage && ent->splashRadius ) 
 		{//this thingy can explode
@@ -7090,6 +7093,7 @@ void WP_SaberStartMissileBlockCheck( gentity_t *self, usercmd_t *ucmd  )
 			//done everything we can for an explosive
 			continue;
 		}
+		*/
 
 
 		/* old method.  borked and messy.

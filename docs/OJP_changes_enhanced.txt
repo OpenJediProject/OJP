@@ -46,7 +46,7 @@ Version 0.0.9v:
 		
 		Dodge:
 			- Fixed problem with explosive weapons sometimes regening player's FP.
-			- Improved the precog Dodge behavior for explosives.
+			- Turned off the auto-jump/auto-push Dodge behavior.			
 
 		Experience System:
 			- Fixed issue where players should spawn without their selected skills and weapons.
