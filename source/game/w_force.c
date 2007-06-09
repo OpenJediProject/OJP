@@ -4995,7 +4995,8 @@ static void WP_ForcePowerRun( gentity_t *self, forcePowers_t forcePower, usercmd
 			self->client->ps.fd.forcePowerDuration[FP_SPEED] = level.time + 500;
 		}
 
-		if ( !WP_ForcePowerAvailable( self, forcePower, 0 ) || self->client->ps.fd.forcePowerDuration[FP_SPEED] < level.time )
+		if ( self->client->ps.fd.forcePower < forcePowerNeeded[self->client->ps.fd.forcePowerLevel[FP_SPEED]][FP_SPEED] 
+			|| self->client->ps.fd.forcePowerDuration[FP_SPEED] < level.time )
 		{
 			WP_ForcePowerStop( self, forcePower );
 		}
