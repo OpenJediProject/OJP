@@ -90,7 +90,10 @@ int forcePowerNeeded[NUM_FORCE_POWER_LEVELS][NUM_FORCE_POWERS] =
 	{
 		65,//FP_HEAL,//instant //was 25, but that was way too little
 		10,//FP_LEVITATION,//hold/duration
-		50,//FP_SPEED,//duration
+		//[ForceSys]
+		3,//FP_SPEED,//hold/duration
+		//50,//FP_SPEED,//duration
+		//[/ForceSys]
 		20,//FP_PUSH,//hold/duration
 		20,//FP_PULL,//hold/duration
 		20,//FP_TELEPATHY,//instant
@@ -118,11 +121,12 @@ int forcePowerNeeded[NUM_FORCE_POWER_LEVELS][NUM_FORCE_POWERS] =
 	{
 		60,//FP_HEAL,//instant
 		10,//FP_LEVITATION,//hold/duration
-		50,//FP_SPEED,//duration
 		//[ForceSys]
+		2,//FP_SPEED,//hold/duration
 		//reduced the FP cost for pull/push
 		15,//FP_PUSH,//hold/duration
 		15,//FP_PULL,//hold/duration
+		//50,//FP_SPEED,//duration
 		//20,//FP_PUSH,//hold/duration
 		//20,//FP_PULL,//hold/duration
 		//[/ForceSys]
@@ -151,11 +155,12 @@ int forcePowerNeeded[NUM_FORCE_POWER_LEVELS][NUM_FORCE_POWERS] =
 	{
 		50,//FP_HEAL,//instant //You get 5 points of health.. for 50 force points!
 		10,//FP_LEVITATION,//hold/duration
-		50,//FP_SPEED,//duration
 		//[ForceSys]
+		1,//FP_SPEED,//duration
 		//reduced the FP cost for pull/push
 		10,//FP_PUSH,//hold/duration
 		10,//FP_PULL,//hold/duration
+		//50,//FP_SPEED,//duration
 		//20,//FP_PUSH,//hold/duration
 		//20,//FP_PULL,//hold/duration
 		//[/ForceSys]
@@ -2666,7 +2671,8 @@ static qboolean PM_CheckJump( void )
 			else if(pm->cmd.upmove > 0 && pm->ps->velocity[2] < -10 )
 			{//can't keep jumping, turn on jetpack?
 #ifdef QAGAME
-				if(g_entities[pm->ps->clientNum].client && !g_entities[pm->ps->clientNum].client->jetPackOn)
+				if(g_entities[pm->ps->clientNum].client && pm->ps->stats[STAT_HOLDABLE_ITEMS] & (1 << HI_JETPACK) 
+					&& !g_entities[pm->ps->clientNum].client->jetPackOn)
 				{
 					ItemUse_Jetpack(&g_entities[pm->ps->clientNum]);
 				}
@@ -4040,7 +4046,7 @@ static void PM_AirMove( void ) {
 			wishvel[2] += scale * pm->cmd.upmove;
 		}
 
-		VectorScale(wishvel, 2.0f, wishvel);
+		VectorScale(wishvel, 1.5f, wishvel);
 
 		/*
 		for ( i = 0 ; i < 2 ; i++ )

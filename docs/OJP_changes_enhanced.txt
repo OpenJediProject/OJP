@@ -14,6 +14,9 @@ Version 0.0.9v:
 		Experience System:
 			- (StanceSelection) Players now buy saber styles individually instead of getting them for free with Saber Offense.
 
+		Force Speed (ForceSys):
+			- Hold the approprate button to use.  FP will drain constantly during use.
+
 		More Realistic Jetpacks (JetpackSys):
 			- Jetpacks can now be turned on by holding jump when falling in the air.  This also makes it so the jetpack kicks in at the top of a jump if the jump button is held down.
 			- Better animations and more movie realistic flight behavior.
@@ -74,6 +77,7 @@ Version 0.0.9v:
 			- Fixed animation/collision issues with dead LMS players after the LMS round respawn.
 			- Added announcer voice to LMS round ends.
 			- Redid message handling to limit the number of messages sent and prevent lag at LMS round reset.
+			- Fixed problem where LMS lives were being deduced when there weren't enough players in the game.
 
 		Misc:
 			- Changed our walk check code to check animations instead of player movement speed to make it more accurate.

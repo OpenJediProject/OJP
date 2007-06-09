@@ -3777,7 +3777,11 @@ void ClientThink_real( gentity_t *ent ) {
 		else if (pm.cmd.generic_cmd != GENCMD_FORCE_THROW &&
 		//if (pm.cmd.generic_cmd != GENCMD_FORCE_THROW &&
 		//[/SaberSys]
-			pm.cmd.generic_cmd != GENCMD_FORCE_PULL)
+			//[ForceSys]
+			pm.cmd.generic_cmd != GENCMD_FORCE_PULL &&
+			pm.cmd.generic_cmd != GENCMD_FORCE_SPEED)
+			//pm.cmd.generic_cmd != GENCMD_FORCE_PULL)
+			//[/ForceSys]
 		{ //these are the only two where you wouldn't care about a delay between
 			ent->client->lastGenCmdTime = level.time + 300; //default 100ms debounce between issuing the same command.
 		}

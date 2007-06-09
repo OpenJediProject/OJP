@@ -3199,8 +3199,7 @@ void CheckExitRules( void ) {
 	//[LastManStanding]
 	if (!LMSReset //not already reseting
 		&& ojp_lms.integer > 0 && BG_IsLMSGametype(g_gametype.integer) 
-		&& level.numNonSpectatorClients > 1  //have at least two players
-		&& (g_gametype.integer < GT_TEAM || (TeamCount( -1, TEAM_RED ) > 0 && TeamCount( -1, TEAM_BLUE ) > 0) ) ) //and either aren't in a team game or in a team game with a player on each team.
+		&& LMS_EnoughPlayers())
 	{//check to see if there's only one LAST MAN STANDING!
 		int i;
 		int		counts[TEAM_NUM_TEAMS];
@@ -4712,7 +4711,7 @@ void G_RunFrame( int levelTime ) {
 					//[JetpackSys]
 					if (ent->client->pers.cmd.forwardmove || ent->client->pers.cmd.upmove || ent->client->pers.cmd.rightmove)
 					{ //only use fuel when actually boosting.
-						ent->client->ps.jetpackFuel -= 2;
+						ent->client->ps.jetpackFuel -= 4;
 					}
 
 					/*

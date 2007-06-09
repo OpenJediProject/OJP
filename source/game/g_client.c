@@ -1260,7 +1260,7 @@ void respawn( gentity_t *ent ) {
 	trap_UnlinkEntity (ent);
 
 	//[LastManStanding]
-	if (ojp_lms.integer > 0 && ent->lives < 1 && BG_IsLMSGametype(g_gametype.integer))
+	if (ojp_lms.integer > 0 && ent->lives < 1 && BG_IsLMSGametype(g_gametype.integer) && LMS_EnoughPlayers())
 	{//playing LMS and we're DEAD!  Just start chillin in tempSpec.
 		OJP_Spectator(ent);
 	}
@@ -1309,7 +1309,7 @@ void respawn( gentity_t *ent ) {
 		tent->s.clientNum = ent->s.clientNum;
 
 		//[LastManStanding]
-		if ( ojp_lms.integer > 0 && BG_IsLMSGametype(g_gametype.integer) && level.numPlayingClients > 1)
+		if ( ojp_lms.integer > 0 && BG_IsLMSGametype(g_gametype.integer) && LMS_EnoughPlayers())
 		{//reduce our number of lives since we respawned and we're not the only player.
 			ent->lives--;
 		}
@@ -2865,14 +2865,14 @@ void ClientBegin( int clientNum, qboolean allowTeamReset ) {
 
 		// locate ent at a spawn point
 		//[LastManStanding]
-		if (ojp_lms.integer > 0 && ent->lives < 1 && BG_IsLMSGametype(g_gametype.integer) && client->sess.sessionTeam != TEAM_SPECTATOR)
+		if (ojp_lms.integer > 0 && ent->lives < 1 && BG_IsLMSGametype(g_gametype.integer) && LMS_EnoughPlayers() && client->sess.sessionTeam != TEAM_SPECTATOR)
 		{//don't allow players to respawn in LMS by switching teams.
 			OJP_Spectator(ent);
 		}
 		else
 		{
 			ClientSpawn(ent);
-			if(client->sess.sessionTeam != TEAM_SPECTATOR)
+			if(client->sess.sessionTeam != TEAM_SPECTATOR && LMS_EnoughPlayers())
 			{//costs a life to switch teams to something other than spectator.
 				ent->lives--;
 			}
@@ -5137,4 +5137,23 @@ qboolean OJP_AllPlayersHaveClientPlugin(void)
 	return qtrue;
 }
 //[/ClientPlugInDetect]
+
+
+//[LastManStanding]
+qboolean LMS_EnoughPlayers()
+{//checks to see if there's enough players in game to enable LMS rules
+	if(level.numNonSpectatorClients < 2)
+	{//definitely not enough.
+		return qfalse;
+	}
+
+	if(g_gametype.integer >= GT_TEAM 
+		&& (TeamCount( -1, TEAM_RED ) == 0 || TeamCount( -1, TEAM_BLUE ) == 0) )
+	{//have to have at least one player on each team to be able to play LMS
+		return qfalse;
+	}
+
+	return qtrue;
+}
+//[/LastManStanding]
 

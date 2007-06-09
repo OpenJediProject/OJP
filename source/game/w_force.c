@@ -1082,7 +1082,7 @@ qboolean WP_ForcePowerUsable( gentity_t *self, forcePowers_t forcePower )
 	
 	if ( (self->client->ps.fd.forcePowersActive & ( 1 << forcePower )) )
 	{//already using this power
-		if (forcePower != FP_LEVITATION)
+		if (forcePower != FP_LEVITATION && forcePower != FP_SPEED)
 		{
 			return qfalse;
 		}
@@ -1295,6 +1295,10 @@ void WP_ForcePowerStart( gentity_t *self, forcePowers_t forcePower, int override
 	case FP_SPEED:
 		hearable = qtrue;
 		hearDist = 256;
+		//[ForceSys]
+		duration = 500;
+
+		/*
 		if (self->client->ps.fd.forcePowerLevel[FP_SPEED] == FORCE_LEVEL_1)
 		{
 			duration = 10000;
@@ -1316,6 +1320,8 @@ void WP_ForcePowerStart( gentity_t *self, forcePowers_t forcePower, int override
 		{
 			duration = overrideAmt;
 		}
+		*/
+		//[/ForceSys]
 
 		self->client->ps.fd.forcePowersActive |= ( 1 << forcePower );
 		break;
@@ -1857,12 +1863,16 @@ void ForceSpeed( gentity_t *self, int forceDuration )
 		return;
 	}
 
+	//[ForceSys]
+	/*
 	if (self->client->ps.forceAllowDeactivateTime < level.time &&
 		(self->client->ps.fd.forcePowersActive & (1 << FP_SPEED)) )
 	{
 		WP_ForcePowerStop( self, FP_SPEED );
 		return;
 	}
+	*/
+	//[/ForceSys]
 
 	if ( !WP_ForcePowerUsable( self, FP_SPEED ) )
 	{
@@ -1877,6 +1887,14 @@ void ForceSpeed( gentity_t *self, int forceDuration )
 			return;
 		}
 	}
+
+	//[ForceSys]
+	if(self->client->ps.fd.forcePowersActive & (1 << FP_SPEED))
+	{//it's already turned on.  just keep it going.
+		self->client->ps.fd.forcePowerDuration[FP_SPEED] = level.time + 500;
+		return;
+	}
+	//[/ForceSys]
 
 	self->client->ps.forceAllowDeactivateTime = level.time + 1500;
 
@@ -4911,6 +4929,9 @@ static int LightningDebounceTime = 0;
 //sets the time between lightning hit shots on the server so that we can alter the sv_fps without issues.  
 #define LIGHTNINGDEBOUNCE		50 
 //[/BugFix27]
+static int SpeedDebounceTime = 0;
+//sets the time between force speed FP drains.  
+#define SPEEDDEBOUNCE		200 
 static void WP_ForcePowerRun( gentity_t *self, forcePowers_t forcePower, usercmd_t *cmd )
 {
 	extern usercmd_t	ucmd;
@@ -4967,6 +4988,22 @@ static void WP_ForcePowerRun( gentity_t *self, forcePowers_t forcePower, usercmd
 			{//disables force powers
 				WP_ForcePowerStop( self, forcePower );
 			}
+		}
+
+		if ( (cmd->buttons & BUTTON_FORCEPOWER) && self->client->ps.fd.forcePowerSelected == FP_SPEED )
+		{//holding it keeps it going
+			self->client->ps.fd.forcePowerDuration[FP_SPEED] = level.time + 500;
+		}
+
+		if ( !WP_ForcePowerAvailable( self, forcePower, 0 ) || self->client->ps.fd.forcePowerDuration[FP_SPEED] < level.time )
+		{
+			WP_ForcePowerStop( self, forcePower );
+		}
+		else if( SpeedDebounceTime == level.time //someone already advanced the timer this frame
+			|| (level.time - SpeedDebounceTime >= SPEEDDEBOUNCE) )
+		{
+			BG_ForcePowerDrain( &self->client->ps, forcePower, 0 );
+			SpeedDebounceTime = level.time;
 		}
 		/*
 		if ( self->client->ps.powerups[PW_REDFLAG]
@@ -5223,13 +5260,19 @@ int WP_DoSpecificPower( gentity_t *self, usercmd_t *ucmd, forcePowers_t forcepow
 		}
 		break;
 	case FP_SPEED:
+		//[ForceSys]
+		/*
 		powerSucceeded = 0; //always 0 for nonhold powers
 		if (self->client->ps.fd.forceButtonNeedRelease)
 		{ //need to release before we can use nonhold powers again
 			break;
 		}
+		*/
+		//[/ForceSys]
 		ForceSpeed(self, 0);
-		self->client->ps.fd.forceButtonNeedRelease = 1;
+		//[ForceSys]
+		//self->client->ps.fd.forceButtonNeedRelease = 1;
+		//[/ForceSys]
 		break;
 	case FP_GRIP:
 		if (self->client->ps.fd.forceGripEntityNum == ENTITYNUM_NONE)
