@@ -64,6 +64,7 @@ Version 0.0.9v:
 			- Raised the cost of the Clone Rifles alternate fire to 40 ammo cells.
 			- Reduced the fire rate of the Clone Rifle's primary fire.
 			- Fixed problem with homing rockets getting stuck in mid-air.
+			- Det Packs, disruptor, and flamethrowers have been reclassified as medium weapons.
 
 		Jetpack:
 			- Increased fuel consumption rate.  Decreased fuel regeneration rate.

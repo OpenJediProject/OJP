@@ -3722,10 +3722,17 @@ qboolean BG_IsLMSGametype(int gametype)
 qboolean BG_IsUsingMediumWeap (playerState_t *ps)
 {//checks to see if the player is using a "medium" class weapon, which prevent offensive Force powers, but not defensive ones.
 	assert(ps);
+
+	if(ps->userInt3 & (1 << FLAG_FLAMETHROWER))
+	{
+		return qtrue;
+	}
 	switch(ps->weapon)
 	{
 	case WP_BLASTER:
 	case WP_BOWCASTER:
+	case WP_DISRUPTOR:
+	case WP_DET_PACK:
 		return qtrue;
 	default:
 		return qfalse;
@@ -3735,17 +3742,11 @@ qboolean BG_IsUsingMediumWeap (playerState_t *ps)
 qboolean BG_IsUsingHeavyWeap (playerState_t *ps)
 {//checks to see if the player is using a "heavy" class weapon, which is too unweildy to be able to use offensive or defense Force powers.
 	assert(ps);
-	if(ps->userInt3 & (1 << FLAG_FLAMETHROWER))
-	{
-		return qtrue;
-	}
 
 	switch(ps->weapon)
 	{
-	case WP_DISRUPTOR:
 	case WP_REPEATER:
 	case WP_ROCKET_LAUNCHER:
-	case WP_DET_PACK:
 		return qtrue;
 	default:
 		return qfalse;
