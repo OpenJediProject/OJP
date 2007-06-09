@@ -3732,7 +3732,6 @@ qboolean BG_IsUsingMediumWeap (playerState_t *ps)
 	case WP_BLASTER:
 	case WP_BOWCASTER:
 	case WP_DISRUPTOR:
-	case WP_DET_PACK:
 		return qtrue;
 	default:
 		return qfalse;
