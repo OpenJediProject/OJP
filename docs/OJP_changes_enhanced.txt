@@ -14,6 +14,10 @@ Version 0.0.9v:
 		Experience System:
 			- (StanceSelection) Players now buy saber styles individually instead of getting them for free with Saber Offense.
 
+		More Realistic Jetpacks (JetpackSys):
+			- Jetpacks can now be turned on by holding jump when falling in the air.  This also makes it so the jetpack kicks in at the top of a jump if the jump button is held down.
+			- Better animations and more movie realistic flight behavior.
+
 		Linux Auto-Packager:
 			- Added an autopackaging batch file (MakeLinuxPackage.bat) for Windows.  Please note that this only works if the jampgamei386.so has been compiled and placed in the \Enhanced folder.
 

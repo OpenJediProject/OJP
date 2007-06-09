@@ -4709,6 +4709,13 @@ void G_RunFrame( int levelTime ) {
 			{ //using jetpack, drain fuel
 				if (ent->client->jetPackDebReduce < level.time)
 				{
+					//[JetpackSys]
+					if (ent->client->pers.cmd.forwardmove || ent->client->pers.cmd.upmove || ent->client->pers.cmd.rightmove)
+					{ //only use fuel when actually boosting.
+						ent->client->ps.jetpackFuel -= 2;
+					}
+
+					/*
 					if (ent->client->pers.cmd.upmove > 0)
 					{ //take more if they're thrusting
 						ent->client->ps.jetpackFuel -= 2;
@@ -4717,6 +4724,8 @@ void G_RunFrame( int levelTime ) {
 					{
 						ent->client->ps.jetpackFuel--;
 					}
+					*/
+					//[/JetpackSys]
 					
 					if (ent->client->ps.jetpackFuel <= 0)
 					{ //turn it off
