@@ -214,7 +214,7 @@
 			text				"Force"
 			type				ITEM_TYPE_BUTTON
 			style				WINDOW_STYLE_EMPTY
-			rect				15 135 90 15
+			rect				15 180 90 15
 			font				3
 			textscale			0.7
 			textalign			ITEM_ALIGN_CENTER
@@ -256,7 +256,7 @@
 			text				"Lightsaber"
 			type				ITEM_TYPE_BUTTON
 			style				WINDOW_STYLE_EMPTY
-			rect				15 180 90 15
+			rect				15 135 90 15
 			font				3
 			textscale			0.7
 			textalign			ITEM_ALIGN_CENTER
