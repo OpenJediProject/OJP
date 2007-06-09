@@ -4498,6 +4498,8 @@ void ClientSpawn(gentity_t *ent) {
 			ent->health = client->ps.stats[STAT_HEALTH] = client->ps.stats[STAT_MAX_HEALTH] = 100;
 		}
 	}
+	//[ExpSys]
+	/* players should start with their max health rather than slightly over it.
 	else if (client->ps.stats[STAT_MAX_HEALTH] <= 100)
 	{
 		ent->health = client->ps.stats[STAT_HEALTH] = client->ps.stats[STAT_MAX_HEALTH] * 1.25;
@@ -4506,6 +4508,8 @@ void ClientSpawn(gentity_t *ent) {
 	{
 		ent->health = client->ps.stats[STAT_HEALTH] = 125;
 	}
+	*/
+	//[/ExpSys]
 	else
 	{
 		ent->health = client->ps.stats[STAT_HEALTH] = client->ps.stats[STAT_MAX_HEALTH];

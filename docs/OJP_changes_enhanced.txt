@@ -50,6 +50,7 @@ Version 0.0.9v:
 
 		Experience System:
 			- Fixed issue where players should spawn without their selected skills and weapons.
+			- Players start with 100 HP instead of 125 HP.
 
 		Fatigue:
 			- Fixed the cartwheel/backflips/jump attack FP costs to account for the new FP cost of jumps.
