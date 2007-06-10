@@ -518,6 +518,13 @@ void ItemUse_Binoculars(gentity_t *ent)
 		return;
 	}
 
+	//[Ticket318]
+	if (BG_InLedgeMove( ent->client->ps.legsAnim ))
+	{//No binocs while hanging!
+		return;
+	}
+	//[/Ticket318]
+
 	/*
 	if (ent->client->ps.weapon == WP_SABER)
 	{ //No.
