@@ -127,6 +127,7 @@ Version 0.0.9v:
 				- Parrying the sabertwirl for staff and duel moves now does an auto slowbounce like parrying lunge. 
 				- You can't block or dodge sabertwirl for staff and duel when you have under 10 FP, just like lunge.
 
+
 Version 0.0.9u:
 	New Features:
 
