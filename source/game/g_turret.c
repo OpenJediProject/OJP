@@ -672,13 +672,19 @@ void SP_misc_turret( gentity_t *base )
 	char* s;
 
 	//[CoOp]
-	//wahoo ojp bug fix - on top of being single player gametype, the spawnflag also should
-	//not be set to 5 as single player calls both types of turrets
-	if( !(base->spawnflags & 5) && g_gametype.integer == GT_SINGLE_PLAYER)
+	//wahoo turret - actually a spawn flag of 5 spawns a huge space turbo turret
+	//and others spawn the normal g2 turret so fixed this if statement.  In sp, spawnflags
+	//are checked for the value of 5 to spawn the turbo turrets, but in mp it checks for
+	//a spawn flag of 8 in sp_misc_turretg2, so setting to 8 before spawning.  No hoth style
+	//turrets can be found in sp so far.
+	if( g_gametype.integer == GT_SINGLE_PLAYER )
 	{//SP uses this same map entity name for the ceiling turrets.  Override to use them
 		//in CoOp.
+		if( base->spawnflags & 5 )
+			base->spawnflags |= 8;
+		
 		SP_misc_turretG2( base );
-		return;
+			return;
 	}
 	//[/CoOp]
 
