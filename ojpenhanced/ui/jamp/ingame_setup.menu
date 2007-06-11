@@ -2197,7 +2197,42 @@
 		}
 //[/UITweaks]
 
-		//[RGBSabers]
+                //[SFXSabers]
+		itemDef 
+		{	
+			name				sfxsabers
+			group				advanced
+      			type				ITEM_TYPE_MULTI
+			text				@OJP_MENUS_SFXSABERS
+			descText			@OJP_MENUS_SFXSABERS_DESC
+			cvar				"sfx_sabers"
+			cvarFloatList		
+			{ 
+				@MENUS_OFF		0
+                                @MENUS_ON		1
+			}
+			rect				220 81 300 20
+	   		textalign			ITEM_ALIGN_RIGHT
+			textalignx			165
+			textaligny			0
+			font 				4
+			textscale 			1
+			forecolor			.615 .615 .956 1
+			visible				0
+			action 
+			{
+				play			"sound/interface/button1.wav"
+			}
+			mouseenter 
+			{ 
+			}
+			mouseexit 
+			{ 
+			}
+		}
+		//[/SFXSabers]
+                
+                //[RGBSabers]
 		itemDef 
 		{	
 			name				teamrgbsabers
@@ -2212,7 +2247,7 @@
 				@OJP_MENUS_TEAMRGBSABERSPLAYER	 	1
 				@OJP_MENUS_TEAMRGBSABERSALL	 	2
 			}
-			rect				220 81 300 20
+			rect				220 101 300 20
 	   		textalign			ITEM_ALIGN_RIGHT
 			textalignx			165
 			textaligny			0
@@ -2248,7 +2283,7 @@
 				@OJP_MENUS_HOLSTEREDWEAPONSPLAYER	 	1
 				@OJP_MENUS_HOLSTEREDWEAPONSALL		 	2
 			}
-			rect				220 101 300 20
+			rect				220 121 300 20
 	   		textalign			ITEM_ALIGN_RIGHT
 			textalignx			165
 			textaligny			0
@@ -2284,7 +2319,7 @@
 				@OJP_MENUS_TRUEINVERTSABERINVERT 			1
 				@OJP_MENUS_TRUEINVERTSABERALWAYSTHIRDPERSON		2
 			}
-			rect				220 121 300 20
+			rect				220 141 300 20
 	   		textalign			ITEM_ALIGN_RIGHT
 			textalignx			165
 			textaligny			0

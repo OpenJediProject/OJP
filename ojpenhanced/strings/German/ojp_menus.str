@@ -439,7 +439,7 @@ LANG_ENGLISH	    "Display Holstered Weapons:"
 LANG_GERMAN     "Zeige getragene Waffen an:"
 
 REFERENCE	    HOLSTEREDWEAPONS_DESC
-LANG_ENGLISH	    "Displays weaponry on players' models"
+LANG_ENGLISH	    "Displays weaponry on players' models."
 LANG_GERMAN     "Zeigt Waffen am Model des Spielers"
 
 REFERENCE	    HOLSTEREDWEAPONSPLAYER
@@ -452,12 +452,20 @@ LANG_GERMAN     "An allen"
 //[/VisualWeapons]
 
 //[RGBSabers]
+REFERENCE	    SFXSABERS
+LANG_ENGLISH	    "SFX Sabers:"
+LANG_GERMAN	    "#same"
+
+REFERENCE	    SFXSABERS_DESC
+LANG_ENGLISH	    "Toggle whether to use the SFX Saber effects."
+LANG_GERMAN	    "#same"
+
 REFERENCE	    TEAMRGBSABERS
 LANG_ENGLISH	    "Team RGB Sabers:"
 LANG_GERMAN	        "Team RGB Klingen:"
 
 REFERENCE	    TEAMRGBSABERS_DESC
-LANG_ENGLISH	    "Displays custom colored sabers in team games"
+LANG_ENGLISH	    "Displays custom colored sabers in team games."
 LANG_GERMAN	        "Zeige farbige Klingen in Team-Spielen"
 
 REFERENCE	    TEAMRGBSABERSPLAYER

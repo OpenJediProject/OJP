@@ -339,7 +339,7 @@ REFERENCE	    HOLSTEREDWEAPONS
 LANG_ENGLISH	    "Display Holstered Weapons:"
 
 REFERENCE	    HOLSTEREDWEAPONS_DESC
-LANG_ENGLISH	    "Displays weaponry on players' models"
+LANG_ENGLISH	    "Displays weaponry on players' models."
 
 REFERENCE	    HOLSTEREDWEAPONSPLAYER
 LANG_ENGLISH	    "On you only"
@@ -349,11 +349,17 @@ LANG_ENGLISH	    "On everyone"
 //[/VisualWeapons]
 
 //[RGBSabers]
+REFERENCE	    SFXSABERS
+LANG_ENGLISH	    "SFX Sabers:"
+
+REFERENCE	    SFXSABERS_DESC
+LANG_ENGLISH	    "Toggle whether to use the SFX Saber effects."
+
 REFERENCE	    TEAMRGBSABERS
 LANG_ENGLISH	    "Team RGB Sabers:"
 
 REFERENCE	    TEAMRGBSABERS_DESC
-LANG_ENGLISH	    "Displays custom colored sabers in team games"
+LANG_ENGLISH	    "Displays custom colored sabers in team games."
 
 REFERENCE	    TEAMRGBSABERSPLAYER
 LANG_ENGLISH	    "Yours only"

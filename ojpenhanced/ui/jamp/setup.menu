@@ -3159,60 +3159,20 @@
 				hide			button_glow
 			}
 		}
-
-		//[VisualWeapons]
+                
+                //[SFXSabers]
 		itemDef 
 		{	
-			name				holsteredweapons
+			name				sfxsabers
 			group				advanced
       			type				ITEM_TYPE_MULTI
-			text				@OJP_MENUS_HOLSTEREDWEAPONS
-			descText			@OJP_MENUS_HOLSTEREDWEAPONS_DESC
-			cvar				"ojp_holsteredweapons"
+			text				@OJP_MENUS_SFXSABERS
+			descText			@OJP_MENUS_SFXSABERS_DESC
+			cvar				"sfx_sabers"
 			cvarFloatList		
 			{ 
 				@MENUS_OFF		0
-				@OJP_MENUS_HOLSTEREDWEAPONSPLAYER	 	1
-				@OJP_MENUS_HOLSTEREDWEAPONSALL	 	2
-			}
-			rect				260 230 340 14
-	   		textalign			ITEM_ALIGN_RIGHT
-			textalignx			174
-			textaligny			0
-			font 				4
-			textscale 			1
-			forecolor			.615 .615 .956 1
-			visible				0
-			action 
-			{
-				play			"sound/interface/button1.wav"
-			}
-			mouseenter 
-			{ 
-				show			button_glow
-				setitemrect		button_glow	260 228 340 20
-			}
-			mouseexit 
-			{ 
-				hide			button_glow
-			}
-		}
-		//[/VisualWeapons]
-
-		//[RGBSabers]
-		itemDef 
-		{	
-			name				teamrgbsabers
-			group				advanced
-      			type				ITEM_TYPE_MULTI
-			text				@OJP_MENUS_TEAMRGBSABERS
-			descText			@OJP_MENUS_TEAMRGBSABERS_DESC
-			cvar				"ojp_teamrgbsabers"
-			cvarFloatList		
-			{ 
-				@MENUS_OFF		0
-				@OJP_MENUS_TEAMRGBSABERSPLAYER	 	1
-				@OJP_MENUS_TEAMRGBSABERSALL	 		2
+				@MENUS_ON	 	1
 			}
 			rect				260 216 340 14
 	   		textalign			ITEM_ALIGN_RIGHT
@@ -3236,22 +3196,61 @@
 				hide			button_glow
 			}
 		}
-		//[/RGBSabers]
-		
-		//[TrueView]
+		//[/SFXSabers]
+
+		//[RGBSabers]
 		itemDef 
 		{	
-			name				trueinvertsaber
+			name				teamrgbsabers
 			group				advanced
-      		type				ITEM_TYPE_MULTI
-			text				@OJP_MENUS_TRUEINVERTSABER
-			descText			@OJP_MENUS_TRUEINVERTSABER_DESC
-			cvar				"cg_trueinvertsaber"
+      			type				ITEM_TYPE_MULTI
+			text				@OJP_MENUS_TEAMRGBSABERS
+			descText			@OJP_MENUS_TEAMRGBSABERS_DESC
+			cvar				"ojp_teamrgbsabers"
 			cvarFloatList		
 			{ 
-				@OJP_MENUS_TRUEINVERTSABERSAME					0
-				@OJP_MENUS_TRUEINVERTSABERINVERT 				1
-				@OJP_MENUS_TRUEINVERTSABERALWAYSTHIRDPERSON		2
+				@MENUS_OFF		0
+				@OJP_MENUS_TEAMRGBSABERSPLAYER	 	1
+				@OJP_MENUS_TEAMRGBSABERSALL	 		2
+			}
+			rect				260 230 340 14
+	   		textalign			ITEM_ALIGN_RIGHT
+			textalignx			174
+			textaligny			0
+			font 				4
+			textscale 			1
+			forecolor			.615 .615 .956 1
+			visible				0
+			action 
+			{
+				play			"sound/interface/button1.wav"
+			}
+			mouseenter 
+			{ 
+				show			button_glow
+				setitemrect		button_glow	260 230 340 20
+			}
+			mouseexit 
+			{ 
+				hide			button_glow
+			}
+		}
+		//[/RGBSabers]
+
+		//[VisualWeapons]
+		itemDef 
+		{	
+			name				holsteredweapons
+			group				advanced
+      			type				ITEM_TYPE_MULTI
+			text				@OJP_MENUS_HOLSTEREDWEAPONS
+			descText			@OJP_MENUS_HOLSTEREDWEAPONS_DESC
+			cvar				"ojp_holsteredweapons"
+			cvarFloatList		
+			{ 
+				@MENUS_OFF		0
+				@OJP_MENUS_HOLSTEREDWEAPONSPLAYER	 	1
+				@OJP_MENUS_HOLSTEREDWEAPONSALL	 	2
 			}
 			rect				260 244 340 14
 	   		textalign			ITEM_ALIGN_RIGHT
@@ -3268,7 +3267,46 @@
 			mouseenter 
 			{ 
 				show			button_glow
-				setitemrect		button_glow	260 242 340 20
+				setitemrect		button_glow	260 244 340 20
+			}
+			mouseexit 
+			{ 
+				hide			button_glow
+			}
+		}
+		//[/VisualWeapons]
+		
+		//[TrueView]
+		itemDef 
+		{	
+			name				trueinvertsaber
+			group				advanced
+      		type				ITEM_TYPE_MULTI
+			text				@OJP_MENUS_TRUEINVERTSABER
+			descText			@OJP_MENUS_TRUEINVERTSABER_DESC
+			cvar				"cg_trueinvertsaber"
+			cvarFloatList		
+			{ 
+				@OJP_MENUS_TRUEINVERTSABERSAME					0
+				@OJP_MENUS_TRUEINVERTSABERINVERT 				1
+				@OJP_MENUS_TRUEINVERTSABERALWAYSTHIRDPERSON		2
+			}
+			rect				260 258 340 14
+	   		textalign			ITEM_ALIGN_RIGHT
+			textalignx			174
+			textaligny			0
+			font 				4
+			textscale 			1
+			forecolor			.615 .615 .956 1
+			visible				0
+			action 
+			{
+				play			"sound/interface/button1.wav"
+			}
+			mouseenter 
+			{ 
+				show			button_glow
+				setitemrect		button_glow	260 258 340 20
 			}
 			mouseexit 
 			{ 
