@@ -5509,6 +5509,45 @@ void G_Damage( gentity_t *targ, gentity_t *inflictor, gentity_t *attacker,
 		return;
 	}
 
+	//[BryarSecondary]
+	if ( mod == MOD_BRYAR_PISTOL_ALT && targ && targ->inuse && targ->client )
+	{//doesn't do actual damage to the target, instead it acts like a stun hit that increases MP/DP and tries to knock
+		//the player over like a kick.
+
+		int mpDamage = (float) inflictor->s.generic1/BRYAR_MAX_CHARGE*MISHAPLEVEL_MAX;
+
+		//deal DP damage
+		G_DodgeDrain(targ, attacker, damage);
+		
+		G_Printf("%i: %i: Bryar MP Damage %i, Charge %i\n", level.time, targ->s.number, mpDamage, inflictor->s.generic1);
+
+		targ->client->ps.saberAttackChainCount += mpDamage;
+
+		if ((targ->client->ps.saberAttackChainCount >= MISHAPLEVEL_HEAVY
+			|| targ->client->ps.stats[STAT_DODGE] <= DODGE_CRITICALLEVEL))
+		{//knockdown
+			if ( targ->client->ps.saberAttackChainCount >= MISHAPLEVEL_FULL )
+			{
+				G_Knockdown( targ, attacker, dir, 300, qtrue );
+			}
+			else
+			{
+				G_Knockdown( targ, attacker, dir, 100, qtrue );
+			}
+
+			BG_ReduceMishapLevel(&targ->client->ps);
+		}
+		else if(targ->client->ps.saberAttackChainCount >= MISHAPLEVEL_LIGHT)
+		{//stumble
+			AnimateStun(targ, attacker, point);   
+			BG_ReduceMishapLevel(&targ->client->ps);
+		}
+
+		targ->client->ps.electrifyTime = level.time + Q_irand( 300, 800 );
+		return;
+	}
+	//[/BryarSecondary]
+
 	if (!targ->takedamage) {
 		return;
 	}

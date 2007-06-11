@@ -1906,13 +1906,9 @@ void CG_FireWeapon( centity_t *cent, qboolean altFire ) {
 
 	if (cg.predictedPlayerState.clientNum == cent->currentState.number)
 	{
-		//[WeaponSys]
-		if( (ent->weapon == WP_BOWCASTER && !altFire) ||
-		//if ((ent->weapon == WP_BRYAR_PISTOL && altFire) ||
-		//	(ent->weapon == WP_BRYAR_OLD && altFire) ||
-		//	(ent->weapon == WP_BOWCASTER && !altFire) ||
-		//[/WeaponSys]
-			
+		if ((ent->weapon == WP_BRYAR_PISTOL && altFire) ||
+			(ent->weapon == WP_BRYAR_OLD && altFire) ||
+			(ent->weapon == WP_BOWCASTER && !altFire) ||	
 			(ent->weapon == WP_DEMP2 && altFire))
 		{
 			float val = ( cg.time - cent->currentState.constantLight ) * 0.001f;

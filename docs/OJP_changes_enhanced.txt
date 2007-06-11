@@ -7,6 +7,20 @@ This file stores all the information about what has changed from release version
 
 
 
+Version 0.0.9w:
+
+	New Features:
+
+			New Bryar Pistol Secondary Fire (BryarSecondary):  The pistol's secondary fire is now a stun shot.  It drains DP exclusively, deals MP damage, and will knock a player down if their MP is high enough.
+
+	Improvements/Fixes:
+
+		Saber Combat:
+
+			Blocking:
+				- Fixed problem where saberers were trying to block attacks that weren't blockable.  This resulted in those kinds of shots hitting the player when they shouldn't have been.
+				- This also means that players will bolt block even if they can't take damage (looks better visually).
+
 Version 0.0.9v:
 
 	New Features:

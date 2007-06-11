@@ -539,7 +539,10 @@ qboolean G_MissileImpact( gentity_t *ent, trace_t *trace ) {
 		}
 	}
 	//ROP VEHICLE_IMP END
-		
+	
+	//[BoltBlockSys]
+	if (OJP_SaberCanBlock(other, ent, qfalse, trace->endpos, -1, -1))
+	/*
 	if (other->takedamage && other->client &&
 		ent->s.weapon != WP_ROCKET_LAUNCHER &&
 		ent->s.weapon != WP_THERMAL &&
@@ -559,6 +562,8 @@ qboolean G_MissileImpact( gentity_t *ent, trace_t *trace ) {
 		OJP_SaberCanBlock(other, ent, qfalse, vec3_origin, -1, -1) )
 		//WP_SaberCanBlock(other, ent->r.currentOrigin, 0, 0, qtrue, 0))
 		//[/BoltBlockSys]
+	*/
+	//[/BoltBlockSys]
 	{ //only block one projectile per 200ms (to prevent giant swarms of projectiles being blocked)
 		//[BoltBlockSys]
 		//racc - missile hit the actual player and it's a type of missile that you can deflect/ref with the saber.
@@ -960,7 +965,7 @@ void G_RunMissile( gentity_t *ent ) {
 	}
 	// trace a line from the previous position to the current position
 	//[RealTrace]
-	G_RealTrace( NULL, &tr, ent->r.currentOrigin, ent->r.mins, ent->r.maxs, origin, passent, ent->clipmask, -1, -1 );
+	G_RealTrace( ent, &tr, ent->r.currentOrigin, ent->r.mins, ent->r.maxs, origin, passent, ent->clipmask, -1, -1 );
 
 	/*
 	if (d_projectileGhoul2Collision.integer)

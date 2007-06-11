@@ -102,7 +102,6 @@ void G_AddMercBalance(gentity_t *self, int amount)
 
 extern qboolean saberKnockOutOfHand(gentity_t *saberent, gentity_t *saberOwner, vec3_t velocity);
 extern void AnimateKnockdown( gentity_t * self, gentity_t * inflictor );
-extern void AnimateStun( gentity_t *self, gentity_t * inflictor, vec3_t impact );
 void G_RollBalance(gentity_t *self, gentity_t *inflictor, qboolean forceMishap)
 {//This function is for rolling saber mishaps outside the saber behavior code.
 	sabmech_t mechSelf;

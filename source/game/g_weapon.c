@@ -25,7 +25,9 @@ static	vec3_t	muzzle;
 //#define BRYAR_PISTOL_VEL			1600
 //#define BRYAR_PISTOL_DAMAGE			10
 //[/WeaponSys]
-#define BRYAR_CHARGE_UNIT			200.0f	// bryar charging gives us one more unit every 200ms--if you change this, you'll have to do the same in bg_pmove
+//[BryarSecondary]
+//#define BRYAR_CHARGE_UNIT			200.0f	// bryar charging gives us one more unit every 200ms--if you change this, you'll have to do the same in bg_pmove
+//[/BryarSecondary]
 #define BRYAR_ALT_SIZE				1.0f
 
 // E11 Blaster
@@ -286,22 +288,10 @@ BRYAR PISTOL
 static void WP_FireBryarPistol( gentity_t *ent, qboolean altFire )
 //---------------------------------------------------------
 {
-	//[WeaponSys]
-	vec3_t	dir, angs;
-	gentity_t	*missile;
-	//[/WeaponSys]
 	int damage = BRYAR_PISTOL_DAMAGE;
 	int count;
 
-	//[WeaponSys]
-	//try to set up the spread code, but so far it's a pain in the butt.  Won't go.
-	vectoangles( forward, angs );
-	angs[PITCH] += crandom() * BRYAR_SPREAD;
-	angs[YAW]	+= crandom() * BRYAR_SPREAD;
-	AngleVectors( angs, dir, NULL, NULL );
-	missile = CreateMissile( muzzle, dir, BRYAR_PISTOL_VEL, 10000, ent, altFire );
-	//gentity_t	*missile = CreateMissile( muzzle, forward, BRYAR_PISTOL_VEL, 10000, ent, altFire );
-	//[/WeaponSys]
+	gentity_t	*missile = CreateMissile( muzzle, forward, BRYAR_PISTOL_VEL, 10000, ent, altFire );
 
 	missile->classname = "bryar_proj";
 	missile->s.weapon = WP_BRYAR_PISTOL;
@@ -316,6 +306,15 @@ static void WP_FireBryarPistol( gentity_t *ent, qboolean altFire )
 		{
 			count = 1;
 		}
+		//[BryarSecondary]
+		else if ( count > BRYAR_MAX_CHARGE )
+		{
+			count = BRYAR_MAX_CHARGE;
+		}
+
+		damage = BRYAR_PISTOL_ALT_DPDAMAGE + (float)count/BRYAR_MAX_CHARGE*(BRYAR_PISTOL_ALT_DPMAXDAMAGE-BRYAR_PISTOL_ALT_DPDAMAGE);
+
+		/*
 		else if ( count > 5 )
 		{
 			count = 5;
@@ -329,6 +328,8 @@ static void WP_FireBryarPistol( gentity_t *ent, qboolean altFire )
 		{
 			damage *= (count*1.5);
 		}
+		*/
+		//[/BryarSecondary]
 
 		missile->s.generic1 = count; // The missile will then render according to the charge level.
 
@@ -4964,15 +4965,11 @@ void FireWeapon( gentity_t *ent, qboolean altFire )
 
 		case WP_BRYAR_PISTOL:
 			//if ( g_gametype.integer == GT_SIEGE )
-			//[WeaponSys]
-			/*
 			if (1)
 			{//allow alt-fire
 				WP_FireBryarPistol( ent, altFire );
 			}
 			else
-			*/
-			//[/WeaponSys]
 			{
 				WP_FireBryarPistol( ent, qfalse );
 			}

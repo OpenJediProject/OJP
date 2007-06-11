@@ -1502,6 +1502,14 @@ qboolean CheckGauntletAttack( gentity_t *ent );
 
 //[DodgeSys]
 #define DISRUPTOR_MAX_CHARGE (g_gametype.integer == GT_SIEGE ? 200 : 60) //max charge on disruptor's alt fire.
+
+#define DODGE_BOLTBLOCK			5	//standard DP cost to block a missile bolt
+
+//[BryarSecondary]
+#define BRYAR_PISTOL_ALT_DPDAMAGE			DODGE_BOLTBLOCK			//minimum DP damage of bryar secondary
+#define BRYAR_PISTOL_ALT_DPMAXDAMAGE		DODGE_BOLTBLOCK*1.5		//maximum DP damage of bryar secondary
+#define BRYAR_MAX_CHARGE					5
+//[/BryarSecondary]
 //[/DodgeSys]
 
 //
@@ -1691,6 +1699,9 @@ void ForceSeeing( gentity_t *self );
 void ForceThrow( gentity_t *self, qboolean pull );
 void ForceTelepathy(gentity_t *self);
 qboolean Jedi_DodgeEvasion( gentity_t *self, gentity_t *shooter, trace_t *tr, int hitLoc );
+//[SaberSys]
+void AnimateStun( gentity_t *self, gentity_t * inflictor, vec3_t impact );
+//[/SaberSys]
 
 // g_log.c
 void QDECL G_LogPrintf( const char *fmt, ... );

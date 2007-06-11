@@ -7619,8 +7619,6 @@ static qboolean PM_DoChargedWeapons( qboolean vehicleRocketLock, bgEntity_t *veh
 		switch( pm->ps->weapon )
 		{
 		//------------------
-		//[WeaponSys]
-		/*
 		case WP_BRYAR_PISTOL:
 
 			// alt-fire charges the weapon
@@ -7634,8 +7632,6 @@ static qboolean PM_DoChargedWeapons( qboolean vehicleRocketLock, bgEntity_t *veh
 				}
 			}
 			break;
-		*/
-		//[/WeaponSys]
 
 		case WP_CONCUSSION:
 			if ( pm->cmd.buttons & BUTTON_ALT_ATTACK )
@@ -7644,8 +7640,6 @@ static qboolean PM_DoChargedWeapons( qboolean vehicleRocketLock, bgEntity_t *veh
 			}
 			break;
 
-		//[WeaponSys]
-		/*
 		case WP_BRYAR_OLD:
 
 			// alt-fire charges the weapon
@@ -7655,8 +7649,6 @@ static qboolean PM_DoChargedWeapons( qboolean vehicleRocketLock, bgEntity_t *veh
 				altFire = qtrue;
 			}
 			break;
-		*/
-		//[/WeaponSys]
 		
 		//------------------
 		case WP_BOWCASTER:
@@ -7860,7 +7852,9 @@ rest:
 
 
 #define BOWCASTER_CHARGE_UNIT	200.0f	// bowcaster charging gives us one more unit every 200ms--if you change this, you'll have to do the same in g_weapon
-#define BRYAR_CHARGE_UNIT		200.0f	// bryar charging gives us one more unit every 200ms--if you change this, you'll have to do the same in g_weapon
+//[BryarSecondary]
+//#define BRYAR_CHARGE_UNIT		200.0f	// bryar charging gives us one more unit every 200ms--if you change this, you'll have to do the same in g_weapon
+//[/BryarSecondary]
 
 int PM_ItemUsable(playerState_t *ps, int forcedUse)
 {

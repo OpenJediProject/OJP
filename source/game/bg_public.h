@@ -145,6 +145,10 @@
 #define FLAMETHROWER_FUELCOST 3		//fuel cost of flamethrower per hit trace
 //[/Flamethrower]
 
+//[BryarSecondary]
+#define BRYAR_CHARGE_UNIT		500.0f	// bryar charging gives us one more unit every 200ms--if you change this, you'll have to do the same in g_weapon
+//[/BryarSecondary]
+
 //[BUGFIX12]
 //as part of this fix I'm giving some defines for the ghoul2 model indexes.
 #define		G2MODEL_PLAYER				0

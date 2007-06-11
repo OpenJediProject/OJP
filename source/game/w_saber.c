@@ -92,7 +92,6 @@ qboolean ButterFingers(gentity_t *saberent, gentity_t *saberOwner, gentity_t *ot
 
 #define DODGE_SABERBLOCK		15  //standard dodge cost for blocking a saber.
 
-#define DODGE_BOLTBLOCK			5	//standard DP cost to block a missile bolt
 #define DODGE_REPEATERBLOCK		2	//the cost of blocking repeater shots is lower since the repeater shoots much faster.
 
 //This is the amount of DP that a player gains from making a successful parry while low on DP
@@ -190,7 +189,7 @@ int BasicDodgeCosts[MOD_MAX] =
 	-1,		//MOD_MELEE,
 	35,		//MOD_SABER,
 	35,		//MOD_BRYAR_PISTOL,
-	35,		//MOD_BRYAR_PISTOL_ALT,
+	-1,		//MOD_BRYAR_PISTOL_ALT,
 	35,		//MOD_BLASTER,
 	35,		//MOD_TURBLAST,
 	35,		//MOD_DISRUPTOR,
@@ -3511,8 +3510,22 @@ int OJP_SaberCanBlock(gentity_t *self, gentity_t *atk, qboolean checkBBoxBlock, 
 {//similar to WP_SaberCanBlock but without the same sorts of restrictions.
 	vec3_t bodyMin, bodyMax, closestBodyPoint, dirToBody, saberMoveDir;
 	
-	if (!self || !self->client)
+	if (!self || !self->client || !atk)
 	{
+		return 0;
+	}
+
+	if(atk && atk->s.eType == ET_MISSILE //is a missile
+		&& (atk->s.weapon == WP_ROCKET_LAUNCHER ||
+			atk->s.weapon == WP_THERMAL ||
+			atk->s.weapon == WP_TRIP_MINE ||
+			atk->s.weapon == WP_DET_PACK ||
+			atk->methodOfDeath == MOD_REPEATER_ALT ||
+			atk->methodOfDeath == MOD_FLECHETTE_ALT_SPLASH ||
+			atk->methodOfDeath == MOD_CONC ||
+			atk->methodOfDeath == MOD_CONC_ALT ||
+			atk->methodOfDeath == MOD_BRYAR_PISTOL_ALT) )
+	{//can't block this stuff with a saber
 		return 0;
 	}
 
@@ -3757,12 +3770,14 @@ static GAME_INLINE int Finish_RealTrace( trace_t *results, trace_t *closestTrace
 //It's not 100% perfect, but the situations where this won't work right are very rare and
 //probably not worth the additional hassle.
 //
-//gentity_t atk is an optional input varible but its required if you want the saber and blade
-//for impacts on sabers.
+//gentity_t attacker is an optional input variable to give information about the attacker.  This is used to give the attacker 
+//		information about which saber blade they hit (if any) and to see if the victim should use a bounding box saber block.
+//		Not providing an attacker will make the function just return REALTRACE_MISS or REALTRACE_HIT.
+
 //return:	REALTRACE_MISS = didn't hit anything	
 //			REALTRACE_HIT = hit object normally
 //			REALTRACE_SABERBLOCKHIT = hit a player who used a bounding box dodge saber block
-int G_RealTrace(gentity_t *SaberAttacker, trace_t *tr, vec3_t start, vec3_t mins, 
+int G_RealTrace(gentity_t *attacker, trace_t *tr, vec3_t start, vec3_t mins, 
 										vec3_t maxs, vec3_t end, int passEntityNum, 
 										int contentmask, int rSaberNum, int rBladeNum)
 {
@@ -3772,12 +3787,13 @@ int G_RealTrace(gentity_t *SaberAttacker, trace_t *tr, vec3_t start, vec3_t mins
 	trace_t closestTrace; 		//this is the trace struct of the closest successful trace.
 	float closestFraction = 1.1; 	//the fraction of the closest trace so far.  Initially set higher than one so that we have an actualy tr even if the tr is clear.
 	int misses = 0;
+	qboolean atkIsSaberer = (attacker && attacker->client && attacker->client->ps.weapon == WP_SABER) ? qtrue : qfalse;
 	InitRealTraceContent();
 
-	if( SaberAttacker && SaberAttacker->client )
-	{//blank out the enemy saber/blade data so we have a fresh start for this trace.
-		SaberAttacker->client->lastSaberCollided = -1;
-		SaberAttacker->client->lastBladeCollided = -1;
+	if( atkIsSaberer )
+	{//attacker is using a saber to attack us, blank out their saber/blade data so we have a fresh start for this trace.
+		attacker->client->lastSaberCollided = -1;
+		attacker->client->lastBladeCollided = -1;
 	}
 
 	//make the default closestTrace be nothing
@@ -3825,8 +3841,8 @@ int G_RealTrace(gentity_t *SaberAttacker, trace_t *tr, vec3_t start, vec3_t mins
 
 		if (currentEnt->inuse && currentEnt->client)
 		{//initial trace hit a humanoid
-			if(OJP_SaberCanBlock(currentEnt, SaberAttacker, qtrue, tr->endpos, rSaberNum, rBladeNum))
-			{//hit victim is willing to bbox block with their jedi saber abilities.
+			if(attacker && OJP_SaberCanBlock(currentEnt, attacker, qtrue, tr->endpos, rSaberNum, rBladeNum))
+			{//hit victim is willing to bbox block with their jedi saber abilities.  Can only do this if we have data on the attacker.
 				if(!VectorCompare(start, currentStart))
 				{//didn't do trace with original start point.  Recalculate the real fraction before we do our comparision.
 					tr->fraction = CalcTraceFraction(start, end, tr->endpos);
@@ -3855,7 +3871,7 @@ int G_RealTrace(gentity_t *SaberAttacker, trace_t *tr, vec3_t start, vec3_t mins
 		{//hit a lightsaber, do the approprate collision detection checks.
 			gentity_t* saberOwner = &g_entities[currentEnt->r.ownerNum];
 
-			G_SaberCollide( SaberAttacker, saberOwner, currentStart, end, mins, maxs, tr);
+			G_SaberCollide( (atkIsSaberer ? attacker : NULL), saberOwner, currentStart, end, mins, maxs, tr);
 		}
 		else if (tr->entityNum < ENTITYNUM_WORLD)
 		{
@@ -6219,7 +6235,7 @@ static GAME_INLINE qboolean CheckSaberDamage(gentity_t *self, int rSaberNum, int
 			return qfalse;
 		}
 
-		if(OJP_SaberCanBlock(&g_entities[tr.entityNum], self, qfalse, vec3_origin, -1, -1))
+		if(OJP_SaberCanBlock(&g_entities[tr.entityNum], self, qfalse, tr.endpos, -1, -1))
 		{//hit victim is able to block, block!
 			didHit = qfalse;
 			otherOwner = &g_entities[tr.entityNum];
