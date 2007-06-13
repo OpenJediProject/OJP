@@ -26,6 +26,7 @@ static	vec3_t	muzzle;
 //#define BRYAR_PISTOL_DAMAGE			10
 //[/WeaponSys]
 //[BryarSecondary]
+#define BRYAR_CHARGE_UNIT		500.0f	// bryar charging gives us one more unit
 //#define BRYAR_CHARGE_UNIT			200.0f	// bryar charging gives us one more unit every 200ms--if you change this, you'll have to do the same in bg_pmove
 //[/BryarSecondary]
 #define BRYAR_ALT_SIZE				1.0f
