@@ -18,6 +18,10 @@ Version 0.0.9w:
 		Experience:
 			- Fixed issue with OJP skills not giving the correct amount of DP.
 
+		Force Powers:
+			- Animations used when you are pushed or pulled took longer if triggered during saber moves.  (ticket:334)
+			- Standardized the push/pull handextend times to match the actual animation lengths.
+
 		Saber Combat:
 
 			Blocking:

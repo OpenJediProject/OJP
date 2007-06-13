@@ -8656,6 +8656,10 @@ static void PM_Weapon( void )
 			}
 		}
 
+		//[ForceSys]
+		//reset the saberMove so we don't hang at the end of the handextend if we were in a saber move.
+		pm->ps->saberMove = LS_READY;
+		//[/ForceSys]
 		return;
 	}
 

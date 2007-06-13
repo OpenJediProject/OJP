@@ -3622,6 +3622,9 @@ void ForceThrow( gentity_t *self, qboolean pull )
 		if (self->client->ps.forceHandExtend == HANDEXTEND_NONE)
 		{
 			self->client->ps.forceHandExtend = HANDEXTEND_FORCEPULL;
+			//[ForceSys]
+			self->client->ps.forceHandExtendTime = level.time + 600;
+			/*
 			if ( g_gametype.integer == GT_SIEGE && self->client->ps.weapon == WP_SABER )
 			{//hold less so can attack right after a pull
 				self->client->ps.forceHandExtendTime = level.time + 200;
@@ -3630,6 +3633,8 @@ void ForceThrow( gentity_t *self, qboolean pull )
 			{
 				self->client->ps.forceHandExtendTime = level.time + 400;
 			}
+			*/
+			//[/ForceSys]
 		}
 		self->client->ps.powerups[PW_DISINT_4] = self->client->ps.forceHandExtendTime + 200;
 		self->client->ps.powerups[PW_PULL] = self->client->ps.powerups[PW_DISINT_4];
@@ -3640,7 +3645,10 @@ void ForceThrow( gentity_t *self, qboolean pull )
 		if (self->client->ps.forceHandExtend == HANDEXTEND_NONE)
 		{
 			self->client->ps.forceHandExtend = HANDEXTEND_FORCEPUSH;
-			self->client->ps.forceHandExtendTime = level.time + 1000;
+			//[ForceSys]
+			self->client->ps.forceHandExtendTime = level.time + 650;
+			//self->client->ps.forceHandExtendTime = level.time + 1000;
+			//[/ForceSys]
 		}
 		else if (self->client->ps.forceHandExtend == HANDEXTEND_KNOCKDOWN && G_InGetUpAnim(&self->client->ps))
 		{//RACC - Force Pushed while in get up animation.
@@ -4077,13 +4085,19 @@ void ForceThrow( gentity_t *self, qboolean pull )
 					{
 						G_Sound( push_list[x], CHAN_BODY, G_SoundIndex( "sound/weapons/force/pull.wav" ) );
 						push_list[x]->client->ps.forceHandExtend = HANDEXTEND_FORCEPULL;
-						push_list[x]->client->ps.forceHandExtendTime = level.time + 400;
+						//[ForceSys]
+						push_list[x]->client->ps.forceHandExtendTime = level.time + 600;
+						//push_list[x]->client->ps.forceHandExtendTime = level.time + 400;
+						//[/ForceSys]
 					}
 					else
 					{
 						G_Sound( push_list[x], CHAN_BODY, G_SoundIndex( "sound/weapons/force/push.wav" ) );
 						push_list[x]->client->ps.forceHandExtend = HANDEXTEND_FORCEPUSH;
-						push_list[x]->client->ps.forceHandExtendTime = level.time + 1000;
+						//[ForceSys]
+						push_list[x]->client->ps.forceHandExtendTime = level.time + 650;
+						//push_list[x]->client->ps.forceHandExtendTime = level.time + 1000;
+						//[/ForceSys]
 					}
 					//racc - add the force push glow to the defender
 					push_list[x]->client->ps.powerups[PW_DISINT_4] = push_list[x]->client->ps.forceHandExtendTime + 200;
