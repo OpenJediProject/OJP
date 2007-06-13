@@ -15,6 +15,9 @@ Version 0.0.9w:
 
 	Improvements/Fixes:
 
+		Experience:
+			- Fixed issue with OJP skills not giving the correct amount of DP.
+
 		Saber Combat:
 
 			Blocking:
