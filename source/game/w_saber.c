@@ -5551,6 +5551,20 @@ qboolean G_DoDodge( gentity_t *self, gentity_t *shooter, vec3_t dmgOrigin, int h
 		return qfalse;
 	}
 
+	//check for private duel conditions
+	if (shooter && shooter->client)
+	{
+		if(shooter->client->ps.duelInProgress && shooter->client->ps.duelIndex != self->s.number)
+		{//enemy client is in duel with someone else.
+			return qfalse;
+		}
+	
+		if (self->client->ps.duelInProgress && self->client->ps.duelIndex != shooter->s.number)
+		{//we're in a duel with someone else.
+			return qfalse;
+		}
+	}
+
 	if(BG_HopAnim(self->client->ps.legsAnim) //in dodge hop
 		|| (BG_InRoll(&self->client->ps, self->client->ps.legsAnim) 
 			&& (self->client->ps.userInt3 & (1 << FLAG_DODGEROLL)))  //in dodge roll

@@ -751,7 +751,7 @@ qboolean G_MissileImpact( gentity_t *ent, trace_t *trace ) {
 		//[DodgeSys]
 		//make players be able to dodge projectiles.
 		missileDmg = ent->damage;
-		if(G_DoDodge(other, ent, trace->endpos, -1, &missileDmg, ent->methodOfDeath))
+		if(G_DoDodge(other, &g_entities[other->r.ownerNum], trace->endpos, -1, &missileDmg, ent->methodOfDeath))
 		{//player dodged the damage, have missile continue moving.
 			return qfalse;
 		}

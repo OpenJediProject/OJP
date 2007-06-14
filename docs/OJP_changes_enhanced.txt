@@ -15,6 +15,9 @@ Version 0.0.9w:
 
 	Improvements/Fixes:
 
+		Dodge:  
+			- Fixed issue with various weapons being able to interfere with private duels.
+
 		Experience:
 			- Fixed issue with OJP skills not giving the correct amount of DP.
 
