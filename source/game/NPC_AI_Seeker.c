@@ -346,14 +346,35 @@ qboolean Seeker_Fire( void )
 	vec3_t		dir, enemy_org, muzzle;
 	gentity_t	*missile;
 	trace_t tr;
+	int randomnum = irand(1,5);
 
+	if (randomnum == 1)
+	{
 	CalcEntitySpot( NPC->enemy, SPOT_HEAD, enemy_org );
+	}
+	else if (randomnum == 2)
+	{
+	CalcEntitySpot( NPC->enemy,SPOT_WEAPON,enemy_org);
+	}
+	else if (randomnum == 3)
+	{
+	CalcEntitySpot(NPC->enemy,SPOT_ORIGIN,enemy_org);
+	}
+	else if (randomnum == 4)
+	{
+	CalcEntitySpot(NPC->enemy,SPOT_CHEST,enemy_org);
+	}
+	else
+	{
+	CalcEntitySpot(NPC->enemy,SPOT_LEGS,enemy_org);
+	}
 
 	
 	//calculate everything based on our model offset
 	VectorCopy(NPC->r.currentOrigin, muzzle);
 	//correct for our model offset
 	muzzle[2] -= 22;
+	muzzle[2] -= randomnum;
 
 	VectorSubtract( enemy_org, NPC->r.currentOrigin, dir );
 	VectorNormalize( dir );

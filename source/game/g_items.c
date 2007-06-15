@@ -578,7 +578,19 @@ void pas_fire( gentity_t *ent )
 	
 	myOrg[0] += fwd[0]*16;
 	myOrg[1] += fwd[1]*16;
+	//[Ticket
+	if (BG_CrouchAnim(ent->enemy->s.legsAnim))
+	{
+	myOrg[2] += fwd[2]-10;
+	}
+	else if (PM_InKnockDown(ent->enemy->playerState ) )
+	{
+
+	}
+	else
+	{
 	myOrg[2] += fwd[2]*16;
+	}
 
 	WP_FireTurretMissile(&g_entities[ent->genericValue3], myOrg, fwd, qfalse, 10, 2300, MOD_SENTRY, ent );
 
@@ -1199,7 +1211,10 @@ void ItemUse_Seeker(gentity_t *ent)
 			remote->genericValue2 = 1000; //maximum time between shots
 
 			//TODO: set this based on player skill
-			remote->damage = 97; //damage per shot (does damage at bryer level)
+			//[SeekerNerf]
+			remote->damage = 65; //damage per shot 
+			//remote->damage = 97; //damage per shot (does damage at bryer level)
+			//[/SeekerNerf]
 
 			//TODO: should beeping on seeing enemy change based on skill?
 			//disabling this for now, but the code to beep every 900 ms while attacking an enemy is still active, 
