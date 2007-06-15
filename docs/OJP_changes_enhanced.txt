@@ -11,7 +11,11 @@ Version 0.0.9w:
 
 	New Features:
 
-			New Bryar Pistol Secondary Fire (BryarSecondary):  The pistol's secondary fire is now a stun shot.  It drains DP exclusively, deals MP damage, and will knock a player down if their MP is high enough.
+		New Bryar Pistol Secondary Fire (BryarSecondary):  
+			The pistol's secondary fire is now a stun shot.  It drains DP exclusively, deals MP damage, and will knock a player down if their MP is high enough.
+
+		Thermal Throw Button (SnapThrow):  
+			Players can now throw a thermal detenator while using other weapons by using a key binded to +button13.
 
 	Improvements/Fixes:
 

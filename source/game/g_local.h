@@ -1500,6 +1500,10 @@ void CalcMuzzlePoint ( gentity_t *ent, vec3_t forward, vec3_t right, vec3_t up, 
 void SnapVectorTowards( vec3_t v, vec3_t to );
 qboolean CheckGauntletAttack( gentity_t *ent );
 
+//[SnapThrow]
+#define TD_VELOCITY			900		//max velocity for thermal dets
+//[/SnapThrow]
+
 //[DodgeSys]
 #define DISRUPTOR_MAX_CHARGE (g_gametype.integer == GT_SIEGE ? 200 : 60) //max charge on disruptor's alt fire.
 

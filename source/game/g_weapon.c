@@ -2240,7 +2240,10 @@ THERMAL DETONATOR
 #define TD_SPLASH_DAM		90
 */
 //[/WeaponSys]
-#define TD_VELOCITY			900
+//[SnapThrow]
+//moved
+//#define TD_VELOCITY			900
+//[/SnapThrow]
 #define TD_MIN_CHARGE		0.15f
 #define TD_TIME				3000//6000
 #define TD_ALT_TIME			3000

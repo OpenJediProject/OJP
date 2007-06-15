@@ -10376,11 +10376,25 @@ void WP_SaberPositionUpdate( gentity_t *self, usercmd_t *ucmd )
 	viewlock = self->client->ps.userInt1;
 #endif
 
-	//I'm leaving these tests in so someone might find more open buttons eventually.
-	if (ucmd->buttons & BUTTON_14)
-	{
-		G_Printf("Button Flag 14 Pressed.\n");
+	//[SnapThrow]
+	if (ucmd->buttons & BUTTON_THERMALTHROW)
+	{//player wants to snap throw a gernade
+		if(self->client->ps.weaponTime <= 0//not currently using a weapon
+			&& self->client->ps.stats[STAT_WEAPONS] & ( 1 << WP_THERMAL ) && self->client->ps.ammo[AMMO_THERMAL] )//have a thermal
+		{//throw!
+			self->s.weapon = WP_THERMAL;  //temp switch weapons so we can toss it.
+			self->client->ps.weaponChargeTime = level.time - TD_VELOCITY; //throw at max power
+			FireWeapon( self, qfalse );
+			self->s.weapon = self->client->ps.weapon; //restore weapon
+			self->client->ps.weaponTime = weaponData[WP_THERMAL].fireTime;
+			self->client->ps.ammo[AMMO_THERMAL]--;
+			G_SetAnim(self, NULL, SETANIM_TORSO, BOTH_MELEE1, SETANIM_FLAG_OVERRIDE|SETANIM_FLAG_HOLD, 0);
+			
+		}
 	}
+	//[/SnapThrow]
+
+	//I'm leaving these tests in so someone might find more open buttons eventually.
 	if (ucmd->buttons & BUTTON_15)
 	{
 		G_Printf("Button Flag 15 Pressed.\n");
