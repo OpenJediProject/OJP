@@ -2222,7 +2222,39 @@
 				play			"sound/interface/button1.wav" ; 
 			}
 		}
+itemDef 
+		{
+			name				none
+			group				weaponcontrols
+			type				ITEM_TYPE_BIND
+			text				@OJP_MENUS_THERMAL_DETONATOR_THROW
+			cvar				"+button13"
+			rect				260 370 340 14
+			textalign			ITEM_ALIGN_RIGHT
+			textalignx			174
+			textaligny			0
+			font				4
+			textscale			1
+			forecolor			.615 .615 .956 1
+			visible			0 
+			// appearance_slot		10
+			descText			@OJP_MENUS_THERMAL_DETONATOR_THROW_AVAILABLE
 
+			mouseenter 
+			{ 
+				show			highlight11
+				show			keybindstatus
+			}
+			mouseexit 
+			{ 
+				hide			highlight11
+				hide			keybindstatus
+			}
+			action 
+			{ 
+				play			"sound/interface/button1.wav" ; 
+			}
+		}
 //----------------------------------------------------------------------------------------------
 //
 //	FORCE BINDING
@@ -2500,6 +2532,7 @@
 				play			"sound/interface/button1.wav" ; 
 			}
 		}
+
 
 //----------------------------------------------------------------------------------------------
 //

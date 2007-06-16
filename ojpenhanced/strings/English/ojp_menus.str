@@ -453,5 +453,13 @@ REFERENCE	    ENEMYTEAM
 LANG_ENGLISH	    "Enemies"
 //[/CoOp]
 
+//Control Menu
+
+REFERENCE	    THERMAL_DETONATOR_THROW
+LANG_ENGLISH	"Thermal Detonator Autothrow:"
+
+REFERENCE       THERMAL_DETONATOR_THROW_AVAILABLE
+LANG_ENGLISH	"Automatically Throws available Thermal Detonator without being selected in inventory"
+
 ENDMARKER
 

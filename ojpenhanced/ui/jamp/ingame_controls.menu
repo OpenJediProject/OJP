@@ -1514,7 +1514,37 @@
 				hide			keybindstatus
 			} 
 		}
+itemDef 
+		{
+			name				none
+			group				weaponcontrols
+			type				ITEM_TYPE_BIND
+			text				@OJP_MENUS_THERMAL_DETONATOR_THROW
+			cvar				"+button13"
+			rect				220 301 300 20
+			textalign			ITEM_ALIGN_RIGHT
+			textalignx			151
+			textaligny			0
+			font				4
+			textscale			1
+			forecolor			.615 .615 .956 1
+			visible				0
+			// appearance_slot		11
+			descText			@OJP_MENUS_THERMAL_DETONATOR_THROW_AVAILABLE
+			action
+			{
+				play			"sound/interface/button1.wav" ; 
+			}
 
+			mouseenter 
+			{ 
+				show			keybindstatus
+			}
+			mouseexit 
+			{ 
+				hide			keybindstatus
+			} 
+		}
 //----------------------------------------------------------------------------------------------
 //
 //	FORCE BINDING

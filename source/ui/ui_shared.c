@@ -5436,6 +5436,9 @@ static bind_t g_bindings[] =
 	{"+button12",		-1,					-1,		-1,	-1},
 	//[/SaberThrowSys]
 
+	//For Detonator quickthrow
+	{"+button13",		-1,					-1,		-1,	-1},
+
 };
 
 
