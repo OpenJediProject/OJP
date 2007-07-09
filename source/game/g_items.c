@@ -111,6 +111,9 @@ static qhandle_t	shieldDamageSound=0;
 
 void ShieldRemove(gentity_t *self)
 {
+	//[Forcefield]
+	self->parent->forceFieldThink = level.time + 30000;
+	//[/Forcefield]
 	self->think = G_FreeEntity;
 	self->nextthink = level.time + 100;
 
@@ -1010,6 +1013,7 @@ void pas_think( gentity_t *ent )
 void turret_die(gentity_t *self, gentity_t *inflictor, gentity_t *attacker, int damage, int mod)
 //------------------------------------------------------------------------------------------------------------
 {
+	gentity_t *owner = &g_entities[self->genericValue3];
 	// Turn off the thinking of the base & use it's targets
 	self->think = 0;//NULL;
 	self->use = 0;//NULL;
@@ -1043,6 +1047,14 @@ void turret_die(gentity_t *self, gentity_t *inflictor, gentity_t *attacker, int 
 
 	//ExplodeDeath( self );
 	G_FreeEntity( self );
+
+	//[SentryGun]
+	if (owner->client->ps.fd.forcePowerLevel[FP_SEE] == FORCE_LEVEL_0)
+	{
+	owner->sentryDeadThink = level.time + 30000;
+	}
+	//[/SentryGun]
+
 }
 
 #define TURRET_AMMO_COUNT 40
@@ -1207,7 +1219,7 @@ void ItemUse_Seeker(gentity_t *ent)
 			//remember, demp2 pwns seekers
 
 			//TODO: set these based on player skill
-			remote->genericValue1 = 250; //minimum time between shots
+			remote->genericValue1 = 350; //minimum time between shots
 			remote->genericValue2 = 1000; //maximum time between shots
 
 			//TODO: set this based on player skill
@@ -1519,7 +1531,11 @@ void ItemUse_FlameThrower(gentity_t *ent)
 	{//can't use flamethrower while in ledgegrab
 		return;
 	}
-
+	
+    if(ent->client->ps.weapon == WP_SABER)
+	{//can't use flamethrower with saber
+		return;
+	}
 	ent->client->flameTime = level.time + 300;
 }
 //[/Flamethrower]

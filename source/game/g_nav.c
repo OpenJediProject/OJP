@@ -1107,7 +1107,7 @@ qboolean NAV_MicroError( vec3_t start, vec3_t end )
 /*
 -------------------------
 NAV_MoveToGoal
--------------------------
+------------------------- 
 */
 
 int	NAV_MoveToGoal( gentity_t *self, navInfo_t *info )

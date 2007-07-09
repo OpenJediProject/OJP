@@ -2556,6 +2556,7 @@ typedef struct playerState_s {
 	int			deltaOneBits;
 	int			deltaNumBits;
 #endif
+
 } playerState_t;
 
 typedef struct siegePers_s
@@ -2777,6 +2778,7 @@ typedef struct usercmd_s {
 	byte			invensel;
 	byte			generic_cmd;
 	signed char	forwardmove, rightmove, upmove;
+
 } usercmd_t;
 
 //===================================================================

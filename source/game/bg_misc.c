@@ -3744,6 +3744,7 @@ qboolean BG_IsUsingHeavyWeap (playerState_t *ps)
 
 	switch(ps->weapon)
 	{
+	case WP_DISRUPTOR:
 	case WP_REPEATER:
 	case WP_ROCKET_LAUNCHER:
 		return qtrue;

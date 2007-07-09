@@ -2069,7 +2069,7 @@ void ForceLightning( gentity_t *self )
 
 	//[ForceSys]
 	//allow during preblocks
-	if (self->client->ps.weaponTime > 0 && (!PM_SaberInParry(pm->ps->saberMove) || !pm->ps->userInt3 & (1 << FLAG_PREBLOCK)))
+	if (self->client->ps.weaponTime > 0 && (!PM_SaberInParry(self->client->ps.saberMove) || !self->client->ps.userInt3 & (1 << FLAG_PREBLOCK)))
 	//if (self->client->ps.weaponTime > 0)
 	//[/ForceSys]
 	{
@@ -2141,6 +2141,12 @@ qboolean OJP_CounterForce(gentity_t *attacker, gentity_t *defender, int attackPo
 	if( defender->client->ps.saberAttackChainCount >= MISHAPLEVEL_HEAVY )
 	{//can't block if we're too off balance.
 		return qfalse;
+	}
+	
+	if (defender->client->ps.forceHandExtend != HANDEXTEND_NONE)
+	{//can block force while using forceHandExtend. This may be a temporary bug fix.
+
+		return qtrue;
 	}
 
 	return qtrue;

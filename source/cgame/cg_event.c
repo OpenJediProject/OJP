@@ -2468,7 +2468,7 @@ void CG_EntityEvent( centity_t *cent, vec3_t position ) {
 
 				if (es->eventParm && es->eventParm < WP_NUM_WEAPONS)
 				{
-					cg.snap->ps.stats[STAT_WEAPONS] &= ~(1 << es->eventParm);
+					//cg.snap->ps.stats[STAT_WEAPONS] &= ~(1 << es->eventParm);
 					weap = cg.snap->ps.weapon;
 				}
 				else if (es->eventParm)

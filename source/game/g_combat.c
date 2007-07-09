@@ -2516,6 +2516,26 @@ void player_die( gentity_t *self, gentity_t *inflictor, gentity_t *attacker, int
 	//check player stuff
 	g_dontFrickinCheck = qfalse;
 	
+	//[/BountySys]
+	if (ojp_bountysys.integer >= 1)
+	{
+		gentity_t *murderer = NULL;
+		murderer = &g_entities[self->client->ps.otherKiller];
+		if (murderer != NULL || murderer->client || Q_stricmp(self->client->pers.netname,murderer->client->pers.netname)==0)
+		{
+
+		
+		if (self->client->sess.iswanted == 1 && Q_stricmp(self->client->sess.issuer,murderer->client->pers.netname)==1)
+		{
+			self->client->sess.iswanted = 0;
+			self->client->sess.bounty = 0;
+			
+		}
+
+		}
+	}
+	//[/BountySys]
+
 	//[LastManStanding]
 	//[Coop]
 	if (g_gametype.integer == GT_SINGLE_PLAYER && ojp_lms.integer == 1)

@@ -64,6 +64,10 @@ vmCvar_t	ojp_dodgemulti;
 //[/Coop]
 //[/LastManStanding]
 
+//[BountySys]
+vmCvar_t	ojp_bountysys;
+//[/BountySys]
+
 vmCvar_t	g_armBreakage;
 
 vmCvar_t	g_saberLocking;
@@ -418,6 +422,10 @@ static cvarTable_t		gameCvarTable[] = {
 	{ &ojp_dodgemulti, "ojp_dodgemulti","10.0",CVAR_LATCH,0,qfalse},
 	//[/Coop]
 	//[/LastManStanding]
+
+	//[BountySys]
+	{ &ojp_bountysys, "ojp_bounty","0",CVAR_SERVERINFO,0,qfalse},
+	//[/BountySys]
 
 	{ &g_armBreakage, "g_armBreakage", "0", 0, 0, qtrue  },
 

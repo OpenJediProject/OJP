@@ -8292,7 +8292,6 @@ void PM_DoPunch(void)
 }
 //[/SaberSys]
 				
-
 /*
 ==============
 PM_Weapon

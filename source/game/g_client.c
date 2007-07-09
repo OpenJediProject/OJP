@@ -3375,6 +3375,10 @@ void ClientSpawn(gentity_t *ent) {
 	}
 	//[/ExpSys]
 
+	//[AmmoRegen]
+	ent->reloading = 0;
+	//[/AmmoRegen]
+
 	//first we want the userinfo so we can see if we should update this client's saber -rww
 	trap_GetUserinfo( index, userinfo, sizeof(userinfo) );
 	while (l < MAX_SABERS)

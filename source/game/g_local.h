@@ -298,6 +298,21 @@ struct gentity_s {
 	qboolean	freeAfterEvent;
 	qboolean	unlinkAfterEvent;
 
+	//[SentryGun]
+	int			sentryDeadThink; //For dead sentrys
+	//[/SentryGun]
+	//[SeekerDroid]
+	int			seekerDeadThink; //For dead seekers
+	//[/SeekerDroid]
+	//[ForceField]
+	int			forceFieldThink;
+	//[/ForceField]
+
+	//[AmmoRegen]
+	int			ammoRegenTime;
+	int			reloading;
+	//[/AmmoRegen]
+
 	qboolean	physicsObject;		// if true, it can be pushed by movers and fall off edges
 									// all game items are physicsObjects, 
 	float		physicsBounce;		// 1.0 = continuous bounce, 0.0 = no bounce
@@ -406,6 +421,10 @@ struct gentity_s {
 	gentity_t	*activator;
 	gentity_t	*teamchain;		// next entity in team
 	gentity_t	*teammaster;	// master of the team
+
+	//[NPCTweaks]
+	vec3_t		lastenemyorigin;
+	//[/NPCTweaks]
 
 	int			watertype;
 	int			waterlevel;
@@ -548,6 +567,12 @@ typedef struct {
 	//[ExpSys]
 	float		skillPoints;		//number of skill points this player currently has.
 	//[/ExpSys]
+
+	//[BountySys]
+	int	iswanted; //0 == Not wanted - 1 == Wanted!
+	float			bounty;	//Wanted for this much
+	char		issuer[MAX_TOKEN_CHARS];	//This person made us wanted >=(.
+	//[/BountySys]
 } clientSession_t;
 
 // playerstate mGameFlags
@@ -1837,8 +1862,13 @@ extern vmCvar_t		ojp_lms;
 extern vmCvar_t		ojp_lmslives;
 //[Coop]
 extern vmCvar_t		ojp_liveExp;
+extern vmCvar_t		ojp_dodgemulti;
 //[/Coop]
 //[/LastManStanding]
+
+//[BountySys]
+extern vmCvar_t		ojp_bountysys;
+//[/BountySys]
 
 extern	vmCvar_t	g_armBreakage;
 

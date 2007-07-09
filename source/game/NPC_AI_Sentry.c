@@ -176,6 +176,7 @@ void Sentry_Fire (void)
 
 	G_PlayEffectID( G_EffectIndex("bryar/muzzle_flash"), muzzle, forward );
 
+	//1600
 	missile = CreateMissile( muzzle, forward, 1600, 10000, NPC, qfalse );
 
 	missile->classname = "bryar_proj";
@@ -207,6 +208,9 @@ void Sentry_Fire (void)
 Sentry_MaintainHeight
 -------------------------
 */
+//[Ticket259]
+extern qboolean BG_CrouchAnim( int anim );
+//[/Ticket259]
 void Sentry_MaintainHeight( void )
 {	
 	float	dif;
@@ -311,7 +315,7 @@ Sentry_Idle
 void Sentry_Idle( void )
 {
 	Sentry_MaintainHeight();
-
+G_Printf("idle");
 	// Is he waking up?
 	if (NPCInfo->localState == LSTATE_WAKEUP)
 	{

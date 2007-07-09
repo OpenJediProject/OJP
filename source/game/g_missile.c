@@ -1177,18 +1177,18 @@ passthrough:
 int NaturalBoltReflectRate[NUM_FORCE_POWER_LEVELS] =
 {
 	0,	//FORCE_LEVEL_0
-	10,	//FORCE_LEVEL_1
-	20, //FORCE_LEVEL_2
-	25
+	20,//10,	//FORCE_LEVEL_1
+	35,//20, //FORCE_LEVEL_2
+	50//25
 };
 
 //bolt reflection rate while attempting manual reflections.
 int ManualBoltReflectRate[NUM_FORCE_POWER_LEVELS] =
 {
 	0,	//FORCE_LEVEL_0
-	20,	//FORCE_LEVEL_1
-	40, //FORCE_LEVEL_2
-	50
+	33,//20,	//FORCE_LEVEL_1
+	66,//40, //FORCE_LEVEL_2
+	100//50
 };
 qboolean PM_SaberInStart( int move );
 extern int OJP_SaberBlockCost(gentity_t *defender, gentity_t *attacker, vec3_t hitLoc);
@@ -1245,14 +1245,14 @@ void OJP_HandleBoltBlock(gentity_t *bolt, gentity_t *player, trace_t *trace)
 		float	speed;
 		//gentity_t	*owner = ent;
 		//int		isowner = 0;
-
+        
 		//add some slop factor to the manual reflections.
 		float slopFactor = MISHAP_MAXINACCURACY * (FORCE_LEVEL_3 - player->client->ps.fd.forcePowerLevel[FP_SABER_DEFENSE])/FORCE_LEVEL_3;
 		vectoangles( fwd, angs );
 		angs[PITCH] += flrand(-slopFactor, slopFactor);
 		angs[YAW] += flrand(-slopFactor, slopFactor);
 		AngleVectors( angs, fwd, NULL, NULL );
-
+		
 		//G_Printf("%i: %i: Level 3 Reflect\n", level.time, player->s.number);
 
 		//save the original speed

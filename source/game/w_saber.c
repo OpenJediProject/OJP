@@ -6,7 +6,6 @@
 //[SaberSys]
 #include "g_saberbeh.h"
 //[/SaberSys]
-
 #define SABER_BOX_SIZE 16.0f
 extern bot_state_t *botstates[MAX_CLIENTS];
 extern qboolean InFront( vec3_t spot, vec3_t from, vec3_t fromAngles, float threshHold );
@@ -92,7 +91,8 @@ qboolean ButterFingers(gentity_t *saberent, gentity_t *saberOwner, gentity_t *ot
 
 #define DODGE_SABERBLOCK		15  //standard dodge cost for blocking a saber.
 
-#define DODGE_REPEATERBLOCK		2	//the cost of blocking repeater shots is lower since the repeater shoots much faster.
+//#define DODGE_REPEATERBLOCK		3	//the cost of blocking repeater shots is lower since the repeater shoots much faster. 
+//EDIT: Slowed way down and blob is way overused so I'm taking this out for now
 
 //This is the amount of DP that a player gains from making a successful parry while low on DP
 #define DODGE_LOWDPBOOST		10
@@ -3381,15 +3381,8 @@ int OJP_SaberBlockCost(gentity_t *defender, gentity_t *attacker, vec3_t hitLoc)
 	if(!attacker	//don't have attacker
 		|| !attacker->client	//attacker isn't a NPC/player
 		|| attacker->client->ps.weapon != WP_SABER ) //or the player that is attacking isn't using a saber
-	{//some sort of missile attack
-		if(attacker && attacker->s.weapon == WP_REPEATER)
-		{//repeaters shot faster so they cost much less to block
-			saberBlockCost = DODGE_REPEATERBLOCK;
-		}
-		else
-		{//standard bolt block!
+	{//standard bolt block!
 		saberBlockCost = DODGE_BOLTBLOCK;
-		}
 	}
 	else if(attacker->client->ps.saberMove == LS_A_LUNGE
 		|| attacker->client->ps.saberMove == LS_SPINATTACK
@@ -3466,6 +3459,35 @@ int OJP_SaberBlockCost(gentity_t *defender, gentity_t *attacker, vec3_t hitLoc)
 			{
 				saberBlockCost *= 2;
 			}
+		
+			/*//staffs back block at normal cost.
+			if(defender->client->ps.fd.saberAnimLevel == SS_STAFF 
+				//level 3 saber defenders do back blocks for normal cost.
+			&& defender->client->ps.fd.forcePowerLevel[FP_SABER_DEFENSE] == FORCE_LEVEL_3) 
+			{// Having both staff and defense 3 allow no extra back hit damage
+				saberBlockCost *= 1;
+			}
+			else if(defender->client->ps.fd.saberAnimLevel == SS_STAFF 
+				//level 3 saber defenders and staff users  have much lessback damage
+			|| defender->client->ps.fd.forcePowerLevel[FP_SABER_DEFENSE] == FORCE_LEVEL_3) 
+			{
+				saberBlockCost *= 1.25;
+			}
+			else if(defender->client->ps.fd.saberAnimLevel != SS_STAFF 
+			&& defender->client->ps.fd.forcePowerLevel[FP_SABER_DEFENSE] == FORCE_LEVEL_2) 
+			{//level 2 defense lowers back damage more
+				saberBlockCost *= 1.50;
+			}
+			else if(defender->client->ps.fd.saberAnimLevel != SS_STAFF 
+			&& defender->client->ps.fd.forcePowerLevel[FP_SABER_DEFENSE] == FORCE_LEVEL_1) 
+			{//level 1 defense lowers back damage a bit
+				saberBlockCost *= 1.75;
+			}
+			else
+			{
+				saberBlockCost *= 2;
+			}
+			*/
 		}
 
 		//clamp to body dodge cost since it wouldn't be fair to cost more than that.
@@ -3485,15 +3507,14 @@ int OJP_SaberBlockCost(gentity_t *defender, gentity_t *attacker, vec3_t hitLoc)
 	}
 
 	if(!WalkCheck(defender))
-	{//we're running, increase DP cost
-		saberBlockCost *= 2;
+	{
+        saberBlockCost *= 2.5;	
 	}
-
+	
 	if(defender->client->ps.groundEntityNum == ENTITYNUM_NONE)
 	{//in mid-air
 		saberBlockCost *= 2;
-	}
-
+	} 
 	if(defender->client->ps.saberBlockTime > level.time)
 	{//attempting to block something too soon after a saber bolt block
 		saberBlockCost *= 2;
@@ -6888,10 +6909,19 @@ void WP_SaberStartMissileBlockCheck( gentity_t *self, usercmd_t *ucmd  )
 	{
 		doFullRoutine = qfalse;
 	}
+	
 	else if ( self->client->ps.saberInFlight )
 	{
 		doFullRoutine = qfalse;
 	}
+	
+	if(!WalkCheck(self)
+	&& (BG_SaberInAttack( self->client->ps.saberMove )
+	|| PM_SaberInStart( self->client->ps.saberMove )))
+	{//this was put in to help bolts stop swings a bit. I dont knwo why it helps but it does :p
+		doFullRoutine = qfalse;
+	}
+
 	else if ( self->client->ps.fd.forcePowersActive&(1<<FP_LIGHTNING) )
 	{//can't block while zapping
 		doFullRoutine = qfalse;
@@ -10375,7 +10405,7 @@ void WP_SaberPositionUpdate( gentity_t *self, usercmd_t *ucmd )
 #ifndef FINAL_BUILD
 	viewlock = self->client->ps.userInt1;
 #endif
-
+    
 	//[SnapThrow]
 	if (ucmd->buttons & BUTTON_THERMALTHROW)
 	{//player wants to snap throw a gernade
@@ -10383,7 +10413,7 @@ void WP_SaberPositionUpdate( gentity_t *self, usercmd_t *ucmd )
 			&& self->client->ps.stats[STAT_WEAPONS] & ( 1 << WP_THERMAL ) && self->client->ps.ammo[AMMO_THERMAL] )//have a thermal
 		{//throw!
 			self->s.weapon = WP_THERMAL;  //temp switch weapons so we can toss it.
-			self->client->ps.weaponChargeTime = level.time - TD_VELOCITY; //throw at max power
+			self->client->ps.weaponChargeTime = level.time - 450; //throw at medium power
 			FireWeapon( self, qfalse );
 			self->s.weapon = self->client->ps.weapon; //restore weapon
 			self->client->ps.weaponTime = weaponData[WP_THERMAL].fireTime;
@@ -11942,12 +11972,12 @@ int WP_SaberCanBlock(gentity_t *self, vec3_t point, int dflags, int mod, qboolea
 		return 0;
 	}
 	*/
-
+/*
 	if (SaberAttacking(self))
 	{ //attacking, can't block now
 		return 0;
 	}
-
+*/
 	if (self->client->ps.saberMove != LS_READY &&
 		!self->client->ps.saberBlocking)
 	{

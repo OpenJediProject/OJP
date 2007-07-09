@@ -1084,11 +1084,13 @@ static qboolean CG_WeaponSelectable( int i ) {
 		return qfalse;
 	}
 
+	/*[AmmoRegen]
 	if (cg.predictedPlayerState.ammo[weaponData[i].ammoIndex] < weaponData[i].energyPerShot &&
 		cg.predictedPlayerState.ammo[weaponData[i].ammoIndex] < weaponData[i].altEnergyPerShot)
 	{
 		return qfalse;
 	}
+	*///[AmmoRegen]
 
 	if (i == WP_DET_PACK && cg.predictedPlayerState.ammo[weaponData[i].ammoIndex] < 1 &&
 		!cg.predictedPlayerState.hasDetPackPlanted)
@@ -1352,11 +1354,13 @@ void CG_DrawWeaponSelect( void ) {
 			continue;
 		}
 
+		/*[AmmoRegen]
 		if ( !CG_WeaponSelectable(i) &&
 			(i == WP_THERMAL || i == WP_TRIP_MINE) )
 		{ //Don't show thermal and tripmine when out of them
 			continue;
 		}
+		*///[/AmmoRegen]
 
 		++iconCnt;					// Good icon
 
@@ -1819,8 +1823,12 @@ The current weapon has just run out of ammo
 */
 void CG_OutOfAmmoChange( int oldWeapon )
 {
+	//[AmmoRegen]
+	return;
+	/*
 	int		i;
 
+	
 	cg.weaponSelectTime = cg.time;
 
 	for ( i = LAST_USEABLE_WEAPON ; i > 0 ; i-- )	//We don't want the emplaced or turret
@@ -1830,7 +1838,7 @@ void CG_OutOfAmmoChange( int oldWeapon )
 			/*
 			if ( 1 == cg_autoswitch.integer && 
 				( i == WP_TRIP_MINE || i == WP_DET_PACK || i == WP_THERMAL || i == WP_ROCKET_LAUNCHER) ) // safe weapon switch
-			*/
+			*//*
 			//rww - Don't we want to make sure i != one of these if autoswitch is 1 (safe)?
 			if (cg_autoswitch.integer != 1 || (i != WP_TRIP_MINE && i != WP_DET_PACK && i != WP_THERMAL && i != WP_ROCKET_LAUNCHER))
 			{
@@ -1844,6 +1852,8 @@ void CG_OutOfAmmoChange( int oldWeapon )
 	}
 
 	trap_S_MuteSound(cg.snap->ps.clientNum, CHAN_WEAPON);
+	*/
+	//[/AmmoRegen]
 }
 
 

@@ -727,6 +727,9 @@ typedef struct {
 	//[ExpSys]
 	int				skill;		//number of skill points this player currently has.
 	//[/ExpSys]
+	//[BountySys]
+	int				bounty;//Wanted for this much.
+	//[/BountySys]
 
 } score_t;
 
@@ -1888,6 +1891,10 @@ extern	vmCvar_t		cg_trueeyeposition;
 extern	vmCvar_t		cg_trueinvertsaber;
 extern	vmCvar_t		cg_truefov;
 //[/TrueView]
+
+//[BountySys]
+extern	vmCvar_t		ojp_bountysys;
+//[/BountySys]
 
 extern	vmCvar_t		cg_stereoSeparation;
 extern	vmCvar_t		cg_lagometer;

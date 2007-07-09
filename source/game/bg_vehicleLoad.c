@@ -1570,7 +1570,7 @@ void BG_VehWeaponLoadParms( void )
 			}
 
 			if ( totallen + len >= MAX_VEH_WEAPON_DATA_SIZE ) {
-trap_FS_FCloseFile(f);//[TicketFix143]
+trap_FS_FCloseFile(f);//[TicketFix143] May be too large but close the file
 				Com_Error(ERR_DROP, "Vehicle Weapon extensions (*.vwp) are too large" );
 			}
 			strcat( marker, tempReadBuffer );

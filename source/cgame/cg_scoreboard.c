@@ -224,6 +224,13 @@ static void CG_DrawClientScore( int y, score_t *score, float *color, float fade,
 			CG_Text_Paint (SB_SKILL_X, y, 1.0f * scale, colorWhite, va("%i", score->skill),0, 0, ITEM_TEXTSTYLE_OUTLINED, FONT_SMALL );	
 		}
 		//[/ExpSys]
+		//[BountySys]
+	if (ojp_bountysys.integer >= 1)
+	{
+	CG_Text_Paint (SB_SCORELINE_X +.25*SB_SCORELINE_WIDTH, y, 1.0f * scale, colorWhite, va("%i", score->bounty),0, 0, ITEM_TEXTSTYLE_OUTLINED, FONT_SMALL );
+	}
+		//[/BountySys]
+
 	}
 	else
 	{
@@ -532,7 +539,12 @@ qboolean CG_DrawOldScoreboard( void ) {
 		CG_Text_Paint ( SB_SKILL_X, y, 1.0f, colorWhite, CG_GetStringEdString("OJP_MENUS", "SKILL"), 0, 0, ITEM_TEXTSTYLE_OUTLINED, FONT_MEDIUM );
 	}
 	//[/ExpSys]
-
+	//[BountySys]
+	if (ojp_bountysys.integer >= 1)
+	{
+CG_Text_Paint ( SB_SCORELINE_X +.25*SB_SCORELINE_WIDTH, y, 1.0f, colorWhite, "Bounty", 0, 0, ITEM_TEXTSTYLE_OUTLINED, FONT_MEDIUM );
+	}
+//[/BountySys]
 	y = SB_TOP;
 
 	// If there are more than SB_MAXCLIENTS_NORMAL, use the interleaved scores

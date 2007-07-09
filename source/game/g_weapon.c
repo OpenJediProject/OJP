@@ -100,7 +100,7 @@ static	vec3_t	muzzle;
 //#define	REPEATER_ALT_DAMAGE				60
 //[/WeaponSys]
 #define REPEATER_ALT_SPLASH_DAMAGE		60
-#define REPEATER_ALT_SPLASH_RADIUS		64
+#define REPEATER_ALT_SPLASH_RADIUS		128
 #define REPEATER_ALT_SPLASH_RAD_SIEGE	80
 #define	REPEATER_ALT_VELOCITY			1100
 
@@ -1200,8 +1200,8 @@ static void WP_BowcasterAltFire( gentity_t *ent )
 	missile->methodOfDeath = MOD_BOWCASTER;
 	missile->clipmask = MASK_SHOT | CONTENTS_LIGHTSABER;
 
-	missile->flags |= FL_BOUNCE;
-	missile->bounceCount = 3;
+	//missile->flags |= FL_BOUNCE; taken out because it was causing problems for sabers
+	//missile->bounceCount = 3;
 }
 
 //---------------------------------------------------------
@@ -2245,7 +2245,7 @@ THERMAL DETONATOR
 //#define TD_VELOCITY			900
 //[/SnapThrow]
 #define TD_MIN_CHARGE		0.15f
-#define TD_TIME				3000//6000
+#define TD_TIME				1500//6000
 #define TD_ALT_TIME			3000
 
 #define TD_ALT_DAMAGE		60//100
@@ -4943,9 +4943,9 @@ void FireWeapon( gentity_t *ent, qboolean altFire )
 			AngleVectors( angs, forward, NULL, NULL );
 
 			//increase mishap level
-			if(!Q_irand(0, SkillLevelforWeapon(ent, ent->s.weapon)) )
+			if(!Q_irand(0, SkillLevelforWeapon(ent, ent->s.weapon)-1) )
 			{//failed skill roll, add mishap.
-				G_AddMercBalance(ent, 1);
+				G_AddMercBalance(ent, 1);//was 1. not enough
 			}
 		}
 		//[/WeapAccuracy]
