@@ -1171,6 +1171,8 @@ void ItemUse_Sentry( gentity_t *ent )
 
 	trap_LinkEntity(sentry);
 
+	sentry->parent->sentryDeadThink = 0;
+
 	sentry->s.owner = ent->s.number;
 	sentry->s.shouldtarget = qtrue;
 	if (g_gametype.integer >= GT_TEAM)

@@ -2188,7 +2188,7 @@ int MaxWeaponAmmo(gclient_t * client)
 int AmmoWeaponRegen(gentity_t *ent)
 {
 	int plusTime;
-	if (ent->client->ps.fd.forcePowerLevel[FP_SEE] != FORCE_LEVEL_0)
+	if (ent->client->ps.fd.forcePowerLevel[FP_SEE] > FORCE_LEVEL_0)
 	{
 		plusTime = 1000;//Hybrid...add a extra second
 	}
@@ -2262,21 +2262,25 @@ void ClientThink_real( gentity_t *ent ) {
 	}
 
 	//[SentryGun]
-	if (ent->sentryDeadThink <= level.time)
+	if (ent->sentryDeadThink <= level.time && ent->sentryDeadThink > 0 )
 	{
+		//G_Printf("Give!\n");
 		ent->client->ps.stats[STAT_HOLDABLE_ITEMS] |= (1 << HI_SENTRY_GUN);
+		ent->sentryDeadThink = 0;
 	}
 	//[/SentryGun]
 	//[SeekerDroid]
-	if (ent->seekerDeadThink <= level.time)
+	if (ent->seekerDeadThink <= level.time && ent->seekerDeadThink > 0)
 	{
 		ent->client->ps.stats[STAT_HOLDABLE_ITEMS] |= (1 << HI_SEEKER);
+		ent->seekerDeadThink = 0;
 	}
 	//[/SeekerDroid]
 	//[Forcefield]
-	if (ent->forceFieldThink <= level.time)
+	if (ent->forceFieldThink <= level.time && ent->forceFieldThink > 0)
 	{
 		ent->client->ps.stats[STAT_HOLDABLE_ITEMS] |= (1 << HI_SHIELD);
+		ent->forceFieldThink = 0;
 	}
 	//[/Forcefield]
 

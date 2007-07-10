@@ -707,7 +707,11 @@ void Seeker_FollowPlayer( void )
 
 	Seeker_MaintainHeight();
 
-	if(NPC->activator && NPC->activator->client){
+	if(NPC->activator && NPC->activator->client)
+	{
+		//[SeekerDroid]
+		NPC->activator->seekerDeadThink = 0;
+		//[/SeekerDroid]
 		if(NPC->activator->client->remote != NPC || NPC->activator->health <= 0){
 			//have us fall down and explode.
 			NPC->NPC->aiFlags |= NPCAI_CUSTOM_GRAVITY;
