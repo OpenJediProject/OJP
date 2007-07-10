@@ -31,7 +31,7 @@ CG_ParseScores
 //[ExpSys]
 //racc - the number of arguements for each player in the score update.  I had to boost this to add the skill point updates.
 //Needed to make it one more bigger to hold if we are wanted or not.
-#define SCOREUPDATEARGS		16
+#define SCOREUPDATEARGS		15
 //[/ExpSys]
 static void CG_ParseScores( void ) {
 	int		i, powerups, readScores;
@@ -74,9 +74,6 @@ static void CG_ParseScores( void ) {
 		cg.scores[i].perfect = atoi(CG_Argv(i * SCOREUPDATEARGS + 16));
 		cg.scores[i].captures = atoi(CG_Argv(i * SCOREUPDATEARGS + 17));
 		cg.scores[i].skill = atoi(CG_Argv(i * SCOREUPDATEARGS + 18));
-		//[BountySys]
-		cg.scores[i].bounty = atoi(CG_Argv(i * SCOREUPDATEARGS + 19));
-		//[/BountySys]
 
 		/* basejka code
 		cg.scores[i].client = atoi( CG_Argv( i * 14 + 4 ) );

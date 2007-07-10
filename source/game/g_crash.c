@@ -317,7 +317,7 @@
 			if(dwModBase) {
 				GetModuleFileName((HINSTANCE)dwModBase, modname, MAX_PATH);
 			} else {
-				wsprintf(modname, "Unknown");
+			//wsprintf(modname, "Unknown");
 			}
 
 			pSym->SizeOfStruct = sizeof(IMAGEHLP_SYMBOL);

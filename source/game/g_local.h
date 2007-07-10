@@ -568,11 +568,6 @@ typedef struct {
 	float		skillPoints;		//number of skill points this player currently has.
 	//[/ExpSys]
 
-	//[BountySys]
-	int	iswanted; //0 == Not wanted - 1 == Wanted!
-	float			bounty;	//Wanted for this much
-	char		issuer[MAX_TOKEN_CHARS];	//This person made us wanted >=(.
-	//[/BountySys]
 } clientSession_t;
 
 // playerstate mGameFlags
@@ -1865,10 +1860,6 @@ extern vmCvar_t		ojp_liveExp;
 extern vmCvar_t		ojp_dodgemulti;
 //[/Coop]
 //[/LastManStanding]
-
-//[BountySys]
-extern vmCvar_t		ojp_bountysys;
-//[/BountySys]
 
 extern	vmCvar_t	g_armBreakage;
 

@@ -791,10 +791,6 @@ vmCvar_t	cg_trueguns;
 vmCvar_t	cg_fpls;
 //[/TrueView]
 
-//[BountySys]
-vmCvar_t	ojp_bountysys;
-//[/BountySys]
-
 vmCvar_t	cg_ghoul2Marks;
 
 vmCvar_t	cg_optvehtrace;
@@ -1028,11 +1024,6 @@ static cvarTable_t cvarTable[] = { // bk001129
 	{ &cg_trueguns, "cg_trueguns", "0", CVAR_ARCHIVE },
 	{ &cg_fpls, "cg_fpls", "0", 0 },
 	//[/TrueView]
-
-	//[BountySys]
-	{ &ojp_bountysys, "ojp_bounty", "0", CVAR_SERVERINFO },
-	//[/BountySys]
-
 
 	{ &cg_ghoul2Marks, "cg_ghoul2Marks", "16", 0 },
 

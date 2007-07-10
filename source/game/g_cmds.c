@@ -88,10 +88,10 @@ void DeathmatchScoreboardMessage( gentity_t *ent ) {
 		perfect = ( cl->ps.persistant[PERS_RANK] == 0 && cl->ps.persistant[PERS_KILLED] == 0 ) ? 1 : 0;
 
 		Com_sprintf (entry, sizeof(entry),
-			//[ExpSys][BountySys]
-			" %i %i %i %i %i %i %i %i %i %i %i %i %i %i %i %i ", level.sortedClients[i],
+			//[ExpSys]
+			" %i %i %i %i %i %i %i %i %i %i %i %i %i %i %i ", level.sortedClients[i],
 			//" %i %i %i %i %i %i %i %i %i %i %i %i %i %i", level.sortedClients[i],
-			//[/ExpSys][/BountySys]
+			//[/ExpSys]
 			cl->ps.persistant[PERS_SCORE], ping, (level.time - cl->pers.enterTime)/60000,
 			scoreFlags, g_entities[level.sortedClients[i]].s.powerups, accuracy, 
 			cl->ps.persistant[PERS_IMPRESSIVE_COUNT],
@@ -103,10 +103,7 @@ void DeathmatchScoreboardMessage( gentity_t *ent ) {
 			//[ExpSys]
 			cl->ps.persistant[PERS_CAPTURES],
 			//cl->ps.persistant[PERS_CAPTURES]);
-			(int) cl->sess.skillPoints,
-			//[BountySys]
-			(int) cl->sess.bounty);
-			//[/BountySys]
+			(int) cl->sess.skillPoints);
 			//[/ExpSys]
 		j = strlen(entry);
 		if (stringlength + j > 1022)
@@ -4153,94 +4150,6 @@ void ClientCommand( int clientNum ) {
 		return;
 	}
 	//end rww
-
-	//[BountySys]
-	if (Q_stricmp(cmd,"bounty") == 0)
-	{
-		if (ojp_bountysys.integer <= 0)
-		{
-			G_Printf("Sorry ojp_bounty must be set to 1.\n");
-			return;
-		}
-	if (trap_Argc() == 3)
-	{
-	//Get the wanted persons name
-	trap_Argv(1,cmd2,sizeof(cmd2));
-	//Get the..skillpoints
-	trap_Argv(2,cmd3,sizeof(cmd3));
-	//Now convert from string to float
-	bounty = atof(cmd3);
-
-
-	clientid = G_ClientNumberFromName( cmd2 );
-	targetplayer = &g_entities[clientid];
-if( !targetplayer->client || targetplayer->client->pers.connected != CON_CONNECTED)
-{
-	G_Printf("No user connected with that name\n");
-	return;
-}
-
-
-	if (ent->client->sess.skillPoints >= bounty)
-	{
-
-	if (targetplayer->client->sess.iswanted == 0)
-	{
-	ent->client->sess.skillPoints -= bounty;
-
-	targetplayer->client->sess.iswanted = 1;
-	targetplayer->client->sess.bounty = 0;
-	G_Printf("%s is now wanted for %f skill points.\n",targetplayer->client->pers.netname,(int)targetplayer->client->sess.bounty);
-	Q_strncpyz(targetplayer->client->sess.issuer,ent->client->pers.netname,sizeof(ent->client->pers.netname));
-	return;
-	}
-	else
-	{
-		G_Printf("%s is already wanted\n",targetplayer->client->pers.netname);
-		return;
-	}
-
-	}
-
-	}
-	else
-	{
-		
-		G_Printf("Correct format is: /bounty persontoplacebountyon bountyamount\n");
-		return;
-	}
-	}
-
-	if (Q_stricmp(cmd,"wanted") == 0)
-	{
-		/*
-		int i;
-		int	wanted = 0;
-		if (ojp_bountysys.integer <= 0)
-		{
-			G_Printf("Sorry ojp_bounty must be set to 1.\n");
-			return;
-		}
-		
-		for ( i = 0; i < level.numNonSpectatorClients; i ++ )
-		{
-			targetplayer = &g_entities[level.sortedClients[i]];
-			if(targetplayer->client->sess.iswanted == 1) 
-			{//this guy is wanted!
-				wanted++;
-			}
-		}
-
-		for ( i = 0; i < wanted; i ++ )
-		{
-			targetplayer = &g_entities[level.sortedClients[i]];
-			G_Printf("%s is wanted for %f skill points\n",targetplayer->client->pers.netname,targetplayer->client->sess.bounty);
-		}
-		return;
-*/
-	}
-
-	//[/BountySys]
 
 
 	if (Q_stricmp (cmd, "say") == 0) {
