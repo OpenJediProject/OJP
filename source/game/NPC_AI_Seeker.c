@@ -34,9 +34,6 @@ void NPC_Seeker_Precache(void)
 //------------------------------------
 void NPC_Seeker_Pain(gentity_t *self, gentity_t *attacker, int damage)
 {
-//[SeekerDroid]
-int damageTest;
-//[/SeekerDroid]
 
 	if ( !(self->NPC->aiFlags&NPCAI_CUSTOM_GRAVITY ))
 	{//void G_Damage( gentity_t *targ, gentity_t *inflictor, gentity_t *attacker, vec3_t dir, vec3_t point, int damage, int dflags, int mod, int hitLoc=HL_NONE );
@@ -55,14 +52,6 @@ int damageTest;
 		self->activator->client->ps.stats[STAT_HOLDABLE_ITEMS] &= ~(1 << HI_SEEKER);
 	}
 	//[/SeekerItemNpc]
-
-	//[SeekerDroid]
-	damageTest = self->health - damage;
-	if (damageTest <= 0 && self->activator->client->ps.fd.forcePowerLevel[FP_SEE] == FORCE_LEVEL_0)
-	{
-	self->activator->seekerDeadThink = level.time + 30000;
-	}
-	//[SeekerDroid]
 
 	SaveNPCGlobals();
 	SetNPCGlobals( self );
@@ -709,9 +698,6 @@ void Seeker_FollowPlayer( void )
 
 	if(NPC->activator && NPC->activator->client)
 	{
-		//[SeekerDroid]
-		NPC->activator->seekerDeadThink = 0;
-		//[/SeekerDroid]
 		if(NPC->activator->client->remote != NPC || NPC->activator->health <= 0){
 			//have us fall down and explode.
 			NPC->NPC->aiFlags |= NPCAI_CUSTOM_GRAVITY;

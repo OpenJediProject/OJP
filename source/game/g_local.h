@@ -301,17 +301,9 @@ struct gentity_s {
 	//[SentryGun]
 	int			sentryDeadThink; //For dead sentrys
 	//[/SentryGun]
-	//[SeekerDroid]
-	int			seekerDeadThink; //For dead seekers
-	//[/SeekerDroid]
 	//[ForceField]
 	int			forceFieldThink;
 	//[/ForceField]
-
-	//[AmmoRegen]
-	int			ammoRegenTime;
-	int			reloading;
-	//[/AmmoRegen]
 
 	qboolean	physicsObject;		// if true, it can be pushed by movers and fall off edges
 									// all game items are physicsObjects, 

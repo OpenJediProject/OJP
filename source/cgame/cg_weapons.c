@@ -1822,8 +1822,6 @@ The current weapon has just run out of ammo
 void CG_OutOfAmmoChange( int oldWeapon )
 {
 
-	return;
-	/*[AmmoRegen]
 	int		i;
 
 	cg.weaponSelectTime = cg.time;
@@ -1849,7 +1847,6 @@ void CG_OutOfAmmoChange( int oldWeapon )
 	}
 
 	trap_S_MuteSound(cg.snap->ps.clientNum, CHAN_WEAPON);
-	*/
 
 }
 

@@ -3373,11 +3373,7 @@ void ClientSpawn(gentity_t *ent) {
 		ent->client->sess.skillPoints = g_minForceRank.value;
 		ent->client->skillUpdated = qtrue;
 	}
-	//[/ExpSys]
-
-	//[AmmoRegen]
-	ent->reloading = 0;
-	//[/AmmoRegen]
+	//[/ExpSys]]
 
 	//first we want the userinfo so we can see if we should update this client's saber -rww
 	trap_GetUserinfo( index, userinfo, sizeof(userinfo) );

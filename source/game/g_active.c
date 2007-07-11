@@ -2147,66 +2147,6 @@ extern qboolean skippingCutscene;
 extern qboolean inGameCinematic;
 //[ROQFILES]
 
-int MaxWeaponAmmo(gclient_t * client)
-{
-	int ammo;
-	switch(client->ps.weapon)
-	{
-	case WP_BOWCASTER:
-	case WP_DISRUPTOR:
-	ammo = ammoData[AMMO_POWERCELL].max * (float) (client->skillLevel[SK_BOWCASTER] < client->skillLevel[SK_DISRUPTOR] ? client->skillLevel[SK_DISRUPTOR] : client->skillLevel[SK_BOWCASTER])/FORCE_LEVEL_3;
-	return ammo;
-	break;
-
-	case WP_REPEATER:
-	ammo = ammoData[AMMO_METAL_BOLTS].max * (float) client->skillLevel[SK_REPEATER]/FORCE_LEVEL_3;
-	return ammo;
-	break;
-	
-	case WP_BLASTER:
-	ammo = ammoData[AMMO_BLASTER].max * (float) client->skillLevel[SK_BLASTER]/FORCE_LEVEL_3;
-	return ammo;
-	break;
-
-	case WP_THERMAL:
-	ammo = ammoData[AMMO_THERMAL].max * (float) client->skillLevel[SK_THERMAL]/FORCE_LEVEL_3;
-	return ammo;
-	break;
-
-	case WP_ROCKET_LAUNCHER:
-	ammo = ammoData[AMMO_ROCKETS].max * (float) client->skillLevel[SK_ROCKET]/FORCE_LEVEL_3;
-	return ammo;
-	break;
-	
-	case WP_DET_PACK:
-	ammo = ammoData[AMMO_DETPACK].max * (float) client->skillLevel[SK_DETPACK]/FORCE_LEVEL_2;
-	return ammo;
-	break;
-}
-}
-
-int AmmoWeaponRegen(gentity_t *ent)
-{
-	int plusTime;
-	if (ent->client->ps.fd.forcePowerLevel[FP_SEE] > FORCE_LEVEL_0)
-	{
-		plusTime = 1000;//Hybrid...add a extra second
-	}
-	else{ plusTime = 0; }
-
-	switch(ent->client->ps.weapon)
-	{
-	case WP_ROCKET_LAUNCHER:
-	case WP_THERMAL:
-	case WP_DET_PACK:
-	return 30000 +plusTime;
-	break;
-	default:
-		return 1000 + plusTime;
-		break;
-	}
-}
-
 /*
 ==============
 ClientThink
@@ -2269,13 +2209,6 @@ void ClientThink_real( gentity_t *ent ) {
 		ent->sentryDeadThink = 0;
 	}
 	//[/SentryGun]
-	//[SeekerDroid]
-	if (ent->seekerDeadThink <= level.time && ent->seekerDeadThink > 0)
-	{
-		ent->client->ps.stats[STAT_HOLDABLE_ITEMS] |= (1 << HI_SEEKER);
-		ent->seekerDeadThink = 0;
-	}
-	//[/SeekerDroid]
 	//[Forcefield]
 	if (ent->forceFieldThink <= level.time && ent->forceFieldThink > 0)
 	{
@@ -2283,31 +2216,6 @@ void ClientThink_real( gentity_t *ent ) {
 		ent->forceFieldThink = 0;
 	}
 	//[/Forcefield]
-
-	//[AmmoRegen]
-	if (ent->client->ps.ammo[weaponData[ent->client->ps.weapon].ammoIndex] < MaxWeaponAmmo(ent->client))
-	{
-		if (ent->reloading == 0)
-		{
-		ent->ammoRegenTime = level.time + AmmoWeaponRegen(ent);
-		ent->reloading = 1;
-		}
-		if (ent->ammoRegenTime <= level.time)
-		{
-			if(ent->client->ps.ammo[weaponData[ent->client->ps.weapon].ammoIndex]+2 < MaxWeaponAmmo(ent->client))
-			{
-			ent->client->ps.ammo[weaponData[ent->client->ps.weapon].ammoIndex] += 2;
-			ent->reloading = 0;
-			}
-			else
-			{
-			ent->reloading = 0;
-			ent->client->ps.ammo[weaponData[ent->client->ps.weapon].ammoIndex] = MaxWeaponAmmo(ent->client);
-			}
-		}
-	}
-	
-	//[/AmmoRegen]
 
 	// This code was moved here from clientThink to fix a problem with g_synchronousClients 
 	// being set to 1 when in vehicles. 
