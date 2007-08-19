@@ -12948,6 +12948,9 @@ void PmoveSingle (pmove_t *pmove) {
 
 	// make sure walking button is clear if they are running, to avoid
 	// proxy no-footsteps cheats
+	//wahoo npc bug fix - only disable walk button for clients who are cheating, this messes up npcs so they
+	//don't use correct walk animation :(
+	if(pm->ps->clientNum < MAX_CLIENTS)
 	if ( abs( pm->cmd.forwardmove ) > 64 || abs( pm->cmd.rightmove ) > 64 ) {
 		pm->cmd.buttons &= ~BUTTON_WALKING;
 	}
