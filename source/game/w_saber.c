@@ -7423,12 +7423,12 @@ void WP_SaberStartMissileBlockCheck( gentity_t *self, usercmd_t *ucmd  )
 			//[/DodgeSys]
 
 			//[SaberSys]
-			if(closestSwingBlock)
+			if(closestSwingBlock && owner->health > 0)
 			{
 				self->client->ps.saberBlocked = BlockedforQuad(closestSwingQuad);
 				self->client->ps.userInt3 |= ( 1 << FLAG_PREBLOCK );
 			}
-			else
+			else if (owner->health > 0)
 			{
 				WP_SaberBlockNonRandom( self, incoming->r.currentOrigin, qtrue );
 			}
