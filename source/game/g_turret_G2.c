@@ -657,7 +657,9 @@ static void turretG2_turnoff( gentity_t *self )
 	//what if the turret is part of a custom map that lets you turn on/off the turrets?
 	//we should turn off when we are told to turn off, dont continue going after the enemy.
 	//the "if ( self->enemy == NULL )" was used to prevent spamming the shutdown noise as well, so we need a new way to detect if we are off
-	if(self->s.frame == 0) //dont turn off if we are already off
+	if(self->s.frame == 0 ||//dont turn off if we are already off
+		self->enemy == NULL) //Fixes shutdown noise being spammed...not sure what [BugFix376]
+		//robo's fix above does...but it doesnt fix it from spamming
 	//if ( self->enemy != NULL ) //CoOp
 	//if ( self->enemy == NULL ) //basejka
 	//[/CoOp]
@@ -835,6 +837,8 @@ static qboolean turretG2_find_enemies( gentity_t *self )
 			G_UseTargets2( self, self, self->target2 );
 		}
 	}
+	else
+		self->enemy = NULL;//[TurretFix] Clear enemy!
 
 	return found;
 }
