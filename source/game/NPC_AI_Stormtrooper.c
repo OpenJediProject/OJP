@@ -92,11 +92,12 @@ void Saboteur_Cloak( gentity_t *self )
 	{//FIXME: need to have this timer set once first?
 		if ( TIMER_Done( self, "nocloak" ) )
 		{//not sitting around waiting to cloak again
+			/*[SaboteurCloak] -- Whats this for?
 			if ( !(self->NPC->aiFlags&NPCAI_SHIELDS) )
 			{//not allowed to cloak, actually
 				Saboteur_Decloak( self, 0 );
-			}
-			else if ( !self->client->ps.powerups[PW_CLOAKED] )
+			}[/SaboteurCloak]
+			else*/ if ( !self->client->ps.powerups[PW_CLOAKED] )
 			{//cloak
 				self->client->ps.powerups[PW_CLOAKED] = Q3_INFINITE;
 				//RAFIXME - impliment?
@@ -3646,6 +3647,21 @@ void NPC_BSST_Default( void )
 		}
 	}
 	*/
+	if(Q_stricmp("saboteur",NPC->NPC_type)==0)//Makes saboteur's cloak
+	{
+		if (NPC->health <= 0 || 
+			(NPC->client->ps.fd.forceGripBeingGripped > level.time) ||
+			NPC->painDebounceTime > level.time )
+		{//taking pain or being gripped
+			Saboteur_Decloak(NPC,2000);
+		}
+		else if ( NPC->health > 0 
+			&& !(NPC->client->ps.fd.forceGripBeingGripped > level.time) 
+			&& NPC->painDebounceTime < level.time )
+		{//still alive, not taking pain and not being gripped
+			Saboteur_Cloak( NPC );
+		}
+	}
 	//[/CoOp]
 	
 	if( !NPC->enemy )

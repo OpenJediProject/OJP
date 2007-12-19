@@ -3560,7 +3560,11 @@ void PM_CheckGrab(void)
 	PM_SetPMViewAngle(pm->ps, pm->ps->viewangles, &pm->cmd);
 	pm->cmd.angles[YAW] = ANGLE2SHORT( pm->ps->viewangles[YAW] ) - pm->ps->delta_angles[YAW];
 
-
+	//[LedgeGrabFix] -- Fixes where if you kicked and while kicking ledge grabbed
+	// you couldnt move
+	pm->ps->weaponTime = 0;
+	pm->ps->saberMove =0;
+	//[/LedgeGrabFix]
 	//We are clear to latch to the wall
 	pm->ps->saberHolstered = 2;
 	VectorCopy(trace.endpos, pm->ps->origin);

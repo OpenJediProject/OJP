@@ -71,7 +71,7 @@ static	vec3_t	muzzle;
 // Wookiee Bowcaster
 //----------
 //[WeaponSys]
-#define	BOWCASTER_DAMAGE			80  //was 50
+#define	BOWCASTER_DAMAGE			45  //was 50 -- Was 80 [Bowcaster]
 #define	BOWCASTER_VELOCITY			4000 //was 1300
 //#define	BOWCASTER_DAMAGE			50
 //#define	BOWCASTER_VELOCITY			1300
@@ -1210,64 +1210,28 @@ static void WP_BowcasterAltFire( gentity_t *ent )
 	//missile->bounceCount = 3;
 }
 
+//[Bowcaster]
 //---------------------------------------------------------
 static void WP_BowcasterMainFire( gentity_t *ent )
 //---------------------------------------------------------
 {
-	int			damage	= BOWCASTER_DAMAGE, count;
+	int			damage	= BOWCASTER_DAMAGE, count=1,dp=0;
 	float		vel;
 	vec3_t		angs, dir;
 	gentity_t	*missile;
 	int i;
 
-	if (!ent->client)
-	{
-		count = 1;
-	}
-	else
-	{
-		count = ( level.time - ent->client->ps.weaponChargeTime ) / BOWCASTER_CHARGE_UNIT;
-	}
+	dp = (level.time - ent->client->ps.weaponChargeTime) / BOWCASTER_CHARGE_UNIT;
+		
+		if ( dp < 1 )
+		{
+			dp = 1;
+		}
+		else if ( dp > BRYAR_MAX_CHARGE )
+		{
+			dp = BRYAR_MAX_CHARGE;
+		}
 
-	if ( count < 1 )
-	{
-		count = 1;
-	}
-	else if ( count > 5 )
-	{
-		count = 5;
-	}
-
-	if ( !(count & 1 ))
-	{
-		// if we aren't odd, knock us down a level
-		count--;
-	}
-
-	//scale the damage down based on how many are about to be fired
-	if (count <= 1)
-	{
-		damage = 50;
-	}
-	else if (count == 2)
-	{
-		damage = 45;
-	}
-	else if (count == 3)
-	{
-		damage = 40;
-	}
-	else if (count == 4)
-	{
-		damage = 35;
-	}
-	else
-	{
-		damage = 30;
-	}
-
-	for (i = 0; i < count; i++ )
-	{
 		// create a range of different velocities
 		vel = BOWCASTER_VELOCITY * ( crandom() * BOWCASTER_VEL_RANGE + 1.0f );
 
@@ -1294,8 +1258,8 @@ static void WP_BowcasterMainFire( gentity_t *ent )
 
 		// we don't want it to bounce
 		missile->bounceCount = 0;
-	}
 }
+//[/Bowcaster]
 
 //---------------------------------------------------------
 static void WP_FireBowcaster( gentity_t *ent, qboolean altFire )
