@@ -3382,7 +3382,37 @@ int OJP_SaberBlockCost(gentity_t *defender, gentity_t *attacker, vec3_t hitLoc)
 		|| !attacker->client	//attacker isn't a NPC/player
 		|| attacker->client->ps.weapon != WP_SABER ) //or the player that is attacking isn't using a saber
 	{//standard bolt block!
+			//[BlasterDP]
+
+		if (attacker->activator && attacker->activator->s.weapon == WP_BLASTER
+			|| attacker->activator && attacker->activator->s.weapon == WP_BRYAR_PISTOL
+			|| attacker->activator && attacker->activator->s.weapon == WP_REPEATER
+			|| attacker->activator && attacker->activator->s.weapon == WP_BOWCASTER
+			|| attacker->activator && attacker->activator->s.weapon == WP_DISRUPTOR
+			|| attacker->activator && attacker->activator->s.weapon == WP_EMPLACED_GUN
+			)
+		{
+			float distance = VectorDistance(attacker->activator->r.currentOrigin,defender->r.currentOrigin);
+			if(distance <= 125.0f)
+				saberBlockCost = DODGE_BOLTBLOCK*3;
+			else if(distance <= 300.0f)
+				saberBlockCost = DODGE_BOLTBLOCK*2;
+			else
+				saberBlockCost = DODGE_BOLTBLOCK;
+			if(BG_SaberInAttack(defender->client->ps.saberMove)
+			|| PM_SaberInStart(defender->client->ps.saberMove)
+			) 
+			{
+				saberBlockCost = saberBlockCost*2;
+			}
+
+			G_Printf("DP damage: %f\n",saberBlockCost);
+		}
+		else
+		{
 		saberBlockCost = DODGE_BOLTBLOCK;
+		}
+
 	}
 	else if(attacker->client->ps.saberMove == LS_A_LUNGE
 		|| attacker->client->ps.saberMove == LS_SPINATTACK
@@ -3427,7 +3457,14 @@ int OJP_SaberBlockCost(gentity_t *defender, gentity_t *attacker, vec3_t hitLoc)
 			&& !(defender->client->ps.userInt3 & ( 1 << FLAG_SLOWBOUNCE ))
 			&& !(defender->client->ps.userInt3 & ( 1 << FLAG_OLDSLOWBOUNCE ))) 
 		{
-			saberBlockCost *= 2;	
+			if(attacker->client->saber[0].numBlades == 1 && defender->client->ps.fd.saberAnimLevel == SS_DUAL)//Ataru's other perk more powerful running hits
+			{
+				saberBlockCost *= 1.75;
+			}
+			else
+			{
+				saberBlockCost *= 1.5;
+			}
 		}
 	}
 	    
@@ -3453,22 +3490,24 @@ int OJP_SaberBlockCost(gentity_t *defender, gentity_t *attacker, vec3_t hitLoc)
 		if(!InFront(attacker->client->ps.origin, defender->client->ps.origin, defender->client->ps.viewangles, -.7f))
 		{//player is behind us, costs more to block
 				//staffs back block at normal cost.
+			/*
 			if(defender->client->ps.fd.saberAnimLevel != SS_STAFF 
 				//level 3 saber defenders do back blocks for normal cost.
 				&& defender->client->ps.fd.forcePowerLevel[FP_SABER_DEFENSE] < FORCE_LEVEL_3) 
 			{
 				saberBlockCost *= 2;
 			}
-		
-			/*//staffs back block at normal cost.
-			if(defender->client->ps.fd.saberAnimLevel == SS_STAFF 
+			*/
+		    
+			//staffs back block at normal cost.
+			if(defender->client->ps.fd.saberAnimLevel == SS_STAFF &&!(defender->client->saber[0].numBlades == 1)
 				//level 3 saber defenders do back blocks for normal cost.
 			&& defender->client->ps.fd.forcePowerLevel[FP_SABER_DEFENSE] == FORCE_LEVEL_3) 
 			{// Having both staff and defense 3 allow no extra back hit damage
 				saberBlockCost *= 1;
 			}
-			else if(defender->client->ps.fd.saberAnimLevel == SS_STAFF 
-				//level 3 saber defenders and staff users  have much lessback damage
+			else if(defender->client->ps.fd.saberAnimLevel == SS_STAFF &&!(defender->client->saber[0].numBlades == 1)
+				//level 3 saber defenders and staff users  have much lessback damage. Staff sabers perk
 			|| defender->client->ps.fd.forcePowerLevel[FP_SABER_DEFENSE] == FORCE_LEVEL_3) 
 			{
 				saberBlockCost *= 1.25;
@@ -3487,7 +3526,6 @@ int OJP_SaberBlockCost(gentity_t *defender, gentity_t *attacker, vec3_t hitLoc)
 			{
 				saberBlockCost *= 2;
 			}
-			*/
 		}
 
 		//clamp to body dodge cost since it wouldn't be fair to cost more than that.
@@ -3508,13 +3546,26 @@ int OJP_SaberBlockCost(gentity_t *defender, gentity_t *attacker, vec3_t hitLoc)
 
 	if(!WalkCheck(defender))
 	{
-        saberBlockCost *= 2.5;	
+		if(defender->NPC)
+		{
+		  saberBlockCost *=1.0;	
+		}
+		else
+		{
+		  saberBlockCost *= 2.5;	
+		}
 	}
-	
 	if(defender->client->ps.groundEntityNum == ENTITYNUM_NONE)
 	{//in mid-air
-		saberBlockCost *= 2;
-	} 
+		if(defender->client->saber[0].numBlades == 1 && defender->client->ps.fd.saberAnimLevel == SS_DUAL)//Ataru's other perk much less cost for air hit
+		{
+			saberBlockCost *= .5;
+		}
+		else
+		{
+			saberBlockCost *= 2;
+		} 
+	}
 	if(defender->client->ps.saberBlockTime > level.time)
 	{//attempting to block something too soon after a saber bolt block
 		saberBlockCost *= 2;
@@ -3530,7 +3581,7 @@ extern qboolean BG_SaberInNonIdleDamageMove(playerState_t *ps, int AnimIndex);
 int OJP_SaberCanBlock(gentity_t *self, gentity_t *atk, qboolean checkBBoxBlock, vec3_t point, int rSaberNum, int rBladeNum)
 {//similar to WP_SaberCanBlock but without the same sorts of restrictions.
 	vec3_t bodyMin, bodyMax, closestBodyPoint, dirToBody, saberMoveDir;
-	
+	float distance = VectorDistance(atk->r.currentOrigin,self->r.currentOrigin);
 	if (!self || !self->client || !atk)
 	{
 		return 0;
@@ -3549,7 +3600,21 @@ int OJP_SaberCanBlock(gentity_t *self, gentity_t *atk, qboolean checkBBoxBlock, 
 	{//can't block this stuff with a saber
 		return 0;
 	}
-
+	/*
+	if(atk && atk->client->skillLevel[SK_PISTOL] == 3)
+		// if the attacker have has level 3 pistol
+	{
+		if(atk && atk->s.eType == ET_MISSILE //is a missile
+		   && atk->methodOfDeath == MOD_BRYAR_PISTOL_ALT)	
+	    {//can't block this with a saber
+			return 0;
+		}
+		else
+		{
+			return 1;
+		}
+	}
+	*/
 	/* racc - we need to block during stumbles because kicks cause stumbles...a lot!
 	if (PM_SaberInBrokenParry(self->client->ps.saberMove))
 	{//you've been stunned from a broken parry
@@ -3584,12 +3649,23 @@ int OJP_SaberCanBlock(gentity_t *self, gentity_t *atk, qboolean checkBBoxBlock, 
 	{
 		return 0;
 	}
-
+	
 	if (self->client->ps.forceHandExtend != HANDEXTEND_NONE)
-	{//can't block while using forceHandExtend
+	{
+		if(atk && atk->client && atk->client->ps.weapon == WP_SABER)
+		{//can't block while using forceHandExtend except if their using a saber
+			return 1;
+		}
+		else
+		{//can't block while using forceHandExtend
 
-		return 0;
+			return 0;
+		}
 	}
+	if(!WalkCheck(self) && self->client->ps.fd.forcePowersActive & (1 << FP_SPEED))
+		{//can't block while running in force speed.
+			return 0;
+		}
 
 	if (PM_InKnockDown(&self->client->ps))
 	{//can't block while knocked down or getting up from knockdown.
@@ -3615,15 +3691,22 @@ int OJP_SaberCanBlock(gentity_t *self, gentity_t *atk, qboolean checkBBoxBlock, 
 		{//can't block super breaks when in critical DP.
 			return 0;
 		}
-
-		if(!WalkCheck(self)
-			&& (!InFront(atk->client->ps.origin, self->client->ps.origin, self->client->ps.viewangles, -.7f)
-			|| BG_SaberInAttack( self->client->ps.saberMove )
-			|| PM_SaberInStart( self->client->ps.saberMove )))
+		if(!WalkCheck(self) 
+		&& (!InFront(atk->client->ps.origin, self->client->ps.origin, self->client->ps.viewangles, -.7f)
+		|| BG_SaberInAttack( self->client->ps.saberMove )
+		|| PM_SaberInStart( self->client->ps.saberMove )))
 		{//can't block saber swings while running and hit from behind or in swing.
-			//G_Printf("%i: %i Can't block because I'm running.\n", level.time, self->s.number);
-			return 0;
+		//G_Printf("%i: %i Can't block because I'm running.\n", level.time, self->s.number);
+			if(self->NPC)
+			{
+				return 1;
+			}
+			else
+			{
+				return 0;
+			}
 		}
+		
 	}
 
 	//check to see if we have the Dodge to do this.
@@ -3632,13 +3715,13 @@ int OJP_SaberCanBlock(gentity_t *self, gentity_t *atk, qboolean checkBBoxBlock, 
 		return 0;
 	}
 
-	/* ok, I'm removing this to get around the problems with long reach attacks cliping thru the player.
+	//ok, I'm removing this to get around the problems with long reach attacks cliping thru the player.
 	//SABERSYSRAFIXME - allow for blocking behind our backs
 	if (!InFront( point, self->client->ps.origin, self->client->ps.viewangles, -.2 ) )
 	{//can only
-		return 0;
+		return 1;
 	}
-	*/
+	
 
 	if(!checkBBoxBlock)
 	{//don't do the additional checkBBoxBlock checks.  As such, we're safe to saber block.
@@ -4631,10 +4714,11 @@ static GAME_INLINE int G_PowerLevelForSaberAnim( gentity_t *ent, int saberNum, q
 		case BOTH_LK_ST_DL_S_SB_1_W:
 			return FORCE_LEVEL_5;
 			break;
+			
 		case BOTH_LK_ST_DL_T_SB_1_W:
 			//special suberbreak - doesn't kill, just kicks them backwards
 			return FORCE_LEVEL_0;
-			break;
+			break; 
 		case BOTH_LK_ST_ST_S_SB_1_W:
 		case BOTH_LK_ST_S_S_SB_1_W:
 			if ( animTimer < 800 )
@@ -5531,9 +5615,15 @@ qboolean G_DoDodge( gentity_t *self, gentity_t *shooter, vec3_t dmgOrigin, int h
 
 	//Don't do any visuals.
 	qboolean NoAction = qfalse;
-
+/*
 	if( !ojp_allowBodyDodge.integer )
 	{//body dodges have been disabled.  
+		return qfalse;
+	}
+*/
+if( !ojp_allowBodyDodge.integer )
+	{//body dodges have been disabled. 
+		if(self->client && !(self->client->pers.cmd.generic_cmd & GENCMD_FORCE_HEALOTHER))
 		return qfalse;
 	}
 
@@ -5571,7 +5661,12 @@ qboolean G_DoDodge( gentity_t *self, gentity_t *shooter, vec3_t dmgOrigin, int h
 		}
 		return qfalse;
 	}
-
+	//[DodgeChange]
+	if (self->client->ps.stats[STAT_DODGE] < 30)
+	{//Not enough dodge
+		return qfalse;
+	}
+	//[/DodgeChange]
 	//check for private duel conditions
 	if (shooter && shooter->client)
 	{
@@ -5669,8 +5764,15 @@ qboolean G_DoDodge( gentity_t *self, gentity_t *shooter, vec3_t dmgOrigin, int h
 			&& (!InFront(shooter->client->ps.origin, self->client->ps.origin, self->client->ps.viewangles, -.7f)
 			|| BG_SaberInAttack( self->client->ps.saberMove )
 			|| PM_SaberInStart( self->client->ps.saberMove )))
-		{//can't Dodge saber swings while running and hit from behind or in swing.
-			return qfalse;
+		{
+			if(self->NPC)
+			{//can't Dodge saber swings while running and hit from behind or in swing.
+				return qtrue;
+			}
+			else
+			{//can't Dodge saber swings while running and hit from behind or in swing.
+				return qfalse;
+			}
 		}
 	}
 
@@ -7423,12 +7525,12 @@ void WP_SaberStartMissileBlockCheck( gentity_t *self, usercmd_t *ucmd  )
 			//[/DodgeSys]
 
 			//[SaberSys]
-			if(closestSwingBlock && owner->health > 0)
+			if(closestSwingBlock && owner->health > 0)//&& !self->client->ps.duelInProgress)
 			{
 				self->client->ps.saberBlocked = BlockedforQuad(closestSwingQuad);
 				self->client->ps.userInt3 |= ( 1 << FLAG_PREBLOCK );
 			}
-			else if (owner->health > 0)
+			else if(owner->health > 0)//!self->client->ps.duelInProgress)
 			{
 				WP_SaberBlockNonRandom( self, incoming->r.currentOrigin, qtrue );
 			}
@@ -9520,6 +9622,11 @@ qboolean OJP_DodgeKick( gentity_t *self, gentity_t *pusher, const vec3_t pushDir
 	{
 		return qfalse;
 	}
+	if (self->client->ps.saberAttackChainCount >= MISHAPLEVEL_LIGHT
+		&& pusher->client->ps.fd.saberAnimLevel == SS_DESANN)//can't block if we're too off balance and their using juyo. Juyo's perk
+	{
+		return qfalse;
+	}
 
 	if(self->client->ps.saberAttackChainCount >= MISHAPLEVEL_LIGHT
 		|| self->client->ps.stats[STAT_DODGE] <= DODGE_CRITICALLEVEL )
@@ -9531,8 +9638,8 @@ qboolean OJP_DodgeKick( gentity_t *self, gentity_t *pusher, const vec3_t pushDir
 				return qfalse;
 			}
 		}
-		else if (!(self->client->buttons & BUTTON_ALT_ATTACK))
-		{//not holding down the dodge kick button
+		else if(!(self->client->buttons & BUTTON_15))
+		{
 			return qfalse;
 		}
 	}
@@ -9566,11 +9673,19 @@ qboolean OJP_DodgeKick( gentity_t *self, gentity_t *pusher, const vec3_t pushDir
 
 	//self->client->ps.legsTimer = 0;
 	//self->client->ps.torsoTimer = 0;
+	if(pusher->client->ps.legsAnim == BOTH_A7_KICK_B)//for the slap
+	{
+		G_SetAnim(self, &self->client->pers.cmd, SETANIM_BOTH, BOTH_RUNBACK1, SETANIM_FLAG_OVERRIDE|SETANIM_FLAG_HOLD, 100);
+		G_DodgeDrain(self, pusher, DODGE_KICKCOST);
+	}
+	else
+	{
 	G_SetAnim(self, &self->client->pers.cmd, SETANIM_BOTH, BOTH_FLIP_BACK1, SETANIM_FLAG_OVERRIDE|SETANIM_FLAG_HOLD, 100);
 	//[ExpSys]
 	G_DodgeDrain(self, pusher, DODGE_KICKCOST);
 	//self->client->ps.stats[STAT_DODGE] -= DODGE_KICKCOST;
 	//[/ExpSys]
+	}
 	return qtrue;
 }
 
@@ -9754,6 +9869,20 @@ static gentity_t *G_KickTrace( gentity_t *ent, vec3_t kickDir, float kickDist, v
 								G_Knockdown( hitEnt, ent, kickDir, kickPush, qtrue );
 							}
 						}
+					else if (ent->client->ps.fd.saberAnimLevel == SS_DESANN
+						&& (hitEnt->client->ps.saberAttackChainCount >= MISHAPLEVEL_LIGHT
+						|| hitEnt->client->ps.stats[STAT_DODGE] <= DODGE_CRITICALLEVEL)
+						&& !(hitEnt->client->buttons & BUTTON_ALT_ATTACK))
+					{//knockdown
+						if ( kickPush >= 75.0f && !Q_irand( 0, 2 ) )
+							{
+								G_Knockdown( hitEnt, ent, kickDir, 300, qtrue );
+							}
+						else
+							{
+								G_Knockdown( hitEnt, ent, kickDir, kickPush, qtrue );
+							}
+						}
 					else
 					{//stumble
 						AnimateStun(hitEnt, ent, trace.endpos);   
@@ -9916,7 +10045,7 @@ static void G_KickSomeMofos(gentity_t *ent)
 	}
 	else
 	{
-		switch ( ent->client->ps.legsAnim )
+		switch ( ent->client->ps.legsAnim | ent->client->ps.torsoAnim)//added this for slap, not sure if it will help
 		{
 		case BOTH_GETUP_BROLL_B:
 		case BOTH_GETUP_BROLL_F:
@@ -9981,9 +10110,9 @@ static void G_KickSomeMofos(gentity_t *ent)
 			if ( elapsedTime >= 250 && remainingTime >= 250 )
 			{//back
 				doKick = qtrue;
-				if ( ri->footRBolt != -1 )
+				if ( ri->handLBolt != -1 )//changed to accomadate teh new hand hand anim
 				{//actually trace to a bolt
-					G_GetBoltPosition( ent, ri->footRBolt, kickEnd, 0 );
+					G_GetBoltPosition( ent, ri->handLBolt, kickEnd, 0 );//changed to accomadate teh new hand hand anim
 					VectorSubtract( kickEnd, ent->r.currentOrigin, kickDir );
 					kickDir[2] = 0;//ah, flatten it, I guess...
 					VectorNormalize( kickDir );
@@ -10115,6 +10244,20 @@ static void G_KickSomeMofos(gentity_t *ent)
 				{//right, though either would do
 					doKick = qtrue;
 					G_GetBoltPosition( ent, ri->footRBolt, kickEnd, 0 );
+					VectorSubtract( kickEnd, ent->r.currentOrigin, kickDir );
+					kickDir[2] = 0;//ah, flatten it, I guess...
+					VectorNormalize( kickDir );
+					//NOTE: have to fudge this a little because it's not getting enough range with the anim as-is
+					VectorMA( kickEnd, 8, kickDir, kickEnd );
+				}
+			}
+			else if ( ri->handLBolt != -1) //for hand slap
+			{//actually trace to a bolt
+				if ( ( elapsedTime >= 750 && elapsedTime < 850 )
+					|| ( elapsedTime >= 1400 && elapsedTime < 1500 ) )
+				{//right, though either would do
+					doKick = qtrue;
+					G_GetBoltPosition( ent, ri->handLBolt, kickEnd, 0 );
 					VectorSubtract( kickEnd, ent->r.currentOrigin, kickDir );
 					kickDir[2] = 0;//ah, flatten it, I guess...
 					VectorNormalize( kickDir );
@@ -10425,10 +10568,12 @@ void WP_SaberPositionUpdate( gentity_t *self, usercmd_t *ucmd )
 	//[/SnapThrow]
 
 	//I'm leaving these tests in so someone might find more open buttons eventually.
+	/*
 	if (ucmd->buttons & BUTTON_15)
 	{
 		G_Printf("Button Flag 15 Pressed.\n");
 	}
+	*/
 	if (ucmd->buttons & BUTTON_16)
 	{
 		G_Printf("Button Flag 16 Pressed.\n");
@@ -11715,6 +11860,7 @@ void WP_SaberBlockNonRandom( gentity_t *self, vec3_t hitloc, qboolean missileBlo
 	vec3_t clEye;
 	float rightdot;
 	float zdiff;
+	qboolean inFront = InFront(hitloc,self->client->ps.origin,self->client->ps.viewangles,-.2f);
 
 	VectorCopy(self->client->ps.origin, clEye);
 	clEye[2] += self->client->ps.viewheight;
@@ -11729,8 +11875,24 @@ void WP_SaberBlockNonRandom( gentity_t *self, vec3_t hitloc, qboolean missileBlo
 
 	rightdot = DotProduct(right, diff);
 	zdiff = hitloc[2] - clEye[2];
-	
-	if ( zdiff > 0 )
+	if(!inFront)
+	{
+		switch(self->client->ps.fd.saberAnimLevel)
+		{
+			
+					case SS_STAFF:
+						G_SetAnim(self,&self->client->pers.cmd,SETANIM_BOTH,BOTH_P7_S1_B_, SETANIM_FLAG_OVERRIDE|SETANIM_FLAG_HOLD, 0);
+						break;
+					case SS_DUAL:
+						G_SetAnim(self,&self->client->pers.cmd,SETANIM_BOTH,BOTH_P6_S1_B_, SETANIM_FLAG_OVERRIDE|SETANIM_FLAG_HOLD, 0);
+						break;
+					default:
+						G_SetAnim(self,&self->client->pers.cmd,SETANIM_BOTH,BOTH_P1_S1_B_, SETANIM_FLAG_OVERRIDE|SETANIM_FLAG_HOLD, 0);
+						break;
+		}
+		self->client->ps.saberBlocked = BLOCKED_BACK;
+	}
+	else if ( zdiff > 0 )
 	{
 		if ( rightdot > 0.3 )
 		{
@@ -11989,7 +12151,7 @@ int WP_SaberCanBlock(gentity_t *self, vec3_t point, int dflags, int mod, qboolea
 		return 0;
 	}
 
-	if (self->client->ps.forceHandExtend != HANDEXTEND_NONE)
+	if (self->client->ps.forceHandExtend != HANDEXTEND_NONE && projectile)
 	{
 		return 0;
 	}
@@ -12033,7 +12195,7 @@ int WP_SaberCanBlock(gentity_t *self, vec3_t point, int dflags, int mod, qboolea
 		return 0;
 	}
 
-	if (projectile)
+	if (projectile && !(self->client->ps.forceHandExtend != HANDEXTEND_NONE))
 	{
 		WP_SaberBlockNonRandom(self, point, projectile);
 	}
@@ -12222,6 +12384,91 @@ qboolean G_BlockIsParry( gentity_t *self, gentity_t *attacker, vec3_t hitLoc )
 					//vs the actual attack location.
 	qboolean inFront = InFront(attacker->client->ps.origin, self->client->ps.origin, self->client->ps.viewangles, 0.0f);
 
+	if(!inFront)
+	{//can't parry attacks to the rear.
+		return qfalse;
+	}
+	else if(PM_SaberInKnockaway(self->client->ps.saberMove) )
+	{//already in parry move, continue parrying anything that hits us as long as 
+		//the attacker is in the same general area that we're facing.
+		return qtrue;
+	}
+
+	if(BG_KickingAnim(self->client->ps.legsAnim))
+	{//can't parry in kick.
+		return qfalse;
+	}
+
+	if(BG_SaberInNonIdleDamageMove(&self->client->ps, self->localAnimIndex)
+		|| PM_SaberInBounce(self->client->ps.saberMove) || BG_InSlowBounce(&self->client->ps))
+	{//can't parry if we're transitioning into a block from an attack state.
+		return qfalse;
+	}
+
+	if(self->client->ps.pm_flags & PMF_DUCKED)
+	{//can't parry while ducked or running
+		return qfalse;
+	}
+
+	//set up flatten version of the location of the incoming attack in orientation
+	//to the player.
+	VectorSubtract(hitLoc, self->client->ps.origin, hitPos);
+	VectorSet(pAngles, 0, self->client->ps.viewangles[YAW], 0);
+	AngleVectors(pAngles, NULL, pRight, NULL);
+	hitFlat[0] = 0;
+	hitFlat[1] = DotProduct(pRight, hitPos);
+	
+	//just bump the hit pos down for the blocking since the average left/right slice happens at about origin +10
+	hitFlat[2] = hitPos[2] - 10;
+	VectorNormalize(hitFlat);
+
+	//set up the vector for the direction the player is trying to parry in.
+	parrierMove[0] = 0;
+	parrierMove[1] = (self->client->pers.cmd.rightmove);
+	parrierMove[2] = -(self->client->pers.cmd.forwardmove);
+	VectorNormalize(parrierMove);
+
+	
+	blockDot = DotProduct(hitFlat, parrierMove);
+
+	if(blockDot >= .4)
+	{//player successfully blocked in the right direction to do a full parry.
+		//G_Printf("%i: %i: parried\n", level.time, self->s.number);
+		return qtrue;
+	}
+	else
+	{//player didn't parry in the correct direction, do the minimal parry bonus.
+		//SABERSYSRAFIXME - this is a hack, please try to fix this since it's not really
+		//fair to players.
+		if(self->r.svFlags & SVF_BOT)
+		{//bots just randomly parry to make up for them not intelligently parrying.
+			if(BOT_PARRYRATE * botstates[self->s.number]->settings.skill > Q_irand(0,999))
+			{
+				//G_Printf("%i: %i: Bot cheat parried\n", level.time, self->s.number);
+				return qtrue;
+			}
+		}
+
+		return qfalse;
+	}
+}
+//[/SaberSys]
+//[SaberSys]
+qboolean G_BlockIsQuickParry( gentity_t *self, gentity_t *attacker, vec3_t hitLoc )
+{//determines if self (who is blocking) is activing blocking (quickparrying)//JRHockney addition
+	vec3_t pAngles;
+	vec3_t pRight;
+	vec3_t parrierMove;
+	vec3_t hitPos;
+	vec3_t hitFlat; //flatten 2D version of the hitPos.
+	float blockDot; //the dot product of our desired parry direction
+					//vs the actual attack location.
+	qboolean inFront = InFront(attacker->client->ps.origin, self->client->ps.origin, self->client->ps.viewangles, 0.0f);
+    
+	if(!((pm->cmd.buttons & BUTTON_15) > 0))
+	{
+		return qfalse;
+	}
 	if(!inFront)
 	{//can't parry attacks to the rear.
 		return qfalse;

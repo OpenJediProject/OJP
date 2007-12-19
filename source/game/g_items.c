@@ -92,7 +92,7 @@ int adjustRespawnTime(float preRespawnTime, int itemType, int itemTag)
 }
 
 //[TicketFix234]
-#define SHIELD_HEALTH				800//Was 250
+#define SHIELD_HEALTH				2000//Was 250
 //[/TicketFix234]
 #define MAX_SHIELD_HEIGHT			254
 #define MAX_SHIELD_HALFWIDTH		255

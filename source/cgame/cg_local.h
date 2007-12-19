@@ -1241,6 +1241,54 @@ typedef struct {
 	qhandle_t sfxSaberEnd2Shader;
 	//[/SFXSabers]
 
+	//[Movie Sabers]
+	//Original Trilogy Sabers
+	qhandle_t otSaberCoreShader;			
+	qhandle_t redOTGlowShader;				
+	qhandle_t orangeOTGlowShader;			
+	qhandle_t yellowOTGlowShader;			
+	qhandle_t greenOTGlowShader;			
+	qhandle_t blueOTGlowShader;			
+	qhandle_t purpleOTGlowShader;			
+
+	//Episode I Sabers
+	qhandle_t ep1SaberCoreShader;
+	qhandle_t redEp1GlowShader;			
+	qhandle_t orangeEp1GlowShader;			
+	qhandle_t yellowEp1GlowShader;			
+	qhandle_t greenEp1GlowShader;			
+	qhandle_t blueEp1GlowShader;			
+	qhandle_t purpleEp1GlowShader;
+
+	//Episode II Sabers
+	qhandle_t ep2SaberCoreShader;
+	qhandle_t whiteIgniteFlare;
+	qhandle_t blackIgniteFlare;
+	qhandle_t redEp2GlowShader;			
+	qhandle_t orangeEp2GlowShader;			
+	qhandle_t yellowEp2GlowShader;			
+	qhandle_t greenEp2GlowShader;			
+	qhandle_t blueEp2GlowShader;			
+	qhandle_t purpleEp2GlowShader;
+
+	//Episode III Sabers
+	qhandle_t ep3SaberCoreShader;
+	qhandle_t whiteIgniteFlare02;
+	qhandle_t blackIgniteFlare02;
+	qhandle_t redIgniteFlare;
+	qhandle_t greenIgniteFlare;
+	qhandle_t purpleIgniteFlare;
+	qhandle_t blueIgniteFlare;
+	qhandle_t orangeIgniteFlare;
+	qhandle_t yellowIgniteFlare;
+	qhandle_t redEp3GlowShader;			
+	qhandle_t orangeEp3GlowShader;			
+	qhandle_t yellowEp3GlowShader;			
+	qhandle_t greenEp3GlowShader;			
+	qhandle_t blueEp3GlowShader;			
+	qhandle_t purpleEp3GlowShader;			
+	//[Movie Sabers]
+
 	qhandle_t	saberBlurShader;
 	qhandle_t	swordTrailShader;
 
@@ -1964,6 +2012,10 @@ extern vmCvar_t ojp_teamrgbsabers;
 //[SFXSabers]
 extern vmCvar_t sfx_sabers;
 //[/SFXSabers]
+
+//[Movie Sabers]
+extern vmCvar_t cg_MovieSaberType;
+//[/Movie Sabers]
 
 //[VisualWeapons]
 extern vmCvar_t	ojp_holsteredweapons;

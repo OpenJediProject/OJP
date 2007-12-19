@@ -3694,7 +3694,7 @@ void ClientSpawn(gentity_t *ent) {
 		savedSkill[i] = client->skillLevel[i];
 	}
 	//[/ExpSys]
-	
+
 	//[DodgeSys]
 	savedDodgeMax = client->ps.stats[STAT_MAX_DODGE];
 	//[/DodgeSys]
@@ -4074,6 +4074,10 @@ void ClientSpawn(gentity_t *ent) {
 				{
 					client->ps.stats[STAT_WEAPONS] |= ( 1 << WP_BRYAR_PISTOL );
 				}
+				if(client->skillLevel[SK_PISTOL] == FORCE_LEVEL_3)
+					client->ps.userInt2 |= SL_PISTOL_3;
+				else
+					client->ps.userInt2 &= ~SL_PISTOL_3;
 			}
 
 			if(client->skillLevel[SK_BLASTER])
@@ -4344,9 +4348,12 @@ void ClientSpawn(gentity_t *ent) {
 		{
 			client->ps.stats[STAT_HOLDABLE_ITEMS] |= (1 << HI_SENTRY_GUN);
 		}
+
 		//client->ps.stats[STAT_HOLDABLE_ITEMS] = 0;
 		//[/ExpSys]
 		client->ps.stats[STAT_HOLDABLE_ITEM] = 0;
+
+		
 	}
 
 	if (g_gametype.integer == GT_SIEGE &&

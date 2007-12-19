@@ -558,7 +558,7 @@ static cvarTable_t		gameCvarTable[] = {
 
 	{ &g_developer, "developer", "0", 0, 0, qfalse },
 
-	{ &g_speed, "g_speed", "250", 0, 0, qtrue  },
+	{ &g_speed, "g_speed", "220", 0, 0, qtrue  },//was 250, but the gameplay seems more solid and balance this way. 
 	{ &g_gravity, "g_gravity", "800", 0, 0, qtrue  },
 	//[CoOp]
 	//Used by UI to set up SP menu stuff
@@ -790,7 +790,7 @@ static cvarTable_t		gameCvarTable[] = {
 	//[DodgeSys]
 	//toggles the use of Body Dodges, which are matrix-like moves that make the players 
 	//evade damage in exchange for DP.
-	{ &ojp_allowBodyDodge, "ojp_allowBodyDodge", "1", CVAR_SERVERINFO|CVAR_ARCHIVE, 0, qtrue },
+	{ &ojp_allowBodyDodge, "ojp_allowBodyDodge", "0", CVAR_SERVERINFO|CVAR_ARCHIVE, 0, qtrue },
 	//[/DodgeSys]
 };
 

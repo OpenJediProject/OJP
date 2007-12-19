@@ -5,7 +5,7 @@
 #include "q_shared.h"
 #include "bg_public.h"
 #include "bg_strap.h"
-
+#include "bg_local.h"
 #ifdef QAGAME
 #include "g_local.h"
 #endif
@@ -221,7 +221,7 @@ int bgForcePowerCost[NUM_TOTAL_SKILLS][NUM_FORCE_POWER_LEVELS] = //0 == neutral
 	*/
 	//NUM_FORCE_POWERS
 	//racc - additional skills
-	{	0,	4,	0,	0	},	//SK_JETPACK,		// Jetpack Skill	
+	{	0,	8,	0,	0	},	//SK_JETPACK,		// Jetpack Skill	
 	{	0,	1,	2,	8	},	//SK_PISTOL,		//blaster pistol
 	{	0,	3,	4,	6	},	//SK_BLASTER,		//blaster rifle skill
 	{	0,	6,	6,	8	},	//SK_THERMAL,		//thermal detenator skill
@@ -949,6 +949,19 @@ qboolean BG_LegalizedForcePowers(char *powerOut, int maxRank, qboolean freeSaber
 		i++;
 	}
 	powerOut[i] = 0;
+	c=0;
+	if(usedPoints)
+	{
+		for(i=2;i<NUM_TOTAL_SKILLS;i++)
+		{
+			if(final_Powers[i])
+				c++;
+		}
+	}
+
+	if(!c)
+	
+		maintainsValidity=qfalse;
 
 	return maintainsValidity;
 }
@@ -2079,9 +2092,9 @@ qboolean BG_CanUseFPNow(int gametype, playerState_t *ps, int time, forcePowers_t
 		}
 	}
 
-	if (ps->saberLockFrame || ps->saberLockTime > time)
+	if (ps-> saberLockFrame || ps->saberLockTime > time)
 	{
-		if (power != FP_PUSH)
+		if (power != FP_PUSH) 
 		{
 			return qfalse;
 		}

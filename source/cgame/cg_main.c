@@ -913,6 +913,10 @@ vmCvar_t	ojp_teamrgbsabers;
 vmCvar_t        sfx_sabers;
 //[/SFXSabers]
 
+//[Movie Sabers]
+vmCvar_t		cg_MovieSaberType;
+//[/Movie Sabers]
+
 //[ClientPlugInDetect]
 vmCvar_t	ojp_clientplugin;
 //[/ClientPlugInDetect]
@@ -1148,6 +1152,10 @@ Ghoul2 Insert End
 //[SFXSabers]
 	{ &sfx_sabers,	"sfx_sabers", "0", CVAR_ARCHIVE },
 //[/SFXSabers]
+
+//[Movie Sabers]
+	{ &cg_MovieSaberType, "cg_MovieSaberType", "3", CVAR_ARCHIVE },
+//[/Movie Sabers]
 
 	//[ClientPlugInDetect]
 	//this cvar is a dummy cvar used to determine if the client has the OJP client plug in or not.
@@ -1662,12 +1670,60 @@ static void CG_RegisterSounds( void ) {
 	//[/RGBSabers]
 
     //[SFXSabers]
-    cgs.media.sfxSaberTrailShader = trap_R_RegisterShader( "SFX_Sabers/saber_trail" );
-    cgs.media.sfxSaberBladeShader = trap_R_RegisterShader( "SFX_Sabers/saber_blade" );
-    cgs.media.sfxSaberBlade2Shader = trap_R_RegisterShader( "SFX_Sabers/saber_blade_rgb" );
-    cgs.media.sfxSaberEndShader = trap_R_RegisterShader( "SFX_Sabers/saber_end" );
-    cgs.media.sfxSaberEnd2Shader = trap_R_RegisterShader( "SFX_Sabers/saber_end_rgb" );
+    cgs.media.sfxSaberTrailShader		= trap_R_RegisterShader( "SFX_Sabers/saber_trail" );
+    cgs.media.sfxSaberBladeShader		= trap_R_RegisterShader( "SFX_Sabers/saber_blade" );
+    cgs.media.sfxSaberBlade2Shader		= trap_R_RegisterShader( "SFX_Sabers/saber_blade_rgb" );
+    cgs.media.sfxSaberEndShader			= trap_R_RegisterShader( "SFX_Sabers/saber_end" );
+    cgs.media.sfxSaberEnd2Shader		= trap_R_RegisterShader( "SFX_Sabers/saber_end_rgb" );
     //[/SFXSabers]
+
+	//[Movie Sabers]
+	//Original Trilogy Sabers
+	cgs.media.otSaberCoreShader			= trap_R_RegisterShader( "OTsabers/ot_saberCore" );
+	cgs.media.redOTGlowShader			= trap_R_RegisterShader( "OTsabers/ot_redGlow" );
+	cgs.media.orangeOTGlowShader		= trap_R_RegisterShader( "OTsabers/ot_orangeGlow" );
+	cgs.media.yellowOTGlowShader		= trap_R_RegisterShader( "OTsabers/ot_yellowGlow" );
+	cgs.media.greenOTGlowShader			= trap_R_RegisterShader( "OTsabers/ot_greenGlow" );
+	cgs.media.blueOTGlowShader			= trap_R_RegisterShader( "OTsabers/ot_blueGlow" );
+	cgs.media.purpleOTGlowShader		= trap_R_RegisterShader( "OTsabers/ot_purpleGlow" );
+
+	//Episode I Sabers
+	cgs.media.ep1SaberCoreShader		= trap_R_RegisterShader( "Ep1Sabers/saber_core" );
+	cgs.media.redEp1GlowShader			= trap_R_RegisterShader( "Ep1Sabers/red_glowa" );
+	cgs.media.orangeEp1GlowShader		= trap_R_RegisterShader( "Ep1Sabers/orange_glowa" );
+	cgs.media.yellowEp1GlowShader		= trap_R_RegisterShader( "Ep1Sabers/yellow_glowa" );
+	cgs.media.greenEp1GlowShader		= trap_R_RegisterShader( "Ep1Sabers/green_glowa" );
+	cgs.media.blueEp1GlowShader			= trap_R_RegisterShader( "Ep1Sabers/blue_glowa" );
+	cgs.media.purpleEp1GlowShader		= trap_R_RegisterShader( "Ep1Sabers/purple_glowa" );
+
+	//Episode II Sabers
+	cgs.media.ep2SaberCoreShader		= trap_R_RegisterShader( "Ep2Sabers/saber_core" );
+	cgs.media.whiteIgniteFlare			= trap_R_RegisterShader( "Ep2Sabers/white_ignite_flare" );
+	cgs.media.blackIgniteFlare			= trap_R_RegisterShader( "Ep3Sabers/black_ignite_flare" );
+	cgs.media.redEp2GlowShader			= trap_R_RegisterShader( "Ep2Sabers/red_glowa" );
+	cgs.media.orangeEp2GlowShader		= trap_R_RegisterShader( "Ep2Sabers/orange_glowa" );
+	cgs.media.yellowEp2GlowShader		= trap_R_RegisterShader( "Ep2Sabers/yellow_glowa" );
+	cgs.media.greenEp2GlowShader		= trap_R_RegisterShader( "Ep2Sabers/green_glowa" );
+	cgs.media.blueEp2GlowShader			= trap_R_RegisterShader( "Ep2Sabers/blue_glowa" );
+	cgs.media.purpleEp2GlowShader		= trap_R_RegisterShader( "Ep2Sabers/purple_glowa" );
+
+	//Episode III Sabers
+	cgs.media.ep3SaberCoreShader		= trap_R_RegisterShader( "Ep3Sabers/saber_core" );
+	cgs.media.whiteIgniteFlare02		= trap_R_RegisterShader( "Ep3Sabers/white_ignite_flare" );
+	cgs.media.blackIgniteFlare02		= trap_R_RegisterShader( "Ep3Sabers/black_ignite_flare" );
+	cgs.media.redIgniteFlare			= trap_R_RegisterShader( "Ep3Sabers/red_ignite_flare" );
+	cgs.media.greenIgniteFlare			= trap_R_RegisterShader( "Ep3Sabers/green_ignite_flare" );
+	cgs.media.purpleIgniteFlare			= trap_R_RegisterShader( "Ep3Sabers/purple_ignite_flare" );
+	cgs.media.blueIgniteFlare			= trap_R_RegisterShader( "Ep3Sabers/blue_ignite_flare" );
+	cgs.media.orangeIgniteFlare			= trap_R_RegisterShader( "Ep3Sabers/orange_ignite_flare" );
+	cgs.media.yellowIgniteFlare			= trap_R_RegisterShader( "Ep3Sabers/yellow_ignite_flare" );
+	cgs.media.redEp3GlowShader			= trap_R_RegisterShader( "Ep3Sabers/red_glowa" );
+	cgs.media.orangeEp3GlowShader		= trap_R_RegisterShader( "Ep3Sabers/orange_glowa" );
+	cgs.media.yellowEp3GlowShader		= trap_R_RegisterShader( "Ep3Sabers/yellow_glowa" );
+	cgs.media.greenEp3GlowShader		= trap_R_RegisterShader( "Ep3Sabers/green_glowa" );
+	cgs.media.blueEp3GlowShader			= trap_R_RegisterShader( "Ep3Sabers/blue_glowa" );
+	cgs.media.purpleEp3GlowShader		= trap_R_RegisterShader( "Ep3Sabers/purple_glowa" );
+	//[Movie Sabers]
 
 	cgs.media.saberBlurShader			= trap_R_RegisterShader( "gfx/effects/sabers/saberBlur" );
 	cgs.media.swordTrailShader			= trap_R_RegisterShader( "gfx/effects/sabers/swordTrail" );

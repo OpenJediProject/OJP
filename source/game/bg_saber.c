@@ -1818,6 +1818,10 @@ void PM_SaberLocked( void )
 
 qboolean PM_SaberInBrokenParry( int move )
 {
+	if(move==139||move==133)
+	{
+		return qfalse;
+	}
 	if ( move >= LS_V1_BR && move <= LS_V1_B_ )
 	{
 		return qtrue;
@@ -2185,9 +2189,29 @@ saberMoveName_t PM_SaberLungeAttackMove( qboolean noSpecials )
 */
 		return LS_A_LUNGE;
 	}
+	else if(!noSpecials && pm->ps->fd.saberAnimLevel == SS_STAFF && saber1->numBlades == 1)
+	{
+						VectorCopy( pm->ps->viewangles, fwdAngles );
+		fwdAngles[PITCH] = fwdAngles[ROLL] = 0;
+		//do the lunge
+		AngleVectors( fwdAngles, jumpFwd, NULL, NULL );
+		VectorScale( jumpFwd, 150, pm->ps->velocity );
+		PM_AddEvent( EV_JUMP );
+		return LS_A_LUNGE;
+	}
 	else if ( !noSpecials && pm->ps->fd.saberAnimLevel == SS_STAFF)
 	{
 		return LS_SPINATTACK;
+	}
+	else if(!noSpecials && (!saber2 || saber2->numBlades == 0))
+	{
+						VectorCopy( pm->ps->viewangles, fwdAngles );
+		fwdAngles[PITCH] = fwdAngles[ROLL] = 0;
+		//do the lunge
+		AngleVectors( fwdAngles, jumpFwd, NULL, NULL );
+		VectorScale( jumpFwd, 150, pm->ps->velocity );
+		PM_AddEvent( EV_JUMP );
+		return LS_A_LUNGE;
 	}
 	else if ( !noSpecials )
 	{
@@ -2521,6 +2545,7 @@ static qboolean PM_CheckEnemyPresence( int dir, float radius )
 
 //racc - force cost of doing cartwheels.
 #define SABER_ALT_ATTACK_POWER_LR	FATIGUE_CARTWHEEL
+#define SABER_ALT_ATTACK_POWER_LRA	FATIGUE_CARTWHEEL_ATARU
 //#define SABER_ALT_ATTACK_POWER_LR	10//30?
 
 //racc - force cost of doing all the special saber attacks (other than the katas and cartwheels)
@@ -2666,6 +2691,7 @@ extern qboolean PM_InCartwheel( int anim );
 //[/SaberSys]
 saberMoveName_t PM_SaberAttackForMovement(saberMoveName_t curmove)
 {
+	saberInfo_t *saber = BG_MySaber( pm->ps->clientNum, 0 );
 	saberMoveName_t newmove = LS_NONE;
 	//[SaberSys]
 	//can't launch a special while in a cartwheel (prevents possible FP exploit)
@@ -2741,6 +2767,8 @@ saberMoveName_t PM_SaberAttackForMovement(saberMoveName_t curmove)
 
 	if ( pm->cmd.rightmove > 0 )
 	{//moving right
+		saberInfo_t *saber1 = BG_MySaber( pm->ps->clientNum, 0 );
+		saberInfo_t *saber2 = BG_MySaber( pm->ps->clientNum, 1 );
 		if ( !noSpecials
 			&& overrideJumpRightAttackMove != LS_NONE
 			&& pm->ps->velocity[2] > 20.0f //pm->ps->groundEntityNum != ENTITYNUM_NONE//on ground
@@ -2749,12 +2777,20 @@ saberMoveName_t PM_SaberAttackForMovement(saberMoveName_t curmove)
 			&& ( pm->cmd.upmove > 0 || (pm->ps->pm_flags & PMF_JUMP_HELD) )//focus-holding player
 			&& BG_EnoughForcePowerForMove( SABER_ALT_ATTACK_POWER_LR ) )//have enough power
 		{//cartwheel right
-			BG_ForcePowerDrain(pm->ps, FP_GRIP, SABER_ALT_ATTACK_POWER_LR);
+			if(saber1 && !saber2 && pm->ps->fd.saberAnimLevel == SS_DUAL)//for a part of single dual/ataru's. 1 point cartwheels
+			{
+				BG_ForcePowerDrain(pm->ps, FP_GRIP, SABER_ALT_ATTACK_POWER_LRA);
+			}
+			else
+			{
+				BG_ForcePowerDrain(pm->ps, FP_GRIP, SABER_ALT_ATTACK_POWER_LR);
+			}
 			if ( overrideJumpRightAttackMove != LS_INVALID )
 			{//overridden with another move
 				return overrideJumpRightAttackMove;
 			}
 			else
+			
 			{
 				vec3_t right, fwdAngles;
 
@@ -2802,6 +2838,8 @@ saberMoveName_t PM_SaberAttackForMovement(saberMoveName_t curmove)
 	}
 	else if ( pm->cmd.rightmove < 0 )
 	{//moving left
+		saberInfo_t *saber1 = BG_MySaber( pm->ps->clientNum, 0 );
+		saberInfo_t *saber2 = BG_MySaber( pm->ps->clientNum, 1 );
 		if ( !noSpecials
 			&& overrideJumpLeftAttackMove != LS_NONE
 			&& pm->ps->velocity[2] > 20.0f //pm->ps->groundEntityNum != ENTITYNUM_NONE//on ground
@@ -2810,8 +2848,14 @@ saberMoveName_t PM_SaberAttackForMovement(saberMoveName_t curmove)
 			&& ( pm->cmd.upmove > 0 || (pm->ps->pm_flags & PMF_JUMP_HELD) )//focus-holding player
 			&& BG_EnoughForcePowerForMove( SABER_ALT_ATTACK_POWER_LR ) )//have enough power
 		{//cartwheel left
-			BG_ForcePowerDrain(pm->ps, FP_GRIP, SABER_ALT_ATTACK_POWER_LR);
-
+			if(saber1 && !saber2 && pm->ps->fd.saberAnimLevel == SS_DUAL)//for a part of single dual/ataru's. 1 point cartwheels
+			{
+				BG_ForcePowerDrain(pm->ps, FP_GRIP, SABER_ALT_ATTACK_POWER_LRA);
+			}
+			else
+			{
+				BG_ForcePowerDrain(pm->ps, FP_GRIP, SABER_ALT_ATTACK_POWER_LR);
+			}
 			if ( overrideJumpLeftAttackMove != LS_INVALID )
 			{//overridden with another move
 				return overrideJumpLeftAttackMove;
@@ -4061,12 +4105,13 @@ void PM_WeaponLightsaber(void)
 	//[SaberSys]
 	//preblocks can be interrupted
 	if(PM_SaberInParry(pm->ps->saberMove) && pm->ps->userInt3 & (1 << FLAG_PREBLOCK) // in a pre-block
-		&& ((pm->cmd.buttons & BUTTON_ALT_ATTACK) || (pm->cmd.buttons & BUTTON_ATTACK)) ) //and attempting an attack
+		&& ((pm->cmd.buttons & BUTTON_ALT_ATTACK) || (pm->cmd.buttons & BUTTON_ATTACK))) //and attempting an attack
+		 
 	{//interrupting a preblock
 		pm->ps->weaponTime = 0;
 		pm->ps->torsoTimer = 0;
 	}
-
+	
 	//Added additional ways of using saber throw.
 	if ( (pm->cmd.buttons & BUTTON_SABERTHROW) || ((pm->cmd.buttons & BUTTON_FORCEPOWER) && pm->ps->fd.forcePowerSelected == FP_SABERTHROW) )
 	//if ( (pm->cmd.buttons & BUTTON_ALT_ATTACK) )
@@ -4844,7 +4889,7 @@ weapChecks:
 			{//in a bounce
 				newmove = saberMoveData[curmove].chain_idle;//oops, not attacking, so don't chain
 			}
-			else
+			else 
 			{//FIXME: what about returning from a parry?
 				//PM_SetSaberMove( LS_READY );
 				//if ( pm->ps->saberBlockingTime > pm->cmd.serverTime )
@@ -5317,7 +5362,12 @@ void PM_SetSaberMove(short newMove)
 		//FIXME: get hand-made bounces and deflections?
 		if ( newMove >= LS_V1_BR && newMove <= LS_REFLECT_LL )
 		{//there aren't 1-7, just 1, 6 and 7, so just set it
-			anim = BOTH_P7_S7_T_ + (anim-BOTH_P1_S1_T_);//shift it up to the proper set
+			//anim = BOTH_P7_S7_T_ + (anim-BOTH_P1_S1_T_);//shift it up to the proper set
+			saberInfo_t *saber1 = BG_MySaber( pm->ps->clientNum, 0 );//new block anims code for Niman
+			if(saber1->numBlades == 1)
+				anim = saberMoveData[newMove].animToUse;
+			else
+				anim = BOTH_P7_S7_T_ + (anim-BOTH_P1_S1_T_);//shift it up to the proper set
 		}
 		else
 		{//add the appropriate animLevel
@@ -5330,7 +5380,14 @@ void PM_SetSaberMove(short newMove)
 		//FIXME: get hand-made bounces and deflections?
 		if ( newMove >= LS_V1_BR && newMove <= LS_REFLECT_LL )
 		{//there aren't 1-7, just 1, 6 and 7, so just set it
+			//anim = BOTH_P6_S6_T_ + (anim-BOTH_P1_S1_T_);//shift it up to the proper set//old code
+			saberInfo_t *saber1 = BG_MySaber( pm->ps->clientNum, 0 );//new ataru block anims
+			saberInfo_t *saber2 = BG_MySaber( pm->ps->clientNum, 1 );
+			if(saber1->numBlades == 1 && (!saber2 || saber2->numBlades == 0))
+				anim = saberMoveData[newMove].animToUse;
+			else
 			anim = BOTH_P6_S6_T_ + (anim-BOTH_P1_S1_T_);//shift it up to the proper set
+
 		}
 		else
 		{//add the appropriate animLevel
@@ -5564,6 +5621,9 @@ void PM_SetSaberMove(short newMove)
 			pm->ps->userInt3 &= ~( 1 << FLAG_SLOWBOUNCE );
 			pm->ps->userInt3 &= ~( 1 << FLAG_OLDSLOWBOUNCE );
 			pm->ps->userInt3 &= ~( 1 << FLAG_PARRIED );
+			//[QuickParry]
+			pm->ps->userInt3 &= ~( 1 << FLAG_QUICKPARRY);
+			//[/QuickParry]
 		}
 
 		if(!PM_SaberInParry(newMove))

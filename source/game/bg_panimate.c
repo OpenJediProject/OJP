@@ -3438,6 +3438,7 @@ void BG_SaberStartTransAnim( int clientNum, int saberAnimLevel, int weapon, int 
 			*animSpeed *= .3f;
 		}
 	}
+	
 	else if( (fatigued & (1 << FLAG_PARRIED)) )
 	{//getting parried slows down your reaction
 		if(BG_BounceAnim(anim) || PM_SaberReturnAnim(anim))
@@ -3446,6 +3447,15 @@ void BG_SaberStartTransAnim( int clientNum, int saberAnimLevel, int weapon, int 
 			*animSpeed *= .5f;
 		}
 	}
+	//[QuickParry]
+	else if ( (fatigued & (1 << FLAG_QUICKPARRY)))
+	{
+		if(BG_BounceAnim(anim) || PM_SaberReturnAnim(anim))
+		{
+			*animSpeed *= 1.0f;
+		}
+	}
+	//[/QuickParry]
 	//[/SaberSys]
 }
 

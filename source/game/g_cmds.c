@@ -4150,7 +4150,22 @@ void ClientCommand( int clientNum ) {
 		return;
 	}
 	//end rww
-
+	if(!Q_stricmp(cmd,"modelscale"))
+	{
+		int size;
+		int temp,temp2;
+		if(trap_Argc()!=2)
+		{
+			trap_SendServerCommand( ent-g_entities, va("print \"Current modelscale is %i.\n\"", (ent->client->ps.iModelScale ? ent->client->ps.iModelScale : 100)) );
+			return;
+		}
+		trap_Argv(1,cmd2,sizeof(cmd2));
+		size=atoi(cmd2);
+		ent->client->ps.iModelScale=size;
+		//ent->client->ps.stats[STAT_MAX_DODGE] = ((100-size)*(ent->client->ps.stats[STAT_DODGE]/100))/2;
+ 
+		return;
+	}
 
 	if (Q_stricmp (cmd, "say") == 0) {
 		Cmd_Say_f (ent, SAY_ALL, qfalse);

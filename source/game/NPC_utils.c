@@ -128,7 +128,7 @@ void CalcEntitySpot ( const gentity_t *ent, const spot_t spot, vec3_t point )
 		{
 			AngleVectors( ent->NPC->shootAngles, forward, right, up );
 		}
-		else
+		else if(ent->client)
 		{
 			AngleVectors( ent->client->ps.viewangles, forward, right, up );
 		}

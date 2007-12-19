@@ -5210,6 +5210,10 @@ void G_Knockdown( gentity_t *self, gentity_t *attacker, const vec3_t pushDir, fl
 		return;
 	}
 
+	//[BoostKnockdown]
+	strength *= 3;
+	//[/BoostKnockdown]
+
 	//break out of a saberLock?
 	if ( self->client->ps.saberLockTime > level.time )
 	{
@@ -5241,8 +5245,8 @@ void G_Knockdown( gentity_t *self, gentity_t *attacker, const vec3_t pushDir, fl
 		G_CheckLedgeDive( self, 72, pushDir, qfalse, qfalse );
 
 		if ( /*!BG_SpinningSaberAnim( self->client->ps.legsAnim )  //racc - I've removed this requirement since it's over used by staffs/duals.
-			&&*/ !BG_FlippingAnim( self->client->ps.legsAnim ) 
-			&& !PM_RollingAnim( self->client->ps.legsAnim ) 
+			&& !BG_FlippingAnim( self->client->ps.legsAnim ) 
+			&&*/ !PM_RollingAnim( self->client->ps.legsAnim ) 
 			&& !PM_InKnockDown( &self->client->ps ) )
 		{
 			int knockAnim = BOTH_KNOCKDOWN1;//default knockdown

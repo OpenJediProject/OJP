@@ -582,7 +582,8 @@ typedef enum {
 	BLOCKED_UPPER_LEFT_PROJ,
 	BLOCKED_LOWER_RIGHT_PROJ,
 	BLOCKED_LOWER_LEFT_PROJ,
-	BLOCKED_TOP_PROJ
+	BLOCKED_TOP_PROJ,
+	BLOCKED_BACK
 } saberBlockedType_t;
 
 
@@ -2723,7 +2724,10 @@ typedef struct siegePers_s
 //flag indicates that this block is a pre-block and interruptable
 #define FLAG_PREBLOCK		9
 
-
+//[QuickParry]
+#define FLAG_QUICKPARRY		10
+//[/QuickParry]
+#define FLAG_BLOCKING       11
 //[SaberDefines]
 //scaler to the walkspeed
 #define WALKSPEED			1.75//1.35

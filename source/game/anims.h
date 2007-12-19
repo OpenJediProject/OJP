@@ -1798,6 +1798,9 @@ typedef enum //# animNumber_e
 	BOTH_CIN_48,		//# Level specific cinematic 
 	BOTH_CIN_49,		//# Level specific cinematic 
 	BOTH_CIN_50,		//# Level specific cinematic
+	BOTH_P1_S1_B_,		//[backblock]
+	BOTH_P6_S1_B_,		//[backblock]
+	BOTH_P7_S1_B_,		//[backblock]
 
 	//# #eol
 	MAX_ANIMATIONS,

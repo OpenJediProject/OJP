@@ -134,7 +134,7 @@ weaponData_t weaponData[WP_NUM_WEAPONS] =
 		8192,					//	int		range;				// Range of weapon
 		//[WeaponSys]
 		1,						//	int		altEnergyPerShot;	// Amount of energy used for alt-fire was 3
-		350,					//	int		altFireTime;		// Amount of time between alt-firings
+		250,					//	int		altFireTime;		// Amount of time between alt-firings was 350
 		//3,					//	int		altEnergyPerShot;	// Amount of energy used for alt-fire
 		//150,					//	int		altFireTime;		// Amount of time between alt-firings
 		//[/WeaponSys]
@@ -183,7 +183,7 @@ weaponData_t weaponData[WP_NUM_WEAPONS] =
 		8192,					//	int		range;				// Range of weapon
 		//[WeaponSys]
 		1,						//	int		altEnergyPerShot;	// Amount of energy used for alt-fire was 5
-		350,					//	int		altFireTime;		// Amount of time between alt-firings was 750
+		220,					//	int		altFireTime;		// Amount of time between alt-firings was 750 -- was 350 [BowcasterChange]
 		//5,						//	int		altEnergyPerShot;	// Amount of energy used for alt-fire
 		//750,					//	int		altFireTime;		// Amount of time between alt-firings
 		//[/WeaponSys]
@@ -201,7 +201,7 @@ weaponData_t weaponData[WP_NUM_WEAPONS] =
 		5,						//	int		ammoLow;			// Count when ammo is low
 		1,						//	int		energyPerShot;		// Amount of energy used per shot
 		//[WeaponSys]
-		200,						//	int		fireTime;			// Amount of time between firings was 100
+		175,						//	int		fireTime;			// Amount of time between firings was 100
 //		100,					//	int		fireTime;			// Amount of time between firings
 		//[/WeaponSys]
 		8192,					//	int		range;				// Range of weapon

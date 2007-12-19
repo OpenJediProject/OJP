@@ -5438,7 +5438,8 @@ static bind_t g_bindings[] =
 
 	//For Detonator quickthrow
 	{"+button13",		-1,					-1,		-1,	-1},
-
+	//For Quick Parry
+	{"+button14",		-1,					-1,		-1,	-1},
 };
 
 

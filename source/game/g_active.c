@@ -2200,7 +2200,13 @@ void ClientThink_real( gentity_t *ent ) {
 	if (client->pers.connected != CON_CONNECTED && !isNPC) {
 		return;
 	}
-
+	
+	if(ent->client->blockTime <= level.time && ent->client->blockTime > 0)
+	{
+		ent->client->ps.userInt3 &= ~ (1 << FLAG_BLOCKING);
+		ent->client->blockTime = 0;
+	}
+	
 	//[SentryGun]
 	if (ent->sentryDeadThink <= level.time && ent->sentryDeadThink > 0 )
 	{

@@ -87,6 +87,7 @@ void G_ReflectMissile( gentity_t *ent, gentity_t *missile, vec3_t forward )
 		missile->nextthink = 0;
 	}
 }
+int NaturalBoltReflectRate[NUM_FORCE_POWER_LEVELS];//[Morerandom]
 
 void G_DeflectMissile( gentity_t *ent, gentity_t *missile, vec3_t forward ) 
 {
@@ -95,7 +96,13 @@ void G_DeflectMissile( gentity_t *ent, gentity_t *missile, vec3_t forward )
 	float	speed;
 	int		isowner = 0;
 	vec3_t missile_dir;
-
+	//[MoreRandom]
+	float   slopFactor=0.0f;
+	int		defLevel=0;
+	float distance =0;
+	gentity_t *prevOwner = &g_entities[missile->r.ownerNum];
+	vec3_t  angs;
+	//[/MoreRandom]
 	if (missile->r.ownerNum == ent->s.number)
 	{ //the original owner is bouncing the missile, so don't try to bounce it back at him
 		isowner = 1;
@@ -103,7 +110,26 @@ void G_DeflectMissile( gentity_t *ent, gentity_t *missile, vec3_t forward )
 
 	//save the original speed
 	speed = VectorNormalize( missile->s.pos.trDelta );
+//[MoreRandom]
+	//determine reflection level.
+	if(Q_irand(0, 99) <  NaturalBoltReflectRate[ent->client->ps.fd.forcePowerLevel[FP_SABER_DEFENSE]])
+	{//natural reflection, bounce back to the attacker.
+		defLevel = FORCE_LEVEL_2;
+	}
+	else
+	{//just deflect the attack
+		defLevel = FORCE_LEVEL_1;
+	}
 
+	vectoangles( forward, angs );
+	if(defLevel == FORCE_LEVEL_2 && distance <= 125.0f)
+		slopFactor = Q_irand(30,40);
+	else if( distance <= 125.0f)
+		slopFactor = Q_irand(40,50);
+	angs[PITCH] += flrand(-slopFactor, slopFactor);
+	angs[YAW] += flrand(-slopFactor, slopFactor);
+	AngleVectors( angs, forward, NULL, NULL );
+	//[/MoreRandom]
 	if (ent->client)
 	{
 		//VectorSubtract( ent->r.currentOrigin, missile->r.currentOrigin, missile_dir );
@@ -663,8 +689,10 @@ qboolean G_MissileImpact( gentity_t *ent, trace_t *trace ) {
 
 			//in this case, deflect it even if we can't actually block it because it hit our saber
 			//WP_SaberCanBlock(otherOwner, ent->r.currentOrigin, 0, 0, qtrue, 0);
-			if (otherOwner->client && !BG_SaberInAttack(otherOwner->client->ps.saberMove))
-			{//racc - play projectile block animation, but only if we're not attacking.
+			if ((otherOwner->client && !BG_SaberInAttack(otherOwner->client->ps.saberMove))
+				|| (otherOwner->client && (pm->cmd.buttons & BUTTON_FORCEPOWER || pm->cmd.buttons & BUTTON_FORCEGRIP
+		         || pm->cmd.buttons & BUTTON_FORCE_LIGHTNING) ))
+			{//racc - play projectile block animation even in .
 				otherOwner->client->ps.weaponTime = 0;
 				WP_SaberBlockNonRandom(otherOwner, ent->r.currentOrigin, qtrue);
 			}
@@ -793,15 +821,56 @@ qboolean G_MissileImpact( gentity_t *ent, trace_t *trace ) {
 				}
 			}
 			else
-			{
+			//if(ent->s.weapon == WP_BLASTER || ent->s.weapon == WP_REPEATER
+			//|| ent->s.weapon == WP_BOWCASTER || ent->s.weapon == WP_BRYAR_PISTOL)
+				{
+					gentity_t *owner = &g_entities[ent->r.ownerNum];
+				float distance = VectorDistance(owner->r.currentOrigin,other->r.currentOrigin);
+				//G_Printf("Distance: %f\n",distance);
+				if(distance <= 100.0f)
+				{
+						G_Damage (other, ent, owner, velocity,
+						//[DodgeSys]
+						/*ent->s.origin*/ent->r.currentOrigin, missileDmg * 2,
+						/*ent->s.origin*///ent->r.currentOrigin, ent->damage, 
+						//[/DodgeSys]
+						0, ent->methodOfDeath);
+//G_Printf("Damage: %i\n",missileDmg * 2);
+				}
+				else if (distance <= 300.0f)
+				{
+						G_Damage (other, ent, owner, velocity,
+						//[DodgeSys]
+						/*ent->s.origin*/ent->r.currentOrigin, missileDmg * 1.5,
+						/*ent->s.origin*///ent->r.currentOrigin, ent->damage, 
+						//[/DodgeSys]
+						0, ent->methodOfDeath);
+//G_Printf("Damage: %f\n",missileDmg * 1.5);
+				}
+				else
+				{
 				G_Damage (other, ent, &g_entities[ent->r.ownerNum], velocity,
 					//[DodgeSys]
 					/*ent->s.origin*/ent->r.currentOrigin, missileDmg,
 					/*ent->s.origin*///ent->r.currentOrigin, ent->damage, 
 					//[/DodgeSys]
 					0, ent->methodOfDeath);
+				}
 				didDmg = qtrue;
 			}
+			//else
+			//{
+				
+				//G_Damage (other, ent, &g_entities[ent->r.ownerNum], velocity, //previous code
+					//[DodgeSys]
+					/*ent->s.origin*///ent->r.currentOrigin, missileDmg,
+					/*ent->s.origin*///ent->r.currentOrigin, ent->damage, 
+					//[/DodgeSys]
+					//0, ent->methodOfDeath);
+				//didDmg = qtrue;
+				
+			//}
+
 
 			if (didDmg && other && other->client)
 			{ //What I'm wondering is why this isn't in the NPC pain funcs. But this is what SP does, so whatever.
@@ -1177,9 +1246,9 @@ passthrough:
 int NaturalBoltReflectRate[NUM_FORCE_POWER_LEVELS] =
 {
 	0,	//FORCE_LEVEL_0
-	20,//10,	//FORCE_LEVEL_1
-	35,//20, //FORCE_LEVEL_2
-	50//25
+	10,//10,	//FORCE_LEVEL_1
+	20,//20, //FORCE_LEVEL_2
+	33//25
 };
 
 //bolt reflection rate while attempting manual reflections.
@@ -1201,7 +1270,7 @@ void OJP_HandleBoltBlock(gentity_t *bolt, gentity_t *player, trace_t *trace)
 	gentity_t *te;
 	int otherDefLevel;
 	gentity_t *prevOwner = &g_entities[bolt->r.ownerNum]; //previous owner of the bolt.  Used for awarding experience to attacker.
-
+	float distance = VectorDistance(prevOwner->r.currentOrigin,player->r.currentOrigin);
 	//create the bolt saber block effect
 	te = G_TempEntity( bolt->r.currentOrigin, EV_SABER_BLOCK );
 	VectorCopy(bolt->r.currentOrigin, te->s.origin);
@@ -1238,16 +1307,36 @@ void OJP_HandleBoltBlock(gentity_t *bolt, gentity_t *player, trace_t *trace)
 	{//bounce the bolt back to sender
 		//G_Printf("%i: %i: Level 2 Reflect\n", level.time, player->s.number);
 		G_ReflectMissile(player, bolt, fwd);
-	}
+	}/*
+	else if(otherDefLevel == FORCE_LEVEL_3 
+		&& distance < 80.0f
+		&&(BG_SaberInAttack( player->client->ps.saberMove )
+		|| PM_SaberInStart( player->client->ps.saberMove)))
+		{//manual reflection, bounce to the crosshair, roughly
+			G_DeflectMissile(player, bolt, fwd);;
+		}*/
 	else
 	{//FORCE_LEVEL_3, reflect the bolt to whereever the player is aiming.
+		gentity_t *owner = &g_entities[player->r.ownerNum];
+				float distance = VectorDistance(owner->r.currentOrigin, prevOwner->r.currentOrigin);
+			if(distance < 80.0f)
+		{//attempted upclose exception
+			G_DeflectMissile(player, bolt, fwd);;
+		}
+		else
+		{
 		vec3_t	bounce_dir, angs;
 		float	speed;
 		//gentity_t	*owner = ent;
 		//int		isowner = 0;
         
 		//add some slop factor to the manual reflections.
-		float slopFactor = MISHAP_MAXINACCURACY * (FORCE_LEVEL_3 - player->client->ps.fd.forcePowerLevel[FP_SABER_DEFENSE])/FORCE_LEVEL_3;
+		float slopFactor = (MISHAP_MAXINACCURACY-6) * (FORCE_LEVEL_3 - player->client->ps.fd.forcePowerLevel[FP_SABER_DEFENSE])/FORCE_LEVEL_3;
+		//[MoreRandom]
+		float distance = VectorDistance(player->r.currentOrigin,prevOwner->r.currentOrigin);
+		if(distance <= 125.0f)
+			slopFactor += Q_irand(20,30);
+		//[/MoreRandom]
 		vectoangles( fwd, angs );
 		angs[PITCH] += flrand(-slopFactor, slopFactor);
 		angs[YAW] += flrand(-slopFactor, slopFactor);
@@ -1272,6 +1361,7 @@ void OJP_HandleBoltBlock(gentity_t *bolt, gentity_t *player, trace_t *trace)
 			bolt->think = 0;
 			bolt->nextthink = 0;
 		}
+		}
 		
 	}
 
@@ -1280,6 +1370,7 @@ void OJP_HandleBoltBlock(gentity_t *bolt, gentity_t *player, trace_t *trace)
 
 	//deduce DP cost
 	//[ExpSys]
+	bolt->activator = prevOwner;
 	G_DodgeDrain(player, prevOwner, OJP_SaberBlockCost(player, bolt, trace->endpos));
 	//[ExpSys]
 

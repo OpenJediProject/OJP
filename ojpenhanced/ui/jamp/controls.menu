@@ -1784,6 +1784,42 @@
 			}
 		}
 
+itemDef 
+		{
+			name				attacklook
+			group				attackcontrols
+			type				ITEM_TYPE_BIND
+			text				@OJP_MENUS_QUICK_PARRY_HOLDBUTTON
+			cvar				"+button14"
+			rect				260 370 340 14
+			textalign			ITEM_ALIGN_RIGHT
+			textalignx			174
+			textaligny			0
+			font				4
+			textscale			1
+			forecolor			1 1 1 1
+			visible			0
+			// appearance_slot		6
+			descText			@OJP_MENUS_ALLOWS_FOR_QUICK_PARRY
+			forecolor			.615 .615 .956 1
+
+			mouseenter 
+			{ 
+				show			highlight13
+				show			keybindstatus
+			}
+			mouseexit 
+			{ 
+				hide			highlight13
+				hide			keybindstatus
+			}
+			action 
+			{ 
+				play			"sound/interface/button1.wav" ; 
+			}
+		}
+
+
 //----------------------------------------------------------------------------------------------
 //
 //	WEAPON BINDING

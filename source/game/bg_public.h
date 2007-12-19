@@ -83,6 +83,8 @@
 //[FatigueDefines]
 //Fatigue for backflips
 #define FATIGUE_BACKFLIP		-FATIGUE_JUMP + 3
+#define FATIGUE_BACKFLIP_ATARU		-FATIGUE_JUMP + 1
+//#define FATIGUE_WALLFLIP		-FATIGUE_JUMP + 3 something that isnt working right
 
 //Fatigue for jumps (This is the basic cost of a jump, force jumps cost points in addition to this)
 #define FATIGUE_JUMP			10
@@ -104,6 +106,7 @@
 
 //the fatigue for doing cartwheels.
 #define FATIGUE_CARTWHEEL		-FATIGUE_JUMP + 3
+#define FATIGUE_CARTWHEEL_ATARU -FATIGUE_JUMP + 1
 
 //FP cost of saber ground attacks
 #define FATIGUE_GROUNDATTACK	3	
@@ -122,7 +125,7 @@
 //[/SaberSys]
 
 //[WeaponSys]
-#define MISHAP_MAXINACCURACY	20  //maximum possible offset angle for weapon accuracy. 
+#define MISHAP_MAXINACCURACY	7  //maximum possible offset angle for weapon accuracy. 
 //[/WeaponSys]
 
 //[DodgeSys]
@@ -822,6 +825,11 @@ typedef enum {
 #define	EF2_BRACKET_ENTITY		(1<<6)		// Draw as bracketed
 #define	EF2_SHIP_DEATH			(1<<7)		// "died in ship" mode
 #define	EF2_NOT_USED_1			(1<<8)		// not used
+
+//[SkillLevel2]
+#define	SL_PISTOL_3			(1<<0)
+#define SL_ACROBATICS		(1<<1)
+//[/SkillLevel2]
 
 
 typedef enum {

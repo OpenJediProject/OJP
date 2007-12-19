@@ -293,6 +293,11 @@ static void WP_FireBryarPistol( gentity_t *ent, qboolean altFire )
 	int count;
 
 	gentity_t	*missile = CreateMissile( muzzle, forward, BRYAR_PISTOL_VEL, 10000, ent, altFire );
+	if(altFire)//must have level 3 pistol to charge
+		if(ent->client->skillLevel[SK_PISTOL] != FORCE_LEVEL_3)
+		{
+			return;
+		}
 
 	missile->classname = "bryar_proj";
 	missile->s.weapon = WP_BRYAR_PISTOL;
@@ -311,6 +316,7 @@ static void WP_FireBryarPistol( gentity_t *ent, qboolean altFire )
 		else if ( count > BRYAR_MAX_CHARGE )
 		{
 			count = BRYAR_MAX_CHARGE;
+
 		}
 
 		damage = BRYAR_PISTOL_ALT_DPDAMAGE + (float)count/BRYAR_MAX_CHARGE*(BRYAR_PISTOL_ALT_DPMAXDAMAGE-BRYAR_PISTOL_ALT_DPDAMAGE);
@@ -4943,9 +4949,9 @@ void FireWeapon( gentity_t *ent, qboolean altFire )
 			AngleVectors( angs, forward, NULL, NULL );
 
 			//increase mishap level
-			if(!Q_irand(0, SkillLevelforWeapon(ent, ent->s.weapon)-1) )
+			if(!Q_irand(0, SkillLevelforWeapon(ent, ent->s.weapon)-1) && ent->s.weapon != WP_EMPLACED_GUN )//Sorry but the mishap meter needs to go up more that before.
 			{//failed skill roll, add mishap.
-				G_AddMercBalance(ent, 1);//was 1. not enough
+				G_AddMercBalance(ent, Q_irand(1, 2));// 1 was not enough
 			}
 		}
 		//[/WeapAccuracy]
@@ -4969,7 +4975,7 @@ void FireWeapon( gentity_t *ent, qboolean altFire )
 
 		case WP_BRYAR_PISTOL:
 			//if ( g_gametype.integer == GT_SIEGE )
-			if (1)
+			if (1) 
 			{//allow alt-fire
 				WP_FireBryarPistol( ent, altFire );
 			}

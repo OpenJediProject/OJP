@@ -127,43 +127,43 @@ REFERENCE	SKILL_BLUESTYLE
 LANG_ENGLISH	"Soresu:"
 
 REFERENCE	    DESC_SKILL_BLUESTYLE
-LANG_ENGLISH	"Gains the user the Soresu style of lightsaber combat."
+LANG_ENGLISH	"Gains the user the Soresu style of lightsaber combat(less cost for parries)."
 
 REFERENCE	SKILL_YELLOWSTYLE
 LANG_ENGLISH	"Shii-Cho:"
 
 REFERENCE	    DESC_SKILL_YELLOWSTYLE
-LANG_ENGLISH	"Gains the user a lightsaber and levels in the Shii-Cho style of lightsaber combat."
+LANG_ENGLISH	"Gains the user a lightsaber and Shii-Cho style of lightsaber combat(faster mishap regen)."
 
 REFERENCE	SKILL_REDSTYLE
 LANG_ENGLISH	"Djem So:"
 
 REFERENCE	    DESC_SKILL_REDSTYLE
-LANG_ENGLISH	"Gains the user the Djem So style of lightsaber combat."
+LANG_ENGLISH	"Gains the user the Djem So style of lightsaber(strongest style and strongest attackfeints)."
 
 REFERENCE	SKILL_GREENSTYLE
 LANG_ENGLISH	"Makashi:"
 
 REFERENCE	    DESC_SKILL_GREENSTYLE
-LANG_ENGLISH	"Gains the user the Makashi style of lightsaber combat."
+LANG_ENGLISH	"Gains user the Makashi style of lightsaber combat(nonparried hits do Mishap damage)."
 
 REFERENCE	SKILL_PURPLESTYLE
 LANG_ENGLISH	"Juyo:"
 
 REFERENCE	    DESC_SKILL_PURPLESTYLE
-LANG_ENGLISH	"Gains the user the Juyo style of lightsaber combat."
+LANG_ENGLISH	"Gains user Juyo style of lightsaber(kicks and forcepower usage at opponent's lesser Mishap)."
 
 REFERENCE	SKILL_DUALSTYLE
-LANG_ENGLISH	"Dual Style:"
+LANG_ENGLISH	"Dual/Ataru Style:"
 
 REFERENCE	    DESC_SKILL_DUALSTYLE
-LANG_ENGLISH	"Gains the user the ability to use dual lightsabers."
+LANG_ENGLISH	"Two sabers usage(cheap attackfeints, no disarm) or Ataru(1 fp backflip/cartwheel)."
 
 REFERENCE	SKILL_STAFFSTYLE
-LANG_ENGLISH	"Staff Style:"
+LANG_ENGLISH	"Staff/Niman Style:"
 
 REFERENCE	    DESC_SKILL_STAFFSTYLE
-LANG_ENGLISH	"Gains the user the ability to use the staff lightsaber."
+LANG_ENGLISH	"Gains user the ability to use the staff(little extra damage) or Niman(faster fp regen)."
 //[/StanceSelection]
 //[/ExpSys]
 
@@ -460,6 +460,12 @@ LANG_ENGLISH	"Thermal Detonator Autothrow:"
 
 REFERENCE       THERMAL_DETONATOR_THROW_AVAILABLE
 LANG_ENGLISH	"Automatically Throws available Thermal Detonator without being selected in inventory"
+
+REFERENCE		QUICK_PARRY_HOLDBUTTON
+LANG_ENGLISH	"QuickParry/Kickblock Button:"
+
+REFERENCE 		ALLOWS_FOR_QUICK_PARRY
+LANG_ENGLISH	"Holding this allows parrying that doesn't stall enemy saberists or blocks enemy kicks" 
 
 ENDMARKER
 

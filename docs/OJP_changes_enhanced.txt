@@ -4,6 +4,48 @@ Open Jedi Project Change Log (Enhanced Distribution)
 
 This file stores all the information about what has changed from release version to release version for OJP Enhanced.  OJP Enhanced contains all the changes of OJP Basic plus a library of gameplay alterations made by OJP's contributors.
 
+Version 0.1.1
+	New Features:
+		Sabersystem:
+			-Reduced the running hit damage to *1.5 because double damage was just too powerful and spammy
+			-Added perks for Juyo, Ataru(singelsaber dual) and Niman (single saber staff)
+				-Juyo has lower kicking and force mishap vulnerability on its opponent
+				-Ataru has 1 force point cartwheels and backflips and more damage for running hits and less cost for getting hit in the air.
+				-Niman has faster force point regenation.
+			-Added single saber blocks and parries to Niman and Ataru to distinguish them better.
+			-Added new parry animations for single saber styles
+			-Added new back block animations for all styles
+			-Reworked bolt deflections so they have different values and no accuracy at close range
+			-bolt blocks now vary in dp cost based on hw far away you are and whether your running or swinging or both.
+			-Added a new Quick Parry feature that allows you to parry a person without them stopping their combo by parrying and hold down the quickparry button.
+			-Took the stumble out of the mishap maxout roll.
+			-Made back hit damages vary a little more based on saber defense level and if they have staff or not.
+			-Replaced back kick with a back hand animation for variaty
+		Skill Menu:
+			-Added more accurate and newer discriptions of some of the skills on the skill menu.
+			-Added control menu reference for the quick parry button.
+		Mishap Meter:
+			-Made mishap cause recoil when high on weapons but lessened the amount of inaccuracy.
+			-Being pushed or pull or lightninged while walking will not knock you down unless you have high mishap
+			-You can fire while being gripped unless you have high mishap.
+		Force powers:
+			-Added Higher jumps over all with the jumping force power.
+			-push and pull can now turn off sentrys and seekers if you aim at them.
+			-pull only pulls a persons gun if they have very high mishap.
+			-No blocking ability when using force speed.
+		Gunner Changes:
+			-Pistol only has alt fire charge at level 3
+			-Alt fire for Blaster and Bowcaster is now a bit faster.
+		Items:
+			-More forcefield health
+			-Can turn off jetpack by pressing item use (should be jump but thats the best I could do for now :P)
+		Bug Fixes:
+			-no weapon respawn bug fixed..mostly, it just goes to the skill menu when it happens.
+			-several force vulnerability bugs fixed
+			-a few crash bugs fixed.
+			-and a ton of others that I can't remember
+			
+			
 
 Version 0.1.0:
 	New Features:

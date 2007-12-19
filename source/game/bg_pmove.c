@@ -26,7 +26,6 @@ extern qboolean BG_FullBodyTauntAnim( int anim );
 extern float PM_WalkableGroundDistance(void);
 extern qboolean PM_GroundSlideOkay( float zNormal );
 extern saberInfo_t *BG_MySaber( int clientNum, int saberNum );
-
 pmove_t		*pm;
 pml_t		pml;
 
@@ -190,10 +189,10 @@ int forcePowerNeeded[NUM_FORCE_POWER_LEVELS][NUM_FORCE_POWERS] =
 
 float forceJumpHeight[NUM_FORCE_POWER_LEVELS] = 
 {
-	32,//normal jump (+stepheight+crouchdiff = 66)
-	96,//(+stepheight+crouchdiff = 130)
-	192,//(+stepheight+crouchdiff = 226)
-	384//(+stepheight+crouchdiff = 418)
+	32,//normal jump (+stepheight+crouchdiff = 66) 
+	150,//(+stepheight+crouchdiff = 130) -- 96
+	350,//(+stepheight+crouchdiff = 226) -- 192
+	550//(+stepheight+crouchdiff = 418)  -- 384
 };
 
 float forceJumpStrength[NUM_FORCE_POWER_LEVELS] = 
@@ -2229,10 +2228,10 @@ void PM_SetForceJumpZStart(float value)
 
 float forceJumpHeightMax[NUM_FORCE_POWER_LEVELS] = 
 {
-	66,//normal jump (32+stepheight(18)+crouchdiff(24) = 74)
-	130,//(96+stepheight(18)+crouchdiff(24) = 138)
-	226,//(192+stepheight(18)+crouchdiff(24) = 234)
-	418//(384+stepheight(18)+crouchdiff(24) = 426)
+	66,//normal jump (32+stepheight(18)+crouchdiff(24) = 74) 
+	185,//(96+stepheight(18)+crouchdiff(24) = 138) -- 130 --- forceJumpHeight level 1 +35
+	385,//(192+stepheight(18)+crouchdiff(24) = 234) 
+	585//(384+stepheight(18)+crouchdiff(24) = 426) 
 };
 
 void PM_GrabWallForJump( int anim )
@@ -2793,6 +2792,7 @@ static qboolean PM_CheckJump( void )
 						vertPush = forceJumpStrength[FORCE_LEVEL_2]/2.25f;
 						anim = BOTH_WALL_FLIP_RIGHT;
 					}
+
 				}
 			}
 			else if ( pm->cmd.rightmove < 0 && pm->ps->fd.forcePowerLevel[FP_LEVITATION] > FORCE_LEVEL_1 )
@@ -2816,9 +2816,22 @@ static qboolean PM_CheckJump( void )
 			}
 			else if ( pm->cmd.forwardmove < 0 && !(pm->cmd.buttons&BUTTON_ATTACK) )
 			{//backflip
+				saberInfo_t *saber1 = BG_MySaber( pm->ps->clientNum, 0 );
+				saberInfo_t *saber2 = BG_MySaber( pm->ps->clientNum, 1 );
 				//[FatigueSys]
 				//can't backflip if we don't have enough FP
-				if ( allowFlips && BG_EnoughForcePowerForMove(FATIGUE_BACKFLIP) )
+				if ( allowFlips && BG_EnoughForcePowerForMove(FATIGUE_BACKFLIP_ATARU)
+					&& saber1 && !saber2 && pm->ps->fd.saberAnimLevel == SS_DUAL)//for a part of single dual/ataru's. 1 point cartwheels)
+				//if ( allowFlips )
+				//[/FatigueSys]
+				{
+					vertPush = JUMP_VELOCITY;
+					anim = BOTH_FLIP_BACK1;//BG_PickAnim( BOTH_FLIP_BACK1, BOTH_FLIP_BACK3 );
+					//[FatigueSys]
+					BG_AddFatigue(pm->ps, FATIGUE_BACKFLIP_ATARU);
+					//[/FatigueSys]
+				}
+				else if ( allowFlips && BG_EnoughForcePowerForMove(FATIGUE_BACKFLIP) )
 				//if ( allowFlips )
 				//[/FatigueSys]
 				{
@@ -4757,7 +4770,7 @@ static void PM_CrashLand( void ) {
 	// decide which landing animation to use
 	else if (!BG_InRoll(pm->ps, pm->ps->legsAnim) && pm->ps->inAirAnim && !pm->ps->m_iVehicleNum)
 	{ //only play a land animation if we transitioned into an in-air animation while off the ground
-		if (!BG_SaberInSpecial(pm->ps->saberMove))
+		if (!BG_SaberInSpecial(pm->ps->saberMove) && !PM_InKnockDown(pm->ps))
 		{
 			if ( pm->ps->pm_flags & PMF_BACKWARDS_JUMP ) {
 				PM_ForceLegsAnim( BOTH_LANDBACK1 );
@@ -4913,6 +4926,11 @@ static void PM_CrashLand( void ) {
 					}
 				}
 			}
+
+			//[DoubleFallDamage]
+			delta_send /= 2;//half it
+			delta_send *= 3;
+			//[/DoubleFallDamage]
 
 			if (didRoll)
 			{ //Add the appropriate event..
@@ -5368,7 +5386,7 @@ static void PM_GroundTrace( void ) {
 
 //[JetpackSys]
 #ifdef QAGAME
-	if(pm->ps->pm_type == PM_JETPACK && g_entities[pm->ps->clientNum].client)
+	if(pm->ps->pm_type == PM_JETPACK && g_entities[pm->ps->clientNum].client || (pm->cmd.buttons & BUTTON_USE) )
 	{//turn off jetpack if we touch the ground.
 		Jetpack_Off(&g_entities[pm->ps->clientNum]);
 	}
@@ -7425,7 +7443,15 @@ void PM_FinishWeaponChange( void ) {
 	}
 	pm->ps->weapon = weapon;
 	pm->ps->weaponstate = WEAPON_RAISING;
-	pm->ps->weaponTime += 250;
+	if(pm->ps->weapon == WP_MELEE)
+	{
+		pm->ps->weaponTime += 500;
+	}
+	else
+	{
+		pm->ps->weaponTime += 250;
+	}
+
 }
 
 #ifdef QAGAME
@@ -7579,7 +7605,6 @@ void PM_RocketLock( float lockDist, qboolean vehicleLock )
 		pm->ps->rocketLockTime = -1;
 	}
 }
-
 //---------------------------------------
 static qboolean PM_DoChargedWeapons( qboolean vehicleRocketLock, bgEntity_t *veh )
 //---------------------------------------
@@ -7623,9 +7648,9 @@ static qboolean PM_DoChargedWeapons( qboolean vehicleRocketLock, bgEntity_t *veh
 
 			// alt-fire charges the weapon
 			//if ( pm->gametype == GT_SIEGE )
-			if (1)
+			if (1 )
 			{
-				if ( pm->cmd.buttons & BUTTON_ALT_ATTACK )
+				if ( pm->cmd.buttons & BUTTON_ALT_ATTACK  && pm->ps->userInt2 & SL_PISTOL_3)
 				{
 					charging = qtrue;
 					altFire = qtrue;
@@ -7851,7 +7876,7 @@ rest:
 }
 
 
-#define BOWCASTER_CHARGE_UNIT	200.0f	// bowcaster charging gives us one more unit every 200ms--if you change this, you'll have to do the same in g_weapon
+#define BOWCASTER_CHARGE_UNIT	500.0f	// bowcaster charging gives us one more unit every 200ms--if you change this, you'll have to do the same in g_weapon
 //[BryarSecondary]
 //NUAM
 //#define BRYAR_CHARGE_UNIT		200.0f	// bryar charging gives us one more unit every 200ms--if you change this, you'll have to do the same in g_weapon
@@ -9215,6 +9240,8 @@ static void PM_Weapon( void )
 				(pm->cmd.buttons & BUTTON_ALT_ATTACK))
 			//[/MELEE]
 			{ //ok, grapple time
+				if(pm->ps->weaponTime <= 0 && !PM_InKnockDown(pm->ps) && !BG_KickingAnim(pm->ps->legsAnim))
+				{
 #if 0 //eh, I want to try turning the saber off, but can't do that reliably for prediction..
 				qboolean icandoit = qtrue;
 				if (pm->ps->weaponTime > 0)
@@ -9261,6 +9288,7 @@ static void PM_Weapon( void )
 			}
 			//[MELEE]
 			//You can do kick without debugMelee turned on
+			}
 			else if (pm->cmd.buttons & BUTTON_ALT_ATTACK)
 			//else if (pm->debugMelee &&
 			//	(pm->cmd.buttons & BUTTON_ALT_ATTACK))
@@ -10284,7 +10312,7 @@ void BG_AdjustClientSpeed(playerState_t *ps, usercmd_t *cmd, int svTime)
 	//[MoveSys]
 	if ( cmd->forwardmove < 0 && (cmd->buttons&BUTTON_WALKING) && pm->ps->groundEntityNum != ENTITYNUM_NONE )
 	{//walking backwards also makes a player move a little slower
-		ps->speed *= 0.75;
+		ps->speed *= 0.75+0.2;//bugfix for the superslow backwalk
 	}
 
 	if ( !cmd->forwardmove 
@@ -10299,12 +10327,12 @@ void BG_AdjustClientSpeed(playerState_t *ps, usercmd_t *cmd, int svTime)
 
 	if (ps->fd.forcePowersActive & (1 << FP_GRIP))
 	{
-		ps->speed *= 0.4;
+		ps->speed *= 0.5;
 	}
 
 	if (ps->fd.forcePowersActive & (1 << FP_SPEED))
 	{
-		ps->speed *= 1.7;
+		ps->speed *= 1.6;//was 1.7
 	}
 	else if (ps->fd.forcePowersActive & (1 << FP_RAGE))
 	{
@@ -12662,7 +12690,12 @@ void PmoveSingle (pmove_t *pmove) {
 	//[SaberSys]
 	PM_MoveLock();
 	//[/SaberSys]
-
+	if (pm->ps->userInt3 & (1 << FLAG_BLOCKING))
+	{
+		stiffenedUp = qtrue;
+	//PM_SetAnim( SETANIM_BOTH, BOTH_STAND1IDLE1, SETANIM_FLAG_OVERRIDE|SETANIM_FLAG_HOLD, 0 );
+		pm->ps->legsAnim = BOTH_STAND1IDLE1;
+	}
 	if (pm->ps->pm_type == PM_FLOAT)
 	{ //You get no control over where you go in grip movement
 		stiffenedUp = qtrue;
@@ -12731,7 +12764,7 @@ void PmoveSingle (pmove_t *pmove) {
 		if ( pm->ps->legsTimer <= 0 )
 		{//done?  be immeditately ready to do an attack
 			pm->ps->saberMove = LS_READY;
-			pm->ps->weaponTime = 0;
+			//pm->ps->weaponTime = 0;
 		}
 		//[/MELEE]
 	}
@@ -12927,12 +12960,21 @@ void PmoveSingle (pmove_t *pmove) {
 		pm->cmd.upmove = 0;
 	}
 
-	if (pm->ps->fd.forceGripCripple)
+	if (pm->ps->fd.forceGripCripple
+		&& pm->ps->saberAttackChainCount >= MISHAPLEVEL_HEAVY
+		&& (pm->ps->weapon != WP_SABER 
+		&& pm->ps->weapon != WP_MELEE))
 	{ //don't let attack or alt attack if being gripped I guess
 		pm->cmd.buttons &= ~BUTTON_ATTACK;
 		pm->cmd.buttons &= ~BUTTON_ALT_ATTACK;
 	}
-
+	if (pm->ps->fd.forceGripCripple
+		&& (pm->ps->weapon == WP_SABER
+		|| pm->ps->weapon == WP_MELEE))
+	{
+		pm->cmd.buttons &= ~BUTTON_ATTACK;
+		pm->cmd.buttons &= ~BUTTON_ALT_ATTACK;
+	}
 	if ( BG_InRoll( pm->ps, pm->ps->legsAnim ) )
 	{ //can't roll unless you're able to move normally
 		BG_CmdForRoll( pm->ps, pm->ps->legsAnim, &pm->cmd );

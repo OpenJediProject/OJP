@@ -915,6 +915,10 @@ struct gclient_s {
 	int			DodgeDebounce;
 	//[/DodgeSys]
 
+	//[ManualDodge]
+	int			ManualDodgeDebounce;
+	//[/ManualDodge]
+
 	//[SaberSys]
 	//debounce timer on the regeneration of the mishap/balance bar. 
 	int			MishapDebounce;
@@ -955,6 +959,7 @@ struct gclient_s {
 	//[SeekerItemNpc]
 	gentity_t *remote;
 	//[/SeekerItemNpc]
+	int         blockTime;
 
 };
 
@@ -1519,7 +1524,8 @@ qboolean CheckGauntletAttack( gentity_t *ent );
 //[DodgeSys]
 #define DISRUPTOR_MAX_CHARGE (g_gametype.integer == GT_SIEGE ? 200 : 60) //max charge on disruptor's alt fire.
 
-#define DODGE_BOLTBLOCK			5	//standard DP cost to block a missile bolt
+#define DODGE_BOLTBLOCK			2.5	//standard DP cost to block a missile bolt
+#define DODGE_BOWCASTERBLOCK	3
 
 //[BryarSecondary]
 #define BRYAR_PISTOL_ALT_DPDAMAGE			DODGE_BOLTBLOCK			//minimum DP damage of bryar secondary
@@ -1710,6 +1716,9 @@ void ForceGrip( gentity_t *self );
 void ForceProtect( gentity_t *self );
 void ForceAbsorb( gentity_t *self );
 void ForceTeamHeal( gentity_t *self );
+//[ManualDodge]
+void ManualButtonDodge(gentity_t *ent);
+//[/ManualDodge]
 void ForceTeamForceReplenish( gentity_t *self );
 void ForceSeeing( gentity_t *self );
 void ForceThrow( gentity_t *self, qboolean pull );

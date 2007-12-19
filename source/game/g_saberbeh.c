@@ -166,13 +166,10 @@ void SabBeh_AddBalance(gentity_t *self, sabmech_t *mechSelf, int amount, qboolea
 		switch (randNum)
 		{
 		case 0:
-			mechSelf->doStun = qtrue;
+			mechSelf->doButterFingers = qtrue;
 			break;
 		case 1:
 			mechSelf->doKnockdown = qtrue;
-			break;
-		case 2:
-			mechSelf->doButterFingers = qtrue;
 			break;
 		};
 		self->client->ps.saberAttackChainCount = MISHAPLEVEL_HEAVY;
@@ -301,7 +298,14 @@ void SabBeh_AttackVsBlock( gentity_t *attacker, sabmech_t *mechAttacker,
 #ifdef _DEBUG
 			mechAttacker->behaveMode = SABBEHAVE_ATTACK;
 #endif
+			if (blocker->client->pers.cmd.buttons & BUTTON_15)
+			{
+				attacker->client->ps.userInt3 |= (1 << FLAG_QUICKPARRY);
+			}
+			else
+			{
 			attacker->client->ps.userInt3 |= ( 1 << FLAG_PARRIED );
+			}
 
 			SabBeh_AddBalance(blocker, mechBlocker, MPCOST_PARRYING_ATTACKFAKE, qfalse);
 #ifdef _DEBUG
@@ -367,7 +371,16 @@ void SabBeh_AttackVsBlock( gentity_t *attacker, sabmech_t *mechAttacker,
 #ifdef _DEBUG
 			mechAttacker->behaveMode = SABBEHAVE_ATTACKPARRIED;
 #endif
+			//[QuickParry]
+			if (blocker->client->pers.cmd.buttons & BUTTON_15)
+			{
+				attacker->client->ps.userInt3 |= ( 1 << FLAG_QUICKPARRY);
+			}
+			else
+			{
 			attacker->client->ps.userInt3 |= ( 1 << FLAG_PARRIED );
+			}
+			//[/QuickParry]
 
 			SabBeh_AddBalance(blocker, mechBlocker, MPCOST_PARRYING, qfalse);
 			
