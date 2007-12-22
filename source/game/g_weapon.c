@@ -1219,7 +1219,7 @@ static void WP_BowcasterMainFire( gentity_t *ent )
 	float		vel;
 	vec3_t		angs, dir;
 	gentity_t	*missile;
-	int i;
+	int i=0;
 
 	dp = (level.time - ent->client->ps.weaponChargeTime) / BOWCASTER_CHARGE_UNIT;
 		

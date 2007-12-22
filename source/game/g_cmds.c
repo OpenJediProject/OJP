@@ -4129,11 +4129,11 @@ extern void G_Knockdown( gentity_t *self, gentity_t *attacker, const vec3_t push
 //[/KnockdownSys]
 void ClientCommand( int clientNum ) {
 	gentity_t *ent;
-	gentity_t *targetplayer;
+//	gentity_t *targetplayer;
 	char	cmd[MAX_TOKEN_CHARS];
 	char	cmd2[MAX_TOKEN_CHARS];
-	char	cmd3[MAX_TOKEN_CHARS];
-	float		bounty;
+	//char	cmd3[MAX_TOKEN_CHARS];
+//	float		bounty;
 	int clientid = 0;
 
 	ent = g_entities + clientNum;
@@ -4153,7 +4153,7 @@ void ClientCommand( int clientNum ) {
 	if(!Q_stricmp(cmd,"modelscale"))
 	{
 		int size;
-		int temp,temp2;
+//		int temp,temp2;
 		if(trap_Argc()!=2)
 		{
 			trap_SendServerCommand( ent-g_entities, va("print \"Current modelscale is %i.\n\"", (ent->client->ps.iModelScale ? ent->client->ps.iModelScale : 100)) );

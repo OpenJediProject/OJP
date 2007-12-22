@@ -1028,6 +1028,10 @@ void ClientEvents( gentity_t *ent, int oldEventSequence ) {
 			}
 			break;
 		case EV_FIRE_WEAPON:
+			//[Reload]
+			if(ent->reloadTime > 0)
+				return;
+			//[/Reload]
 			FireWeapon( ent, qfalse );
 			ent->client->dangerTime = level.time;
 			ent->client->ps.eFlags &= ~EF_INVULNERABLE;
@@ -2147,6 +2151,75 @@ extern qboolean skippingCutscene;
 extern qboolean inGameCinematic;
 //[ROQFILES]
 
+//[Reload]
+void SetupReload(gentity_t *ent)
+{
+	if(ent->reloadCooldown > level.time)
+		return;
+
+	if(ent->client->ps.weapon == WP_MELEE || ent->client->ps.weapon == WP_SABER || ent->client->ps.weapon == WP_THERMAL ||
+		ent->client->ps.weapon == WP_DET_PACK)
+	{
+		ent->bulletsToReload =0;
+		ent->reloadTime = -1;
+		return;
+	}
+
+	if(ent->client->ps.weapon == WP_ROCKET_LAUNCHER)
+		ent->bulletsToReload = 3 - ent->client->ps.ammo[weaponData[ent->client->ps.weapon].ammoIndex];
+	else
+	ent->bulletsToReload = 30 - ent->client->ps.ammo[weaponData[ent->client->ps.weapon].ammoIndex];
+	
+	ent->reloadTime = level.time + 200;
+	
+}
+void Reload(gentity_t *ent)
+{
+	if(ent->bullets[ent->client->ps.weapon] < 1)
+	{
+		ent->bulletsToReload =0;
+		ent->reloadTime = -1;
+		ent->client->ps.ammo[weaponData[ent->client->ps.weapon].ammoIndex] = -10;
+		return;
+	}
+	if(ent->bulletsToReload < 1)
+	{
+		ent->bulletsToReload =0;
+		ent->reloadTime = -1;
+		return;
+	}
+	if(ent->client->ps.ammo[weaponData[ent->client->ps.weapon].ammoIndex] >= 30)
+	{
+		ent->bulletsToReload =0;
+		ent->reloadTime = -1;
+		return;
+	}
+
+	ent->bullets[ent->client->ps.weapon]--;
+	ent->client->ps.ammo[weaponData[ent->client->ps.weapon].ammoIndex]++;
+	ent->reloadTime = level.time + 200;
+	ent->bulletsToReload--;
+	G_SoundOnEnt(ent,CHAN_WEAPON,"sound/weapons/disruptor/zoomstart.wav");
+
+	//keep him in the "use" anim
+	if (ent->client->ps.torsoAnim != BOTH_CONSOLE1)
+	{
+		G_SetAnim( ent, NULL, SETANIM_TORSO, BOTH_CONSOLE1, SETANIM_FLAG_OVERRIDE|SETANIM_FLAG_HOLD, 0 );
+	}
+	else
+	{
+		ent->client->ps.torsoTimer = 500;
+	}
+		ent->client->ps.weaponTime = ent->client->ps.torsoTimer;
+	
+}
+void CancelReload(gentity_t *ent)
+{
+	ent->reloadTime = -1;
+	ent->reloadCooldown = level.time + 3000;
+}
+//[/Reload]
+
 /*
 ==============
 ClientThink
@@ -2222,6 +2295,13 @@ void ClientThink_real( gentity_t *ent ) {
 		ent->forceFieldThink = 0;
 	}
 	//[/Forcefield]
+
+	//[Reload]
+	if(ent->reloadTime <= level.time && ent->reloadTime > 0)
+	{
+		Reload(ent);
+	}
+	//[/Reload]
 
 	// This code was moved here from clientThink to fix a problem with g_synchronousClients 
 	// being set to 1 when in vehicles. 
@@ -3845,13 +3925,14 @@ void ClientThink_real( gentity_t *ent ) {
 		case GENCMD_FORCE_PROTECT:
 			ForceProtect(ent);
 			break;
-		//[ForceSys]
-		/*
+		//[ForceSys][Reload]
 		case GENCMD_FORCE_ABSORB:
-			ForceAbsorb(ent);
+			if(ent->reloadTime > 0)
+				CancelReload(ent);
+			else
+				SetupReload(ent);
 			break;
-		*/
-		//[/ForceSys]
+		//[/ForceSys][/Reload]
 		case GENCMD_FORCE_HEALOTHER:
 			ForceTeamHeal(ent);
 			break;

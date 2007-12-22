@@ -3375,6 +3375,13 @@ void ClientSpawn(gentity_t *ent) {
 	}
 	//[/ExpSys]]
 
+	//[Reload]
+	for(i=0;i<WP_NUM_WEAPONS;i++)
+		ent->bullets[i] = 300;
+	ent->reloadTime =-1;
+	ent->bulletsToReload = 0;
+	//[/Reload]
+
 	//first we want the userinfo so we can see if we should update this client's saber -rww
 	trap_GetUserinfo( index, userinfo, sizeof(userinfo) );
 	while (l < MAX_SABERS)
@@ -4382,13 +4389,14 @@ void ClientSpawn(gentity_t *ent) {
 // nmckenzie: DESERT_SIEGE... or well, siege generally.  This was over-writing the max value, which was NOT good for siege.
 	if ( inSiegeWithClass == qfalse )
 	{//racc - not playing siege, assign ammo levels.
-		//[ExpSys]
-		client->ps.ammo[AMMO_POWERCELL] = ammoData[AMMO_POWERCELL].max * (float) (client->skillLevel[SK_BOWCASTER] < client->skillLevel[SK_DISRUPTOR] ? client->skillLevel[SK_DISRUPTOR] : client->skillLevel[SK_BOWCASTER])/FORCE_LEVEL_3;
-
-		client->ps.ammo[AMMO_METAL_BOLTS] = ammoData[AMMO_METAL_BOLTS].max * (float) client->skillLevel[SK_REPEATER]/FORCE_LEVEL_3;
-
-		client->ps.ammo[AMMO_BLASTER] = ammoData[AMMO_BLASTER].max * (float) client->skillLevel[SK_BLASTER]/FORCE_LEVEL_3;
-
+		//[ExpSys][Reload]
+		//client->ps.ammo[AMMO_POWERCELL] = ammoData[AMMO_POWERCELL].max * (float) (client->skillLevel[SK_BOWCASTER] < client->skillLevel[SK_DISRUPTOR] ? client->skillLevel[SK_DISRUPTOR] : client->skillLevel[SK_BOWCASTER])/FORCE_LEVEL_3;
+		client->ps.ammo[AMMO_POWERCELL] = 30;
+		//client->ps.ammo[AMMO_METAL_BOLTS] = ammoData[AMMO_METAL_BOLTS].max * (float) client->skillLevel[SK_REPEATER]/FORCE_LEVEL_3;
+		client->ps.ammo[AMMO_METAL_BOLTS] = 30;
+		//client->ps.ammo[AMMO_BLASTER] = ammoData[AMMO_BLASTER].max * (float) client->skillLevel[SK_BLASTER]/FORCE_LEVEL_3;
+		client->ps.ammo[AMMO_BLASTER] = 30;
+		//[/Reload]
 		client->ps.ammo[AMMO_THERMAL] = ammoData[AMMO_THERMAL].max * (float) client->skillLevel[SK_THERMAL]/FORCE_LEVEL_3;
 
 		client->ps.ammo[AMMO_ROCKETS] = ammoData[AMMO_ROCKETS].max * (float) client->skillLevel[SK_ROCKET]/FORCE_LEVEL_3;

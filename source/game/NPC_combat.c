@@ -755,6 +755,11 @@ void ChangeWeapon( gentity_t *ent, int newWeapon )
 		return;
 	}
 
+	//[Reload]
+	if(ent->reloadTime > 0)
+		return;
+	//[/Reload]
+
 	ent->client->ps.weapon = newWeapon;
 	ent->client->pers.cmd.weapon = newWeapon;
 	ent->NPC->shotTime = 0;

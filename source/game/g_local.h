@@ -477,6 +477,14 @@ struct gentity_s {
 	//[ROFF]
 	int			roff_ctr;		// current roff frame we are playing
 	//[/ROFF]
+
+	//[Reload]
+	qboolean	justReloaded;	//Used to stop user from holding down reload
+	int			bullets[WP_NUM_WEAPONS];//Number of bullets each gun has left
+	int			reloadTime;		//Every 0.2 seconds reload a bullet
+	int			bulletsToReload;//Bullets to reload
+	int			reloadCooldown;
+	//[/Reload]
 };
 
 #define DAMAGEREDIRECT_HEAD		1

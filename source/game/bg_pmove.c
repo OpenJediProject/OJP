@@ -8780,6 +8780,18 @@ static void PM_Weapon( void )
 		return;
 	}
 
+	//[Reload]
+#ifdef QAGAME
+	if(1)
+	{
+	gentity_t *ent = (gentity_t*)pm_entSelf;
+
+	if(ent->reloadTime > 0)
+		return;
+	}
+#endif
+	//[/Reload]
+
 	// check for item using
 	if ( pm->cmd.buttons & BUTTON_USE_HOLDABLE ) 
 	{
