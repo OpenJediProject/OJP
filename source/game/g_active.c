@@ -2152,6 +2152,86 @@ extern qboolean inGameCinematic;
 //[ROQFILES]
 
 //[Reload]
+int ClipSize(int ammo)
+{
+	switch(ammo)
+	{
+	case AMMO_BLASTER:
+		return 21;
+	case AMMO_ROCKETS:
+		return 1;
+	case AMMO_POWERCELL:
+		return 25;
+	case AMMO_METAL_BOLTS:
+		return 100;
+
+	//case WP_BRYAR_PISTOL:
+	//	return 12;
+	}
+	return -1;
+}
+
+int SkillLevelForWeap(gentity_t *ent,int weap)
+{
+	switch(weap)
+	{
+	case WP_BRYAR_PISTOL:
+		return ent->client->skillLevel[SK_PISTOL];
+	case WP_BLASTER:
+		return ent->client->skillLevel[SK_BLASTER];
+	case WP_THERMAL:
+		return ent->client->skillLevel[SK_THERMAL];
+	case WP_ROCKET_LAUNCHER:
+		return ent->client->skillLevel[SK_ROCKET];
+	case WP_BOWCASTER:
+		return ent->client->skillLevel[SK_BOWCASTER];
+	case WP_DET_PACK:
+		return ent->client->skillLevel[SK_DETPACK];
+	case WP_REPEATER:
+		return ent->client->skillLevel[SK_REPEATER];
+	case WP_DISRUPTOR:
+		return ent->client->skillLevel[SK_DISRUPTOR];
+	default:
+		return -1;
+	}
+	return -1;
+}
+
+int ReloadTime(gentity_t *ent)
+{
+	if(ent->client->ps.weapon == WP_ROCKET_LAUNCHER)
+	{
+		if(SkillLevelForWeap(ent,ent->client->ps.weapon) == 3)
+		{
+			return 4000;
+		}
+		else if (SkillLevelForWeap(ent,ent->client->ps.weapon) == 2)
+		{
+			return 6000;
+		}
+		else if (SkillLevelForWeap(ent,ent->client->ps.weapon) == 1)
+		{
+			return 8000;
+		}
+	}
+	else
+	{
+		if(SkillLevelForWeap(ent,ent->client->ps.weapon) == 3)
+		{
+			return 200;
+		}
+		else if (SkillLevelForWeap(ent,ent->client->ps.weapon) == 2)
+		{
+			return 300;
+		}
+		else if (SkillLevelForWeap(ent,ent->client->ps.weapon) == 1)
+		{
+			return 400;
+		}
+	}
+	return -1;
+}
+
 void SetupReload(gentity_t *ent)
 {
 	if(ent->reloadCooldown > level.time)
@@ -2166,13 +2246,17 @@ void SetupReload(gentity_t *ent)
 	}
 
 	if(ent->client->ps.weapon == WP_ROCKET_LAUNCHER)
-		ent->bulletsToReload = 3 - ent->client->ps.ammo[weaponData[ent->client->ps.weapon].ammoIndex];
-	else
-	ent->bulletsToReload = 30 - ent->client->ps.ammo[weaponData[ent->client->ps.weapon].ammoIndex];
-	
-	ent->reloadTime = level.time + 200;
+	{
+		G_SetAnim( ent, NULL, SETANIM_TORSO, BOTH_CONSOLE1, SETANIM_FLAG_OVERRIDE|SETANIM_FLAG_HOLD, 0 );
+		ent->client->ps.torsoTimer = 3000;
+		ent->client->ps.weaponTime = ent->client->ps.torsoTimer;
+	}
+
+	ent->bulletsToReload = ClipSize(weaponData[ent->client->ps.weapon].ammoIndex) - ent->client->ps.ammo[weaponData[ent->client->ps.weapon].ammoIndex];
+	ent->reloadTime = level.time + ReloadTime(ent);
 	
 }
+
 void Reload(gentity_t *ent)
 {
 	if(ent->bullets[ent->client->ps.weapon] < 1)
@@ -2188,7 +2272,7 @@ void Reload(gentity_t *ent)
 		ent->reloadTime = -1;
 		return;
 	}
-	if(ent->client->ps.ammo[weaponData[ent->client->ps.weapon].ammoIndex] >= 30)
+	if(ent->client->ps.ammo[weaponData[ent->client->ps.weapon].ammoIndex] >= ClipSize(weaponData[ent->client->ps.weapon].ammoIndex))
 	{
 		ent->bulletsToReload =0;
 		ent->reloadTime = -1;
@@ -2197,7 +2281,8 @@ void Reload(gentity_t *ent)
 
 	ent->bullets[ent->client->ps.weapon]--;
 	ent->client->ps.ammo[weaponData[ent->client->ps.weapon].ammoIndex]++;
-	ent->reloadTime = level.time + 200;
+	ent->reloadTime = level.time + ReloadTime(ent);
+
 	ent->bulletsToReload--;
 	G_SoundOnEnt(ent,CHAN_WEAPON,"sound/weapons/disruptor/zoomstart.wav");
 
@@ -2208,11 +2293,15 @@ void Reload(gentity_t *ent)
 	}
 	else
 	{
-		ent->client->ps.torsoTimer = 500;
+		if(ent->bulletsToReload > 0)
+			ent->client->ps.torsoTimer = ReloadTime(ent);
+		else
+			ent->client->ps.torsoTimer = 500;
 	}
 		ent->client->ps.weaponTime = ent->client->ps.torsoTimer;
 	
 }
+
 void CancelReload(gentity_t *ent)
 {
 	ent->reloadTime = -1;

@@ -3303,6 +3303,7 @@ int TotalAllociatedSkillPoints(gentity_t *ent)
 }
 //[/ExpSys]
 
+extern int ClipSize(int ammo);//[Reload]
 
 /*
 ===========
@@ -4391,15 +4392,15 @@ void ClientSpawn(gentity_t *ent) {
 	{//racc - not playing siege, assign ammo levels.
 		//[ExpSys][Reload]
 		//client->ps.ammo[AMMO_POWERCELL] = ammoData[AMMO_POWERCELL].max * (float) (client->skillLevel[SK_BOWCASTER] < client->skillLevel[SK_DISRUPTOR] ? client->skillLevel[SK_DISRUPTOR] : client->skillLevel[SK_BOWCASTER])/FORCE_LEVEL_3;
-		client->ps.ammo[AMMO_POWERCELL] = 30;
+		client->ps.ammo[AMMO_POWERCELL] = ClipSize(AMMO_POWERCELL);
 		//client->ps.ammo[AMMO_METAL_BOLTS] = ammoData[AMMO_METAL_BOLTS].max * (float) client->skillLevel[SK_REPEATER]/FORCE_LEVEL_3;
-		client->ps.ammo[AMMO_METAL_BOLTS] = 30;
+		client->ps.ammo[AMMO_METAL_BOLTS] = ClipSize(AMMO_METAL_BOLTS);
 		//client->ps.ammo[AMMO_BLASTER] = ammoData[AMMO_BLASTER].max * (float) client->skillLevel[SK_BLASTER]/FORCE_LEVEL_3;
-		client->ps.ammo[AMMO_BLASTER] = 30;
+		client->ps.ammo[AMMO_BLASTER] = ClipSize(AMMO_BLASTER);
+
+		client->ps.ammo[AMMO_ROCKETS] = ClipSize(AMMO_ROCKETS);
 		//[/Reload]
 		client->ps.ammo[AMMO_THERMAL] = ammoData[AMMO_THERMAL].max * (float) client->skillLevel[SK_THERMAL]/FORCE_LEVEL_3;
-
-		client->ps.ammo[AMMO_ROCKETS] = ammoData[AMMO_ROCKETS].max * (float) client->skillLevel[SK_ROCKET]/FORCE_LEVEL_3;
 
 		client->ps.ammo[AMMO_DETPACK] = ammoData[AMMO_DETPACK].max * (float) client->skillLevel[SK_DETPACK]/FORCE_LEVEL_2;
 		//client->ps.ammo[AMMO_BLASTER] = 100; //ammoData[AMMO_BLASTER].max; //100 seems fair.
