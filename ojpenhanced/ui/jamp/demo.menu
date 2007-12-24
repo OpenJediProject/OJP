@@ -1,0 +1,582 @@
+//----------------------------------------------------------------------------------------------
+//	MAIN MENU
+//----------------------------------------------------------------------------------------------
+{
+	menuDef 
+	{
+		name					"demo"
+		fullScreen				MENU_TRUE				
+		rect					0 0 640 480							// Size and position of the menu
+		visible					MENU_TRUE							// Visible on open
+		focusColor				0 0.4 0.8 1							// Focus color for text and items	
+
+		onOpen 
+		{
+			uiScript LoadDemos ;
+		}
+									
+		onESC 
+		{ 
+			play				"sound/interface/menuroam.wav" ; 
+			close				demo ;
+			open				multiplayermenu ;
+		}
+	
+
+
+//----------------------------------------------------------------------------------------------
+//	OJP MENU BACKGROUND
+//----------------------------------------------------------------------------------------------
+
+
+
+		itemDef
+		{
+			name				mainbackground
+			style				WINDOW_STYLE_FILLED
+			rect				0 0 640 480
+			backcolor			0 0 0 1
+			visible				1
+			decoration
+		}
+
+
+		itemDef 
+		{
+			name				bluewire
+			group				none
+			style				WINDOW_STYLE_SHADER
+			rect				115 -40 150 150
+			background			"ojp/menu/bluewire"
+			forecolor			1 1 1 1
+			visible				1
+			decoration
+		}
+
+
+
+		itemDef 
+		{
+			name				redwire
+			group				none
+			style				WINDOW_STYLE_SHADER
+			rect				375 -40 150 150
+			background			"ojp/menu/redwire"
+			forecolor			1 1 1 1
+			visible				1
+			decoration
+		}
+
+		itemDef 
+		{
+			name				anakin
+			group				none
+			background			"ojp/menu/anakin"
+			style				WINDOW_STYLE_SHADER
+			rect				526 98 114 303
+			forecolor			1 1 1 1
+			visible				1
+			decoration
+		}
+
+
+		itemDef 
+		{
+			name				line1
+			group				none
+			style				WINDOW_STYLE_SHADER
+			rect				103 104 26 300
+			background			"ojp/menu/boltblue"
+			forecolor			1 1 1 1
+			visible				1
+			decoration
+		}
+
+		itemDef 
+		{
+			name				line2
+			group				none
+			style				WINDOW_STYLE_SHADER
+			rect				511 104 26 300
+			background			"ojp/menu/boltred"
+			forecolor			1 1 1 1
+			visible				1
+			decoration
+		}
+
+
+		itemDef 
+		{
+			name				red_emitter
+			group				none
+			style				WINDOW_STYLE_SHADER
+			rect				508 85 32 32
+			background			"ojp/menu/red_emitter"
+			forecolor			1 1 1 1
+			visible				1
+			decoration
+		}
+
+		itemDef 
+		{
+			name				blue_emitter
+			group				none
+			style				WINDOW_STYLE_SHADER
+			rect				100 85 32 32
+			background			"ojp/menu/blue_emitter"
+			forecolor			1 1 1 1
+			visible				1
+			decoration
+		}
+
+
+		itemDef 
+		{
+			name				emitter1
+			group				none
+			style				WINDOW_STYLE_SHADER
+			rect				508 380 32 -32
+			background			"ojp/menu/blue_emitter"
+			forecolor			1 1 1 1
+			visible				1
+			decoration
+		}
+
+		itemDef 
+		{
+			name				emitter2
+			group				none
+			style				WINDOW_STYLE_SHADER
+			rect				100 380 32 -32
+			background			"ojp/menu/blue_emitter"
+			forecolor			1 1 1 1
+			visible				1
+			decoration
+		}
+
+		itemdef
+		{
+			name				lowbar
+			group				none
+			style				WINDOW_STYLE_SHADER
+			rect				0 391 640 18
+			background			"ojp/menu/lowbar"
+			forecolor			1 1 1 1
+			visible				1
+			decoration
+		}
+
+		itemdef
+		{
+			name				topbar
+			group				none
+			style				WINDOW_STYLE_SHADER
+			rect				0 85 640 18
+			background			"ojp/menu/topbar"
+			forecolor			1 1 1 1
+			visible				1
+			decoration
+		}
+
+
+
+		itemDef 
+		{
+			name				bluebeam
+			group				none
+			style				WINDOW_STYLE_SHADER
+			rect				0 0 320 80
+			background			"ojp/menu/bluebeam"
+			forecolor			1 1 1 1
+			visible				1
+			decoration
+		}
+
+		itemDef 
+		{
+			name				redbeam
+			group				none
+			style				WINDOW_STYLE_SHADER
+			rect				320 1 320 72
+			background			"ojp/menu/redbeam"
+			forecolor			1 1 1 1
+			visible				1
+			decoration
+		}
+
+		itemDef 
+		{
+			name				mpi_fboon
+			group				none
+			style				WINDOW_STYLE_SHADER
+			rect				0 -5 80 80
+			background			"gfx/hud/mpi_fboon"
+			forecolor			1 1 1 1
+			visible				1
+			decoration
+		}
+
+		itemDef 
+		{
+			name				redspin
+			group				none
+			style				WINDOW_STYLE_SHADER
+			rect				560 -5 80 80
+			background			"ojp/menu/redspin"
+			forecolor			1 1 1 1
+			visible				1
+			decoration
+		}
+
+		itemDef 
+		{
+			name				lightside
+			group				none
+			style				WINDOW_STYLE_SHADER
+			rect				0 -5 80 80
+			background			"ojp/menu/lightside"
+			forecolor			1 1 1 1
+			visible				1
+			decoration
+		}
+
+		itemDef 
+		{
+			name				darkside
+			group				none
+			style				WINDOW_STYLE_SHADER
+			rect				560 -5 80 80
+			background			"ojp/menu/darkside"
+			forecolor			1 1 1 1
+			visible				1
+			decoration
+		}
+
+
+		itemDef 
+		{
+			name				ojplogo
+			group				none
+			style				WINDOW_STYLE_SHADER
+			rect				220 0 200 90
+			background			"ojp/menu/ojplogo"
+			forecolor			1 1 1 1
+			visible				1
+			decoration
+		}
+
+
+
+
+//----------------------------------------------------------------------------------------------
+//	BOTTOM MENU BUTTONS
+//----------------------------------------------------------------------------------------------
+
+
+
+		
+		itemDef 
+		{
+			name				playbutton
+			group				main_button
+			style				WINDOW_STYLE_EMPTY
+			type				ITEM_TYPE_BUTTON
+			rect				-10 410 130 24
+			text				@MENUS_PLAY					
+			font				3
+			textscale			1.1
+			textaligny			0
+			textalign			ITEM_ALIGN_CENTER
+			textstyle			0
+			textalignx			65
+			forecolor			0 0.4 0.8 1
+			visible				1
+
+
+			action 
+			{ 			
+			play				"sound/weapons/saber/saberhup1.mp3" ; 
+			close				demo ;
+				
+			}
+		}
+
+		// Big button "CONTROLS"
+		
+		itemDef 
+		{
+			name				controlsbutton
+			group				main_button
+			text				@MENUS_CONTROLS2
+			type				ITEM_TYPE_BUTTON
+			style				WINDOW_STYLE_EMPTY
+			rect				240 410 160 24
+			font				3
+			textscale			1.1
+			textaligny			0
+			textalign			ITEM_ALIGN_CENTER
+			textstyle			0
+			textalignx			65
+			backcolor			0 0 0 0
+			forecolor			0.7 0.7 0.7 1
+			visible				1
+			 
+	  	  
+			action 
+			{
+				play			"sound/weapons/saber/saberhup1.mp3" ; 
+				close			demo ;
+				open			controlsMenu ;
+			}
+		}
+
+		// Big button "SETUP"
+
+
+		itemDef 
+		{
+			name				setupbutton
+			group				main_button
+			text				@MENUS_SETUP
+			type				ITEM_TYPE_BUTTON
+			style				WINDOW_STYLE_EMPTY
+			rect				505 410 130 24
+			font				3
+			textscale			1.1
+			textaligny			0
+			textalign			ITEM_ALIGN_CENTER
+			textstyle			0
+			textalignx			65
+			backcolor			0 0 0 0
+			forecolor			0.7 0.7 0.7 1
+			visible				1
+			 	  	  
+			action 
+			{
+				play			"sound/weapons/saber/saberhup1.mp3" ; 
+				close			demo ;
+				open			setup_menu ;
+			}
+		}
+
+//---------------------------------------------------------------------------------------------
+//PLAY BUTTONS
+//---------------------------------------------------------------------------------------------
+
+		itemDef 
+		{
+			name				createserver
+			group				playbuttons
+			text				@MENUS_CREATE
+			type				ITEM_TYPE_BUTTON
+			style				WINDOW_STYLE_EMPTY
+			rect				0 150 140 24
+			font				3
+			textscale			0.65
+			textaligny			10
+			textalign			ITEM_ALIGN_LEFT
+			textstyle			0
+			textalignx			5
+			backcolor			0 0 0 0
+			forecolor			0.7 0.7 1 1
+			visible				1
+			 	  	  
+			action 
+			{
+			play				"sound/weapons/saber/saberhup1.mp3" ; 
+			close				demo ;
+			open				createserver
+
+			}
+		}
+
+		itemDef 
+		{
+			name				joinserver
+			group				playbuttons
+			text				@MENUS_JOIN_SERVER_CAPS
+			type				ITEM_TYPE_BUTTON
+			style				WINDOW_STYLE_EMPTY
+			rect				0 210 140 24
+			font				3
+			textscale			0.65
+			textaligny			10
+			textalign			ITEM_ALIGN_LEFT
+			textstyle			0
+			textalignx			5
+			backcolor			0 0 0 0
+			forecolor			0.7 0.7 1 1
+			visible				1
+			 	  	  
+			action 
+			{
+			play				"sound/weapons/saber/saberhup1.mp3" ; 
+			close				demo ;
+			open				joinserver
+			}
+		}
+
+		itemDef 
+		{
+			name				demo
+			group				playbuttons
+			text				@MENUS_DEMOS
+			type				ITEM_TYPE_BUTTON
+			style				WINDOW_STYLE_EMPTY
+			rect				0 270 140 24
+			font				3
+			textscale			0.65
+			textaligny			10
+			textalign			ITEM_ALIGN_LEFT
+			textstyle			0
+			textalignx			5
+			backcolor			0 0 0 0
+			forecolor			0 0.4 0.8 1
+			visible				1
+			 	  	  
+			action 
+			{
+			play				"sound/weapons/saber/saberhup1.mp3" ; 
+			close				demo ;
+			open				multiplayerMenu
+			}
+		}
+
+
+
+///////////////////////////////////
+// TITLE BAR
+///////////////////////////////////
+
+
+		itemDef 
+		{
+			name				demolist
+			rect				134 110 370 210 
+			type				ITEM_TYPE_LISTBOX
+			style				WINDOW_STYLE_FILLED
+			elementwidth			120
+			elementheight			20
+			//background			"gfx/menus/menu_box1"
+			font				3
+			textscale			.8
+			elementtype			LISTBOX_TEXT
+			feeder				FEEDER_DEMOS
+			textalign			3
+			textaligny			22
+			border				1
+			bordercolor			.8 .8 .8 1
+			outlinecolor			.5 .5 .5 .5
+			forecolor			.615 .615 .956 1
+			backcolor			0 0 0 .6
+			visible				1
+			doubleclick
+			{
+				play			"sound/interface/button1.wav" ; 
+				close demo ; 
+				uiScript RunDemo 
+			}
+		}
+
+
+		itemDef 
+		{
+			name				begin
+			text				"PLAY"
+			descText			@MENUS_BEGIN_PLAYING_THE_DEMO
+			type				ITEM_TYPE_BUTTON
+			font				3
+			textscale			1
+			style				WINDOW_STYLE_EMPTY
+			rect				245 330 150 30
+			textalignx			75						// Center
+			textaligny			1
+			textalign			ITEM_ALIGN_CENTER
+			forecolor			0.7 0.7 0.7 1
+			visible				1 
+			action 
+			{
+				play			"sound/interface/button1.wav" ; 
+				close demo ; 
+				uiScript RunDemo 
+			} 	  
+
+		}
+
+//----------------------------------------------------------------------------------------------
+//	OTHER MAIN MENU BUTTONS
+//----------------------------------------------------------------------------------------------
+		// Credits hidden button
+		itemDef 
+		{
+			name				creditsbutton
+			group				othermain
+//			text				@CREDITS
+			descText			@MENUS_SHOW_GAME_CREDITS
+			type				ITEM_TYPE_BUTTON
+			style				WINDOW_STYLE_EMPTY
+			rect				200 144 256 256
+			font				2
+			textscale			1
+			textaligny			0
+			textalign			ITEM_ALIGN_CENTER
+			textalignx			46
+			backcolor			0 0 0 0
+			forecolor			0.65 0.65 1 1
+			visible				0
+
+			mouseEnter
+			{
+			}		
+			mouseExit
+			{
+			}		
+			action 
+			{ 
+				play			"sound/weapons/saber/saberhup1.mp3" ; 	
+				close			all ; 
+				open			creditsMenu 
+			}
+		}
+
+		itemDef 
+		{
+			name				exitgamebutton
+			group				othermain
+			text				@MENUS_EXIT
+			descText			@MENUS_LEAVE_JEDI_KNIGHT_II
+			type				ITEM_TYPE_BUTTON
+			style				WINDOW_STYLE_EMPTY
+			rect				550 449 111 21 
+			font				3
+			textscale			0.8
+			textalign			ITEM_ALIGN_CENTER
+			textstyle			0
+			textalignx			65
+			textaligny			5
+			forecolor			0.7 0.7 0.7 1
+			visible				1
+
+	  	  
+			action 
+			{ 
+				play			"sound/weapons/saber/saberoff.mp3"; 
+				close			demo ; 
+				open			quitMenu 
+			}
+		}
+	}
+}
+
+
+
+
+
+
+
+
+
+
+
+
+

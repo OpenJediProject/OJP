@@ -1,0 +1,29 @@
+repeatDelay				50
+
+Particle
+{
+	name				Flare Core
+
+	alpha
+	{
+		start			0.6 0.8
+	}
+
+	size
+	{
+		start			50 30
+	}
+
+	shaders
+	[
+		gfx/effects/sabers/saber_block
+	]
+}
+
+Flash
+{
+	rgb
+	{
+		start			1 0.8471 0.6902 1 0.9412 0.8824
+	}
+}
