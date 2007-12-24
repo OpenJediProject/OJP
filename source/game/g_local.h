@@ -2083,6 +2083,10 @@ extern vmCvar_t		ojp_MOTD;
 extern vmCvar_t		ojp_allowBodyDodge;
 //[/DodgeSys]
 
+//[FFARespawnTimer]
+extern vmCvar_t		ojp_ffaRespawnTimer;
+//[/FFARespawnTimer]
+
 #include "../namespace_begin.h"
 
 void	trap_Printf( const char *fmt );

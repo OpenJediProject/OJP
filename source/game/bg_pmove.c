@@ -7654,7 +7654,18 @@ static qboolean PM_DoChargedWeapons( qboolean vehicleRocketLock, bgEntity_t *veh
 			//if ( pm->gametype == GT_SIEGE )
 			if (1 )
 			{
-				if ( pm->cmd.buttons & BUTTON_ALT_ATTACK  && pm->ps->userInt2 & SL_PISTOL_3)
+				//[PistolLevel3]
+#ifdef QAGAME
+				gentity_t *ent = &g_entities[pm->ps->clientNum];
+#endif
+				if ( pm->cmd.buttons & BUTTON_ALT_ATTACK
+#ifdef QAGAME
+					&& ent->client->skillLevel[SK_PISTOL] == 3)
+#else
+)
+#endif
+					//[/PistolLevel3]
+					
 				{
 					charging = qtrue;
 					altFire = qtrue;
@@ -7751,6 +7762,17 @@ static qboolean PM_DoChargedWeapons( qboolean vehicleRocketLock, bgEntity_t *veh
 
 		} // end switch
 	}
+
+	//[PistolLevel3]
+#ifdef QAGAME
+	if(1)
+	{
+		gentity_t *ent = &g_entities[pm->ps->clientNum];
+		if(pm->ps->weapon == WP_BRYAR_PISTOL && altFire && ent->client->skillLevel[SK_PISTOL] != 3)
+			return qfalse;
+	}
+#endif
+	//[/PistolLevel3]
 
 	// set up the appropriate weapon state based on the button that's down.  
 	//	Note that we ALWAYS return if charging is set ( meaning the buttons are still down )
@@ -8788,6 +8810,11 @@ static void PM_Weapon( void )
 
 	if(ent->reloadTime > 0)
 		return;
+	//[PistolLevel3]
+	if(ent->client->skillLevel[SK_PISTOL] != 3 && (pm->cmd.buttons & BUTTON_ALT_ATTACK)
+		&& pm->ps->weapon == WP_BRYAR_PISTOL)
+		return;
+	//[/PistolLevel3]
 	}
 #endif
 	//[/Reload]
@@ -13676,7 +13703,7 @@ void PmoveSingle (pmove_t *pmove) {
 
 	if (!pm->ps->m_iVehicleNum //not a vehicle and not riding one
 		|| pm_entSelf->s.NPC_class==CLASS_VEHICLE //you are a vehicle NPC
-		|| (!(pm->ps->eFlags&EF_NODRAW)&&PM_WeaponOkOnVehicle(pm->cmd.weapon)) )//you're not inside the vehicle and the weapon you're holding can be used when riding this vehicle
+		|| (!(pm->ps->eFlags&EF_NODRAW)&&PM_WeaponOkOnVehicle(pm->cmd.weapon))) //you're not inside the vehicle and the weapon you're holding can be used when riding this vehicle
 	{ //only run weapons if a valid weapon is selected
 		// weapons
 		PM_Weapon();

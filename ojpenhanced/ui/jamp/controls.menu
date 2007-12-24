@@ -10,11 +10,11 @@
 		fullScreen			1					// MENU_TRUE				
 		rect				0 0 640 480				// Size and position of the menu
 		visible				0					// Visible on open
-		focusColor			1 1 1 1					// Focus color for text and items
+		focusColor			0 0.4 0.8 1					// Focus color for text and items
 		descX				320
-		descY					424
+		descY					460
 		descScale			1
-		descColor				1 .682 0 .8
+		descColor			0.7 0.7 0.7 1
 		descAlignment			ITEM_ALIGN_CENTER		
 
 		onOpen 
@@ -22,22 +22,21 @@
 			uiScript 		loadControls;
 
 			show			setup_background ;
-			show 			movecontrols ;
+			hide 			movecontrols ;
 			hide 			attackcontrols ;
 			hide			weaponcontrols ;
 			hide			forcecontrols ;
-			hide			forcecontrols2 ;
 			hide 			quickcontrols ;
 			hide			joycontrols ;
 			hide			othercontrols ;
-			setitemcolor		movementcontrolbutton 		forecolor 1 1 1 1 ;
-			setitemcolor		attackcontrolbutton 		forecolor 1 .682 0 1 ;
-			setitemcolor		weaponscontrolbutton 		forecolor 1 .682 0 1 ;
-			setitemcolor		forcecontrolbutton 		forecolor 1 .682 0 1 ;
-			setitemcolor		forcecontrolbutton2 		forecolor 1 .682 0 1 ;		
-			setitemcolor		quickcontrolbutton 		forecolor 1 .682 0 1 ;
-			setitemcolor		mousejoystickcontrolbutton 	forecolor 1 .682 0 1 ;
-			setitemcolor		othercontrolbutton 		forecolor 1 .682 0 1 ;
+			setitemcolor		movementcontrolbutton 		forecolor .7 .7 1 1 ;
+			setitemcolor		attackcontrolbutton 		forecolor .7 .7 1 1 ;
+			setitemcolor		weaponscontrolbutton 		forecolor .7 .7 1 1 ;
+			setitemcolor		forcecontrolbutton 		forecolor .7 .7 1 1 ;
+			setitemcolor		forcecontrolbutton2 		forecolor .7 .7 1 1 ;		
+			setitemcolor		quickcontrolbutton 		forecolor .7 .7 1 1 ;
+			setitemcolor		mousejoystickcontrolbutton 	forecolor .7 .7 1 1 ;
+			setitemcolor		othercontrolbutton 		forecolor .7 .7 1 1 ;
 		}
 
 		onClose 
@@ -48,71 +47,87 @@
 		onESC 
 		{ 
 			play				"sound/interface/menuroam.wav" ; 
-			hide				highlights ;
 			close				controlsMenu ; 
-			open				main ;
 		}
 
-		//----------------------------------------------------------------------------------------------
-		//
-		//	MENU BACKGROUND
-		//
-		//----------------------------------------------------------------------------------------------
-		itemDef 
-		{
-			name				really_background
-			group				none
-			style				WINDOW_STYLE_SHADER
-			rect				156 154 320 240
-			background			"gfx/menus/main_centerblue"
-			forecolor			1 1 1 1
-			visible				1
-			decoration
-		}
+//----------------------------------------------------------------------------------------------
+//	OJP MENU BACKGROUND
+//----------------------------------------------------------------------------------------------
 
-		itemDef 
-		{
-			name				background_text
-			group				none
-			style				WINDOW_STYLE_SHADER
-			rect				0 0 160 480
-			background			"gfx/menus/menu_side_text"
-			forecolor			1 1 1 1
-			visible				1
-			decoration
-		}
 
-		itemDef 
+
+		itemDef
 		{
-			name				background_text_b
-			group				none
-			style				WINDOW_STYLE_SHADER
-			rect				480 0 160 480
-			background			"gfx/menus/menu_side_text_right"
-			forecolor			1 1 1 1
-			visible				1
-			decoration
-		}	
-	
-		itemDef 
-		{
-			name				background
-			group				none
-			style				WINDOW_STYLE_SHADER
+			name				mainbackground
+			style				WINDOW_STYLE_FILLED
 			rect				0 0 640 480
-			background			"gfx/menus/main_background"
+			backcolor			0 0 0 1
+			visible				1
+			decoration
+		}
+
+
+		itemDef
+		{
+			name				bgpic
+			style				WINDOW_STYLE_SHADER
+			rect				118 98 404 304
+			background			"ojp/menu/3"
 			forecolor			1 1 1 1
 			visible				1
 			decoration
 		}
 
+
+		itemDef
+		{
+			name				mainbackground
+			style				WINDOW_STYLE_FILLED
+			rect				118 98 404 304
+			backcolor			0 0 0 0.8
+			visible				1
+			decoration
+		}
+
+
+
+
+
+
 		itemDef 
 		{
-			name				starwars
+			name				bluewire
 			group				none
 			style				WINDOW_STYLE_SHADER
-			rect				107 8 428 112
-			background			"gfx/menus/jediacademy"	
+			rect				115 -40 150 150
+			background			"ojp/menu/bluewire"
+			forecolor			1 1 1 1
+			visible				1
+			decoration
+		}
+
+
+
+		itemDef 
+		{
+			name				redwire
+			group				none
+			style				WINDOW_STYLE_SHADER
+			rect				375 -40 150 150
+			background			"ojp/menu/redwire"
+			forecolor			1 1 1 1
+			visible				1
+			decoration
+		}
+
+
+		itemDef 
+		{
+			name				line1
+			group				none
+			style				WINDOW_STYLE_SHADER
+			rect				103 104 26 300
+			background			"ojp/menu/boltblue"
 			forecolor			1 1 1 1
 			visible				1
 			decoration
@@ -120,11 +135,26 @@
 
 		itemDef 
 		{
-			name				left_frame
-			group				lf_fr
+			name				line2
+			group				none
 			style				WINDOW_STYLE_SHADER
-			rect				0 50 320 160
-			background			"gfx/menus/menu_boxes_left"	
+			rect				511 104 26 300
+			background			"ojp/menu/boltred"
+			forecolor			1 1 1 1
+			visible				1
+			decoration
+		}
+
+
+
+
+		itemDef 
+		{
+			name				red_emitter
+			group				none
+			style				WINDOW_STYLE_SHADER
+			rect				508 85 32 32
+			background			"ojp/menu/red_emitter"
 			forecolor			1 1 1 1
 			visible				1
 			decoration
@@ -132,137 +162,199 @@
 
 		itemDef 
 		{
-			name				right_frame
-			group				rt_fr
+			name				blue_emitter
+			group				none
 			style				WINDOW_STYLE_SHADER
-			rect				320 50 320 160
-			background			"gfx/menus/menu_boxes_right"	
+			rect				100 85 32 32
+			background			"ojp/menu/blue_emitter"
 			forecolor			1 1 1 1
 			visible				1
 			decoration
 		}
 
-		//----------------------------------------------------------------------------------------------
-		//
-		//	TOP MENU BUTTONS
-		//
-		//----------------------------------------------------------------------------------------------
 
-		// Big button "NEW"
 		itemDef 
 		{
-			name				newgamebutton_glow
-			group				mods
+			name				emitter1
+			group				none
 			style				WINDOW_STYLE_SHADER
-			rect				7 126 130 24
-			background			"gfx/menus/menu_buttonback"			// Frame around button
+			rect				508 380 32 -32
+			background			"ojp/menu/blue_emitter"
 			forecolor			1 1 1 1
-			visible			0
+			visible				1
 			decoration
 		}
 
 		itemDef 
 		{
-			name				newgamebutton
-			group				toprow
+			name				emitter2
+			group				none
+			style				WINDOW_STYLE_SHADER
+			rect				100 380 32 -32
+			background			"ojp/menu/blue_emitter"
+			forecolor			1 1 1 1
+			visible				1
+			decoration
+		}
+
+		itemdef
+		{
+			name				lowbar
+			group				none
+			style				WINDOW_STYLE_SHADER
+			rect				0 391 640 18
+			background			"ojp/menu/lowbar"
+			forecolor			1 1 1 1
+			visible				1
+			decoration
+		}
+
+		itemdef
+		{
+			name				topbar
+			group				none
+			style				WINDOW_STYLE_SHADER
+			rect				0 85 640 18
+			background			"ojp/menu/topbar"
+			forecolor			1 1 1 1
+			visible				1
+			decoration
+		}
+
+
+
+		itemDef 
+		{
+			name				bluebeam
+			group				none
+			style				WINDOW_STYLE_SHADER
+			rect				0 0 320 80
+			background			"ojp/menu/bluebeam"
+			forecolor			1 1 1 1
+			visible				1
+			decoration
+		}
+
+		itemDef 
+		{
+			name				redbeam
+			group				none
+			style				WINDOW_STYLE_SHADER
+			rect				320 1 320 72
+			background			"ojp/menu/redbeam"
+			forecolor			1 1 1 1
+			visible				1
+			decoration
+		}
+
+		itemDef 
+		{
+			name				mpi_fboon
+			group				none
+			style				WINDOW_STYLE_SHADER
+			rect				0 -5 80 80
+			background			"gfx/hud/mpi_fboon"
+			forecolor			1 1 1 1
+			visible				1
+			decoration
+		}
+
+		itemDef 
+		{
+			name				redspin
+			group				none
+			style				WINDOW_STYLE_SHADER
+			rect				560 -5 80 80
+			background			"ojp/menu/redspin"
+			forecolor			1 1 1 1
+			visible				1
+			decoration
+		}
+
+		itemDef 
+		{
+			name				lightside
+			group				none
+			style				WINDOW_STYLE_SHADER
+			rect				-1.5 -5 80 80
+			background			"ojp/menu/lightside"
+			forecolor			1 1 1 1
+			visible				1
+			decoration
+		}
+
+		itemDef 
+		{
+			name				darkside
+			group				none
+			style				WINDOW_STYLE_SHADER
+			rect				560 -5 80 80
+			background			"ojp/menu/darkside"
+			forecolor			1 1 1 1
+			visible				1
+			decoration
+		}
+
+
+		itemDef 
+		{
+			name				ojplogo
+			group				none
+			style				WINDOW_STYLE_SHADER
+			rect				220 0 200 90
+			background			"ojp/menu/ojplogo"
+			forecolor			1 1 1 1
+			visible				1
+			decoration
+		}
+
+
+
+
+//----------------------------------------------------------------------------------------------
+//	BOTTOM MENU BUTTONS
+//----------------------------------------------------------------------------------------------
+
+
+
+		
+		itemDef 
+		{
+			name				playbutton
+			group				main_button
 			style				WINDOW_STYLE_EMPTY
 			type				ITEM_TYPE_BUTTON
-			rect				7 126 130 24
-			text				@MENUS_PLAY
-			descText			@MENUS_START_PLAYING_NOW
+			rect				-10 410 130 24
+			text				@MENUS_PLAY					
 			font				3
 			textscale			1.1
 			textaligny			0
 			textalign			ITEM_ALIGN_CENTER
 			textstyle			0
 			textalignx			65
-			forecolor			1 .682 0 1
-			visible			1
+			forecolor			0.7 0.7 0.7 1
+			visible				1
 
-			mouseEnter 
-			{ 
-				show			newgamebutton_glow 
-			}
-			mouseExit 
-			{ 
-				hide			newgamebutton_glow 
-			}	  	  
+
 			action 
-			{ 
-				play			"sound/interface/button1.wav" ; 
-				close			all ; 
-				open			multiplayermenu 
-			}
-		}
-
-		// Big button "PLAYER PROFILE"
-		itemDef 
-		{
-			name				profilebutton_glow
-			group				mods
-			style				WINDOW_STYLE_SHADER
-			rect				170 126 130 24
-			background			"gfx/menus/menu_buttonback"			// Frame around button
-			forecolor			1 1 1 1
-			visible			0
-			decoration
-		}
-
-		itemDef 
-		{
-			name				profilebutton
-			group				toprow
-			text				@MENUS_PROFILE
-			descText			@MENUS_PROFILE_DESC
-			style				WINDOW_STYLE_EMPTY
-			type				ITEM_TYPE_BUTTON
-			rect				170 126 130 24
-			textaligny			0
-			font				3
-			textscale			1.1
-			textalign			ITEM_ALIGN_CENTER
-			textstyle			0
-			textalignx			65
-			forecolor			1 .682 0 1
-			visible			1
-
-			mouseEnter 
-			{ 
-				show			profilebutton_glow 
-			}
-			mouseExit 
-			{ 
-				hide			profilebutton_glow 
-			}	  	  
-			action 
-			{ 
-				play			"sound/interface/button1.wav" ; 
-				close			all ; 
-				open			playerMenu
+			{ 			
+			play			"sound/weapons/saber/saberhup1.mp3" ; 
+			close			controlsMenu ;
+			open			multiplayermenu ;
+			setitemrect	metalpipe	0 0 0 0
 			}
 		}
 
 		// Big button "CONTROLS"
+		
 		itemDef 
 		{
-			name				controlsbutton_glow
-			group				mods
-			style				WINDOW_STYLE_SHADER
-			rect				340 126 130 24
-			background			"gfx/menus/menu_buttonback"			// Frame around button
-			forecolor			1 1 1 1
-			visible			0
-			decoration
-		}
-
-		itemDef {
 			name				controlsbutton
-			group				toprow
+			group				main_button
 			text				@MENUS_CONTROLS2
-			descText			@MENUS_CONFIGURE_GAME_CONTROLS
 			type				ITEM_TYPE_BUTTON
 			style				WINDOW_STYLE_EMPTY
-			rect				340 126 130 24
+			rect				240 410 160 24
 			font				3
 			textscale			1.1
 			textaligny			0
@@ -270,40 +362,29 @@
 			textstyle			0
 			textalignx			65
 			backcolor			0 0 0 0
-			forecolor			1 1 1 1
-			visible			1
+			forecolor			0 0.4 0.8 1
+			visible				1
 			 
-			mouseEnter 
-			{ 
-				show			controlsbutton_glow 
+	  	  
+			action 
+			{
+				play			"sound/weapons/saber/saberhup1.mp3" ; 
+				close			controlsMenu ; 
+				setitemrect	metalpipe	0 0 0 0
 			}
-			mouseExit 
-			{ 
-				hide			controlsbutton_glow 
-			}	  	  
 		}
 
 		// Big button "SETUP"
+
+
 		itemDef 
 		{
-			name				setupbutton_glow
-			group				mods
-			style				WINDOW_STYLE_SHADER
-			rect				502 126 130 24
-			background			"gfx/menus/menu_buttonback"			// Frame around button
-			forecolor			1 1 1 1
-			visible			0
-			decoration
-		}
-
-		itemDef {
 			name				setupbutton
-			group				toprow
+			group				main_button
 			text				@MENUS_SETUP
-			descText			@MENUS_CONFIGURE_GAME_SETTINGS
 			type				ITEM_TYPE_BUTTON
 			style				WINDOW_STYLE_EMPTY
-			rect				502 126 130 24
+			rect				505 410 130 24
 			font				3
 			textscale			1.1
 			textaligny			0
@@ -311,110 +392,20 @@
 			textstyle			0
 			textalignx			65
 			backcolor			0 0 0 0
-			forecolor			1 .682 0 1
-			visible			1
-			 
-			mouseEnter 
-			{ 
-				show			setupbutton_glow 
-			}
-			mouseExit 
-			{ 
-				hide			setupbutton_glow 
-			}	  	  
+			forecolor			0.7 0.7 0.7 1
+			visible				1
+			 	  	  
 			action 
 			{
-				play			"sound/interface/button1.wav" ; 
-				close			all ; 
-				open			setup_menu
+				play			"sound/weapons/saber/saberhup1.mp3" ; 
+				open			setup_menu ; 
+				close			controlsMenu ; 
+				setitemrect	metalpipe	0 0 0 0
 			}
 		}
 
 
-		//----------------------------------------------------------------------------------------------
-		//
-		//	OTHER MAIN MENU BUTTONS
-		//
-		//----------------------------------------------------------------------------------------------
-		// Credits hidden button
-		itemDef 
-		{
-			name				creditsbutton
-			group				othermain
-//			text				@CREDITS
-			descText			@MENUS_SHOW_GAME_CREDITS
-			type				ITEM_TYPE_BUTTON
-			style				WINDOW_STYLE_EMPTY
-			rect				200 144 256 256
-			font				2
-			textscale			1
-			textaligny			0
-			textalign			ITEM_ALIGN_CENTER
-			textalignx			46
-			backcolor			0 0 0 0
-			forecolor			1 .682 0 1
-			visible				0
 
-			mouseEnter
-			{
-			}		
-			mouseExit
-			{
-			}		
-			action 
-			{ 
-				play			"sound/interface/button1.wav" ; 	
-				close			all ; 
-				open			creditsMenu 
-			}
-		}
-
-		// EXIT button in lower left corner
-		itemDef 
-		{
-			name				exitgamebutton_glow
-			group				mods
-			style				WINDOW_STYLE_SHADER
-			rect				255 444 130 24
-			background			"gfx/menus/menu_buttonback"			// Frame around button
-			forecolor			1 1 1 1
-			visible			0
-			decoration
-		}
-
-		itemDef 
-		{
-			name				exitgamebutton
-			group				othermain
-			text				@MENUS_EXIT
-			descText			@MENUS_LEAVE_JEDI_KNIGHT_II
-			type				ITEM_TYPE_BUTTON
-			style				WINDOW_STYLE_EMPTY
-			rect				255 444 130 24
-			font				3
-			textscale			1.1
-			textalign			ITEM_ALIGN_CENTER
-			textstyle			0
-			textalignx			65
-			textaligny			-1
-			forecolor			1 .682 0 1
-			visible			1
-
-			mouseEnter 
-			{ 
-				show			exitgamebutton_glow 
-			}
-			mouseExit 
-			{ 
-				hide			exitgamebutton_glow 
-			}	  	  
-			action 
-			{ 
-				play			"sound/weapons/saber/saberoff.mp3"; 
-				close			all ; 
-				open			quitMenu 
-			}
-		}
 
 		//----------------------------------------------------------------------------------------------
 		//
@@ -422,36 +413,10 @@
 		//
 		//----------------------------------------------------------------------------------------------
 		// Configure Controls title
-		itemDef 
-		{
-			name				control_title
-			group				none
-			style				WINDOW_STYLE_SHADER
-			background			"gfx/menus/menu_blendbox"
-			text				@MENUS_CONFIGURE_CONTROLS
-      			rect				100 164 440 16
-			font				3
-			textscale			0.7
-			textalign			ITEM_ALIGN_CENTER		
-			textalignx			225
-			textaligny			-1
-			forecolor			.549 .854 1 1
-      			visible				1 
-  	    		decoration 
-		}
+
 
 		// movement  button
-		itemDef 
-		{
-			name				movementcontrolbutton_glow
-			group				mods
-			style				WINDOW_STYLE_SHADER
-			rect				80 185 180 24
-			background			"gfx/menus/menu_blendbox2"			// Frame around button
-			forecolor			1 1 1 1
-			visible				0
-			decoration
-		}
+
 
 		itemDef 
 		{
@@ -460,59 +425,39 @@
 			text				@MENUS_MOVEMENT
 			type				ITEM_TYPE_BUTTON
 			style				WINDOW_STYLE_EMPTY
-			rect				80 185 170 24
+			rect				0 150 130 24
 			font				3
-			textscale			0.9
-			textalignx			160
-			textaligny			2
-			textalign			ITEM_ALIGN_RIGHT
+			textscale			0.65
+			textalignx			5
+			textaligny			10
 			textstyle			0
-			forecolor			1 .682 0 1
+			textalign			ITEM_ALIGN_LEFT
+			forecolor			0.7 0.7 1 1
 			visible				1
 			descText			@MENUS_CONFIGURE_MOVEMENT_KEYS
-
-			mouseEnter 
-			{ 
-				show			movementcontrolbutton_glow
-			}
-			mouseExit 
-			{ 
-				hide			movementcontrolbutton_glow
-			}	  	  
 			action 
 			{ 
-				play			"sound/interface/button1.wav" ;
+				play			"sound/weapons/saber/saberhup1.mp3" ;
 				show			setup_background ;
 				show			movecontrols ;
 				hide 			attackcontrols ;
 				hide 			weaponcontrols ;
 				hide			forcecontrols ;
-				hide			forcecontrols2 ;
 				hide			joycontrols ;
 				hide			othercontrols ;
-				setitemcolor		movementcontrolbutton 		forecolor 1 1 1 1 ;
-				setitemcolor		attackcontrolbutton 		forecolor 1 .682 0 1 ;
-				setitemcolor		weaponscontrolbutton 		forecolor 1 .682 0 1 ;
-				setitemcolor		forcecontrolbutton 		forecolor 1 .682 0 1 ;
-				setitemcolor		forcecontrolbutton2 		forecolor 1 .682 0 1 ;
-				setitemcolor		mousejoystickcontrolbutton 	forecolor 1 .682 0 1 ;
-				setitemcolor		othercontrolbutton 		forecolor 1 .682 0 1 ;
+				setitemcolor		movementcontrolbutton 		forecolor 0 0.4 0.8 1 ;
+				setitemcolor		attackcontrolbutton 		forecolor 0.7 0.7 1 1 ;
+				setitemcolor		weaponscontrolbutton 		forecolor 0.7 0.7 1 1 ;
+				setitemcolor		forcecontrolbutton 		forecolor 0.7 0.7 1 1 ;
+				setitemcolor		forcecontrolbutton2 		forecolor 0.7 0.7 1 1 ;
+				setitemcolor		mousejoystickcontrolbutton 	forecolor 0.7 0.7 1 1 ;
+				setitemcolor		othercontrolbutton 		forecolor 0.7 0.7 1 1 ;
 			}
 		}
 		
 
 		// attack  button
-		itemDef 
-		{
-			name				attackcontrolbutton_glow
-			group				mods
-			style				WINDOW_STYLE_SHADER
-			rect				80 209 180 24
-			background			"gfx/menus/menu_blendbox2"			// Frame around button
-			forecolor			1 1 1 1
-			visible				0
-			decoration
-		}
+
 
 		itemDef 
 		{
@@ -521,58 +466,37 @@
 			text				@MENUS_INTERACTION
 			type				ITEM_TYPE_BUTTON
 			style				WINDOW_STYLE_EMPTY
-			rect				80 209 170 24
+			rect				0 180 130 24
 			font				3
-			textscale			0.9
-			textalignx			160
-			textaligny			2
-			textalign			ITEM_ALIGN_RIGHT
+			textscale			0.65
+			textalignx			5
+			textaligny			10
 			textstyle			0
-			forecolor			1 .682 0 1
+			textalign			ITEM_ALIGN_LEFT
+			forecolor			0.7 0.7 1 1
 			visible				1
-			descText			@MENUS_INTERACTION_DESC
-
-			mouseEnter 
-			{ 
-				show			attackcontrolbutton_glow
-			}
-			mouseExit 
-			{ 
-				hide			attackcontrolbutton_glow
-			}	  	  
 			action 
 			{ 
-				play			"sound/interface/button1.wav" ;
+				play			"sound/weapons/saber/saberhup1.mp3" ;
 				show			setup_background ;
 				hide			movecontrols ;
 				show 			attackcontrols ;
 				hide 			weaponcontrols ;
 				hide			forcecontrols ;
-				hide			forcecontrols2 ;
 				hide			joycontrols ;
 				hide			othercontrols ;
-				setitemcolor		movementcontrolbutton 		forecolor 1 .682 0 1 ;
-				setitemcolor		attackcontrolbutton 		forecolor 1 1 1 1 ;
-				setitemcolor		weaponscontrolbutton 		forecolor 1 .682 0 1 ;
-				setitemcolor		forcecontrolbutton 		forecolor 1 .682 0 1 ;
-				setitemcolor		forcecontrolbutton2 		forecolor 1 .682 0 1 ;
-				setitemcolor		mousejoystickcontrolbutton 	forecolor 1 .682 0 1 ;
-				setitemcolor		othercontrolbutton 		forecolor 1 .682 0 1 ;
+				setitemcolor		movementcontrolbutton 		forecolor 0.7 0.7 1 1 ;
+				setitemcolor		attackcontrolbutton 		forecolor 0 0.4 0.8 1 ;
+				setitemcolor		weaponscontrolbutton 		forecolor 0.7 0.7 1 1 ;
+				setitemcolor		forcecontrolbutton 		forecolor 0.7 0.7 1 1 ;
+				setitemcolor		forcecontrolbutton2 		forecolor 0.7 0.7 1 1 ;
+				setitemcolor		mousejoystickcontrolbutton 	forecolor 0.7 0.7 1 1 ;
+				setitemcolor		othercontrolbutton 		forecolor 0.7 0.7 1 1 ;
 			}
 		}
 
 		// Weapons button
-		itemDef 
-		{
-			name				weaponscontrolbutton_glow
-			group				mods
-			style				WINDOW_STYLE_SHADER
-			rect				80 233 180 24
-			background			"gfx/menus/menu_blendbox2"			// Frame around button
-			forecolor			1 1 1 1
-			visible			0
-			decoration
-		}
+
 
 		itemDef 
 		{
@@ -581,58 +505,37 @@
 			text				@MENUS_WEAPONS
 			type				ITEM_TYPE_BUTTON
 			style				WINDOW_STYLE_EMPTY
-			rect				80 233 170 24
+			rect				0 210 130 24
 			font				3
-			textscale			0.9
-			textalignx			160
-			textaligny			2
-			textalign			ITEM_ALIGN_RIGHT
+			textscale			0.65
+			textalignx			5
+			textaligny			10
 			textstyle			0
-			forecolor			1 .682 0 1
-			visible			1
-			descText			@MENUS_CONFIGURE_WEAPON_CONTROLS
-
-			mouseEnter 
-			{ 
-				show			weaponscontrolbutton_glow
-			}
-			mouseExit 
-			{ 
-				hide			weaponscontrolbutton_glow
-			}	  	  
+			textalign			ITEM_ALIGN_LEFT
+			forecolor			0.7 0.7 1 1
+			visible				1
 			action 
 			{ 
-				play			"sound/interface/button1.wav" ;
+				play			"sound/weapons/saber/saberhup1.mp3" ;
 				show			setup_background ;
 				hide			movecontrols ;
 				hide 			attackcontrols ;
 				show 			weaponcontrols ;
 				hide			forcecontrols ;
-				hide			forcecontrols2 ;
 				hide			joycontrols ;
 				hide			othercontrols ;
-				setitemcolor		movementcontrolbutton 		forecolor 1 .682 0 1 ;
-				setitemcolor		attackcontrolbutton 		forecolor 1 .682 0 1 ;
-				setitemcolor		weaponscontrolbutton 		forecolor 1 1 1 1 ;
-				setitemcolor		forcecontrolbutton 		forecolor 1 .682 0 1 ;
-				setitemcolor		forcecontrolbutton2 		forecolor 1 .682 0 1 ;
-				setitemcolor		mousejoystickcontrolbutton 	forecolor 1 .682 0 1 ;
-				setitemcolor		othercontrolbutton 		forecolor 1 .682 0 1 ;
+				setitemcolor		movementcontrolbutton 		forecolor 0.7 0.7 1 1 ;
+				setitemcolor		attackcontrolbutton 		forecolor 0.7 0.7 1 1 ;
+				setitemcolor		weaponscontrolbutton 		forecolor 0 0.4 0.8 1 ;
+				setitemcolor		forcecontrolbutton 		forecolor 0.7 0.7 1 1 ;
+				setitemcolor		forcecontrolbutton2 		forecolor 0.7 0.7 1 1 ;
+				setitemcolor		mousejoystickcontrolbutton 	forecolor 0.7 0.7 1 1 ;
+				setitemcolor		othercontrolbutton 		forecolor 0.7 0.7 1 1 ;
 			}
 		}
 
 		// Force Powers button
-		itemDef 
-		{
-			name				forcecontrolbutton_glow
-			group				mods
-			style				WINDOW_STYLE_SHADER
-			rect				80 257 180 24
-			background			"gfx/menus/menu_blendbox2"			// Frame around button
-			forecolor			1 1 1 1
-			visible			0
-			decoration
-		}
+
 
 		itemDef 
 		{
@@ -641,177 +544,80 @@
 			text				@MENUS_FORCE_POWERS_1
 			type				ITEM_TYPE_BUTTON
 			style				WINDOW_STYLE_EMPTY
-			rect				80 257 170 24
+			rect				0 240 130 24
 			font				3
-			textscale			0.9
-			textalignx			160
-			textaligny			2
-			textalign			ITEM_ALIGN_RIGHT
+			textscale			0.65
+			textalignx			5
+			textaligny			10
 			textstyle			0
-			forecolor			1 .682 0 1
-			visible			1
-			descText			@MENUS_CONFIGURE_FORCE_POWER
-
-			mouseEnter 
-			{ 
-				show			forcecontrolbutton_glow
-			}
-			mouseExit 
-			{ 
-				hide			forcecontrolbutton_glow
-			}	  	  
+			textalign			ITEM_ALIGN_LEFT
+			forecolor			0.7 0.7 1 1
+			visible				1
 			action 
 			{ 
-				play			"sound/interface/button1.wav" ;
+				play			"sound/weapons/saber/saberhup1.mp3" ;
 				show			setup_background ;
 				hide			movecontrols ;
 				hide 			attackcontrols ;
 				hide 			weaponcontrols ;
 				show			forcecontrols ;
-				hide			forcecontrols2 ;
 				hide			joycontrols ;
 				hide			othercontrols ;
-				setitemcolor		movementcontrolbutton 		forecolor 1 .682 0 1 ;
-				setitemcolor		attackcontrolbutton 		forecolor 1 .682 0 1 ;
-				setitemcolor		weaponscontrolbutton 		forecolor 1 .682 0 1 ;
-				setitemcolor		forcecontrolbutton 		forecolor 1 1 1 1 ;
-				setitemcolor		forcecontrolbutton2 		forecolor 1 .682 0 1 ;
-				setitemcolor		mousejoystickcontrolbutton 	forecolor 1 .682 0 1 ;
-				setitemcolor		othercontrolbutton 		forecolor 1 .682 0 1 ;
+				setitemcolor		movementcontrolbutton 		forecolor 0.7 0.7 1 1 ;
+				setitemcolor		attackcontrolbutton 		forecolor 0.7 0.7 1 1 ;
+				setitemcolor		weaponscontrolbutton 		forecolor 0.7 0.7 1 1 ;
+				setitemcolor		forcecontrolbutton 		forecolor 0 0.4 0.8 1 ;
+				setitemcolor		forcecontrolbutton2 		forecolor 0.7 0.7 1 1 ;
+				setitemcolor		mousejoystickcontrolbutton 	forecolor 0.7 0.7 1 1 ;
+				setitemcolor		othercontrolbutton 		forecolor 0.7 0.7 1 1 ;
 			}
 		}
 
-		// Force Powers button 2
-		itemDef 
-		{
-			name				forcecontrolbutton2_glow
-			group				mods
-			style				WINDOW_STYLE_SHADER
-			rect				80 281 180 24
-			background			"gfx/menus/menu_blendbox2"			// Frame around button
-			forecolor			1 1 1 1
-			visible			0
-			decoration
-		}
 
-		itemDef 
-		{
-			name				forcecontrolbutton2
-			text				@MENUS_FORCE_POWERS_2
-			type				ITEM_TYPE_BUTTON
-			style				WINDOW_STYLE_EMPTY
-			rect				80 281 170 24
-			font				3
-			textscale			0.9
-			textalignx			160
-			textaligny			2
-			textalign			ITEM_ALIGN_RIGHT
-			textstyle			0
-			forecolor			1 .682 0 1
-			visible			1
-			descText			@MENUS_CONFIGURE_FORCE_POWER
-
-			mouseEnter 
-			{ 
-				show			forcecontrolbutton2_glow
-			}
-			mouseExit 
-			{ 
-				hide			forcecontrolbutton2_glow
-			}	  	  
-			action 
-			{ 
-				play			"sound/interface/button1.wav" ;
-				show			setup_background ;
-				hide			movecontrols ;
-				hide 			attackcontrols ;
-				hide 			weaponcontrols ;
-				hide			forcecontrols ;
-				show			forcecontrols2 ;
-				hide			joycontrols ;
-				hide			othercontrols ;
-				setitemcolor		movementcontrolbutton 		forecolor 1 .682 0 1 ;
-				setitemcolor		attackcontrolbutton 		forecolor 1 .682 0 1 ;
-				setitemcolor		weaponscontrolbutton 		forecolor 1 .682 0 1 ;
-				setitemcolor		forcecontrolbutton 		forecolor 1 .682 0 1 ;
-				setitemcolor		forcecontrolbutton2 		forecolor 1 1 1 1 ;
-				setitemcolor		mousejoystickcontrolbutton 	forecolor 1 .682 0 1 ;
-				setitemcolor		othercontrolbutton 		forecolor 1 .682 0 1 ;
-			}
-		}
 
 		// mousejoystick  button
-		itemDef 
-		{
-			name				mousejoystickcontrolbutton_glow
-			group				mods
-			style				WINDOW_STYLE_SHADER
-			rect				80 305 180 24
-			background			"gfx/menus/menu_blendbox2"			// Frame around button
-			forecolor			1 1 1 1
-			visible			0
-			decoration
-		}
+
 
 		itemDef 
 		{
 			name				mousejoystickcontrolbutton
 			group				none
-			text				@MENUS_MOUSE_JOYSTICK
+			text				"PERIPHERALS"
 			type				ITEM_TYPE_BUTTON
 			style				WINDOW_STYLE_EMPTY
-			rect				80 305 170 24
+			rect				0 270 130 24
 			font				3
-			textscale			0.9
-			textalignx			160
-			textaligny			2
-			textalign			ITEM_ALIGN_RIGHT
+			textscale			0.65
+			textalignx			5
+			textaligny			10
 			textstyle			0
-			forecolor			1 .682 0 1
+			textalign			ITEM_ALIGN_LEFT
+			textstyle			0
+			forecolor			0.7 0.7 1 1
 			visible			1
-			descText			@MENUS_CONFIGURE_MOUSE_AND_JOYSTICK
-
-			mouseEnter 
-			{ 
-				show			mousejoystickcontrolbutton_glow
-			}
-			mouseExit 
-			{ 
-				hide			mousejoystickcontrolbutton_glow
-			}	  	  
+			descText			@MENUS_CONFIGURE_MOUSE_AND_JOYSTICK	  	  
 			action 
 			{ 
-				play			"sound/interface/button1.wav" ;
+				play			"sound/weapons/saber/saberhup1.mp3" ;
 				show			setup_background ;
 				hide			movecontrols ;
 				hide 			attackcontrols ;
 				hide 			weaponcontrols ;
 				hide			forcecontrols ;
-				hide			forcecontrols2 ;
 				show			joycontrols ;
 				hide			othercontrols ;
-				setitemcolor		movementcontrolbutton 		forecolor 1 .682 0 1 ;
-				setitemcolor		attackcontrolbutton 		forecolor 1 .682 0 1 ;
-				setitemcolor		weaponscontrolbutton 		forecolor 1 .682 0 1 ;
-				setitemcolor		forcecontrolbutton 		forecolor 1 .682 0 1 ;
-				setitemcolor		forcecontrolbutton2 		forecolor 1 .682 0 1 ;
-				setitemcolor		mousejoystickcontrolbutton 	forecolor 1 1 1 1 ;
-				setitemcolor		othercontrolbutton 		forecolor 1 .682 0 1 ;
+				setitemcolor		movementcontrolbutton 		forecolor 0.7 0.7 1 1 ;
+				setitemcolor		attackcontrolbutton 		forecolor 0.7 0.7 1 1 ;
+				setitemcolor		weaponscontrolbutton 		forecolor 0.7 0.7 1 1 ;
+				setitemcolor		forcecontrolbutton 		forecolor 0.7 0.7 1 1 ;
+				setitemcolor		forcecontrolbutton2 		forecolor 0.7 0.7 1 1 ;
+				setitemcolor		mousejoystickcontrolbutton 	forecolor 0 0.4 0.8 1 ;
+				setitemcolor		othercontrolbutton 		forecolor 0.7 0.7 1 1 ;
 			}
 		}
 
 		// other  button
-		itemDef 
-		{
-			name				othercontrolbutton_glow
-			group				mods
-			style				WINDOW_STYLE_SHADER
-			rect				80 329 180 24
-			background			"gfx/menus/menu_blendbox2"			// Frame around button
-			forecolor			1 1 1 1
-			visible			0
-			decoration
-		}
+
 
 		itemDef 
 		{
@@ -820,256 +626,41 @@
 			text				@MENUS_OTHER
 			type				ITEM_TYPE_BUTTON
 			style				WINDOW_STYLE_EMPTY
-			rect				80 329 170 24
+			rect				0 300 130 24
 			font				3
-			textscale			0.9
-			textalignx			160
-			textaligny			2
-			textalign			ITEM_ALIGN_RIGHT
+			textscale			0.65
+			textalignx			5
+			textaligny			10
 			textstyle			0
-			forecolor			1 .682 0 1
+			textalign			ITEM_ALIGN_LEFT
+			textstyle			0
+			forecolor			0.7 0.7 1 1
 			visible			1
 			descText			@MENUS_CONFIGURE_ADDITIONAL
 
-			mouseEnter 
-			{ 
-				show			othercontrolbutton_glow
-			}
-			mouseExit 
-			{ 
-				hide			othercontrolbutton_glow
-			}	  	  
 			action 
 			{ 
-				play			"sound/interface/button1.wav" ;
+				play			"sound/weapons/saber/saberhup1.mp3" ;
 				show			setup_background ;
 				hide			movecontrols ;
 				hide 			attackcontrols ;
 				hide 			weaponcontrols ;
 				hide			forcecontrols ;
-				hide			forcecontrols2 ;
 				hide			joycontrols ;
 				show			othercontrols ;
-				setitemcolor		movementcontrolbutton 		forecolor 1 .682 0 1 ;
-				setitemcolor		attackcontrolbutton 		forecolor 1 .682 0 1 ;
-				setitemcolor		weaponscontrolbutton 		forecolor 1 .682 0 1 ;
-				setitemcolor		forcecontrolbutton 		forecolor 1 .682 0 1 ;
-				setitemcolor		forcecontrolbutton2 		forecolor 1 .682 0 1 ;
-				setitemcolor		mousejoystickcontrolbutton 	forecolor 1 .682 0 1 ;
-				setitemcolor		othercontrolbutton 		forecolor 1 1 1 1 ;
+				setitemcolor		movementcontrolbutton 		forecolor 0.7 0.7 1 1 ;
+				setitemcolor		attackcontrolbutton 		forecolor 0.7 0.7 1 1 ;
+				setitemcolor		weaponscontrolbutton 		forecolor 0.7 0.7 1 1 ;
+				setitemcolor		forcecontrolbutton 		forecolor 0.7 0.7 1 1 ;
+				setitemcolor		forcecontrolbutton2 		forecolor 0.7 0.7 1 1 ;
+				setitemcolor		mousejoystickcontrolbutton 	forecolor 0.7 0.7 1 1 ;
+				setitemcolor		othercontrolbutton 		forecolor 0 0.4 0.8 1 ;
 			}
 		}
 
-		itemDef 
-		{
-			name				setup_background
-			group				none
-			style				WINDOW_STYLE_FILLED
-			rect				260 185 340 235	
-			backcolor			0 0 .6 .5
-			forecolor			1 1 1 1
-			border				1
-			bordercolor			0 0 .6 1
-			visible				0
-			decoration
-		}
 
-		//----------------------------------------------------------------------------------------------
-		//
-		//	HIGHLIGHT BARS
-		//
-		//----------------------------------------------------------------------------------------------
-		itemDef
-		{
-			name				highlight1
-			group				highlights
-			style				WINDOW_STYLE_SHADER
-			rect				260 190 340 14
-			background			"gfx/menus/menu_blendbox"
-			forecolor			1 1 1 1
-			visible			0
-			decoration
-		}
-		
-		itemDef
-		{
-			name				highlight2
-			group				highlights
-			style				WINDOW_STYLE_SHADER
-			rect				260 204 340 14
-			background			"gfx/menus/menu_blendbox"
-			forecolor			1 1 1 1
-			visible			0
-			decoration
-		}
-		
-		itemDef
-		{
-			name				highlight3
-			group				highlights
-			style				WINDOW_STYLE_SHADER
-			rect				260 218 340 14
-			background			"gfx/menus/menu_blendbox"
-			forecolor			1 1 1 1
-			visible			0
-			decoration
-		}
-		
-		itemDef
-		{
-			name				highlight4
-			group				highlights
-			style				WINDOW_STYLE_SHADER
-			rect				260 232 340 14
-			background			"gfx/menus/menu_blendbox"
-			forecolor			1 1 1 1
-			visible			0
-			decoration
-		}
-		
-		itemDef
-		{
-			name				highlight5
-			group				highlights
-			style				WINDOW_STYLE_SHADER
-			rect				260 246 340 14
-			background			"gfx/menus/menu_blendbox"
-			forecolor			1 1 1 1
-			visible			0
-			decoration
-		}
-		
-		itemDef
-		{
-			name				highlight6
-			group				highlights
-			style				WINDOW_STYLE_SHADER
-			rect				260 260 340 14
-			background			"gfx/menus/menu_blendbox"
-			forecolor			1 1 1 1
-			visible			0
-			decoration
-		}
-		
-		itemDef
-		{
-			name				highlight7
-			group				highlights
-			style				WINDOW_STYLE_SHADER
-			rect				260 274 340 14
-			background			"gfx/menus/menu_blendbox"
-			forecolor			1 1 1 1
-			visible			0
-			decoration
-		}
-		
-		itemDef
-		{
-			name				highlight8
-			group				highlights
-			style				WINDOW_STYLE_SHADER
-			rect				260 288 340 14
-			background			"gfx/menus/menu_blendbox"
-			forecolor			1 1 1 1
-			visible			0
-			decoration
-		}
-		
-		itemDef
-		{
-			name				highlight9
-			group				highlights
-			style				WINDOW_STYLE_SHADER
-			rect				260 302 340 14
-			background			"gfx/menus/menu_blendbox"
-			forecolor			1 1 1 1
-			visible			0
-			decoration
-		}
-		
-		itemDef
-		{
-			name				highlight10
-			group				highlights
-			style				WINDOW_STYLE_SHADER
-			rect				260 316 340 14
-			background			"gfx/menus/menu_blendbox"
-			forecolor			1 1 1 1
-			visible			0
-			decoration
-		}
-		
-		itemDef
-		{
-			name				highlight11
-			group				highlights
-			style				WINDOW_STYLE_SHADER
-			rect				260 330 340 14
-			background			"gfx/menus/menu_blendbox"
-			forecolor			1 1 1 1
-			visible			0
-			decoration
-		}
-		
-		itemDef
-		{
-			name				highlight12
-			group				highlights
-			style				WINDOW_STYLE_SHADER
-			rect				260 344 340 14
-			background			"gfx/menus/menu_blendbox"
-			forecolor			1 1 1 1
-			visible			0
-			decoration
-		}
 
-		itemDef
-		{
-			name				highlight13
-			group				highlights
-			style				WINDOW_STYLE_SHADER
-			rect				260 358 340 14
-			background			"gfx/menus/menu_blendbox"
-			forecolor			1 1 1 1
-			visible			0
-			decoration
-		}
 
-		itemDef
-		{
-			name				highlight14
-			group				highlights
-			style				WINDOW_STYLE_SHADER
-			rect				260 372 340 14
-			background			"gfx/menus/menu_blendbox"
-			forecolor			1 1 1 1
-			visible			0
-			decoration
-		}
-
-		itemDef
-		{
-			name				highlight15
-			group				highlights
-			style				WINDOW_STYLE_SHADER
-			rect				260 386 340 14
-			background			"gfx/menus/menu_blendbox"
-			forecolor			1 1 1 1
-			visible			0
-			decoration
-		}
-		
-		itemDef
-		{
-			name				highlight16
-			group				highlights
-			style				WINDOW_STYLE_SHADER
-			rect				260 400 340 14
-			background			"gfx/menus/menu_blendbox"
-			forecolor			1 1 1 1
-			visible			0
-			decoration
-		}
 		
 //----------------------------------------------------------------------------------------------
 //
@@ -1083,9 +674,9 @@
 			type				ITEM_TYPE_BIND
 			text				@MENUS_WALK_FORWARD
 			cvar				"+forward"
-			rect				260 188 340 14
-			textalign			ITEM_ALIGN_RIGHT
-			textalignx			174 
+			rect				130 159 210 14
+			textalign			ITEM_ALIGN_LEFT
+			textalignx			20
 			textaligny			0
 			font				4
 			textscale			1
@@ -1094,18 +685,7 @@
 			descText			@MENUS_MOVES_PLAYER_FORWARD
 			action 
 			{ 
-				play			sound/interface/button1
-			}
-
-			mouseenter 
-			{
-				show			highlight1
-				show			keybindstatus
-			}
-			mouseexit 
-			{ 
-				hide			highlight1
-				hide			keybindstatus
+				play			"sound/weapons/saber/saberhup1.mp3"
 			}
 		}
 
@@ -1117,9 +697,9 @@
 			type				ITEM_TYPE_BIND
 			text				@MENUS_BACKPEDAL
 			cvar				"+back"
-			rect				260 202 340 14
-			textalign			ITEM_ALIGN_RIGHT
-			textalignx			174 
+			rect				130 174 210 14
+			textalign			ITEM_ALIGN_LEFT
+			textalignx			20
 			textaligny			0
 			font				4
 			textscale			1
@@ -1128,18 +708,7 @@
 			descText			@MENUS_MOVES_PLAYER_BACKWARD
 			action 
 			{ 
-				play			sound/interface/button1
-			}
-
-			mouseenter 
-			{
-				show			highlight2
-				show			keybindstatus
-			}
-			mouseexit 
-			{ 
-				hide			highlight2
-				hide			keybindstatus
+				play			"sound/weapons/saber/saberhup1.mp3"
 			}
 		}
 
@@ -1150,9 +719,9 @@
 			type				ITEM_TYPE_BIND
 			text				@MENUS_TURN_LEFT
 			cvar				"+left"
-			rect				260 216 340 14
-			textalign			ITEM_ALIGN_RIGHT
-			textalignx			174 
+			rect				130 189 210 14
+			textalign			ITEM_ALIGN_LEFT
+			textalignx			20
 			textaligny			0
 			font				4
 			textscale			1
@@ -1161,18 +730,7 @@
 			descText			@MENUS_ROTATES_PLAYER_LEFT
 			action 
 			{ 
-				play			sound/interface/button1
-			}
-
-			mouseenter 
-			{
-				show			highlight3
-				show			keybindstatus
-			}
-			mouseexit 
-			{ 
-				hide			highlight3
-				hide			keybindstatus
+				play			"sound/weapons/saber/saberhup1.mp3"
 			}
 		}
 
@@ -1183,9 +741,9 @@
 			type				ITEM_TYPE_BIND
 			text				@MENUS_TURN_RIGHT
 			cvar				"+right"
-			rect				260 230 340 14
-			textalign			ITEM_ALIGN_RIGHT
-			textalignx			174 
+			rect				130 204 210 14
+			textalign			ITEM_ALIGN_LEFT
+			textalignx			20
 			textaligny			0
 			font				4
 			textscale			1
@@ -1194,18 +752,7 @@
 			descText			@MENUS_ROTATES_PLAYER_RIGHT
 			action 
 			{ 
-				play			sound/interface/button1
-			}
-
-			mouseenter 
-			{
-				show			highlight4
-				show			keybindstatus
-			}
-			mouseexit 
-			{ 
-				hide			highlight4
-				hide			keybindstatus
+				play			"sound/weapons/saber/saberhup1.mp3"
 			}
 		}
 
@@ -1216,9 +763,9 @@
 			type				ITEM_TYPE_BIND
 			text				@MENUS_RUN_WALK
 			cvar				"+speed"
-			rect				260 244 340 14
-			textalign			ITEM_ALIGN_RIGHT
-			textalignx			174 
+			rect				130 219 210 14
+			textalign			ITEM_ALIGN_LEFT
+			textalignx			20
 			textaligny			0
 			font				4
 			textscale			1
@@ -1227,18 +774,7 @@
 			descText			@MENUS_IF_HELD_TOGGLES_BETWEEN
 			action 
 			{ 
-				play			sound/interface/button1
-			}
-
-			mouseenter 
-			{
-				show			highlight5
-				show			keybindstatus
-			}
-			mouseexit 
-			{ 
-				hide			highlight5
-				hide			keybindstatus
+				play			"sound/weapons/saber/saberhup1.mp3"
 			}
 		}
 
@@ -1249,9 +785,9 @@
 			type				ITEM_TYPE_BIND
 			text				@MENUS_STEP_LEFT
 			cvar				"+moveleft"
-			rect				260 258 340 14
-			textalign			ITEM_ALIGN_RIGHT
-			textalignx			174 
+			rect				130 234 340 14
+			textalign			ITEM_ALIGN_LEFT
+			textalignx			20
 			textaligny			0
 			font				4
 			textscale			1
@@ -1261,17 +797,7 @@
 
 			action 
 			{ 
-				play			sound/interface/button1
-			}
-			mouseenter 
-			{
-				show			highlight6
-				show			keybindstatus
-			}
-			mouseexit 
-			{ 
-				hide			highlight6
-				hide			keybindstatus
+				play			"sound/weapons/saber/saberhup1.mp3"
 			}
 		}
 
@@ -1282,9 +808,9 @@
 			type				ITEM_TYPE_BIND
 			text				@MENUS_STEP_RIGHT
 			cvar				"+moveright"
-			rect				260 272 340 14
-			textalign			ITEM_ALIGN_RIGHT
-			textalignx			174 
+			rect				130 249 340 14
+			textalign			ITEM_ALIGN_LEFT
+			textalignx			20
 			textaligny			0
 			font				4
 			textscale			1
@@ -1293,18 +819,7 @@
 			descText			@MENUS_STEPS_PLAYER_TO_THE_RIGHT
 			action 
 			{ 
-				play			sound/interface/button1
-			}
-
-			mouseenter 
-			{
-				show			highlight7
-				show			keybindstatus
-			}
-			mouseexit 
-			{ 
-				hide			highlight7
-				hide			keybindstatus
+				play			"sound/weapons/saber/saberhup1.mp3"
 			}
 		}
 
@@ -1315,9 +830,9 @@
 			type				ITEM_TYPE_BIND
 			text				@MENUS_SIDESTEP_TURN
 			cvar				"+strafe"
-			rect				260 286 340 14
-			textalign			ITEM_ALIGN_RIGHT
-			textalignx			174 
+			rect				130 264 340 14
+			textalign			ITEM_ALIGN_LEFT
+			textalignx			20
 			textaligny			0
 			font				4
 			textscale			1
@@ -1326,19 +841,9 @@
 			descText			@MENUS_HELD_ALLOWS_PLAYER_TO
 			action 
 			{ 
-				play			sound/interface/button1
+				play			"sound/weapons/saber/saberhup1.mp3"
 			}
 
-			mouseenter 
-			{
-				show			highlight8
-				show			keybindstatus
-			}
-			mouseexit 
-			{ 
-				hide			highlight8
-				hide			keybindstatus
-			}
 		}
 
 		itemDef 
@@ -1348,9 +853,9 @@
 			type				ITEM_TYPE_BIND
 			text				@MENUS_UP_JUMP
 			cvar				"+moveup"
-			rect				260 342 340 14
-			textalign			ITEM_ALIGN_RIGHT
-			textalignx			174 
+			rect				130 279 340 14
+			textalign			ITEM_ALIGN_LEFT
+			textalignx			20
 			textaligny			0
 			font				4
 			textscale			1
@@ -1359,18 +864,7 @@
 			descText			@MENUS_MAKES_PLAYER_JUMP_IF
 			action 
 			{ 
-				play			sound/interface/button1
-			}
-
-			mouseenter 
-			{
-				show			highlight12
-				show			keybindstatus
-			}
-			mouseexit 
-			{ 
-				hide			highlight12
-				hide			keybindstatus
+				play			"sound/weapons/saber/saberhup1.mp3"
 			}
 		}
 
@@ -1381,9 +875,9 @@
 			type				ITEM_TYPE_BIND
 			text				@MENUS_DOWN_CROUCH
 			cvar				"+movedown"
-			rect				260 356 340 14
-			textalign			ITEM_ALIGN_RIGHT
-			textalignx			174 
+			rect				130 294 340 14
+			textalign			ITEM_ALIGN_LEFT
+			textalignx			20
 			textaligny			0
 			font				4
 			textscale			1
@@ -1392,18 +886,7 @@
 			descText			@MENUS_MAKES_PLAYER_CROUCH_TO
 			action 
 			{ 
-				play			sound/interface/button1
-			}
-
-			mouseenter 
-			{
-				show			highlight13
-				show			keybindstatus
-			}
-			mouseexit 
-			{ 
-				hide			highlight13
-				hide			keybindstatus
+				play			"sound/weapons/saber/saberhup1.mp3"
 			}
 		}
 
@@ -1419,9 +902,9 @@
 			type				ITEM_TYPE_BIND
 			text				@MENUS_ATTACK
 			cvar				"+attack"
-			rect				260 188 340 14
-			textalign			ITEM_ALIGN_RIGHT
-			textalignx			174
+			rect				130 159 210 14
+			textalign			ITEM_ALIGN_LEFT
+			textalignx			20
 			textaligny			0
 			font				4
 			textscale			1
@@ -1430,18 +913,7 @@
 			descText			@MENUS_ATTACKS_WITH_READIED
 			action 
 			{ 
-				play			sound/interface/button1
-			}
-
-			mouseenter 
-			{
-				show			highlight1
-				show			keybindstatus
-			}
-			mouseexit 
-			{ 
-				hide			highlight1
-				hide			keybindstatus
+				play			"sound/weapons/saber/saberhup1.mp3"
 			}
 		}
 
@@ -1452,9 +924,9 @@
 			type				ITEM_TYPE_BIND
 			text				@MENUS_ALT_ATTACK
 			cvar				"+altattack"
-			rect				260 202 340 14
-			textalign			ITEM_ALIGN_RIGHT
-			textalignx			174
+			rect				130 174 210 14
+			textalign			ITEM_ALIGN_LEFT
+			textalignx			20
 			textaligny			0
 			font				4
 			textscale			1
@@ -1463,18 +935,7 @@
 			descText			@MENUS_ATTACKS_WITH_ALTERNATE
 			action 
 			{ 
-				play			sound/interface/button1
-			}
-
-			mouseenter 
-			{ 
-				show			highlight2
-				show			keybindstatus
-			}
-			mouseexit 
-			{ 
-				hide			highlight2
-				hide			keybindstatus
+				play			"sound/weapons/saber/saberhup1.mp3"
 			}
 		}
 
@@ -1485,9 +946,9 @@
 			type				ITEM_TYPE_BIND
 			text				@MENUS_LIGHTSABER_STYLE
 			cvar				"saberAttackCycle"
-			rect				260 216 340 14
-			textalign			ITEM_ALIGN_RIGHT
-			textalignx			174
+			rect				130 189 210 14
+			textalign			ITEM_ALIGN_LEFT
+			textalignx			20
 			textaligny			0
 			font				4
 			textscale			1
@@ -1496,18 +957,7 @@
 			descText			@MENUS_CYCLES_BETWEEN_AVAILABLE
 			action 
 			{ 
-				play			sound/interface/button1
-			}
-
-			mouseenter 
-			{ 
-				show			highlight3
-				show			keybindstatus
-			}
-			mouseexit 
-			{ 
-				hide			highlight3
-				hide			keybindstatus
+				play			"sound/weapons/saber/saberhup1.mp3"
 			}
 		}
 
@@ -1518,9 +968,9 @@
 			type				ITEM_TYPE_BIND
 			text				@MENUS_USE
 			cvar				"+use"
-			rect				260 244 340 14
-			textalign			ITEM_ALIGN_RIGHT
-			textalignx			174
+			rect				130 204 210 14
+			textalign			ITEM_ALIGN_LEFT
+			textalignx			20
 			textaligny			0
 			font				4
 			textscale			1
@@ -1529,19 +979,9 @@
 			// appearance_slot		3
 			descText			@MENUS_ACTIVATES_WORLD_DEVICES
 
-			mouseenter 
-			{ 
-				show			highlight5
-				show			keybindstatus
-			}
-			mouseexit 
-			{ 
-				hide			highlight5
-				hide			keybindstatus
-			}
 			action 
 			{ 
-				play			"sound/interface/button1.wav" ; 
+				play			"sound/weapons/saber/saberhup1.mp3" ; 
 			}
 		}
 
@@ -1552,9 +992,9 @@
 			type				ITEM_TYPE_BIND
 			text				@MENUS_USE_HELD_ITEM
 			cvar				"+button2"
-			rect				260 258 340 14
-			textalign			ITEM_ALIGN_RIGHT
-			textalignx			174
+			rect				130 219 210 14
+			textalign			ITEM_ALIGN_LEFT
+			textalignx			20
 			textaligny			0
 			font				4
 			textscale			1
@@ -1562,20 +1002,9 @@
 			visible			0 
 			// appearance_slot		6
 			descText			@MENUS_ACTIVATES_CURRENTLY_SELECTED
-
-			mouseenter 
-			{ 
-				show			highlight6
-				show			keybindstatus
-			}
-			mouseexit 
-			{ 
-				hide			highlight6
-				hide			keybindstatus
-			}
 			action 
 			{ 
-				play			"sound/interface/button1.wav" ; 
+				play			"sound/weapons/saber/saberhup1.mp3" ; 
 			}
 		}
 
@@ -1586,9 +1015,9 @@
 			type				ITEM_TYPE_BIND
 			text				@MENUS_NEXT_INVENTORY
 			cvar				"invnext"
-			rect				260 272 340 14
-			textalign			ITEM_ALIGN_RIGHT
-			textalignx			174
+			rect				130 234 210 14
+			textalign			ITEM_ALIGN_LEFT
+			textalignx			20
 			textaligny			0
 			font				4
 			textscale			1
@@ -1596,20 +1025,9 @@
 			visible			0 
 			// appearance_slot		6
 			descText			@MENUS_SELECTS_NEXT_USABLE_ITEM
-
-			mouseenter 
-			{ 
-				show			highlight7
-				show			keybindstatus
-			}
-			mouseexit 
-			{ 
-				hide			highlight7
-				hide			keybindstatus
-			}
 			action 
 			{ 
-				play			"sound/interface/button1.wav" ; 
+				play			"sound/weapons/saber/saberhup1.mp3" ; 
 			}
 		}
 
@@ -1620,9 +1038,9 @@
 			type				ITEM_TYPE_BIND
 			text				@MENUS_PREV_INVENTORY
 			cvar				"invprev"
-			rect				260 286 340 14
-			textalign			ITEM_ALIGN_RIGHT
-			textalignx			174
+			rect				130 249 210 14
+			textalign			ITEM_ALIGN_LEFT
+			textalignx			20
 			textaligny			0
 			font				4
 			textscale			1
@@ -1631,19 +1049,9 @@
 			// appearance_slot		6
 			descText			@MENUS_SELECTS_PREVIOUS_USABLE
 
-			mouseenter 
-			{ 
-				show			highlight8
-				show			keybindstatus
-			}
-			mouseexit 
-			{ 
-				hide			highlight8
-				hide			keybindstatus
-			}
 			action 
 			{ 
-				play			"sound/interface/button1.wav" ; 
+				play			"sound/weapons/saber/saberhup1.mp3" ; 
 			}
 		}
 
@@ -1654,9 +1062,9 @@
 			type				ITEM_TYPE_BIND
 			text				@MENUS_LOOK_UP
 			cvar				"+lookup"
-			rect				260 314 340 14
-			textalign			ITEM_ALIGN_RIGHT
-			textalignx			174
+			rect				130 264 210 14
+			textalign			ITEM_ALIGN_LEFT
+			textalignx			20
 			textaligny			0
 			font				4
 			textscale			1
@@ -1665,19 +1073,9 @@
 			// appearance_slot		4
 			descText			@MENUS_TILTS_VIEW_UPWARDS
 
-			mouseenter 
-			{ 
-				show			highlight10
-				show			keybindstatus
-			}
-			mouseexit 
-			{ 
-				hide			highlight10
-				hide			keybindstatus
-			}
 			action 
 			{ 
-				play			"sound/interface/button1.wav" ; 
+				play			"sound/weapons/saber/saberhup1.mp3" ; 
 			}
 		}
 
@@ -1689,28 +1087,19 @@
 			type				ITEM_TYPE_BIND
 			text				@MENUS_LOOK_DOWN
 			cvar				"+lookdown"
-			rect				260 328 340 14
-			textalign			ITEM_ALIGN_RIGHT
-			textalignx			174
+			rect				130 279 210 14
+			textalign			ITEM_ALIGN_LEFT
+			textalignx			20
 			textaligny			0
 			font				4
 			textscale			1
+			visible			0
 			descText			@MENUS_TILTS_VIEW_DOWNWARDS
 			forecolor			.615 .615 .956 1
 
-			mouseenter 
-			{ 
-				show			highlight11
-				show			keybindstatus
-			}
-			mouseexit 
-			{ 
-				hide			highlight11
-				hide			keybindstatus
-			}
 			action 
 			{ 
-				play			"sound/interface/button1.wav" ; 
+				play			"sound/weapons/saber/saberhup1.mp3" ; 
 			}
 		}
 
@@ -1721,31 +1110,19 @@
 			type				ITEM_TYPE_BIND
 			text				@MENUS_MOUSE_LOOK
 			cvar				"+mlook"
-			rect				260 342 340 14
-			textalign			ITEM_ALIGN_RIGHT
-			textalignx			174
+			rect				130 294 210 14
+			textalign			ITEM_ALIGN_LEFT
+			textalignx			20
 			textaligny			0
 			font				4
 			textscale			1
-			forecolor			1 1 1 1
 			visible			0
 			// appearance_slot		6
 			descText			@MENUS_IF_HELD_ALLOWS_PLAYER
 			forecolor			.615 .615 .956 1
-
-			mouseenter 
-			{ 
-				show			highlight12
-				show			keybindstatus
-			}
-			mouseexit 
-			{ 
-				hide			highlight12
-				hide			keybindstatus
-			}
 			action 
 			{ 
-				play			"sound/interface/button1.wav" ; 
+				play			"sound/weapons/saber/saberhup1.mp3" ; 
 			}
 		}
 
@@ -1756,69 +1133,22 @@
 			type				ITEM_TYPE_BIND
 			text				@MENUS_CENTER_VIEW
 			cvar				"centerview"
-			rect				260 356 340 14
-			textalign			ITEM_ALIGN_RIGHT
-			textalignx			174
+			rect				130 309 210 14
+			textalign			ITEM_ALIGN_LEFT
+			textalignx			20
 			textaligny			0
 			font				4
 			textscale			1
-			forecolor			1 1 1 1
 			visible			0
 			// appearance_slot		6
 			descText			@MENUS_RETURNS_VIEW_TO_HORIZONTAL
 			forecolor			.615 .615 .956 1
 
-			mouseenter 
-			{ 
-				show			highlight13
-				show			keybindstatus
-			}
-			mouseexit 
-			{ 
-				hide			highlight13
-				hide			keybindstatus
-			}
 			action 
 			{ 
-				play			"sound/interface/button1.wav" ; 
+				play			"sound/weapons/saber/saberhup1.mp3" ; 
 			}
 		}
-
-itemDef 
-		{
-			name				attacklook
-			group				attackcontrols
-			type				ITEM_TYPE_BIND
-			text				@OJP_MENUS_QUICK_PARRY_HOLDBUTTON
-			cvar				"+button14"
-			rect				260 370 340 14
-			textalign			ITEM_ALIGN_RIGHT
-			textalignx			174
-			textaligny			0
-			font				4
-			textscale			1
-			forecolor			1 1 1 1
-			visible			0
-			// appearance_slot		6
-			descText			@OJP_MENUS_ALLOWS_FOR_QUICK_PARRY
-			forecolor			.615 .615 .956 1
-
-			mouseenter 
-			{ 
-				show			highlight13
-				show			keybindstatus
-			}
-			mouseexit 
-			{ 
-				hide			highlight13
-				hide			keybindstatus
-			}
-			action 
-			{ 
-				play			"sound/interface/button1.wav" ; 
-			}
-		}
-
 
 //----------------------------------------------------------------------------------------------
 //
@@ -1832,30 +1162,18 @@ itemDef
 			type				ITEM_TYPE_BIND
 			text				@MENUS_MELEE_LIGHTSABER
 			cvar				"weapon 1"
-			rect				260 188 340 14
-			textalign			ITEM_ALIGN_RIGHT
-			textalignx			174
+			rect				130 159 210 14
+			textalign			ITEM_ALIGN_LEFT
+			textalignx			20
 			textaligny			0
 			font				4
 			textscale			1
-			forecolor			1 1 1 1
 			visible			0
 			descText			@MENUS_READIES_LIGHTSABER
 			forecolor			.615 .615 .956 1
-
-			mouseenter 
-			{ 
-				show			highlight1
-				show			keybindstatus
-			}
-			mouseexit 
-			{ 
-				hide			highlight1
-				hide			keybindstatus
-			} 
 			action 
 			{ 
-				play			"sound/interface/button1.wav" ; 
+				play			"sound/weapons/saber/saberhup1.mp3" ; 
 			}
 		}
 
@@ -1866,30 +1184,19 @@ itemDef
 			type				ITEM_TYPE_BIND
 			text				@MENUS_PISTOL
 			cvar				"weapon 2"
-			rect				260 202 340 14
-			textalign			ITEM_ALIGN_RIGHT
-			textalignx			174
+			rect				130 174 210 14
+			textalign			ITEM_ALIGN_LEFT
+			textalignx			20
 			textaligny			0
 			font				4
 			textscale			1
-			forecolor			1 1 1 1
 			visible			0
 			descText			@MENUS_READIES_THE_BLASTER_PISTOL
 			forecolor			.615 .615 .956 1
 
-			mouseenter 
-			{ 
-				show			highlight2
-				show			keybindstatus
-			}
-			mouseexit 
-			{ 
-				hide			highlight2
-				hide			keybindstatus
-			}
 			action 
 			{ 
-				play			"sound/interface/button1.wav" ; 
+				play			"sound/weapons/saber/saberhup1.mp3" ; 
 			}
 		}
 
@@ -1900,13 +1207,12 @@ itemDef
 			type				ITEM_TYPE_BIND
 			text				@MENUS_RIFLE
 			cvar				"weapon 3"
-			rect				260 216 340 14
-			textalign			ITEM_ALIGN_RIGHT
-			textalignx			174
+			rect				130 189 210 14
+			textalign			ITEM_ALIGN_LEFT
+			textalignx			20
 			textaligny			0
 			font				4
 			textscale			1
-			forecolor			1 1 1 1
 			visible			0
 			descText			@MENUS_READIES_THE_E_11_BLASTER
 			forecolor			.615 .615 .956 1
@@ -1923,7 +1229,7 @@ itemDef
 			}
 			action 
 			{ 
-				play			"sound/interface/button1.wav" ; 
+				play			"sound/weapons/saber/saberhup1.mp3" ; 
 			}
 		}
 
@@ -1934,9 +1240,9 @@ itemDef
 			type				ITEM_TYPE_BIND
 			text				@MENUS_DISRUPTOR_RIFLE
 			cvar				"weapon 4"
-			rect				260 230 340 14
-			textalign			ITEM_ALIGN_RIGHT
-			textalignx			174
+			rect				130 204 210 14
+			textalign			ITEM_ALIGN_LEFT
+			textalignx			20
 			textaligny			0
 			font				4
 			textscale			1
@@ -1956,7 +1262,7 @@ itemDef
 			}
 			action 
 			{ 
-				play			"sound/interface/button1.wav" ; 
+				play			"sound/weapons/saber/saberhup1.mp3" ; 
 			}
 		}
 
@@ -1967,9 +1273,9 @@ itemDef
 			type				ITEM_TYPE_BIND
 			text				@MENUS_BOWCASTER
 			cvar				"weapon 5"
-			rect				260 244 340 14
-			textalign			ITEM_ALIGN_RIGHT
-			textalignx			174
+			rect				130 219 210 14
+			textalign			ITEM_ALIGN_LEFT
+			textalignx			20
 			textaligny			0
 			font				4
 			textscale			1
@@ -1989,7 +1295,7 @@ itemDef
 			}
 			action 
 			{ 
-				play			"sound/interface/button1.wav" ; 
+				play			"sound/weapons/saber/saberhup1.mp3" ; 
 			}
 		}
 
@@ -2000,9 +1306,9 @@ itemDef
 			type				ITEM_TYPE_BIND
 			text				@MENUS_HEAVY_REPEATER
 			cvar				"weapon 6"
-			rect				260 258 340 14
-			textalign			ITEM_ALIGN_RIGHT
-			textalignx			174
+			rect				130 234 210 14
+			textalign			ITEM_ALIGN_LEFT
+			textalignx			20
 			textaligny			0
 			font				4
 			textscale			1
@@ -2022,7 +1328,7 @@ itemDef
 			}
 			action 
 			{ 
-				play			"sound/interface/button1.wav" ; 
+				play			"sound/weapons/saber/saberhup1.mp3" ; 
 			}
 		}
 		itemDef 
@@ -2032,9 +1338,9 @@ itemDef
 			type				ITEM_TYPE_BIND
 			text				@MENUS_DEMP_2
 			cvar				"weapon 7"
-			rect				260 272 340 14
-			textalign			ITEM_ALIGN_RIGHT
-			textalignx			174
+			rect				130 249 210 14
+			textalign			ITEM_ALIGN_LEFT
+			textalignx			20
 			textaligny			0
 			font				4
 			textscale			1
@@ -2055,7 +1361,7 @@ itemDef
 			}
 			action 
 			{ 
-				play			"sound/interface/button1.wav" ; 
+				play			"sound/weapons/saber/saberhup1.mp3" ; 
 			}
 		}
 		itemDef 
@@ -2065,9 +1371,9 @@ itemDef
 			type				ITEM_TYPE_BIND
 			text				@MENUS_FLECHETTE
 			cvar				"weapon 8"
-			rect				260 286 340 14
-			textalign			ITEM_ALIGN_RIGHT
-			textalignx			174
+			rect				130 264 210 14
+			textalign			ITEM_ALIGN_LEFT
+			textalignx			20
 			textaligny			0
 			font				4
 			textscale			1
@@ -2088,7 +1394,7 @@ itemDef
 			} 
 			action 
 			{ 
-				play			"sound/interface/button1.wav" ; 
+				play			"sound/weapons/saber/saberhup1.mp3" ; 
 			}
 		}
 		itemDef 
@@ -2098,9 +1404,9 @@ itemDef
 			type				ITEM_TYPE_BIND
 			text				@MENUS_CONC_RIFLE_SETUP
 			cvar				"weapon 13"
-			rect				260 300 340 14
-			textalign			ITEM_ALIGN_RIGHT
-			textalignx			174
+			rect				130 279 210 14
+			textalign			ITEM_ALIGN_LEFT
+			textalignx			20
 			textaligny			0
 			font				4
 			textscale			1
@@ -2108,20 +1414,9 @@ itemDef
 			visible			0
 			// appearance_slot		8
 			descText			@MENUS_READIES_THE_CONC_RIFLE
-
-			mouseenter 
-			{ 
-				show			highlight9
-				show			keybindstatus
-			}
-			mouseexit 
-			{ 
-				hide			keybindstatus
-				hide			highlight9
-			} 
 			action 
 			{ 
-				play			"sound/interface/button1.wav" ; 
+				play			"sound/weapons/saber/saberhup1.mp3" ; 
 			}
 		}
 		itemDef 
@@ -2131,9 +1426,9 @@ itemDef
 			type				ITEM_TYPE_BIND
 			text				@MENUS_MERR_SONN
 			cvar				"weapon 9"
-			rect				260 314 340 14
-			textalign			ITEM_ALIGN_RIGHT
-			textalignx			174
+			rect				130 294 210 14
+			textalign			ITEM_ALIGN_LEFT
+			textalignx			20
 			textaligny			0
 			font				4
 			textscale			1
@@ -2141,20 +1436,9 @@ itemDef
 			visible			0
 			// appearance_slot		9
 			descText			@MENUS_READIES_THE_MERR_SONN
-
-			mouseenter 
-			{ 
-				show			highlight10
-				show			keybindstatus
-			}
-			mouseexit 
-			{ 
-				hide			highlight10
-				hide			keybindstatus
-			} 
 			action 
 			{ 
-				play			"sound/interface/button1.wav" ; 
+				play			"sound/weapons/saber/saberhup1.mp3" ; 
 			}
 		}
 		itemDef 
@@ -2164,9 +1448,9 @@ itemDef
 			type				ITEM_TYPE_BIND
 			text				@MENUS_THROWABLE_WEAPONS
 			cvar				"weapon 10"
-			rect				260 328 340 14
-			textalign			ITEM_ALIGN_RIGHT
-			textalignx			174
+			rect				130 309 210 14
+			textalign			ITEM_ALIGN_LEFT
+			textalignx			20
 			textaligny			0
 			font				4
 			textscale			1
@@ -2174,20 +1458,9 @@ itemDef
 			visible			0
 			// appearance_slot		10
 			descText			@MENUS_TOGGLES_BETWEEN_DETONATORS
-
-			mouseenter 
-			{ 
-				show			highlight11
-				show			keybindstatus
-			}
-			mouseexit 
-			{ 
-				hide			highlight11
-				hide			keybindstatus
-			} 
 			action 
 			{ 
-				play			"sound/interface/button1.wav" ; 
+				play			"sound/weapons/saber/saberhup1.mp3" ; 
 			}
 		}
 
@@ -2198,9 +1471,9 @@ itemDef
 			type				ITEM_TYPE_BIND
 			text				@MENUS_NEXT_WEAPON
 			cvar				"weapnext"
-			rect				260 342 340 14
-			textalign			ITEM_ALIGN_RIGHT
-			textalignx			174
+			rect				130 324 210 14
+			textalign			ITEM_ALIGN_LEFT
+			textalignx			20
 			textaligny			0
 			font				4
 			textscale			1
@@ -2208,20 +1481,9 @@ itemDef
 			visible				0
 			// appearance_slot		10
 			descText			@MENUS_SELECTS_THE_NEXT_WEAPON
-
-			mouseenter 
-			{ 
-				show			highlight12
-				show			keybindstatus
-			}
-			mouseexit 
-			{ 
-				hide			highlight12
-				hide			keybindstatus
-			} 
 			action 
 			{ 
-				play			"sound/interface/button1.wav" ; 
+				play			"sound/weapons/saber/saberhup1.mp3" ; 
 			}
 		}
 
@@ -2232,9 +1494,9 @@ itemDef
 			type				ITEM_TYPE_BIND
 			text				@MENUS_PREVIOUS_WEAPON
 			cvar				"weapprev"
-			rect				260 356 340 14
-			textalign			ITEM_ALIGN_RIGHT
-			textalignx			174
+			rect				130 339 210 14
+			textalign			ITEM_ALIGN_LEFT
+			textalignx			20
 			textaligny			0
 			font				4
 			textscale			1
@@ -2242,32 +1504,22 @@ itemDef
 			visible				0
 			// appearance_slot		11
 			descText			@MENUS_SELECTS_THE_PREVIOUS
-
-			mouseenter 
-			{ 
-				show			highlight13
-				show			keybindstatus
-			}
-			mouseexit 
-			{ 
-				hide			highlight13
-				hide			keybindstatus
-			} 
 			action 
 			{ 
-				play			"sound/interface/button1.wav" ; 
+				play			"sound/weapons/saber/saberhup1.mp3" ; 
 			}
 		}
-itemDef 
+
+		itemDef 
 		{
 			name				none
 			group				weaponcontrols
 			type				ITEM_TYPE_BIND
 			text				@OJP_MENUS_THERMAL_DETONATOR_THROW
 			cvar				"+button13"
-			rect				260 370 340 14
-			textalign			ITEM_ALIGN_RIGHT
-			textalignx			174
+			rect				130 354 210 14
+			textalign			ITEM_ALIGN_LEFT
+			textalignx			20
 			textaligny			0
 			font				4
 			textscale			1
@@ -2291,6 +1543,7 @@ itemDef
 				play			"sound/interface/button1.wav" ; 
 			}
 		}
+
 //----------------------------------------------------------------------------------------------
 //
 //	FORCE BINDING
@@ -2303,9 +1556,9 @@ itemDef
 			type				ITEM_TYPE_BIND
 			text				@MENUS_FORCE_PUSH
 			cvar				"force_throw"
-			rect				260 188 340 14
-			textalign			ITEM_ALIGN_RIGHT
-			textalignx			174
+			rect				130 159 180 14
+			textalign			ITEM_ALIGN_LEFT
+			textalignx			20
 			textaligny			0
 			font				4
 			textscale			1
@@ -2313,20 +1566,9 @@ itemDef
 			visible			0
 			// appearance_slot		1
 			descText			@MENUS_USES_FORCE_PUSH_ABILITY
-
-			mouseenter 
-			{ 
-				show			highlight1
-				show			keybindstatus
-			}
-			mouseexit 
-			{ 
-				hide			highlight1
-				hide			keybindstatus
-			}
 			action 
 			{ 
-				play			"sound/interface/button1.wav" ; 
+				play			"sound/weapons/saber/saberhup1.mp3" ; 
 			}
 		}
 
@@ -2337,9 +1579,9 @@ itemDef
 			type				ITEM_TYPE_BIND
 			text				@MENUS_FORCE_PULL
 			cvar				"force_pull"
-			rect				260 202 340 14
-			textalign			ITEM_ALIGN_RIGHT
-			textalignx			174
+			rect				130 174 180 14
+			textalign			ITEM_ALIGN_LEFT
+			textalignx			20
 			textaligny			0
 			font				4
 			textscale			1
@@ -2347,20 +1589,9 @@ itemDef
 			visible			0 
 			// appearance_slot		2
 			descText			@MENUS_USES_FORCE_PULL_ABILITY
-
-			mouseenter 
-			{ 
-				show			highlight2
-				show			keybindstatus
-			}
-			mouseexit 
-			{ 
-				hide			highlight2
-				hide			keybindstatus
-			}
 			action 
 			{ 
-				play			"sound/interface/button1.wav" ; 
+				play			"sound/weapons/saber/saberhup1.mp3" ; 
 			}
 		}
 
@@ -2371,9 +1602,9 @@ itemDef
 			type				ITEM_TYPE_BIND
 			text				@MENUS_FORCE_SPEED
 			cvar				"force_speed"
-			rect				260 216 340 14
-			textalign			ITEM_ALIGN_RIGHT
-			textalignx			174
+			rect				130 189 180 14
+			textalign			ITEM_ALIGN_LEFT
+			textalignx			20
 			textaligny			0
 			font				4
 			textscale			1
@@ -2381,20 +1612,9 @@ itemDef
 			visible			0
 			// appearance_slot		3
 			descText			@MENUS_USES_FORCE_SPEED_ABILITY
-
-			mouseenter 
-			{ 
-				show			highlight3
-				show			keybindstatus
-			}
-			mouseexit 
-			{ 
-				hide			highlight3
-				hide			keybindstatus
-			}
 			action 
 			{ 
-				play			"sound/interface/button1.wav" ; 
+				play			"sound/weapons/saber/saberhup1.mp3" ; 
 			}
 		}
 
@@ -2405,29 +1625,18 @@ itemDef
 			type				ITEM_TYPE_BIND
 			text				@MENUS_FORCE_SIGHT
 			cvar				"force_seeing"
-			rect				260 230 340 14
-			textalign			ITEM_ALIGN_RIGHT
-			textalignx			174
+			rect				130 204 180 14
+			textalign			ITEM_ALIGN_LEFT
+			textalignx			20
 			textaligny			0
 			font				4
 			textscale			1
 			forecolor			.615 .615 .956 1
 			visible				0
 			descText			@MENUS_USES_FORCE_SIGHT_ABILITY
-
-			mouseenter 
-			{ 
-				show			highlight4
-				show			keybindstatus
-			}
-			mouseexit 
-			{ 
-				hide			highlight4
-				hide			keybindstatus
-			}
 			action 
 			{ 
-				play			"sound/interface/button1.wav" ; 
+				play			"sound/weapons/saber/saberhup1.mp3" ; 
 			}
 		}
 
@@ -2439,29 +1648,18 @@ itemDef
 			type				ITEM_TYPE_BIND
 			text				@OJP_MENUS_FORCE_SABERTHROW
 			cvar				"+button12"
-			rect				260 244 340 14
-			textalign			ITEM_ALIGN_RIGHT
-			textalignx			174
+			rect				130 219 180 14
+			textalign			ITEM_ALIGN_LEFT
+			textalignx			20
 			textaligny			0
 			font				4
 			textscale			1
 			forecolor			.615 .615 .956 1
 			visible				0
 			descText			@OJP_MENUS_USES_FORCE_SABERTHROW_ABILITY
-
-			mouseenter 
-			{ 
-				show			highlight5
-				show			keybindstatus
-			}
-			mouseexit 
-			{ 
-				hide			highlight5
-				hide			keybindstatus
-			}
 			action 
 			{ 
-				play			"sound/interface/button1.wav" ; 
+				play			"sound/weapons/saber/saberhup1.mp3" ; 
 			}
 		}
 		//[/SaberThrowSys]
@@ -2474,9 +1672,9 @@ itemDef
 			type				ITEM_TYPE_BIND
 			text				@MENUS_USE_FORCE_POWER
 			cvar				"+useforce"
-			rect				260 300 340 14
-			textalign			ITEM_ALIGN_RIGHT
-			textalignx			174
+			rect				130 264 180 14
+			textalign			ITEM_ALIGN_LEFT
+			textalignx			20
 			textaligny			0
 			font				4
 			textscale			1
@@ -2484,20 +1682,9 @@ itemDef
 			visible			0 
 			// appearance_slot		8
 			descText			@MENUS_USES_CURRENTLY_SELECTED
-
-			mouseenter 
-			{ 
-				show			highlight9
-				show			keybindstatus
-			}
-			mouseexit 
-			{ 
-				hide			highlight9
-				hide			keybindstatus
-			}
 			action 
 			{ 
-				play			"sound/interface/button1.wav" ; 
+				play			"sound/weapons/saber/saberhup1.mp3" ; 
 			}
 		}
 
@@ -2508,9 +1695,9 @@ itemDef
 			type				ITEM_TYPE_BIND
 			text				@MENUS_FORCE_NEXT
 			cvar				"forcenext"
-			rect				260 314 340 14
-			textalign			ITEM_ALIGN_RIGHT
-			textalignx			174
+			rect				130 279 180 14
+			textalign			ITEM_ALIGN_LEFT
+			textalignx			20
 			textaligny			0
 			font				4
 			textscale			1
@@ -2518,20 +1705,9 @@ itemDef
 			visible			0 
 			// appearance_slot		9
 			descText			@MENUS_SELECTS_NEXT_AVAILABLE
-
-			mouseenter 
-			{ 
-				show			highlight10
-				show			keybindstatus
-			}
-			mouseexit 
-			{ 
-				hide			highlight10
-				hide			keybindstatus
-			}
 			action 
 			{ 
-				play			"sound/interface/button1.wav" ; 
+				play			"sound/weapons/saber/saberhup1.mp3" ; 
 			}
 		}
 
@@ -2542,9 +1718,9 @@ itemDef
 			type				ITEM_TYPE_BIND
 			text				@MENUS_FORCE_PREVIOUS
 			cvar				"forceprev"
-			rect				260 328 340 14
-			textalign			ITEM_ALIGN_RIGHT
-			textalignx			174
+			rect				130 294 180 14
+			textalign			ITEM_ALIGN_LEFT
+			textalignx			20
 			textaligny			0
 			font				4
 			textscale			1
@@ -2552,346 +1728,219 @@ itemDef
 			visible			0 
 			// appearance_slot		10
 			descText			@MENUS_SELECTS_PREVIOUS_AVAILABLE
-
-			mouseenter 
-			{ 
-				show			highlight11
-				show			keybindstatus
-			}
-			mouseexit 
-			{ 
-				hide			highlight11
-				hide			keybindstatus
-			}
 			action 
 			{ 
-				play			"sound/interface/button1.wav" ; 
+				play			"sound/weapons/saber/saberhup1.mp3" ; 
 			}
 		}
 
-
-//----------------------------------------------------------------------------------------------
-//
-//	FORCE BINDING 2 (light / dark)
-//
-//----------------------------------------------------------------------------------------------
 		itemDef 
 		{
-			group				forcecontrols2
+			group				forcecontrols
 			type				ITEM_TYPE_BIND
 			text				@MENUS_FORCE_PROTECT
 			cvar				"force_protect"
-			rect				260 188 340 14
-			textalign			ITEM_ALIGN_RIGHT
-			textalignx			174
+			rect				320 159 180 14
+			textalign			ITEM_ALIGN_LEFT
+			textalignx			20
 			textaligny			0
 			font				4
 			textscale			1
 			forecolor			.615 .615 .956 1
 			visible				0
 			descText			@MENUS_USES_FORCE_PROTECT_ABILITY
-
-			mouseenter 
-			{ 
-				show			highlight1
-				show			keybindstatus
-			}
-			mouseexit 
-			{ 
-				hide			highlight1
-				hide			keybindstatus
-			}
 			action 
 			{ 
-				play			"sound/interface/button1.wav" ; 
+				play			"sound/weapons/saber/saberhup1.mp3" ; 
 			}
 		}
 
 		itemDef 
 		{
-			group				forcecontrols2
+			group				forcecontrols
 			type				ITEM_TYPE_BIND
 			text				@MENUS_FORCE_ABSORB
 			cvar				"force_absorb"
-			rect				260 202 340 14
-			textalign			ITEM_ALIGN_RIGHT
-			textalignx			174
+			rect				320 174 180 14
+			textalign			ITEM_ALIGN_LEFT
+			textalignx			20
 			textaligny			0
 			font				4
 			textscale			1
 			forecolor			.615 .615 .956 1
 			visible				0
 			descText			@MENUS_USE_ABSORB
-
-			mouseenter 
-			{ 
-				show			highlight2
-				show			keybindstatus
-			}
-			mouseexit 
-			{ 
-				hide			highlight2
-				hide			keybindstatus
-			}
 			action 
 			{ 
-				play			"sound/interface/button1.wav" ; 
+				play			"sound/weapons/saber/saberhup1.mp3" ; 
 			}
 		}
 
 		itemDef 
 		{
-			group				forcecontrols2
+			group				forcecontrols
 			type				ITEM_TYPE_BIND
 			text				@MENUS_FORCE_HEAL
 			cvar				"force_heal"
-			rect				260 216 340 14
-			textalign			ITEM_ALIGN_RIGHT
-			textalignx			174
+			rect				320 189 180 14
+			textalign			ITEM_ALIGN_LEFT
+			textalignx			20
 			textaligny			0
 			font				4
 			textscale			1
 			forecolor			.615 .615 .956 1
 			visible				0
 			descText			@MENUS_USES_FORCE_HEAL_ABILITY
-
-			mouseenter 
-			{ 
-				show			highlight3
-				show			keybindstatus
-			}
-			mouseexit 
-			{ 
-				hide			highlight3
-				hide			keybindstatus
-			}
 			action 
 			{ 
-				play			"sound/interface/button1.wav" ; 
+				play			"sound/weapons/saber/saberhup1.mp3" ; 
 			}
 		}
 
 		itemDef 
 		{
-			group				forcecontrols2
+			group				forcecontrols
 			type				ITEM_TYPE_BIND
 			text				@MENUS_HEAL_OTHER
 			cvar				"force_healother"
-			rect				260 230 340 14
-			textalign			ITEM_ALIGN_RIGHT
-			textalignx			174
+			rect				320 204 180 14
+			textalign			ITEM_ALIGN_LEFT
+			textalignx			20
 			textaligny			0
 			font				4
 			textscale			1
 			forecolor			.615 .615 .956 1
 			visible				0
 			descText			@MENUS_USE_HEAL_OTHER
-
-			mouseenter 
-			{ 
-				show			highlight4
-				show			keybindstatus
-			}
-			mouseexit 
-			{ 
-				hide			highlight4
-				hide			keybindstatus
-			}
 			action 
 			{ 
-				play			"sound/interface/button1.wav" ; 
+				play			"sound/weapons/saber/saberhup1.mp3" ; 
 			}
 		}
 
 		itemDef 
 		{
-			group				forcecontrols2
+			group				forcecontrols
 			type				ITEM_TYPE_BIND
 			text				@MENUS_FORCE_MINDTRICK
 			cvar				"force_distract"
-			rect				260 244 340 14
-			textalign			ITEM_ALIGN_RIGHT
-			textalignx			174
+			rect				320 219 180 14
+			textalign			ITEM_ALIGN_LEFT
+			textalignx			20
 			textaligny			0
 			font				4
 			textscale			1
 			forecolor			.615 .615 .956 1
 			visible				0
 			descText			@MENUS_USES_MIND_TRICK_ABILITY
-
-			mouseenter 
-			{ 
-				show			highlight5
-				show			keybindstatus
-			}
-			mouseexit 
-			{ 
-				hide			highlight5
-				hide			keybindstatus
-			}
 			action 
 			{ 
-				play			"sound/interface/button1.wav" ; 
+				play			"sound/weapons/saber/saberhup1.mp3" ; 
 			}
 		}
 
 		itemDef 
 		{
-			group				forcecontrols2
+			group				forcecontrols
 			type				ITEM_TYPE_BIND
 			text				@MENUS_FORCE_GRIP
 			cvar				"+force_grip"
-			rect				260 272 340 14
-			textalign			ITEM_ALIGN_RIGHT
-			textalignx			174
+			rect				320 234 180 14
+			textalign			ITEM_ALIGN_LEFT
+			textalignx			20
 			textaligny			0
 			font				4
 			textscale			1
 			forecolor			.615 .615 .956 1
 			visible				0
 			descText			@MENUS_USES_GRIP_FORCE_ABILITY
-
-			mouseenter 
-			{ 
-				show			highlight7
-				show			keybindstatus
-			}
-			mouseexit 
-			{ 
-				hide			highlight7
-				hide			keybindstatus
-			}
 			action 
 			{ 
-				play			"sound/interface/button1.wav" ; 
+				play			"sound/weapons/saber/saberhup1.mp3" ; 
 			}
 		}
 
 		itemDef 
 		{
-			group				forcecontrols2
+			group				forcecontrols
 			type				ITEM_TYPE_BIND
 			text				@MENUS_FORCE_DRAIN
 			cvar				"+force_drain"
-			rect				260 286 340 14
-			textalign			ITEM_ALIGN_RIGHT
-			textalignx			174
+			rect				320 249 180 14
+			textalign			ITEM_ALIGN_LEFT
+			textalignx			20
 			textaligny			0
 			font				4
 			textscale			1
 			forecolor			.615 .615 .956 1
 			visible				0
 			descText			@MENUS_USES_DRAIN_FORCE_ABILITY
-
-			mouseenter 
-			{ 
-				show			highlight8
-				show			keybindstatus
-			}
-			mouseexit 
-			{ 
-				hide			highlight8
-				hide			keybindstatus
-			}
 			action 
 			{ 
-				play			"sound/interface/button1.wav" ; 
+				play			"sound/weapons/saber/saberhup1.mp3" ; 
 			}
 		}
 
 		itemDef 
 		{
-			group				forcecontrols2
+			group				forcecontrols
 			type				ITEM_TYPE_BIND
 			text				@MENUS_FORCE_LIGHTNING
 			cvar				"+force_lightning"
-			rect				260 300 340 14
-			textalign			ITEM_ALIGN_RIGHT
-			textalignx			174
+			rect				320 264 180 14
+			textalign			ITEM_ALIGN_LEFT
+			textalignx			20
 			textaligny			0
 			font				4
 			textscale			1
 			forecolor			.615 .615 .956 1
 			visible				0
 			descText			@MENUS_USES_LIGHTNING_FORCE
-
-			mouseenter 
-			{ 
-				show			highlight9
-				show			keybindstatus
-			}
-			mouseexit 
-			{ 
-				hide			highlight9
-				hide			keybindstatus
-			}
 			action 
 			{ 
-				play			"sound/interface/button1.wav" ; 
+				play			"sound/weapons/saber/saberhup1.mp3" ; 
 			}
 		}
 
 		itemDef 
 		{
-			group				forcecontrols2
+			group				forcecontrols
 			type				ITEM_TYPE_BIND
 			text				@MENUS_RAGE
 			cvar				"force_rage"
-			rect				260 314 340 14
-			textalign			ITEM_ALIGN_RIGHT
-			textalignx			174
+			rect				320 279 180 14
+			textalign			ITEM_ALIGN_LEFT
+			textalignx			20
 			textaligny			0
 			font				4
 			textscale			1
 			forecolor			.615 .615 .956 1
 			visible				0
 			descText			@MENUS_USES_RAGE_FORCE_ABILITY
-
-			mouseenter 
-			{ 
-				show			highlight10
-				show			keybindstatus
-			}
-			mouseexit 
-			{ 
-				hide			highlight10
-				hide			keybindstatus
-			}
 			action 
 			{ 
-				play			"sound/interface/button1.wav" ; 
+				play			"sound/weapons/saber/saberhup1.mp3" ; 
 			}
 		}
 
 		itemDef 
 		{
-			group				forcecontrols2
+			group				forcecontrols
 			type				ITEM_TYPE_BIND
 			text				@MENUS_TEAM_POWER
 			cvar				"force_forcepowerother"
-			rect				260 330 340 14
-			textalign			ITEM_ALIGN_RIGHT
-			textalignx			174
+			rect				320 294 180 14
+			textalign			ITEM_ALIGN_LEFT
+			textalignx			20
 			textaligny			0
 			font				4
 			textscale			1
 			forecolor			.615 .615 .956 1
 			visible				0
 			descText			@MENUS_USES_TEAM_POWER_FORCE
-
-			mouseenter 
-			{ 
-				show			highlight11
-				show			keybindstatus
-			}
-			mouseexit 
-			{ 
-				hide			highlight11
-				hide			keybindstatus
-			}
 			action 
 			{ 
-				play			"sound/interface/button1.wav" ; 
+				play			"sound/weapons/saber/saberhup1.mp3" ; 
 			}
 		}
 
@@ -2907,9 +1956,9 @@ itemDef
 			type				ITEM_TYPE_YESNO
 			text				@MENUS_FREE_LOOK
 			cvar				"cl_freelook"
-			rect				260 188 340 14
-			textalign			ITEM_ALIGN_RIGHT
-			textalignx			174
+			rect				130 159 180 14
+			textalign			ITEM_ALIGN_LEFT
+			textalignx			20
 			textaligny			0
 			font				4
 			textscale			1
@@ -2917,19 +1966,9 @@ itemDef
 			visible			0
 			// appearance_slot		1
 			descText			@MENUS_TOGGLE_TO_ALLOW_PLAYER
-		
-			mouseenter 
-			{ 
-				show			highlight1
-			}
-
-			mouseexit 
-			{ 
-				hide			highlight1
-			}			
 			action 
 			{ 
-				play			"sound/interface/button1.wav" ; 
+				play			"sound/weapons/saber/saberhup1.mp3" ; 
 			}
 		}
 
@@ -2940,9 +1979,9 @@ itemDef
 			type				ITEM_TYPE_SLIDER
 			text				@MENUS_SENSITIVITY
 			cvarfloat			"sensitivity" 5 2 30
-			rect				260 216 340 14
-			textalign			ITEM_ALIGN_RIGHT
-			textalignx			174
+			rect				130 189 180 14
+			textalign			ITEM_ALIGN_LEFT
+			textalignx			20
 			textaligny			0
 			font				4
 			textscale			1
@@ -2950,18 +1989,9 @@ itemDef
 			visible			0 
 			// appearance_slot		2
 			descText			@MENUS_ADJUSTS_CHARACTER_REACTION
-
-			mouseenter 
-			{ 
-				show			highlight3
-			}
-			mouseexit 
-			{ 
-				hide			highlight3
-			} 
 			action 
 			{ 
-				play			"sound/interface/button1.wav" ; 
+				play			"sound/weapons/saber/saberhup1.mp3" ; 
 			}
 		}
 
@@ -2972,9 +2002,9 @@ itemDef
 			type				ITEM_TYPE_YESNO
 			text				@MENUS_INVERT_MOUSE
 			cvar				"ui_mousePitch"
-			rect				260 244 340 14
-			textalign			ITEM_ALIGN_RIGHT
-			textalignx			174
+			rect				130 204 180 14
+			textalign			ITEM_ALIGN_LEFT
+			textalignx			20
 			textaligny			0
 			font				4
 			textscale			1
@@ -2985,7 +2015,7 @@ itemDef
 
 			action 
 			{ 
-				play			"sound/interface/button1.wav" ; 
+				play			"sound/weapons/saber/saberhup1.mp3" ; 
 				uiScript update ui_mousePitch 
 			}
 			mouseenter 
@@ -3006,9 +2036,9 @@ itemDef
 			type				ITEM_TYPE_YESNO
 			text				@MENUS_SMOOTH_MOUSE
 			cvar				"m_filter"
-			rect				260 258 340 14
-			textalign			ITEM_ALIGN_RIGHT
-			textalignx			174
+			rect				130 219 180 14
+			textalign			ITEM_ALIGN_LEFT
+			textalignx			20
 			textaligny			0
 			font				4
 			textscale			1
@@ -3016,19 +2046,9 @@ itemDef
 			visible			0 
 			// appearance_slot		4
 			descText			@MENUS_WHEN_TURNED_ON_MOUSE
-
-			mouseenter 
-			{ 
-				show			highlight6
-			}
-
-			mouseexit 
-			{ 
-				hide			highlight6
-			}			
 			action 
 			{ 
-				play			"sound/interface/button1.wav" ; 
+				play			"sound/weapons/saber/saberhup1.mp3" ; 
 			}
 		}
 
@@ -3039,9 +2059,9 @@ itemDef
 			type				ITEM_TYPE_YESNO
 			text				@MENUS_ENABLE_JOYSTICK
 			cvar				"in_joystick"
-			rect				260 300 340 14
-			textalign			ITEM_ALIGN_RIGHT
-			textalignx			174
+			rect				130 249 180 14
+			textalign			ITEM_ALIGN_LEFT
+			textalignx			20
 			textaligny			0
 			font				4
 			textscale			1
@@ -3049,19 +2069,9 @@ itemDef
 			visible			0 
 			// appearance_slot		6
 			descText			@MENUS_TURNED_ON_GAME_SEARCHES
-
-			mouseenter 
-			{ 
-				show			highlight9
-			}
-
-			mouseexit 
-			{ 
-				hide			highlight9
-			}			
 			action 
 			{ 
-				play			"sound/interface/button1.wav" ; 
+				play			"sound/weapons/saber/saberhup1.mp3" ; 
 				exec			in_restart
 			}
 		}
@@ -3073,9 +2083,9 @@ itemDef
 			type				ITEM_TYPE_SLIDER
 			text				@MENUS_JOYSTICK_THRESHOLD
 			cvarfloat			"joy_threshold" .15 .05 .75
-			rect				260 328 340 14
-			textalign			ITEM_ALIGN_RIGHT
-			textalignx			174
+			rect				130 279 180 14
+			textalign			ITEM_ALIGN_LEFT
+			textalignx			20
 			textaligny			0
 			font				4
 			textscale			1
@@ -3083,18 +2093,9 @@ itemDef
 			visible			0 
 			// appearance_slot		7
 			descText			@MENUS_ADJUSTS_THE_SIZE_OF_THE
-
-			mouseenter 
-			{ 
-				show			highlight11
-			}
-			mouseexit 
-			{ 
-				hide			highlight11
-			} 
 			action 
 			{ 
-				play			"sound/interface/button1.wav" ; 
+				play			"sound/weapons/saber/saberhup1.mp3" ; 
 			}
 		}
 
@@ -3105,9 +2106,9 @@ itemDef
 			type				ITEM_TYPE_YESNO
 			text				@MENUS_X_AXIS_AS_BUTTONS
 			cvar				"joy_xbutton"
-			rect				260 356 340 14
-			textalign			ITEM_ALIGN_RIGHT
-			textalignx			174
+			rect				130 294 180 14
+			textalign			ITEM_ALIGN_LEFT
+			textalignx			20
 			textaligny			0
 			font				4
 			textscale			1
@@ -3115,19 +2116,9 @@ itemDef
 			visible			0
 			// appearance_slot		8
 			descText			@MENUS_WHEN_OFF_HORIZONTAL
-		
-			mouseenter 
-			{ 
-				show			highlight13
-			}
-
-			mouseexit 
-			{ 
-				hide			highlight13
-			}			
 			action 
 			{ 
-				play			"sound/interface/button1.wav" ; 
+				play			"sound/weapons/saber/saberhup1.mp3" ; 
 			}
 		}
 
@@ -3138,9 +2129,9 @@ itemDef
 			type				ITEM_TYPE_YESNO
 			text				@MENUS_Y_AXIS_AS_BUTTONS
 			cvar				"joy_ybutton"
-			rect				260 370 340 14
-			textalign			ITEM_ALIGN_RIGHT
-			textalignx			174
+			rect				130 309 180 14
+			textalign			ITEM_ALIGN_LEFT
+			textalignx			20
 			textaligny			0
 			font				4
 			textscale			1
@@ -3148,19 +2139,9 @@ itemDef
 			visible			0 
 			// appearance_slot		9
 			descText			@MENUS_WHEN_OFF_VERTICAL_STICK
-		
-			mouseenter 
-			{ 
-				show			highlight14
-			}
-
-			mouseexit 
-			{ 
-				hide			highlight14
-			}			
 			action 
 			{ 
-				play			"sound/interface/button1.wav" ; 
+				play			"sound/weapons/saber/saberhup1.mp3" ; 
 			}
 		}
 
@@ -3176,9 +2157,9 @@ itemDef
 			type				ITEM_TYPE_YESNO
 			text				@MENUS_ALWAYS_RUN
 			cvar				"cl_run"
-			rect				260 188 340 14
-			textalign			ITEM_ALIGN_RIGHT
-			textalignx			174
+			rect				130 159 180 14
+			textalign			ITEM_ALIGN_LEFT
+			textalignx			20
 			textaligny			0
 			font				4
 			textscale			1
@@ -3186,19 +2167,9 @@ itemDef
 			visible				0
 			// appearance_slot		1
 			descText			@MENUS_WHEN_ON_PLAYER_ALWAYS
-		
-			mouseenter 
-			{ 
-				show			highlight1
-			}
-
-			mouseexit 
-			{ 
-				hide			highlight1
-			}			
 			action 
 			{ 
-				play			"sound/interface/button1.wav" ; 
+				play			"sound/weapons/saber/saberhup1.mp3" ; 
 			}
 		}
 
@@ -3214,26 +2185,18 @@ itemDef
 				@MENUS_BEST_SAFE_WEAPON 	1
 				@MENUS_ALWAYS_BEST_WEAPON 	2
 			}
-			rect				260 202 340 14
-			textalign			ITEM_ALIGN_RIGHT
-			textalignx			174
+			rect				130 174 180 14
+			textalign			ITEM_ALIGN_LEFT
+			textalignx			20
 			textaligny			0
 			font				4
 			textscale			1
 			forecolor			.615 .615 .956 1
 			visible			0
 			descText			@MENUS_CHOOSE_WHETHER_TO_SWITCH
-			mouseenter 
-			{ 
-				show			highlight2
-			}
-			mouseexit 
-			{ 
-				hide			highlight2
-			}			
 			action 
 			{ 
-				play			"sound/interface/button1.wav" 
+				play			"sound/weapons/saber/saberhup1.mp3" 
 			}
 		}
 
@@ -3243,29 +2206,18 @@ itemDef
 			type				ITEM_TYPE_BIND
 			text				@MENUS_CHAT
 			cvar				"messagemode"
-			rect				260 230 340 14
-			textalign			ITEM_ALIGN_RIGHT
-			textalignx			174
+			rect				130 204 180 14
+			textalign			ITEM_ALIGN_LEFT
+			textalignx			20
 			textaligny			0
 			font				4
 			textscale			1
 			forecolor			.615 .615 .956 1
 			visible				0 
 			descText			@MENUS_SENDS_A_CHAT_MESSAGE
-
-			mouseenter 
-			{ 
-				show			highlight4
-				show			keybindstatus
-			}
-			mouseexit 
-			{ 
-				hide			highlight4
-				hide			keybindstatus
-			}
 			action 
 			{ 
-				play			"sound/interface/button1.wav" ; 
+				play			"sound/weapons/saber/saberhup1.mp3" ; 
 			}
 		}
 
@@ -3275,29 +2227,18 @@ itemDef
 			type				ITEM_TYPE_BIND
 			text				@MENUS_TEAM_CHAT
 			cvar				"messagemode2"
-			rect				260 244 340 14
-			textalign			ITEM_ALIGN_RIGHT
-			textalignx			174
+			rect				130 219 180 14
+			textalign			ITEM_ALIGN_LEFT
+			textalignx			20
 			textaligny			0
 			font				4
 			textscale			1
 			forecolor			.615 .615 .956 1
 			visible				0 
 			descText			@MENUS_A_CHAT_MESSAGE_TO_EVERYONE
-
-			mouseenter 
-			{ 
-				show			highlight5
-				show			keybindstatus
-			}
-			mouseexit 
-			{ 
-				hide			highlight5
-				hide			keybindstatus
-			}
 			action 
 			{ 
-				play			"sound/interface/button1.wav" ; 
+				play			"sound/weapons/saber/saberhup1.mp3" ; 
 			}
 		}
 
@@ -3307,29 +2248,18 @@ itemDef
 			type				ITEM_TYPE_BIND
 			text				@MENUS_VC_CONTROLS
 			cvar				"voicechat"
-			rect				260 258 340 14
-			textalign			ITEM_ALIGN_RIGHT
-			textalignx			174
+			rect				130 234 180 14
+			textalign			ITEM_ALIGN_LEFT
+			textalignx			20
 			textaligny			0
 			font				4
 			textscale			1
 			forecolor			.615 .615 .956 1
 			visible				0 
 			descText			@MENUS_VC_CONTROLS_DESC
-
-			mouseenter 
-			{ 
-				show			highlight6
-				show			keybindstatus
-			}
-			mouseexit 
-			{ 
-				hide			highlight6
-				hide			keybindstatus
-			}
 			action 
 			{ 
-				play			"sound/interface/button1.wav" ; 
+				play			"sound/weapons/saber/saberhup1.mp3" ; 
 			}
 		}
 
@@ -3339,9 +2269,9 @@ itemDef
 			type				ITEM_TYPE_BIND
 			text				@MENUS_AUTOMAP
 			cvar				"automap_toggle"
-			rect				260 272 340 14
-			textalign			ITEM_ALIGN_RIGHT
-			textalignx			174
+			rect				130 249 180 14
+			textalign			ITEM_ALIGN_LEFT
+			textalignx			20
 			textaligny			0
 			font				4
 			textscale			1
@@ -3350,18 +2280,7 @@ itemDef
 			descText			@MENUS_AUTOMAP_DESC
 			action
 			{
-				play			"sound/interface/button1.wav" ; 
-			}
-
-			mouseenter 
-			{ 
-				show			highlight7
-				show			keybindstatus
-			}
-			mouseexit 
-			{ 
-				hide			highlight7
-				hide			keybindstatus
+				play			"sound/weapons/saber/saberhup1.mp3" ; 
 			}
 		}
 
@@ -3371,9 +2290,9 @@ itemDef
 			type				ITEM_TYPE_BIND
 			text				@MENUS_SHOW_SCORES
 			cvar				"+scores"
-			rect				260 286 340 14
-			textalign			ITEM_ALIGN_RIGHT
-			textalignx			174
+			rect				130 264 180 14
+			textalign			ITEM_ALIGN_LEFT
+			textalignx			20
 			textaligny			0
 			font				4
 			textscale			1
@@ -3381,19 +2300,9 @@ itemDef
 			visible				0 
 			descText			@MENUS_SHOWS_THE_CURRENT_SCORES
 
-			mouseenter 
-			{ 
-				show			highlight8
-				show			keybindstatus
-			}
-			mouseexit 
-			{ 
-				hide			highlight8
-				hide			keybindstatus
-			}
 			action 
 			{ 
-				play			"sound/interface/button1.wav" ; 
+				play			"sound/weapons/saber/saberhup1.mp3" ; 
 			}
 		}
 
@@ -3403,29 +2312,18 @@ itemDef
 			type				ITEM_TYPE_BIND
 			text				@MENUS_SABER_CHALLENGE
 			cvar				"engage_duel"
-			rect				260 300 340 14
-			textalign			ITEM_ALIGN_RIGHT
-			textalignx			174
+			rect				130 279 180 14
+			textalign			ITEM_ALIGN_LEFT
+			textalignx			20
 			textaligny			0
 			font				4
 			textscale			1
 			forecolor			.615 .615 .956 1
 			visible				0 
 			descText			@MENUS_INFO_SABER_CHALLENGE
-
-			mouseenter 
-			{ 
-				show			highlight9
-				show			keybindstatus
-			}
-			mouseexit 
-			{ 
-				hide			highlight9
-				hide			keybindstatus
-			}
 			action 
 			{ 
-				play			"sound/interface/button1.wav" ; 
+				play			"sound/weapons/saber/saberhup1.mp3" ; 
 			}
 		}
 		
@@ -3435,29 +2333,18 @@ itemDef
 			type				ITEM_TYPE_BIND
 			text				@MENUS_3RD_PERSON
 			cvar				"cg_thirdperson !"
-			rect				260 314 340 14
-			textalign			ITEM_ALIGN_RIGHT
-			textalignx			174
+			rect				130 294 180 14
+			textalign			ITEM_ALIGN_LEFT
+			textalignx			20
 			textaligny			0
 			font				4
 			textscale			1
 			forecolor			.615 .615 .956 1
 			visible				0
 			descText			@MENUS_CHANGES_VIEW_BETWEEN
-
-			mouseenter 
-			{ 
-				show			highlight10
-				show			keybindstatus
-			}
-			mouseexit 
-			{ 
-				hide			highlight10
-				hide			keybindstatus
-			}
 			action 
 			{ 
-				play			"sound/interface/button1.wav" ; 
+				play			"sound/weapons/saber/saberhup1.mp3" ; 
 			}
 		}
 
@@ -3467,29 +2354,18 @@ itemDef
 			type				ITEM_TYPE_BIND
 			text				@MENUS_TAUNT
 			cvar				"taunt"
-			rect				260 342 340 14
-			textalign			ITEM_ALIGN_RIGHT
-			textalignx			174
+			rect				320 204 180 14
+			textalign			ITEM_ALIGN_LEFT
+			textalignx			20
 			textaligny			0
 			font				4
 			textscale			1
 			forecolor			.615 .615 .956 1
 			visible				0
 			descText			@MENUS_TAUNT_DESC
-
-			mouseenter 
-			{ 
-				show			highlight12
-				show			keybindstatus
-			}
-			mouseexit 
-			{ 
-				hide			highlight12
-				hide			keybindstatus
-			}
 			action 
 			{ 
-				play			"sound/interface/button1.wav" ; 
+				play			"sound/weapons/saber/saberhup1.mp3" ; 
 			}
 		}
 
@@ -3499,29 +2375,18 @@ itemDef
 			type				ITEM_TYPE_BIND
 			text				@MENUS_BOW
 			cvar				"bow"
-			rect				260 356 340 14
-			textalign			ITEM_ALIGN_RIGHT
-			textalignx			174
+			rect				320 219 180 14
+			textalign			ITEM_ALIGN_LEFT
+			textalignx			20
 			textaligny			0
 			font				4
 			textscale			1
 			forecolor			.615 .615 .956 1
 			visible				0
 			descText			@MENUS_BOW_DESC
-
-			mouseenter 
-			{ 
-				show			highlight13
-				show			keybindstatus
-			}
-			mouseexit 
-			{ 
-				hide			highlight13
-				hide			keybindstatus
-			}
 			action 
 			{ 
-				play			"sound/interface/button1.wav" ; 
+				play			"sound/weapons/saber/saberhup1.mp3" ; 
 			}
 		}
 
@@ -3531,29 +2396,18 @@ itemDef
 			type				ITEM_TYPE_BIND
 			text				@MENUS_MEDITATE
 			cvar				"meditate"
-			rect				260 372 340 14
-			textalign			ITEM_ALIGN_RIGHT
-			textalignx			174
+			rect				320 234 180 14
+			textalign			ITEM_ALIGN_LEFT
+			textalignx			20
 			textaligny			0
 			font				4
 			textscale			1
 			forecolor			.615 .615 .956 1
 			visible				0
 			descText			@MENUS_MEDITATE_DESC
-
-			mouseenter 
-			{ 
-				show			highlight14
-				show			keybindstatus
-			}
-			mouseexit 
-			{ 
-				hide			highlight14
-				hide			keybindstatus
-			}
 			action 
 			{ 
-				play			"sound/interface/button1.wav" ; 
+				play			"sound/weapons/saber/saberhup1.mp3" ; 
 			}
 		}
 
@@ -3563,29 +2417,18 @@ itemDef
 			type				ITEM_TYPE_BIND
 			text				@MENUS_FLOURISH
 			cvar				"flourish"
-			rect				260 386 340 14
-			textalign			ITEM_ALIGN_RIGHT
-			textalignx			174
+			rect				320 249 180 14
+			textalign			ITEM_ALIGN_LEFT
+			textalignx			20
 			textaligny			0
 			font				4
 			textscale			1
 			forecolor			.615 .615 .956 1
 			visible				0
 			descText			@MENUS_FLOURISH_DESC
-
-			mouseenter 
-			{ 
-				show			highlight15
-				show			keybindstatus
-			}
-			mouseexit 
-			{ 
-				hide			highlight15
-				hide			keybindstatus
-			}
 			action 
 			{ 
-				play			"sound/interface/button1.wav" ; 
+				play			"sound/weapons/saber/saberhup1.mp3" ; 
 			}
 		}
 
@@ -3595,29 +2438,18 @@ itemDef
 			type				ITEM_TYPE_BIND
 			text				@MENUS_GLOAT
 			cvar				"gloat"
-			rect				260 400 340 14
-			textalign			ITEM_ALIGN_RIGHT
-			textalignx			174
+			rect				320 264 180 14
+			textalign			ITEM_ALIGN_LEFT
+			textalignx			20
 			textaligny			0
 			font				4
 			textscale			1
 			forecolor			.615 .615 .956 1
 			visible				0
 			descText			@MENUS_GLOAT_DESC
-
-			mouseenter 
-			{ 
-				show			highlight16
-				show			keybindstatus
-			}
-			mouseexit 
-			{ 
-				hide			highlight16
-				hide			keybindstatus
-			}
 			action 
 			{ 
-				play			"sound/interface/button1.wav" ; 
+				play			"sound/weapons/saber/saberhup1.mp3" ; 
 			}
 		}
 
@@ -3685,6 +2517,84 @@ itemDef
 			forecolor			1 .682 0 1
 			visible				0
 			decoration 
+		}
+
+		//----------------------------------------------------------------------------------------------
+		//
+		//	OTHER MAIN MENU BUTTONS
+		//
+		//----------------------------------------------------------------------------------------------
+		// Credits hidden button
+		itemDef 
+		{
+			name				creditsbutton
+			group				othermain
+//			text				@CREDITS
+			descText			@MENUS_SHOW_GAME_CREDITS
+			type				ITEM_TYPE_BUTTON
+			style				WINDOW_STYLE_EMPTY
+			rect				200 144 256 256
+			font				2
+			textscale			1
+			textaligny			0
+			textalign			ITEM_ALIGN_CENTER
+			textalignx			46
+			backcolor			0 0 0 0
+			forecolor			1 .682 0 1
+			visible				0
+
+			mouseEnter
+			{
+			}		
+			mouseExit
+			{
+			}		
+			action 
+			{ 
+				play			"sound/weapons/saber/saberhup1.mp3" ; 	
+				close			all ; 
+				open			creditsMenu 
+			}
+		}
+
+		// EXIT button in lower left corner
+		itemDef 
+		{
+			name				exitgamebutton_glow
+			group				mods
+			style				WINDOW_STYLE_SHADER
+			rect				255 444 130 24
+			background			"gfx/menus/menu_buttonback"			// Frame around button
+			forecolor			1 1 1 1
+			visible			0
+			decoration
+		}
+
+		itemDef 
+		{
+			name				exitgamebutton
+			group				othermain
+			text				@MENUS_EXIT
+			type				ITEM_TYPE_BUTTON
+			style				WINDOW_STYLE_EMPTY
+			rect				550 449 111 21 
+			font				3
+			textscale			0.8
+			textalign			ITEM_ALIGN_CENTER
+			textstyle			0
+			textalignx			65
+			textaligny			5
+			forecolor			0.7 0.7 0.7 1
+			visible				1
+
+	  	  
+			action 
+			{ 
+				play			"sound/weapons/saber/saberoff.mp3"; 
+				setitemrect	metalpipe	0 0 0 0
+				open			quitMenu ;
+			}
+		}
 		}
 	}
 }

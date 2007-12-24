@@ -599,15 +599,5 @@ REFERENCE       THERMAL_DETONATOR_THROW_AVAILABLE
 LANG_ENGLISH	"Automatically Throws available Thermal Detonator without being selected in inventory"
 LANG_GERMAN	    "#same"
 
-REFERENCE		QUICK_PARRY_HOLDBUTTON
-LANG_ENGLISH	"Quick Parry Hold Button:"
-LANG_GERMAN	    "#same"
-
-
-REFERENCE 		ALLOWS_FOR_QUICK_PARRY
-LANG_ENGLISH	"Allows parrying that doesn't stall your enemy" 
-LANG_GERMAN	    "#same"
-
-
 ENDMARKER
 

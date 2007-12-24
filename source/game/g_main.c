@@ -364,6 +364,10 @@ vmCvar_t	g_allowBotLimit;
 vmCvar_t	mapURL;
 //[/MapURLs]
 
+//[FFARespawnTimer]
+vmCvar_t		ojp_ffaRespawnTimer;
+//[/FFARespawnTimer]
+
 // bk001129 - made static to avoid aliasing
 static cvarTable_t		gameCvarTable[] = {
 	// don't override the cheat state set by the system
@@ -792,6 +796,9 @@ static cvarTable_t		gameCvarTable[] = {
 	//evade damage in exchange for DP.
 	{ &ojp_allowBodyDodge, "ojp_allowBodyDodge", "0", CVAR_SERVERINFO|CVAR_ARCHIVE, 0, qtrue },
 	//[/DodgeSys]
+	//[FFARespawnTimer]
+	{ &ojp_ffaRespawnTimer, "ojp_ffaRespawnTimer","1",CVAR_ARCHIVE,0,qtrue},
+	//[/FFARespawnTimer]
 };
 
 // bk001129 - made static to avoid aliasing
@@ -4320,6 +4327,7 @@ extern void Jedi_Decloak( gentity_t *self );
 qboolean G_PointInBounds( vec3_t point, vec3_t mins, vec3_t maxs );
 
 int g_siegeRespawnCheck = 0;
+int ojp_ffaRespawnTimerCheck =0;//[FFARespawnTimer]
 
 //[AREAPORTALFIX]
 void SetMoverState( gentity_t *ent, moverState_t moverState, int time );
@@ -4371,6 +4379,31 @@ void G_RunFrame( int levelTime ) {
 
 		g_siegeRespawnCheck = level.time + g_siegeRespawn.integer * 1000;
 	}
+
+	//[FFARespawnTimer]
+	if ((g_gametype.integer == GT_FFA || g_gametype.integer == GT_TEAM) &&
+		ojp_ffaRespawnTimer.integer &&
+		ojp_ffaRespawnTimerCheck < level.time)
+	{
+		int i = 0;
+		gentity_t *clEnt;
+		while (i < MAX_CLIENTS)
+		{
+			clEnt = &g_entities[i];
+
+			if (clEnt->inuse && clEnt->client &&
+				clEnt->client->tempSpectate > level.time &&
+				clEnt->client->sess.sessionTeam != TEAM_SPECTATOR)
+			{
+				respawn(clEnt);
+				clEnt->client->tempSpectate = 0;
+			}
+			i++;
+		}
+
+		ojp_ffaRespawnTimerCheck = level.time + 30000;
+	}
+	//[/FFARespawnTimer]
 
 	if (gDoSlowMoDuel)
 	{

@@ -10,6 +10,7 @@ static vec3_t	playerMins = {-15, -15, DEFAULT_MINS_2};
 static vec3_t	playerMaxs = {15, 15, DEFAULT_MAXS_2};
 
 extern int g_siegeRespawnCheck;
+extern int ojp_ffaRespawnTimerCheck;//[FFARespawnTimer]
 
 void WP_SaberAddG2Model( gentity_t *saberent, const char *saberModel, qhandle_t saberSkin );
 void WP_SaberRemoveG2Model( gentity_t *saberent );
@@ -1263,6 +1264,33 @@ void respawn( gentity_t *ent ) {
 	if (ojp_lms.integer > 0 && ent->lives < 1 && BG_IsLMSGametype(g_gametype.integer) && LMS_EnoughPlayers())
 	{//playing LMS and we're DEAD!  Just start chillin in tempSpec.
 		OJP_Spectator(ent);
+	}
+	else if(g_gametype.integer == GT_FFA || g_gametype.integer == GT_TEAM)
+	{
+		if (ojp_ffaRespawnTimer.integer)
+		{
+			if (ent->client->tempSpectate <= level.time)
+			{
+				int minDel = g_siegeRespawn.integer* 2000;
+				if (minDel < 20000)
+				{
+					minDel = 20000;
+				}
+				OJP_Spectator(ent);
+				ent->client->tempSpectate = level.time + minDel;
+
+				// Respawn time.
+				if ( ent->s.number < MAX_CLIENTS )
+				{
+					gentity_t *te = G_TempEntity( ent->client->ps.origin, EV_SIEGESPEC );
+					te->s.time = ojp_ffaRespawnTimerCheck;
+					te->s.owner = ent->s.number;
+				}
+
+				return;
+			}
+		}
+		ClientSpawn(ent);
 	}
 	else if (g_gametype.integer == GT_SIEGE)
 	//if (g_gametype.integer == GT_SIEGE)
@@ -4082,10 +4110,6 @@ void ClientSpawn(gentity_t *ent) {
 				{
 					client->ps.stats[STAT_WEAPONS] |= ( 1 << WP_BRYAR_PISTOL );
 				}
-				if(client->skillLevel[SK_PISTOL] == FORCE_LEVEL_3)
-					client->ps.userInt2 |= SL_PISTOL_3;
-				else
-					client->ps.userInt2 &= ~SL_PISTOL_3;
 			}
 
 			if(client->skillLevel[SK_BLASTER])
