@@ -588,6 +588,62 @@
 				setitemcolor	setsk_disruptor forecolor .2 1 .2 1
 			}
 		}
+		
+		// t-21 title
+		itemDef 
+		{
+			name					setsk_flechette
+			group					gunpowers
+			style					0	
+			text					"T-21"
+			rect					20 210 110 15
+			textalign				ITEM_ALIGN_LEFT												
+			textalignx				0
+			textaligny				0
+			font					4
+			textscale				1
+			forecolor				.2 1 .2 1
+			outlinecolor			1 .5 .5 .5
+			backcolor				0 0 0 0
+			border					0
+			bordercolor				0 0 0 0
+			visible					1 
+			decoration
+		}
+		
+		// t-21 assign
+		itemDef 
+		{
+			name					setsk_flechette
+			group					gunpowers
+			style					0	
+			ownerdraw				UI_FORCE_RANK_FLECHETTE  
+			rect					20 210 175 15
+			textalign				ITEM_ALIGN_LEFT		
+			textalignx				115
+			textaligny				-5
+			textscale				.25        
+			forecolor				.2 1 .2 1
+			backcolor				0 0 0 0
+			forecolor				1 0.2 0.2 1
+			border					0
+			bordercolor				0 0 0 0
+			descText				"Gains the T-21 shotgun."
+			visible					1 
+			action 
+			{ 
+				play			"sound/interface/button1.wav" ;
+			}
+
+			mouseenter 
+			{ 
+				setitemcolor	setsk_flechette forecolor .7 1 2. 1
+			}
+			mouseexit 
+			{ 
+				setitemcolor	setsk_flechette forecolor .2 1 .2 1
+			}
+		}
 	
 		// repeater upgrade by t3h 1337 DarthDie ;) MERRY CHRISTMAS
 		itemDef 
@@ -596,7 +652,7 @@
 			group					repeaterupgradeg
 			style					0	
 			ownerdraw				UI_FORCE_RANK_REPEATERUPGRADE  
-			rect					20 210 175 15
+			rect					20 225 175 15
 			textalign				ITEM_ALIGN_LEFT		
 			textalignx				115
 			textaligny				-5
@@ -629,7 +685,7 @@
 			group					repeaterupgradeg
 			style					0	
 			text					"Repeater Upgrade"
-			rect					20 210 110 15
+			rect					20 225 110 15
 			textalign				ITEM_ALIGN_LEFT												
 			textalignx				0
 			textaligny				0

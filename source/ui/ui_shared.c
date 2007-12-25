@@ -3249,6 +3249,7 @@ qboolean Item_OwnerDraw_HandleKey(itemDef_t *item, int key) {
 			case UI_FORCE_RANK_DUALSTYLE:
 			case UI_FORCE_RANK_STAFFSTYLE:
 			case UI_FORCE_RANK_REPEATERUPGRADE:
+			case UI_FORCE_RANK_FLECHETTE:
 			//[/StanceSelection]
 			//[/ExpSys]
 	  			if(!Rect_ContainsPoint(&item->window.rect, DC->cursorx, DC->cursory) )

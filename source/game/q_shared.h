@@ -671,6 +671,7 @@ typedef enum
 	SK_STAFFSTYLE,	//Staff lightsaber style
 	//[/StanceSelection]
 	SK_REPEATERUPGRADE,//[Repeater]
+	SK_FLECHETTE,//[Flechette]
 	NUM_SKILLS
 } skills_t;
 

@@ -306,7 +306,7 @@ void UI_UpdateClientForcePowers(const char *teamArg)
 {
 	//[ExpSys]
 	char newForceString[MAX_INFO_STRING];
-	strncpy(newForceString, va("%i-%i-%i%i%i%i%i%i%i%i%i%i%i%i%i%i%i%i%i%i%i%i%i%i%i%i%i%i%i%i%i%i%i%i%i%i%i%i%i%i%i%i",
+	strncpy(newForceString, va("%i-%i-%i%i%i%i%i%i%i%i%i%i%i%i%i%i%i%i%i%i%i%i%i%i%i%i%i%i%i%i%i%i%i%i%i%i%i%i%i%i%i%i%i",
 		uiForceRank, uiForceSide, uiForcePowersRank[0], uiForcePowersRank[1],
 		uiForcePowersRank[2], uiForcePowersRank[3], uiForcePowersRank[4],
 		uiForcePowersRank[5], uiForcePowersRank[6], uiForcePowersRank[7],
@@ -320,7 +320,7 @@ void UI_UpdateClientForcePowers(const char *teamArg)
 		uiForcePowersRank[29], uiForcePowersRank[30], uiForcePowersRank[31],
 		uiForcePowersRank[32], uiForcePowersRank[33], uiForcePowersRank[34],
 		uiForcePowersRank[35], uiForcePowersRank[36], uiForcePowersRank[37],
-		uiForcePowersRank[38],uiForcePowersRank[39]), sizeof(newForceString));
+		uiForcePowersRank[38],uiForcePowersRank[39],uiForcePowersRank[40]), sizeof(newForceString));
 	/*
 	//[ExpSys]
 	trap_Cvar_Set( "forcepowers", va("%i-%i-%i%i%i%i%i%i%i%i%i%i%i%i%i%i%i%i%i%i%i%i%i%i%i%i%i%i%i%i%i%i%i%i%i%i%i%i%i%i%i",

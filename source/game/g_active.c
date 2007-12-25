@@ -2191,6 +2191,8 @@ int SkillLevelForWeap(gentity_t *ent,int weap)
 		return ent->client->skillLevel[SK_REPEATER];
 	case WP_DISRUPTOR:
 		return ent->client->skillLevel[SK_DISRUPTOR];
+	case WP_FLECHETTE:
+		return ent->client->skillLevel[SK_FLECHETTE];
 	default:
 		return -1;
 	}

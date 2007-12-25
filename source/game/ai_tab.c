@@ -1600,7 +1600,8 @@ qboolean HaveHeavyWeapon(int weapons)
 		|| (weapons & (1 << WP_THERMAL))
 		|| (weapons & (1 << WP_TRIP_MINE))
 		|| (weapons & (1 << WP_DET_PACK))
-		|| (weapons & (1 << WP_CONCUSSION)))
+		|| (weapons & (1 << WP_CONCUSSION))
+		|| (weapons & (1 << WP_FLECHETTE)))
 	{
 		return qtrue;
 	}
@@ -1625,6 +1626,7 @@ qboolean IsHeavyWeapon(bot_state_t *bs, int weapon)
 	case WP_THERMAL:
 	case WP_DET_PACK:
 	case WP_CONCUSSION:
+	case WP_FLECHETTE:
 		return qtrue;
 		break;
 	};

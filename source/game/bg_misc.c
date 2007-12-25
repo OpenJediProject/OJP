@@ -245,6 +245,7 @@ int bgForcePowerCost[NUM_TOTAL_SKILLS][NUM_FORCE_POWER_LEVELS] = //0 == neutral
 	{	0,	1,	0,	0	},	//SK_STAFFSTYLE,	//Staff lightsaber style
 	//[/StanceSelection]
 	{	0,	10,	0,	0	},  //SK_REPEATERUPGRADE //Repeater Upgrade
+	{	0,	4,	5,	8	},  //SK_FLECHETTE //Flechette
 	//[/ExpSys]
 };
 
@@ -3761,6 +3762,7 @@ qboolean BG_IsUsingHeavyWeap (playerState_t *ps)
 	case WP_DISRUPTOR:
 	case WP_REPEATER:
 	case WP_ROCKET_LAUNCHER:
+	case WP_FLECHETTE:
 		return qtrue;
 	default:
 		return qfalse;
