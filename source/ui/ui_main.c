@@ -3398,6 +3398,7 @@ static int UI_OwnerDrawWidth(int ownerDraw, float scale) {
 	case UI_FORCE_RANK_GREENSTYLE:
 	case UI_FORCE_RANK_DUALSTYLE:
 	case UI_FORCE_RANK_STAFFSTYLE:
+	case UI_FORCE_RANK_REPEATERUPGRADE:
 	//[/StanceSelection]
 		if(ownerDraw < UI_FORCE_RANK_JETPACK)
 		{
@@ -3906,6 +3907,7 @@ static void UI_OwnerDraw(float x, float y, float w, float h, float text_x, float
 	case UI_FORCE_RANK_GREENSTYLE:
 	case UI_FORCE_RANK_DUALSTYLE:
 	case UI_FORCE_RANK_STAFFSTYLE:
+	case UI_FORCE_RANK_REPEATERUPGRADE:
 	//[/StanceSelection]
 	//[/ExpSys]
 
@@ -5259,6 +5261,7 @@ static qboolean UI_OwnerDrawHandleKey(int ownerDraw, int flags, float *special, 
 	case UI_FORCE_RANK_GREENSTYLE:
 	case UI_FORCE_RANK_DUALSTYLE:
 	case UI_FORCE_RANK_STAFFSTYLE:
+	case UI_FORCE_RANK_REPEATERUPGRADE:
 	//[/StanceSelection]
 		if(ownerDraw < UI_FORCE_RANK_JETPACK)
 		{

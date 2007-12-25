@@ -244,6 +244,7 @@ int bgForcePowerCost[NUM_TOTAL_SKILLS][NUM_FORCE_POWER_LEVELS] = //0 == neutral
 	{	0,	1,	0,	0	},	//SK_DUALSTYLE,	//Dual lightsaber style
 	{	0,	1,	0,	0	},	//SK_STAFFSTYLE,	//Staff lightsaber style
 	//[/StanceSelection]
+	{	0,	10,	0,	0	},  //SK_REPEATERUPGRADE //Repeater Upgrade
 	//[/ExpSys]
 };
 

@@ -8958,6 +8958,13 @@ static void PM_Weapon( void )
 				pm->ps->ammo[weaponData[pm->ps->weapon].ammoIndex] < weaponData[pm->ps->weapon].altEnergyPerShot) 
 			{ //the weapon is out of ammo essentially because it cannot fire primary or secondary, so do the switch
 			  //regardless of if the player is attacking or not
+				//[Reload]
+#ifdef QAGAME
+				gentity_t *ent = &g_entities[pm->ps->clientNum];
+				if(ent->bullets[ent->client->ps.weapon] < 1)
+					pm->ps->ammo[weaponData[ent->client->ps.weapon].ammoIndex] = -10;
+#endif
+				//[/Reload]
 				PM_AddEventWithParm( EV_NOAMMO, WP_NUM_WEAPONS+pm->ps->weapon );
 
 				if (pm->ps->weaponTime < 500)

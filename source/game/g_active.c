@@ -2218,6 +2218,9 @@ int ReloadTime(gentity_t *ent)
 	{
 		if(SkillLevelForWeap(ent,ent->client->ps.weapon) == 3)
 		{
+			if(ent->client->ps.weapon == WP_REPEATER && ent->client->skillLevel[SK_REPEATERUPGRADE] > FORCE_LEVEL_0)
+				return 100;
+			else
 			return 200;
 		}
 		else if (SkillLevelForWeap(ent,ent->client->ps.weapon) == 2)
@@ -2263,7 +2266,6 @@ void Reload(gentity_t *ent)
 	{
 		ent->bulletsToReload =0;
 		ent->reloadTime = -1;
-		ent->client->ps.ammo[weaponData[ent->client->ps.weapon].ammoIndex] = -10;
 		return;
 	}
 	if(ent->bulletsToReload < 1)

@@ -68,8 +68,9 @@ qboolean uiForcePowersDisabled[NUM_TOTAL_SKILLS] = {
 	qfalse,//SK_SENTRY,		//sentry gun skill
 	qfalse,//SK_DETPACK,		//detpack skill
 	qfalse,//SK_REPEATER,       //repeater/clone rifle skill added by JRHockney
-	qfalse //SK_DISRUPTOR,      //Disruptor/sniper rifle skill added by JRHockney
+	qfalse, //SK_DISRUPTOR,      //Disruptor/sniper rifle skill added by JRHockney
 	//[/ExpSys]
+	qfalse, //SK_REPEATERUPGRADE //Repeater upgrade
 };
 
 //[ExpSys]
@@ -121,6 +122,7 @@ int uiForcePowersRank[NUM_TOTAL_SKILLS] = {
 	0,//SK_REPEATER,       //repeater/clone rifle skill added by JRHockney
 	0,//SK_DISRUPTOR,      //Disruptor/sniper rifle skill added by JRHockney
 	//[/ExpSys]
+	0,//SK_REPEATERUPGRADE //Repeater upgrade
 };
 
 //[ExpSys]
@@ -167,6 +169,7 @@ int uiForcePowerDarkLight[NUM_TOTAL_SKILLS] = //0 == neutral
 	0,//SK_REPEATER,       //repeater/clone rifle skill added by JRHockney
 	0,//SK_DISRUPTOR,      //Disruptor/sniper rifle skill added by JRHockney
 	//[/ExpSys]
+	0,//SK_REPEATERUPGRADE //Repeater upgrade
 };
 
 int uiForceStarShaders[NUM_FORCE_STAR_IMAGES][2];
@@ -219,6 +222,7 @@ int NumberOfSkillRanks(int skill)
 		case NUM_FORCE_POWERS+SK_GREENSTYLE:	//Green lightsaber style
 		case NUM_FORCE_POWERS+SK_DUALSTYLE:	//Dual lightsaber style
 		case NUM_FORCE_POWERS+SK_STAFFSTYLE:	//Staff lightsaber style
+		case NUM_FORCE_POWERS+SK_REPEATERUPGRADE://Repeater Upgrade
 			return 1;
 			break;
 		case NUM_FORCE_POWERS+SK_BACTA:
@@ -302,7 +306,7 @@ void UI_UpdateClientForcePowers(const char *teamArg)
 {
 	//[ExpSys]
 	char newForceString[MAX_INFO_STRING];
-	strncpy(newForceString, va("%i-%i-%i%i%i%i%i%i%i%i%i%i%i%i%i%i%i%i%i%i%i%i%i%i%i%i%i%i%i%i%i%i%i%i%i%i%i%i%i%i%i",
+	strncpy(newForceString, va("%i-%i-%i%i%i%i%i%i%i%i%i%i%i%i%i%i%i%i%i%i%i%i%i%i%i%i%i%i%i%i%i%i%i%i%i%i%i%i%i%i%i%i",
 		uiForceRank, uiForceSide, uiForcePowersRank[0], uiForcePowersRank[1],
 		uiForcePowersRank[2], uiForcePowersRank[3], uiForcePowersRank[4],
 		uiForcePowersRank[5], uiForcePowersRank[6], uiForcePowersRank[7],
@@ -316,7 +320,7 @@ void UI_UpdateClientForcePowers(const char *teamArg)
 		uiForcePowersRank[29], uiForcePowersRank[30], uiForcePowersRank[31],
 		uiForcePowersRank[32], uiForcePowersRank[33], uiForcePowersRank[34],
 		uiForcePowersRank[35], uiForcePowersRank[36], uiForcePowersRank[37],
-		uiForcePowersRank[38]), sizeof(newForceString));
+		uiForcePowersRank[38],uiForcePowersRank[39]), sizeof(newForceString));
 	/*
 	//[ExpSys]
 	trap_Cvar_Set( "forcepowers", va("%i-%i-%i%i%i%i%i%i%i%i%i%i%i%i%i%i%i%i%i%i%i%i%i%i%i%i%i%i%i%i%i%i%i%i%i%i%i%i%i%i%i",
@@ -654,6 +658,20 @@ void UpdateForceUsed()
 			}
 		}
 	}
+
+	//[Repeater]
+	if(uiForcePowersRank[NUM_FORCE_POWERS+SK_REPEATER] < FORCE_LEVEL_3)
+	{
+		uiForcePowersRank[NUM_FORCE_POWERS+SK_REPEATERUPGRADE] = 0;
+		if(menu)
+		Menu_ShowItemByName(menu, "repeaterupgradeg", qfalse);
+	}
+	else
+	{
+		if(menu)
+		Menu_ShowItemByName(menu, "repeaterupgradeg", qtrue);
+	}
+	//[/Repeater]
 
 	//[ExpSys]
 	//Made Force Seeing Level 1 a pre-req to taking any additional force powers, except in the case of free sabers.

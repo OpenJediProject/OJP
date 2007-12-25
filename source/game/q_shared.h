@@ -670,6 +670,7 @@ typedef enum
 	SK_DUALSTYLE,	//Dual lightsaber style
 	SK_STAFFSTYLE,	//Staff lightsaber style
 	//[/StanceSelection]
+	SK_REPEATERUPGRADE,//[Repeater]
 	NUM_SKILLS
 } skills_t;
 
