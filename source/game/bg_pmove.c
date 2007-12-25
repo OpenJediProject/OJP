@@ -190,9 +190,9 @@ int forcePowerNeeded[NUM_FORCE_POWER_LEVELS][NUM_FORCE_POWERS] =
 float forceJumpHeight[NUM_FORCE_POWER_LEVELS] = 
 {
 	32,//normal jump (+stepheight+crouchdiff = 66) 
-	150,//(+stepheight+crouchdiff = 130) -- 96
-	350,//(+stepheight+crouchdiff = 226) -- 192
-	550//(+stepheight+crouchdiff = 418)  -- 384
+	220,//(+stepheight+crouchdiff = 130) -- 96 was 150
+	500,//(+stepheight+crouchdiff = 226) -- 192 was 350
+	780//(+stepheight+crouchdiff = 418)  -- 384	was 550
 };
 
 float forceJumpStrength[NUM_FORCE_POWER_LEVELS] = 
@@ -2228,10 +2228,10 @@ void PM_SetForceJumpZStart(float value)
 
 float forceJumpHeightMax[NUM_FORCE_POWER_LEVELS] = 
 {
-	66,//normal jump (32+stepheight(18)+crouchdiff(24) = 74) 
-	185,//(96+stepheight(18)+crouchdiff(24) = 138) -- 130 --- forceJumpHeight level 1 +35
-	385,//(192+stepheight(18)+crouchdiff(24) = 234) 
-	585//(384+stepheight(18)+crouchdiff(24) = 426) 
+	85,//normal jump (32+stepheight(18)+crouchdiff(24) = 74)  was 66
+	340,//(96+stepheight(18)+crouchdiff(24) = 138) -- 130 --- forceJumpHeight level 1 +35 was 185
+	480,//(192+stepheight(18)+crouchdiff(24) = 234) was 385
+	820//(384+stepheight(18)+crouchdiff(24) = 426) was 585
 };
 
 void PM_GrabWallForJump( int anim )
@@ -2441,6 +2441,7 @@ static qboolean PM_CheckJump( void )
 				BG_ForcePowerDrain( pm->ps, FP_LEVITATION, 5 );
 			}
 			*/
+			pm->ps->velocity[2]+=100;//[JumpIncrease]
 			//[/FatigueSys]
 			if (pm->ps->fd.forcePowerLevel[FP_LEVITATION] >= FORCE_LEVEL_2)
 			{
@@ -2644,7 +2645,9 @@ static qboolean PM_CheckJump( void )
 					pm->ps->velocity[2] = (forceJumpHeight[pm->ps->fd.forcePowerLevel[FP_LEVITATION]]-curHeight)/forceJumpHeight[pm->ps->fd.forcePowerLevel[FP_LEVITATION]]*forceJumpStrength[pm->ps->fd.forcePowerLevel[FP_LEVITATION]];//JUMP_VELOCITY;
 					pm->ps->velocity[2] /= 10;
 					pm->ps->velocity[2] += JUMP_VELOCITY;
+					pm->ps->velocity[2]+=150;
 					pm->ps->pm_flags |= PMF_JUMP_HELD;
+					
 				}
 				else if ( curHeight > forceJumpHeight[0] && curHeight < forceJumpHeight[pm->ps->fd.forcePowerLevel[FP_LEVITATION]] - forceJumpHeight[0] )
 				{//still have some headroom, don't totally stop it

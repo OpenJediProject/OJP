@@ -570,35 +570,35 @@ itemDef
 
 		// Saber style graphics
 		itemDef 
-		{
-			name				saberstyle_strong
-			background			"gfx/hud/saber_strong"
+		{//Djem so
+			name				saberstyle_slow
+			background			"gfx/hud/saber_slow"
 			forecolor			1 1 1 1
-			rect				-126 77 120 9		// (these positions are relative to the initial position of the menu) 
+			rect				-129 77 120 9		// (these positions are relative to the initial position of the menu) 
 												// X pos, Y pos, char size, char height
 		}		
 
 		itemDef 
-		{
+		{//Shii cho
 			name				saberstyle_medium
-			background			"gfx/hud/saber_med"
+			background			"gfx/hud/saber_medium"
 			forecolor			1 1 1 1
-			rect				-125 77 120 9		// (these positions are relative to the initial position of the menu) 
+			rect				-122 77 120 9		// (these positions are relative to the initial position of the menu) 
 												// X pos, Y pos, char size, char height
 		}		
 
 		itemDef 
-		{
+		{//Soresu
 			name				saberstyle_fast
 			background			"gfx/hud/saber_fast"
 			forecolor			1 1 1 1
-			rect				-125 77 120 9		// (these positions are relative to the initial position of the menu) 
+			rect				-133 77 120 9		// (these positions are relative to the initial position of the menu) 
 												// X pos, Y pos, char size, char height
 		}
 
 		//[SaberSys]
 		itemDef 
-		{
+		{//Juyo
 			name				saberstyle_desann
 			background			"gfx/hud/saber_desann"
 			forecolor			1 1 1 1
@@ -607,14 +607,31 @@ itemDef
 		}	
 
 		itemDef 
-		{
+		{//Makashi
 			name				saberstyle_tavion
 			background			"gfx/hud/saber_tavion"
 			forecolor			1 1 1 1
-			rect				-127 77 120 9		// (these positions are relative to the initial position of the menu) 
+			rect				-128 77 120 9		// (these positions are relative to the initial position of the menu) 
 												// X pos, Y pos, char size, char height
 		}
 		
+		itemDef 
+		{//Staff
+			name				saberstyle_staff
+			background			"gfx/hud/saber_staff"
+			forecolor			1 1 1 1
+			rect				-120 77 120 9		// (these positions are relative to the initial position of the menu) 
+												// X pos, Y pos, char size, char height
+		}
+		
+		itemDef 
+		{//Dual
+			name				saberstyle_dual
+			background			"gfx/hud/saber_dual"
+			forecolor			1 1 1 1
+			rect				-120 77 120 9		// (these positions are relative to the initial position of the menu) 
+												// X pos, Y pos, char size, char height
+		}
 
 		//[/SaberSys]
 		

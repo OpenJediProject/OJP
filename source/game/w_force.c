@@ -3879,6 +3879,9 @@ void ForceThrow( gentity_t *self, qboolean pull )
 
 			funcNum = trap_EntitiesInBox( mins, maxs, funcList, MAX_GENTITIES );
 
+			if(numListedEntities <= 0)
+				return;
+
 			for(i = 0; i < funcNum; i++)
 			{
 				funcEnt = &g_entities[funcList[i]];
@@ -4476,7 +4479,7 @@ void ForceThrow( gentity_t *self, qboolean pull )
 
 					if ((int)push_list[x]->client->ps.velocity[2] == 0)
 					{ //if not going anywhere vertically, boost them up a bit
-						push_list[x]->client->ps.velocity[2] = pushDir[2]*pushPowerMod;
+						push_list[x]->client->ps.velocity[2] = pushDir[2]*pushPowerMod +200;
 
 						if (push_list[x]->client->ps.velocity[2] < 128)
 						{

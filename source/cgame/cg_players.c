@@ -15770,7 +15770,7 @@ void CG_Player( centity_t *cent ) {
 	renderfx |= RF_LIGHTING_ORIGIN;			// use the same origin for all
 
 	// if we've been hit, display proper fullscreen fx
-	CG_PlayerHitFX(cent);
+	//CG_PlayerHitFX(cent);//[NoShield]
 
 	VectorCopy( cent->lerpOrigin, legs.origin );
 

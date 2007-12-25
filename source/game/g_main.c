@@ -562,7 +562,7 @@ static cvarTable_t		gameCvarTable[] = {
 
 	{ &g_developer, "developer", "0", 0, 0, qfalse },
 
-	{ &g_speed, "g_speed", "220", 0, 0, qtrue  },//was 250, but the gameplay seems more solid and balance this way. 
+	{ &g_speed, "g_speed", "210", 0, 0, qtrue  },//was 250, but the gameplay seems more solid and balance this way. 
 	{ &g_gravity, "g_gravity", "800", 0, 0, qtrue  },
 	//[CoOp]
 	//Used by UI to set up SP menu stuff
