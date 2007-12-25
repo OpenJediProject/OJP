@@ -1,0 +1,116 @@
+repeatDelay				300
+
+Sound
+{
+	cullrange			800
+
+	sounds
+	[
+		sound/weapons/blaster/reflect1.wav
+		sound/weapons/blaster/reflect2.wav
+		sound/weapons/blaster/reflect3.wav
+	]
+}
+
+Line
+{
+	count				0
+
+	life				100 200
+
+	cullrange			1200
+
+	origin2				12 -10 -10 18 10 10
+
+	alpha
+	{
+		start			0.25 1
+		end				0
+		flags			linear
+	}
+
+	size
+	{
+		start			0.2 0.5
+	}
+
+	shaders
+	[
+		gfx/misc/spark
+		gfx/misc/spark2
+	]
+}
+
+Tail
+{
+	flags				usePhysics
+
+	count				0
+
+	life				700 1100
+
+	cullrange			1200
+
+	bounce				0.25 0.4
+
+	velocity			120 -80 -80 250 80 80
+
+	gravity				-350 -450
+
+	size
+	{
+		start			0.3 0.4
+	}
+
+	length
+	{
+		start			4 10
+		end				0.1 1
+		flags			linear
+	}
+
+	shaders
+	[
+		gfx/misc/spark
+	]
+}
+
+Particle
+{
+	count				0
+
+	life				900 1000
+
+	velocity			8 -12 -12 16 12 12
+
+	gravity				12 24
+
+	alpha
+	{
+		start			0.2 0.4
+		end				0
+		flags			linear
+	}
+
+	size
+	{
+		start			4 12
+		end				12 24
+		flags			linear
+	}
+
+	shaders
+	[
+		gfx/misc/steam
+	]
+}
+
+FxRunner
+{
+	delay				0 100
+
+	playfx
+	[
+		saber/saber_block
+	]
+}

@@ -1,0 +1,53 @@
+repeatDelay				300
+
+Particle
+{
+	count				1 2
+
+	life				300 1000
+
+	rotation			-90 90
+
+	rgb
+	{
+		start			1 0.3 0.1
+	}
+
+	alpha
+	{
+		end				0
+		flags			linear
+	}
+
+	size
+	{
+		start			6
+		end				2
+		flags			linear
+	}
+
+	shaders
+	[
+		gfx/effects/whiteFlare
+	]
+}
+
+Particle
+{
+	count				1 3
+
+	life				300 800
+
+	rotation			-90 90
+
+	alpha
+	{
+		end				0
+		flags			linear
+	}
+
+	shaders
+	[
+		gfx/effects/whiteFlare
+	]
+}

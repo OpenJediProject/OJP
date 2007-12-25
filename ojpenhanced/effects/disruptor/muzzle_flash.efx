@@ -1,0 +1,156 @@
+repeatDelay				300
+
+Line
+{
+	life				10 200
+
+	origin2				24 0 0 30 0 0
+
+	alpha
+	{
+		start			0.5 0.6
+		end				0.35
+		flags			linear
+	}
+
+	size
+	{
+		start			4.75 6.25
+		end				4
+		flags			linear
+	}
+
+	shaders
+	[
+		gfx/effects/bryarSideFlash
+	]
+}
+
+Particle
+{
+	life				20 300
+
+	origin				5 0 0
+
+	rotation			0 360
+
+	alpha
+	{
+		start			0.65 0.8
+		end				0.5
+		flags			linear
+	}
+
+	size
+	{
+		start			9 12.5
+		end				7
+		flags			linear
+	}
+
+	shaders
+	[
+		gfx/effects/bryarFrontFlash
+	]
+}
+
+Particle
+{
+	count				6
+
+	life				75 300
+
+	origin				5 -1 -1 5 1 1
+
+	rotation			0 360
+
+	rotationDelta		-6 6
+
+	rgb
+	{
+		start			0.7 0.3 0 0.6 0.1 0
+	}
+
+	alpha
+	{
+		start			0.8
+		end				0.2
+		flags			linear
+	}
+
+	size
+	{
+		start			2 5
+		end				10 20
+		flags			linear
+	}
+
+	shaders
+	[
+		gfx/effects/flare1
+	]
+}
+
+Particle
+{
+	count				20 23
+
+	life				550 1100
+
+	delay				0 350
+
+	origin				5 0 0
+
+	rotation			0 360
+
+	velocity			0 -3 -3 10 3 3
+
+	gravity				1 60
+
+	alpha
+	{
+		start			0.2 0.3
+		end				0
+		flags			linear
+	}
+
+	size
+	{
+		start			0.5 1
+		end				2 3
+		flags			linear
+	}
+
+	shaders
+	[
+		gfx/misc/steam
+	]
+}
+
+Light
+{
+	rgb
+	{
+		start			1 0.7 0.2
+	}
+
+	size
+	{
+		start			300 350
+	}
+}
+
+Sound
+{
+	sounds
+	[
+		sound/weapons/disruptor/fire.wav
+	]
+}
+
+CameraShake
+{
+	intensity			0.3 0.4
+
+	radius				60
+}

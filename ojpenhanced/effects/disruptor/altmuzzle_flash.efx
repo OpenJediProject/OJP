@@ -1,0 +1,161 @@
+// Simple muzzle flash effect
+
+Line
+{
+	life		10
+	origin2	24 0 0 	30 0 0
+
+	width
+	{
+		start 	4.75 	6.25
+		end	4.0
+		flags	linear
+	}
+
+	alpha
+	{
+		start	0.5	0.6
+		end	0.35
+		flags	linear
+	}
+
+	shader
+	[
+		gfx/effects/bryarSideFlash
+	]
+}
+
+Particle
+{
+	life	20
+	origin	5 0 0
+	rotation	0	360
+
+	size
+	{
+		start 	9.0 	12.5
+		end	7.0
+		flags	linear
+	}
+
+	alpha
+	{
+		start	0.65	0.8
+		end	0.5
+		flags	linear
+	}
+
+	shader
+	[
+		gfx/effects/bryarFrontFlash
+	]
+}
+
+Particle
+{
+	count	6
+	life	75 	150
+	origin	5 -1 -1		5 1 1
+
+	rotation	0	360
+	rotationdelta	-6	6
+
+	size
+	{
+		start 	2.0	5.0
+		end	10 20
+		flags	linear
+	}
+
+	rgb
+	{
+		start	0.7 0.3 0.0 	0.6 0.1 0.0
+	}
+
+	alpha
+	{
+		start	0.8
+		end	0.2
+		flags	linear
+	}
+
+	shader
+	[
+		gfx/effects/flare1
+	]
+}
+
+Particle
+{
+	count	20
+	delay 0	350
+
+	life	550	1100
+
+	origin	5 0 0
+
+	rotation	0	360
+
+	velocity	0 -3	-3 	10 3 3
+
+	gravity		1	60
+
+	size
+	{
+		start 	0.5 	1.0
+		end	2.0	3.0
+		flags	linear
+	}
+
+	alpha
+	{
+		start	0.2	0.3
+		end	0.0
+		flags	linear
+	}
+
+	shaders
+	[
+		gfx/misc/steam
+//		gfx/misc/steam2
+	]
+}
+
+Light
+{
+	size
+	{
+		start 	300	350
+	}
+
+	rgb
+	{
+		start  1.0 0.7 0.2
+	}
+}
+
+
+sound
+{
+	sounds
+	[
+		sound/weapons/disruptor/alt_fire.wav
+	]
+}
+
+forcefeedback
+{
+	forces
+	[
+		fffx/weapons/disruptor/alt_fire
+	]
+}
+
+CameraShake
+{
+	life				50
+
+	intensity			0.5
+
+	radius				60
+}

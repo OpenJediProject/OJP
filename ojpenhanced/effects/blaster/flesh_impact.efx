@@ -1,0 +1,69 @@
+repeatDelay				300
+
+Particle
+{
+	count				8 12
+
+	life				800 1200
+
+	intensity			0.3 0.5
+
+	origin				4 -3 -3 3 2 3
+
+	velocity			40 -48 -48 100 48 48
+
+	gravity				-100 -300
+
+	rgb
+	{
+		start			1 0.4 0 1 1 0.2
+		end				1 0.4 0
+		flags			linear
+	}
+
+	size
+	{
+		start			0.4 0
+		end				0
+		parm			80 90
+		flags			nonlinear
+	}
+
+	shaders
+	[
+		gfx/effects/whiteGlow
+	]
+}
+
+Particle
+{
+	flags				useAlpha
+
+	spawnFlags			cheapOrgCalc absoluteVel absoluteAccel
+
+	count				0
+
+	life				0
+
+	alpha
+	{
+		end				0
+		parm			60 75
+		flags			nonlinear
+	}
+
+	size
+	{
+		start			1 2
+		end				3 5
+		flags			linear
+	}
+}
+
+FxRunner
+{
+	playfx
+	[
+		blaster/wall_impact
+	]
+}

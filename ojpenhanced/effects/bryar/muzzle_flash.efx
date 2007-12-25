@@ -1,0 +1,89 @@
+repeatDelay				142
+
+Line
+{
+	life				5
+
+	origin2				24 0 0 30 0 0
+
+	alpha
+	{
+		start			0.5 0.6
+		end				0.35
+		flags			linear
+	}
+
+	size
+	{
+		start			6.25 8.5
+		end				5
+		flags			linear
+	}
+
+	shaders
+	[
+		gfx/effects/bryarSideFlash
+	]
+}
+
+Particle
+{
+	life				10
+
+	origin				2 0 0
+
+	rotation			0 360
+
+	alpha
+	{
+		start			0.8 1
+		end				0.7
+		flags			linear
+	}
+
+	size
+	{
+		start			5 6.5
+		end				7
+		flags			linear
+	}
+
+	shaders
+	[
+		gfx/effects/bryarFrontFlash
+	]
+}
+
+Light
+{
+	life				75
+
+	rgb
+	{
+		start			1 0.7 0.2
+	}
+
+	size
+	{
+		start			125
+		end				50
+		flags			linear
+	}
+}
+
+Sound
+{
+	sounds
+	[
+		sound/weapons/bryar/fire.mp3
+	]
+}
+
+CameraShake
+{
+	flags				usePhysics
+
+	bounce				0.2 0.3
+
+	radius				60
+}

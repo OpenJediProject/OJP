@@ -1,0 +1,83 @@
+repeatDelay				472
+
+Cylinder
+{
+	count				5 8
+
+	life				1000 800
+
+	rgb
+	{
+		start			1 0.3 0.1
+	}
+
+	alpha
+	{
+		start			0.4
+		end				0
+		flags			linear
+	}
+
+	size
+	{
+		start			2
+		end				4
+		flags			linear
+	}
+
+	size2
+	{
+		start			3
+		end				7
+		flags			linear
+	}
+
+	shaders
+	[
+		gfx/misc/shockwave
+	]
+}
+
+Cylinder
+{
+	count				3 6
+
+	life				700 300
+
+	rgb
+	{
+		start			1 0.302 0.102 1 1 1
+		flags			wave
+	}
+
+	alpha
+	{
+		start			0.3
+		end				0
+		flags			linear
+	}
+
+	size
+	{
+		start			4 5
+		end				18
+		flags			linear
+	}
+
+	size2
+	{
+		start			18
+		end				32
+		flags			linear
+	}
+
+	length
+	{
+		start			1 0
+	}
+
+	shaders
+	[
+		gfx/misc/shockwave
+	]
+}

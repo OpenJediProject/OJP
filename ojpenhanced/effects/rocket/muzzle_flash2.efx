@@ -1,0 +1,446 @@
+Line
+{
+	life				60
+
+	origin2				24 0 0 30 0 0
+
+	alpha
+	{
+		start			0.5 0.6
+		end				0.35
+		flags			linear
+	}
+
+	size
+	{
+		start			4.75 6.25
+		end				4
+		flags			linear
+	}
+
+	shaders
+	[
+		gfx/effects/bryarSideFlash
+	]
+}
+
+Particle
+{
+	life				60
+
+	origin				5 0 0
+
+	rotation			0 360
+
+	alpha
+	{
+		start			0.65 0.8
+		end				0.5
+		flags			linear
+	}
+
+	size
+	{
+		start			8 10.5
+		end				7
+		flags			linear
+	}
+
+	shaders
+	[
+		gfx/effects/bryarFrontFlash
+	]
+}
+
+Particle
+{
+	flags				useAlpha
+
+	count				3 4
+
+	life				450 800
+
+	origin				6 -1 -1 10 1 1
+
+	rotation			-180 180
+
+	velocity			10 -10 -10 20 10 10
+
+	gravity				-20 20
+
+	alpha
+	{
+		start			0.6 0.7
+		end				0.2
+		flags			linear
+	}
+
+	size
+	{
+		start			3 4
+		end				4 10
+		flags			linear
+	}
+
+	shaders
+	[
+		gfx/misc/black_smoke
+	]
+}
+
+Light
+{
+	life				60
+
+	rgb
+	{
+		start			1 0.7 0.2
+	}
+
+	size
+	{
+		start			100
+		flags			linear
+	}
+}
+
+CameraShake
+{
+	flags				usePhysics
+
+	life				150
+
+	bounce				1.0 1.2
+
+	radius				60
+}
+
+Sound
+{
+	sounds
+	[
+		sound/weapons/rocket/fire.wav
+	]
+}
+
+forcefeedback
+{
+	forces
+	[
+		fffx/weapons/rocket/fire
+	]
+}
+
+Tail
+{
+	count				6
+
+	life				80 120
+
+	delay				0 100
+
+	origin				-1 1 1
+
+	velocity			0 1 1
+
+	alpha
+	{
+		end				0
+		parm			75
+		flags			linear nonlinear
+	}
+
+	size
+	{
+		start			0.3 0.4
+		end				0.7 0.8
+		flags			linear
+	}
+
+	length
+	{
+		start			-1 -1.5
+		end				-4 -5
+		flags			linear
+	}
+
+	shaders
+	[
+		gfx/effects/rocket_muz
+		gfx/effects/rocket_muz2
+	]
+}
+
+Tail
+{
+	name				line 0
+
+	count				6
+
+	life				80 120
+
+	delay				0 100
+
+	origin				-1 -1 1
+
+	velocity			0 -1 1
+
+	alpha
+	{
+		end				0
+		parm			75
+		flags			linear nonlinear
+	}
+
+	size
+	{
+		start			0.3 0.4
+		end				0.7 0.8
+		flags			linear
+	}
+
+	length
+	{
+		start			-0.8 -1
+		end				-4 -5
+		flags			linear
+	}
+
+	shaders
+	[
+		gfx/effects/rocket_muz
+		gfx/effects/rocket_muz2
+	]
+}
+
+Tail
+{
+	name				Copy of line 0
+
+	count				6
+
+	life				80 120
+
+	delay				0 100
+
+	origin				-1 -1 -1
+
+	velocity			0 -1 -1
+
+	alpha
+	{
+		end				0
+		parm			75
+		flags			linear nonlinear
+	}
+
+	size
+	{
+		start			0.3 0.4
+		end				0.7 0.8
+		flags			linear
+	}
+
+	length
+	{
+		start			-1
+		end				-4 -5
+		flags			linear
+	}
+
+	shaders
+	[
+		gfx/effects/rocket_muz
+		gfx/effects/rocket_muz2
+	]
+}
+
+Tail
+{
+	name				Copy of Copy of line 0
+
+	count				3
+
+	life				80 120
+
+	delay				0 50
+
+	origin				-1 1 -1
+
+	velocity			0 1 -1
+
+	alpha
+	{
+		end				0
+		parm			75
+		flags			linear nonlinear
+	}
+
+	size
+	{
+		start			0.3 0.4
+		end				0.7 0.8
+		flags			linear
+	}
+
+	length
+	{
+		start			-1 -0.9
+		end				-2 -4
+		flags			linear
+	}
+
+	shaders
+	[
+		gfx/effects/rocket_muz
+		gfx/effects/rocket_muz2
+	]
+}
+
+Particle
+{
+	spawnFlags			evenDistribution
+
+	count				3 4
+
+	life				600 700
+
+	delay				0 400
+
+	origin				-1 0 0
+
+	rotation			0 360
+
+	velocity			-1 -8 -8 -1 -9 -9
+
+	alpha
+	{
+		start			0
+		end				0.2 0.25
+		parm			2.8
+		flags			wave
+	}
+
+	size
+	{
+		start			0.5 0.7
+		end				1.5 2
+		flags			linear
+	}
+
+	shaders
+	[
+		gfx/misc/steam
+	]
+}
+
+Particle
+{
+	spawnFlags			evenDistribution
+
+	count				3
+
+	life				600 700
+
+	delay				0 400
+
+	origin				-1 0 0
+
+	rotation			0 360
+
+	velocity			-1 8 -8 -1 9 -9
+
+	alpha
+	{
+		start			0
+		end				0.2
+		parm			2.8
+		flags			wave
+	}
+
+	size
+	{
+		start			0.5 0.7
+		end				1.5 2
+		flags			linear
+	}
+
+	shaders
+	[
+		gfx/misc/steam
+	]
+}
+
+Particle
+{
+	spawnFlags			evenDistribution
+
+	count				5
+
+	life				600 700
+
+	delay				0 400
+
+	origin				-1 0 0
+
+	rotation			0 360
+
+	velocity			-1 -8 8 -1 -9 9
+
+	alpha
+	{
+		start			0
+		end				0.2
+		parm			2.8
+		flags			wave
+	}
+
+	size
+	{
+		start			0.5 0.7
+		end				1.5 2
+		flags			linear
+	}
+
+	shaders
+	[
+		gfx/misc/steam
+	]
+}
+
+Particle
+{
+	spawnFlags			evenDistribution
+
+	count				5
+
+	life				600 700
+
+	delay				0 400
+
+	origin				-1 0 0
+
+	rotation			0 360
+
+	velocity			-1 8 8 -1 9 9
+
+	alpha
+	{
+		start			0
+		end				0.2
+		parm			2.8
+		flags			wave
+	}
+
+	size
+	{
+		start			0.5 0.7
+		end				1.5 2
+		flags			linear
+	}
+
+	shaders
+	[
+		gfx/misc/steam
+	]
+}

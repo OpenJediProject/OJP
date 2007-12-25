@@ -1,0 +1,32 @@
+repeatDelay				300
+
+Cylinder
+{
+	count				1 2
+
+	rgb
+	{
+		start			1 0.302 0.102 1 1 0
+	}
+
+	alpha
+	{
+		start			0.4
+	}
+
+	size
+	{
+		start			11
+	}
+
+	size2
+	{
+		start			4 15
+		flags			linear
+	}
+
+	shaders
+	[
+		gfx/misc/shockwave
+	]
+}

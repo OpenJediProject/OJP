@@ -1,0 +1,228 @@
+repeatDelay				300
+
+Particle
+{
+	name				OrangeGlow
+
+	count				17 16
+
+	life				1200 1700
+
+	origin				4 -35 -35 25 35 35
+
+	rotation			0 360
+
+	rotationDelta		-4 4
+
+	velocity			5 -10 -10 10 10 10
+
+	alpha
+	{
+		end				0
+		parm			60 75
+		flags			linear nonlinear
+	}
+
+	size
+	{
+		start			2 8
+		end				61 130
+		parm			5 25
+		flags			linear clamp
+	}
+
+	shaders
+	[
+		gfx/misc/exp02_2
+		gfx/misc/exp02_3
+	]
+}
+
+Particle
+{
+	flags				usePhysics
+
+	spawnFlags			rgbComponentInterpolation
+
+	count				41 43
+
+	life				600 2000
+
+	cullrange			750
+
+	bounce				0.2 0.5
+
+	origin				0 -10 -10 10 10 10
+
+	velocity			50 -250 -250 350 250 250
+
+	gravity				-400 -600
+
+	rgb
+	{
+		start			1 0.7 0.5 1 1 1
+	}
+
+	alpha
+	{
+		end				0
+		parm			80
+		flags			linear nonlinear
+	}
+
+	size
+	{
+		start			0.5 2.5
+		end				0.2 0.3
+		flags			linear
+	}
+
+	shaders
+	[
+		gfx/misc/spark
+	]
+}
+
+Particle
+{
+	name				LingeringSmoke
+
+	count				6
+
+	life				1800 3000
+
+	delay				300
+
+	cullrange			950
+
+	origin				10 -35 -35 20 35 35
+
+	rotation			0 360
+
+	rotationDelta		-10 10
+
+	velocity			10 -10 -10 20 10 10
+
+	gravity				3 25
+
+	alpha
+	{
+		end				0
+		parm			40 50
+		flags			linear
+	}
+
+	size
+	{
+		start			5 10
+		end				45 70
+		flags			linear
+	}
+
+	shaders
+	[
+		gfx/misc/steam
+	]
+}
+
+Light
+{
+	name				Flash
+
+	life				250
+
+	alpha
+	{
+		end				0
+		flags			random linear
+	}
+
+	size
+	{
+		start			120
+		end				10
+		flags			linear
+	}
+}
+
+CameraShake
+{
+	name				Shake
+
+	flags				usePhysics
+
+	life				500 800
+
+	bounce				2 4
+
+	radius				300 400
+}
+
+Tail
+{
+	count				8 18
+
+	life				400 700
+
+	cullrange			800
+
+	origin				0 -10 -10 10 10 10
+
+	velocity			10 -45 -45 35 45 45
+
+	gravity				0 -15
+
+	alpha
+	{
+		end				0
+		parm			30 50
+		flags			linear nonlinear
+	}
+
+	size
+	{
+		start			4 10
+		end				14 20
+		flags			linear
+	}
+
+	length
+	{
+		start			-40
+		end				-105 -150
+		flags			linear
+	}
+
+	shaders
+	[
+		gfx/effects/plume1
+		gfx/effects/plume2
+	]
+}
+
+Decal
+{
+	count				2
+
+	rotation			0 360
+
+	size
+	{
+		start			35.5 60
+	}
+
+	shaders
+	[
+		gfx/damage/burnmark4
+	]
+}
+
+Sound
+{
+	cullrange			1200
+
+	sounds
+	[
+		sound/weapons/detpack/explode.wav
+	]
+}

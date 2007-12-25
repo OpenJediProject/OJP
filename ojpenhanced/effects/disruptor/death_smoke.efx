@@ -1,0 +1,110 @@
+repeatDelay				300
+
+Particle
+{
+	flags				useAlpha
+
+	count				3
+
+	life				500 800
+
+	delay				0 100
+
+	origin				-4 -8 -8 4 8 8
+
+	rotation			0 360
+
+	velocity			-10 -10 -10 10 10 10
+
+	gravity				-15 45
+
+	alpha
+	{
+		end				0
+		parm			60
+		flags			linear nonlinear
+	}
+
+	size
+	{
+		start			3 5
+		end				8 16
+		flags			linear
+	}
+
+	shaders
+	[
+		gfx/effects/alpha_smoke2
+		gfx/misc/black_smoke2
+	]
+}
+
+Particle
+{
+	spawnFlags			rgbComponentInterpolation
+
+	count				12 20
+
+	life				250 1100
+
+	delay				0 100
+
+	origin				-15 -6 -6 15 6 6
+
+	rotation			0 360
+
+	velocity			-50 -50 -50 50 50 50
+
+	acceleration		-5 -5 -5 5 5 5
+
+	gravity				10 80
+
+	rgb
+	{
+		start			1 0.4 0 0.9961 0.9804 0.3216
+	}
+
+	alpha
+	{
+		end				0
+		parm			80
+		flags			linear nonlinear
+	}
+
+	size
+	{
+		start			0.1 0.3
+		end				0.4 0.8
+		flags			linear
+	}
+
+	shaders
+	[
+		gfx/effects/whiteFlare
+	]
+}
+
+Electricity
+{
+	flags				useBBox usePhysics
+
+	spawnFlags			org2fromTrace
+
+	count				0
+
+	life				0
+
+	delay				10
+
+	bounce				10 7
+
+	rgb
+	{
+		start			1 1 1 1 1 0
+	}
+
+	size
+	{
+		start			0.3
+	}
+}

@@ -1,0 +1,19 @@
+// just plays a sound
+
+sound
+{
+	sounds
+	[
+		sound/weapons/detpack/fire.wav
+	]
+}
+
+// ...that's what YOU think
+
+forcefeedback
+{
+	forces
+	[
+		fffx/weapons/detpack/fire
+	]
+}

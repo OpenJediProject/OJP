@@ -1,0 +1,54 @@
+// Simple bryar pistol effect
+
+Line
+{
+	name 	Core
+
+	origin	8 0 0
+	origin2	-40 0 0
+	flags	useAlpha
+
+	width
+	{
+		start 	1.0
+	}
+
+	alpha
+	{
+		start	0.6	0.7
+	}
+
+	shader
+	[
+		gfx/effects/bryar_blob
+	]
+}
+
+// glow
+Line
+{
+	name	Glow
+
+	origin	16 0 0
+	origin2	-50 0 0
+
+	width
+	{
+		start 	2.0 	2.5
+	}
+
+	alpha
+	{
+		start	0.8	1.0
+	}
+
+	rgb
+	{
+		start	0.8 0.6 0.0 	0.9 0.7 0.2
+	}
+
+	shader
+	[
+		gfx/effects/whiteGlow
+	]
+}

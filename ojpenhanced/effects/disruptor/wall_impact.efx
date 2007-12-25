@@ -1,0 +1,144 @@
+OrientedParticle
+{
+	life				300 550
+
+	origin				0.5 0 0
+
+	rotation			-90 90
+
+	rgb
+	{
+		start			1 0.3 0.1
+	}
+
+	alpha
+	{
+		end				0
+		flags			linear
+	}
+
+	size
+	{
+		start			10 18
+		end				5
+		flags			linear
+	}
+
+	shaders
+	[
+		gfx/effects/whiteFlare
+	]
+}
+
+OrientedParticle
+{
+	life				300 500
+
+	origin				0.5 0 0
+
+	rotation			-90 90
+
+	alpha
+	{
+		end				0
+		flags			linear
+	}
+
+	size
+	{
+		start			2 3
+	}
+
+	shaders
+	[
+		gfx/effects/whiteFlare
+	]
+}
+
+Cylinder
+{
+	life				250
+
+	rgb
+	{
+		start			1 0.3 0.1
+	}
+
+	alpha
+	{
+		start			0.3
+		end				0
+		flags			linear
+	}
+
+	size
+	{
+		end				20
+		flags			linear
+	}
+
+	size2
+	{
+		start			2
+		end				22
+		flags			linear
+	}
+
+	shaders
+	[
+		gfx/misc/shockwave
+	]
+}
+
+Decal
+{
+	size
+	{
+		start			9 14
+	}
+
+	shaders
+	[
+		gfx/damage/burnmark4
+	]
+}
+
+Sound
+{
+	sounds
+	[
+		sound/weapons/disruptor/hit_wall.wav
+	]
+}
+
+Particle
+{
+	life				300 550
+
+	origin				1 0 0
+
+	rotation			-90 90
+
+	rgb
+	{
+		start			1 0.3 0.1
+	}
+
+	alpha
+	{
+		end				0
+		flags			linear
+	}
+
+	size
+	{
+		start			8
+		end				3
+		flags			linear
+	}
+
+	shaders
+	[
+		gfx/effects/whiteFlare
+	]
+}

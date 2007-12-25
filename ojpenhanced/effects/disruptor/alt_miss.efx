@@ -1,0 +1,201 @@
+repeatDelay				997
+
+Cylinder
+{
+	life				150 200
+
+	rgb
+	{
+		start			1 0.4 0.1
+	}
+
+	alpha
+	{
+		start			0.5
+		end				0
+		flags			linear
+	}
+
+	size
+	{
+		start			2
+		end				12
+		flags			linear
+	}
+
+	size2
+	{
+		start			3
+		end				14
+		flags			linear
+	}
+
+	shaders
+	[
+		gfx/misc/shockwave
+	]
+}
+
+Cylinder
+{
+	count				1 3
+
+	life				400 600
+
+	rgb
+	{
+		start			1 0.3 0.1
+	}
+
+	alpha
+	{
+		start			0.3
+		end				0
+		flags			linear
+	}
+
+	size
+	{
+		start			1 0.3
+		end				17 23
+		flags			linear
+	}
+
+	size2
+	{
+		start			2
+		end				32
+		flags			linear
+	}
+
+	shaders
+	[
+		gfx/misc/shockwave
+	]
+}
+
+Decal
+{
+	count				2
+
+	size
+	{
+		start			5 10
+	}
+
+	shaders
+	[
+		gfx/damage/burnmark4
+	]
+}
+
+Particle
+{
+	flags				usePhysics
+
+	count				7 13
+
+	life				2400 4000
+
+	bounce				0.2 0.5
+
+	origin				0 -0.5 -0.5 0.5 0.5 0.5
+
+	velocity			28 -22 -22 96 22 22
+
+	gravity				-250 -400
+
+	rgb
+	{
+		start			1 0.4 0 1 1 0.2
+		end				1 0.4 0 1 1 0
+	}
+
+	size
+	{
+		start			0.3 1
+		end				0 1
+		parm			50 70
+		flags			random wave
+	}
+
+	shaders
+	[
+		gfx/effects/whiteGlow
+	]
+}
+
+Particle
+{
+	count				3
+
+	life				800 1600
+
+	origin				1 -2 -2 2 2 2
+
+	velocity			10 -12 -12 20 12 12
+
+	gravity				8 24
+
+	alpha
+	{
+		start			0.3 0.4
+		end				0
+		flags			linear
+	}
+
+	size
+	{
+		start			6 8
+		end				8 14
+		flags			linear
+	}
+
+	shaders
+	[
+		gfx/misc/steam
+	]
+}
+
+OrientedParticle
+{
+	spawnFlags			rgbComponentInterpolation
+
+	count				2
+
+	life				3500 5100
+
+	rotation			0 360
+
+	rgb
+	{
+		start			0.8 0.8 0.1 1 0.9 0.2
+		end				0.8 0.1 0
+		flags			linear
+	}
+
+	alpha
+	{
+		end				0
+		parm			60 80
+		flags			nonlinear
+	}
+
+	size
+	{
+		start			1.6 2.8
+	}
+
+	shaders
+	[
+		gfx/effects/meltMark
+	]
+}
+
+Sound
+{
+	sounds
+	[
+		sound/weapons/disruptor/hit_wall
+	]
+}

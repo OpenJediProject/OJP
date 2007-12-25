@@ -1,0 +1,66 @@
+// Blaster droid impact effect
+
+// glowing chunks
+Particle
+{
+	count	6	10
+	life	800	1200
+
+	origin	2 -3 -3		2 3 3
+	vel	40 -48 -48		100 48 48
+	gravity	-100	-300
+	bounce	0.3 	0.5
+
+	size
+	{
+		start 	0.3	1.0
+		end	0.0
+		parm	80	90
+		flags	nonlinear
+	}
+
+	rgb
+	{
+		start	1.0 0.4 0.0	1.0 1.0 0.2
+		end	1.0 0.4 0.0
+		flags	linear
+	}
+
+	shader
+	[
+		gfx/effects/whiteGlow
+	]
+}
+
+// Dark smoke
+Particle
+{
+	count	3	4
+	life	800	1200
+
+	origin	2 -3 -3		2 3 3
+	vel	15 -12 -12		20 12 12
+	gravity	32	80
+
+	flags	useAlpha
+
+	size
+	{
+		start 	2.0	6.0
+		end	6.0	10.0
+		flags	linear
+	}
+
+	alpha
+	{
+		start	1.0
+		end 	0.0
+		parm	60 	75
+		flags	nonlinear
+	}
+
+	shader
+	[
+		gfx/misc/black_smoke
+	]
+}

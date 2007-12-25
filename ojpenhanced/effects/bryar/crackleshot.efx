@@ -1,0 +1,49 @@
+// Simple alt-charge crackle effect
+
+Line
+{
+	origin	20 0 0
+	origin2	-100 0 0
+
+	width
+	{
+		start 	6.0 	9.5
+	}
+
+	alpha
+	{
+		start	0.3	0.5
+	}
+
+	rgb
+	{
+		start	0.8 0.7 0.0 	1.0 0.8 0.6
+	}
+
+	shader
+	[
+		gfx/effects/whiteGlow
+	]
+}
+
+particle
+{
+	name 	Filler
+
+	origin	-8 0 0
+
+	size
+	{
+		start 	4.6	8.8
+	}
+
+	rgb
+	{
+		start	0.4 0.3 0.0 	0.5 0.4 0.1
+	}
+
+	shader
+	[
+		gfx/effects/whiteGlow
+	]
+}

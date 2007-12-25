@@ -1,0 +1,102 @@
+repeatDelay				300
+
+Particle
+{
+	life				300 1300
+
+	origin				2 0 0
+
+	rotation			-90 90
+
+	rgb
+	{
+		start			1 0.3 0.1
+	}
+
+	alpha
+	{
+		end				0
+		flags			linear
+	}
+
+	size
+	{
+		start			20 28
+		end				10
+		flags			linear
+	}
+
+	shaders
+	[
+		gfx/effects/whiteFlare
+	]
+}
+
+Particle
+{
+	count				1 2
+
+	life				300 1000
+
+	origin				2 0 0
+
+	rotation			-90 90
+
+	alpha
+	{
+		end				0
+		flags			linear
+	}
+
+	size
+	{
+		start			4 6
+	}
+
+	shaders
+	[
+		gfx/effects/whiteFlare
+	]
+}
+
+Particle
+{
+	flags				useAlpha
+
+	count				3 5
+
+	life				800 1200
+
+	origin				2 -3 -3 2 3 3
+
+	velocity			15 -12 -12 20 12 12
+
+	gravity				32 80
+
+	alpha
+	{
+		end				0
+		parm			60 75
+		flags			nonlinear
+	}
+
+	size
+	{
+		start			2 6
+		end				6 10
+		flags			linear
+	}
+
+	shaders
+	[
+		gfx/misc/black_smoke
+	]
+}
+
+Sound
+{
+	sounds
+	[
+		sound/weapons/disruptor/hit_wall.wav
+	]
+}

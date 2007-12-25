@@ -1,0 +1,77 @@
+repeatDelay				300
+
+Line
+{
+	flags				useAlpha
+
+	count				1 2
+
+	origin				12 0 0
+
+	origin2				-80 0 0
+
+	alpha
+	{
+		start			0.6 1
+		flags			linear
+	}
+
+	size
+	{
+		start			1.4 3
+	}
+
+	shaders
+	[
+		gfx/effects/blaster_blob
+	]
+}
+
+Line
+{
+	count				2
+
+	origin				20 0 0
+
+	origin2				-90 0 0
+
+	rgb
+	{
+		start			1 0 0
+	}
+
+	alpha
+	{
+		start			0.8 1
+	}
+
+	size
+	{
+		start			4 5
+	}
+
+	shaders
+	[
+		gfx/effects/whiteGlow
+	]
+}
+
+Particle
+{
+	origin				-12 0 0
+
+	rgb
+	{
+		start			0.7 0 0 0.9 0.15 0.15
+	}
+
+	size
+	{
+		start			1.6 1.8
+	}
+
+	shaders
+	[
+		gfx/effects/whiteGlow
+	]
+}

@@ -1,0 +1,34 @@
+FxRunner
+{
+	cullrange			1200
+
+	playfx
+	[
+		blaster/sparks
+	]
+}
+
+Decal
+{
+	cullrange			1200
+
+	size
+	{
+		start			5.5 7
+	}
+
+	shaders
+	[
+		gfx/damage/burnmark4
+	]
+}
+
+Sound
+{
+	cullrange			1200
+
+	sounds
+	[
+		sound/weapons/bryar/hit_wall.wav
+	]
+}
