@@ -599,5 +599,22 @@ REFERENCE       THERMAL_DETONATOR_THROW_AVAILABLE
 LANG_ENGLISH	"Automatically Throws available Thermal Detonator without being selected in inventory"
 LANG_GERMAN	    "#same"
 
+REFERENCE	   QUICK_PARRY_HOLDBUTTON
+LANG_ENGLISH	"QuickParry/KickBlock Button"
+LANG_GERMAN	    "#same"
+
+REFERENCE	   ALLOWS_FOR_QUICK_PARRY
+LANG_ENGLISH	"Holding this allows parrying that doesn't stall enemy saberists or block enemy kicks"
+LANG_GERMAN	    "#same"
+
+REFERENCE		RELOAD
+LANG_ENGLISH	"Reload Button:"
+LANG_GERMAN	    "#same"
+
+REFERENCE	   	USESRELOAD
+LANG_ENGLISH	"Reloads weapon. Cancels reload if you tap it again."
+LANG_GERMAN	    "#same"
+
+
 ENDMARKER
 

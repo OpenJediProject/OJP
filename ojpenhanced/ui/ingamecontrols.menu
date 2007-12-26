@@ -1525,6 +1525,38 @@
 				hide			keybindstatus
 			}
 		}
+itemDef 
+		{
+			name				force5
+			group				attackcontrols
+			type				ITEM_TYPE_BIND
+			text				@OJP_MENUS_RELOAD
+			cvar				"force_absorb"
+			rect				260 229 340 14
+			textalign			ITEM_ALIGN_RIGHT
+			textalignx			174
+			textaligny			0
+			font				4
+			textscale			1
+			forecolor			 .615 .615 .956 1.0
+			visible				0
+			descText			@OJP_MENUS_USES_RELOAD
+			action 
+			{ 
+				play			sound/interface/button1
+			}
+
+			mouseenter 
+			{ 
+				show			highlight5
+				show			keybindstatus
+			}
+			mouseexit 
+			{ 
+				hide			highlight5
+				hide			keybindstatus
+			}
+		}
 
 		itemDef 
 		{
@@ -2255,7 +2287,7 @@
 				hide			keybindstatus
 			}
 		}
-
+/*
 		itemDef 
 		{
 			name				force5
@@ -2288,7 +2320,7 @@
 				hide			keybindstatus
 			}
 		}
-
+*/
 		itemDef 
 		{
 			name				force6

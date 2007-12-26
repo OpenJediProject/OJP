@@ -157,7 +157,7 @@ REFERENCE	SKILL_DUALSTYLE
 LANG_ENGLISH	"Dual/Ataru Style:"
 
 REFERENCE	    DESC_SKILL_DUALSTYLE
-LANG_ENGLISH	"Two sabers usage(cheap attackfeints, no disarm) or Ataru(1 fp backflip/cartwheel)."
+LANG_ENGLISH	"Two sabers usage(cheap attackfeints, no disarm) or Ataru(1 fp backflip/cartwheel, better run hit)."
 
 REFERENCE	SKILL_STAFFSTYLE
 LANG_ENGLISH	"Staff/Niman Style:"
@@ -460,6 +460,18 @@ LANG_ENGLISH	"Thermal Detonator Autothrow:"
 
 REFERENCE       THERMAL_DETONATOR_THROW_AVAILABLE
 LANG_ENGLISH	"Automatically Throws available Thermal Detonator without being selected in inventory"
+
+REFERENCE	   QUICK_PARRY_HOLDBUTTON
+LANG_ENGLISH	"QuickParry/KickBlock Button:"
+
+REFERENCE	   ALLOWS_FOR_QUICK_PARRY
+LANG_ENGLISH	"Holding this allows parrying that doesn't stall enemy saberists or block enemy kicks"
+
+REFERENCE		RELOAD
+LANG_ENGLISH	"Reload Button:"
+
+REFERENCE	   	USESRELOAD
+LANG_ENGLISH	"Reloads weapon. Cancels reload if you tap it again."
 
 ENDMARKER
 
