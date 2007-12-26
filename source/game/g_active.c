@@ -2220,18 +2220,15 @@ int ReloadTime(gentity_t *ent)
 	{
 		if(SkillLevelForWeap(ent,ent->client->ps.weapon) == 3)
 		{
-			if(ent->client->ps.weapon == WP_REPEATER && ent->client->skillLevel[SK_REPEATERUPGRADE] > FORCE_LEVEL_0)
-				return 100;
-			else
-			return 200;
+			return 100;
 		}
 		else if (SkillLevelForWeap(ent,ent->client->ps.weapon) == 2)
 		{
-			return 300;
+			return 200;
 		}
 		else if (SkillLevelForWeap(ent,ent->client->ps.weapon) == 1)
 		{
-			return 400;
+			return 300;
 		}
 	}
 	return -1;
@@ -2259,7 +2256,7 @@ void SetupReload(gentity_t *ent)
 
 	ent->bulletsToReload = ClipSize(weaponData[ent->client->ps.weapon].ammoIndex) - ent->client->ps.ammo[weaponData[ent->client->ps.weapon].ammoIndex];
 	ent->reloadTime = level.time + ReloadTime(ent);
-	
+	ent->client->ps.zoomMode = 0;
 }
 
 void Reload(gentity_t *ent)
@@ -2283,11 +2280,43 @@ void Reload(gentity_t *ent)
 		return;
 	}
 
+	if(ent->client->ps.weapon == WP_REPEATER && ent->client->skillLevel[SK_REPEATERUPGRADE] > FORCE_LEVEL_0)
+	{
+		int i;
+		for(i=0;i<4;i++)
+		{
+		ent->bullets[ent->client->ps.weapon]--;
+		ent->client->ps.ammo[weaponData[ent->client->ps.weapon].ammoIndex]++;
+		ent->bulletsToReload--;
+		if(ent->bullets[ent->client->ps.weapon] < 1)
+		return;
+		if(ent->client->ps.ammo[weaponData[ent->client->ps.weapon].ammoIndex] >= ClipSize(weaponData[ent->client->ps.weapon].ammoIndex))
+			return;
+		}
+	ent->reloadTime = level.time + ReloadTime(ent);
+	}
+	else if(ent->client->ps.weapon == WP_REPEATER)
+	{
+		int i;
+		for(i=0; i<3; i++)
+		{
+		ent->bullets[ent->client->ps.weapon]--;
+		ent->client->ps.ammo[weaponData[ent->client->ps.weapon].ammoIndex]++;
+		ent->bulletsToReload--;
+		if(ent->bullets[ent->client->ps.weapon] < 1)
+		return;
+		if(ent->client->ps.ammo[weaponData[ent->client->ps.weapon].ammoIndex] >= ClipSize(weaponData[ent->client->ps.weapon].ammoIndex))
+			return;
+		}
+	ent->reloadTime = level.time + ReloadTime(ent);
+	}
+	else
+	{
 	ent->bullets[ent->client->ps.weapon]--;
 	ent->client->ps.ammo[weaponData[ent->client->ps.weapon].ammoIndex]++;
 	ent->reloadTime = level.time + ReloadTime(ent);
-
 	ent->bulletsToReload--;
+	}
 	G_SoundOnEnt(ent,CHAN_WEAPON,"sound/weapons/disruptor/zoomstart.wav");
 
 	//keep him in the "use" anim

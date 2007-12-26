@@ -386,6 +386,7 @@ struct gentity_s {
 	int			health;
 	qboolean	takedamage;
 	material_t	material;
+	int			damageDecreaseTime;
 
 	//[LastManStanding]
 	int			lives;

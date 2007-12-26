@@ -98,11 +98,11 @@ ojp/menu/mainvideo
 
 
 
-ojp/menu/obiwan
+menu/obiwan
 {
 
     {
-        clampmap ojp/menu/obiwan
+        clampmap menu/obiwan
         blendFunc GL_ONE GL_ONE
     }
 }

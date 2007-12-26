@@ -1,6 +1,6 @@
 #include "../qcommon/qfiles.h"
 
-#define NUM_FORCE_STAR_IMAGES  9
+#define NUM_FORCE_STAR_IMAGES  11
 #define FORCE_NONJEDI	0
 #define FORCE_JEDI		1
 

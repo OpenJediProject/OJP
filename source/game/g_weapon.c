@@ -1206,6 +1206,8 @@ static void WP_BowcasterAltFire( gentity_t *ent )
 	missile->methodOfDeath = MOD_BOWCASTER;
 	missile->clipmask = MASK_SHOT | CONTENTS_LIGHTSABER;
 
+	missile->damageDecreaseTime = level.time + 300;
+
 	//missile->flags |= FL_BOUNCE; taken out because it was causing problems for sabers
 	//missile->bounceCount = 3;
 }
@@ -1258,6 +1260,8 @@ static void WP_BowcasterMainFire( gentity_t *ent )
 
 		// we don't want it to bounce
 		missile->bounceCount = 0;
+
+		missile->damageDecreaseTime = level.time + 300;
 }
 //[/Bowcaster]
 
@@ -1695,6 +1699,8 @@ static void WP_FlechetteMainFire( gentity_t *ent )
 		// we don't want it to bounce forever
 		missile->bounceCount = Q_irand(5,8);
 
+		missile->damageDecreaseTime = level.time + 300;
+
 		missile->flags |= FL_BOUNCE_SHRAPNEL;
 	}
 }
@@ -1888,23 +1894,41 @@ static void WP_CreateFlechetteBouncyThing( vec3_t start, vec3_t fwd, gentity_t *
 static void WP_FlechetteAltFire( gentity_t *self )
 //---------------------------------------------------------
 {
-	vec3_t 	dir, fwd, start, angs;
+	vec3_t		fwd, angs;
+	gentity_t	*missile;
 	int i;
 
-	vectoangles( forward, angs );
-	VectorCopy( muzzle, start );
-
-	WP_TraceSetStart( self, start, vec3_origin, vec3_origin );//make sure our start point isn't on the other side of a wall
-
-	for ( i = 0; i < 2; i++ )
+	for (i = 0; i < FLECHETTE_SHOTS+FLECHETTE_SHOTS; i++ )
 	{
-		VectorCopy( angs, dir );
+		vectoangles( forward, angs );
 
-		dir[PITCH] -= random() * 4 + 8; // make it fly upwards
-		dir[YAW] += crandom() * 2;
-		AngleVectors( dir, fwd, NULL, NULL );
+		if (i != 0)
+		{ //do nothing on the first shot, it will hit the crosshairs
+			angs[PITCH] += crandom() * FLECHETTE_SPREAD+0.5f;
+			angs[YAW]	+= crandom() * FLECHETTE_SPREAD+0.5f;
+		}
 
-		WP_CreateFlechetteBouncyThing( start, fwd, self );
+		AngleVectors( angs, fwd, NULL, NULL );
+
+		missile = CreateMissile( muzzle, fwd, FLECHETTE_VEL, 10000, self, qfalse);
+
+		missile->classname = "flech_proj";
+		missile->s.weapon = WP_FLECHETTE;
+
+		VectorSet( missile->r.maxs, FLECHETTE_SIZE, FLECHETTE_SIZE, FLECHETTE_SIZE );
+		VectorScale( missile->r.maxs, -1, missile->r.mins );
+
+		missile->damage = FLECHETTE_DAMAGE;
+		missile->dflags = DAMAGE_DEATH_KNOCKBACK;
+		missile->methodOfDeath = MOD_FLECHETTE;
+		missile->clipmask = MASK_SHOT | CONTENTS_LIGHTSABER;
+
+		// we don't want it to bounce forever
+		missile->bounceCount = Q_irand(5,8);
+
+		missile->flags |= FL_BOUNCE_SHRAPNEL;
+		missile->damageDecreaseTime = level.time + 300;
+		
 	}
 }
 

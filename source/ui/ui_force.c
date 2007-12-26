@@ -194,6 +194,10 @@ void UI_InitForceShaders(void)
 	uiForceStarShaders[7][1] = trap_R_RegisterShaderNoMip("forcestar7");
 	uiForceStarShaders[8][0] = trap_R_RegisterShaderNoMip("forcecircle8");
 	uiForceStarShaders[8][1] = trap_R_RegisterShaderNoMip("forcestar8");
+	uiForceStarShaders[9][0] = trap_R_RegisterShaderNoMip("gfx/menus/forcecircle9");
+	uiForceStarShaders[9][1] = trap_R_RegisterShaderNoMip("gfx/menus/forcestar9");
+	uiForceStarShaders[10][0] = trap_R_RegisterShaderNoMip("gfx/menus/forcecircle10");
+	uiForceStarShaders[10][1] = trap_R_RegisterShaderNoMip("gfx/menus/forcestar10");
 
 	uiSaberColorShaders[SABER_RED]		= trap_R_RegisterShaderNoMip("menu/art/saber_red");
 	uiSaberColorShaders[SABER_ORANGE]	= trap_R_RegisterShaderNoMip("menu/art/saber_orange");

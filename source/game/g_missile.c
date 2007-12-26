@@ -439,7 +439,7 @@ qboolean G_MissileImpact( gentity_t *ent, trace_t *trace ) {
 	}
 	
 	// I would glom onto the FL_BOUNCE code section above, but don't feel like risking breaking something else
-	if ( (!other->takedamage && (ent->bounceCount > 0 || ent->bounceCount == -5) && ( ent->flags&(FL_BOUNCE_SHRAPNEL) ) ) || ((trace->surfaceFlags&SURF_FORCEFIELD)&&!ent->splashDamage&&!ent->splashRadius&&(ent->bounceCount > 0 || ent->bounceCount == -5)) ) 
+	if (/* (!other->takedamage && (ent->bounceCount > 0 || ent->bounceCount == -5) && ( ent->flags&(FL_BOUNCE_SHRAPNEL) ) ) ||*/ ((trace->surfaceFlags&SURF_FORCEFIELD)&&!ent->splashDamage&&!ent->splashRadius&&(ent->bounceCount > 0 || ent->bounceCount == -5)) ) 
 	{
 		G_BounceMissile( ent, trace );
 
@@ -1232,6 +1232,12 @@ passthrough:
 				ent->s.apos.trBase[PITCH] = 0;
 			}
 		}
+	}
+
+	if(ent->damageDecreaseTime && ent->damageDecreaseTime <= level.time)
+	{
+		ent->damage-=4;
+		ent->damageDecreaseTime = level.time + 300;
 	}
 
 	// check think function after bouncing
