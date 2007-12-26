@@ -36,9 +36,11 @@ Version 0.1.1
 		Gunner Changes:
 			-Pistol only has alt fire charge at level 3
 			-Alt fire for Blaster and Bowcaster is now a bit faster.
+			-New Reload system. press the reload key to start it and tap it again to stop. You can shoot while reloading.
+			-Added The T-21 weapon. Its the Flechette with a new model and damages. Its also a heavy gun.
 		Items:
 			-More forcefield health
-			-Can turn off jetpack by pressing item use (should be jump but thats the best I could do for now :P)
+			-Can turn off jetpack by pressing item use 
 		Bug Fixes:
 			-no weapon respawn bug fixed..mostly, it just goes to the skill menu when it happens.
 			-several force vulnerability bugs fixed

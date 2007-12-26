@@ -1,0 +1,110 @@
+This is a basic tutorial of how to be a gunner in OJP. Recent as of 0.1.1
+Sorry I couldnt make a more complete manual here guys, we ran out of time for our chritmas release :p
+
+Dodge:
+
+Dodge is your what allows you to dodge saber swings or bolts that hit you without losing HP.
+Blaster shots and saber hits do alot more damage than Base JKA, so keep your dodge meter high as|
+much as you can. IT regenerates at a fairly slow pace.
+
+Mishap:
+
+Firing Your weapon raises your mishap meter. As it gets higher, you lose accuracy in your shots
+and your camera shakes to varying degrees. It also controls how vulnerable force power you are.
+
+Force defense:
+
+If you dont have Absorb, You can prevent a knockdown from most force powers if you walk and do not have high
+mishap or are using a heavy gun. They will only move you around or or do basic damage. Lightning and grip do not prevent you from
+firing shots back at the force user unless you have high mishap.
+
+Light Guns:
+
+Pistol
+Blaster
+Bowcaster
+
+Heavy Guns (Cannot block force powers while using these):
+
+Clone Rifle (Note: alt fire costs 100 bolts)
+T-21
+disruptor
+Rocket Launcher
+
+Reloading:
+
+Almost all of the weapons have clips. pressing teh reload button will regenerate the clip.
+Note: you cannot fire as its regenerating so tap the button again to cancel the regen if needed.
+
+Hybrids:
+
+Basically a gunner who knows uses anything on the force menu as well. They will not have their
+certain items like the seeker, forcefield, and sentry regenerate in their inventory unlike 
+pure gunners. Hybrids cannot use offensive forcepowers with a gun in their hand.
+
+Tips:
+
+
+Gunner vs Gunner:
+
+Just remember that your more accurate if you walk and fire. Therefore use cover alot. Also,
+the quickthrow thermal detonator feature will come in handy alot. Take them out halo style.
+
+Gunner vs Hybrid:
+
+Try to hit them in the air when they jump so you get past their dodge. Watch out for force usage 
+and keep the firepower coming so maybe you can hit them when they try to use force, but they cannot use offensive powers with a gunin  their hand
+ Take advantage of teh fact that you most likely have more items and guns than they do because they spent half of it on force.
+
+Gunner vs Jedi:
+
+Walk alot and watch your mishap meter to avoid knockdowns from force power. Use roll alot
+ especially when they get close and keep firing even when you get knocked down. You can even rollout of 
+out of push and pull if you didnt get knocked down. Bolts do more DP damage to jedi the closer 
+they are and even more if they are running and swinging, so try and find ways to get a little closer to them.
+Use your items strategically. Shield can make a nasty knockdown surprise for a jedi and you can shoot them on the 
+ground for more damage. even a well placed sentry or quickthrown detonator can turn the tide as well. Be careful is a 
+jedi starts walking and swinging his saber because he's trying to deflect you. If Mind tricked, remember your bots can see him. keep moving. Jedi's, just keep this stuff
+in mind when fighting a gunner. 
+
+Hybrid vs Jedi:
+
+A tough matchup at times especially for the jedi. Hybrids use absorb and Jump alot alot with 
+their guns and flamethrower for best results. Jedi need to use speed alot, deflect, and watch for 
+reloads and especially high mishap inaccuracy or use of heavy guns because they are vulnerable 
+to force in that case. Also, if you need to catch up with a running hybrid. blast him with push or pull
+and it will make them stop to block it. Also, since they are spending points on weapons too, they
+may not have all their absorb so they may be vulnerable when running or jumping.
+
+Jedi vs Jedi:
+
+Read the saber manual!!
+
+Force powers:
+
+Jump: Goes very high now but costs a ton if used too often with no recharge (meditate regens force faster btw).
+
+seeing: Seeing 1 is the PREREQUISITE of all forcepowers and saber stuffs. better seeing at higher
+levels and important if mindtricked
+
+Push:pushes back rockets and some detonators. You must target your enemy at level 1.
+There is a range increase with the next levels as wel as protection from push the way absorb works
+
+Pull: Requires targeting at level 1. Pulls vulnerable enemies over and pulls their weapon if they have
+high mishap.
+
+Mindtrick: requires targeting at level 1 as well I believe and increases in range and time with higher
+levels. Bots can see through it.
+
+Lightning: do a little damage at level 1 but knocks people down at other levels if their are vulnerable.
+
+Grip: Works similiar to base JKA, except gunners can still shoot you or use items if they didnt have 
+high mishap when you gripped them.
+
+Shi-cho: Not a force power but a prerequisite for all the otehr styles and a saber.
+The saber style perks are described on the skill menu Hold you mouse over the bubbles:
+
+Saber Defense: Allows for lesser damage rom back hits Allows for better bolt deflection a depending
+o what level you have. Swing in order to make it more accurate, but just dont swing too close when deflecting.
+
+Ok thats all I have the energy for right now. More another time.
