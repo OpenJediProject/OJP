@@ -3250,6 +3250,7 @@ qboolean Item_OwnerDraw_HandleKey(itemDef_t *item, int key) {
 			case UI_FORCE_RANK_STAFFSTYLE:
 			case UI_FORCE_RANK_REPEATERUPGRADE:
 			case UI_FORCE_RANK_FLECHETTE:
+			case UI_FORCE_RANK_BLASTERRATEOFFIRE://[BlasterRateOfFireUpgrade]
 			//[/StanceSelection]
 			//[/ExpSys]
 	  			if(!Rect_ContainsPoint(&item->window.rect, DC->cursorx, DC->cursory) )

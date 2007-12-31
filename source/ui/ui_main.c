@@ -3400,6 +3400,7 @@ static int UI_OwnerDrawWidth(int ownerDraw, float scale) {
 	case UI_FORCE_RANK_STAFFSTYLE:
 	case UI_FORCE_RANK_REPEATERUPGRADE:
 	case UI_FORCE_RANK_FLECHETTE:
+	case UI_FORCE_RANK_BLASTERRATEOFFIRE://[BlasterRateOfFireUpgrade]
 	//[/StanceSelection]
 		if(ownerDraw < UI_FORCE_RANK_JETPACK)
 		{
@@ -3910,6 +3911,7 @@ static void UI_OwnerDraw(float x, float y, float w, float h, float text_x, float
 	case UI_FORCE_RANK_STAFFSTYLE:
 	case UI_FORCE_RANK_REPEATERUPGRADE:
 	case UI_FORCE_RANK_FLECHETTE:
+	case UI_FORCE_RANK_BLASTERRATEOFFIRE://[BlasterRateOfFireUpgrade]
 	//[/StanceSelection]
 	//[/ExpSys]
 
@@ -5265,6 +5267,7 @@ static qboolean UI_OwnerDrawHandleKey(int ownerDraw, int flags, float *special, 
 	case UI_FORCE_RANK_STAFFSTYLE:
 	case UI_FORCE_RANK_REPEATERUPGRADE:
 	case UI_FORCE_RANK_FLECHETTE:
+	case UI_FORCE_RANK_BLASTERRATEOFFIRE://[BlasterRateOfFireUpgrade]
 	//[/StanceSelection]
 		if(ownerDraw < UI_FORCE_RANK_JETPACK)
 		{

@@ -10385,7 +10385,8 @@ static void G_GrabSomeMofos(gentity_t *self)
 			G_CanBeEnemy(self, grabbed) &&
 			G_PrettyCloseIGuess(grabbed->client->ps.origin[2], self->client->ps.origin[2], 4.0f) &&
 			(!BG_InGrappleMove(grabbed->client->ps.torsoAnim) || grabbed->client->ps.torsoAnim == BOTH_KYLE_GRAB) &&
-			(!BG_InGrappleMove(grabbed->client->ps.legsAnim) || grabbed->client->ps.legsAnim == BOTH_KYLE_GRAB))
+			(!BG_InGrappleMove(grabbed->client->ps.legsAnim) || grabbed->client->ps.legsAnim == BOTH_KYLE_GRAB)
+			&& grabbed->s.NPC_class != CLASS_VEHICLE)
 		{ //grabbed an active player/npc
 			int tortureAnim = -1;
 			int correspondingAnim = -1;

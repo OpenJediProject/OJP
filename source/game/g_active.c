@@ -2161,7 +2161,7 @@ int ClipSize(int ammo)
 	case AMMO_ROCKETS:
 		return 1;
 	case AMMO_POWERCELL:
-		return 25;
+		return 30;
 	case AMMO_METAL_BOLTS:
 		return 100;
 
@@ -4376,7 +4376,8 @@ void ClientThink_real( gentity_t *ent ) {
 			{ //wave respawning on
 				forceRes = 1;
 			}
-			else if((g_gametype.integer == GT_FFA || g_gametype.integer == GT_TEAM) &&
+			else if((g_gametype.integer == GT_FFA || g_gametype.integer == GT_TEAM ||
+				g_gametype.integer == GT_CTF) &&
 				ojp_ffaRespawnTimer.integer)
 				forceRes = 1;
 

@@ -380,6 +380,7 @@
 #define UI_FORCE_RANK_STAFFSTYLE	318
 #define UI_FORCE_RANK_REPEATERUPGRADE 319//[Repeater]
 #define UI_FORCE_RANK_FLECHETTE		320
+#define UI_FORCE_RANK_BLASTERRATEOFFIRE 321 //[BlasterRateOfFireUpgrade]
 //[/StanceSelection]
 //[/ExpSys]
 

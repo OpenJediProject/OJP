@@ -935,6 +935,11 @@ int ForcePowerUsableOn(gentity_t *attacker, gentity_t *other, forcePowers_t forc
 	{
 		return 0;
 	}
+
+	//[InAirChange]
+	//if(other && other->client && other->client->ps.stats[STAT_DODGE] <= DODGE_CRITICALLEVEL)
+	//	return 1;
+
 	if(forcePower == FP_TELEPATHY && other->client)
 	{
 		switch(other->client->ps.fd.forcePowerLevel[FP_ABSORB])
@@ -3257,6 +3262,8 @@ qboolean ForceTelepathyCheckDirectNPCTarget( gentity_t *self, trace_t *tr, qbool
 	return qtrue;
 }
 
+extern void WP_DeactivateSaber( gentity_t *self, qboolean clearLength );
+
 void ForceTelepathy(gentity_t *self)
 {
 	trace_t tr;
@@ -3271,7 +3278,7 @@ void ForceTelepathy(gentity_t *self)
 	{
 		return;
 	}
-
+	
 	if (self->client->ps.forceHandExtend != HANDEXTEND_NONE)
 	{
 		return;
@@ -3299,6 +3306,9 @@ void ForceTelepathy(gentity_t *self)
 	{
 		return;
 	}
+
+	if(self->client->ps.weapon == WP_SABER)
+			WP_DeactivateSaber(self,qfalse);
 
 	if ( ForceTelepathyCheckDirectNPCTarget( self, &tr, &tookPower ) )
 	{//hit an NPC directly
@@ -4467,6 +4477,7 @@ void ForceThrow( gentity_t *self, qboolean pull )
 					   || PM_SaberInBrokenParry(push_list[x]->client->ps.saberMove)
 					   || push_list[x]->client->ps.stats[STAT_DODGE] < DODGE_CRITICALLEVEL)
 						{
+							//trap_SendServerCommand(push_list[x]->client->ps.clientNum,"phsx");
 							G_Knockdown(push_list[x], self, pushDir, 300, qtrue);
 						}
 					//[/ForceSys]
@@ -4611,6 +4622,8 @@ void ForceThrow( gentity_t *self, qboolean pull )
 	}
 }
 
+extern void WP_ActivateSaber( gentity_t *self );
+
 void WP_ForcePowerStop( gentity_t *self, forcePowers_t forcePower )
 {
 	int wasActive = self->client->ps.fd.forcePowersActive;
@@ -4644,6 +4657,7 @@ void WP_ForcePowerStop( gentity_t *self, forcePowers_t forcePower )
 		self->client->ps.fd.forceMindtrickTargetIndex2 = 0;
 		self->client->ps.fd.forceMindtrickTargetIndex3 = 0;
 		self->client->ps.fd.forceMindtrickTargetIndex4 = 0;
+
 		break;
 	case FP_SEE:
 		if (wasActive & (1 << FP_SEE))

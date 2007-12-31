@@ -672,6 +672,7 @@ typedef enum
 	//[/StanceSelection]
 	SK_REPEATERUPGRADE,//[Repeater]
 	SK_FLECHETTE,//[Flechette]
+	SK_BLASTERRATEOFFIREUPGRADE,//[BlasterRateOfFire]
 	NUM_SKILLS
 } skills_t;
 

@@ -629,6 +629,9 @@ void Seeker_FindEnemy( void )
 		//dont attack our owner
 		if(NPC->activator == ent)
 			continue;
+
+		if(ent->s.NPC_class == CLASS_VEHICLE)
+			continue;
 		//[/SeekerItemNpc]
 
 		dis = DistanceHorizontalSquared( NPC->r.currentOrigin, ent->r.currentOrigin );

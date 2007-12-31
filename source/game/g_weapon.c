@@ -1358,8 +1358,8 @@ static void WP_FireRepeater( gentity_t *ent, qboolean altFire )
 	else
 	{
 		// add some slop to the alt-fire direction
-		angs[PITCH] += crandom() * REPEATER_SPREAD;
-		angs[YAW]	+= crandom() * REPEATER_SPREAD;
+		//angs[PITCH] += crandom() * REPEATER_SPREAD;
+		//angs[YAW]	+= crandom() * REPEATER_SPREAD;
 
 		AngleVectors( angs, dir, NULL, NULL );
 
@@ -4939,7 +4939,10 @@ void FireWeapon( gentity_t *ent, qboolean altFire )
 			//increase mishap level
 			if(!Q_irand(0, SkillLevelforWeapon(ent, ent->s.weapon)-1) && ent->s.weapon != WP_EMPLACED_GUN )//Sorry but the mishap meter needs to go up more that before.
 			{//failed skill roll, add mishap.
-				G_AddMercBalance(ent, Q_irand(1, 2));// 1 was not enough
+				if(ent->s.weapon == WP_DISRUPTOR && ent->client->ps.zoomMode == 0)
+					G_AddMercBalance(ent, Q_irand(2, 3));// 1 was not enough
+				else
+					G_AddMercBalance(ent, Q_irand(1, 2));// 1 was not enough
 			}
 		}
 		//[/WeapAccuracy]

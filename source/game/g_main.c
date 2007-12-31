@@ -1275,6 +1275,36 @@ void G_InitGame( int levelTime, int randomSeed, int restart ) {
 	}
 #endif
 
+	//[ReloadGametypeAndMap]
+	/*
+	if(!restart)
+	{
+		fileHandle_t serversettings;
+		char buffer[100];
+		char map[100];
+		int i,j;
+		trap_FS_FOpenFile("serversettings.cfg",&serversettings,FS_READ);
+		if(serversettings)
+		{
+			trap_FS_Read(buffer,strlen(buffer),serversettings);
+			for(i=0;i<strlen(buffer);i++)
+			{
+				if(buffer[i] == "." && buffer[i+1] == "b" && buffer[i+2] == "s")
+				{
+					for(j=0;j<i+3;j++)
+					{
+						map[j] = buffer[j];
+					}
+					break;
+				}
+			}
+			//trap_Cvar_Set
+		}
+		trap_FS_FCloseFile(serversettings);
+	}
+	*/
+	//[/ReloadGametypeAndMap]
+
 	//Init RMG to 0, it will be autoset to 1 if there is terrain on the level.
 	trap_Cvar_Set("RMG", "0");
 	g_RMG.integer = 0;
@@ -4381,7 +4411,8 @@ void G_RunFrame( int levelTime ) {
 	}
 
 	//[FFARespawnTimer]
-	if ((g_gametype.integer == GT_FFA || g_gametype.integer == GT_TEAM) &&
+	if ((g_gametype.integer == GT_FFA || g_gametype.integer == GT_TEAM
+		|| g_gametype.integer == GT_CTF) &&
 		ojp_ffaRespawnTimer.integer &&
 		ojp_ffaRespawnTimerCheck < level.time)
 	{

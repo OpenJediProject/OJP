@@ -648,6 +648,8 @@ static qboolean pas_find_enemies( gentity_t *self )
 		{//racc - don't attack owner
 			continue;
 		}
+		if(self->s.NPC_class == CLASS_SEEKER)
+			continue;
 
 		//[SentryGun]
 		//don't allow sentry gun to attack our own stuff (specifically our seeker item)

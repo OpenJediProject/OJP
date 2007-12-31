@@ -5515,7 +5515,7 @@ void G_Damage( gentity_t *targ, gentity_t *inflictor, gentity_t *attacker,
 	}
 
 	//[BryarSecondary]
-	if ( mod == MOD_BRYAR_PISTOL_ALT && targ && targ->inuse && targ->client )
+	if ( (mod == MOD_BRYAR_PISTOL_ALT || mod == MOD_SEEKER) && targ && targ->inuse && targ->client )
 	{//doesn't do actual damage to the target, instead it acts like a stun hit that increases MP/DP and tries to knock
 		//the player over like a kick.
 

@@ -71,6 +71,7 @@ qboolean uiForcePowersDisabled[NUM_TOTAL_SKILLS] = {
 	qfalse, //SK_DISRUPTOR,      //Disruptor/sniper rifle skill added by JRHockney
 	//[/ExpSys]
 	qfalse, //SK_REPEATERUPGRADE //Repeater upgrade
+	qfalse,//SK_BLASTERRATEOFFIREUPGRADE
 };
 
 //[ExpSys]
@@ -123,6 +124,7 @@ int uiForcePowersRank[NUM_TOTAL_SKILLS] = {
 	0,//SK_DISRUPTOR,      //Disruptor/sniper rifle skill added by JRHockney
 	//[/ExpSys]
 	0,//SK_REPEATERUPGRADE //Repeater upgrade
+	0,//SK_BLASTERRATEOFFIREUPGRADE
 };
 
 //[ExpSys]
@@ -170,6 +172,7 @@ int uiForcePowerDarkLight[NUM_TOTAL_SKILLS] = //0 == neutral
 	0,//SK_DISRUPTOR,      //Disruptor/sniper rifle skill added by JRHockney
 	//[/ExpSys]
 	0,//SK_REPEATERUPGRADE //Repeater upgrade
+	0,//SK_BLASTERRATEOFFIREUPGRADE
 };
 
 int uiForceStarShaders[NUM_FORCE_STAR_IMAGES][2];
@@ -227,6 +230,7 @@ int NumberOfSkillRanks(int skill)
 		case NUM_FORCE_POWERS+SK_DUALSTYLE:	//Dual lightsaber style
 		case NUM_FORCE_POWERS+SK_STAFFSTYLE:	//Staff lightsaber style
 		case NUM_FORCE_POWERS+SK_REPEATERUPGRADE://Repeater Upgrade
+		case NUM_FORCE_POWERS+SK_BLASTERRATEOFFIREUPGRADE:
 			return 1;
 			break;
 		case NUM_FORCE_POWERS+SK_BACTA:
@@ -310,7 +314,7 @@ void UI_UpdateClientForcePowers(const char *teamArg)
 {
 	//[ExpSys]
 	char newForceString[MAX_INFO_STRING];
-	strncpy(newForceString, va("%i-%i-%i%i%i%i%i%i%i%i%i%i%i%i%i%i%i%i%i%i%i%i%i%i%i%i%i%i%i%i%i%i%i%i%i%i%i%i%i%i%i%i%i",
+	strncpy(newForceString, va("%i-%i-%i%i%i%i%i%i%i%i%i%i%i%i%i%i%i%i%i%i%i%i%i%i%i%i%i%i%i%i%i%i%i%i%i%i%i%i%i%i%i%i%i%i",
 		uiForceRank, uiForceSide, uiForcePowersRank[0], uiForcePowersRank[1],
 		uiForcePowersRank[2], uiForcePowersRank[3], uiForcePowersRank[4],
 		uiForcePowersRank[5], uiForcePowersRank[6], uiForcePowersRank[7],
@@ -324,7 +328,8 @@ void UI_UpdateClientForcePowers(const char *teamArg)
 		uiForcePowersRank[29], uiForcePowersRank[30], uiForcePowersRank[31],
 		uiForcePowersRank[32], uiForcePowersRank[33], uiForcePowersRank[34],
 		uiForcePowersRank[35], uiForcePowersRank[36], uiForcePowersRank[37],
-		uiForcePowersRank[38],uiForcePowersRank[39],uiForcePowersRank[40]), sizeof(newForceString));
+		uiForcePowersRank[38],uiForcePowersRank[39],uiForcePowersRank[40],
+		uiForcePowersRank[41]), sizeof(newForceString));
 	/*
 	//[ExpSys]
 	trap_Cvar_Set( "forcepowers", va("%i-%i-%i%i%i%i%i%i%i%i%i%i%i%i%i%i%i%i%i%i%i%i%i%i%i%i%i%i%i%i%i%i%i%i%i%i%i%i%i%i%i",
@@ -456,7 +461,6 @@ void UI_SaveForceTemplate()
 		Menu_SetFeederSelection(NULL, FEEDER_FORCECFG, 0, NULL);
 	}
 }
-
 
 // 
 extern qboolean UI_TrueJediEnabled( void );
@@ -667,17 +671,35 @@ void UpdateForceUsed()
 	if(uiForcePowersRank[NUM_FORCE_POWERS+SK_REPEATER] < FORCE_LEVEL_3)
 	{
 		uiForcePowersRank[NUM_FORCE_POWERS+SK_REPEATERUPGRADE] = 0;
+		menu = Menus_FindByName("ingame_playergunnery");
 		if(menu)
-		Menu_ShowItemByName(menu, "repeaterupgradeg", qfalse);
+		Menu_ShowItemByName(menu, "repeaterupgrade", qfalse);
 	}
 	else
 	{
+		menu = Menus_FindByName("ingame_playergunnery");
 		if(menu)
-		Menu_ShowItemByName(menu, "repeaterupgradeg", qtrue);
+		Menu_ShowItemByName(menu, "repeaterupgrade", qtrue);
 	}
 	//[/Repeater]
+	//[BlasterRateOfFireUpgrade]
+	if(uiForcePowersRank[NUM_FORCE_POWERS+SK_BLASTER] < FORCE_LEVEL_3)
+	{
+		uiForcePowersRank[NUM_FORCE_POWERS+SK_BLASTERRATEOFFIREUPGRADE] = 0;
+		menu = Menus_FindByName("ingame_playergunnery");
+		if(menu)
+		Menu_ShowItemByName(menu, "blasterrateoffire", qfalse);
+	}
+	else
+	{
+		menu = Menus_FindByName("ingame_playergunnery");
+		if(menu)
+		Menu_ShowItemByName(menu, "blasterrateoffire", qtrue);
+	}
+	//[/BlasterRateOfFireUpgrade]
 
 	//[ExpSys]
+	menu = Menus_FindByName("ingame_playerforce");
 	//Made Force Seeing Level 1 a pre-req to taking any additional force powers, except in the case of free sabers.
 	if(uiForcePowersRank[FP_SEE] <= FORCE_LEVEL_0)
 	{//can't use the force if we aren't Force sensitive.
@@ -703,6 +725,52 @@ void UpdateForceUsed()
 			Menu_ShowItemByName(menu, "neutralpowers", qtrue);
 			Menu_ShowItemByName(menu, "darkpowers", qtrue);
 			Menu_ShowItemByName(menu, "lightpowers", qtrue);
+		}
+	}
+
+	if(uiMaxRank <= 100 && uiForcePowersRank[FP_SEE])
+	{
+		if(uiMaxRank <= 75)
+		{
+			menu = Menus_FindByName("ingame_playerforce");
+			if(menu)
+			{
+				Menu_ShowItemByName(menu, "darkpowers", qfalse);
+				Menu_ShowItemByName(menu, "setfp_mindtrick", qfalse);
+			}
+			menu = Menus_FindByName("ingame_playergunnery");
+			if(menu)
+			{
+				Menu_ShowItemByName(menu, "setsk_seeker", qfalse);
+				Menu_ShowItemByName(menu, "setsk_sentry", qfalse);
+				Menu_ShowItemByName(menu, "setsk_flamethrower", qfalse);
+				Menu_ShowItemByName(menu, "setsk_jetpack", qfalse);
+				Menu_ShowItemByName(menu, "setsk_forcefield", qfalse);
+			}
+			uiForcePowersRank[FP_GRIP] = 0;
+			uiForcePowersRank[FP_LIGHTNING] = 0;
+			uiForcePowersRank[FP_TELEPATHY] = 0;
+			uiForcePowersRank[NUM_FORCE_POWERS+SK_SEEKER] = 0;
+			uiForcePowersRank[NUM_FORCE_POWERS+SK_SENTRY] = 0;
+			uiForcePowersRank[NUM_FORCE_POWERS+SK_FLAMETHROWER] = 0;
+			uiForcePowersRank[NUM_FORCE_POWERS+SK_JETPACK] = 0;
+			uiForcePowersRank[NUM_FORCE_POWERS+SK_FORCEFIELD] = 0;
+		}
+		else
+		{
+			uiForcePowersRank[NUM_FORCE_POWERS+SK_SEEKER] = 0;
+			uiForcePowersRank[NUM_FORCE_POWERS+SK_SENTRY] = 0;
+			uiForcePowersRank[NUM_FORCE_POWERS+SK_FLAMETHROWER] = 0;
+			uiForcePowersRank[NUM_FORCE_POWERS+SK_FORCEFIELD] = 0;
+
+			menu = Menus_FindByName("ingame_playerforce");
+			if(menu)
+			{
+				Menu_ShowItemByName(menu, "darkpowers", qtrue);
+				Menu_ShowItemByName(menu, "setfp_mindtrick", qtrue);
+			}
+			menu = Menus_FindByName("ingame_playergunnery");
+				Menu_ShowItemByName(menu, "setsk_jetpack", qtrue);
 		}
 	}
 

@@ -246,6 +246,7 @@ int bgForcePowerCost[NUM_TOTAL_SKILLS][NUM_FORCE_POWER_LEVELS] = //0 == neutral
 	//[/StanceSelection]
 	{	0,	10,	0,	0	},  //SK_REPEATERUPGRADE //Repeater Upgrade
 	{	0,	4,	5,	8	},  //SK_FLECHETTE //Flechette
+	{	0,	10,	0,	0	},	//SK_BLASTERRATEOFFIREUPGRADE
 	//[/ExpSys]
 };
 

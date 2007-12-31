@@ -2335,6 +2335,51 @@ qboolean PM_InForceFall()
 }
 //[/FORCE FALL]
 
+int NumberOfWeapons(void)
+{
+	int numWeaps=0;
+	if(pm->ps->stats[STAT_WEAPONS] & (1 << WP_BRYAR_PISTOL))
+		numWeaps++;
+	if(pm->ps->stats[STAT_WEAPONS] & (1 << WP_BLASTER))
+		numWeaps++;
+	if(pm->ps->stats[STAT_WEAPONS] & (1 << WP_DISRUPTOR))
+		numWeaps++;
+	if(pm->ps->stats[STAT_WEAPONS] & (1 << WP_BOWCASTER))
+		numWeaps++;
+	if(pm->ps->stats[STAT_WEAPONS] & (1 << WP_REPEATER))
+		numWeaps++;
+	if(pm->ps->stats[STAT_WEAPONS] & (1 << WP_DEMP2))
+		numWeaps++;
+	if(pm->ps->stats[STAT_WEAPONS] & (1 << WP_FLECHETTE))
+		numWeaps++;
+	if(pm->ps->stats[STAT_WEAPONS] & (1 << WP_ROCKET_LAUNCHER))
+		numWeaps++;
+	if(pm->ps->stats[STAT_WEAPONS] & (1 << WP_THERMAL))
+		numWeaps++;
+	if(pm->ps->stats[STAT_WEAPONS] & (1 << WP_TRIP_MINE))
+		numWeaps++;
+	if(pm->ps->stats[STAT_WEAPONS] & (1 << WP_DET_PACK))
+		numWeaps++;
+
+		return numWeaps;
+}
+
+int JumpHeightDeduction(void)
+{
+	int deduction=0,i;
+	if(!NumberOfWeapons())
+		return 0;
+	if(pm->ps->fd.forcePowerLevel[FP_LEVITATION] == FORCE_LEVEL_0)
+		return 0;
+	if(BG_InBackFlip(pm->ps->legsAnim))
+		return 200;
+	for(i=0;i<NumberOfWeapons();i++)
+	{
+		deduction+=forceJumpHeight[pm->ps->fd.forcePowerLevel[FP_LEVITATION]]/10;
+	}
+	return deduction;
+}
+
 /*
 =============
 PM_CheckJump
@@ -2414,7 +2459,6 @@ static qboolean PM_CheckJump( void )
 	{
 		pm->ps->fd.forcePowersActive &= ~(1<<FP_LEVITATION);
 	}
-
 	if (pm->ps->fd.forcePowersActive & (1 << FP_LEVITATION))
 	{ //Force jump is already active.. continue draining power appropriately until we land.
 		if (pm->ps->fd.forcePowerDebounce[FP_LEVITATION] < pm->cmd.serverTime)
@@ -2516,7 +2560,7 @@ static qboolean PM_CheckJump( void )
 				//check for max force jump level and cap off & cut z vel
 				if ( ( curHeight<=forceJumpHeight[0] ||//still below minimum jump height
 						(pm->ps->fd.forcePower&&pm->cmd.upmove>=10) ) &&////still have force power available and still trying to jump up 
-					curHeight < forceJumpHeight[pm->ps->fd.forcePowerLevel[FP_LEVITATION]] &&
+						curHeight < forceJumpHeight[pm->ps->fd.forcePowerLevel[FP_LEVITATION]]-JumpHeightDeduction() &&//[Weight]
 					pm->ps->fd.forceJumpZStart)//still below maximum jump height
 				{//can still go up
 					if ( curHeight > forceJumpHeight[0] )
@@ -4679,6 +4723,7 @@ static void PM_CrashLand( void ) {
 	float		vel, acc;
 	float		t;
 	float		a, b, c, den;
+	float		misc1,misc2,misc3,misc4;
 	qboolean	didRoll = qfalse;
 
 	//[CoOp]
@@ -4937,6 +4982,9 @@ static void PM_CrashLand( void ) {
 			//[DoubleFallDamage]
 			delta_send /= 2;//half it
 			delta_send *= 3;
+			//misc2 = pm->ps->fd.forceJumpZStart - pm->ps->origin[2];
+			//if(!pm->ps->fd.forceJumpZStart)
+ 			//delta_send+=c*3/2;
 			//[/DoubleFallDamage]
 
 			if (didRoll)
@@ -9524,6 +9572,19 @@ static void PM_Weapon( void )
 			PM_AddEvent( EV_FIRE_WEAPON );
 		}
 		addTime = weaponData[pm->ps->weapon].fireTime;
+
+		//[BlasterRateOfFireUpgrade]
+		#ifdef QAGAME
+		if(1)
+		{
+			gentity_t *ent = &g_entities[pm->ps->clientNum];
+			if(ent->client->ps.weapon == WP_BLASTER && 
+				ent->client->skillLevel[SK_BLASTERRATEOFFIREUPGRADE] > FORCE_LEVEL_0)
+				addTime =350;
+		}
+		#endif
+		//[/BlasterRateOfFireUpgrade]
+
 		if ( pm->gametype == GT_SIEGE && pm->ps->weapon == WP_DET_PACK )
 		{	// were far too spammy before?  So says Rick.
 			addTime *= 2;
