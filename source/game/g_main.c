@@ -368,6 +368,8 @@ vmCvar_t	mapURL;
 vmCvar_t		ojp_ffaRespawnTimer;
 //[/FFARespawnTimer]
 
+vmCvar_t		ojp_truebalance;//[TrueBalance]
+
 // bk001129 - made static to avoid aliasing
 static cvarTable_t		gameCvarTable[] = {
 	// don't override the cheat state set by the system
@@ -799,6 +801,7 @@ static cvarTable_t		gameCvarTable[] = {
 	//[FFARespawnTimer]
 	{ &ojp_ffaRespawnTimer, "ojp_ffaRespawnTimer","1",CVAR_ARCHIVE,0,qtrue},
 	//[/FFARespawnTimer]
+	{ &ojp_truebalance, "ojp_trueBalance","1",CVAR_ARCHIVE|CVAR_LATCH,0,qtrue},  //[TrueBalance]
 };
 
 // bk001129 - made static to avoid aliasing

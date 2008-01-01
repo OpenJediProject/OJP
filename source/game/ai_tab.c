@@ -4163,6 +4163,8 @@ void TAB_StandardBotAI(bot_state_t *bs, float thinktime)
 			(!bs->doChat || bs->chatTime < level.time))
 		{
 			trap_EA_Attack(bs->client);
+			Cmd_SaberAttackCycle_f(&g_entities[bs->client]);//[TABBot]
+			bs->changeStyleDebounce = level.time + 20000;//[TABBot]
 		}
 
 		return;
@@ -4175,6 +4177,14 @@ void TAB_StandardBotAI(bot_state_t *bs, float thinktime)
 		return;
 	}
 	//[/LedgeGrab]
+
+	if ( (bs->cur_ps.weapon == WP_SABER /*|| BG_Is_Staff_Weapon(bs->cur_ps.weapon)*/)
+		&& bs->changeStyleDebounce < level.time ) 
+	{// Switch stance every so often...
+		bs->changeStyleDebounce = level.time + 200000;
+		Cmd_SaberAttackCycle_f(&g_entities[bs->client]);
+		
+	}
 
 	//[SaberLockSys]
 	if(bs->cur_ps.saberLockTime > level.time)

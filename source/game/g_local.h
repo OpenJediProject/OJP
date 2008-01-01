@@ -2088,6 +2088,8 @@ extern vmCvar_t		ojp_allowBodyDodge;
 extern vmCvar_t		ojp_ffaRespawnTimer;
 //[/FFARespawnTimer]
 
+extern vmCvar_t		ojp_truebalance;//[TrueBalance]
+
 #include "../namespace_begin.h"
 
 void	trap_Printf( const char *fmt );

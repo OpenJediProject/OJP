@@ -10107,10 +10107,11 @@ static void G_KickSomeMofos(gentity_t *ent)
 			break;
 		case BOTH_A7_KICK_B:
 			//FIXME: push back?
-			if ( elapsedTime >= 250 && remainingTime >= 250 )
+			if ( elapsedTime >= 415 && remainingTime >= 200 )
 			{//back
 				doKick = qtrue;
-				if ( ri->handLBolt != -1 )//changed to accomadate teh new hand hand anim
+				//kickDist+=30;
+			if ( ri->handLBolt != -1 )//changed to accomadate teh new hand hand anim
 				{//actually trace to a bolt
 					G_GetBoltPosition( ent, ri->handLBolt, kickEnd, 0 );//changed to accomadate teh new hand hand anim
 					VectorSubtract( kickEnd, ent->r.currentOrigin, kickDir );

@@ -728,7 +728,7 @@ void UpdateForceUsed()
 		}
 	}
 
-	if(uiMaxRank <= 100 && uiForcePowersRank[FP_SEE])
+	if(uiMaxRank <= 100 && uiForcePowersRank[FP_SEE] && (int)(trap_Cvar_VariableValue("ojp_trueBalance")) == 1)
 	{
 		if(uiMaxRank <= 75)
 		{
@@ -761,7 +761,6 @@ void UpdateForceUsed()
 			uiForcePowersRank[NUM_FORCE_POWERS+SK_SEEKER] = 0;
 			uiForcePowersRank[NUM_FORCE_POWERS+SK_SENTRY] = 0;
 			uiForcePowersRank[NUM_FORCE_POWERS+SK_FLAMETHROWER] = 0;
-			uiForcePowersRank[NUM_FORCE_POWERS+SK_FORCEFIELD] = 0;
 
 			menu = Menus_FindByName("ingame_playerforce");
 			if(menu)
@@ -770,8 +769,29 @@ void UpdateForceUsed()
 				Menu_ShowItemByName(menu, "setfp_mindtrick", qtrue);
 			}
 			menu = Menus_FindByName("ingame_playergunnery");
+			{
 				Menu_ShowItemByName(menu, "setsk_jetpack", qtrue);
+				Menu_ShowItemByName(menu, "setsk_forcefield", qtrue);
+			}
 		}
+	}
+	else if ((int)(trap_Cvar_VariableValue("ojp_trueBalance") == 1))
+	{
+			menu = Menus_FindByName("ingame_playerforce");
+			if(menu && uiForcePowersRank[FP_SEE])
+			{
+			Menu_ShowItemByName(menu, "darkpowers", qtrue);
+			Menu_ShowItemByName(menu, "setfp_mindtrick", qtrue);
+			}
+			menu = Menus_FindByName("ingame_playergunnery");
+			if(menu)
+			{
+			Menu_ShowItemByName(menu, "setsk_seeker", qtrue);
+			Menu_ShowItemByName(menu, "setsk_sentry", qtrue);
+			Menu_ShowItemByName(menu, "setsk_flamethrower", qtrue);
+			Menu_ShowItemByName(menu, "setsk_jetpack", qtrue);
+			Menu_ShowItemByName(menu, "setsk_forcefield", qtrue);
+			}
 	}
 
 	// Make sure that we're still legal.

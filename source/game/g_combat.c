@@ -5522,6 +5522,7 @@ void G_Damage( gentity_t *targ, gentity_t *inflictor, gentity_t *attacker,
 		int mpDamage = (float) inflictor->s.generic1/BRYAR_MAX_CHARGE*MISHAPLEVEL_MAX;
 
 		//deal DP damage
+		if(mod != MOD_SEEKER)
 		G_DodgeDrain(targ, attacker, damage);
 		
 		G_Printf("%i: %i: Bryar MP Damage %i, Charge %i\n", level.time, targ->s.number, mpDamage, inflictor->s.generic1);

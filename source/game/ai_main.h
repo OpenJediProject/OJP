@@ -237,6 +237,8 @@ typedef struct bot_state_s
 	int					squadRegroupInterval;
 	int					squadCannotLead;
 
+	int					changeStyleDebounce;//[TABBot]
+
 	int					lastDeadTime;
 
 	wpobject_t			*wpCurrent;
