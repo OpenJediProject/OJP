@@ -4,9 +4,6 @@
 #ifndef CGAME
 	#include "ui_local.h"
 #endif
-#ifdef _XBOX
-#include "../client/client.h"
-#endif
 
 #include "ui_shared.h"
 #include "../game/bg_public.h"
@@ -31,11 +28,6 @@ typedef struct scrollInfo_s {
 	itemDef_t *item;
 	qboolean scrollDir;
 } scrollInfo_t;
-
-#ifdef _XBOX
-//extern void *Z_Malloc(int iSize, memtag_t eTag, qboolean bZeroit, int iAlign);
-//extern void Z_TagFree(memtag_t eTag);
-#endif
 
 
 #ifndef CGAME	// Defined in ui_main.c, not in the namespace
@@ -63,34 +55,6 @@ extern void trap_Key_SetCatcher( int catcher );
 extern void trap_Cvar_Set( const char *var_name, const char *value );
 
 #endif
-
-//JLF DEMOCODE
-#ifdef _XBOX
-
-//support for attract mode demo timer
-#define DEMO_TIME_MAX  45000 //g_demoTimeBeforeStart
-int g_demoLastKeypress = 0;  //milliseconds
-bool  g_ReturnToSplash = false;
-bool g_runningDemo = false;
-
-void G_DemoStart();
-void G_DemoEnd();
-void G_DemoFrame();
-void G_DemoKeypress();
-
-void PlayDemo();
-//void UpdateDemoTimer();
-bool TestDemoTimer();
-//END DEMOCODE
-
-//JLF used by sliders
-#define TICK_COUNT 20
-
-//JLF MORE PROTOTYPES
-qboolean Item_HandleSelectionNext(itemDef_t * item);
-qboolean Item_HandleSelectionPrev(itemDef_t * item);
-
-#endif	// _XBOX
 
 qboolean Item_SetFocus(itemDef_t *item, float x, float y);
 
@@ -142,9 +106,7 @@ extern qboolean ItemParse_model_g2anim_go( itemDef_t *item, const char *animName
 #define	UI_ALLOCATION_TAG	TAG_UI_ALLOC
 #endif
 
-#ifndef _XBOX
 static char		memoryPool[MEM_POOL_SIZE];
-#endif // _XBOX
 
 static int		allocPoint, outOfMemory;
 
@@ -210,12 +172,6 @@ UI_Alloc
 ===============
 */
 void *UI_Alloc( int size ) {
-#ifdef _XBOX
-
-	allocPoint += size;
-	return Z_Malloc(size, UI_ALLOCATION_TAG, qfalse, 4);
-
-#else	// _XBOX
 
 	char	*p; 
 
@@ -233,7 +189,7 @@ void *UI_Alloc( int size ) {
 	allocPoint += ( size + 15 ) & ~15;
 
 	return p;
-#endif
+
 }
 
 /*
@@ -244,9 +200,6 @@ UI_InitMemory
 void UI_InitMemory( void ) {
 	allocPoint = 0;
 	outOfMemory = qfalse;
-#ifdef _XBOX
-	Z_TagFree(UI_ALLOCATION_TAG);
-#endif
 }
 
 qboolean UI_OutOfMemory() {
@@ -1975,13 +1928,7 @@ qboolean Script_SetFocus(itemDef_t *item, char **args)
     focusItem = Menu_FindItemByName((menuDef_t *) item->parent, name);
     if (focusItem && !(focusItem->window.flags & WINDOW_DECORATION) && !(focusItem->window.flags & WINDOW_HASFOCUS)) {
       Menu_ClearFocus((menuDef_t *) item->parent);
-//JLF
-#ifdef _XBOX
-			Item_SetFocus(focusItem, 0,0); 
-#else
-			focusItem->window.flags |= WINDOW_HASFOCUS;
-#endif
-//END JLF
+		focusItem->window.flags |= WINDOW_HASFOCUS;
 
       
       if (focusItem->onFocus) {
@@ -2504,12 +2451,6 @@ qboolean Item_SetFocus(itemDef_t *item, float x, float y) {
 		r = item->textRect;
 		r.y -= r.h;
 
-//JLFMOUSE
-#ifndef _XBOX
-		//[CoOp]
-		//if (Rect_ContainsPoint(&r, x, y)) 
-		//[/CoOp]
-#endif
 		{
 			item->window.flags |= WINDOW_HASFOCUS;
 			if (item->focusSound) {
@@ -2519,9 +2460,6 @@ qboolean Item_SetFocus(itemDef_t *item, float x, float y) {
 		}
 		//[CoOp]
 		/*
-#ifndef _XBOX
-		else 
-#endif
 		{
 			if (oldFocus) {
 				oldFocus->window.flags |= WINDOW_HASFOCUS;
@@ -3126,12 +3064,7 @@ void Item_MouseEnter(itemDef_t *item, float x, float y) {
 			return;
 		}
 
-//JLFMOUSE 
-#ifndef _XBOX
 		if (Rect_ContainsPoint(&r, x, y)) 
-#else
-		if (item->flags & WINDOW_HASFOCUS)
-#endif
 		{
 			if (!(item->window.flags & WINDOW_MOUSEOVERTEXT)) {
 				Item_RunScript(item, item->mouseEnterText);
@@ -3196,6 +3129,18 @@ void Item_SetMouseOver(itemDef_t *item, qboolean focus) {
   }
 }
 
+qboolean IsForceRank(int rank)
+{
+	int i=0;
+for(i=0;i<NUM_TOTAL_SKILLS;i++)
+{
+	if(uiRank[i].uiForceRankID == rank)
+	{
+		return qtrue;
+	}
+}
+return qfalse;
+}
 
 qboolean Item_OwnerDraw_HandleKey(itemDef_t *item, int key) {
   if (item && DC->ownerDrawHandleKey)
@@ -3204,61 +3149,10 @@ qboolean Item_OwnerDraw_HandleKey(itemDef_t *item, int key) {
 	  // yep this is an ugly hack
 	  if( key == A_MOUSE1 || key == A_MOUSE2 )
 	  {
-		switch( item->window.ownerDraw )
-		{
-			case UI_FORCE_SIDE:
-			case UI_FORCE_RANK_HEAL:
-			case UI_FORCE_RANK_LEVITATION:
-			case UI_FORCE_RANK_SPEED:
-			case UI_FORCE_RANK_PUSH:
-			case UI_FORCE_RANK_PULL:
-			case UI_FORCE_RANK_TELEPATHY:
-			case UI_FORCE_RANK_GRIP:
-			case UI_FORCE_RANK_LIGHTNING:
-			case UI_FORCE_RANK_RAGE:
-			case UI_FORCE_RANK_PROTECT:
-			case UI_FORCE_RANK_ABSORB:
-			case UI_FORCE_RANK_TEAM_HEAL:
-			case UI_FORCE_RANK_TEAM_FORCE:
-			case UI_FORCE_RANK_DRAIN:
-			case UI_FORCE_RANK_SEE:
-			case UI_FORCE_RANK_SABERATTACK:
-			case UI_FORCE_RANK_SABERDEFEND:
-			case UI_FORCE_RANK_SABERTHROW:
-			//[ExpSys]
-			case UI_FORCE_RANK_JETPACK:
-			case UI_FORCE_RANK_PISTOL:
-			case UI_FORCE_RANK_BLASTER:
-			case UI_FORCE_RANK_THERMALS:
-			case UI_FORCE_RANK_ROCKETS:
-			case UI_FORCE_RANK_BACTA:
-			case UI_FORCE_RANK_FLAMETHROWER:
-			case UI_FORCE_RANK_BOWCASTER:
-			case UI_FORCE_RANK_FORCEFIELD:
-			case UI_FORCE_RANK_CLOAK:
-			case UI_FORCE_RANK_SEEKER:
-			case UI_FORCE_RANK_SENTRY:
-			case UI_FORCE_RANK_DETPACK:
-			case UI_FORCE_RANK_REPEATER:
-			case UI_FORCE_RANK_DISRUPTOR:
-			//[StanceSelection]
-			case UI_FORCE_RANK_BLUESTYLE:
-			case UI_FORCE_RANK_REDSTYLE:
-			case UI_FORCE_RANK_PURPLESTYLE:
-			case UI_FORCE_RANK_GREENSTYLE:
-			case UI_FORCE_RANK_DUALSTYLE:
-			case UI_FORCE_RANK_STAFFSTYLE:
-			case UI_FORCE_RANK_REPEATERUPGRADE:
-			case UI_FORCE_RANK_FLECHETTE:
-			case UI_FORCE_RANK_BLASTERRATEOFFIRE://[BlasterRateOfFireUpgrade]
-			//[/StanceSelection]
-			//[/ExpSys]
+		  if(IsForceRank(item->window.ownerDraw) 
+			  || item->window.ownerDraw == UI_FORCE_SIDE)
 	  			if(!Rect_ContainsPoint(&item->window.rect, DC->cursorx, DC->cursory) )
-				{
 					return qfalse;
-				}
-				break;
-		}
 	  }
 	  
 
@@ -3267,72 +3161,12 @@ qboolean Item_OwnerDraw_HandleKey(itemDef_t *item, int key) {
   return qfalse;
 }
 
-
-#ifdef _XBOX
-// Xbox-only key handlers
-
-//JLF new func
-qboolean Item_Button_HandleKey(itemDef_t *item, int key) 
-{
-	if ( key == A_CURSOR_RIGHT)
-	{
-		if (Item_HandleSelectionNext(item))
-		{
-			//Item processed it 
-			return qtrue;
-		}
-	}
-	else if ( key ==  A_CURSOR_LEFT)
-	{
-		if (Item_HandleSelectionPrev(item))
-		{
-			//Item processed it 
-			return qtrue;
-		}
-	}
-	return qfalse;
-}
-
-/*
-=================
-Item_Text_HandleKey
-=================
-*/
-qboolean Item_Text_HandleKey(itemDef_t *item, int key) 
-{
-//JLFSELECTIONRightLeft
-	if ( key == A_CURSOR_RIGHT)
-	{
-		if (Item_HandleSelectionNext(item))
-		{
-			//Item processed it 
-			return qtrue;
-		}
-	}
-	else if ( key ==  A_CURSOR_LEFT)
-	{
-		if (Item_HandleSelectionPrev(item))
-		{
-			//Item processed it 
-			return qtrue;
-		}
-	}
-	return qfalse;
-}
-
-#endif // _XBOX
-
-
 qboolean Item_ListBox_HandleKey(itemDef_t *item, int key, qboolean down, qboolean force) {
 	listBoxDef_t *listPtr = (listBoxDef_t*)item->typeData;
 	int count = DC->feederCount(item->special);
 	int max, viewmax;
 //JLFMOUSE
-#ifndef _XBOX
 	if (force || (Rect_ContainsPoint(&item->window.rect, DC->cursorx, DC->cursory) && item->window.flags & WINDOW_HASFOCUS))
-#else
-	if (force || item->window.flags & WINDOW_HASFOCUS)
-#endif
 	{
 		max = Item_ListBox_MaxScroll(item);
 		if (item->window.flags & WINDOW_HORIZONTAL) {
@@ -3341,19 +3175,13 @@ qboolean Item_ListBox_HandleKey(itemDef_t *item, int key, qboolean down, qboolea
 			{
 				if (!listPtr->notselectable) {
 					listPtr->cursorPos--;
-#ifdef _XBOX
-					listPtr->startPos--;
-#endif
 					if (listPtr->cursorPos < 0) {
 						listPtr->cursorPos = 0;
 						return qfalse;
 					}
 					if (listPtr->cursorPos < listPtr->startPos) {
 						listPtr->startPos = listPtr->cursorPos;
-//JLF
-#ifndef _XBOX
 						return qfalse;
-#endif
 					}
 					if (listPtr->cursorPos >= listPtr->startPos + viewmax) {
 						listPtr->startPos = listPtr->cursorPos - viewmax + 1;
@@ -3374,10 +3202,7 @@ qboolean Item_ListBox_HandleKey(itemDef_t *item, int key, qboolean down, qboolea
 					listPtr->cursorPos++;
 					if (listPtr->cursorPos < listPtr->startPos) {
 						listPtr->startPos = listPtr->cursorPos;
-//JLF
-#ifndef _XBOX
 						return qfalse;
-#endif
 					}
 					if (listPtr->cursorPos >= count) {
 						listPtr->cursorPos = count-1;
@@ -3420,10 +3245,7 @@ qboolean Item_ListBox_HandleKey(itemDef_t *item, int key, qboolean down, qboolea
 					}
 					if (listPtr->cursorPos < listPtr->startPos) {
 						listPtr->startPos = listPtr->cursorPos;
-//JLF
-#ifndef _XBOX
 						return qfalse;
-#endif
 					}
 					if (listPtr->cursorPos >= listPtr->startPos + viewmax) {
 						listPtr->startPos = listPtr->cursorPos - viewmax + 1;
@@ -3444,10 +3266,7 @@ qboolean Item_ListBox_HandleKey(itemDef_t *item, int key, qboolean down, qboolea
 					listPtr->cursorPos++;
 					if (listPtr->cursorPos < listPtr->startPos) {
 						listPtr->startPos = listPtr->cursorPos;
-//JLF
-#ifndef _XBOX
 						return qfalse;
-#endif
 					}
 					if (listPtr->cursorPos >= count) {
 						listPtr->cursorPos = count-1;
@@ -3496,11 +3315,7 @@ qboolean Item_ListBox_HandleKey(itemDef_t *item, int key, qboolean down, qboolea
 				// Display_SetCaptureItem(item);
 			} else {
 				// select an item
-#ifdef _XBOX
-				if (listPtr->doubleClick) {
-#else
 				if (DC->realTime < lastListBoxClickTime && listPtr->doubleClick) {
-#endif
 					Item_RunScript(item, listPtr->doubleClick);
 				}
 				lastListBoxClickTime = DC->realTime + DOUBLE_CLICK_DELAY;
@@ -3581,22 +3396,9 @@ qboolean Item_ListBox_HandleKey(itemDef_t *item, int key, qboolean down, qboolea
 }
 
 qboolean Item_YesNo_HandleKey(itemDef_t *item, int key) {
-//JLFMOUSE MPMOVED
-#ifndef _XBOX
   if (Rect_ContainsPoint(&item->window.rect, DC->cursorx, DC->cursory) && item->window.flags & WINDOW_HASFOCUS && item->cvar) 
-#else
-	if (item->window.flags & WINDOW_HASFOCUS && item->cvar) 
-#endif
 	{
-
-//JLFDPAD MPMOVED
-#ifndef _XBOX
 		if (key == A_MOUSE1 || key == A_ENTER || key == A_MOUSE2 || key == A_MOUSE3) 
-#else
-		if ( key == A_CURSOR_RIGHT || key == A_CURSOR_LEFT)
-#endif
-//end JLFDPAD
-
 		{
 	    DC->setCVar(item->cvar, va("%i", !DC->getCVarValue(item->cvar)));
 		  return qtrue;
@@ -3689,21 +3491,9 @@ qboolean Item_Multi_HandleKey(itemDef_t *item, int key)
 	multiDef_t *multiPtr = (multiDef_t*)item->typeData;
 	if (multiPtr) 
 	{
-//JLF MPMOVED
-#ifndef _XBOX
 		if (Rect_ContainsPoint(&item->window.rect, DC->cursorx, DC->cursory) && item->window.flags & WINDOW_HASFOCUS) 
-#else
-		if (item->window.flags & WINDOW_HASFOCUS)// JLF* && item->cvar)
-#endif
 		{
-#ifndef _XBOX
-					
 			if (key == A_MOUSE1 || key == A_ENTER || key == A_MOUSE2 || key == A_MOUSE3) 
-#else
-//JLFDPAD MPMOVED
-			if ( key == A_CURSOR_RIGHT || key == A_CURSOR_LEFT)
-//end JLFDPAD
-#endif
 			{
 				int current = Item_Multi_FindCvarByValue(item);
 				int max = Item_Multi_CountSettings(item);
@@ -4218,8 +4008,6 @@ qboolean Item_Slider_HandleKey(itemDef_t *item, int key, qboolean down) {
 	float x, value, width, work;
 
 	//DC->Print("slider handle key\n");
-//JLF MPMOVED
-#ifndef _XBOX
 	if (item->window.flags & WINDOW_HASFOCUS && item->cvar && Rect_ContainsPoint(&item->window.rect, DC->cursorx, DC->cursory)) {
 		if (key == A_MOUSE1 || key == A_ENTER || key == A_MOUSE2 || key == A_MOUSE3) {
 			editFieldDef_t *editDef = (editFieldDef_t *) item->typeData;
@@ -4259,52 +4047,7 @@ qboolean Item_Slider_HandleKey(itemDef_t *item, int key, qboolean down) {
 			}
 		}
 	}
-#else  //def _XBOX
-//JLF
-	if (item->window.flags & WINDOW_HASFOCUS && item->cvar)
-	{
-		if (key == A_CURSOR_LEFT)
-		{
-			editFieldDef_t *editDef = (editFieldDef_s *) item->typeData;
-			if (editDef) 
-			{
-				value = DC->getCVarValue(item->cvar);
-				value -= (editDef->maxVal-editDef->minVal)/TICK_COUNT;
-				if ( value < editDef->minVal)
-					value = editDef->minVal;
-				//[INTSLIDER]
-				if ( item->type == ITEM_TYPE_INTSLIDER ) {
-					DC->setCVar(item->cvar, va("%i", (int)value));
-				} else {
-					DC->setCVar(item->cvar, va("%f", value));
-				}
-				//DC->setCVar(item->cvar, va2("%f", value));
-				//[/INTSLIDER]
-				return qtrue;
-			}
-		}
-		if (key == A_CURSOR_RIGHT)
-		{
-			editFieldDef_t *editDef = (editFieldDef_s *) item->typeData;
-			if (editDef) 
-			{
-				value = DC->getCVarValue(item->cvar);
-				value += (editDef->maxVal-editDef->minVal)/TICK_COUNT;
-				if ( value > editDef->maxVal)
-					value = editDef->maxVal;
-				//[INTSLIDER]
-				if ( item->type == ITEM_TYPE_INTSLIDER ) {
-					DC->setCVar(item->cvar, va("%i", (int)value));
-				} else {
-					DC->setCVar(item->cvar, va("%f", value));
-				}
-				//DC->setCVar(item->cvar, va2("%f", value));
-				//[/INTSLIDER]
-				return qtrue;
-			}
-		}
-	}
-#endif
+
 	//[UITweaks]
 	//Raven missed a Debug message
 	//DC->Print("slider handle key exit\n");
@@ -4333,18 +4076,11 @@ qboolean Item_HandleKey(itemDef_t *item, int key, qboolean down) {
 
   switch (item->type) {
     case ITEM_TYPE_BUTTON:
-#ifdef _XBOX
-			return Item_Button_HandleKey(item, key);
-#else
-			return qfalse;
-#endif
-      break;
+	  return qfalse;
     case ITEM_TYPE_RADIOBUTTON:
       return qfalse;
-      break;
     case ITEM_TYPE_CHECKBOX:
       return qfalse;
-      break;
     case ITEM_TYPE_EDITFIELD:
     case ITEM_TYPE_NUMERICFIELD:
 		if (key == A_MOUSE1 || key == A_MOUSE2 || key == A_ENTER)
@@ -4359,45 +4095,27 @@ qboolean Item_HandleKey(itemDef_t *item, int key, qboolean down) {
       //return Item_TextField_HandleKey(item, key);
 		}
       return qfalse;
-      break;
     case ITEM_TYPE_COMBO:
       return qfalse;
-      break;
     case ITEM_TYPE_LISTBOX:
       return Item_ListBox_HandleKey(item, key, down, qfalse);
-      break;
 	case ITEM_TYPE_TEXTSCROLL:
       return Item_TextScroll_HandleKey(item, key, down, qfalse);
-      break;
     case ITEM_TYPE_YESNO:
       return Item_YesNo_HandleKey(item, key);
-      break;
     case ITEM_TYPE_MULTI:
       return Item_Multi_HandleKey(item, key);
-      break;
     case ITEM_TYPE_OWNERDRAW:
       return Item_OwnerDraw_HandleKey(item, key);
-      break;
     case ITEM_TYPE_BIND:
 			return Item_Bind_HandleKey(item, key, down);
-      break;
     case ITEM_TYPE_SLIDER:
 	//[INTSLIDER]
 	case ITEM_TYPE_INTSLIDER:
 	//[/INTSLIDER]
       return Item_Slider_HandleKey(item, key, down);
-      break;
-#ifdef _XBOX
-	case ITEM_TYPE_TEXT:
-	  return Item_Text_HandleKey(item, key);
-	  break;
-#endif
-    //case ITEM_TYPE_IMAGE:
-    //  Item_Image_Paint(item);
-    //  break;
     default:
       return qfalse;
-      break;
   }
 
   //return qfalse;
@@ -4420,46 +4138,6 @@ qboolean Item_HandleAccept(itemDef_t * item)
 	}
 	return qfalse;
 }
-
-#ifdef _XBOX	// Xbox-only event handlers
-
-//JLFDPADSCRIPT MPMOVED
-/*
------------------------------------------
-Item_HandleSelectionNext
-	If Item has an selectionNext script, run it.
--------------------------------------------
-*/
-qboolean Item_HandleSelectionNext(itemDef_t * item)
-{
-	if (item->selectionNext)
-	{
-		Item_RunScript(item, item->selectionNext);
-		return qtrue;
-	}
-	return qfalse;
-}
-
-//JLFDPADSCRIPT MPMOVED
-/*
------------------------------------------
-Item_HandleSelectionPrev
-	If Item has an selectionPrev script, run it.
--------------------------------------------
-*/
-qboolean Item_HandleSelectionPrev(itemDef_t * item)
-{
-	if (item->selectionPrev)
-	{
-		Item_RunScript(item, item->selectionPrev);
-		return qtrue;
-	}
-	return qfalse;
-}
-
-//JLF END
-#endif	// _XBOX
-
 
 void Item_Action(itemDef_t *item) {
   if (item) {
@@ -4557,14 +4235,6 @@ static void Display_CloseCinematics() {
 }
 
 void  Menus_Activate(menuDef_t *menu) {
-
-//JLFCALLOUT MPMOVED
-#ifdef _XBOX
-	DC->setCVar("ui_hideAcallout" ,"0");
-	DC->setCVar("ui_hideBcallout" ,"0");
-	DC->setCVar("ui_hideCcallout" ,"0");
-#endif
-//JLF END
 	menu->window.flags |= (WINDOW_HASFOCUS | WINDOW_VISIBLE);
 	if (menu->onOpen) {
 		itemDef_t item;
@@ -4595,12 +4265,6 @@ int Display_VisibleMenuCount() {
 
 void Menus_HandleOOBClick(menuDef_t *menu, int key, qboolean down) {
 	if (menu) {
-//JLFMOUSE
-#ifdef _XBOX
-		Menu_HandleMouseMove(menu, DC->cursorx, DC->cursory);
-		Menu_HandleKey(menu, key, down);
-		return; 
-#endif
 		int i;
 		// basically the behaviour we are looking for is if there are windows in the stack.. see if 
 		// the cursor is within any of them.. if not close them otherwise activate them and pass the 
@@ -4673,13 +4337,8 @@ void Menu_HandleKey(menuDef_t *menu, int key, qboolean down) {
 		inHandler = qfalse;
 		return;
 	}
-	//JLFMOUSE  
 		// see if the mouse is within the window bounds and if so is this a mouse click
-#ifndef _XBOX
 	if (down && !(menu->window.flags & WINDOW_POPUP) && !Rect_ContainsPoint(&menu->window.rect, DC->cursorx, DC->cursory)) 
-#else
-	if (down) 
-#endif
 	{
 		static qboolean inHandleKey = qfalse;
 		// bk001206 - parentheses
@@ -4708,19 +4367,11 @@ void Menu_HandleKey(menuDef_t *menu, int key, qboolean down) {
 	if (item != NULL) {
 		if (Item_HandleKey(item, key, down)) 
 		{
-
-#ifdef _XBOX
-			if (key == A_MOUSE1 || key == A_MOUSE2 ||(item->type == ITEM_TYPE_MULTI && (key == A_CURSOR_RIGHT || key == A_CURSOR_LEFT)))
-			{
-#endif
 				// It is possible for an item to be disable after Item_HandleKey is run (like in Voice Chat)
 				if (!item->disabled) 
 				{
 					Item_Action(item);
 				}
-#ifdef _XBOX
-			}
-#endif
 			inHandler = qfalse;
 			return;
 		}
@@ -4768,18 +4419,12 @@ void Menu_HandleKey(menuDef_t *menu, int key, qboolean down) {
 		case A_MOUSE2:
 			if (item) {
 				if (item->type == ITEM_TYPE_TEXT) {
-//JLFMOUSE
-#ifndef _XBOX
 					if (Rect_ContainsPoint(&item->window.rect, DC->cursorx, DC->cursory))
-#endif
 					{
 						Item_Action(item);
 					}
 				} else if (item->type == ITEM_TYPE_EDITFIELD || item->type == ITEM_TYPE_NUMERICFIELD) {
-//JLFMOUSE
-#ifndef _XBOX
 					if (Rect_ContainsPoint(&item->window.rect, DC->cursorx, DC->cursory)) 
-#endif			
 					{	
 						Item_Action(item);
 						item->cursorPos = 0;
@@ -4818,10 +4463,7 @@ void Menu_HandleKey(menuDef_t *menu, int key, qboolean down) {
 				}
 //END JLFACCEPT			
 				else {
-//JLFMOUSE
-#ifndef _XBOX
 					if (Rect_ContainsPoint(&item->window.rect, DC->cursorx, DC->cursory))
-#endif
 					{
 
 						Item_Action(item);
@@ -5240,35 +4882,13 @@ void Item_YesNo_Paint(itemDef_t *item) {
 	if (item->text) 
 	{
 		Item_Text_Paint(item);
-//JLF MPMOVED
-#ifdef _XBOX
-		if (item->xoffset == 0)
-			DC->drawText(item->textRect.x + item->textRect.w + item->xoffset + 8, item->textRect.y, item->textscale, newColor, yesnovalue, 0, 0,item->textStyle, item->iMenuFont);
-		else
-#endif
-			DC->drawText(item->textRect.x + item->textRect.w + 8, item->textRect.y, item->textscale, newColor, yesnovalue, 0, 0, item->textStyle, item->iMenuFont);
+		DC->drawText(item->textRect.x + item->textRect.w + 8, item->textRect.y, item->textscale, newColor, yesnovalue, 0, 0, item->textStyle, item->iMenuFont);
 
 	} 
 	else 
 	{
-//JLF MPMOVED
-#ifdef _XBOX
-		DC->drawText(item->textRect.x + item->xoffset, item->textRect.y, item->textscale, newColor, yesnovalue , 0, 0, item->textStyle, item->iMenuFont);
-#else
 		DC->drawText(item->textRect.x, item->textRect.y, item->textscale, newColor, yesnovalue , 0, 0, item->textStyle, item->iMenuFont);
-#endif
 	}		
-
-/* JLF ORIGINAL CODE
-	if (item->text) {
-		Item_Text_Paint(item);
-//		DC->drawText(item->textRect.x + item->textRect.w + 8, item->textRect.y, item->textscale, newColor, (value != 0) ? sYES : sNO, 0, 0, item->textStyle);
-		DC->drawText(item->textRect.x + item->textRect.w + 8, item->textRect.y, item->textscale, newColor, (value != 0) ? sYES : sNO, 0, 0, item->textStyle,item->iMenuFont);
-	} else {
-//		DC->drawText(item->textRect.x, item->textRect.y, item->textscale, newColor, (value != 0) ? sYES : sNO, 0, 0, item->textStyle);
-		DC->drawText(item->textRect.x, item->textRect.y, item->textscale, newColor, (value != 0) ? sYES : sNO, 0, 0, item->textStyle,item->iMenuFont);
-	}
-*/
 }
 
 void Item_Multi_Paint(itemDef_t *item) {
@@ -5302,13 +4922,7 @@ void Item_Multi_Paint(itemDef_t *item) {
 
 	if (item->text) {
 		Item_Text_Paint(item);
-//JLF  MPMOVED
-#ifdef _XBOX
-		if ( item->xoffset)
-			DC->drawText(item->textRect.x + item->textRect.w + item->xoffset, item->textRect.y, item->textscale, newColor, text, 0,0, item->textStyle, item->iMenuFont);
-		else
-#endif
-			DC->drawText(item->textRect.x + item->textRect.w + 8, item->textRect.y, item->textscale, newColor, text, 0, 0, item->textStyle,item->iMenuFont);
+		DC->drawText(item->textRect.x + item->textRect.w + 8, item->textRect.y, item->textscale, newColor, text, 0, 0, item->textStyle,item->iMenuFont);
 	} else {
 		//JLF added xoffset
 		DC->drawText(item->textRect.x+item->xoffset, item->textRect.y, item->textscale, newColor, text, 0, 0, item->textStyle,item->iMenuFont);
@@ -6146,11 +5760,6 @@ void Item_ListBox_Paint(itemDef_t *item) {
 	// there is no clipping available so only the last completely visible item is painted
 	count = DC->feederCount(item->special);
 
-//JLFLISTBOX  MPMOVED
-#ifdef _XBOX
-	listPtr->startPos = listPtr->cursorPos;
-	//item->cursorPos = listPtr->startPos;
-#endif
 //JLFLISTBOX MPMOVED
 	if (listPtr->startPos > (count?count-1:count))
 	{//probably changed feeders, so reset
@@ -6399,16 +6008,10 @@ void Item_ListBox_Paint(itemDef_t *item) {
 		{
 			x = item->window.rect.x + 1;
 			y = item->window.rect.y + 1;
-//JLF MPMOVED
 			y = item->window.rect.y + 1 - listPtr->elementHeight;
-#ifdef _XBOX
-			i = listPtr->startPos - (numlines/2);
-#else
 			i = listPtr->startPos;
-#endif
 
 			for (; i < count; i++) 
-//JLF END
 			{
 				const char *text;
 				// always draw at least one
@@ -6441,19 +6044,8 @@ void Item_ListBox_Paint(itemDef_t *item) {
 						*/
 						if ( text )
 						{
-//JLF MPMOVED
-#ifdef _XBOX
-							float fScaleA = item->textscale;
-#endif
 							int textyOffset;
-#ifdef _XBOX
-							textyOffset = DC->textHeight (text, fScaleA, item->iMenuFont);
-							textyOffset *= -1;
-							textyOffset /=2;
-							textyOffset += listPtr->elementHeight/2;
-#else
 							textyOffset = 0;
-#endif
 //							DC->drawText(x + 4 + listPtr->columnInfo[j].pos, y + listPtr->elementHeight, item->textscale, item->window.foreColor, text, 0, listPtr->columnInfo[j].maxChars, item->textStyle);
 	//WAS LAST						DC->drawText(x + 4 + listPtr->columnInfo[j].pos, y, item->textscale, item->window.foreColor, text, 0, listPtr->columnInfo[j].maxChars, item->textStyle, item->iMenuFont);
 							DC->drawText(x + 4 + listPtr->columnInfo[j].pos, y + listPtr->elementHeight+ textyOffset + item->textaligny, item->textscale, item->window.foreColor, text, 0,listPtr->columnInfo[j].maxChars, item->textStyle, item->iMenuFont);
@@ -6482,10 +6074,6 @@ void Item_ListBox_Paint(itemDef_t *item) {
 				} 
 				else 
 				{
-#ifdef _XBOX
-					if (i >= 0)
-					{
-#endif
 					text = DC->feederItemText(item->special, i, 0, &optionalImage1, &optionalImage2, &optionalImage3 );
 					if ( optionalImage1 >= 0 || optionalImage2 >= 0 || optionalImage3 >= 0) 
 					{
@@ -6496,9 +6084,6 @@ void Item_ListBox_Paint(itemDef_t *item) {
 //						DC->drawText(x + 4, y + listPtr->elementHeight, item->textscale, item->window.foreColor, text, 0, 0, item->textStyle);
 						DC->drawText(x + 4, y + item->textaligny, item->textscale, item->window.foreColor, text, 0, 0, item->textStyle, item->iMenuFont);
 					}
-#ifdef _XBOX
-					}
-#endif
 				}
 
 				if (i == item->cursorPos) 
@@ -7019,27 +6604,10 @@ void Item_Paint(itemDef_t *item)
 	}
 
 
-//JLFMOUSE
-#ifndef _XBOX
 	if (item->window.flags & WINDOW_MOUSEOVER)
-#else
-	if (item->window.flags & WINDOW_HASFOCUS)
-#endif
 	{
 		if (item->descText && !Display_KeyBindPending())
 		{
-			// Make DOUBLY sure that this item should have desctext.
-#ifndef _XBOX
-			// NOTE : we can't just check the mouse position on this, what if we TABBED
-			// to the current menu item -- in that case our mouse isn't over the item.
-			// Removing the WINDOW_MOUSEOVER flag just prevents the item's OnExit script from running
-	//	    if (!Rect_ContainsPoint(&item->window.rect, DC->cursorx, DC->cursory)) 
-	//		{	// It isn't something that should, because it isn't live anymore.
-	//			item->window.flags &= ~WINDOW_MOUSEOVER;
-	//		}
-	//		else
-#endif
-	//END JLFMOUSE
 			{	// Draw the desctext
 				const char *textPtr = item->descText;
 				if (*textPtr == '@')	// string reference
@@ -7281,14 +6849,6 @@ void Item_Init(itemDef_t *item) {
 }
 
 void Menu_HandleMouseMove(menuDef_t *menu, float x, float y) {
-
-	//JLFMOUSE  I THINK THIS JUST SETS THE FOCUS BASED ON THE MOUSE
-#ifdef _XBOX
-	return ;
-#endif
-	//END JLF
-
-
   int i, pass;
   qboolean focusSet = qfalse;
 
@@ -7709,10 +7269,6 @@ void UI_CleanupGhoul2(void)
 
 		next = next->next;
 	}
-
-#ifdef _XBOX
-	ui_G2PtrTracker = NULL;
-#endif
 }
 
 // asset_model <string>
@@ -8653,6 +8209,7 @@ qboolean ItemParse_cvar( itemDef_t *item, int handle )
 			//[/INTSLIDER]
 			case ITEM_TYPE_TEXT:
 				editPtr = (editFieldDef_t*)item->typeData;
+
 				editPtr->minVal = -1;
 				editPtr->maxVal = -1;
 				editPtr->defVal = -1;
@@ -10086,11 +9643,6 @@ void *Display_CaptureItem(int x, int y) {
 // FIXME: 
 qboolean Display_MouseMove(void *p, int x, int y) {
 
-//JLFMOUSE  AGAIN I THINK THIS SHOULD BE MOOT
-#ifdef _XBOX
-	return qtrue;
-#endif
-	//END JLF
 	int i;
 	menuDef_t *menu = (menuDef_t *) p;
 
@@ -10181,10 +9733,6 @@ void Display_CacheAll() {
 
 static qboolean Menu_OverActiveItem(menuDef_t *menu, float x, float y) {
  	if (menu && menu->window.flags & (WINDOW_VISIBLE | WINDOW_FORCED)) {
-//JLFMOUSE
-#ifdef _XBOX
-		return qtrue;
-#endif
 		if (Rect_ContainsPoint(&menu->window.rect, x, y)) {
 			int i;
 			for (i = 0; i < menu->itemCount; i++) {
@@ -10217,161 +9765,5 @@ static qboolean Menu_OverActiveItem(menuDef_t *menu, float x, float y) {
 	}
 	return qfalse;
 }
-
-//JLF DEMOCODE MPMOVED
-#ifdef _XBOX
-
-void G_DemoStart()
-{
-//	demoDelay = 0;
-//	lastChange = 0;
-	g_runningDemo = true;
-
-//	g_demoLastChange = 0;
-
-
-	extern void Menus_CloseAll();
-	
-	Menus_CloseAll();
-
-	trap_Key_SetCatcher( trap_Key_GetCatcher() & ~KEYCATCH_UI );
-#ifndef CGAME
-	trap_Key_ClearStates();
-#endif
-	trap_Cvar_Set( "cl_paused", "0" );
-
-//	g_demoStartFade = 0;
-//	g_demoStartTransition = 0;
-}
-
-
-
-const char *attractMovieNames[] = {
-	"jk1",
-	"jk2",
-	"jk3",
-	"jk4",
-	"jk5",
-};
-
-extern int trap_Milliseconds( void );
-
-const int	numAttractMovies = sizeof(attractMovieNames) / sizeof(attractMovieNames[0]);
-static int	curAttractMovie = 0;
-
-void G_DemoFrame()
-{
-	bool keypressed = false;
-	if (g_runningDemo)
-	{
-		while (!keypressed)
-			keypressed = CIN_PlayAllFrames( "atvi.bik", 0, 0, 640, 480, 0, true );
-		G_DemoEnd();
-
-
-
-	}
-	else 
-	{
-		menuDef_t* curMenu = Menu_GetFocused();
-		
-		if (curMenu && curMenu->window.name &&
-			(!Q_stricmp(curMenu->window.name , "mainMenu") ||
-			!Q_stricmp(curMenu->window.name, "splashMenu")))
-		{
-			if (!g_demoLastKeypress)
-				g_demoLastKeypress = trap_Milliseconds();
-			else if (g_demoLastKeypress + DEMO_TIME_MAX < trap_Milliseconds())
-				G_DemoStart();
-		}
-		else
-		{
-			g_demoLastKeypress = trap_Milliseconds();
-		}
-	}
-}
-
-void G_DemoKeypress()
-{
-	g_demoLastKeypress = trap_Milliseconds();
-		
-//JLF moved
-//	g_demoLastKeypress = Sys_Milliseconds();
-	
-}
-
-
-void G_DemoEnd()
-{
-	
-	if (!g_runningDemo)
-		return;
-	//CIN_StopCinematic(1);
-	CIN_CloseAllVideos();
-//	Key_SetCatcher( KEYCATCH_UI );
-	Menus_CloseAll();
-	g_ReturnToSplash = true;
-	g_runningDemo = qfalse;
-	G_DemoKeypress();
-	trap_Key_SetCatcher( trap_Key_GetCatcher() & KEYCATCH_UI );
-#ifndef CGAME
-	trap_Key_ClearStates();
-#endif
-	trap_Cvar_Set( "cl_paused", "0" );
-
-//	g_demoStartFade = 0;
-//	g_demoStartTransition = 0;
-//	g_demoLastKeypress = 0;
-}
-
-void PlayDemo()
-{
-//	bool keypressed = false;
-	G_DemoStart();
-	CIN_PlayAllFrames( attractMovieNames[curAttractMovie], 0, 0, 640, 480, 0, true );
-	curAttractMovie = (curAttractMovie + 1) % numAttractMovies;
-//	while (!keypressed)
-//		keypressed = CIN_PlayAllFrames( "atvi.bik", 0, 0, 640, 480, 0, true );
-	G_DemoEnd();
-}
-
-void UpdateDemoTimer()
-{
-	g_demoLastKeypress = trap_Milliseconds();
-}
-
-bool TestDemoTimer()
-{
-//JLF TEMP DEBUG
-	return false;
-
-
-	menuDef_t* curMenu = Menu_GetFocused();
-	if (curMenu && curMenu->window.name &&
-			(!Q_stricmp(curMenu->window.name , "mainMenu") ||
-			!Q_stricmp(curMenu->window.name, "splashMenu")))
-	{	
-		if (!g_demoLastKeypress)
-			g_demoLastKeypress = trap_Milliseconds();
-		else if (g_demoLastKeypress + DEMO_TIME_MAX < trap_Milliseconds())
-			return true;
-	}
-	return false;
-}
-
-//END DEMOCODE
-
-
-#endif // _XBOX
-
-
-
-
-
-
-
-
-
-
 
 #include "../namespace_end.h"
