@@ -3,7 +3,7 @@
 
 [Setup]
 AppName=OJP Enhanced
-AppVerName=OJP Enhanced v0.0.9v
+AppVerName=OJP Enhanced v0.1.1
 AppPublisher=OJP Team
 AppPublisherURL=http://ojp.jediknight.net/
 AppSupportURL=http://ojp.jediknight.net/
@@ -28,9 +28,12 @@ Source: "ojp_enhancedstuff.pk3"; DestDir: "{app}\GameData\ojpenhanced"; Flags: i
 Source: "ojpenhanced\trueview.cfg"; DestDir: "{app}\GameData\ojpenhanced"; Flags: ignoreversion
 Source: "docs\*"; DestDir: "{app}\GameData\ojpenhanced\docs"; Flags: ignoreversion
 Source: "..\Basic\docs\*"; DestDir: "{app}\GameData\ojpenhanced\docs"; Flags: ignoreversion
+Source: "..\Basic\docs\OJP_Editing_Screenshots\*"; DestDir: "{app}\GameData\ojpenhanced\docs\OJP_Editing_Screenshots"; Flags: ignoreversion
+Source: "..\Basic\docs\OJP_Editing_AccessSVN\*"; DestDir: "{app}\GameData\ojpenhanced\docs\OJP_Editing_AccessSVN"; Flags: ignoreversion
 Source: "ojpenhanced\StartOJPEnhancedServer.bat"; DestDir: "{app}\GameData\ojpenhanced"; Flags: ignoreversion
 Source: "ojpenhanced\OJPEnhancedServer.cfg"; DestDir: "{app}\GameData\ojpenhanced"; Flags: onlyifdoesntexist
 Source: "..\resources\OJP File Icon\OJP.ico"; DestDir: "{app}\GameData\ojpenhanced"; Flags: ignoreversion
+Source: "ojpenhanced\StartOJPEnhanced.bat"; DestDir: "{app}\GameData"; Flags: ignoreversion
 ; NOTE: Don't use "Flags: ignoreversion" on any shared system files
 
 [Icons]
