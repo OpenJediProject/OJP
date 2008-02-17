@@ -4154,6 +4154,11 @@ void ClientCommand( int clientNum ) {
 	{
 		int size;
 //		int temp,temp2;
+		if(!ojp_modelscaleEnabled.integer)
+		{
+			trap_SendServerCommand( ent-g_entities, va("print \"Modelscale is disabled!\n\"") );
+			return;
+		}
 		if(trap_Argc()!=2)
 		{
 			trap_SendServerCommand( ent-g_entities, va("print \"Current modelscale is %i.\n\"", (ent->client->ps.iModelScale ? ent->client->ps.iModelScale : 100)) );

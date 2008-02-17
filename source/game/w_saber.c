@@ -3406,7 +3406,7 @@ int OJP_SaberBlockCost(gentity_t *defender, gentity_t *attacker, vec3_t hitLoc)
 				saberBlockCost = saberBlockCost*2;
 			}
 
-			G_Printf("DP damage: %f\n",saberBlockCost);
+			//G_Printf("DP damage: %f\n",saberBlockCost);
 		}
 		else
 		{

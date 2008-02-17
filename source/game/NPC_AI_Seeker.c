@@ -592,6 +592,11 @@ void Seeker_FindEnemy( void )
 	float closestDist = SEEKER_SEEK_RADIUS * SEEKER_SEEK_RADIUS + 1;
 	//[/SeekerItemNpc]
 
+	if(NPC->activator && NPC->activator->client->ps.weapon == WP_SABER && !NPC->activator->client->ps.saberHolstered)
+	{
+		NPC->enemy=NULL;
+		return;
+	}
 
 	VectorSet( maxs, SEEKER_SEEK_RADIUS, SEEKER_SEEK_RADIUS, SEEKER_SEEK_RADIUS );
 	VectorScale( maxs, -1, mins );

@@ -370,6 +370,8 @@ vmCvar_t		ojp_ffaRespawnTimer;
 
 vmCvar_t		ojp_truebalance;//[TrueBalance]
 
+vmCvar_t	ojp_modelscaleEnabled;//[ModelScale]
+
 // bk001129 - made static to avoid aliasing
 static cvarTable_t		gameCvarTable[] = {
 	// don't override the cheat state set by the system
@@ -802,6 +804,8 @@ static cvarTable_t		gameCvarTable[] = {
 	{ &ojp_ffaRespawnTimer, "ojp_ffaRespawnTimer","1",CVAR_ARCHIVE,0,qtrue},
 	//[/FFARespawnTimer]
 	{ &ojp_truebalance, "ojp_trueBalance","1",CVAR_ARCHIVE|CVAR_LATCH,0,qtrue},  //[TrueBalance]
+
+	{ &ojp_modelscaleEnabled, "ojp_modelscaleenabled","1", CVAR_ARCHIVE ,0,qtrue},//[ModelScale]
 };
 
 // bk001129 - made static to avoid aliasing

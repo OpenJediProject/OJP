@@ -1266,15 +1266,16 @@ static void CG_DrawAmmo( centity_t	*cent,menuDef_t *menuHUD)
 			}
 			value =ps->ammo[weaponData[cent->currentState.weapon].ammoIndex];
 
-			CG_DrawNumField (
+			CG_DrawStringExt(
 				focusItem->window.rect.x, 
-				focusItem->window.rect.y, 
-				3, 
-				value, 
+				focusItem->window.rect.y,
+				va("%i/%i",(int)value,cg.snap->ps.stats[STAT_AMMOPOOL]),
+				0,
+				qfalse,
+				qfalse,
 				focusItem->window.rect.w, 
-				focusItem->window.rect.h, 
-				NUM_FONT_SMALL,
-				qfalse);
+				focusItem->window.rect.h,
+				8);
 		}
 	}
 

@@ -2332,7 +2332,7 @@ void Reload(gentity_t *ent)
 			ent->client->ps.torsoTimer = 500;
 	}
 		ent->client->ps.weaponTime = ent->client->ps.torsoTimer;
-	
+	ent->client->ps.stats[STAT_AMMOPOOL] = ent->bullets[ent->client->ps.weapon];
 }
 
 void CancelReload(gentity_t *ent)

@@ -2090,6 +2090,8 @@ extern vmCvar_t		ojp_ffaRespawnTimer;
 
 extern vmCvar_t		ojp_truebalance;//[TrueBalance]
 
+extern vmCvar_t ojp_modelscaleEnabled;//[Modelscale]
+
 #include "../namespace_begin.h"
 
 void	trap_Printf( const char *fmt );

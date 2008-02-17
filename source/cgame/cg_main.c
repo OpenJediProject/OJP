@@ -1203,6 +1203,8 @@ Ghoul2 Insert End
 	//controls the angular offset for the current debug holsterType
 	{ &ojp_holsterdebug_angoffset, "ojp_holsterdebug_angoffset", "0.0 0.0 0.0", 0 },
 	//[/VisualWeapons]
+
+
 };
 
 static int  cvarTableSize = sizeof( cvarTable ) / sizeof( cvarTable[0] );

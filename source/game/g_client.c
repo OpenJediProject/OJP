@@ -3409,6 +3409,7 @@ void ClientSpawn(gentity_t *ent) {
 		ent->bullets[i] = 300;
 	ent->reloadTime =-1;
 	ent->bulletsToReload = 0;
+	client->ps.stats[STAT_AMMOPOOL] = 300;
 	//[/Reload]
 
 	//first we want the userinfo so we can see if we should update this client's saber -rww

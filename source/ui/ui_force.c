@@ -535,6 +535,7 @@ void UpdateForceUsed()
 		}
 	}
 
+	/*
 	if(uiMaxRank <= 100 && uiRank[FP_SEE].uiForcePowersRank && (int)(trap_Cvar_VariableValue("ojp_trueBalance")) == 1)
 	{
 		if(uiMaxRank <= 75)
@@ -600,6 +601,7 @@ void UpdateForceUsed()
 			Menu_ShowItemByName(menu, "setsk_forcefield", qtrue);
 			}
 	}
+	*/
 
 	// Make sure that we're still legal.
 	for (curpower=0;curpower<NUM_TOTAL_SKILLS;curpower++)

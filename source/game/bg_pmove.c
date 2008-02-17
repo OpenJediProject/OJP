@@ -7417,6 +7417,16 @@ void PM_BeginWeaponChange( int weapon ) {
 		return;
 	}
 
+//[Reload]
+#ifdef QAGAME
+	if(1)
+	{
+		gentity_t *ent = &g_entities[pm->ps->clientNum];
+		pm->ps->stats[STAT_AMMOPOOL] = ent->client->ps.stats[STAT_AMMOPOOL] = ent->bullets[pm->ps->weapon];
+	}
+#endif
+//[Reload]
+
 	// turn of any kind of zooming when weapon switching.
 	if (pm->ps->zoomMode)
 	{
