@@ -2215,6 +2215,10 @@ int ReloadTime(gentity_t *ent)
 		{
 			return 8000;
 		}
+    else if (SkillLevelForWeap(ent,ent->client->ps.weapon) == 0)
+    {
+      return 10000;
+    }
 	}
 	else
 	{
@@ -2230,6 +2234,10 @@ int ReloadTime(gentity_t *ent)
 		{
 			return 300;
 		}
+    else if (SkillLevelForWeap(ent,ent->client->ps.weapon) == 0)
+    {
+      return 400;
+    }
 	}
 	return -1;
 }

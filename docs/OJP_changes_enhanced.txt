@@ -4,6 +4,12 @@ Open Jedi Project Change Log (Enhanced Distribution)
 
 This file stores all the information about what has changed from release version to release version for OJP Enhanced.  OJP Enhanced contains all the changes of OJP Basic plus a library of gameplay alterations made by OJP's contributors.
 
+Version 0.1.2
+	Improvements/Fixes:
+		Weapons:
+			-Fixed speed reloading with no skill bug.
+
+
 Version 0.1.1
 	New Features:
 		Sabersystem:
