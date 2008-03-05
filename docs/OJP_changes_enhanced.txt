@@ -6,6 +6,8 @@ This file stores all the information about what has changed from release version
 
 Version 0.1.2
 	Improvements/Fixes:
+		Cooperative Play:
+			-Seekers crash game when they attempt to lock into a shield unit or door.
 		Weapons:
 			-Fixed speed reloading with no skill bug.
 

@@ -445,7 +445,12 @@ void G_SetEnemy( gentity_t *self, gentity_t *enemy )
 		return;
 	}
 
-	//[CoOp]
+  //[CoOp]
+	if (Q_stricmp("item_shield", enemy->classname) == 0 || Q_stricmp("func_door", enemy->classname) == 0)
+	{//can't set a shield or a door as an enemy
+		return;
+	}
+
 	//check to see if this enemy is actually a turret, if so.  We want to set enemy
 	//to the turret's user.
 	enemy = G_CheckControlledTurretEnemy(self, enemy, qtrue);
