@@ -8354,8 +8354,11 @@ void saberKnockDown(gentity_t *saberent, gentity_t *saberOwner, gentity_t *other
 
 	///[Dual Saber Fix]
 	if(saberOwner->client->ps.fd.saberAnimLevel != SS_DUAL)
-	saberent->r.contents = CONTENTS_TRIGGER;//0;
+		saberent->r.contents = CONTENTS_TRIGGER;//0;
+	else
+		saberent->r.contents += CONTENTS_TRIGGER;
 	//[/Dual Saber Fix]
+
 	VectorSet( saberent->r.mins, -3.0f, -3.0f, -1.5f );
 	VectorSet( saberent->r.maxs, 3.0f, 3.0f, 1.5f );
 
