@@ -299,7 +299,11 @@ int PM_GetSaberStance(void)
 	saberInfo_t *saber1 = BG_MySaber( pm->ps->clientNum, 0 );
 	saberInfo_t *saber2 = BG_MySaber( pm->ps->clientNum, 1 );
 
-	if (!pm->ps->saberEntityNum)
+	//[Dual Saber Fix]
+	if ((!pm->ps->saberEntityNum)&&( !saber1 
+		&& saber2
+		&& !pm->ps->saberHolstered ))
+	//[/Dual Saber Fix]
 	{ //lost it
 		return BOTH_STAND1;
 	}
