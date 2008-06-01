@@ -7011,12 +7011,12 @@ void WP_SaberStartMissileBlockCheck( gentity_t *self, usercmd_t *ucmd  )
 	{
 		doFullRoutine = qfalse;
 	}
-	
-	else if ( self->client->ps.saberInFlight )
+	//[Dual Saber Fix]
+	else if ( self->client->ps.saberInFlight && self->client->ps.fd.saberAnimLevel != SS_DUAL)
 	{
 		doFullRoutine = qfalse;
 	}
-	
+	//[/Dual Saber Fix]
 	if(!WalkCheck(self)
 	&& (BG_SaberInAttack( self->client->ps.saberMove )
 	|| PM_SaberInStart( self->client->ps.saberMove )))
@@ -8351,8 +8351,11 @@ void saberKnockDown(gentity_t *saberent, gentity_t *saberOwner, gentity_t *other
 	saberOwner->client->saberKnockedTime = level.time + SABER_RETRIEVE_DELAY;
 
 	saberent->clipmask = MASK_SOLID;
-	saberent->r.contents = CONTENTS_TRIGGER;//0;
 
+	///[Dual Saber Fix]
+	if(saberOwner->client->ps.fd.saberAnimLevel != SS_DUAL)
+	saberent->r.contents = CONTENTS_TRIGGER;//0;
+	//[/Dual Saber Fix]
 	VectorSet( saberent->r.mins, -3.0f, -3.0f, -1.5f );
 	VectorSet( saberent->r.maxs, 3.0f, 3.0f, 1.5f );
 
