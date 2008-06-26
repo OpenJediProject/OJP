@@ -187,36 +187,36 @@ int BasicDodgeCosts[MOD_MAX] =
 	-1,		//MOD_UNKNOWN,
 	-1,		//MOD_STUN_BATON,
 	-1,		//MOD_MELEE,
-	35,		//MOD_SABER,
-	35,		//MOD_BRYAR_PISTOL,
+	40,		//MOD_SABER,
+	20,		//MOD_BRYAR_PISTOL,
 	-1,		//MOD_BRYAR_PISTOL_ALT,
-	35,		//MOD_BLASTER,
-	35,		//MOD_TURBLAST,
-	35,		//MOD_DISRUPTOR,
-	35,		//MOD_DISRUPTOR_SPLASH,
-	35,		//MOD_DISRUPTOR_SNIPER,
-	35,		//MOD_BOWCASTER,
-	35,		//MOD_REPEATER,
-	35,		//MOD_REPEATER_ALT,
-	35,		//MOD_REPEATER_ALT_SPLASH,
-	35,		//MOD_DEMP2,
-	35,		//MOD_DEMP2_ALT,
-	35,		//MOD_FLECHETTE,
-	35,		//MOD_FLECHETTE_ALT_SPLASH,
-	35,		//MOD_ROCKET,
-	35,		//MOD_ROCKET_SPLASH,
-	35,		//MOD_ROCKET_HOMING,
-	35,		//MOD_ROCKET_HOMING_SPLASH,
-	35,		//MOD_THERMAL,
-	35,		//MOD_THERMAL_SPLASH,
-	35,		//MOD_TRIP_MINE_SPLASH,
-	35,		//MOD_TIMED_MINE_SPLASH,
-	35,		//MOD_DET_PACK_SPLASH,
+	20,		//MOD_BLASTER,
+	20,		//MOD_TURBLAST,
+	20,		//MOD_DISRUPTOR,
+	20,		//MOD_DISRUPTOR_SPLASH,
+	20,		//MOD_DISRUPTOR_SNIPER,
+	20,		//MOD_BOWCASTER,
+	20,		//MOD_REPEATER,
+	20,		//MOD_REPEATER_ALT,
+	20,		//MOD_REPEATER_ALT_SPLASH,
+	20,		//MOD_DEMP2,
+	20,		//MOD_DEMP2_ALT,
+	20,		//MOD_FLECHETTE,
+	20,		//MOD_FLECHETTE_ALT_SPLASH,
+	20,		//MOD_ROCKET,
+	20,		//MOD_ROCKET_SPLASH,
+	20,		//MOD_ROCKET_HOMING,
+	20,		//MOD_ROCKET_HOMING_SPLASH,
+	20,		//MOD_THERMAL,
+	20,		//MOD_THERMAL_SPLASH,
+	20,		//MOD_TRIP_MINE_SPLASH,
+	20,		//MOD_TIMED_MINE_SPLASH,
+	20,		//MOD_DET_PACK_SPLASH,
 	-1,		//MOD_VEHICLE,
-	35,		//MOD_CONC,
-	35,		//MOD_CONC_ALT,
+	20,		//MOD_CONC,
+	20,		//MOD_CONC_ALT,
 	-1,		//MOD_FORCE_DARK,
-	35,		//MOD_SENTRY,
+	20,		//MOD_SENTRY,
 	-1,		//MOD_WATER,
 	-1,		//MOD_SLIME,
 	-1,		//MOD_LAVA,
@@ -232,7 +232,7 @@ int BasicDodgeCosts[MOD_MAX] =
 	-1,		//MOD_VEH_EXPLOSION,
 	//[/Asteroids]
 	//[SeekerItemNPC]
-	35,		//MOD_SEEKER,	//death by player's seeker droid.
+	20,		//MOD_SEEKER,	//death by player's seeker droid.
 	//[/SeekerItemNPC]
 	//MOD_MAX
 };
@@ -781,7 +781,8 @@ void WP_SaberInitBladeData( gentity_t *ent )
 	gentity_t *saberent = NULL;
 	gentity_t *checkEnt;
 	int i = 0;
-
+	
+	//G_Printf("WP_SaberInitBladeData called\n");
 	while (i < level.num_entities)
 	{ //make sure there are no other saber entities floating around that think they belong to this client.
 		checkEnt = &g_entities[i];
@@ -819,6 +820,7 @@ void WP_SaberInitBladeData( gentity_t *ent )
 		saberent = G_Spawn();
 	}
 	ent->client->ps.saberEntityNum = ent->client->saberStoredIndex = saberent->s.number;
+	
 	saberent->classname = "lightsaber";
 	
 	saberent->neverFree = qtrue; //the saber being removed would be a terrible thing.
@@ -3384,29 +3386,112 @@ int OJP_SaberBlockCost(gentity_t *defender, gentity_t *attacker, vec3_t hitLoc)
 	{//standard bolt block!
 			//[BlasterDP]
 
-		if (attacker->activator && attacker->activator->s.weapon == WP_BLASTER
-			|| attacker->activator && attacker->activator->s.weapon == WP_BRYAR_PISTOL
+		if (attacker->activator && attacker->activator->s.weapon == WP_BRYAR_PISTOL
 			|| attacker->activator && attacker->activator->s.weapon == WP_REPEATER
 			|| attacker->activator && attacker->activator->s.weapon == WP_BOWCASTER
 			|| attacker->activator && attacker->activator->s.weapon == WP_DISRUPTOR
 			|| attacker->activator && attacker->activator->s.weapon == WP_EMPLACED_GUN
-			)
+			|| attacker->activator && attacker->activator->s.weapon == WP_FLECHETTE)
 		{
-			float distance = VectorDistance(attacker->activator->r.currentOrigin,defender->r.currentOrigin);
-			if(distance <= 125.0f)
-				saberBlockCost = DODGE_BOLTBLOCK*3;
-			else if(distance <= 300.0f)
-				saberBlockCost = DODGE_BOLTBLOCK*2;
-			else
-				saberBlockCost = DODGE_BOLTBLOCK;
-			if(BG_SaberInAttack(defender->client->ps.saberMove)
-			|| PM_SaberInStart(defender->client->ps.saberMove)
-			) 
+			if(attacker->activator->s.weapon == WP_FLECHETTE)
 			{
-				saberBlockCost = saberBlockCost*2;
+				float distance = VectorDistance(attacker->activator->r.currentOrigin,defender->r.currentOrigin);
+
+				if(WalkCheck(defender))
+					saberBlockCost=4;
+				else
+					saberBlockCost=8;
+
+				if(defender->client->ps.fd.forcePowerLevel[FP_SABER_OFFENSE] >= FORCE_LEVEL_3
+					&& defender->client->ps.fd.saberAnimLevel != SS_MEDIUM)
+					saberBlockCost++;
+
+				if(distance >= 200.0f)
+					saberBlockCost+=2.5;
+
+				saberBlockCost+=2;
+			}
+			else if(attacker->activator->s.weapon != WP_BOWCASTER || attacker->activator->s.weapon != WP_BOWCASTER && attacker->activator->client->skillLevel[SK_BOWCASTER] < FORCE_LEVEL_3 )
+			{
+				float distance = VectorDistance(attacker->activator->r.currentOrigin,defender->r.currentOrigin);
+				if(distance <= 125.0f)
+					saberBlockCost = DODGE_BOLTBLOCK*3;
+				else if(distance <= 300.0f)
+					saberBlockCost = DODGE_BOLTBLOCK*2;
+				else
+					saberBlockCost = DODGE_BOLTBLOCK;
+
+				if(attacker->activator->s.weapon == WP_REPEATER)
+					saberBlockCost /=2;
+
+			}
+			else if(attacker->activator->s.weapon == WP_DISRUPTOR)
+			{
+				switch(attacker->s.generic1)
+				{
+				case 5:
+					saberBlockCost=200;
+					break;
+				case 4:
+				case 3:
+					saberBlockCost=15;
+					break;
+				case 2:
+					saberBlockCost=10;
+					break;
+				default:
+					saberBlockCost=10;
+					break;
+				}
+			}
+			else
+			{
+				switch(attacker->s.generic1)
+				{
+				case 5:
+					saberBlockCost=50;
+					break;
+				case 4:
+				case 3:
+					saberBlockCost=15;
+					break;
+				case 2:
+					saberBlockCost=10;
+					break;
+				default:
+					saberBlockCost=10;
+					break;
+				}
+			}
+			if(BG_SaberInAttack(defender->client->ps.saberMove)
+			|| PM_SaberInStart(defender->client->ps.saberMove)) 
+			{
+				if(attacker->activator->s.weapon == WP_FLECHETTE)
+					saberBlockCost = saberBlockCost*1.5;
+				else
+					saberBlockCost = saberBlockCost*2;
+			}
+
+			if(attacker->activator->s.weapon == WP_BOWCASTER)
+			{
+				if(attacker->s.generic1 > 1)
+				{
+					float temp1 = saberBlockCost/100;
+					float temp2 = 15+saberBlockCost;
+					saberBlockCost=temp1*temp2;
+				}
 			}
 
 			//G_Printf("DP damage: %f\n",saberBlockCost);
+			if(defender->client->ps.fd.saberAnimLevel == SS_FAST)
+			{
+				//float temp1 = ceilf(saberBlockCost/100);
+				saberBlockCost--; //= temp1*20+saberBlockCost;
+			}
+		}
+		else if(attacker->activator && attacker->activator->s.weapon == WP_BLASTER)
+		{
+			saberBlockCost=4; 
 		}
 		else
 		{
@@ -3457,9 +3542,10 @@ int OJP_SaberBlockCost(gentity_t *defender, gentity_t *attacker, vec3_t hitLoc)
 			&& !(defender->client->ps.userInt3 & ( 1 << FLAG_SLOWBOUNCE ))
 			&& !(defender->client->ps.userInt3 & ( 1 << FLAG_OLDSLOWBOUNCE ))) 
 		{
-			if(attacker->client->saber[0].numBlades == 1 && defender->client->ps.fd.saberAnimLevel == SS_DUAL)//Ataru's other perk more powerful running hits
+
+			if(attacker->client->saber[0].numBlades == 1 && attacker->client->ps.fd.saberAnimLevel == SS_DUAL)//Ataru's other perk more powerful running hits
 			{
-				saberBlockCost *= 1.75;
+				saberBlockCost *= 3.0;
 			}
 			else
 			{
@@ -3582,6 +3668,7 @@ int OJP_SaberCanBlock(gentity_t *self, gentity_t *atk, qboolean checkBBoxBlock, 
 {//similar to WP_SaberCanBlock but without the same sorts of restrictions.
 	vec3_t bodyMin, bodyMax, closestBodyPoint, dirToBody, saberMoveDir;
 	float distance = VectorDistance(atk->r.currentOrigin,self->r.currentOrigin);
+
 	if (!self || !self->client || !atk)
 	{
 		return 0;
@@ -3624,6 +3711,11 @@ int OJP_SaberCanBlock(gentity_t *self, gentity_t *atk, qboolean checkBBoxBlock, 
 
 	if(BG_InGrappleMove(self->client->ps.torsoAnim))
 	{//you can't block while doing a melee move.
+		return 0;
+	}
+	
+	if(BG_KickMove(self->client->ps.saberMove))
+	{
 		return 0;
 	}
 
@@ -3717,9 +3809,12 @@ int OJP_SaberCanBlock(gentity_t *self, gentity_t *atk, qboolean checkBBoxBlock, 
 
 	//ok, I'm removing this to get around the problems with long reach attacks cliping thru the player.
 	//SABERSYSRAFIXME - allow for blocking behind our backs
-	if (!InFront( point, self->client->ps.origin, self->client->ps.viewangles, -.2 ) )
+	if (!InFront( point, self->client->ps.origin, self->client->ps.viewangles, -.2 ))
 	{//can only
-		return 1;
+		if(self->client->ps.fd.forcePowerLevel[FP_SABER_DEFENSE] >= FORCE_LEVEL_3)
+			return 1;
+		else
+			return 0;
 	}
 	
 
@@ -5172,8 +5267,8 @@ void WP_SaberDoClash( gentity_t *self, int saberNum, int bladeNum )
 		te->s.legsAnim = bladeNum;
 
 		//[SaberSys]
-		if(saberClashOther != -1)
-		{//only viewlock if we're passed valid other otherOwner
+		if(saberClashOther != -1 && PM_SaberInParry(g_entities[saberClashOther].client->ps.saberMove))
+		{//only viewlock if we're passed valid other otherOwner, DD -- And if we parryed
 			otherOwner = &g_entities[saberClashOther];
 
 			G_SetViewLock(self, saberClashPos, saberClashNorm);
@@ -5729,10 +5824,6 @@ if( !ojp_allowBodyDodge.integer )
 		}
 		return qfalse;
 	}
-	else if(mod == MOD_DISRUPTOR_SNIPER && shooter && shooter->client)
-	{//charging a sniper shot can double the DP cost.
-		dpcost *= 2 * DetermineDisruptorCharge(shooter)/DISRUPTOR_MAX_CHARGE;
-	}
 
 	if(self->client->ps.legsAnim == BOTH_MEDITATE)
 	{//can't dodge while meditating.
@@ -5776,8 +5867,7 @@ if( !ojp_allowBodyDodge.integer )
 		}
 	}
 
-	//RAFIXME - could add some location based cost adjustor here or something
-	if( *dmg <= DODGE_MINDAM )
+	if( *dmg <= DODGE_MINDAM && mod != MOD_REPEATER )
 	{
 		dpcost = (int)(dpcost * ((float) *dmg/DODGE_MINDAM));
 		NoAction = qtrue;
@@ -5787,6 +5877,48 @@ if( !ojp_allowBodyDodge.integer )
 		dpcost = 0;
 	}
 
+	if(mod == MOD_DISRUPTOR_SNIPER && shooter && shooter->client)
+	{//25,50,75,100
+	 //15,30,45,60
+		int damage=0;
+
+		if(shooter->genericValue6 <= 10)
+			damage=10;
+		else if(shooter->genericValue6 <= 25)
+			damage=20;
+		else if(shooter->genericValue6 < 59)
+			damage=50;
+		else if(shooter->genericValue6 == 60)
+			damage=100;
+
+		if(self->client->ps.stats[STAT_DODGE] > damage)
+			dpcost=damage;
+		else
+			return qfalse;
+		/*
+		switch(shooter->client->skillLevel[SK_DISRUPTOR])
+		{
+		case FORCE_LEVEL_3:
+			return qfalse;
+		case FORCE_LEVEL_2:
+			if(self->client->ps.stats[STAT_DODGE] >100)
+				dpcost=100;
+			else
+				return qfalse;
+			break;
+		case FORCE_LEVEL_1:
+			if(self->client->ps.stats[STAT_DODGE] >50)
+				dpcost=50;
+			else
+				return qfalse;
+			break;
+			//G_Damage(self,shooter,shooter,NULL,NULL,200,DAMAGE_NO_ARMOR,MOD_DISRUPTOR_SNIPER);
+			//break;
+		}
+		return qtrue;
+		//G_DodgeDrain(self,shooter,200);
+		*/
+	}
 
 	if(dpcost < self->client->ps.stats[STAT_DODGE])
 	{
@@ -5844,20 +5976,21 @@ if( !ojp_allowBodyDodge.integer )
 		|| mod == MOD_THERMAL_SPLASH
 		|| mod == MOD_TRIP_MINE_SPLASH
 		|| mod == MOD_TIMED_MINE_SPLASH
-		|| mod == MOD_DET_PACK_SPLASH )
+		|| mod == MOD_DET_PACK_SPLASH
+		|| mod == MOD_ROCKET)
 	{//splash damage dodge, dodged by throwing oneself away from the blast into a knockdown
-		vec3_t blowBackDir;
+		vec3_t blowBackDir;//[ExplosivesKnockback]
 		int blowBackPower = savedDmg;
 		VectorSubtract(self->client->ps.origin, dmgOrigin, blowBackDir);
 		VectorNormalize(blowBackDir);
 
-		if(blowBackPower > 50)
+		if(blowBackPower > 1000)
 		{//clamp blow back power level 
-			blowBackPower = 50;
+			blowBackPower = 1000;
 		}
-
+		blowBackPower*=2;
 		G_Throw( self, blowBackDir, blowBackPower );
-		G_Knockdown(self, shooter, blowBackDir, 300, qtrue); 
+		G_Knockdown(self, shooter, blowBackDir, 600, qtrue); 
 		if(g_debugdodge.integer)
 		{
 			G_Printf("%i: Client %i Splash Dodged %i points of damage.\n", level.time, self->s.number, *dmg);
@@ -6334,6 +6467,9 @@ static GAME_INLINE qboolean CheckSaberDamage(gentity_t *self, int rSaberNum, int
 		saberHitWall = qtrue;
 	}
 
+	//if(tr.entityNum == ENTITYNUM_WORLD)
+		//return qfalse;
+
 	if (g_entities[tr.entityNum].takedamage &&
 		(g_entities[tr.entityNum].health > 0 || !(g_entities[tr.entityNum].s.eFlags & EF_DISINTEGRATION)) &&
 		tr.entityNum != self->s.number &&
@@ -6391,7 +6527,7 @@ static GAME_INLINE qboolean CheckSaberDamage(gentity_t *self, int rSaberNum, int
 		g_entities[tr.entityNum].inuse))
 	{ //hit a saber blade
 		otherOwner = &g_entities[g_entities[tr.entityNum].r.ownerNum];
-
+		//G_Printf("Hit saber!\n");
 		if (!otherOwner->inuse || !otherOwner->client)
 		{//Bad defender saber owner state
 			return qfalse;
@@ -7011,12 +7147,12 @@ void WP_SaberStartMissileBlockCheck( gentity_t *self, usercmd_t *ucmd  )
 	{
 		doFullRoutine = qfalse;
 	}
-	//[Dual Saber Fix]
-	else if ( self->client->ps.saberInFlight && self->client->ps.fd.saberAnimLevel != SS_DUAL)
+	
+	else if ( self->client->ps.saberInFlight )
 	{
 		doFullRoutine = qfalse;
 	}
-	//[/Dual Saber Fix]
+	
 	if(!WalkCheck(self)
 	&& (BG_SaberInAttack( self->client->ps.saberMove )
 	|| PM_SaberInStart( self->client->ps.saberMove )))
@@ -8346,18 +8482,13 @@ void saberKnockDown(gentity_t *saberent, gentity_t *saberOwner, gentity_t *other
 	//trace stuct used for determining if it's safe to spawn at current location
 	trace_t		tr;  
 	//[/BugFix23]
-
 	saberOwner->client->ps.saberEntityNum = 0; //still stored in client->saberStoredIndex
 	saberOwner->client->saberKnockedTime = level.time + SABER_RETRIEVE_DELAY;
 
 	saberent->clipmask = MASK_SOLID;
 
-	///[Dual Saber Fix]
 	if(saberOwner->client->ps.fd.saberAnimLevel != SS_DUAL)
 		saberent->r.contents = CONTENTS_TRIGGER;//0;
-	else
-		saberent->r.contents += CONTENTS_TRIGGER;
-	//[/Dual Saber Fix]
 
 	VectorSet( saberent->r.mins, -3.0f, -3.0f, -1.5f );
 	VectorSet( saberent->r.maxs, 3.0f, 3.0f, 1.5f );
@@ -9140,7 +9271,21 @@ void thrownSaberTouch (gentity_t *saberent, gentity_t *other, trace_t *trace)
 	//particular call.
 	VectorCopy(saberent->r.currentOrigin, saberent->s.pos.trBase);
 	VectorCopy(saberent->r.currentAngles, saberent->s.apos.trBase);
-	saberKnockDown(saberent, saberOwn, saberOwn);
+	if(saberOwn->client->ps.fd.forcePowerLevel[FP_SABERTHROW] == FORCE_LEVEL_3)
+	{
+		saberReactivate(saberent, saberOwn);
+
+		saberent->touch = SaberGotHit;
+
+		saberent->think = saberBackToOwner;
+		saberent->speed = 0;
+		saberent->genericValue5 = 0;
+		saberent->nextthink = level.time;
+
+		saberent->r.contents = CONTENTS_LIGHTSABER;
+	}
+	else
+		saberKnockDown(saberent, saberOwn, saberOwn);
 
 	
 	/* basejka code - setting up the speed check stuff for returns.
@@ -9151,7 +9296,7 @@ void thrownSaberTouch (gentity_t *saberent, gentity_t *other, trace_t *trace)
 }
 
 #define SABER_MAX_THROW_DISTANCE 700
-
+extern void G_StopObjectMoving( gentity_t *object );
 void saberFirstThrown(gentity_t *saberent)
 {//racc - this is the think function for live thrown sabers.
 	vec3_t		vSub;
@@ -9253,6 +9398,12 @@ void saberFirstThrown(gentity_t *saberent)
 	VectorSubtract(saberOwn->client->ps.origin, saberent->r.currentOrigin, vSub);
 	vLen = VectorLength(vSub);
 
+	if(vLen >= 300 && saberOwn->client->ps.fd.forcePowerLevel[FP_SABERTHROW] == FORCE_LEVEL_1)
+	{
+		thrownSaberBallistics(saberent, saberOwn, qfalse);
+		goto runMin;
+	}
+
 	if (vLen >= (SABER_MAX_THROW_DISTANCE*saberOwn->client->ps.fd.forcePowerLevel[FP_SABERTHROW]))
 	{//racc - saber has reached maximum throw range, start returning the saber.
 		//[SaberThrowSys]
@@ -9270,14 +9421,45 @@ void saberFirstThrown(gentity_t *saberent)
 	{//we're not using the saber throw button, that means we don't want to maintain
 		//our force concentration on holding the saber in the air.
 		//run the object for this frame and then convert to a ballistic saber.
-		G_RunObject(saberent);
-		thrownSaberBallistics(saberent, saberOwn, qfalse);
+		if(saberOwn->client->ps.fd.forcePowerLevel[FP_SABERTHROW] >= FORCE_LEVEL_3)
+		{
+			saberent->s.eFlags &= ~EF_MISSILE_STICK;
+
+			saberReactivate(saberent, saberOwn);
+
+			saberent->touch = SaberGotHit;
+
+			saberent->think = saberBackToOwner;
+			saberent->speed = 0;
+			saberent->genericValue5 = 0;
+			saberent->nextthink = level.time;
+
+			saberent->r.contents = CONTENTS_LIGHTSABER;
+		}
+		else
+		{
+			G_RunObject(saberent);
+			thrownSaberBallistics(saberent, saberOwn, qfalse);
+		}
 	}
 
-	/* we don't want to have any physical control over the thrown saber's path. basejka code.
-	if (saberOwn->client->ps.fd.forcePowerLevel[FP_SABERTHROW] >= FORCE_LEVEL_2 &&
+	if (saberOwn->client->ps.fd.forcePowerDebounce[FP_SABERTHROW] < level.time
+		&& saberOwn->client->ps.fd.forcePowerLevel[FP_SABERTHROW] >= FORCE_LEVEL_3)
+	{
+		BG_ForcePowerDrain( &saberOwn->client->ps, FP_SABERTHROW, 2 );
+		if (saberOwn->client->ps.fd.forcePower < 1)
+		{
+			WP_ForcePowerStop(saberOwn, FP_SABERTHROW);
+		}
+
+		saberOwn->client->ps.fd.forcePowerDebounce[FP_SABERTHROW] = level.time + 1000;
+	}
+
+	// we don't want to have any physical control over the thrown saber's path. basejka code.
+		//Yes we do!
+	if (saberOwn->client->ps.fd.forcePowerLevel[FP_SABERTHROW] >= FORCE_LEVEL_3 &&
 		saberent->speed < level.time)
-	{ //if owner is rank 3 in saber throwing, the saber goes where he points
+	{ 
 		vec3_t fwd, traceFrom, traceTo, dir;
 		trace_t tr;
 
@@ -9287,14 +9469,25 @@ void saberFirstThrown(gentity_t *saberent)
 		traceFrom[2] += saberOwn->client->ps.viewheight;
 
 		VectorCopy(traceFrom, traceTo);
-		traceTo[0] += fwd[0]*4096;
-		traceTo[1] += fwd[1]*4096;
-		traceTo[2] += fwd[2]*4096;
+		if(saberOwn->client->ps.fd.forcePowerLevel[FP_SABERTHROW] >= FORCE_LEVEL_3)
+		{
+			traceTo[0] += fwd[0]*300;
+			traceTo[1] += fwd[1]*300;
+			traceTo[2] += fwd[2]*300;
+		}
+		else
+		{
+			//traceTo[0] += fwd[0];
+			//traceTo[1] += fwd[1];
+			//traceTo[2] += fwd[2];
+		}
 
 		//racc - move the saber for this frame based on it's current movement.
 		saberMoveBack(saberent, qfalse);
-		VectorCopy(saberent->r.currentOrigin, saberent->s.pos.trBase);
 
+		
+		VectorCopy(saberent->r.currentOrigin, saberent->s.pos.trBase);
+		
 		if (saberOwn->client->ps.fd.forcePowerLevel[FP_SABERTHROW] >= FORCE_LEVEL_3)
 		{ //if highest saber throw rank, we can direct the saber toward players directly by looking at them
 			trap_Trace(&tr, traceFrom, NULL, NULL, traceTo, saberOwn->s.number, MASK_PLAYERSOLID);
@@ -9311,16 +9504,19 @@ void saberFirstThrown(gentity_t *saberent)
 		VectorScale(dir, 500, saberent->s.pos.trDelta );
 		saberent->s.pos.trTime = level.time;
 
+		//VectorCopy(dir,saberent->r.currentOrigin);
+
 		if (saberOwn->client->ps.fd.forcePowerLevel[FP_SABERTHROW] >= FORCE_LEVEL_3)
 		{ //we'll treat them to a quicker update rate if their throw rank is high enough
-			saberent->speed = level.time + 100;
+			saberent->speed = level.time + 300;
 		}
 		else
 		{
 			saberent->speed = level.time + 400;
 		}
 	}
-	*/
+	
+
 	//[/SaberThrowSys]
 runMin:
 
@@ -9543,7 +9739,7 @@ void UpdateClientRenderinfo(gentity_t *self, vec3_t renderOrigin, vec3_t renderA
 	}
 }
 
-#define STAFF_KICK_RANGE 16
+#define STAFF_KICK_RANGE 13
 extern void G_GetBoltPosition( gentity_t *self, int boltIndex, vec3_t pos, int modelIndex ); //NPC_utils.c
 
 extern qboolean BG_InKnockDown( int anim );
@@ -9858,7 +10054,7 @@ static gentity_t *G_KickTrace( gentity_t *ent, vec3_t kickDir, float kickDist, v
 				{
 					//[KnockdownSys]
 					//reenabled SP code since the knockdown code now based on the SP code again.
-					G_Throw( hitEnt, kickDir, kickPush );
+					G_Throw( hitEnt, kickDir, kickPush*10 );
 
 					//[SaberSys]
 					//made the knockdown behavior of kicks be based on the player's mishap level or low DP and not hold alt attack.
@@ -9866,15 +10062,22 @@ static gentity_t *G_KickTrace( gentity_t *ent, vec3_t kickDir, float kickDist, v
 						|| hitEnt->client->ps.stats[STAT_DODGE] <= DODGE_CRITICALLEVEL)
 						&& !(hitEnt->client->buttons & BUTTON_ALT_ATTACK))
 					{//knockdown
-						if ( kickPush >= 75.0f && !Q_irand( 0, 2 ) )
+						if(hitEnt->client->ps.fd.saberAnimLevel == SS_STAFF)
+						{
+							SabBeh_AnimateSlowBounce(hitEnt,ent);
+						}
+						else
+						{
+							if ( kickPush >= 75.0f && !Q_irand( 0, 2 ) )
 							{
 								G_Knockdown( hitEnt, ent, kickDir, 300, qtrue );
 							}
-						else
+							else
 							{
 								G_Knockdown( hitEnt, ent, kickDir, kickPush, qtrue );
 							}
 						}
+					}
 					else if (ent->client->ps.fd.saberAnimLevel == SS_DESANN
 						&& (hitEnt->client->ps.saberAttackChainCount >= MISHAPLEVEL_LIGHT
 						|| hitEnt->client->ps.stats[STAT_DODGE] <= DODGE_CRITICALLEVEL)
@@ -10116,8 +10319,8 @@ static void G_KickSomeMofos(gentity_t *ent)
 			if ( elapsedTime >= 415 && remainingTime >= 200 )
 			{//back
 				doKick = qtrue;
-				//kickDist+=30;
-			if ( ri->handLBolt != -1 )//changed to accomadate teh new hand hand anim
+				kickDist=70;
+				if ( ri->handLBolt != -1 )//changed to accomadate teh new hand hand anim
 				{//actually trace to a bolt
 					G_GetBoltPosition( ent, ri->handLBolt, kickEnd, 0 );//changed to accomadate teh new hand hand anim
 					VectorSubtract( kickEnd, ent->r.currentOrigin, kickDir );
@@ -10260,10 +10463,11 @@ static void G_KickSomeMofos(gentity_t *ent)
 			}
 			else if ( ri->handLBolt != -1) //for hand slap
 			{//actually trace to a bolt
-				if ( ( elapsedTime >= 750 && elapsedTime < 850 )
+				if ( ( elapsedTime >= 750 && elapsedTime < 860 )
 					|| ( elapsedTime >= 1400 && elapsedTime < 1500 ) )
 				{//right, though either would do
 					doKick = qtrue;
+					G_Printf(":wtf:");
 					G_GetBoltPosition( ent, ri->handLBolt, kickEnd, 0 );
 					VectorSubtract( kickEnd, ent->r.currentOrigin, kickDir );
 					kickDir[2] = 0;//ah, flatten it, I guess...
@@ -10561,7 +10765,7 @@ void WP_SaberPositionUpdate( gentity_t *self, usercmd_t *ucmd )
 	if (ucmd->buttons & BUTTON_THERMALTHROW)
 	{//player wants to snap throw a gernade
 		if(self->client->ps.weaponTime <= 0//not currently using a weapon
-			&& self->client->ps.stats[STAT_WEAPONS] & ( 1 << WP_THERMAL ) && self->client->ps.ammo[AMMO_THERMAL] )//have a thermal
+			&& self->client->ps.stats[STAT_WEAPONS] & ( 1 << WP_THERMAL ) && self->client->ps.ammo[AMMO_THERMAL] > 0 )//have a thermal
 		{//throw!
 			self->s.weapon = WP_THERMAL;  //temp switch weapons so we can toss it.
 			self->client->ps.weaponChargeTime = level.time - 450; //throw at medium power
@@ -11463,6 +11667,7 @@ nextStep:
 			{ //don't to saber 1 if the left arm is broken
 				break;
 			}
+			
 			if (rSaberNum > 0 
 				&& self->client->saber[1].model
 				&& self->client->saber[1].model[0]
@@ -11883,7 +12088,7 @@ void WP_SaberBlockNonRandom( gentity_t *self, vec3_t hitloc, qboolean missileBlo
 
 	rightdot = DotProduct(right, diff);
 	zdiff = hitloc[2] - clEye[2];
-	if(!inFront)
+	if(!inFront && self->client->ps.fd.forcePowerLevel[FP_SABER_DEFENSE] >= FORCE_LEVEL_3)
 	{
 		switch(self->client->ps.fd.saberAnimLevel)
 		{
@@ -12473,7 +12678,7 @@ qboolean G_BlockIsQuickParry( gentity_t *self, gentity_t *attacker, vec3_t hitLo
 					//vs the actual attack location.
 	qboolean inFront = InFront(attacker->client->ps.origin, self->client->ps.origin, self->client->ps.viewangles, 0.0f);
     
-	if(!((pm->cmd.buttons & BUTTON_15) > 0))
+	if(!(self->client->pers.cmd.buttons & BUTTON_15))
 	{
 		return qfalse;
 	}
@@ -12533,6 +12738,7 @@ qboolean G_BlockIsQuickParry( gentity_t *self, gentity_t *attacker, vec3_t hitLo
 	{//player didn't parry in the correct direction, do the minimal parry bonus.
 		//SABERSYSRAFIXME - this is a hack, please try to fix this since it's not really
 		//fair to players.
+		self->client->ps.saberAttackChainCount += 3;
 		if(self->r.svFlags & SVF_BOT)
 		{//bots just randomly parry to make up for them not intelligently parrying.
 			if(BOT_PARRYRATE * botstates[self->s.number]->settings.skill > Q_irand(0,999))

@@ -1,0 +1,23 @@
+REFERENCE           MINXP
+LANG_ENGLISH        "Minimum XP:"
+
+REFERENCE           DESC_MINXP
+LANG_ENGLISH        "Minimum amount of XP you can have."
+
+REFERENCE           MAXXP
+LANG_ENGLISH        "Maximum XP:"
+
+REFERENCE           DESC_MAXXP
+LANG_ENGLISH        "Maximum amount of XP you can accumulate."
+
+REFERENCE           RESPAWNTIMER
+LANG_ENGLISH        "Respawn Time:"
+
+REFERENCE           DESC_RESPAWNTIMER
+LANG_ENGLISH        "Time taken before you respawn again."
+
+REFERENCE           LIVES
+LANG_ENGLISH        "Lives:"
+
+REFERENCE           DESC_LIVES
+LANG_ENGLISH        "Amount of lives you have, before you're forced to spectate until the round is over."

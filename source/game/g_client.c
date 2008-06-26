@@ -470,6 +470,7 @@ void JMSaberTouch(gentity_t *self, gentity_t *other, trace_t *trace)
 
 	if (other->client->ps.fd.forcePower < 100)
 	{
+
 		other->client->ps.fd.forcePower = 100;
 	}
 
@@ -1118,6 +1119,7 @@ static qboolean CopyToBodyQue( gentity_t *ent ) {
 	} else {
 		body->s.pos.trType = TR_STATIONARY;
 	}
+
 	body->s.event = 0;
 
 	body->s.weapon = ent->s.bolt2;
@@ -1265,7 +1267,8 @@ void respawn( gentity_t *ent ) {
 	{//playing LMS and we're DEAD!  Just start chillin in tempSpec.
 		OJP_Spectator(ent);
 	}
-	else if(g_gametype.integer == GT_FFA || g_gametype.integer == GT_TEAM)
+	else if(g_gametype.integer == GT_FFA || g_gametype.integer == GT_TEAM
+		|| g_gametype.integer == GT_CTF)
 	{
 		if (ojp_ffaRespawnTimer.integer)
 		{
@@ -1291,6 +1294,12 @@ void respawn( gentity_t *ent ) {
 			}
 		}
 		ClientSpawn(ent);
+		//[LastManStanding]
+		if ( ojp_lms.integer > 0 && BG_IsLMSGametype(g_gametype.integer) && LMS_EnoughPlayers())
+		{//reduce our number of lives since we respawned and we're not the only player.
+			ent->lives--;
+		}
+		//[/LastManStanding]
 	}
 	else if (g_gametype.integer == GT_SIEGE)
 	//if (g_gametype.integer == GT_SIEGE)
@@ -1335,13 +1344,6 @@ void respawn( gentity_t *ent ) {
 		// add a teleportation effect
 		tent = G_TempEntity( ent->client->ps.origin, EV_PLAYER_TELEPORT_IN );
 		tent->s.clientNum = ent->s.clientNum;
-
-		//[LastManStanding]
-		if ( ojp_lms.integer > 0 && BG_IsLMSGametype(g_gametype.integer) && LMS_EnoughPlayers())
-		{//reduce our number of lives since we respawned and we're not the only player.
-			ent->lives--;
-		}
-		//[/LastManStanding]
 	}
 }
 
@@ -1507,10 +1509,12 @@ static void ClientCleanName( const char *in, char *out, int outSize ) {
 			}
 
 			// don't allow black in a name, period
+			/*
 			if( ColorIndex(*in) == 0 ) {
 				in++;
 				continue;
 			}
+			*/
 
 			// make sure room in dest for both chars
 			if( len > outSize - 2 ) {
@@ -3331,7 +3335,55 @@ int TotalAllociatedSkillPoints(gentity_t *ent)
 }
 //[/ExpSys]
 
-extern int ClipSize(int ammo);//[Reload]
+extern int ClipSize(int ammo,gentity_t *pog);//[Reload]
+
+extern void G_Knockdown( gentity_t *self, gentity_t *attacker, const vec3_t pushDir, float strength, qboolean breakSaberLock );
+void player_touch(gentity_t *self, gentity_t *other, trace_t *trace )
+{
+	if(!other)
+		return;
+
+	if(!other->client)
+		return;
+
+
+	if(other->client->pushEffectTime > level.time
+		|| other->client->ps.fd.forceGripBeingGripped > level.time)
+	{//Other player was pushed!
+		float speed = (vec_t)sqrt (other->client->ps.velocity[0]*
+			other->client->ps.velocity[0] + other->client->ps.velocity[1]*
+			other->client->ps.velocity[1])/2;
+		G_Printf("Speed %f\n",speed);
+		if(speed > 50)
+		{
+			int damage = (speed >= 100 ? 35 : 10);
+			gentity_t *gripper = NULL;
+			int i=0;
+
+			G_Knockdown(self,other,other->client->ps.velocity,100,qfalse);
+			self->client->ps.velocity[1] = other->client->ps.velocity[1]*5.5f;
+			self->client->ps.velocity[0] = other->client->ps.velocity[0]*5.5f;
+
+			for(i=0;i<1024;i++)
+			{
+				gripper = &g_entities[i];
+				if(gripper && gripper->client)
+				{
+					if(gripper->client->ps.fd.forceGripEntityNum == other->client->ps.clientNum)
+						break;
+				}
+			}
+
+			if(gripper == NULL)
+				return;
+
+			G_Printf("Damage: %i\n",damage);
+			//G_Damage(gripEnt, self, self, NULL, NULL, 2, DAMAGE_NO_ARMOR, MOD_FORCE_DARK);
+			G_Damage(other,gripper,gripper,NULL,NULL,damage,DAMAGE_NO_ARMOR,MOD_FORCE_DARK);
+			G_Damage(self,other,other,NULL,NULL,damage,DAMAGE_NO_ARMOR,0);
+		}
+	}
+}
 
 /*
 ===========
@@ -3403,14 +3455,6 @@ void ClientSpawn(gentity_t *ent) {
 		ent->client->skillUpdated = qtrue;
 	}
 	//[/ExpSys]]
-
-	//[Reload]
-	for(i=0;i<WP_NUM_WEAPONS;i++)
-		ent->bullets[i] = 300;
-	ent->reloadTime =-1;
-	ent->bulletsToReload = 0;
-	client->ps.stats[STAT_AMMOPOOL] = 300;
-	//[/Reload]
 
 	//first we want the userinfo so we can see if we should update this client's saber -rww
 	trap_GetUserinfo( index, userinfo, sizeof(userinfo) );
@@ -3899,6 +3943,7 @@ void ClientSpawn(gentity_t *ent) {
 	ent->r.contents = CONTENTS_BODY;
 	ent->clipmask = MASK_PLAYERSOLID;
 	ent->die = player_die;
+	ent->touch = player_touch;
 	ent->waterlevel = 0;
 	ent->watertype = 0;
 	ent->flags = 0;
@@ -4127,6 +4172,10 @@ void ClientSpawn(gentity_t *ent) {
 				{
 					client->ps.stats[STAT_WEAPONS] |= ( 1 << WP_BOWCASTER );
 				}
+
+				if(client->skillLevel[SK_BOWCASTER] > FORCE_LEVEL_2)
+					client->ps.eFlags2 |= EF2_BOWCASTERSCOPE;
+
 			}
 
 			if(client->skillLevel[SK_THERMAL])
@@ -4393,7 +4442,12 @@ void ClientSpawn(gentity_t *ent) {
 		//[/ExpSys]
 		client->ps.stats[STAT_HOLDABLE_ITEM] = 0;
 
-		
+		//[DualPistols]
+		if(client->skillLevel[SK_PISTOL] >= FORCE_LEVEL_3 && ent->client->ps.weapon == WP_BRYAR_PISTOL)
+		{
+			ent->client->ps.eFlags |= EF_DUAL_WEAPONS;
+		}
+		//[/DualPistols]
 	}
 
 	if (g_gametype.integer == GT_SIEGE &&
@@ -4424,13 +4478,13 @@ void ClientSpawn(gentity_t *ent) {
 	{//racc - not playing siege, assign ammo levels.
 		//[ExpSys][Reload]
 		//client->ps.ammo[AMMO_POWERCELL] = ammoData[AMMO_POWERCELL].max * (float) (client->skillLevel[SK_BOWCASTER] < client->skillLevel[SK_DISRUPTOR] ? client->skillLevel[SK_DISRUPTOR] : client->skillLevel[SK_BOWCASTER])/FORCE_LEVEL_3;
-		client->ps.ammo[AMMO_POWERCELL] = ClipSize(AMMO_POWERCELL);
+		client->ps.ammo[AMMO_POWERCELL] = ClipSize(AMMO_POWERCELL,ent);
 		//client->ps.ammo[AMMO_METAL_BOLTS] = ammoData[AMMO_METAL_BOLTS].max * (float) client->skillLevel[SK_REPEATER]/FORCE_LEVEL_3;
-		client->ps.ammo[AMMO_METAL_BOLTS] = ClipSize(AMMO_METAL_BOLTS);
+		client->ps.ammo[AMMO_METAL_BOLTS] = ClipSize(AMMO_METAL_BOLTS,ent);
 		//client->ps.ammo[AMMO_BLASTER] = ammoData[AMMO_BLASTER].max * (float) client->skillLevel[SK_BLASTER]/FORCE_LEVEL_3;
-		client->ps.ammo[AMMO_BLASTER] = ClipSize(AMMO_BLASTER);
+		client->ps.ammo[AMMO_BLASTER] = ClipSize(AMMO_BLASTER,ent);
 
-		client->ps.ammo[AMMO_ROCKETS] = ClipSize(AMMO_ROCKETS);
+		client->ps.ammo[AMMO_ROCKETS] = ClipSize(AMMO_ROCKETS,ent);
 		//[/Reload]
 		client->ps.ammo[AMMO_THERMAL] = ammoData[AMMO_THERMAL].max * (float) client->skillLevel[SK_THERMAL]/FORCE_LEVEL_3;
 
@@ -4472,6 +4526,15 @@ void ClientSpawn(gentity_t *ent) {
 		G_AddEvent(ent, EV_WEAPINVCHANGE, client->ps.stats[STAT_WEAPONS]);
 	}
 	//[/VisualWeapons]
+
+	//[Reload]
+	for(i=0;i<WP_NUM_WEAPONS;i++)
+		ent->bullets[i] = ammoPool[SkillLevelForWeap(ent,i)][i].max;
+
+	ent->reloadTime =-1;
+	ent->bulletsToReload = 0;
+	client->ps.stats[STAT_AMMOPOOL] = ammoPool[SkillLevelForWeap(ent,ent->client->ps.weapon)][ent->client->ps.weapon].max;
+	//[/Reload]
 
 	client->ps.isJediMaster = qfalse;
 
@@ -4625,7 +4688,12 @@ void ClientSpawn(gentity_t *ent) {
 		else
 		{
 			G_SetAnim(ent, NULL, SETANIM_TORSO, TORSO_RAISEWEAP1, SETANIM_FLAG_OVERRIDE|SETANIM_FLAG_HOLD|SETANIM_FLAG_HOLDLESS, 0);
-			client->ps.legsAnim = WeaponReadyAnim[client->ps.weapon];
+			//[DualPistols]
+			if (client->ps.eFlags & EF_DUAL_WEAPONS)
+				client->ps.legsAnim = WeaponReadyAnim2[client->ps.weapon];
+			else
+				client->ps.legsAnim = WeaponReadyAnim[client->ps.weapon];
+			//[/DualPistols]
 		}
 		client->ps.weaponstate = WEAPON_RAISING;
 		client->ps.weaponTime = client->ps.torsoTimer;

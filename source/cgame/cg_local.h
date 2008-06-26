@@ -319,10 +319,6 @@ typedef struct {
 
 	int			superSmoothTime; //do crazy amount of smoothing
 
-#ifdef _XBOX
-	int			friendshipStatus;
-#endif
-
 	//[RGBSabers]
 	//[2] array cause there are 2 sabers :)
 
@@ -386,11 +382,7 @@ typedef struct {
 } clientInfo_t;
 
 //rww - cheap looping sound struct
-#ifdef _XBOX
-#define MAX_CG_LOOPSOUNDS 2
-#else
 #define MAX_CG_LOOPSOUNDS 8
-#endif
 
 typedef struct cgLoopSound_s {
 	int entityNum;
@@ -470,6 +462,7 @@ typedef struct centity_s {
 	int				weapon;
 
 	void			*ghoul2weapon; //rww - pointer to ghoul2 instance of the current 3rd person weapon
+	void			*ghoul2weapon2;//[DualPistols]
 
 	float			radius;
 	int				boltInfo;
@@ -919,10 +912,6 @@ typedef struct {
 
 	// view rendering
 	refdef_t	refdef;
-
-#ifdef _XBOX
-	qboolean widescreen;
-#endif
 
 	// zoom key
 	qboolean	zoomed;
@@ -2232,7 +2221,7 @@ void TurretClientRun(centity_t *ent);
 //
 // cg_weapons.c
 //
-void CG_GetClientWeaponMuzzleBoltPoint(int clIndex, vec3_t to);
+void CG_GetClientWeaponMuzzleBoltPoint(int clIndex, vec3_t to, qboolean leftweap);
 
 void CG_NextWeapon_f( void );
 void CG_PrevWeapon_f( void );
@@ -2247,7 +2236,7 @@ void CG_MissileHitWall(int weapon, int clientNum, vec3_t origin, vec3_t dir, imp
 void CG_MissileHitPlayer( int weapon, vec3_t origin, vec3_t dir, int entityNum, qboolean alt_fire);
 
 void CG_AddViewWeapon (playerState_t *ps);
-void CG_AddPlayerWeapon( refEntity_t *parent, playerState_t *ps, centity_t *cent, int team, vec3_t newAngles, qboolean thirdPerson );
+void CG_AddPlayerWeapon( refEntity_t *parent, playerState_t *ps, centity_t *cent, int team, vec3_t newAngles, qboolean thirdPerson, qboolean leftweap );//[DualPistols]
 void CG_DrawWeaponSelect( void );
 void CG_DrawIconBackground(void);
 

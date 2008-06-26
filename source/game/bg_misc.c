@@ -20,11 +20,6 @@
 #endif
 #endif
 
-#ifdef _XBOX
-extern void *Z_Malloc(int iSize, memtag_t eTag, qboolean bZeroit, int iAlign);
-extern void Z_Free(void *pvAddress);
-#endif
-
 #ifdef QAGAME
 extern void Q3_SetParm (int entID, int parmNum, const char *parmValue);
 #endif
@@ -182,23 +177,23 @@ int bgForcePowerCost[NUM_TOTAL_SKILLS][NUM_FORCE_POWER_LEVELS] = //0 == neutral
 {
 	//[ExpSys]
 	{	0,	2,	4,	6	},	// Heal			// FP_HEAL
-	{	0,	1,	4,	6	},	// Jump			//FP_LEVITATION,//hold/duration
-	{	0,	4,	4,	6	},	// Speed		//FP_SPEED,//duration
-	{	0,	1,	4,	6	},	// Push			//FP_PUSH,//hold/duration
-	{	0,	1,	4,	6	},	// Pull			//FP_PULL,//hold/duration
-	{	0,	4,	6,	8	},	// Mind Trick	//FP_TELEPATHY,//instant
-	{	0,	4,	6,	8	},	// Grip			//FP_GRIP,//hold/duration
-	{	0,	4,	6,	8	},	// Lightning	//FP_LIGHTNING,//hold/duration
+	{	0,	1,	3,	8	},	// Jump			//FP_LEVITATION,//hold/duration -- lvl3 was 10
+	{	0,	2,	4,	6	},	// Speed		//FP_SPEED,//duration
+	{	0,	2,	5,	5	},	// Push			//FP_PUSH,//hold/duration
+	{	0,	3,	5,	7	},	// Pull			//FP_PULL,//hold/duration
+	{	0,	1,	5,	8	},	// Mind Trick	//FP_TELEPATHY,//instant -- lvl3 was 10
+	{	0,	2,	5,	8	},	// Grip			//FP_GRIP,//hold/duration -- lvl3 was 10
+	{	0,	2,	8,	6	},	// Lightning	//FP_LIGHTNING,//hold/duration
 	{	0,	4,	6,	8	},	// Dark Rage	//FP_RAGE,//duration
 	{	0,	2,	5,	8	},	// Protection	//FP_PROTECT,//duration
-	{	0,	2,	4,	6	},	// Absorb		//FP_ABSORB,//duration
+	{	0,	5,	5,	8	},	// Absorb		//FP_ABSORB,//duration
 	{	0,	1,	3,	6	},	// Team Heal	//FP_TEAM_HEAL,//instant
 	{	0,	1,	3,	6	},	// Team Force	//FP_TEAM_FORCE,//instant
 	{	0,	2,	4,	6	},	// Drain		//FP_DRAIN,//hold/duration
-	{	0,	1,	4,	6	},	// Sight		//FP_SEE,//duration
+	{	0,	2,	4,	8	},	// Sight		//FP_SEE,//duration -- lvl3 was 10
 	{	0,	SABER_OFFENSE_L1,	0,	0	},	// Saber Attack	//FP_SABER_OFFENSE,
-	{	0,	SABER_DEFENSE_L1,	4,	4	},	// Saber Defend	//FP_SABER_DEFENSE,
-	{	0,	2,	4,	6	},	// Saber Throw	//FP_SABERTHROW,
+	{	0,	SABER_DEFENSE_L1,	2,	8	},	// Saber Defend	//FP_SABER_DEFENSE, -- lvl3 was 10
+	{	0,	2,	4,	8	},	// Saber Throw	//FP_SABERTHROW,
 	/* basejka values
 	{	0,	2,	4,	6	},	// Heal			// FP_HEAL
 	{	0,	0,	2,	6	},	// Jump			//FP_LEVITATION,//hold/duration
@@ -233,16 +228,16 @@ int bgForcePowerCost[NUM_TOTAL_SKILLS][NUM_FORCE_POWER_LEVELS] = //0 == neutral
 	{	0,	8,	0,	0	},	//SK_CLOAK,		//cloaking device skill
 	{	0,	6,	0,	0	},	//SK_SEEKER,		//seeker droid skill
 	{	0,  6,  0,  0	},	//SK_SENTRY,		//sentry gun skill
-	{	0,  6,  6,  0	},	//SK_DETPACK,		//detpack skill
+	{	0,  5,  5,  0	},	//SK_DETPACK,		//detpack skill
 	{   0,  6,  7,  8   },  //SK_REPEATER,      // repeater/clone rifle skill
 	{   0,  5,  6,  8   },	//SK_DISRUPTOR,      // Disruptor/sniper rifle skill
 	//[StanceSelection]
-	{	0,	1,	0,	0	},	//SK_BLUESTYLE,	//Yellow lightsaber style
-	{	0,	1,	0,	0	},	//SK_REDSTYLE,	//Red lightsaber style
-	{	0,	1,	0,	0	},	//SK_PURPLESTYLE,	//Purple lightsaber style
-	{	0,	1,	0,	0	},	//SK_GREENSTYLE,	//Green lightsaber style
-	{	0,	1,	0,	0	},	//SK_DUALSTYLE,	//Dual lightsaber style
-	{	0,	1,	0,	0	},	//SK_STAFFSTYLE,	//Staff lightsaber style
+	{	0,	8,	0,	0	},	//SK_BLUESTYLE,	//Yellow lightsaber style
+	{	0,	8,	0,	0	},	//SK_REDSTYLE,	//Red lightsaber style
+	{	0,	8,	0,	0	},	//SK_PURPLESTYLE,	//Purple lightsaber style
+	{	0,	8,	0,	0	},	//SK_GREENSTYLE,	//Green lightsaber style
+	{	0,	8,	0,	0	},	//SK_DUALSTYLE,	//Dual lightsaber style
+	{	0,	8,	0,	0	},	//SK_STAFFSTYLE,	//Staff lightsaber style
 	//[/StanceSelection]
 	{	0,	10,	0,	0	},  //SK_REPEATERUPGRADE //Repeater Upgrade
 	{	0,	4,	5,	8	},  //SK_FLECHETTE //Flechette
@@ -372,6 +367,57 @@ int WeaponAttackAnim[WP_NUM_WEAPONS] =
 	BOTH_ATTACK1//WP_TURRET,
 };
 
+int WeaponReadyAnim2[WP_NUM_WEAPONS] =
+{
+	TORSO_DROPWEAP1,//WP_NONE,
+
+	TORSO_WEAPONREADY3,//WP_STUN_BATON,
+	FACE_TALK0,//WP_MELEE,
+	BOTH_STAND2,//WP_SABER,
+	BOTH_STAND9,//WP_BRYAR_PISTOL,
+	FACE_TALK0,//WP_BLASTER,
+	FACE_TALK0,//TORSO_WEAPONREADY4,//WP_DISRUPTOR,
+	FACE_TALK0,//TORSO_WEAPONREADY5,//WP_BOWCASTER,
+	FACE_TALK0,//TORSO_WEAPONREADY6,//WP_REPEATER,
+	FACE_TALK0,//TORSO_WEAPONREADY7,//WP_DEMP2,
+	FACE_TALK0,//TORSO_WEAPONREADY8,//WP_FLECHETTE,
+	FACE_TALK0,//TORSO_WEAPONREADY9,//WP_ROCKET_LAUNCHER,
+	FACE_TALK0,//WP_THERMAL,
+	TORSO_WEAPONREADY10,//TORSO_WEAPONREADY11,//WP_TRIP_MINE,
+	TORSO_WEAPONREADY10,//TORSO_WEAPONREADY12,//WP_DET_PACK,
+	FACE_TALK0,//WP_CONCUSSION
+	FACE_TALK0,//WP_BRYAR_OLD,
+
+	//NOT VALID (e.g. should never really be used):
+	BOTH_STAND1,//WP_EMPLACED_GUN,
+	TORSO_WEAPONREADY1//WP_TURRET,
+};
+
+int WeaponAttackAnim2[WP_NUM_WEAPONS] =
+{
+	BOTH_ATTACK1,//WP_NONE, //(shouldn't happen)
+
+	BOTH_ATTACK3,//WP_STUN_BATON,
+	FACE_TALK0,//WP_MELEE,
+	BOTH_STAND2,//WP_SABER, //(has its own handling)
+	BOTH_FORCE_2HANDEDLIGHTNING_HOLD ,//WP_BRYAR_PISTOL,
+	FACE_TALK0,//WP_BLASTER,
+	FACE_TALK0,//BOTH_ATTACK4,//WP_DISRUPTOR,
+	FACE_TALK0,//BOTH_ATTACK5,//WP_BOWCASTER,
+	FACE_TALK0,//BOTH_ATTACK6,//WP_REPEATER,
+	FACE_TALK0,//BOTH_ATTACK7,//WP_DEMP2,
+	FACE_TALK0,//BOTH_ATTACK8,//WP_FLECHETTE,
+	FACE_TALK0,//BOTH_ATTACK9,//WP_ROCKET_LAUNCHER,
+	FACE_TALK0,//WP_THERMAL,
+	BOTH_ATTACK3,//BOTH_ATTACK11,//WP_TRIP_MINE,
+	BOTH_ATTACK3,//BOTH_ATTACK12,//WP_DET_PACK,
+	FACE_TALK0,//WP_BRYAR_OLD,
+
+	//NOT VALID (e.g. should never really be used):
+	BOTH_STAND1,//WP_EMPLACED_GUN,
+	BOTH_ATTACK1//WP_TURRET,
+};
+
 qboolean BG_FileExists(const char *fileName)
 {
 	if (fileName && fileName[0])
@@ -383,6 +429,7 @@ qboolean BG_FileExists(const char *fileName)
 			trap_FS_FCloseFile(fh);
 			return qtrue;
 		}
+		trap_FS_FCloseFile(fh);
 	}
 
 	return qfalse;
@@ -670,6 +717,9 @@ qboolean BG_LegalizedForcePowers(char *powerOut, int maxRank, qboolean freeSaber
 		int powerCycle = 2;
 		int minPow = 0;
 		
+#ifdef QAGAME
+		G_Printf("OH NOEZ, we overspent our points! We are now unspending some points!\n");
+#endif
 		if (freeSaber)
 		{
 			minPow = 1;
@@ -821,6 +871,10 @@ qboolean BG_LegalizedForcePowers(char *powerOut, int maxRank, qboolean freeSaber
 		{ //Still? Fine then.. we will kill all of your powers, except the freebies.
 			i = 0;
 
+#ifdef QAGAME
+			G_Printf("OH NOEZ, killing all force powers!\n");
+#endif 
+
 			//[ExpSys]
 			while (i < NUM_TOTAL_SKILLS)
 			//while (i < NUM_FORCE_POWERS)
@@ -963,8 +1017,14 @@ qboolean BG_LegalizedForcePowers(char *powerOut, int maxRank, qboolean freeSaber
 	}
 
 	if(!c)
-	
 		maintainsValidity=qfalse;
+
+#ifdef QAGAME
+	if(!maintainsValidity)
+	{
+		G_Printf("Uh oh, invalid force power/weapon/item string :C\n");
+	}
+#endif
 
 	return maintainsValidity;
 }
@@ -3536,91 +3596,6 @@ int BG_ModelCache(const char *modelName, const char *skinName)
 #endif
 }
 
-#ifdef _XBOX	// Hacky BG_Alloc replacement
-
-// This file claims to be stateless. Yeah, right. Regardless, I'm not setting
-// aside 5.5 MB of static buffers for this crap. Let's use Z_Malloc. Of course,
-// we still need to deal with the fact that any code using BG_Malloc is almost
-// certainly leaking memory like a sieve.
-
-// Dave addendum - TAG_BG_ALLOC is entirely freed when the level starts.
-void *BG_Alloc ( int size )
-{
-	return Z_Malloc(size, TAG_BG_ALLOC, qfalse, 4);
-}
-
-void *BG_AllocUnaligned ( int size )
-{
-	// Ignore the unaligned hint, this function isn't called anyway
-	return Z_Malloc(size, TAG_BG_ALLOC, qfalse, 4);
-}
-
-// Because the interface to BG_TempAlloc/BG_TempFree is brain-dead, we need
-// to remember our last few temporary allocations performed.
-#define MAX_TEMP_ALLOCS	3
-static void	*tempAllocPointers[MAX_TEMP_ALLOCS] = { 0 };
-static int	tempAllocSizes[MAX_TEMP_ALLOCS] = { 0 };
-
-void *BG_TempAlloc( int size )
-{
-	int i;
-
-	// Do we have a free spot?
-	for (i = 0; i < MAX_TEMP_ALLOCS; ++i)
-		if (!tempAllocPointers[i])
-			break;
-
-	if (i == MAX_TEMP_ALLOCS)
-	{
-		assert(!"No space for TempAlloc -> Increase MAX_TEMP_ALLOCS");
-		return NULL;
-	}
-
-	tempAllocPointers[i] = Z_Malloc(size, TAG_TEMP_WORKSPACE, qfalse, 4);
-	tempAllocSizes[i] = size;
-
-	return tempAllocPointers[i];
-}
-
-void BG_TempFree( int size )
-{
-	int i;
-
-	// Find the allocation
-	for (i = MAX_TEMP_ALLOCS - 1; i >= 0; --i)
-		if (tempAllocPointers[i] && (tempAllocSizes[i] == size))
-			break;
-
-	if (i < 0)
-	{
-		assert(!"BG_TempFree doesn't match a call to BG_TempAlloc");
-		return;
-	}
-
-	Z_Free(tempAllocPointers[i]);
-	tempAllocPointers[i] = 0;
-	tempAllocSizes[i] = 0;
-
-	return;
-}
-
-char *BG_StringAlloc ( const char *source )
-{
-	char *dest;
-
-	dest = (char *) BG_Alloc ( strlen ( source ) + 1 );
-	strcpy ( dest, source );
-	return dest;
-}
-
-qboolean BG_OutOfMemory ( void )
-{
-	// Never called
-	return qfalse;
-}
-
-#else // _XBOX
-
 #ifdef QAGAME
 #define MAX_POOL_SIZE	3000000 //1024000
 #elif defined CGAME //don't need as much for cgame stuff. 2mb will be fine.
@@ -3707,8 +3682,6 @@ qboolean BG_OutOfMemory ( void )
 	return bg_poolSize >= MAX_POOL_SIZE;
 }
 
-#endif // _XBOX && QAGAME
-
 //[ExpandedMOTD]
 qboolean BG_IsWhiteSpace(char c)
 {//this function simply checks to see if the given character is whitespace.
@@ -3746,7 +3719,6 @@ qboolean BG_IsUsingMediumWeap (playerState_t *ps)
 	switch(ps->weapon)
 	{
 	case WP_BLASTER:
-	case WP_BOWCASTER:
 	case WP_DISRUPTOR:
 		return qtrue;
 	default:
@@ -3764,6 +3736,7 @@ qboolean BG_IsUsingHeavyWeap (playerState_t *ps)
 	case WP_REPEATER:
 	case WP_ROCKET_LAUNCHER:
 	case WP_FLECHETTE:
+	case WP_BOWCASTER:
 		return qtrue;
 	default:
 		return qfalse;

@@ -599,7 +599,15 @@ void BotInputToUserCommand(bot_input_t *bi, usercmd_t *ucmd, int delta_angles[3]
 	if (bi->actionflags & ACTION_USE) ucmd->buttons |= BUTTON_USE_HOLDABLE;
 	if (bi->actionflags & ACTION_WALK) ucmd->buttons |= BUTTON_WALKING;
 
-	if (bi->actionflags & ACTION_FORCEPOWER) ucmd->buttons |= BUTTON_FORCEPOWER;
+	if(bi->weapon == WP_SABER)
+	{
+		if (bi->actionflags & ACTION_FORCEPOWER) ucmd->buttons |= BUTTON_ATTACK;
+	}
+	else
+	{
+		if (bi->actionflags & ACTION_FORCEPOWER) ucmd->buttons |= BUTTON_FORCEPOWER;
+	}
+		
 
 	//[TABBot]
 	//RAFIXME:  This is a hack to fix the hack that Raven did

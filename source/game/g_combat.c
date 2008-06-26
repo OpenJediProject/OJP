@@ -5472,6 +5472,7 @@ vec3_t gPainPoint;
 //[CloakingVehicles]
 extern void G_ToggleVehicleCloak(playerState_t *ps);
 //[/CloakingVehicles]
+extern qboolean ButterFingers(gentity_t *saberent, gentity_t *saberOwner, gentity_t *other, trace_t *tr);
 void G_Damage( gentity_t *targ, gentity_t *inflictor, gentity_t *attacker,
 			   vec3_t dir, vec3_t point, int damage, int dflags, int mod ) {
 	gclient_t	*client;
@@ -5489,6 +5490,15 @@ void G_Damage( gentity_t *targ, gentity_t *inflictor, gentity_t *attacker,
 	{
 		G_Damage(&g_entities[targ->damageRedirectTo], inflictor, attacker, dir, point, damage, dflags, mod);
 		return;
+	}
+
+	if(mod != MOD_STUN_BATON && mod != MOD_UNKNOWN && mod != MOD_MELEE && mod != MOD_SABER
+		&& mod != MOD_VEHICLE && mod != MOD_WATER && mod != MOD_SLIME && mod != MOD_LAVA
+		&& mod != MOD_CRUSH && mod != MOD_TELEFRAG && mod != MOD_FALLING)
+	{
+		if(targ && attacker && attacker->client && targ->client 
+			&& targ->client->ps.fd.forceGripEntityNum == attacker->client->ps.clientNum)
+			WP_ForcePowerStop(targ,FP_GRIP);
 	}
 
 	if (mod == MOD_DEMP2 && targ && targ->inuse && targ->client)
@@ -5518,12 +5528,14 @@ void G_Damage( gentity_t *targ, gentity_t *inflictor, gentity_t *attacker,
 	if ( (mod == MOD_BRYAR_PISTOL_ALT || mod == MOD_SEEKER) && targ && targ->inuse && targ->client )
 	{//doesn't do actual damage to the target, instead it acts like a stun hit that increases MP/DP and tries to knock
 		//the player over like a kick.
-
-		int mpDamage = (float) inflictor->s.generic1/BRYAR_MAX_CHARGE*MISHAPLEVEL_MAX;
-
+		
+		//int mpDamage = (float) inflictor->s.generic1/BRYAR_MAX_CHARGE*MISHAPLEVEL_MAX;
+		int mpDamage = (float) inflictor->s.generic1/BRYAR_MAX_CHARGE*7;
 		//deal DP damage
 		if(mod != MOD_SEEKER)
-		G_DodgeDrain(targ, attacker, damage);
+		{
+			G_DodgeDrain(targ, attacker, damage);
+		}
 		
 		G_Printf("%i: %i: Bryar MP Damage %i, Charge %i\n", level.time, targ->s.number, mpDamage, inflictor->s.generic1);
 
@@ -5532,6 +5544,10 @@ void G_Damage( gentity_t *targ, gentity_t *inflictor, gentity_t *attacker,
 		if ((targ->client->ps.saberAttackChainCount >= MISHAPLEVEL_HEAVY
 			|| targ->client->ps.stats[STAT_DODGE] <= DODGE_CRITICALLEVEL))
 		{//knockdown
+			vec3_t blowBackDir;
+			VectorSubtract(targ->client->ps.origin,attacker->client->ps.origin, blowBackDir);
+
+			G_Throw(targ,blowBackDir,4);
 			if ( targ->client->ps.saberAttackChainCount >= MISHAPLEVEL_FULL )
 			{
 				G_Knockdown( targ, attacker, dir, 300, qtrue );
@@ -5540,11 +5556,12 @@ void G_Damage( gentity_t *targ, gentity_t *inflictor, gentity_t *attacker,
 			{
 				G_Knockdown( targ, attacker, dir, 100, qtrue );
 			}
-
-			BG_ReduceMishapLevel(&targ->client->ps);
 		}
 		else if(targ->client->ps.saberAttackChainCount >= MISHAPLEVEL_LIGHT)
 		{//stumble
+			vec3_t blowBackDir;
+			VectorSubtract(targ->client->ps.origin,attacker->client->ps.origin, blowBackDir);
+			G_Throw(targ,blowBackDir,2);
 			AnimateStun(targ, attacker, point);   
 			BG_ReduceMishapLevel(&targ->client->ps);
 		}
@@ -5754,6 +5771,9 @@ void G_Damage( gentity_t *targ, gentity_t *inflictor, gentity_t *attacker,
 		knockback = 0;
 	}
 
+	if(targ->client && (targ->client->ps.stats[STAT_HEALTH]-damage) < 1)
+		knockback *=2.5;
+
 	// figure momentum add, even if the damage won't be taken
 	if ( knockback && targ->client ) {
 		vec3_t	kvel;
@@ -5811,7 +5831,7 @@ void G_Damage( gentity_t *targ, gentity_t *inflictor, gentity_t *attacker,
 			VectorScale (dir, g_knockback.value * (float)knockback / mass, kvel);
 		}
 		VectorAdd (targ->client->ps.velocity, kvel, targ->client->ps.velocity);
-
+		
 
 		//[Asteroids]
 		//moved this stuff down a bit.
@@ -6978,6 +6998,13 @@ qboolean G_RadiusDamage ( vec3_t origin, gentity_t *attacker, float damage, floa
 				//[/Asteroids]
 			}
 
+			if(ent && missile && ent && Q_stricmp(ent->classname,"func_breakable")==0)
+			{
+				vec3_t blowBackDir;
+				VectorSubtract(ent->s.pos.trBase,missile->s.pos.trBase, blowBackDir);
+				G_Throw(ent,blowBackDir,200);
+			}
+
 			if (ent && ent->client && roastPeople && missile &&
 				!VectorCompare(ent->r.currentOrigin, missile->r.currentOrigin))
 			{ //the thing calling this function can create burn marks on people, so create an event to do so
@@ -7053,7 +7080,7 @@ void AddSkill(gentity_t *self, float amount)
 
 	if(g_maxForceRank.integer < g_minForceRank.integer)
 	{//can't have a max skill point level that's less than our starting skill points.
-		G_Printf("g_maxForceRank less than g_minForceRank.  Defaulting to g_minForceRank.\n");
+		//G_Printf("g_maxForceRank less than g_minForceRank.  Defaulting to g_minForceRank.\n");
 		trap_Cvar_Set("g_maxForceRank", g_minForceRank.string);
 	}
 
@@ -7071,7 +7098,22 @@ void G_DodgeDrain(gentity_t *victim, gentity_t *attacker, int amount)
 		return;
 	}
 
+	if(victim->flags &FL_GODMODE)
+		return;
+
+	if(victim->client && victim->client->ps.fd.forcePowersActive & (1 << FP_PROTECT))
+	{
+		amount /= 2;
+		if(amount < 1)
+			amount=1;
+	}
+
 	victim->client->ps.stats[STAT_DODGE] -= amount;
+
+	if(attacker->client && attacker->client->ps.torsoAnim == saberMoveData[16].animToUse)
+	{//In DFA?
+		victim->client->ps.saberAttackChainCount+=16;
+	}
 
 	if(victim->client->ps.stats[STAT_DODGE] < 0)
 	{

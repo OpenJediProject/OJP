@@ -96,13 +96,13 @@ int forcePowerNeeded[NUM_FORCE_POWER_LEVELS][NUM_FORCE_POWERS] =
 		20,//FP_PUSH,//hold/duration
 		20,//FP_PULL,//hold/duration
 		20,//FP_TELEPATHY,//instant
-		30,//FP_GRIP,//hold/duration
+		0,//FP_GRIP,//hold/duration
 		//[ForceSys]
-		10,//FP_LIGHTNING,//initial FP cost
+		8,//FP_LIGHTNING,//initial FP cost -- was 10
 		//1,//FP_LIGHTNING,//hold/duration
 		//[/ForceSys]
 		50,//FP_RAGE,//duration
-		50,//FP_PROTECT,//duration
+		3,//FP_PROTECT,//duration
 		50,//FP_ABSORB,//duration
 		50,//FP_TEAM_HEAL,//instant
 		50,//FP_TEAM_FORCE,//instant
@@ -130,13 +130,13 @@ int forcePowerNeeded[NUM_FORCE_POWER_LEVELS][NUM_FORCE_POWERS] =
 		//20,//FP_PULL,//hold/duration
 		//[/ForceSys]
 		20,//FP_TELEPATHY,//instant
-		30,//FP_GRIP,//hold/duration
+		0,//FP_GRIP,//hold/duration
 		//[ForceSys]
-		10,//FP_LIGHTNING,//initial FP cost
+		8,//FP_LIGHTNING,//initial FP cost -- was 10
 		//1,//FP_LIGHTNING,//hold/duration
 		//[/ForceSys]
 		50,//FP_RAGE,//duration
-		25,//FP_PROTECT,//duration
+		2,//FP_PROTECT,//duration
 		25,//FP_ABSORB,//duration
 		33,//FP_TEAM_HEAL,//instant
 		33,//FP_TEAM_FORCE,//instant
@@ -155,7 +155,7 @@ int forcePowerNeeded[NUM_FORCE_POWER_LEVELS][NUM_FORCE_POWERS] =
 		50,//FP_HEAL,//instant //You get 5 points of health.. for 50 force points!
 		10,//FP_LEVITATION,//hold/duration
 		//[ForceSys]
-		1,//FP_SPEED,//duration
+		2,//FP_SPEED,//duration
 		//reduced the FP cost for pull/push
 		10,//FP_PUSH,//hold/duration
 		10,//FP_PULL,//hold/duration
@@ -164,13 +164,13 @@ int forcePowerNeeded[NUM_FORCE_POWER_LEVELS][NUM_FORCE_POWERS] =
 		//20,//FP_PULL,//hold/duration
 		//[/ForceSys]
 		20,//FP_TELEPATHY,//instant
-		60,//FP_GRIP,//hold/duration
+		0,//FP_GRIP,//hold/duration
 		//[ForceSys]
-		10,//FP_LIGHTNING,//initial FP cost
+		8,//FP_LIGHTNING,//initial FP cost -- Was 10
 		//1,//FP_LIGHTNING,//hold/duration
 		//[/ForceSys]
 		50,//FP_RAGE,//duration
-		10,//FP_PROTECT,//duration
+		1,//FP_PROTECT,//duration
 		10,//FP_ABSORB,//duration
 		25,//FP_TEAM_HEAL,//instant
 		25,//FP_TEAM_FORCE,//instant
@@ -190,9 +190,9 @@ int forcePowerNeeded[NUM_FORCE_POWER_LEVELS][NUM_FORCE_POWERS] =
 float forceJumpHeight[NUM_FORCE_POWER_LEVELS] = 
 {
 	32,//normal jump (+stepheight+crouchdiff = 66) 
-	220,//(+stepheight+crouchdiff = 130) -- 96 was 150
-	500,//(+stepheight+crouchdiff = 226) -- 192 was 350
-	780//(+stepheight+crouchdiff = 418)  -- 384	was 550
+	440,//(+stepheight+crouchdiff = 130) -- 96 was 150
+	1000,//(+stepheight+crouchdiff = 226) -- 192 was 350
+	1560//(+stepheight+crouchdiff = 418)  -- 384	was 550
 };
 
 float forceJumpStrength[NUM_FORCE_POWER_LEVELS] = 
@@ -232,6 +232,25 @@ bgEntity_t *PM_BGEntForNum( int num )
 
 	return ent;
 }
+qboolean PM_WalkingAnim( int anim );
+qboolean PM_RunningAnim( int anim );
+//[DualPistols]
+qboolean PM_CanSetWeaponReadyAnim(void)
+{
+	if ( pm->ps->pm_type != PM_JETPACK
+		&& pm->ps->weaponstate != WEAPON_FIRING
+		&& ( (!pm->cmd.forwardmove && !pm->cmd.rightmove)
+			|| ( ( pm->ps->groundEntityNum == ENTITYNUM_NONE || ((pm->cmd.buttons & BUTTON_WALKING )&&pm->cmd.forwardmove>0) ) && (PM_WalkingAnim(pm->ps->torsoAnim)||PM_RunningAnim(pm->ps->torsoAnim) ) )
+			)
+		//&& pm->ps->legsAnim != BOTH_RUN4
+		)
+	{
+		return qtrue;
+	}
+
+	return qfalse;
+}
+//[/DualPistols]
 
 qboolean BG_SabersOff( playerState_t *ps )
 {
@@ -293,17 +312,23 @@ qboolean PM_INLINE PM_IsRocketTrooper(void)
 	return qfalse;
 }
 
+//[DualPistols]
+animNumber_t PM_INLINE PM_GetWeaponReadyAnim(void)
+{
+	if (pm->ps->eFlags & EF_DUAL_WEAPONS)
+		return WeaponReadyAnim2[pm->ps->weapon];
+	else
+		return WeaponReadyAnim[pm->ps->weapon];	
+}
+//[/DualPistols]
+
 int PM_GetSaberStance(void)
 {
 	int anim = BOTH_STAND2;
 	saberInfo_t *saber1 = BG_MySaber( pm->ps->clientNum, 0 );
 	saberInfo_t *saber2 = BG_MySaber( pm->ps->clientNum, 1 );
 
-	//[Dual Saber Fix]
-	if ((!pm->ps->saberEntityNum)&&( !saber1 
-		&& saber2
-		&& !pm->ps->saberHolstered ))
-	//[/Dual Saber Fix]
+	if (!pm->ps->saberEntityNum)
 	{ //lost it
 		return BOTH_STAND1;
 	}
@@ -659,7 +684,8 @@ static void PM_SetVehicleAngles( vec3_t normal )
 		vec3_t	velocity;
 		float	speed;
 		VectorCopy( pm->ps->velocity, velocity );
-		velocity[2] = 0.0f;
+		velocity[ROLL] = 0.0f;
+
 		speed = VectorNormalize( velocity );
 		if ( speed > 32.0f || speed < -32.0f ) 
 		{
@@ -819,7 +845,7 @@ void BG_VehicleTurnRateForSpeed( Vehicle_t *pVeh, float speed, float *mPitchOver
 // Following couple things don't belong in the DLL namespace!
 #ifdef QAGAME
 //[Linux]//[Mac]
-#if _WIN32
+#if _WIN32 && !defined(__GNUC__)
 typedef struct gentity_s gentity_t;
 #endif
 //[/Linux]//[/Mac]
@@ -1172,7 +1198,7 @@ static void PM_Friction( void ) {
 	bgEntity_t *pEnt = NULL;
 	
 	vel = pm->ps->velocity;
-	
+
 	VectorCopy( vel, vec );
 	if ( pml.walking ) {
 		vec[2] = 0;	// ignore slope movement
@@ -1261,11 +1287,6 @@ static void PM_Friction( void ) {
 	if ( pm->waterlevel ) {
 		drop += speed*pm_waterfriction*pm->waterlevel*pml.frametime;
 	}
-	// If on a client then there is no friction
-	else if ( pm->ps->groundEntityNum < MAX_CLIENTS )
-	{
-		drop = 0;
-	}
 
 	if ( pm->ps->pm_type == PM_SPECTATOR || pm->ps->pm_type == PM_FLOAT )
 	{
@@ -1333,6 +1354,7 @@ static void PM_Accelerate( vec3_t wishdir, float wishspeed, float accel )
 		for (i=0 ; i<3 ; i++) {
 			pm->ps->velocity[i] += accelspeed*wishdir[i];	
 		}
+
 	}
 	else
 	{ //use the proper way for siege
@@ -2232,7 +2254,7 @@ void PM_SetForceJumpZStart(float value)
 
 float forceJumpHeightMax[NUM_FORCE_POWER_LEVELS] = 
 {
-	85,//normal jump (32+stepheight(18)+crouchdiff(24) = 74)  was 66
+	85,//normal jump (32+stepheight(18)+crouchdiff(24) = 74)  was 66 
 	340,//(96+stepheight(18)+crouchdiff(24) = 138) -- 130 --- forceJumpHeight level 1 +35 was 185
 	480,//(192+stepheight(18)+crouchdiff(24) = 234) was 385
 	820//(384+stepheight(18)+crouchdiff(24) = 426) was 585
@@ -2257,9 +2279,9 @@ void PM_GrabWallForJump( int anim )
 int ForceFallBrakeRate[NUM_FORCE_POWER_LEVELS] =
 {
 	0, //Can't brake with zero Force Jump skills
-	30,
-	40,
 	50,
+	60,
+	70,
 };
 
 //time between Force Fall braking actions.
@@ -2277,7 +2299,7 @@ qboolean PM_CanForceFall()
 		&& pm->cmd.upmove > 10 // pressing the jump button
 		&& pm->ps->velocity[2] < FORCEFALLVELOCITY // falling
 		&& pm->ps->groundEntityNum == ENTITYNUM_NONE // in the air
-		&& pm->ps->fd.forcePowerLevel[FP_LEVITATION] > FORCE_LEVEL_0 //have force jump level 1 or above
+		&& pm->ps->fd.forcePowerLevel[FP_LEVITATION] > FORCE_LEVEL_1 //have force jump level 2 or above
 		&& pm->ps->fd.forcePower > FM_FORCEFALL // have atleast 5 force power points
 		&& pm->waterlevel < 2 // above water level
 		&& pm->ps->gravity > 0); // not in zero-g
@@ -2474,6 +2496,7 @@ static qboolean PM_CheckJump( void )
 			}
 			else
 			{
+				if(!BG_InLedgeMove(pm->ps->legsAnim))
  				BG_ForcePowerDrain( pm->ps, FP_LEVITATION, 1 );
 			}
 			/*
@@ -2489,7 +2512,8 @@ static qboolean PM_CheckJump( void )
 				BG_ForcePowerDrain( pm->ps, FP_LEVITATION, 5 );
 			}
 			*/
-			pm->ps->velocity[2]+=100;//[JumpIncrease]
+			if(!BG_InLedgeMove( pm->ps->legsAnim ))
+			//pm->ps->velocity[2]+=100;//[JumpIncrease]
 			//[/FatigueSys]
 			if (pm->ps->fd.forcePowerLevel[FP_LEVITATION] >= FORCE_LEVEL_2)
 			{
@@ -3517,6 +3541,7 @@ qboolean LedgeTrace( trace_t *trace, vec3_t dir, float *lerpup, float *lerpfwd, 
 }
 
 //check for ledge grab
+
 void PM_CheckGrab(void)
 {
 	vec3_t checkDir, traceTo, fwdAngles; 
@@ -3526,7 +3551,7 @@ void PM_CheckGrab(void)
 	float lerpyaw = 0;
 	qboolean skipcmdtrace = qfalse;
 
-	if(pm->ps->groundEntityNum != ENTITYNUM_NONE)
+	if(pm->ps->groundEntityNum != ENTITYNUM_NONE && pm->ps->inAirAnim)
 	{//not in the air don't attempt a ledge grab
 		return;
 	}
@@ -3541,6 +3566,9 @@ void PM_CheckGrab(void)
 	{//already on ledge, a spectator, or in a special jump
 		return;
 	}
+
+	if(pm->ps->velocity[0] == 0)
+		return;//Not moving forward
 
 	//try looking in front of us first
 	VectorSet(fwdAngles, 0, pm->ps->viewangles[YAW], 0.0f);
@@ -3615,6 +3643,7 @@ void PM_CheckGrab(void)
 	// you couldnt move
 	pm->ps->weaponTime = 0;
 	pm->ps->saberMove =0;
+	pm->cmd.upmove=0; 
 	//[/LedgeGrabFix]
 	//We are clear to latch to the wall
 	pm->ps->saberHolstered = 2;
@@ -3622,8 +3651,6 @@ void PM_CheckGrab(void)
 	VectorCopy(vec3_origin, pm->ps->velocity);
 	PM_GrabWallForJump( BOTH_LEDGE_GRAB );
 	pm->ps->weaponTime = pm->ps->legsTimer;
-
-
 }
 //[/LedgeGrab]
 
@@ -3992,105 +4019,6 @@ static void PM_AirMove( void ) {
 			VectorCopy( pm->ps->moveDir, wishdir );
 			scale = 1.0f;
 		}
-#if 0
-		else
-		{
-			float controlMod = 1.0f;
-			if ( pml.groundPlane )
-			{//on a slope of some kind, shouldn't have much control and should slide a lot
-				controlMod = pml.groundTrace.plane.normal[2];
-			}
-
-			vec3_t	vfwd, vrt;
-			vec3_t	vAngles;
-
-			VectorCopy( pVeh->m_vOrientation, vAngles );
-			vAngles[ROLL] = 0;//since we're a hovercraft, we really don't want to stafe up into the air if we're banking
-			AngleVectors( vAngles, vfwd, vrt, NULL );
-
-			float speed = pm->ps->speed;
-			float strafeSpeed = 0;
-
-			if ( fmove < 0 )
-			{//going backwards
-				if ( speed < 0 )
-				{//speed is negative, but since our command is reverse, make speed positive
-					speed = fabs( speed );
-					/*
-					if ( pml.groundPlane )
-					{//on a slope, still have some control
-						speed = fabs( speed );
-					}
-					else
-					{//can't reverse in air
-						speed = 0;
-					}
-					*/
-				}
-				else if ( speed > 0 )
-				{//trying to move back but speed is still positive, so keep moving forward (we'll slow down eventually)
-					speed = 0;
-				}
-			}
-
-			if ( pm->ps->clientNum < MAX_CLIENTS )
-			{//do normal adding to wishvel
-				VectorScale( vfwd, speed*controlMod*(fmove/127.0f), wishvel );
-				//just add strafing
-				if ( pVeh->m_pVehicleInfo->strafePerc )
-				{//we can strafe
-					if ( smove )
-					{//trying to strafe
-						float minSpeed = pVeh->m_pVehicleInfo->speedMax * 0.5f * pVeh->m_pVehicleInfo->strafePerc;
-						strafeSpeed = fabs(DotProduct( pm->ps->velocity, vfwd ))*pVeh->m_pVehicleInfo->strafePerc;
-						if ( strafeSpeed < minSpeed )
-						{
-							strafeSpeed = minSpeed;
-						}
-						strafeSpeed *= controlMod*((float)(smove))/127.0f;
-						if ( strafeSpeed < 0 )
-						{//pm_accelerate does not understand negative numbers
-							strafeSpeed *= -1;
-							VectorScale( vrt, -1, vrt );
-						}
-						//now just add it to actual velocity
-						PM_Accelerate( vrt, strafeSpeed, pVeh->m_pVehicleInfo->traction );
-					}
-				}
-			}
-			else
-			{
-				if ( pVeh->m_pVehicleInfo->strafePerc )
-				{//we can strafe
-					if ( pm->ps->clientNum )
-					{//alternate control scheme: can strafe
-						if ( smove )
-						{
-							/*
-							if ( fmove > 0 )
-							{//actively accelerating
-								strafeSpeed = pm->ps->speed;
-							}
-							else
-							{//not stepping on accelerator, only strafe based on magnitude of current forward velocity
-								strafeSpeed = fabs(DotProduct( pm->ps->velocity, vfwd ));
-							}
-							*/
-							strafeSpeed = ((float)(smove))/127.0f;
-						}
-					}
-				}
-				//strafing takes away from forward speed
-				VectorScale( vfwd, (fmove/127.0f)*(1.0f-pVeh->m_pVehicleInfo->strafePerc), wishvel );
-				if ( strafeSpeed )
-				{
-					VectorMA( wishvel, strafeSpeed*pVeh->m_pVehicleInfo->strafePerc, vrt, wishvel );
-				}
-				VectorNormalize( wishvel );
-				VectorScale( wishvel, speed*controlMod, wishvel );
-			}
-		}
-#endif
 	}
 	else if ( gPMDoSlowFall )
 	{//no air-control
@@ -4103,35 +4031,25 @@ static void PM_AirMove( void ) {
 		{//just up/down movement
 			wishvel[0] = 0;
 			wishvel[1] = 0;
-			wishvel[2] = pm->ps->speed * (pm->cmd.upmove/127.0f) * 3;
+			wishvel[2] = pm->ps->speed * (pm->cmd.upmove/127.0f) * 1.5;//Was 3, [HeavyJetpack]
 		} 
 		else 
 		{//some x/y movement
 			for (i=0 ; i<3 ; i++) {
-				wishvel[i] = scale * pml.forward[i]*pm->cmd.forwardmove + scale * pml.right[i]*pm->cmd.rightmove;
+				if(i==2)
+					wishvel[i] = scale * pml.forward[i]*pm->cmd.forwardmove + scale * pml.right[i]*pm->cmd.rightmove * 1.6;//[HeavyJetpack] -- Added * 1.5
+				else
+					wishvel[i] = scale * pml.forward[i]*pm->cmd.forwardmove + scale * pml.right[i]*pm->cmd.rightmove * 1.2;//[HeavyJetpack] -- Added * 1.5
+
+				//wishvel[i]-=(wishvel[i]/100*20);
+
 			}
 
 			wishvel[2] += scale * pm->cmd.upmove;
+			//wishvel[2]=0;
 		}
 
 		VectorScale(wishvel, 1.5f, wishvel);
-
-		/*
-		for ( i = 0 ; i < 2 ; i++ )
-		{
-			wishvel[i] = pml.forward[i]*fmove + pml.right[i]*smove;
-		}
-		wishvel[2] = 0;
-
-		if (pm->cmd.upmove <= 0)
-		{
-            VectorScale(wishvel, 0.8f, wishvel);
-		}
-		else
-		{ //if we are jetting then we have more control than usual
-            VectorScale(wishvel, 2.0f, wishvel);
-		}
-		*/
 		//[/JetpackSys]
 	}
 	else
@@ -4150,7 +4068,6 @@ static void PM_AirMove( void ) {
 	{
 		wishspeed *= scale;
 	}
-	//wishspeed *= scale;
 	//[/JetpackSys]
 
 	accelerate = pm_airaccelerate;
@@ -4727,7 +4644,7 @@ static void PM_CrashLand( void ) {
 	float		vel, acc;
 	float		t;
 	float		a, b, c, den;
-	float		misc1,misc2,misc3,misc4;
+//	float		misc1,misc2,misc3,misc4;
 	qboolean	didRoll = qfalse;
 
 	//[CoOp]
@@ -4843,6 +4760,12 @@ static void PM_CrashLand( void ) {
 		{
 			PM_StartTorsoAnim( TORSO_WEAPONREADY4 );
 		}
+		//[BowcasterScope]
+		else if(pm->ps->weapon == WP_BOWCASTER && pm->ps->zoomMode)
+		{
+			PM_StartTorsoAnim( TORSO_WEAPONREADY4 );
+		}
+		//[/BowcasterScope]
 		else
 		{
 			if (pm->ps->weapon == WP_EMPLACED_GUN)
@@ -4851,7 +4774,12 @@ static void PM_CrashLand( void ) {
 			}
 			else
 			{
-				PM_StartTorsoAnim( WeaponReadyAnim[pm->ps->weapon] );
+				//[DualPistols]
+				if ( PM_CanSetWeaponReadyAnim() )
+				{
+					PM_StartTorsoAnim( PM_GetWeaponReadyAnim() );
+				}
+				//[/DualPistols]
 			}
 		}
 	}
@@ -5014,8 +4942,15 @@ static void PM_CrashLand( void ) {
 	}
 
 	// make sure velocity resets so we don't bounce back up again in case we miss the clear elsewhere
-	pm->ps->velocity[2] = 0;
+	//pm->ps->velocity[2] = 0;
+	//Clear velocity
 
+	if(PM_InForceFall())
+	{
+		return;
+	}
+
+	VectorClear(pm->ps->velocity);
 	// start footstep cycle over
 	pm->ps->bobCycle = 0;
 }
@@ -6478,7 +6413,7 @@ static void PM_Footsteps( void ) {
 		return;
 	}
 	//[/Knockdown]
-	
+
 	//[SaberSys]
 	//racc - Broken parries should play full body.
 	if ( (PM_InSaberAnim( (pm->ps->legsAnim) ) 
@@ -6593,6 +6528,14 @@ static void PM_Footsteps( void ) {
 					//yeah.. the anim has a valid pose for the legs, it uses it (you can't move while using disruptor)
 					PM_ContinueLegsAnim( TORSO_WEAPONREADY4 );
 				}
+				//[BowcasterScope]
+				if (pm->ps->weapon == WP_BOWCASTER && pm->ps->zoomMode)
+				{
+					///????  continue legs anim on a torso anim...??!!!
+					//yeah.. the anim has a valid pose for the legs, it uses it (you can't move while using disruptor)
+					PM_ContinueLegsAnim( TORSO_WEAPONREADY4 );
+				}
+				//[/BowcasterScope]
 				else
 				{
 					if (pm->ps->weapon == WP_SABER && BG_SabersOff( pm->ps ) )
@@ -6622,7 +6565,6 @@ static void PM_Footsteps( void ) {
 		}
 		return;
 	}
-	
 
 	footstep = qfalse;
 
@@ -7421,6 +7363,11 @@ void PM_BeginWeaponChange( int weapon ) {
 		return;
 	}
 
+	if(pm->ps->weapon == WP_BRYAR_PISTOL)
+	{//Changing weaps, remove dual weaps
+		pm->ps->eFlags &= ~EF_DUAL_WEAPONS;
+	}
+
 //[Reload]
 #ifdef QAGAME
 	if(1)
@@ -7465,7 +7412,13 @@ void PM_FinishWeaponChange( void ) {
 		weapon = WP_NONE;
 	}
 
-	
+#ifdef QAGAME
+	if(weapon == WP_BRYAR_PISTOL 
+		&& g_entities[pm->ps->clientNum].client->skillLevel[SK_PISTOL] >= FORCE_LEVEL_3)
+	{//Changed weaps, add dual weaps
+		pm->ps->eFlags |= EF_DUAL_WEAPONS;
+	}
+#endif
 	//[SaberThrowSys][test]
 	/* racc - I'm not sure this code by Keshire is needed for saber throw anymore.  Disabling for now to see.
 	if (weapon == WP_SABER)
@@ -7759,10 +7712,16 @@ static qboolean PM_DoChargedWeapons( qboolean vehicleRocketLock, bgEntity_t *veh
 		case WP_BOWCASTER:
 
 			// primary fire charges the weapon
-			if ( pm->cmd.buttons & BUTTON_ATTACK )
+			if ( pm->cmd.buttons & BUTTON_ATTACK
+#ifdef QAGAME
+				&& g_entities[pm->ps->clientNum].client->skillLevel[SK_BOWCASTER] > FORCE_LEVEL_2)
+#else
+)
+#endif
 			{
 				charging = qtrue;
 			}
+
 			break;
 		
 		//------------------
@@ -7921,7 +7880,8 @@ static qboolean PM_DoChargedWeapons( qboolean vehicleRocketLock, bgEntity_t *veh
 			{
 				if (pm->ps->weaponChargeSubtractTime < pm->cmd.serverTime)
 				{
-					pm->ps->ammo[weaponData[pm->ps->weapon].ammoIndex] -= weaponData[pm->ps->weapon].chargeSub;
+					int amount = weaponData[pm->ps->weapon].chargeSub;
+					pm->ps->ammo[weaponData[pm->ps->weapon].ammoIndex] -= amount;
 					pm->ps->weaponChargeSubtractTime = pm->cmd.serverTime + weaponData[pm->ps->weapon].chargeSubTime;
 				}
 			}
@@ -8426,11 +8386,12 @@ extern void G_ToggleVehicleCloak(playerState_t *ps);
 //[/CloakingVehicles]
 static void PM_Weapon( void )
 {
-	int		addTime;
+	int		addTime=0;
 	int amount;
 	int		killAfterItem = 0;
 	bgEntity_t *veh = NULL;
 	qboolean vehicleRocketLock = qfalse;
+	int weap = pm->ps->weapon;
 
 #ifdef QAGAME
 	if (pm->ps->clientNum >= MAX_CLIENTS &&
@@ -8448,6 +8409,19 @@ static void PM_Weapon( void )
 		}
 	}
 #endif
+
+	//if ( (pm->cmd.buttons & BUTTON_SABERTHROW) || ((pm->cmd.buttons & BUTTON_FORCEPOWER) && pm->ps->fd.forcePowerSelected == FP_SABERTHROW) )
+	//if ( (pm->cmd.buttons & BUTTON_ALT_ATTACK) )
+	if(weap != WP_SABER && ((pm->cmd.buttons & BUTTON_SABERTHROW) || ((pm->cmd.buttons & BUTTON_FORCEPOWER) && pm->ps->fd.forcePowerSelected == FP_SABERTHROW)))
+	{
+#ifdef QAGAME
+		gentity_t*ent=&g_entities[pm->ps->clientNum];
+		if(ent->client->skillLevel[SK_FLAMETHROWER] >= FORCE_LEVEL_1)
+		{
+			ItemUse_FlameThrower(ent);	
+		}
+#endif
+	}
 
 	if (!pm->ps->emplacedIndex &&
 		pm->ps->weapon == WP_EMPLACED_GUN)
@@ -8555,6 +8529,12 @@ static void PM_Weapon( void )
 				//PM_StartTorsoAnim( TORSO_WEAPONREADY4 );
 				PM_StartTorsoAnim( TORSO_RAISEWEAP1);
 			}
+			//[BowcasterScope]
+			else if(pm->ps->weapon == WP_BOWCASTER && pm->ps->zoomMode)
+			{
+				PM_StartTorsoAnim( TORSO_RAISEWEAP1);
+			}
+			//[/BowcasterScope]
 			else
 			{
 				if (pm->ps->weapon == WP_EMPLACED_GUN)
@@ -8775,6 +8755,10 @@ static void PM_Weapon( void )
 		//reset the saberMove so we don't hang at the end of the handextend if we were in a saber move.
 		pm->ps->saberMove = LS_READY;
 		//[/ForceSys]
+
+		if(pm->ps->fd.forcePowersActive & (1 << FP_GRIP))
+			PM_WeaponLightsaber();
+
 		return;
 	}
 
@@ -9009,42 +8993,78 @@ static void PM_Weapon( void )
 	amount = weaponData[pm->ps->weapon].energyPerShot;
 
 	// take an ammo away if not infinite
-	if ( pm->ps->weapon != WP_NONE &&
-		pm->ps->weapon == pm->cmd.weapon &&
+	if ( pm->ps->weapon != WP_NONE && pm->ps->weapon == pm->cmd.weapon &&
 		(pm->ps->weaponTime <= 0 || pm->ps->weaponstate != WEAPON_FIRING) )
 	{
 		if ( pm->ps->clientNum < MAX_CLIENTS && pm->ps->ammo[ weaponData[pm->ps->weapon].ammoIndex ] != -1 )
 		{
-			// enough energy to fire this weapon?
-			if (pm->ps->ammo[weaponData[pm->ps->weapon].ammoIndex] < weaponData[pm->ps->weapon].energyPerShot &&
-				pm->ps->ammo[weaponData[pm->ps->weapon].ammoIndex] < weaponData[pm->ps->weapon].altEnergyPerShot) 
-			{ //the weapon is out of ammo essentially because it cannot fire primary or secondary, so do the switch
-			  //regardless of if the player is attacking or not
-				//[Reload]
-#ifdef QAGAME
-				gentity_t *ent = &g_entities[pm->ps->clientNum];
-				if(ent->bullets[ent->client->ps.weapon] < 1)
-					pm->ps->ammo[weaponData[ent->client->ps.weapon].ammoIndex] = -10;
-#endif
-				//[/Reload]
-				PM_AddEventWithParm( EV_NOAMMO, WP_NUM_WEAPONS+pm->ps->weapon );
-
-				if (pm->ps->weaponTime < 500)
-				{
-					pm->ps->weaponTime += 500;
-				}
-				return;
-			}
-
-			if (pm->ps->weapon == WP_DET_PACK && !pm->ps->hasDetPackPlanted && pm->ps->ammo[weaponData[pm->ps->weapon].ammoIndex] < 1)
+			//[DualPistols]
+			if ((pm->ps->eFlags & EF_DUAL_WEAPONS))
 			{
-				PM_AddEventWithParm( EV_NOAMMO, WP_NUM_WEAPONS+pm->ps->weapon );
+				if (pm->ps->ammo[weaponData[pm->ps->weapon].ammoIndex] < (weaponData[pm->ps->weapon].energyPerShot * 2) &&
+					pm->ps->ammo[weaponData[pm->ps->weapon].ammoIndex] < (weaponData[pm->ps->weapon].altEnergyPerShot * 2) )
+				{ //the weapon is out of ammo essentially because it cannot fire primary or secondary, so do the switch
+				//regardless of if the player is attacking or not
+					//[Reload]
+					#ifdef QAGAME
+					gentity_t *ent = &g_entities[pm->ps->clientNum];
+					if(ent->bullets[ent->client->ps.weapon] < 1)
+						pm->ps->ammo[weaponData[ent->client->ps.weapon].ammoIndex] = -10;
+					#endif
+					//[/Reload]
 
-				if (pm->ps->weaponTime < 500)
-				{
-					pm->ps->weaponTime += 500;
+					if (( pm->ps->weapon == WP_BRYAR_PISTOL )) 
+					{
+						PM_AddEventWithParm( EV_NOAMMO, WP_NUM_WEAPONS+pm->ps->weapon );
+
+						if (pm->ps->weaponTime < 500)
+						{
+							pm->ps->weaponTime += 500;
+						}
+					}
+					else
+					{
+						if (pm->ps->weaponTime < 50)
+						{							
+							pm->ps->weaponTime += 50;
+						}
+					}
+					return;
 				}
-				return;
+			}
+			else//[/DualPistols]
+			{
+				// enough energy to fire this weapon?
+				if (pm->ps->ammo[weaponData[pm->ps->weapon].ammoIndex] < weaponData[pm->ps->weapon].energyPerShot &&
+					pm->ps->ammo[weaponData[pm->ps->weapon].ammoIndex] < weaponData[pm->ps->weapon].altEnergyPerShot)
+				{ //the weapon is out of ammo essentially because it cannot fire primary or secondary, so do the switch
+				  //regardless of if the player is attacking or not
+					//[Reload]
+					#ifdef QAGAME
+					gentity_t *ent = &g_entities[pm->ps->clientNum];
+					if(ent->bullets[ent->client->ps.weapon] < 1)
+						pm->ps->ammo[weaponData[ent->client->ps.weapon].ammoIndex] = -10;
+					#endif
+					//[/Reload]
+					PM_AddEventWithParm( EV_NOAMMO, WP_NUM_WEAPONS+pm->ps->weapon );
+
+					if (pm->ps->weaponTime < 500)
+					{
+						pm->ps->weaponTime += 500;
+					}
+					return;
+				}
+
+				if (pm->ps->weapon == WP_DET_PACK && !pm->ps->hasDetPackPlanted && pm->ps->ammo[weaponData[pm->ps->weapon].ammoIndex] < 1)
+				{
+					PM_AddEventWithParm( EV_NOAMMO, WP_NUM_WEAPONS+pm->ps->weapon );
+
+					if (pm->ps->weaponTime < 500)
+					{
+						pm->ps->weaponTime += 500;
+					}
+					return;
+				}
 			}
 		}
 	}
@@ -9058,8 +9078,20 @@ static void PM_Weapon( void )
 		}
 	}
 
-	if ( pm->ps->weaponTime > 0 ) {
+	if ( pm->ps->weaponTime > 0 && pm->ps->weapon != WP_FLECHETTE ) {
 		return;
+	}
+	else if(pm->ps->weapon == WP_FLECHETTE)
+	{
+		if ( ! (pm->cmd.buttons & (BUTTON_ATTACK|BUTTON_ALT_ATTACK)) && pm->ps->weaponTime > 50000 ) 
+		{
+			pm->ps->weaponTime = 0;
+			pm->ps->weaponstate = WEAPON_READY;
+			return;
+		}
+		else if(pm->ps->weaponTime > 0)
+			return;
+		
 	}
 
 	if (pm->ps->weapon == WP_DISRUPTOR &&
@@ -9115,7 +9147,12 @@ static void PM_Weapon( void )
 					}
 					else
 					{
-						PM_StartTorsoAnim( WeaponReadyAnim[pm->ps->weapon] );
+						//[DualPistols]
+						if ( PM_CanSetWeaponReadyAnim()  )
+						{
+							PM_StartTorsoAnim( PM_GetWeaponReadyAnim() );
+						}
+						//[/DualPistols]
 					}
 				}
 			}
@@ -9128,11 +9165,16 @@ static void PM_Weapon( void )
 		pm->ps->weaponstate == WEAPON_READY && pm->ps->weaponTime <= 0 &&
 		(pm->ps->weapon >= WP_BRYAR_PISTOL || pm->ps->weapon == WP_STUN_BATON) &&
 		pm->ps->torsoTimer <= 0 &&
-		(pm->ps->torsoAnim) != WeaponReadyAnim[pm->ps->weapon] &&
+		pm->ps->torsoAnim != PM_GetWeaponReadyAnim() &&//[DualPistols]
 		pm->ps->torsoAnim != TORSO_WEAPONIDLE3 &&
 		pm->ps->weapon != WP_EMPLACED_GUN)
 	{
-		PM_StartTorsoAnim( WeaponReadyAnim[pm->ps->weapon] );
+		//[DualPistols]
+		if ( PM_CanSetWeaponReadyAnim() )
+		{
+			PM_StartTorsoAnim( PM_GetWeaponReadyAnim() );
+		}
+		//[/DualPistols]
 	}
 	else if (PM_CanSetWeaponAnims() &&
 		pm->ps->weapon == WP_MELEE)
@@ -9180,7 +9222,12 @@ static void PM_Weapon( void )
 		}
 		else if (PM_CanSetWeaponAnims())
 		{
-			PM_StartTorsoAnim( WeaponReadyAnim[pm->ps->weapon] );
+			//[DualPistols]
+			if ( PM_CanSetWeaponReadyAnim() )
+			{
+				PM_StartTorsoAnim( PM_GetWeaponReadyAnim() );
+			}
+			//[/DualPistols]
 		}
 	}
 	else if (((pm->ps->torsoAnim) != TORSO_WEAPONREADY4 &&
@@ -9190,6 +9237,15 @@ static void PM_Weapon( void )
 	{
 		PM_StartTorsoAnim( TORSO_WEAPONREADY4 );
 	}
+	//[BowcasterScope]
+	else if (((pm->ps->torsoAnim) != TORSO_WEAPONREADY4 &&
+		(pm->ps->torsoAnim) != BOTH_ATTACK4) &&
+		PM_CanSetWeaponAnims() &&
+		(pm->ps->weapon == WP_BOWCASTER && pm->ps->zoomMode))
+	{
+		PM_StartTorsoAnim( TORSO_WEAPONREADY4 );
+	}
+	//[/BowcasterScope]
 
 	if (pm->ps->clientNum >= MAX_CLIENTS &&
 		pm_entSelf &&
@@ -9341,6 +9397,12 @@ static void PM_Weapon( void )
 	{
 		PM_StartTorsoAnim( BOTH_ATTACK4 );
 	}
+	//[BowcasterScope]
+	else if(pm->ps->weapon == WP_BOWCASTER && pm->ps->zoomMode)
+	{
+		PM_StartTorsoAnim( BOTH_ATTACK4 );
+	}
+	//[/BowcasterScope]
 	else if (pm->ps->weapon == WP_MELEE)
 	{ //special anims for standard melee attacks
 		//Alternate between punches and use the anim length as weapon time.
@@ -9352,7 +9414,7 @@ static void PM_Weapon( void )
 			if (pm->debugMelee &&
 				(pm->cmd.buttons & BUTTON_ATTACK) &&
 			*/
-				(pm->cmd.buttons & BUTTON_ALT_ATTACK))
+			(pm->cmd.buttons & BUTTON_ALT_ATTACK))
 			//[/MELEE]
 			{ //ok, grapple time
 				if(pm->ps->weaponTime <= 0 && !PM_InKnockDown(pm->ps) && !BG_KickingAnim(pm->ps->legsAnim))
@@ -9400,7 +9462,7 @@ static void PM_Weapon( void )
 				return;
 	#endif
 #endif
-			}
+				}
 			//[MELEE]
 			//You can do kick without debugMelee turned on
 			}
@@ -9520,7 +9582,12 @@ static void PM_Weapon( void )
 	}
 	else
 	{
-		PM_StartTorsoAnim( WeaponAttackAnim[pm->ps->weapon] );
+		//[DualPistols]
+		if (pm->ps->eFlags & EF_DUAL_WEAPONS)
+			PM_StartTorsoAnim( WeaponAttackAnim2[pm->ps->weapon] );
+		else
+			PM_StartTorsoAnim( WeaponAttackAnim[pm->ps->weapon] );
+		//[/DualPistols]
 	}
 
 	if ( pm->cmd.buttons & BUTTON_ALT_ATTACK )
@@ -9532,10 +9599,28 @@ static void PM_Weapon( void )
 		amount = weaponData[pm->ps->weapon].energyPerShot;
 	}
 
+	//[DualPistols]
+	if((pm->ps->eFlags & EF_DUAL_WEAPONS) && pm->ps->weapon == WP_BRYAR_PISTOL)
+		amount*=2;
+	//[/DualPistols]
+
 	pm->ps->weaponstate = WEAPON_FIRING;
 
+	if(pm->cmd.buttons & BUTTON_ALT_ATTACK )
+	{
+		if(pm->ps->weapon == WP_BOWCASTER)
+				return;
+		#ifdef QAGAME
+		else if(pm->ps->weapon == WP_FLECHETTE && g_entities[pm->ps->clientNum].client->skillLevel[SK_FLECHETTE] < FORCE_LEVEL_2)
+			return;
+		else if(pm->ps->weapon == WP_REPEATER && g_entities[pm->ps->clientNum].client->skillLevel[SK_REPEATER] < FORCE_LEVEL_2)
+			return;
+		#endif
+	}
+
 	// take an ammo away if not infinite
-	if ( pm->ps->clientNum < MAX_CLIENTS && pm->ps->ammo[ weaponData[pm->ps->weapon].ammoIndex ] != -1 )
+	if ( pm->ps->clientNum < MAX_CLIENTS && pm->ps->ammo[ weaponData[pm->ps->weapon].ammoIndex ] != -1 &&
+		(pm->ps->weapon != WP_BOWCASTER || pm->ps->weapon == WP_BOWCASTER &&!(pm->ps->eFlags2 & EF2_BOWCASTERSCOPE)))
 	{
 		// enough energy to fire this weapon?
 		if ((pm->ps->ammo[weaponData[pm->ps->weapon].ammoIndex] - amount) >= 0) 
@@ -9569,6 +9654,7 @@ static void PM_Weapon( void )
 			PM_AddEvent( EV_FIRE_WEAPON );
 			addTime = weaponData[pm->ps->weapon].fireTime;
 		}
+
 		else
 		{
 			if (pm->ps->weapon != WP_MELEE ||
@@ -9585,6 +9671,7 @@ static void PM_Weapon( void )
 		{ //do not fire melee events at all when on vehicle
 			PM_AddEvent( EV_FIRE_WEAPON );
 		}
+
 		addTime = weaponData[pm->ps->weapon].fireTime;
 
 		//[BlasterRateOfFireUpgrade]
@@ -9731,7 +9818,6 @@ static void PM_DropTimers( void ) {
 
 #include "../namespace_end.h"
 
-#if !defined(_XBOX) || defined(QAGAME)
 extern	vmCvar_t	bg_fighterAltControl;
 qboolean BG_UnrestrainedPitchRoll( playerState_t *ps, Vehicle_t *pVeh )
 {
@@ -9748,10 +9834,6 @@ qboolean BG_UnrestrainedPitchRoll( playerState_t *ps, Vehicle_t *pVeh )
 	}
 	return qfalse;
 }
-#else
-extern qboolean BG_UnrestrainedPitchRoll( playerState_t *ps, Vehicle_t *pVeh );
-#endif
-
 #include "../namespace_begin.h"
 
 /*
@@ -10074,6 +10156,31 @@ void PM_AdjustAttackStates( pmove_t *pm )
 	else
 	{
 		amount = pm->ps->ammo[weaponData[ pm->ps->weapon ].ammoIndex] - weaponData[pm->ps->weapon].energyPerShot;
+	}
+
+	// disruptor alt-fire should toggle the zoom mode, but only bother doing this for the player?
+	if ( pm->ps->weapon == WP_BOWCASTER && pm->ps->weaponstate == WEAPON_READY && (pm->ps->eFlags2 & EF2_BOWCASTERSCOPE))
+	{
+
+		if ( !(pm->ps->eFlags & EF_ALT_FIRING) && (pm->cmd.buttons & BUTTON_ALT_ATTACK) /*&&
+			pm->cmd.upmove <= 0 && !pm->cmd.forwardmove && !pm->cmd.rightmove*/)
+		{
+			// We just pressed the alt-fire key
+			if ( !pm->ps->zoomMode && pm->ps->pm_type != PM_DEAD )
+			{
+				pm->ps->zoomMode=5;
+				pm->ps->zoomLocked=qtrue;
+				pm->ps->zoomFov=30;
+				
+			}
+			else if (pm->ps->zoomMode == 5 && pm->ps->zoomLockTime < pm->cmd.serverTime)
+			{ //check for == 1 so we can't turn binoculars off with disruptor alt fire
+				// already zooming, so must be wanting to turn it off
+				pm->ps->zoomMode=0;
+				pm->ps->userInt3=0;
+				pm->ps->zoomLocked=qfalse;
+			}
+		}
 	}
 
 	// disruptor alt-fire should toggle the zoom mode, but only bother doing this for the player?
@@ -10460,11 +10567,23 @@ void BG_AdjustClientSpeed(playerState_t *ps, usercmd_t *cmd, int svTime)
 
 	if (ps->fd.forcePowersActive & (1 << FP_SPEED))
 	{
-		ps->speed *= 1.6;//was 1.7
+#ifdef QAGAME
+		if(g_entities[pm->ps->clientNum].client->ps.fd.forcePowerLevel[FP_SPEED] >= FORCE_LEVEL_3)
+			ps->speed *= 2.0;
+		else
+			ps->speed *= 1.6;//was 1.7
+#endif
 	}
 	else if (ps->fd.forcePowersActive & (1 << FP_RAGE))
 	{
-		ps->speed *= 1.3;
+		//[Rage]
+		if(ps->fd.forcePowerLevel[FP_RAGE] == FORCE_LEVEL_3)
+			ps->speed *= 1.3;
+		else if(ps->fd.forcePowerLevel[FP_RAGE] == FORCE_LEVEL_2)
+			ps->speed *= 1.2;
+		else
+			ps->speed *= 1.1;
+		//[/Rage]
 	}
 	else if (ps->fd.forceRageRecoveryTime > svTime)
 	{
@@ -11556,9 +11675,14 @@ void BG_G2PlayerAngles(void *ghoul2, int motionBolt, entityState_t *cent, int ti
 	// --------- yaw -------------
 
 	// allow yaw to drift a bit
-	if ((( cent->legsAnim ) != BOTH_STAND1) || 
-			( cent->torsoAnim ) != WeaponReadyAnim[cent->weapon]  ) 
+	//[DualPistols]
+	if ( (( cent->legsAnim ) != BOTH_STAND1) || 
+			( ( ( ( cent->torsoAnim ) != WeaponReadyAnim[cent->weapon] ) && !( cent->eFlags & EF_DUAL_WEAPONS) ) ||
+			( ( ( cent->torsoAnim ) != WeaponReadyAnim2[cent->weapon] ) && ( cent->eFlags & EF_DUAL_WEAPONS) ) )
+			//( cent->torsoAnim != PM_GetWeaponReadyAnim() )
+		)
 	{
+	//[/DualPistols]
 		// if not standing still, always point all in the same direction
 		//cent->pe.torso.yawing = qtrue;	// always center
 		*tYawing = qtrue;

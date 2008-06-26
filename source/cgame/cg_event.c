@@ -1192,11 +1192,6 @@ void CG_GetCTFMessageEvent(entityState_t *es)
 qboolean BG_InKnockDownOnly( int anim );
 #include "../namespace_end.h"
 
-//JLFRUMBLE
-#ifdef _XBOX
-extern void FF_XboxDamage(int damage, float xpos);
-#endif
-
 void DoFall(centity_t *cent, entityState_t *es, int clientNum)
 {
 	int delta = es->eventParm;
@@ -1256,37 +1251,6 @@ void DoFall(centity_t *cent, entityState_t *es, int clientNum)
 		}
 		cg.landTime = cg.time;
 	}
-//JLFRUMBLE
-#ifdef _XBOX
-	if ( cent->playerState)
-	{
-
-		if (BG_InKnockDownOnly(es->legsAnim))
-		{
-			if (delta > 14)
-			{
-				FF_XboxDamage(20, 0);
-			}
-			else
-			{
-				FF_XboxDamage(14, 0);
-			}
-			return;
-		}
-		if ( delta > 50)
-			FF_XboxDamage(50, 0);
-		else 
-			FF_XboxDamage(delta, 0);
-/*		else if (delta > 44)
-			FF_XboxDamage(44, 0);
-		else 
-			FF_XboxDamage(20, 0);
-*/
-	}
-#endif
-
-
-
 }
 
 int CG_InClientBitflags(entityState_t *ent, int client)
@@ -2998,7 +2962,12 @@ void CG_EntityEvent( centity_t *cent, vec3_t position ) {
 			//cg.renderingThirdPerson)
 			//[/TrueView]
 		{ //h4q3ry
-			CG_GetClientWeaponMuzzleBoltPoint(cent->currentState.eventParm, cent->currentState.origin2);
+			//[DualPistols]
+			if (cent->currentState.eFlags & EF_DUAL_WEAPONS)
+				CG_GetClientWeaponMuzzleBoltPoint(cent->currentState.eventParm, cent->currentState.origin2,qtrue);
+			else
+				CG_GetClientWeaponMuzzleBoltPoint(cent->currentState.eventParm, cent->currentState.origin2,qfalse);
+			//[/DualPistols]
 		}
 		else
 		{
@@ -3015,7 +2984,12 @@ void CG_EntityEvent( centity_t *cent, vec3_t position ) {
 		if (cent->currentState.eventParm != cg.snap->ps.clientNum ||
 			cg.renderingThirdPerson)
 		{ //h4q3ry
-			CG_GetClientWeaponMuzzleBoltPoint(cent->currentState.eventParm, cent->currentState.origin2);
+			//[DualPistols]
+			if (cent->currentState.eFlags & EF_DUAL_WEAPONS)
+				CG_GetClientWeaponMuzzleBoltPoint(cent->currentState.eventParm, cent->currentState.origin2,qtrue);
+			else
+				CG_GetClientWeaponMuzzleBoltPoint(cent->currentState.eventParm, cent->currentState.origin2,qfalse);
+			//[/DualPistols]
 		}
 		else
 		{

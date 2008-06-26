@@ -101,7 +101,6 @@ void G_DeflectMissile( gentity_t *ent, gentity_t *missile, vec3_t forward )
 	int		defLevel=0;
 	float distance =0;
 	gentity_t *prevOwner = &g_entities[missile->r.ownerNum];
-	vec3_t  angs;
 	//[/MoreRandom]
 	if (missile->r.ownerNum == ent->s.number)
 	{ //the original owner is bouncing the missile, so don't try to bounce it back at him
@@ -110,26 +109,6 @@ void G_DeflectMissile( gentity_t *ent, gentity_t *missile, vec3_t forward )
 
 	//save the original speed
 	speed = VectorNormalize( missile->s.pos.trDelta );
-//[MoreRandom]
-	//determine reflection level.
-	if(Q_irand(0, 99) <  NaturalBoltReflectRate[ent->client->ps.fd.forcePowerLevel[FP_SABER_DEFENSE]])
-	{//natural reflection, bounce back to the attacker.
-		defLevel = FORCE_LEVEL_2;
-	}
-	else
-	{//just deflect the attack
-		defLevel = FORCE_LEVEL_1;
-	}
-
-	vectoangles( forward, angs );
-	if(defLevel == FORCE_LEVEL_2 && distance <= 125.0f)
-		slopFactor = Q_irand(30,40);
-	else if( distance <= 125.0f)
-		slopFactor = Q_irand(40,50);
-	angs[PITCH] += flrand(-slopFactor, slopFactor);
-	angs[YAW] += flrand(-slopFactor, slopFactor);
-	AngleVectors( angs, forward, NULL, NULL );
-	//[/MoreRandom]
 	if (ent->client)
 	{
 		//VectorSubtract( ent->r.currentOrigin, missile->r.currentOrigin, missile_dir );
@@ -1312,7 +1291,7 @@ void OJP_HandleBoltBlock(gentity_t *bolt, gentity_t *player, trace_t *trace)
 	else if (otherDefLevel == FORCE_LEVEL_2)
 	{//bounce the bolt back to sender
 		//G_Printf("%i: %i: Level 2 Reflect\n", level.time, player->s.number);
-		G_ReflectMissile(player, bolt, fwd);
+		G_DeflectMissile(player, bolt, fwd);
 	}/*
 	else if(otherDefLevel == FORCE_LEVEL_3 
 		&& distance < 80.0f
@@ -1321,6 +1300,12 @@ void OJP_HandleBoltBlock(gentity_t *bolt, gentity_t *player, trace_t *trace)
 		{//manual reflection, bounce to the crosshair, roughly
 			G_DeflectMissile(player, bolt, fwd);;
 		}*/
+	else if(player->client->ps.fd.saberAnimLevel == SS_FAST
+		|| player->client->ps.fd.saberAnimLevel == SS_MEDIUM
+		|| player->client->ps.fd.saberAnimLevel == SS_TAVION)
+	{
+		G_DeflectMissile(player, bolt, fwd);
+	}
 	else
 	{//FORCE_LEVEL_3, reflect the bolt to whereever the player is aiming.
 		gentity_t *owner = &g_entities[player->r.ownerNum];
@@ -1337,16 +1322,22 @@ void OJP_HandleBoltBlock(gentity_t *bolt, gentity_t *player, trace_t *trace)
 		//int		isowner = 0;
         
 		//add some slop factor to the manual reflections.
-		float slopFactor = (MISHAP_MAXINACCURACY-6) * (FORCE_LEVEL_3 - player->client->ps.fd.forcePowerLevel[FP_SABER_DEFENSE])/FORCE_LEVEL_3;
-		//[MoreRandom]
-		float distance = VectorDistance(player->r.currentOrigin,prevOwner->r.currentOrigin);
-		if(distance <= 125.0f)
-			slopFactor += Q_irand(20,30);
-		//[/MoreRandom]
-		vectoangles( fwd, angs );
-		angs[PITCH] += flrand(-slopFactor, slopFactor);
-		angs[YAW] += flrand(-slopFactor, slopFactor);
-		AngleVectors( angs, fwd, NULL, NULL );
+		if(player->client->pers.cmd.forwardmove >= 0)
+		{
+			float slopFactor = (MISHAP_MAXINACCURACY-6) * (FORCE_LEVEL_3 - player->client->ps.fd.forcePowerLevel[FP_SABER_DEFENSE])/FORCE_LEVEL_3;
+			//[MoreRandom]
+			float distance = VectorDistance(player->r.currentOrigin,prevOwner->r.currentOrigin);
+				slopFactor += Q_irand(1,5);
+			vectoangles( fwd, angs );
+			angs[PITCH] += flrand(-slopFactor, slopFactor);
+			angs[YAW] += flrand(-slopFactor, slopFactor);
+			AngleVectors( angs, fwd, NULL, NULL );
+		}
+		else
+		{
+			vectoangles( fwd, angs );
+			AngleVectors( angs, fwd, NULL, NULL );
+		}
 		
 		//G_Printf("%i: %i: Level 3 Reflect\n", level.time, player->s.number);
 
@@ -1377,7 +1368,16 @@ void OJP_HandleBoltBlock(gentity_t *bolt, gentity_t *player, trace_t *trace)
 	//deduce DP cost
 	//[ExpSys]
 	bolt->activator = prevOwner;
-	G_DodgeDrain(player, prevOwner, OJP_SaberBlockCost(player, bolt, trace->endpos));
+
+	if(otherDefLevel == FORCE_LEVEL_3
+		&& player->client->pers.cmd.forwardmove < 0)
+	{
+		int amount = OJP_SaberBlockCost(player, bolt, trace->endpos);
+		amount/=100*40;
+		G_DodgeDrain(player, prevOwner, amount);
+	}
+	else
+		G_DodgeDrain(player, prevOwner, OJP_SaberBlockCost(player, bolt, trace->endpos));
 	//[ExpSys]
 
 	//[SaberLockSys]

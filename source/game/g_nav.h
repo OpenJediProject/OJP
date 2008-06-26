@@ -22,9 +22,9 @@
 
 // This is probably wrong - VVFIXME
 // Some kind of wacky code sharing going on here, but we need these things
-// in g_navnew.c -- which is now C++ code in the GAME on Xbox, so the
+// in g_navnew.c -- 
 // original test fails.
-#if !defined(__cplusplus) || (defined(_XBOX) && defined(QAGAME)) || (defined(__linux__) && defined(QAGAME))
+#if !defined(__cplusplus) || defined(QAGAME) || (defined(__linux__) && defined(QAGAME))
 //rww - Rest of defines here are also shared in exe, do not modify.
 #define	__NEWCOLLECT	1
 

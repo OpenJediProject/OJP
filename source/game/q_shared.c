@@ -862,6 +862,7 @@ int Q_stricmpn (const char *s1, const char *s2, int n) {
 			return 0;		// strings are equal until end point
 		}
 		
+
 		if (c1 != c2) {
 			if (c1 >= 'a' && c1 <= 'z') {
 				c1 -= ('a' - 'A');

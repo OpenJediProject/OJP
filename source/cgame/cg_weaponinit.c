@@ -278,7 +278,7 @@ void CG_RegisterWeapon( int weaponNum) {
 		weaponInfo->altMissileTrailFunc = 0;
 
 		cgs.effects.disruptorRingsEffect		= trap_FX_RegisterEffect( "disruptor/rings" );
-		cgs.effects.disruptorProjectileEffect	= trap_FX_RegisterEffect( "disruptor/projectile" );
+		cgs.effects.disruptorProjectileEffect	= trap_FX_RegisterEffect( "disruptor/shot" );
 		cgs.effects.disruptorWallImpactEffect	= trap_FX_RegisterEffect( "disruptor/wall_impact" );
 		cgs.effects.disruptorFleshImpactEffect	= trap_FX_RegisterEffect( "disruptor/flesh_impact" );
 		cgs.effects.disruptorAltMissEffect		= trap_FX_RegisterEffect( "disruptor/alt_miss" );

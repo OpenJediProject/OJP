@@ -151,7 +151,6 @@ const int mindTrickTime[NUM_FORCE_POWER_LEVELS] =
 	15000
 };
 
-
 //[DodgeSys]
 #define SK_DP_FORFORCE		.5f	//determines the number of DP points players get for each skill point dedicated to Force Powers.
 #define SK_DP_FORMERC		1/6.0f	//determines the number of DP points get for each skill point dedicated to gunner/merc skills.
@@ -785,6 +784,12 @@ void WP_SpawnInitForcePowers( gentity_t *ent )
 
 	ent->client->ps.holocronBits = 0;
 
+	if(ent->client->ps.fd.forcePowerLevel[FP_SEE] >= FORCE_LEVEL_3)
+	{
+		ent->client->ps.fd.forcePower+=15;
+		ent->client->ps.fd.forcePowerMax+=15;
+	}
+
 	i = 0;
 	while (i < NUM_FORCE_POWERS)
 	{
@@ -907,6 +912,45 @@ void WP_SpawnInitForcePowers( gentity_t *ent )
 extern qboolean BG_InKnockDown( int anim ); //bg_pmove.c
 #include "../namespace_end.h"
 
+qboolean IsMerc(gentity_t*ent)
+{
+	if(!ent->client)
+		return qfalse;
+
+	if(ent->client->skillLevel[SK_JETPACK])
+		return qtrue;
+	else if(ent->client->skillLevel[SK_PISTOL])
+		return qtrue;
+	else if(ent->client->skillLevel[SK_BLASTER])
+		return qtrue;
+	else if(ent->client->skillLevel[SK_THERMAL])
+		return qtrue;
+	else if(ent->client->skillLevel[SK_ROCKET])
+		return qtrue;
+	else if(ent->client->skillLevel[SK_BACTA])
+		return qtrue;
+	else if(ent->client->skillLevel[SK_FLAMETHROWER])
+		return qtrue;
+	else if(ent->client->skillLevel[SK_BOWCASTER])
+		return qtrue;
+	else if(ent->client->skillLevel[SK_FORCEFIELD])
+		return qtrue;
+	else if(ent->client->skillLevel[SK_CLOAK])
+		return qtrue;
+	else if(ent->client->skillLevel[SK_SEEKER])
+		return qtrue;
+	else if(ent->client->skillLevel[SK_SENTRY])
+		return qtrue;
+	else if(ent->client->skillLevel[SK_DETPACK])
+		return qtrue;
+	else if(ent->client->skillLevel[SK_REPEATER])
+		return qtrue;
+	else if(ent->client->skillLevel[SK_DISRUPTOR])
+		return qtrue;
+
+	return qfalse;
+}
+
 //[ForceSys]
 extern qboolean PM_RunningAnim(int anim);
 extern qboolean PM_SaberInBrokenParry( int move );
@@ -915,6 +959,9 @@ extern qboolean BG_InKnockDownOnGround( playerState_t *ps );
 //[/ForceSys]
 int ForcePowerUsableOn(gentity_t *attacker, gentity_t *other, forcePowers_t forcePower)
 {
+	if(other->client && other->client->ps.inAirAnim || other->client && other->client->ps.groundEntityNum == ENTITYNUM_NONE)
+		return 1;
+
 	if (other && other->client && BG_HasYsalamiri(g_gametype.integer, &other->client->ps))
 	{
 		return 0;
@@ -924,6 +971,9 @@ int ForcePowerUsableOn(gentity_t *attacker, gentity_t *other, forcePowers_t forc
 	{
 		return 0;
 	}
+	
+	if(IsMerc(other) && other->client->ps.fd.forcePowerLevel[FP_SEE] >= FORCE_LEVEL_1)
+		return 1;
 
 	//Dueling fighters cannot use force powers on others, with the exception of force push when locked with each other
 	if (attacker && attacker->client && attacker->client->ps.duelInProgress)
@@ -939,6 +989,10 @@ int ForcePowerUsableOn(gentity_t *attacker, gentity_t *other, forcePowers_t forc
 	//[InAirChange]
 	//if(other && other->client && other->client->ps.stats[STAT_DODGE] <= DODGE_CRITICALLEVEL)
 	//	return 1;
+
+	if(other->client && other->client->ps.fd.saberAnimLevel == SS_DESANN
+		&& other->client->ps.saberAttackChainCount >= MISHAPLEVEL_HEAVY)
+		return 0;
 
 	if(forcePower == FP_TELEPATHY && other->client)
 	{
@@ -958,6 +1012,27 @@ int ForcePowerUsableOn(gentity_t *attacker, gentity_t *other, forcePowers_t forc
 			break;
 		}
 	}
+	else if(forcePower == FP_GRIP && other->client)
+	{
+		switch(other->client->ps.fd.forcePowerLevel[FP_ABSORB])
+		{
+		case FORCE_LEVEL_1://Can only block if walking
+			if(!WalkCheck(other))
+				return 1;
+			break;
+		case FORCE_LEVEL_2://Can block if walking or running
+			if(other->client->ps.inAirAnim || other->client->ps.groundEntityNum == ENTITYNUM_NONE)
+				return 1;
+			break;
+
+		case FORCE_LEVEL_3:
+			return 0;
+
+		default:
+			return 1;
+		}
+	}
+
 	//[ForceSys]
 	//handling the grip countering actions in OJP_CounterForce().
 	/*
@@ -1315,7 +1390,7 @@ void WP_ForcePowerStart( gentity_t *self, forcePowers_t forcePower, int override
 		hearDist = 256;
 		//[ForceSys]
 		duration = 500;
-
+		self->client->forceSpeedStartTime = level.time;
 		/*
 		if (self->client->ps.fd.forcePowerLevel[FP_SPEED] == FORCE_LEVEL_1)
 		{
@@ -1382,7 +1457,10 @@ void WP_ForcePowerStart( gentity_t *self, forcePowers_t forcePower, int override
 	case FP_LIGHTNING:
 		hearable = qtrue;
 		hearDist = 512;
-		duration = overrideAmt;
+		if(self->client->ps.fd.forcePowerLevel[FP_LIGHTNING] == FORCE_LEVEL_1)
+			duration = 1000;
+		else
+			duration = overrideAmt;
 		overrideAmt = 0;
 		self->client->ps.fd.forcePowersActive |= ( 1 << forcePower );
 		self->client->ps.activeForcePass = self->client->ps.fd.forcePowerLevel[FP_LIGHTNING];
@@ -1390,6 +1468,7 @@ void WP_ForcePowerStart( gentity_t *self, forcePowers_t forcePower, int override
 	case FP_RAGE:
 		hearable = qtrue;
 		hearDist = 256;
+		/*
 		if (self->client->ps.fd.forcePowerLevel[FP_RAGE] == FORCE_LEVEL_1)
 		{
 			duration = 8000;
@@ -1406,6 +1485,8 @@ void WP_ForcePowerStart( gentity_t *self, forcePowers_t forcePower, int override
 		{
 			break;
 		}
+		*/
+		duration=10000;
 
 		self->client->ps.fd.forcePowersActive |= ( 1 << forcePower );
 		break;
@@ -1841,7 +1922,7 @@ void ForceGrip( gentity_t *self )
 	tto[0] = tfrom[0] + fwd[0]*MAX_GRIP_DISTANCE;
 	tto[1] = tfrom[1] + fwd[1]*MAX_GRIP_DISTANCE;
 	tto[2] = tfrom[2] + fwd[2]*MAX_GRIP_DISTANCE;
-
+	
 	trap_Trace(&tr, tfrom, NULL, NULL, tto, self->s.number, MASK_PLAYERSOLID);
 
 	if ( tr.fraction != 1.0 &&
@@ -1874,7 +1955,14 @@ void ForceGrip( gentity_t *self )
 
 		self->client->ps.forceHandExtend = HANDEXTEND_FORCE_HOLD;
 		self->client->ps.forceHandExtendTime = level.time + 5000;
-	}
+	}/*
+	else if(self && Q_stricmp(g_entities[tr.entityNum].classname,"body") == 0)
+	{
+		self->client->ps.fd.forceGripEntityNum = tr.entityNum;
+		self->client->ps.fd.forceGripDamageDebounceTime = 0;
+		self->client->ps.forceHandExtend = HANDEXTEND_FORCE_HOLD;
+		self->client->ps.forceHandExtendTime = level.time + 5000;
+	}*/
 	else
 	{
 		self->client->ps.fd.forceGripEntityNum = ENTITYNUM_NONE;
@@ -2094,7 +2182,7 @@ void ForceLightning( gentity_t *self )
 		return;
 	}
 
-	if (self->client->ps.forceHandExtend != HANDEXTEND_NONE)
+	if (self->client->ps.forceHandExtend != HANDEXTEND_NONE && (!self->client->ps.fd.forcePowersActive & (1 << FP_GRIP)))
 	{
 		return;
 	}
@@ -2119,8 +2207,13 @@ void ForceLightning( gentity_t *self )
 
 	G_Sound( self, CHAN_BODY, G_SoundIndex("sound/weapons/force/lightning") );
 	
+	if(self->client->ps.fd.forcePowerLevel[FP_LIGHTNING] == FORCE_LEVEL_1)
+		WP_ForcePowerStart( self, FP_LIGHTNING, 0 );
+	else
+		WP_ForcePowerStart( self, FP_LIGHTNING, 0 );
+
 	//[ForceSys]
-	WP_ForcePowerStart( self, FP_LIGHTNING, 0 );
+	
 	//WP_ForcePowerStart( self, FP_LIGHTNING, 500 );
 	//[ForceSys]
 }
@@ -2176,6 +2269,9 @@ qboolean OJP_CounterForce(gentity_t *attacker, gentity_t *defender, int attackPo
 	{//can't block force powers while using heavy weapons
 		return qfalse;
 	}
+
+	if(IsMerc(defender) && defender->client->ps.fd.forcePowerLevel[FP_SEE] >= FORCE_LEVEL_1)
+		return qfalse;
 
 	if( !(defender->client->ps.fd.forcePowersKnown & (1 << attackPower)) 
 		&& !(defender->client->ps.fd.forcePowersKnown & (1 << FP_ABSORB)) )
@@ -2392,7 +2488,7 @@ void ForceLightningDamage( gentity_t *self, gentity_t *traceEnt, vec3_t dir, vec
 					
 					//[ForceSys]
 					//lightning also blasts the target back.
-					G_Throw(traceEnt, dir, dmg*7);
+					G_Throw(traceEnt, dir, 100);
 					if(!WalkCheck(traceEnt) 
 					|| (WalkCheck(traceEnt) && traceEnt->client->ps.saberAttackChainCount >= MISHAPLEVEL_HEAVY) 
 					|| BG_IsUsingHeavyWeap(&traceEnt->client->ps)
@@ -3657,10 +3753,13 @@ void ForceThrow( gentity_t *self, qboolean pull )
     //[SentryTurnoff]
 	gentity_t *aimingAt; 
 	//[/SentryTurnOff]
+	//[GripPush]
+	qboolean iGrip=qfalse;
+	//[/GripPush]
 
 	visionArc = 0;
 
-	if (self->client->ps.forceHandExtend != HANDEXTEND_NONE && (self->client->ps.forceHandExtend != HANDEXTEND_KNOCKDOWN || !G_InGetUpAnim(&self->client->ps)))
+	if (self->client->ps.forceHandExtend != HANDEXTEND_NONE && (self->client->ps.forceHandExtend != HANDEXTEND_KNOCKDOWN || !G_InGetUpAnim(&self->client->ps)) && !(self->client->ps.fd.forcePowersActive & (1 << FP_GRIP)))
 	{
 		return;
 	}
@@ -3709,6 +3808,12 @@ void ForceThrow( gentity_t *self, qboolean pull )
 	if ( !WP_ForcePowerUsable( self, powerUse ) )
 	{
 		return;
+	}
+
+	if(self->client->ps.fd.forcePowersActive & (1 << FP_GRIP))
+	{
+		WP_ForcePowerStop(self,FP_GRIP);
+		iGrip=qtrue;
 	}
 
 	if (!pull && self->client->ps.saberLockTime > level.time && self->client->ps.saberLockFrame)
@@ -4240,7 +4345,7 @@ void ForceThrow( gentity_t *self, qboolean pull )
 					if ( pull )
 					{
 						G_Sound( push_list[x], CHAN_BODY, G_SoundIndex( "sound/weapons/force/pull.wav" ) );
-						push_list[x]->client->ps.forceHandExtend = HANDEXTEND_FORCEPULL;
+						//push_list[x]->client->ps.forceHandExtend = HANDEXTEND_FORCEPULL;
 						//[ForceSys]
 						push_list[x]->client->ps.forceHandExtendTime = level.time + 600;
 						//push_list[x]->client->ps.forceHandExtendTime = level.time + 400;
@@ -4249,7 +4354,7 @@ void ForceThrow( gentity_t *self, qboolean pull )
 					else
 					{
 						G_Sound( push_list[x], CHAN_BODY, G_SoundIndex( "sound/weapons/force/push.wav" ) );
-						push_list[x]->client->ps.forceHandExtend = HANDEXTEND_FORCEPUSH;
+						//push_list[x]->client->ps.forceHandExtend = HANDEXTEND_FORCEPUSH;
 						//[ForceSys]
 						push_list[x]->client->ps.forceHandExtendTime = level.time + 650;
 						//push_list[x]->client->ps.forceHandExtendTime = level.time + 1000;
@@ -4471,19 +4576,102 @@ void ForceThrow( gentity_t *self, qboolean pull )
 								}
 							}
 						}
-                       if(!WalkCheck(push_list[x])
-					   || (WalkCheck(push_list[x]) && push_list[x]->client->ps.saberAttackChainCount >= MISHAPLEVEL_HEAVY)
+/*
+                       if((push_list[x]->client->ps.saberAttackChainCount >= MISHAPLEVEL_HEAVY)
 					   || BG_IsUsingHeavyWeap(&push_list[x]->client->ps)
 					   || PM_SaberInBrokenParry(push_list[x]->client->ps.saberMove)
 					   || push_list[x]->client->ps.stats[STAT_DODGE] < DODGE_CRITICALLEVEL)
 						{
-							//trap_SendServerCommand(push_list[x]->client->ps.clientNum,"phsx");
 							G_Knockdown(push_list[x], self, pushDir, 300, qtrue);
 						}
+						*/
 					//[/ForceSys]
 					}
 					//fullbody push effect
 					push_list[x]->client->pushEffectTime = level.time + 600;
+
+					if(!pull)
+					{
+					if((WalkCheck(push_list[x])
+						&& (push_list[x]->client->ps.saberAttackChainCount <= MISHAPLEVEL_HEAVY)
+					   && !BG_IsUsingHeavyWeap(&push_list[x]->client->ps)
+					   && !PM_SaberInBrokenParry(push_list[x]->client->ps.saberMove)
+					   && push_list[x]->client->ps.stats[STAT_DODGE] > DODGE_CRITICALLEVEL)
+						|| BG_InRoll(&push_list[x]->client->ps,push_list[x]->client->ps.legsAnim)
+						&& !pull)
+					{
+						if(push_list[x]->client->ps.fd.forcePowerLevel[FP_ABSORB] == FORCE_LEVEL_0
+							|| push_list[x]->client->ps.fd.forcePowerLevel[FP_PUSH] < self->client->ps.fd.forcePowerLevel[FP_PUSH])
+						pushPowerMod /= 2;
+					}
+					else if((WalkCheck(push_list[x])
+						&& (push_list[x]->client->ps.saberAttackChainCount <= MISHAPLEVEL_HEAVY)
+					   && (BG_IsUsingHeavyWeap(&push_list[x]->client->ps) && WalkCheck(push_list[x]))
+					   && !PM_SaberInBrokenParry(push_list[x]->client->ps.saberMove)
+					   && (push_list[x]->client->ps.stats[STAT_DODGE] > DODGE_CRITICALLEVEL
+					   && InFront(push_list[x]->client->ps.origin, self->client->ps.origin, self->client->ps.viewangles, -.7f)))
+						&& !pull)
+					{
+						if(push_list[x]->client->ps.fd.forcePowerLevel[FP_ABSORB] == FORCE_LEVEL_0
+							|| push_list[x]->client->ps.fd.forcePowerLevel[FP_PUSH] < self->client->ps.fd.forcePowerLevel[FP_PUSH])
+						pushPowerMod *= 1;
+					}
+					else
+					{
+						if(push_list[x]->client->ps.fd.forcePowerLevel[FP_ABSORB] == FORCE_LEVEL_0
+							|| push_list[x]->client->ps.fd.forcePowerLevel[FP_PUSH] < self->client->ps.fd.forcePowerLevel[FP_PUSH])
+						pushPowerMod *= 1;//Push
+
+						if(!BG_IsUsingHeavyWeap(&push_list[x]->client->ps) && !WalkCheck(push_list[x]) && push_list[x]->client->ps.fd.forcePowerLevel[FP_ABSORB] == FORCE_LEVEL_0)
+						{//Using a light weapon,Running,Don't have absorb
+							if(!InFront(push_list[x]->r.currentOrigin,self->r.currentOrigin,self->client->ps.viewangles,0.3f))
+								G_Knockdown(push_list[x], self, pushDir, 300, qtrue);
+						}
+						else
+							G_Knockdown(push_list[x], self, pushDir, 300, qtrue);
+					}
+					}
+					else if(pull)
+					{
+						if((WalkCheck(push_list[x])
+						&& (push_list[x]->client->ps.saberAttackChainCount <= MISHAPLEVEL_HEAVY)
+					   && !BG_IsUsingHeavyWeap(&push_list[x]->client->ps)
+					   && !PM_SaberInBrokenParry(push_list[x]->client->ps.saberMove)
+					   && push_list[x]->client->ps.stats[STAT_DODGE] > DODGE_CRITICALLEVEL)
+						|| BG_InRoll(&push_list[x]->client->ps,push_list[x]->client->ps.legsAnim))
+					{
+						if(push_list[x]->client->ps.fd.forcePowerLevel[FP_ABSORB] == FORCE_LEVEL_0
+							|| push_list[x]->client->ps.fd.forcePowerLevel[FP_PULL] < self->client->ps.fd.forcePowerLevel[FP_PUSH])
+						pushPowerMod = 200;
+					}
+					else if(((WalkCheck(push_list[x]) && BG_IsUsingHeavyWeap(&push_list[x]->client->ps)
+						|| (!WalkCheck(push_list[x]) && !BG_IsUsingHeavyWeap(&push_list[x]->client->ps))))
+						&& (push_list[x]->client->ps.saberAttackChainCount <= MISHAPLEVEL_HEAVY)
+					   && !PM_SaberInBrokenParry(push_list[x]->client->ps.saberMove)
+					   && (push_list[x]->client->ps.stats[STAT_DODGE] > DODGE_CRITICALLEVEL
+					   && InFront(push_list[x]->client->ps.origin, self->client->ps.origin, self->client->ps.viewangles, -.7f)))
+					{
+						if(push_list[x]->client->ps.fd.forcePowerLevel[FP_ABSORB] == FORCE_LEVEL_0
+							|| push_list[x]->client->ps.fd.forcePowerLevel[FP_PULL] < self->client->ps.fd.forcePowerLevel[FP_PUSH])
+						pushPowerMod *= 1;
+					}
+					else
+					{
+						if(push_list[x]->client->ps.fd.forcePowerLevel[FP_ABSORB] == FORCE_LEVEL_0
+							|| push_list[x]->client->ps.fd.forcePowerLevel[FP_PULL] < self->client->ps.fd.forcePowerLevel[FP_PUSH])
+						pushPowerMod *= 1;
+						if(!BG_IsUsingHeavyWeap(&push_list[x]->client->ps) && !WalkCheck(push_list[x]) && push_list[x]->client->ps.fd.forcePowerLevel[FP_ABSORB] == FORCE_LEVEL_0)
+						{//Using a light weapon,Running,Don't have absorb
+							if(!InFront(push_list[x]->r.currentOrigin,self->r.currentOrigin,self->client->ps.viewangles,0.3f))
+								G_Knockdown(push_list[x], self, pushDir, 300, qtrue);
+						}
+						else
+							G_Knockdown(push_list[x], self, pushDir, 300, qtrue);
+					}
+					}
+
+					if(iGrip)
+						pushPowerMod *=2;
 
 					push_list[x]->client->ps.velocity[0] = pushDir[0]*pushPowerMod;
 					push_list[x]->client->ps.velocity[1] = pushDir[1]*pushPowerMod;
@@ -4643,6 +4831,8 @@ void WP_ForcePowerStop( gentity_t *self, forcePowers_t forcePower )
 		{
 			G_MuteSound(self->client->ps.fd.killSoundEntIndex[TRACK_CHANNEL_2-50], CHAN_VOICE);
 		}
+		if(self->client->forceSpeedStartTime+2000 > level.time && self->client->ps.fd.forcePowerLevel[FP_SPEED] >= FORCE_LEVEL_3)
+			self->client->ps.fd.forcePower -= 10;
 		break;
 	case FP_PUSH:
 		break;
@@ -4754,6 +4944,20 @@ void WP_ForcePowerStop( gentity_t *self, forcePowers_t forcePower )
 	}
 }
 
+qboolean ValidGripEnt(gentity_t*self,gentity_t*ent)
+{
+	if(!ent)
+		return qfalse;
+
+	if(Q_stricmp(ent->classname,"body")==0)
+		return qtrue;
+
+	if(!ent->client || !ent->inuse || ent->health < 1 || !ForcePowerUsableOn(self, ent, FP_GRIP))
+		return qfalse;
+
+	return qtrue;
+}
+
 void DoGripAction(gentity_t *self, forcePowers_t forcePower)
 {//racc - have someone in our grip, deal with them.
 	gentity_t *gripEnt;
@@ -4768,9 +4972,9 @@ void DoGripAction(gentity_t *self, forcePowers_t forcePower)
 
 	gripEnt = &g_entities[self->client->ps.fd.forceGripEntityNum];
 
-	if (!gripEnt || !gripEnt->client || !gripEnt->inuse || gripEnt->health < 1 || !ForcePowerUsableOn(self, gripEnt, FP_GRIP))
+	if (!ValidGripEnt(self,gripEnt))
 	{
-		WP_ForcePowerStop(self, forcePower);
+		WP_ForcePowerStop(self,FP_GRIP);
 		self->client->ps.fd.forceGripEntityNum = ENTITYNUM_NONE;
 
 		if (gripEnt && gripEnt->client && gripEnt->inuse)
@@ -4780,9 +4984,15 @@ void DoGripAction(gentity_t *self, forcePowers_t forcePower)
 		return;
 	}
 
-	VectorSubtract(gripEnt->client->ps.origin, self->client->ps.origin, a);
-	
-	trap_Trace(&tr, self->client->ps.origin, NULL, NULL, gripEnt->client->ps.origin, self->s.number, MASK_PLAYERSOLID);
+	if(gripEnt->client)
+		VectorSubtract(gripEnt->client->ps.origin, self->client->ps.origin, a);
+	else
+		VectorSubtract(gripEnt->s.pos.trBase,self->client->ps.origin,a);
+
+	if(gripEnt->client)
+		trap_Trace(&tr, self->client->ps.origin, NULL, NULL, gripEnt->client->ps.origin, self->s.number, MASK_PLAYERSOLID);
+	else
+		trap_Trace(&tr, self->client->ps.origin, NULL, NULL, gripEnt->s.pos.trBase, self->s.number, MASK_PLAYERSOLID);
 
 	//[ForceSys]
 	gripLevel = self->client->ps.fd.forcePowerLevel[FP_GRIP];
@@ -4809,21 +5019,32 @@ void DoGripAction(gentity_t *self, forcePowers_t forcePower)
 		return;
 	}
 
-	if ( !InFront( gripEnt->client->ps.origin, self->client->ps.origin, self->client->ps.viewangles, 0.9f ) &&
-		gripLevel < FORCE_LEVEL_3)
+	if(gripEnt->client)
 	{
-		WP_ForcePowerStop(self, forcePower);
-		return;
+		if ( !InFront( gripEnt->client->ps.origin, self->client->ps.origin, self->client->ps.viewangles, 0.9f ) &&
+			gripLevel < FORCE_LEVEL_3)
+		{
+			WP_ForcePowerStop(self, forcePower);
+		}
+	}
+	else
+	{
+		if ( !InFront( gripEnt->s.pos.trBase, self->client->ps.origin, self->client->ps.viewangles, 0.9f ) &&
+			gripLevel < FORCE_LEVEL_3)
+		{
+			WP_ForcePowerStop(self, forcePower);
+		}
 	}
 
+	/*
 	if (tr.fraction != 1.0f &&
 		tr.entityNum != gripEnt->s.number /*&&
-		gripLevel < FORCE_LEVEL_3*/)
+		gripLevel < FORCE_LEVEL_3*//*)
 	{
 		WP_ForcePowerStop(self, forcePower);
-		return;
+		continue;
 	}
-
+*/
 	if (self->client->ps.fd.forcePowerDebounce[FP_GRIP] < level.time)
 	{ //2 damage per second while choking, resulting in 10 damage total (not including The Squeeze<tm>)
 		self->client->ps.fd.forcePowerDebounce[FP_GRIP] = level.time + 1000;
@@ -4834,19 +5055,22 @@ void DoGripAction(gentity_t *self, forcePowers_t forcePower)
 
 	if (gripLevel == FORCE_LEVEL_1)
 	{
-		gripEnt->client->ps.fd.forceGripBeingGripped = level.time + 1000;
+		if(gripEnt->client)
+			gripEnt->client->ps.fd.forceGripBeingGripped = level.time + 1000;
 		
-		if ((level.time - gripEnt->client->ps.fd.forceGripStarted) > 5000)
-		{
-			WP_ForcePowerStop(self, forcePower);
-		}
-		return;
+		if(gripEnt->client)
+			if ((level.time - gripEnt->client->ps.fd.forceGripStarted) > 5000)
+			{
+				WP_ForcePowerStop(self, forcePower);
+			}
 	}
 
 	if (gripLevel == FORCE_LEVEL_2)
 	{
-		gripEnt->client->ps.fd.forceGripBeingGripped = level.time + 1000;
+		if(gripEnt->client)
+			gripEnt->client->ps.fd.forceGripBeingGripped = level.time + 1000;
 
+		if(gripEnt->client)
 		if (gripEnt->client->ps.forceGripMoveInterval < level.time)
 		{
 			gripEnt->client->ps.velocity[2] = 30;
@@ -4854,129 +5078,190 @@ void DoGripAction(gentity_t *self, forcePowers_t forcePower)
 			gripEnt->client->ps.forceGripMoveInterval = level.time + 300; //only update velocity every 300ms, so as to avoid heavy bandwidth usage
 		}
 
-		gripEnt->client->ps.otherKiller = self->s.number;
-		gripEnt->client->ps.otherKillerTime = level.time + 5000;
-		gripEnt->client->ps.otherKillerDebounceTime = level.time + 100;
-		//[Asteroids]
-		gripEnt->client->otherKillerMOD = MOD_UNKNOWN;
-		gripEnt->client->otherKillerVehWeapon = 0;
-		gripEnt->client->otherKillerWeaponType = WP_NONE;
+		if(gripEnt->client)
+		{
+			gripEnt->client->ps.otherKiller = self->s.number;
+			gripEnt->client->ps.otherKillerTime = level.time + 5000;
+			gripEnt->client->ps.otherKillerDebounceTime = level.time + 100;
+			//[Asteroids]
+			gripEnt->client->otherKillerMOD = MOD_UNKNOWN;
+			gripEnt->client->otherKillerVehWeapon = 0;
+			gripEnt->client->otherKillerWeaponType = WP_NONE;
 		//[/Asteroids]
 
-		gripEnt->client->ps.forceGripChangeMovetype = PM_FLOAT;
+			gripEnt->client->ps.forceGripChangeMovetype = PM_FLOAT;
+		}
 
-		if ((level.time - gripEnt->client->ps.fd.forceGripStarted) > 3000 && !self->client->ps.fd.forceGripDamageDebounceTime)
-		{ //if we managed to lift him into the air for 2 seconds, give him a crack
-			self->client->ps.fd.forceGripDamageDebounceTime = 1;
-			G_Damage(gripEnt, self, self, NULL, NULL, 20, DAMAGE_NO_ARMOR, MOD_FORCE_DARK);
+		if(gripEnt->client)
+		{
+			if ((level.time - gripEnt->client->ps.fd.forceGripStarted) > 3000 && !self->client->ps.fd.forceGripDamageDebounceTime)
+			{ //if we managed to lift him into the air for 2 seconds, give him a crack
+				self->client->ps.fd.forceGripDamageDebounceTime = 1;
+				G_Damage(gripEnt, self, self, NULL, NULL, 20, DAMAGE_NO_ARMOR, MOD_FORCE_DARK);
 
-			//Must play custom sounds on the actual entity. Don't use G_Sound (it creates a temp entity for the sound)
-			G_EntitySound( gripEnt, CHAN_VOICE, G_SoundIndex(va( "*choke%d.wav", Q_irand( 1, 3 ) )) );
+				//Must play custom sounds on the actual entity. Don't use G_Sound (it creates a temp entity for the sound)
+				G_EntitySound( gripEnt, CHAN_VOICE, G_SoundIndex(va( "*choke%d.wav", Q_irand( 1, 3 ) )) );
 
-			gripEnt->client->ps.forceHandExtend = HANDEXTEND_CHOKE;
-			gripEnt->client->ps.forceHandExtendTime = level.time + 2000;
+				gripEnt->client->ps.forceHandExtend = HANDEXTEND_CHOKE;
+				gripEnt->client->ps.forceHandExtendTime = level.time + 2000;
 
-			if (gripEnt->client->ps.fd.forcePowersActive & (1 << FP_GRIP))
-			{ //choking, so don't let him keep gripping himself
-				WP_ForcePowerStop(gripEnt, FP_GRIP);
+				if (gripEnt->client->ps.fd.forcePowersActive & (1 << FP_GRIP))
+				{ //choking, so don't let him keep gripping himself
+					WP_ForcePowerStop(gripEnt, FP_GRIP);
+				}
+			}
+			else if ((level.time - gripEnt->client->ps.fd.forceGripStarted) > 4000)
+			{
+				WP_ForcePowerStop(self, forcePower);
 			}
 		}
-		else if ((level.time - gripEnt->client->ps.fd.forceGripStarted) > 4000)
-		{
-			WP_ForcePowerStop(self, forcePower);
-		}
-		return;
 	}
 
 	if (gripLevel == FORCE_LEVEL_3)
 	{
-		gripEnt->client->ps.fd.forceGripBeingGripped = level.time + 1000;
-
-		gripEnt->client->ps.otherKiller = self->s.number;
-		gripEnt->client->ps.otherKillerTime = level.time + 5000;
-		gripEnt->client->ps.otherKillerDebounceTime = level.time + 100;
-		//[Asteroids]
-		gripEnt->client->otherKillerMOD = MOD_UNKNOWN;
-		gripEnt->client->otherKillerVehWeapon = 0;
-		gripEnt->client->otherKillerWeaponType = WP_NONE;
-		//[/Asteroids]
-
-		gripEnt->client->ps.forceGripChangeMovetype = PM_FLOAT;
-
-		if (gripEnt->client->ps.forceGripMoveInterval < level.time)
+		if(gripEnt->client)
 		{
-			float nvLen = 0;
+			gripEnt->client->ps.fd.forceGripBeingGripped = level.time + 1000;
 
-			VectorCopy(gripEnt->client->ps.origin, start_o);
-			AngleVectors(self->client->ps.viewangles, fwd, NULL, NULL);
-			fwd_o[0] = self->client->ps.origin[0] + fwd[0]*128;
-			fwd_o[1] = self->client->ps.origin[1] + fwd[1]*128;
-			fwd_o[2] = self->client->ps.origin[2] + fwd[2]*128;
-			fwd_o[2] += 16;
-			VectorSubtract(fwd_o, start_o, nvel);
+			gripEnt->client->ps.otherKiller = self->s.number;
+			gripEnt->client->ps.otherKillerTime = level.time + 5000;
+			gripEnt->client->ps.otherKillerDebounceTime = level.time + 100;
+			//[Asteroids]
+			gripEnt->client->otherKillerMOD = MOD_UNKNOWN;
+			gripEnt->client->otherKillerVehWeapon = 0;
+			gripEnt->client->otherKillerWeaponType = WP_NONE;
+			//[/Asteroids]
 
-			nvLen = VectorLength(nvel);
-
-			if (nvLen < 16)
-			{ //within x units of desired spot
-				VectorNormalize(nvel);
-				gripEnt->client->ps.velocity[0] = nvel[0]*8;
-				gripEnt->client->ps.velocity[1] = nvel[1]*8;
-				gripEnt->client->ps.velocity[2] = nvel[2]*8;
-			}
-			else if (nvLen < 64)
-			{
-				VectorNormalize(nvel);
-				gripEnt->client->ps.velocity[0] = nvel[0]*128;
-				gripEnt->client->ps.velocity[1] = nvel[1]*128;
-				gripEnt->client->ps.velocity[2] = nvel[2]*128;
-			}
-			else if (nvLen < 128)
-			{
-				VectorNormalize(nvel);
-				gripEnt->client->ps.velocity[0] = nvel[0]*256;
-				gripEnt->client->ps.velocity[1] = nvel[1]*256;
-				gripEnt->client->ps.velocity[2] = nvel[2]*256;
-			}
-			else if (nvLen < 200)
-			{
-				VectorNormalize(nvel);
-				gripEnt->client->ps.velocity[0] = nvel[0]*512;
-				gripEnt->client->ps.velocity[1] = nvel[1]*512;
-				gripEnt->client->ps.velocity[2] = nvel[2]*512;
-			}
-			else
-			{
-				VectorNormalize(nvel);
-				gripEnt->client->ps.velocity[0] = nvel[0]*700;
-				gripEnt->client->ps.velocity[1] = nvel[1]*700;
-				gripEnt->client->ps.velocity[2] = nvel[2]*700;
-			}
-
-			gripEnt->client->ps.forceGripMoveInterval = level.time + 300; //only update velocity every 300ms, so as to avoid heavy bandwidth usage
+			gripEnt->client->ps.forceGripChangeMovetype = PM_FLOAT;
 		}
-
-		if ((level.time - gripEnt->client->ps.fd.forceGripStarted) > 3000 && !self->client->ps.fd.forceGripDamageDebounceTime)
-		{ //if we managed to lift him into the air for 2 seconds, give him a crack
-			self->client->ps.fd.forceGripDamageDebounceTime = 1;
-			G_Damage(gripEnt, self, self, NULL, NULL, 40, DAMAGE_NO_ARMOR, MOD_FORCE_DARK);
-
-			//Must play custom sounds on the actual entity. Don't use G_Sound (it creates a temp entity for the sound)
-			G_EntitySound( gripEnt, CHAN_VOICE, G_SoundIndex(va( "*choke%d.wav", Q_irand( 1, 3 ) )) );
-
-			gripEnt->client->ps.forceHandExtend = HANDEXTEND_CHOKE;
-			gripEnt->client->ps.forceHandExtendTime = level.time + 2000;
-
-			if (gripEnt->client->ps.fd.forcePowersActive & (1 << FP_GRIP))
-			{ //choking, so don't let him keep gripping himself
-				WP_ForcePowerStop(gripEnt, FP_GRIP);
-			}
-		}
-		else if ((level.time - gripEnt->client->ps.fd.forceGripStarted) > 4000)
+		if(gripEnt->client)
 		{
-			WP_ForcePowerStop(self, forcePower);
-		}
-		return;
+			if (gripEnt->client->ps.forceGripMoveInterval < level.time)
+			{
+				float nvLen = 0;
+
+				VectorCopy(gripEnt->client->ps.origin, start_o);
+				AngleVectors(self->client->ps.viewangles, fwd, NULL, NULL);
+				fwd_o[0] = self->client->ps.origin[0] + fwd[0]*128;
+				fwd_o[1] = self->client->ps.origin[1] + fwd[1]*128;
+				fwd_o[2] = self->client->ps.origin[2] + fwd[2]*128;
+				fwd_o[2] += 16;
+				VectorSubtract(fwd_o, start_o, nvel);
+
+				nvLen = VectorLength(nvel);
+
+				if (nvLen < 16)
+				{ //within x units of desired spot
+					VectorNormalize(nvel);
+					gripEnt->client->ps.velocity[0] = nvel[0]*8;
+					gripEnt->client->ps.velocity[1] = nvel[1]*8;
+					gripEnt->client->ps.velocity[2] = nvel[2]*8;
+				}
+				else if (nvLen < 64)
+				{
+					VectorNormalize(nvel);
+					gripEnt->client->ps.velocity[0] = nvel[0]*128;
+					gripEnt->client->ps.velocity[1] = nvel[1]*128;
+					gripEnt->client->ps.velocity[2] = nvel[2]*128;
+				}
+				else if (nvLen < 128)
+				{
+					VectorNormalize(nvel);
+					gripEnt->client->ps.velocity[0] = nvel[0]*256;
+					gripEnt->client->ps.velocity[1] = nvel[1]*256;
+					gripEnt->client->ps.velocity[2] = nvel[2]*256;
+				}
+				else if (nvLen < 200)
+				{
+					VectorNormalize(nvel);
+					gripEnt->client->ps.velocity[0] = nvel[0]*512;
+					gripEnt->client->ps.velocity[1] = nvel[1]*512;
+					gripEnt->client->ps.velocity[2] = nvel[2]*512;
+				}
+				else
+				{
+					VectorNormalize(nvel);
+					gripEnt->client->ps.velocity[0] = nvel[0]*700;
+					gripEnt->client->ps.velocity[1] = nvel[1]*700;
+					gripEnt->client->ps.velocity[2] = nvel[2]*700;
+				}
+
+				gripEnt->client->ps.forceGripMoveInterval = level.time + 300; //only update velocity every 300ms, so as to avoid heavy bandwidth usage
+			}
+
+			if ((level.time - gripEnt->client->ps.fd.forceGripStarted) > 3000 && !self->client->ps.fd.forceGripDamageDebounceTime)
+			{ //if we managed to lift him into the air for 2 seconds, give him a crack
+				self->client->ps.fd.forceGripDamageDebounceTime = 1;
+				G_Damage(gripEnt, self, self, NULL, NULL, 40, DAMAGE_NO_ARMOR, MOD_FORCE_DARK);
+
+				//Must play custom sounds on the actual entity. Don't use G_Sound (it creates a temp entity for the sound)
+				G_EntitySound( gripEnt, CHAN_VOICE, G_SoundIndex(va( "*choke%d.wav", Q_irand( 1, 3 ) )) );
+
+				gripEnt->client->ps.forceHandExtend = HANDEXTEND_CHOKE;
+				gripEnt->client->ps.forceHandExtendTime = level.time + 2000;
+
+				if (gripEnt->client->ps.fd.forcePowersActive & (1 << FP_GRIP))
+				{ //choking, so don't let him keep gripping himself
+					WP_ForcePowerStop(gripEnt, FP_GRIP);
+				}
+			}
+			else if ((level.time - gripEnt->client->ps.fd.forceGripStarted) > 4000)
+			{
+				WP_ForcePowerStop(self, forcePower);
+			}
+		}//end FORCE_LEVEL_3
+		else
+			{
+float nvLen = 0;
+
+				VectorCopy(gripEnt->s.pos.trBase, start_o);
+				AngleVectors(self->client->ps.viewangles, fwd, NULL, NULL);
+				fwd_o[0] = self->client->ps.origin[0] + fwd[0]*128;
+				fwd_o[1] = self->client->ps.origin[1] + fwd[1]*128;
+				fwd_o[2] = self->client->ps.origin[2] + fwd[2]*128;
+				fwd_o[2] += 16;
+				VectorSubtract(fwd_o, start_o, nvel);
+
+				nvLen = VectorLength(nvel);
+
+				if (nvLen < 16)
+				{ //within x units of desired spot
+					VectorNormalize(nvel);
+					gripEnt->s.pos.trBase[0] = nvel[0]*8;
+					gripEnt->s.pos.trBase[1] = nvel[1]*8;
+					gripEnt->s.pos.trBase[2] = nvel[2]*8;
+				}
+				else if (nvLen < 64)
+				{
+					VectorNormalize(nvel);
+					gripEnt->s.pos.trBase[0] = nvel[0]*128;
+					gripEnt->s.pos.trBase[1] = nvel[1]*128;
+					gripEnt->s.pos.trBase[2] = nvel[2]*128;
+				}
+				else if (nvLen < 128)
+				{
+					VectorNormalize(nvel);
+					gripEnt->s.pos.trDelta[0] = nvel[0]*256;
+					gripEnt->s.pos.trDelta[1] = nvel[1]*256;
+					gripEnt->s.pos.trDelta[2] = nvel[2]*256;
+				}
+				else if (nvLen < 200)
+				{
+					VectorNormalize(nvel);
+					gripEnt->s.pos.trDelta[0] = nvel[0]*512;
+					gripEnt->s.pos.trDelta[1] = nvel[1]*512;
+					gripEnt->s.pos.trDelta[2] = nvel[2]*512;
+				}
+				else
+				{
+					VectorNormalize(nvel);
+					gripEnt->s.pos.trDelta[0] = nvel[0]*700;
+					gripEnt->s.pos.trDelta[1] = nvel[1]*700;
+					gripEnt->s.pos.trDelta[2] = nvel[2]*700;
+				}
+
+				//gripEnt->client->ps.forceGripMoveInterval = level.time + 300; //only update velocity every 300ms, so as to avoid heavy bandwidth usage
+			}
 	}
 }
 
@@ -5107,7 +5392,10 @@ static int LightningDebounceTime = 0;
 //[/BugFix27]
 static int SpeedDebounceTime = 0;
 //sets the time between force speed FP drains.  
+static int ProtectDebounceTime=0;
+//same as above except for Protect
 #define SPEEDDEBOUNCE		200 
+#define PROTECTDEBOUNCE		200
 static void WP_ForcePowerRun( gentity_t *self, forcePowers_t forcePower, usercmd_t *cmd )
 {
 	extern usercmd_t	ucmd;
@@ -5155,6 +5443,54 @@ static void WP_ForcePowerRun( gentity_t *self, forcePowers_t forcePower, usercmd
 			WP_ForcePowerStop( self, forcePower );
 		}
 		break;
+		case FP_PROTECT:
+			{
+		int debounce = PROTECTDEBOUNCE;
+		/*
+		if (self->client->ps.fd.forcePowerDebounce[forcePower] < level.time)
+		{
+			BG_ForcePowerDrain( &self->client->ps, forcePower, 1 );
+			if (self->client->ps.fd.forcePower < 1)
+			{
+				WP_ForcePowerStop(self, forcePower);
+			}
+
+			self->client->ps.fd.forcePowerDebounce[forcePower] = level.time + 300;
+		}
+		*/
+		
+
+		if(self->client->ps.fd.forcePowerLevel[FP_PROTECT] >= FORCE_LEVEL_3)
+			debounce=250;
+
+		if ( self->client->holdingObjectiveItem >= MAX_CLIENTS  
+			&& self->client->holdingObjectiveItem < ENTITYNUM_WORLD )
+		{
+			if ( g_entities[self->client->holdingObjectiveItem].genericValue15 )
+			{//disables force powers
+				WP_ForcePowerStop( self, forcePower );
+			}
+		}
+		
+		if ( (ucmd.buttons & BUTTON_FORCEPOWER) && self->client->ps.fd.forcePowerSelected == FP_PROTECT )
+		{//holding it keeps it going
+			self->client->ps.fd.forcePowerDuration[FP_PROTECT] = level.time + 500;
+		}
+
+		if ( self->client->ps.fd.forcePower < forcePowerNeeded[self->client->ps.fd.forcePowerLevel[FP_PROTECT]][FP_PROTECT] 
+			|| self->client->ps.fd.forcePowerDuration[FP_PROTECT] < level.time )
+		{
+			WP_ForcePowerStop( self, forcePower );
+		}
+		else if( ProtectDebounceTime == level.time //someone already advanced the timer this frame
+			|| (level.time - ProtectDebounceTime >= debounce) )
+		{
+			BG_ForcePowerDrain( &self->client->ps, forcePower, 0 );
+			ProtectDebounceTime = level.time;
+		}
+
+		break;
+			}
 	case FP_SPEED:
 		//This is handled in PM_WalkMove and PM_StepSlideMove
 		if ( self->client->holdingObjectiveItem >= MAX_CLIENTS  
@@ -5166,11 +5502,12 @@ static void WP_ForcePowerRun( gentity_t *self, forcePowers_t forcePower, usercmd
 			}
 		}
 
-		if ( (cmd->buttons & BUTTON_FORCEPOWER) && self->client->ps.fd.forcePowerSelected == FP_SPEED )
+		if ( (ucmd.buttons & BUTTON_FORCEPOWER) && self->client->ps.fd.forcePowerSelected == FP_SPEED )
 		{//holding it keeps it going
 			self->client->ps.fd.forcePowerDuration[FP_SPEED] = level.time + 500;
 		}
 
+		
 		if ( self->client->ps.fd.forcePower < forcePowerNeeded[self->client->ps.fd.forcePowerLevel[FP_SPEED]][FP_SPEED] 
 			|| self->client->ps.fd.forcePowerDuration[FP_SPEED] < level.time )
 		{
@@ -5181,6 +5518,7 @@ static void WP_ForcePowerRun( gentity_t *self, forcePowers_t forcePower, usercmd
 		{
 			BG_ForcePowerDrain( &self->client->ps, forcePower, 0 );
 			SpeedDebounceTime = level.time;
+			
 		}
 		/*
 		if ( self->client->ps.powerups[PW_REDFLAG]
@@ -5201,7 +5539,7 @@ static void WP_ForcePowerRun( gentity_t *self, forcePowers_t forcePower, usercmd
 		if (self->client->ps.fd.forcePowerDebounce[FP_PULL] < level.time)
 		{ //This is sort of not ideal. Using the debounce value reserved for pull for this because pull doesn't need it.
 			BG_ForcePowerDrain( &self->client->ps, forcePower, 1 );
-			self->client->ps.fd.forcePowerDebounce[FP_PULL] = level.time + 100;
+			self->client->ps.fd.forcePowerDebounce[FP_PULL] = level.time + 500;
 		}
 
 		if (self->client->ps.fd.forcePower < 1)
@@ -5228,8 +5566,6 @@ static void WP_ForcePowerRun( gentity_t *self, forcePowers_t forcePower, usercmd
 		{
 			int addTime = 400;
 
-			self->health -= 2;
-
 			if (self->client->ps.fd.forcePowerLevel[FP_RAGE] == FORCE_LEVEL_1)
 			{
 				addTime = 150;
@@ -5244,14 +5580,7 @@ static void WP_ForcePowerRun( gentity_t *self, forcePowers_t forcePower, usercmd
 			}
 			self->client->ps.forceRageDrainTime = level.time + addTime;
 		}
-
-		if (self->health < 1)
-		{
-			self->health = 1;
-			WP_ForcePowerStop(self, forcePower);
-		}
-
-		self->client->ps.stats[STAT_HEALTH] = self->health;
+		
 		break;
 	case FP_DRAIN:
 		if (self->client->ps.forceHandExtend != HANDEXTEND_FORCE_HOLD)
@@ -5262,7 +5591,7 @@ static void WP_ForcePowerRun( gentity_t *self, forcePowers_t forcePower, usercmd
 
 		if ( self->client->ps.fd.forcePowerLevel[FP_DRAIN] > FORCE_LEVEL_1 )
 		{//higher than level 1
-			if ( (cmd->buttons & BUTTON_FORCE_DRAIN) || ((cmd->buttons & BUTTON_FORCEPOWER) && self->client->ps.fd.forcePowerSelected == FP_DRAIN) )
+			if ( (cmd->buttons & BUTTON_FORCE_DRAIN) || ((ucmd.buttons & BUTTON_FORCEPOWER) && self->client->ps.fd.forcePowerSelected == FP_DRAIN) )
 			{//holding it keeps it going
 				self->client->ps.fd.forcePowerDuration[FP_DRAIN] = level.time + 500;
 			}
@@ -5323,6 +5652,7 @@ static void WP_ForcePowerRun( gentity_t *self, forcePowers_t forcePower, usercmd
 				self->client->ps.fd.forcePowerDuration[FP_LIGHTNING] = level.time + 500;
 			}
 		}
+
 		// OVERRIDEFIXME
 		//[ForceSys]
 		if ( !WP_ForcePowerAvailable( self, forcePower, 1 ) || self->client->ps.fd.forcePowerDuration[FP_LIGHTNING] < level.time 
@@ -5369,18 +5699,6 @@ static void WP_ForcePowerRun( gentity_t *self, forcePowers_t forcePower, usercmd
 	case FP_SABER_DEFENSE:
 		break;
 	case FP_SABERTHROW:
-		break;
-	case FP_PROTECT:
-		if (self->client->ps.fd.forcePowerDebounce[forcePower] < level.time)
-		{
-			BG_ForcePowerDrain( &self->client->ps, forcePower, 1 );
-			if (self->client->ps.fd.forcePower < 1)
-			{
-				WP_ForcePowerStop(self, forcePower);
-			}
-
-			self->client->ps.fd.forcePowerDebounce[forcePower] = level.time + 300;
-		}
 		break;
 	case FP_ABSORB:
 		if (self->client->ps.fd.forcePowerDebounce[forcePower] < level.time)
@@ -6487,7 +6805,7 @@ void WP_ForcePowersUpdate( gentity_t *self, usercmd_t *ucmd )
 			self->client->ps.userInt3 |= (1 << FLAG_FLAMETHROWER);
 			self->client->ps.forceHandExtend = HANDEXTEND_FORCE_HOLD;
 			self->client->ps.forceHandExtendTime = level.time + 100;
-			
+
 			if( LightningDebounceTime == level.time //someone already advanced the timer this frame
 				|| (level.time - LightningDebounceTime >= LIGHTNINGDEBOUNCE) )
 			{
@@ -6840,6 +7158,8 @@ void WP_ForcePowersUpdate( gentity_t *self, usercmd_t *ucmd )
 		{//saberer regens slower since they use MP differently
 			if(self->client->ps.fd.saberAnimLevel == SS_MEDIUM)
 			{//yellow style is more "centered" and recovers MP faster.
+				//self->client->MishapDebounce = level.time + (g_mishapRegenTime.integer*.75);
+				//self->client->MishapDebounce/=100*10+self->client->MishapDebounce;
 				self->client->MishapDebounce = level.time + (g_mishapRegenTime.integer*.75);
 			}
 			else

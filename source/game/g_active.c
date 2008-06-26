@@ -945,6 +945,7 @@ void ClientEvents( gentity_t *ent, int oldEventSequence ) {
 	gclient_t *client;
 	int		damage;
 	vec3_t	dir;
+	qboolean fired=qfalse,altFired=qfalse;
 //	vec3_t	origin, angles;
 //	qboolean	fired;
 //	gitem_t *item;
@@ -1036,13 +1037,17 @@ void ClientEvents( gentity_t *ent, int oldEventSequence ) {
 			ent->client->dangerTime = level.time;
 			ent->client->ps.eFlags &= ~EF_INVULNERABLE;
 			ent->client->invulnerableTimer = 0;
+			fired=qtrue;
 			break;
 
 		case EV_ALT_FIRE:
+			if(ent->client->ps.weapon == WP_BOWCASTER)
+				return;
 			FireWeapon( ent, qtrue );
 			ent->client->dangerTime = level.time;
 			ent->client->ps.eFlags &= ~EF_INVULNERABLE;
 			ent->client->invulnerableTimer = 0;
+			altFired=qtrue;
 			break;
 
 		case EV_SABER_ATTACK:
@@ -1088,6 +1093,7 @@ void ClientEvents( gentity_t *ent, int oldEventSequence ) {
 		//[Flamethrower]
 		case EV_USE_ITEM12: //flamethrower
 			ItemUse_FlameThrower(ent);
+			break;
 		//[/Flamethrower]
 		default:
 			break;
@@ -2152,7 +2158,7 @@ extern qboolean inGameCinematic;
 //[ROQFILES]
 
 //[Reload]
-int ClipSize(int ammo)
+int ClipSize(int ammo,gentity_t *ent)
 {
 	switch(ammo)
 	{
@@ -2161,9 +2167,69 @@ int ClipSize(int ammo)
 	case AMMO_ROCKETS:
 		return 1;
 	case AMMO_POWERCELL:
-		return 30;
+		if(ent->client->skillLevel[SK_BOWCASTER] >= ent->client->skillLevel[SK_DISRUPTOR])
+		{
+			switch(ent->client->skillLevel[SK_BOWCASTER])
+			{
+			case FORCE_LEVEL_3:
+				return 30;
+				break;
+			case FORCE_LEVEL_2:
+				return 20;
+				break;
+			case FORCE_LEVEL_1:
+				return 10;
+				break;
+			}
+		}
+		else
+		{
+			switch(ent->client->skillLevel[SK_DISRUPTOR])
+			{
+			case FORCE_LEVEL_3:
+				return 30;
+				break;
+			case FORCE_LEVEL_2:
+				return 20;
+				break;
+			case FORCE_LEVEL_1:
+				return 10;
+				break;
+			}
+		}
+		break;
 	case AMMO_METAL_BOLTS:
-		return 100;
+		if(ent->client->skillLevel[SK_REPEATER] >= ent->client->skillLevel[SK_FLECHETTE])
+		{
+			switch(ent->client->skillLevel[SK_REPEATER])
+			{
+			case FORCE_LEVEL_3:
+				return 100;
+				break;
+			case FORCE_LEVEL_2:
+				return 50;
+				break;
+			case FORCE_LEVEL_1:
+				return 20;
+				break;
+			}
+		}
+		else
+		{
+			switch(ent->client->skillLevel[SK_FLECHETTE])
+			{
+			case FORCE_LEVEL_3:
+				return 100;
+				break;
+			case FORCE_LEVEL_2:
+				return 50;
+				break;
+			case FORCE_LEVEL_1:
+				return 20;
+				break;
+			}
+		}
+		break;
 
 	//case WP_BRYAR_PISTOL:
 	//	return 12;
@@ -2201,24 +2267,11 @@ int SkillLevelForWeap(gentity_t *ent,int weap)
 
 int ReloadTime(gentity_t *ent)
 {
-	if(ent->client->ps.weapon == WP_ROCKET_LAUNCHER)
+	if(ent->client->ps.weapon == WP_FLECHETTE)
+		return 1000;
+	else if(ent->client->ps.weapon == WP_ROCKET_LAUNCHER)
 	{
-		if(SkillLevelForWeap(ent,ent->client->ps.weapon) == 3)
-		{
-			return 4000;
-		}
-		else if (SkillLevelForWeap(ent,ent->client->ps.weapon) == 2)
-		{
-			return 6000;
-		}
-		else if (SkillLevelForWeap(ent,ent->client->ps.weapon) == 1)
-		{
-			return 8000;
-		}
-    else if (SkillLevelForWeap(ent,ent->client->ps.weapon) == 0)
-    {
-      return 10000;
-    }
+		return 3000;
 	}
 	else
 	{
@@ -2234,10 +2287,6 @@ int ReloadTime(gentity_t *ent)
 		{
 			return 300;
 		}
-    else if (SkillLevelForWeap(ent,ent->client->ps.weapon) == 0)
-    {
-      return 400;
-    }
 	}
 	return -1;
 }
@@ -2262,28 +2311,43 @@ void SetupReload(gentity_t *ent)
 		ent->client->ps.weaponTime = ent->client->ps.torsoTimer;
 	}
 
-	ent->bulletsToReload = ClipSize(weaponData[ent->client->ps.weapon].ammoIndex) - ent->client->ps.ammo[weaponData[ent->client->ps.weapon].ammoIndex];
+	ent->bulletsToReload = ClipSize(weaponData[ent->client->ps.weapon].ammoIndex,ent) - ent->client->ps.ammo[weaponData[ent->client->ps.weapon].ammoIndex];
+
 	ent->reloadTime = level.time + ReloadTime(ent);
 	ent->client->ps.zoomMode = 0;
+
+	if(ent->client->ps.weapon == WP_ROCKET_LAUNCHER)
+	{
+		ent->client->ps.eFlags|=EF_WALK;
+		ent->client->pers.cmd.buttons |= BUTTON_WALKING;
+	}
+
 }
 
+void G_SoundOnEnt( gentity_t *ent, int channel, const char *soundPath );
 void Reload(gentity_t *ent)
 {
 	if(ent->bullets[ent->client->ps.weapon] < 1)
 	{
 		ent->bulletsToReload =0;
 		ent->reloadTime = -1;
+		if(ent->client->ps.weapon == WP_ROCKET_LAUNCHER)
+			ent->client->ps.eFlags &= ~EF_WALK;
 		return;
 	}
 	if(ent->bulletsToReload < 1)
 	{
 		ent->bulletsToReload =0;
 		ent->reloadTime = -1;
+		if(ent->client->ps.weapon == WP_ROCKET_LAUNCHER)
+		ent->client->ps.eFlags &= ~EF_WALK;
 		return;
 	}
-	if(ent->client->ps.ammo[weaponData[ent->client->ps.weapon].ammoIndex] >= ClipSize(weaponData[ent->client->ps.weapon].ammoIndex))
+	if(ent->client->ps.ammo[weaponData[ent->client->ps.weapon].ammoIndex] >= ClipSize(weaponData[ent->client->ps.weapon].ammoIndex,ent))
 	{
 		ent->bulletsToReload =0;
+		if(ent->client->ps.weapon == WP_ROCKET_LAUNCHER)
+		ent->client->ps.eFlags &= ~EF_WALK;
 		ent->reloadTime = -1;
 		return;
 	}
@@ -2298,7 +2362,7 @@ void Reload(gentity_t *ent)
 		ent->bulletsToReload--;
 		if(ent->bullets[ent->client->ps.weapon] < 1)
 		return;
-		if(ent->client->ps.ammo[weaponData[ent->client->ps.weapon].ammoIndex] >= ClipSize(weaponData[ent->client->ps.weapon].ammoIndex))
+		if(ent->client->ps.ammo[weaponData[ent->client->ps.weapon].ammoIndex] >= ClipSize(weaponData[ent->client->ps.weapon].ammoIndex,ent))
 			return;
 		}
 	ent->reloadTime = level.time + ReloadTime(ent);
@@ -2313,10 +2377,56 @@ void Reload(gentity_t *ent)
 		ent->bulletsToReload--;
 		if(ent->bullets[ent->client->ps.weapon] < 1)
 		return;
-		if(ent->client->ps.ammo[weaponData[ent->client->ps.weapon].ammoIndex] >= ClipSize(weaponData[ent->client->ps.weapon].ammoIndex))
+		if(ent->client->ps.ammo[weaponData[ent->client->ps.weapon].ammoIndex] >= ClipSize(weaponData[ent->client->ps.weapon].ammoIndex,ent))
 			return;
 		}
 	ent->reloadTime = level.time + ReloadTime(ent);
+	}
+	else if(ent->client->ps.weapon == WP_FLECHETTE)
+	{
+		if(SkillLevelForWeap(ent,WP_FLECHETTE) == FORCE_LEVEL_1)
+		{
+			int i;
+			for(i=0; i<5; i++)
+			{
+				ent->bullets[ent->client->ps.weapon]--;
+				ent->client->ps.ammo[weaponData[ent->client->ps.weapon].ammoIndex]++;
+				ent->bulletsToReload--;
+				if(ent->bullets[ent->client->ps.weapon] < 1)
+					return;
+				if(ent->client->ps.ammo[weaponData[ent->client->ps.weapon].ammoIndex] >= ClipSize(weaponData[ent->client->ps.weapon].ammoIndex,ent))
+					return;
+			}		
+		}
+		else if(SkillLevelForWeap(ent,WP_FLECHETTE) == FORCE_LEVEL_2)
+		{
+			int i;
+			for(i=0; i<10; i++)
+			{
+				ent->bullets[ent->client->ps.weapon]--;
+				ent->client->ps.ammo[weaponData[ent->client->ps.weapon].ammoIndex]++;
+				ent->bulletsToReload--;
+				if(ent->bullets[ent->client->ps.weapon] < 1)
+					return;
+				if(ent->client->ps.ammo[weaponData[ent->client->ps.weapon].ammoIndex] >= ClipSize(weaponData[ent->client->ps.weapon].ammoIndex,ent))
+					return;
+			}		
+		}
+		else if(SkillLevelForWeap(ent,WP_FLECHETTE) == FORCE_LEVEL_3)
+		{
+			int i;
+			for(i=0; i<15; i++)
+			{
+				ent->bullets[ent->client->ps.weapon]--;
+				ent->client->ps.ammo[weaponData[ent->client->ps.weapon].ammoIndex]++;
+				ent->bulletsToReload--;
+				if(ent->bullets[ent->client->ps.weapon] < 1)
+					return;
+				if(ent->client->ps.ammo[weaponData[ent->client->ps.weapon].ammoIndex] >= ClipSize(weaponData[ent->client->ps.weapon].ammoIndex,ent))
+					return;
+			}		
+		}
+		ent->reloadTime = level.time + ReloadTime(ent);
 	}
 	else
 	{
@@ -2410,6 +2520,13 @@ void ClientThink_real( gentity_t *ent ) {
 		ent->client->blockTime = 0;
 	}
 	
+	//[SentryHack]
+	if(ent->client->isHacking == -100 && ent->client->ps.hackingTime <= level.time)
+	{
+		ItemUse_Sentry2(ent);
+		ent->client->isHacking = qfalse;
+	}
+	//[/SentryHack]
 	//[SentryGun]
 	if (ent->sentryDeadThink <= level.time && ent->sentryDeadThink > 0 )
 	{
@@ -2957,7 +3074,7 @@ void ClientThink_real( gentity_t *ent ) {
 
 			client->ps.speed = ent->NPC->desiredSpeed;
 		}
-
+		
 		//[CoOp]
 		//add case to prevent NPCs from getting their ucmds halved
 		if (ucmd->buttons & BUTTON_WALKING && ent->s.eType != ET_NPC)
@@ -2997,7 +3114,10 @@ void ClientThink_real( gentity_t *ent ) {
 		(!ent->NPC || ent->s.NPC_class != CLASS_VEHICLE)) //if riding a vehicle it will manage our speed and such
 	{
 		// set speed
-		client->ps.speed = g_speed.value;
+		if(ent->client->ps.eFlags & EF_WALK)
+			client->ps.speed = g_speed.value /(2);
+		else
+			client->ps.speed = g_speed.value;
 
 		//Check for a siege class speed multiplier
 		if (g_gametype.integer == GT_SIEGE &&
@@ -4394,7 +4514,7 @@ void ClientThink_real( gentity_t *ent ) {
 				respawn( ent );
 				return;
 			}
-		
+			
 			// pressing attack or use is the normal respawn method
 			if ( ucmd->buttons & ( BUTTON_ATTACK | BUTTON_USE_HOLDABLE ) ) {
 				respawn( ent );

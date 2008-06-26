@@ -1532,7 +1532,7 @@ LANG_ENGLISH        "Disruptor Rifle:"
 
 REFERENCE           HEAVY_REPEATER
 NOTES               "Used in weapon binding."
-LANG_ENGLISH        "Heavy Repeater:"
+LANG_ENGLISH        "Clone Rifle:"
 
 REFERENCE           DEMP_2
 NOTES               "Used in weapon binding."
@@ -1540,13 +1540,13 @@ LANG_ENGLISH        "DEMP 2:"
 
 REFERENCE           FLECHETTE
 NOTES               "Used in weapon binding."
-LANG_ENGLISH        "Flechette:"
+LANG_ENGLISH        "T-21:"
 
 REFERENCE           CONC_RIFLE_SETUP
 LANG_ENGLISH        "Concussion Rifle:"
 
 REFERENCE           MERR_SONN
-LANG_ENGLISH        "Merr-Sonn:"
+LANG_ENGLISH        "Rocket Launcher:"
 
 REFERENCE           NEXT_WEAPON
 NOTES               "Used in weapon binding."
@@ -2286,10 +2286,10 @@ REFERENCE           SEE_ENEMIES_AT_ALL_TIMES
 LANG_ENGLISH        "See enemies at all times, and even dodge sniper shots."
 
 REFERENCE           CREATE_AN_AURA_THAT_PROTECTS
-LANG_ENGLISH        "Create an aura that protects from physical attacks."
+LANG_ENGLISH        "Create a Force shield that reduces DP damage from attacks."
 
 REFERENCE           PROTECT_AGAINST_FORCE
-LANG_ENGLISH        "Protect against Force attacks and gain power from them."
+LANG_ENGLISH        "Passively absorbs Force attacks."
 
 REFERENCE           HEAL_YOUR_BODY_WITH_THE
 LANG_ENGLISH        "Heal your body with the Force."
@@ -2308,6 +2308,9 @@ LANG_ENGLISH        "Immobilize opponents in an agonizing grip of death."
 
 REFERENCE           UNLEASH_DEADLY_ELECTRICAL
 LANG_ENGLISH        "Unleash deadly electrical attacks against your foes."
+
+REFERENCE           UNLEASH_DEADLY_RAGE
+LANG_ENGLISH        "Unleash a raging flurry of fast strikes."
 
 REFERENCE           BECOME_A_NEARLY_UNSTOPPABLE
 LANG_ENGLISH        "Become a nearly unstoppable juggernaut."
@@ -4260,7 +4263,7 @@ LANG_ENGLISH        "CLOSE"
 REFERENCE           TEAM_SWITCHING
 LANG_ENGLISH        "Team Switching:"
 
-REFERENCE           TEAM_SWITCHING_DESC
+REFERENCE     TEAM_SWITCHING_DESC
 LANG_ENGLISH        "Toggle game mode where teams compete to finish map in least amount of time."
 
 REFERENCE           MATCHING_NAMES

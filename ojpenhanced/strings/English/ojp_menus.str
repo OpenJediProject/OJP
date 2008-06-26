@@ -24,146 +24,146 @@ REFERENCE	    SKILL
 LANG_ENGLISH	    "Skill"
 
 REFERENCE	    NOTFORCESENSITIVE
-LANG_ENGLISH	    "No Force Powers"
+LANG_ENGLISH	    "Not Force-Sensitive."
 
 REFERENCE	    DESC_NOTFORCESENSITIVE
 LANG_ENGLISH	    "Must acquire a minimum rank of 1 in Force Seeing to use other Force Powers."
 
 REFERENCE	    SKILL_JETPACK
-LANG_ENGLISH	    "Jetpack:"
+LANG_ENGLISH	    "JT-12 Jetpack:"
 
 REFERENCE	    DESC_SKILL_JETPACK
-LANG_ENGLISH	"Gains the user a jetpack.  Additional points give the pack additional fuel."
+LANG_ENGLISH	"A Merr-Sonn JT-12 Jetpack."
 
 REFERENCE	    SKILL_PISTOL
-LANG_ENGLISH	    "Pistol:"
+LANG_ENGLISH	    "DL-44 Blaster"
 
 REFERENCE	    DESC_SKILL_PISTOL
-LANG_ENGLISH	"Gains the user a blaster pistol."
+LANG_ENGLISH	"The DL-44 Heavy Blaster pistol. Allows akimbo-wielding at level 3."
 
 REFERENCE	    SKILL_BLASTER
-LANG_ENGLISH	    "Blaster:"
+LANG_ENGLISH	    "E-11 Blaster"
 
 REFERENCE	    DESC_SKILL_BLASTER
-LANG_ENGLISH	"Gains the user a blaster rifle."
+LANG_ENGLISH	"The BlasTech E-11 Blaster rifle. All-purpose rifle."
 
 REFERENCE	    SKILL_THERMALS
-LANG_ENGLISH	    "Thermals:"
+LANG_ENGLISH	    "Thermal Det.:"
 
 REFERENCE	    DESC_SKILL_THERMALS
-LANG_ENGLISH	"Gains the user thermals."
+LANG_ENGLISH	"The Thermal Detonator. Crowd-control grenade capable of vaporization."
 
 REFERENCE	    SKILL_ROCKET
-LANG_ENGLISH	    "Rocket Launcher:"
+LANG_ENGLISH	    "Merr-Sonn RL:"
 
 REFERENCE	    DESC_SKILL_ROCKET
-LANG_ENGLISH	"Gains the user a Rocket Launcher."
+LANG_ENGLISH	"Merr-Sonn Rocket Launcher. Ammo added for each level; reload time improved."
 
 REFERENCE	    SKILL_BACTA
-LANG_ENGLISH	    "Bacta:"
+LANG_ENGLISH	    "Bacta Canister"
 
 REFERENCE	    DESC_SKILL_BACTA
-LANG_ENGLISH	"Gains the user a emergency medical bacta pack.  Additional points makes the pack larger."
+LANG_ENGLISH	"A canister of Bacta. Used for Health regeneration."
 
 REFERENCE	    SKILL_FLAMETHROWER
 LANG_ENGLISH	    "Flamethrower:"
 
 REFERENCE	    DESC_SKILL_FLAMETHROWER
-LANG_ENGLISH	"Gains the user a Flamethrower."
+LANG_ENGLISH	"A wrist-mounted flamethrower. Delivers good Health damage with knockback."
 
 REFERENCE	    SKILL_BOWCASTER
 LANG_ENGLISH	    "Bowcaster:"
 
 REFERENCE	    DESC_SKILL_BOWCASTER
-LANG_ENGLISH	"Gains the user a Bowcaster."
+LANG_ENGLISH	"Wookiee Bowcaster. Decimates Dodge and bears a scope at level 3."
 
 REFERENCE	    SKILL_FORCEFIELD
 LANG_ENGLISH	    "Force Field:"
 
 REFERENCE	    DESC_SKILL_FORCEFIELD
-LANG_ENGLISH	"Gains the user a portable ray shield."
+LANG_ENGLISH	"A portable ray shield."
 
 REFERENCE	    SKILL_CLOAK
 LANG_ENGLISH	    "Cloaking Device:"
 
 REFERENCE	    DESC_SKILL_CLOAK
-LANG_ENGLISH	"Gains the user a cloaking device."
+LANG_ENGLISH	"Allows brief periods of refractive cloaking of the user."
 
 REFERENCE	    SKILL_SEEKER
 LANG_ENGLISH	    "Seeker Droid:"
 
 REFERENCE	    DESC_SKILL_SEEKER
-LANG_ENGLISH	"Gains the user a seeker droid."
+LANG_ENGLISH	"Commandable seeker droid, firing stun shots."
 
 REFERENCE	    SKILL_SENTRY
-LANG_ENGLISH	    "Sentry Gun:"
+LANG_ENGLISH	    "Sentry Droid:"
 
 REFERENCE	    DESC_SKILL_SENTRY
-LANG_ENGLISH	"Gains the user a sentry gun."
+LANG_ENGLISH	"Hack-setup sentry droid for base defense. Highly explosive."
 
 REFERENCE	    SKILL_DETPACK
-LANG_ENGLISH	    "Detpack:"
+LANG_ENGLISH	    "Det Packs:"
 
 REFERENCE	    DESC_SKILL_DETPACK
-LANG_ENGLISH	"Gains the user detpacks."
+LANG_ENGLISH	"Detonation packs with highly concentrated area of effect damage."
 
 REFERENCE	    SKILL_REPEATER
-LANG_ENGLISH	"Clone Rifle:"
+LANG_ENGLISH	"DC-15 Rifle:"
 
 REFERENCE	    DESC_SKILL_REPEATER
-LANG_ENGLISH	"Gains the user the Clone Rifle."
+LANG_ENGLISH	"DC-15 Rifle. Accurate at all ranges, boasts concussive blasts at level 3."
 
 REFERENCE	    SKILL_DISRUPTOR
-LANG_ENGLISH	"Disruptor:"
+LANG_ENGLISH	"DXR-6 Disruptor:"
 
 REFERENCE	    DESC_SKILL_DISRUPTOR
-LANG_ENGLISH	"Gains the user the Disruptor."
+LANG_ENGLISH	"Molecular destabilizer. Fully charged shots decimate Dodge from afar."
 
 //[StanceSelection]
 REFERENCE	REQUIRES_BLUESTYLE
-LANG_ENGLISH	"(requires Shii-Cho 1)"
+LANG_ENGLISH	"(requires Basic Lightsaber training in Shii-Cho Form)"
 
 REFERENCE	SKILL_BLUESTYLE
 LANG_ENGLISH	"Soresu:"
 
 REFERENCE	    DESC_SKILL_BLUESTYLE
-LANG_ENGLISH	"Gains the user the Soresu style of lightsaber combat(less cost for parries)."
+LANG_ENGLISH	"Parry defense bonuses; blaster defense bonuses."
 
 REFERENCE	SKILL_YELLOWSTYLE
 LANG_ENGLISH	"Shii-Cho:"
 
 REFERENCE	    DESC_SKILL_YELLOWSTYLE
-LANG_ENGLISH	"Gains the user a lightsaber and Shii-Cho style of lightsaber combat(faster mishap regen)."
+LANG_ENGLISH	"Lightsaber training; faster mishap regeneration."
 
 REFERENCE	SKILL_REDSTYLE
 LANG_ENGLISH	"Djem So:"
 
 REFERENCE	    DESC_SKILL_REDSTYLE
-LANG_ENGLISH	"Gains the user the Djem So style of lightsaber(strongest style and strongest attackfeints)."
+LANG_ENGLISH	"Destructive combination attacks; fatigue-inducing strikes if not parried."
 
 REFERENCE	SKILL_GREENSTYLE
 LANG_ENGLISH	"Makashi:"
 
 REFERENCE	    DESC_SKILL_GREENSTYLE
-LANG_ENGLISH	"Gains user the Makashi style of lightsaber combat(nonparried hits do Mishap damage)."
+LANG_ENGLISH	"Attacks do mishap damage if unparried; easier disarming."
 
 REFERENCE	SKILL_PURPLESTYLE
 LANG_ENGLISH	"Juyo:"
 
 REFERENCE	    DESC_SKILL_PURPLESTYLE
-LANG_ENGLISH	"Gains user Juyo style of lightsaber(kicks and forcepower usage at opponent's lesser Mishap)."
+LANG_ENGLISH	"Power attacks damage mishap if unparried; opponent vulnerable to Force and melee attacks."
 
 REFERENCE	SKILL_DUALSTYLE
-LANG_ENGLISH	"Dual/Ataru Style:"
+LANG_ENGLISH	"Dual/Ataru:"
 
 REFERENCE	    DESC_SKILL_DUALSTYLE
-LANG_ENGLISH	"Two sabers usage(cheap attackfeints, no disarm) or Ataru(1 fp backflip/cartwheel, better run hit)."
+LANG_ENGLISH	"Triple damage for run attacks; low Force cost for acrobatics."
 
 REFERENCE	SKILL_STAFFSTYLE
-LANG_ENGLISH	"Staff/Niman Style:"
+LANG_ENGLISH	"Staff/Niman:"
 
 REFERENCE	    DESC_SKILL_STAFFSTYLE
-LANG_ENGLISH	"Gains user the ability to use the staff(little extra damage) or Niman(faster fp regen)."
+LANG_ENGLISH	"Upgraded damage potential; faster Force regeneration."
 //[/StanceSelection]
 //[/ExpSys]
 
@@ -177,8 +177,11 @@ REFERENCE	    FORCE_SABERTHROW
 LANG_ENGLISH	    "Saber Throw:"
 
 REFERENCE	    USES_FORCE_SABERTHROW_ABILITY
-LANG_ENGLISH	    "Uses Force Saber Throw ability."
+LANG_ENGLISH	    "Uses Force Saber Throw ability.  Control and range increase with mastery."
 //[/SaberThrowSys]
+
+REFERENCE		FORCE_RAGE
+LANG_ENGLISH		"Force Rage:"
 
 //[OLDGAMETYPES]
 REFERENCE           JEDIMASTER
@@ -462,7 +465,7 @@ REFERENCE       THERMAL_DETONATOR_THROW_AVAILABLE
 LANG_ENGLISH	"Automatically Throws available Thermal Detonator without being selected in inventory"
 
 REFERENCE	   QUICK_PARRY_HOLDBUTTON
-LANG_ENGLISH	"QuickParry/KickBlock Button:"
+LANG_ENGLISH	"Quick parry / Kick block:"
 
 REFERENCE	   ALLOWS_FOR_QUICK_PARRY
 LANG_ENGLISH	"Holding this allows parrying that doesn't stall enemy saberists or block enemy kicks"

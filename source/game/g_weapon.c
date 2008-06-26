@@ -12,6 +12,7 @@
 static	float	s_quadFactor;
 static	vec3_t	forward, vright, up;
 static	vec3_t	muzzle;
+static  vec3_t  muzzle2;//[DualPistols]
 
 // Bryar Pistol
 //--------
@@ -26,7 +27,7 @@ static	vec3_t	muzzle;
 //#define BRYAR_PISTOL_DAMAGE			10
 //[/WeaponSys]
 //[BryarSecondary]
-#define BRYAR_CHARGE_UNIT		500.0f	// bryar charging gives us one more unit
+#define BRYAR_CHARGE_UNIT		300.0f	// bryar charging gives us one more unit
 //#define BRYAR_CHARGE_UNIT			200.0f	// bryar charging gives us one more unit every 200ms--if you change this, you'll have to do the same in bg_pmove
 //[/BryarSecondary]
 #define BRYAR_ALT_SIZE				1.0f
@@ -38,9 +39,9 @@ static	vec3_t	muzzle;
 //[WeaponSys]
 //racc - primary fire spread
 #define BLASTER_SPREAD2				0.7f//1.2f
-#define BLASTER_VELOCITY			4000  //Used to be 2300.  Again, way too slow.  You can almost outrun them.
+#define BLASTER_VELOCITY			3650  //Used to be 2300.  Again, way too slow.  You can almost outrun them.
 //Better gun, better stopping power.  Kills in two hits if you don't have full shields.
-#define BLASTER_DAMAGE				125
+#define BLASTER_DAMAGE				50
 //#define BLASTER_VELOCITY			2300
 //#define BLASTER_DAMAGE				20
 //[/WeaponSys]
@@ -48,7 +49,7 @@ static	vec3_t	muzzle;
 // Tenloss Disruptor
 //----------
 //[WeaponSys]
-#define DISRUPTOR_MAIN_DAMAGE			179 //was 30
+#define DISRUPTOR_MAIN_DAMAGE			25 //was 30
 #define DISRUPTOR_MAIN_DAMAGE_SIEGE		90 //was 50
 //#define DISRUPTOR_MAIN_DAMAGE			30 //40
 //#define DISRUPTOR_MAIN_DAMAGE_SIEGE		50
@@ -64,15 +65,15 @@ static	vec3_t	muzzle;
 #define DISRUPTOR_ALT_TRACES			3		// can go through a max of 3 damageable(sp?) entities
 #define DISRUPTOR_CHARGE_UNIT			50.0f	// distruptor charging gives us one more unit every 50ms--if you change this, you'll have to do the same in bg_pmove
 //[WeaponSys]
-#define DISRUPTOR_SHOT_SIZE				1		//disruptor shot size.  Was originally 0
+#define DISRUPTOR_SHOT_SIZE				2		//disruptor shot size.  Was originally 0
 //[/WeaponSys]
 
 
 // Wookiee Bowcaster
 //----------
 //[WeaponSys]
-#define	BOWCASTER_DAMAGE			45  //was 50 -- Was 80 [Bowcaster]
-#define	BOWCASTER_VELOCITY			4000 //was 1300
+#define	BOWCASTER_DAMAGE			150  //was 50 -- Was 80 [Bowcaster]
+#define	BOWCASTER_VELOCITY			3000 //was 1300
 //#define	BOWCASTER_DAMAGE			50
 //#define	BOWCASTER_VELOCITY			1300
 //[/WeaponSys]
@@ -88,8 +89,8 @@ static	vec3_t	muzzle;
 //----------
 #define REPEATER_SPREAD				1.4f
 //[WeaponSys]
-#define	REPEATER_DAMAGE				30  //was 14
-#define	REPEATER_VELOCITY			4000 //was 1600
+#define	REPEATER_DAMAGE				7  //was 14
+#define	REPEATER_VELOCITY			3400 //was 1600
 //#define	REPEATER_DAMAGE				14
 //#define	REPEATER_VELOCITY			1600
 //[/WeaponSys]
@@ -121,21 +122,21 @@ static	vec3_t	muzzle;
 // Golan Arms Flechette
 //---------
 #define FLECHETTE_SHOTS				5
-#define FLECHETTE_SPREAD			4.0f
-#define FLECHETTE_DAMAGE			12//15
-#define FLECHETTE_VEL				3500
+#define FLECHETTE_SPREAD			6.5f
+#define FLECHETTE_DAMAGE			3//15
+#define FLECHETTE_VELOCITY			5000
 #define FLECHETTE_SIZE				1
-#define FLECHETTE_MINE_RADIUS_CHECK	256
-#define FLECHETTE_ALT_DAMAGE		60
-#define FLECHETTE_ALT_SPLASH_DAM	60
-#define FLECHETTE_ALT_SPLASH_RAD	128
+//#define FLECHETTE_MINE_RADIUS_CHECK	256
+#define FLECHETTE_ALT_DAMAGE		63.5
+//#define FLECHETTE_ALT_SPLASH_DAM	60
+//#define FLECHETTE_ALT_SPLASH_RAD	128
 
 // Personal Rocket Launcher
 //---------
 //[WeaponSys]
-#define	ROCKET_VELOCITY				3500  //was 900...  and again, could be outrun, just about.
-//#define	ROCKET_VELOCITY				900
-#define	ROCKET_DAMAGE				250
+#define	ROCKET_VELOCITY				2500  //was 900...  and again, could be outrun, just about. - Was 3500 DD
+//#define	ROCKET_VELOCITY				900 
+#define	ROCKET_DAMAGE				400
 #define	ROCKET_SPLASH_DAMAGE		250
 #define	ROCKET_SPLASH_RADIUS		210
 //#define	ROCKET_DAMAGE				100
@@ -285,81 +286,158 @@ BRYAR PISTOL
 ======================================================================
 */
 
-//----------------------------------------------
-static void WP_FireBryarPistol( gentity_t *ent, qboolean altFire )
-//---------------------------------------------------------
+static void WP_FireBryarPistolMain(gentity_t*ent)
 {
 	int damage = BRYAR_PISTOL_DAMAGE;
-	int count;
+	gentity_t	*missile;
 
-	gentity_t	*missile = CreateMissile( muzzle, forward, BRYAR_PISTOL_VEL, 10000, ent, altFire );
-	if(altFire)//must have level 3 pistol to charge
-		if(ent->client->skillLevel[SK_PISTOL] != FORCE_LEVEL_3)
-		{
-			return;
-		}
+	if((ent->client->ps.eFlags & EF_DUAL_WEAPONS))
+	{
+		if(ent->client->leftPistol)
+			missile=CreateMissile(muzzle2,forward,BRYAR_PISTOL_VEL,10000,ent,qfalse);
+		else
+			missile = CreateMissile( muzzle, forward, BRYAR_PISTOL_VEL, 10000, ent, qfalse );
+		
+		ent->client->leftPistol = !ent->client->leftPistol;
+	}
+	else
+		missile = CreateMissile( muzzle, forward, BRYAR_PISTOL_VEL, 10000, ent, qfalse );
+	//gentity_t	*missile = CreateMissile( muzzle, forward, BRYAR_PISTOL_VEL, 10000, ent, altFire );
+	//gentity_t   *missile2;
+
+	//[DualPistols]
+	//if((ent->client->ps.eFlags & EF_DUAL_WEAPONS))
+	//	missile2 = CreateMissile(muzzle2,forward,BRYAR_PISTOL_VEL,10000,ent,altFire);
+	//[/DualPistols]
 
 	missile->classname = "bryar_proj";
 	missile->s.weapon = WP_BRYAR_PISTOL;
 
-	if ( altFire )
+	//[DualPistols]
+	/*
+	if((ent->client->ps.eFlags & EF_DUAL_WEAPONS))
 	{
-		float boxSize = 0;
-
-		count = ( level.time - ent->client->ps.weaponChargeTime ) / BRYAR_CHARGE_UNIT;
-
-		if ( count < 1 )
-		{
-			count = 1;
-		}
-		//[BryarSecondary]
-		else if ( count > BRYAR_MAX_CHARGE )
-		{
-			count = BRYAR_MAX_CHARGE;
-
-		}
-
-		damage = BRYAR_PISTOL_ALT_DPDAMAGE + (float)count/BRYAR_MAX_CHARGE*(BRYAR_PISTOL_ALT_DPMAXDAMAGE-BRYAR_PISTOL_ALT_DPDAMAGE);
-
-		/*
-		else if ( count > 5 )
-		{
-			count = 5;
-		}
-
-		if (count > 1)
-		{
-			damage *= (count*1.7);
-		}
-		else
-		{
-			damage *= (count*1.5);
-		}
-		*/
-		//[/BryarSecondary]
-
-		missile->s.generic1 = count; // The missile will then render according to the charge level.
-
-		boxSize = BRYAR_ALT_SIZE*(count*0.5);
-
-		VectorSet( missile->r.maxs, boxSize, boxSize, boxSize );
-		VectorSet( missile->r.mins, -boxSize, -boxSize, -boxSize );
-	}
+		missile2->classname = "bryar_proj";
+		missile2->s.weapon = WP_BRYAR_PISTOL;
+	}*/
+	//[/DualPistols]
 
 	missile->damage = damage;
 	missile->dflags = DAMAGE_DEATH_KNOCKBACK;
-	if (altFire)
-	{
-		missile->methodOfDeath = MOD_BRYAR_PISTOL_ALT;
-	}
-	else
-	{
-		missile->methodOfDeath = MOD_BRYAR_PISTOL;
-	}
+	missile->methodOfDeath = MOD_BRYAR_PISTOL;
 	missile->clipmask = MASK_SHOT | CONTENTS_LIGHTSABER;
 
 	// we don't want it to bounce forever
 	missile->bounceCount = 8;
+
+	//[DualPistols]
+	/*
+	if((ent->client->ps.eFlags & EF_DUAL_WEAPONS))
+	{
+		missile2->damage = damage;
+		missile2->dflags = DAMAGE_DEATH_KNOCKBACK;
+		missile2->methodOfDeath = MOD_BRYAR_PISTOL;
+		missile2->clipmask = MASK_SHOT | CONTENTS_LIGHTSABER;
+
+		// we don't want it to bounce forever
+		missile2->bounceCount = 8;
+	}*/
+	//[/DualPistols]
+}
+
+static void WP_FireBryarPistolAlt(gentity_t*ent)
+{
+	int damage = BRYAR_PISTOL_DAMAGE;
+	int count;
+
+	gentity_t	*missile = CreateMissile( muzzle, forward, BRYAR_PISTOL_VEL, 10000, ent, qtrue );
+	gentity_t   *missile2;
+	float boxSize = 0;
+
+	//[DualPistols]
+	if((ent->client->ps.eFlags & EF_DUAL_WEAPONS))
+		missile2 = CreateMissile(muzzle2,forward,BRYAR_PISTOL_VEL,10000,ent,qtrue);
+	//[/DualPistols]
+
+	if(ent->client->skillLevel[SK_PISTOL] != FORCE_LEVEL_3)
+	{
+		return;
+	}
+
+	missile->classname = "bryar_proj";
+	missile->s.weapon = WP_BRYAR_PISTOL;
+
+	//[DualPistols]
+	if((ent->client->ps.eFlags & EF_DUAL_WEAPONS))
+	{
+		missile2->classname = "bryar_proj";
+		missile2->s.weapon = WP_BRYAR_PISTOL;
+	}
+	//[/DualPistols]
+	
+
+	count = ( level.time - ent->client->ps.weaponChargeTime ) / BRYAR_CHARGE_UNIT;
+
+	if ( count < 1 )
+	{
+		count = 1;
+	}
+	//[BryarSecondary]
+	else if ( count > BRYAR_MAX_CHARGE )
+	{
+		count = BRYAR_MAX_CHARGE;
+	}
+
+	damage = BRYAR_PISTOL_ALT_DPDAMAGE + (float)count/BRYAR_MAX_CHARGE*(BRYAR_PISTOL_ALT_DPMAXDAMAGE-BRYAR_PISTOL_ALT_DPDAMAGE);
+
+	//[/BryarSecondary]
+
+	missile->s.generic1 = count; // The missile will then render according to the charge level.
+
+	boxSize = BRYAR_ALT_SIZE*(count*0.5);
+
+	VectorSet( missile->r.maxs, boxSize, boxSize, boxSize );
+	VectorSet( missile->r.mins, -boxSize, -boxSize, -boxSize );
+
+	//[DualPistols]
+	if((ent->client->ps.eFlags & EF_DUAL_WEAPONS))
+	{
+		missile2->s.generic1 = count;
+		VectorSet( missile2->r.maxs, boxSize, boxSize, boxSize );
+		VectorSet( missile2->r.mins, -boxSize, -boxSize, -boxSize );
+	}
+	//[/DualPistols]
+
+	missile->damage = damage;
+	missile->dflags = DAMAGE_DEATH_KNOCKBACK;
+	missile->methodOfDeath = MOD_BRYAR_PISTOL_ALT;
+	missile->clipmask = MASK_SHOT | CONTENTS_LIGHTSABER;
+
+	// we don't want it to bounce forever
+	missile->bounceCount = 8;
+
+	//[DualPistols]
+	if((ent->client->ps.eFlags & EF_DUAL_WEAPONS))
+	{
+		missile2->damage = damage;
+		missile2->dflags = DAMAGE_DEATH_KNOCKBACK;
+		missile2->methodOfDeath = MOD_BRYAR_PISTOL_ALT;
+		missile2->clipmask = MASK_SHOT | CONTENTS_LIGHTSABER;
+
+		// we don't want it to bounce forever
+		missile2->bounceCount = 8;
+	}
+	//[/DualPistols]
+}
+
+//----------------------------------------------
+static void WP_FireBryarPistol( gentity_t *ent, qboolean altFire )
+//---------------------------------------------------------
+{
+	if(altFire)
+		WP_FireBryarPistolAlt(ent);
+	else
+		WP_FireBryarPistolMain(ent);
 }
 
 /*
@@ -855,27 +933,11 @@ void WP_DisruptorAltFire( gentity_t *ent )
 	{
 		VectorCopy( ent->client->ps.origin, start );
 		start[2] += ent->client->ps.viewheight;//By eyes
-
-		//[DodgeSys]
-		//moved into DetermineDisruptorCharge so we can use it for Dodge cost calcs
-		/*
-		count = ( level.time - ent->client->ps.weaponChargeTime ) / DISRUPTOR_CHARGE_UNIT;
-		if ( g_gametype.integer == GT_SIEGE )
-		{//maybe a full alt-charge should be a *bit* more dangerous in Siege mode?
-			//maxCount = ceil((200.0f-(float)damage)/2.0f);//cap at 200 damage total
-			maxCount = 200;//the previous line ALWAYS evaluated to 135 - was that on purpose?
-		}
-		*/
-		//[/DodgeSys]
 	}
 	else
 	{
 		VectorCopy( ent->r.currentOrigin, start );
 		start[2] += 24;
-		//[DodgeSys]
-		//moved into DetermineDisruptorCharge so we can use it for Dodge cost calcs
-		//count = ( 100 ) / DISRUPTOR_CHARGE_UNIT;
-		//[/DodgeSys]
 	}
 
 	//[DodgeSys]
@@ -886,20 +948,6 @@ void WP_DisruptorAltFire( gentity_t *ent )
 	{
 		fullCharge = qtrue;
 	}
-	/* basejka code
-	count *= 2;
-
-	if ( count < 1 )
-	{
-		count = 1;
-	}
-	else if ( count >= maxCount )
-	{
-		count = maxCount;
-		fullCharge = qtrue;
-	}
-	*/
-	//[/DodgeSys]
 
 	// more powerful charges go through more things
 	if ( count < 10 )
@@ -910,6 +958,9 @@ void WP_DisruptorAltFire( gentity_t *ent )
 	{
 		traces = 2;
 	}
+
+	//ent->s.generic1=count;
+	ent->genericValue6=count;
 
 	damage += count;
 	
@@ -930,7 +981,6 @@ void WP_DisruptorAltFire( gentity_t *ent )
 		{
 			//[WeaponSys]
 			trap_Trace( &tr, start, shotMins, shotMaxs, end, skip, MASK_SHOT );
-			//trap_Trace( &tr, start, NULL, NULL, end, skip, MASK_SHOT );
 			//[/WeaponSys]
 		}
 
@@ -942,12 +992,7 @@ void WP_DisruptorAltFire( gentity_t *ent )
 			{ //since we used G2TRFLAG_GETSURFINDEX, tr.surfaceFlags will actually contain the index of the surface on the ghoul2 model we collided with.
 				traceEnt->client->g2LastSurfaceHit = tr.surfaceFlags;
 				traceEnt->client->g2LastSurfaceTime = level.time;
-				//[BugFix12]
-				//BUGFIX12RAFIXME - ugh, can't seem to get the model index on the 
-				//trap_G2Traces.  These probably need to be replaced with the more
-				//indepth G2traces.  For now, just assume that the player model was hit.
 				traceEnt->client->g2LastSurfaceModel = G2MODEL_PLAYER;
-				//[/BugFix12]
 			}
 
 			if (traceEnt->ghoul2)
@@ -969,83 +1014,12 @@ void WP_DisruptorAltFire( gentity_t *ent )
 			continue;
 		}
 
-		//[BoltBlockSys]
-		//players can block or dodge disruptor shots.
-		/*  can't saber block alt fire shots.
-		if(OJP_SaberCanBlock(traceEnt, ent, qfalse, tr.endpos, -1, -1) )
-		{//saber can be used to block the shot.
-
-			//broadcast the shot block effect
-			gentity_t *te = NULL;
-
-			tent = G_TempEntity( tr.endpos, EV_DISRUPTOR_SNIPER_SHOT );
-			VectorCopy( muzzle, tent->s.origin2 );
-			tent->s.shouldtarget = fullCharge;
-			tent->s.eventParm = ent->s.number;
-
-			te = G_TempEntity( tr.endpos, EV_SABER_BLOCK );
-			VectorCopy(tr.endpos, te->s.origin);
-			VectorCopy(tr.plane.normal, te->s.angles);
-			if (!te->s.angles[0] && !te->s.angles[1] && !te->s.angles[2])
-			{
-				te->s.angles[1] = 1;
-			}
-			te->s.eventParm = 0;
-			te->s.weapon = 0;//saberNum
-			te->s.legsAnim = 0;//bladeNum
-
-			//reduce DP cost of the block
-			//[ExpSys]
-			G_DodgeDrain(traceEnt, ent, OJP_SaberBlockCost(traceEnt, ent, tr.endpos));
-			//[/ExpSys]
-
-			//force player into a projective block move.
-			WP_SaberBlockNonRandom(traceEnt, tr.endpos, qtrue);
-			return;
-		}
-		//[/BoltBlockSys]
-		//[DodgeSys]
-		else*/ if(G_DoDodge(traceEnt, ent, tr.endpos, -1, &damage, MOD_DISRUPTOR_SNIPER))
+		if(G_DoDodge(traceEnt, ent, tr.endpos, -1, &damage, MOD_DISRUPTOR_SNIPER))
 		{//player physically dodged the damage.  Act like we didn't hit him.
 			skip = tr.entityNum;
 			VectorCopy(tr.endpos, start);
 			continue;
 		}
-
-		/* basejka block/dodge code...redundent with dodgesys code in place.
-		if (Jedi_DodgeEvasion(traceEnt, ent, &tr, G_GetHitLocation(traceEnt, tr.endpos)))
-		{
-			skip = tr.entityNum;
-			VectorCopy(tr.endpos, start);
-			continue;
-		}
-		else if (traceEnt && traceEnt->client && traceEnt->client->ps.fd.forcePowerLevel[FP_SABER_DEFENSE] >= FORCE_LEVEL_3)
-		{
-			if (WP_SaberCanBlock(traceEnt, tr.endpos, 0, MOD_DISRUPTOR_SNIPER, qtrue, 0))
-			{ //broadcast and stop the shot because it was blocked
-				gentity_t *te = NULL;
-
-				tent = G_TempEntity( tr.endpos, EV_DISRUPTOR_SNIPER_SHOT );
-				VectorCopy( muzzle, tent->s.origin2 );
-				tent->s.shouldtarget = fullCharge;
-				tent->s.eventParm = ent->s.number;
-
-				te = G_TempEntity( tr.endpos, EV_SABER_BLOCK );
-				VectorCopy(tr.endpos, te->s.origin);
-				VectorCopy(tr.plane.normal, te->s.angles);
-				if (!te->s.angles[0] && !te->s.angles[1] && !te->s.angles[2])
-				{
-					te->s.angles[1] = 1;
-				}
-				te->s.eventParm = 0;
-				te->s.weapon = 0;//saberNum
-				te->s.legsAnim = 0;//bladeNum
-
-				return;
-			}
-		}
-		*/
-		//[/DodgeSys]
 
 		// always render a shot beam, doing this the old way because I don't much feel like overriding the effect.
 		tent = G_TempEntity( tr.endpos, EV_DISRUPTOR_SNIPER_SHOT );
@@ -1257,7 +1231,8 @@ static void WP_BowcasterMainFire( gentity_t *ent )
 		missile->dflags = DAMAGE_DEATH_KNOCKBACK;
 		missile->methodOfDeath = MOD_BOWCASTER;
 		missile->clipmask = MASK_SHOT | CONTENTS_LIGHTSABER;
-
+		missile->s.generic1 = dp;
+		ent->client->ps.userInt2=dp;
 		// we don't want it to bounce
 		missile->bounceCount = 0;
 
@@ -1269,6 +1244,7 @@ static void WP_BowcasterMainFire( gentity_t *ent )
 static void WP_FireBowcaster( gentity_t *ent, qboolean altFire )
 //---------------------------------------------------------
 {
+	/*
 	if ( altFire )
 	{
 		WP_BowcasterAltFire( ent );
@@ -1277,6 +1253,8 @@ static void WP_FireBowcaster( gentity_t *ent, qboolean altFire )
 	{
 		WP_BowcasterMainFire( ent );
 	}
+	*/
+	WP_BowcasterMainFire( ent );
 }
 
 
@@ -1351,7 +1329,7 @@ static void WP_FireRepeater( gentity_t *ent, qboolean altFire )
 
 	vectoangles( forward, angs );
 
-	if ( altFire )
+	if ( altFire && ent->client->skillLevel[SK_REPEATER] > FORCE_LEVEL_1 )
 	{
 		WP_RepeaterAltFire( ent );
 	}
@@ -1664,47 +1642,40 @@ FLECHETTE
 */
 
 //---------------------------------------------------------
-static void WP_FlechetteMainFire( gentity_t *ent )
+static void WP_FlechetteMainFire( gentity_t *ent,qboolean altFire )
 //---------------------------------------------------------
 {
-	vec3_t		fwd, angs;
-	gentity_t	*missile;
-	int i;
-
-	for (i = 0; i < FLECHETTE_SHOTS; i++ )
-	{
-		vectoangles( forward, angs );
-
-		if (i != 0)
-		{ //do nothing on the first shot, it will hit the crosshairs
-			angs[PITCH] += crandom() * FLECHETTE_SPREAD;
-			angs[YAW]	+= crandom() * FLECHETTE_SPREAD;
-		}
-
-		AngleVectors( angs, fwd, NULL, NULL );
-
-		missile = CreateMissile( muzzle, fwd, FLECHETTE_VEL, 10000, ent, qfalse);
-
-		missile->classname = "flech_proj";
-		missile->s.weapon = WP_FLECHETTE;
-
-		VectorSet( missile->r.maxs, FLECHETTE_SIZE, FLECHETTE_SIZE, FLECHETTE_SIZE );
-		VectorScale( missile->r.maxs, -1, missile->r.mins );
-
-		missile->damage = FLECHETTE_DAMAGE;
-		missile->dflags = DAMAGE_DEATH_KNOCKBACK;
-		missile->methodOfDeath = MOD_FLECHETTE;
-		missile->clipmask = MASK_SHOT | CONTENTS_LIGHTSABER;
-
-		// we don't want it to bounce forever
-		missile->bounceCount = Q_irand(5,8);
-
-		missile->damageDecreaseTime = level.time + 300;
-
-		missile->flags |= FL_BOUNCE_SHRAPNEL;
+	int velocity	= FLECHETTE_VELOCITY;
+	int	damage		= (altFire ? FLECHETTE_ALT_DAMAGE : FLECHETTE_DAMAGE);
+	gentity_t *missile;
+	vec3_t angs,fwd;
+	if (ent->s.eType == ET_NPC)
+	{ //animent
+		//[WeaponSys]
+		damage = 90;
+		//damage = 10;
+		//[/WeaponSys]
 	}
+
+	vectoangles( forward, angs );
+
+	AngleVectors( angs, fwd, NULL, NULL );
+
+	missile = CreateMissile( muzzle, fwd, velocity, 10000, ent, altFire );
+
+	missile->classname = "blaster_proj";
+	missile->s.weapon = WP_BLASTER;
+
+	missile->damage = damage;
+	missile->dflags = DAMAGE_DEATH_KNOCKBACK;
+	missile->methodOfDeath = MOD_BLASTER;
+	missile->clipmask = MASK_SHOT | CONTENTS_LIGHTSABER;
+
+	// we don't want it to bounce forever
+	missile->bounceCount = 8;
 }
 
+/*
 //---------------------------------------------------------
 void prox_mine_think( gentity_t *ent )
 //---------------------------------------------------------
@@ -1743,6 +1714,7 @@ void prox_mine_think( gentity_t *ent )
 		ent->nextthink = level.time + 500;
 	}
 }
+*/
 
 //-----------------------------------------------------------------------------
 static void WP_TraceSetStart( gentity_t *ent, vec3_t start, vec3_t mins, vec3_t maxs )
@@ -1877,10 +1849,10 @@ static void WP_CreateFlechetteBouncyThing( vec3_t start, vec3_t fwd, gentity_t *
 
 	missile->bounceCount = 50;
 
-	missile->damage = FLECHETTE_ALT_DAMAGE;
+	missile->damage = FLECHETTE_DAMAGE;
 	missile->dflags = 0;
-	missile->splashDamage = FLECHETTE_ALT_SPLASH_DAM;
-	missile->splashRadius = FLECHETTE_ALT_SPLASH_RAD;
+//	missile->splashDamage = FLECHETTE_ALT_SPLASH_DAM;
+//	missile->splashRadius = FLECHETTE_ALT_SPLASH_RAD;
 
 	missile->r.svFlags = SVF_USE_CURRENT_ORIGIN;
 
@@ -1910,7 +1882,7 @@ static void WP_FlechetteAltFire( gentity_t *self )
 
 		AngleVectors( angs, fwd, NULL, NULL );
 
-		missile = CreateMissile( muzzle, fwd, FLECHETTE_VEL, 10000, self, qfalse);
+		missile = CreateMissile( muzzle, fwd, FLECHETTE_VELOCITY, 10000, self, qfalse);
 
 		missile->classname = "flech_proj";
 		missile->s.weapon = WP_FLECHETTE;
@@ -1936,6 +1908,7 @@ static void WP_FlechetteAltFire( gentity_t *self )
 static void WP_FireFlechette( gentity_t *ent, qboolean altFire )
 //---------------------------------------------------------
 {
+	/*
 	if ( altFire )
 	{
 		//WP_FlechetteProxMine( ent );
@@ -1945,6 +1918,13 @@ static void WP_FireFlechette( gentity_t *ent, qboolean altFire )
 	{
 		WP_FlechetteMainFire( ent );
 	}
+	*/
+	//[T21]
+	if(altFire && ent->client->skillLevel[SK_FLECHETTE] <= FORCE_LEVEL_1)
+		return;
+
+		WP_FlechetteMainFire( ent,altFire );
+	//[/T21]
 }
 
 
@@ -2225,9 +2205,9 @@ THERMAL DETONATOR
 ======================================================================
 */
 //[WeaponSys]
-#define TD_DAMAGE			250 //only on a direct impact
-#define TD_SPLASH_DAM		250
-#define TD_SPLASH_RAD		210
+#define TD_DAMAGE			500 //only on a direct impact
+#define TD_SPLASH_DAM		500
+#define TD_SPLASH_RAD		245
 /*
 #define TD_DAMAGE			70 //only do 70 on a direct impact
 #define TD_SPLASH_RAD		128
@@ -2856,10 +2836,6 @@ void WP_PlaceLaserTrap( gentity_t *ent, qboolean alt_fire )
 	vec3_t		dir, start;
 	int			trapcount = 0;
 	int			foundLaserTraps[MAX_GENTITIES];
-	int			trapcount_org;
-	int			lowestTimeStamp;
-	int			removeMe;
-	int			i;
 
 	foundLaserTraps[0] = ENTITYNUM_NONE;
 
@@ -2870,6 +2846,7 @@ void WP_PlaceLaserTrap( gentity_t *ent, qboolean alt_fire )
 	
 	//limit to 10 placed at any one time
 	//see how many there are now
+	/*
 	while ( (found = G_Find( found, FOFS(classname), "laserTrap" )) != NULL )
 	{
 		if ( found->parent != ent )
@@ -2917,7 +2894,7 @@ void WP_PlaceLaserTrap( gentity_t *ent, qboolean alt_fire )
 			break;
 		}
 	}
-
+	*/
 	//now make the new one
 	CreateLaserTrap( laserTrap, start, ent );
 
@@ -2982,6 +2959,8 @@ void charge_stick (gentity_t *self, gentity_t *other, trace_t *trace)
 	else if (other && other->s.number < ENTITYNUM_WORLD &&
 		(other->client || !other->s.weapon))
 	{ //hit another entity that is not stickable, "bounce" off
+		self->target_ent = other;
+		/*
 		vec3_t vNor, tN;
 
 		VectorCopy(trace->plane.normal, vNor);
@@ -2994,7 +2973,9 @@ void charge_stick (gentity_t *self, gentity_t *other, trace_t *trace)
 		vectoangles(vNor, self->s.angles);
 		vectoangles(vNor, self->s.apos.trBase);
 		self->touch = charge_stick;
+		
 		return;
+		*/
 	}
 	else if (other && other->s.number < ENTITYNUM_WORLD)
 	{ //hit an entity that we just want to explode on (probably another projectile or something)
@@ -3024,7 +3005,7 @@ void charge_stick (gentity_t *self, gentity_t *other, trace_t *trace)
 
 	self->touch = 0;
 	self->think = DetPackBlow;
-	self->nextthink = level.time + 30000;
+	self->nextthink = level.time + 1800000;//make them last 30 mins?:eek:
 
 	VectorClear(self->s.apos.trDelta);
 	self->s.apos.trType = TR_STATIONARY;
@@ -3115,7 +3096,7 @@ void drop_charge (gentity_t *self, vec3_t start, vec3_t dir)
 
 	bolt->parent = self;
 	bolt->r.ownerNum = self->s.number;
-	bolt->damage = 100;
+	bolt->damage = 2000;
 	bolt->splashDamage = 200;
 	bolt->splashRadius = 200;
 	bolt->methodOfDeath = MOD_DET_PACK_SPLASH;
@@ -3888,6 +3869,31 @@ void CalcMuzzlePoint ( gentity_t *ent, vec3_t forward, vec3_t right, vec3_t up, 
 	// snap to integer coordinates for more efficient network bandwidth usage
 	SnapVector( muzzlePoint );
 }
+
+//[DualPistols]
+void CalcMuzzlePoint2 ( gentity_t *ent, vec3_t forward, vec3_t right, vec3_t up, vec3_t muzzlePoint ) 
+{
+	int weapontype;
+	vec3_t muzzleOffPoint;
+
+	weapontype = ent->s.weapon;
+	VectorCopy( ent->s.pos.trBase, muzzlePoint );
+
+	VectorCopy(WP_MuzzlePoint2[weapontype], muzzleOffPoint);
+
+	if (weapontype > WP_NONE && weapontype < WP_NUM_WEAPONS)
+	{	// Use the table to generate the muzzlepoint;
+		{	// Crouching.  Use the add-to-Z method to adjust vertically.
+			VectorMA(muzzlePoint, muzzleOffPoint[0], forward, muzzlePoint);
+			VectorMA(muzzlePoint, muzzleOffPoint[1], right, muzzlePoint);
+			muzzlePoint[2] += ent->client->ps.viewheight + muzzleOffPoint[2];
+		}
+	}
+
+	// snap to integer coordinates for more efficient network bandwidth usage
+	SnapVector( muzzlePoint );
+}
+//[/DualPistols]
 
 /*
 ===============
@@ -4923,6 +4929,10 @@ void FireWeapon( gentity_t *ent, qboolean altFire )
 		}
 
 		CalcMuzzlePoint ( ent, forward, vright, up, muzzle );
+		//[DualPistols]
+		if (ent->client->ps.eFlags & EF_DUAL_WEAPONS)
+			CalcMuzzlePoint2 ( ent, forward, vright, up, muzzle2 );
+		//[/DualPistols]
 
 		//[WeapAccuracy]
 		//bump accuracy based on MP level.
@@ -4941,12 +4951,28 @@ void FireWeapon( gentity_t *ent, qboolean altFire )
 			{//failed skill roll, add mishap.
 				if(ent->s.weapon == WP_DISRUPTOR && ent->client->ps.zoomMode == 0)
 					G_AddMercBalance(ent, Q_irand(2, 3));// 1 was not enough
+				else if(ent->s.weapon == WP_FLECHETTE)
+					G_AddMercBalance(ent,1);
+				else if(ent->s.weapon == WP_BRYAR_PISTOL)
+					G_AddMercBalance(ent,Q_irand(2,3));
+				else if(ent->s.weapon == WP_REPEATER)
+				{
+					ent->client->cloneFired++;
+					if(ent->client->cloneFired == 2)
+					{
+						if(ent->client->pers.cmd.forwardmove == 0 && ent->client->pers.cmd.rightmove ==0)
+							G_AddMercBalance(ent,1);
+						else
+							G_AddMercBalance(ent,2);
+
+						ent->client->cloneFired=0;
+					}
+				}
 				else
 					G_AddMercBalance(ent, Q_irand(1, 2));// 1 was not enough
 			}
 		}
 		//[/WeapAccuracy]
-
 
 		// fire the specific weapon
 		switch( ent->s.weapon ) {
@@ -5006,6 +5032,8 @@ void FireWeapon( gentity_t *ent, qboolean altFire )
 			break;
 
 		case WP_BOWCASTER:
+			if(altFire)
+				return;
 			WP_FireBowcaster( ent, altFire );
 			break;
 

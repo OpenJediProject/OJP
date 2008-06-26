@@ -2568,6 +2568,7 @@ void CG_ParseScriptedSaber(char *script, clientInfo_t *ci, int snum);
 #include "../namespace_begin.h"
 void WP_SetSaber( int entNum, saberInfo_t *sabers, int saberNum, const char *saberName );
 #include "../namespace_end.h"
+extern void *CG_G2WeaponInstance2(centity_t *cent, int weapon);
 
 void CG_NewClientInfo( int clientNum, qboolean entitiesInitialized ) {
 	clientInfo_t *ci;
@@ -3076,6 +3077,18 @@ void CG_NewClientInfo( int clientNum, qboolean entitiesInitialized ) {
 			{
 				CG_CopyG2WeaponInstance(&cg_entities[clientNum], cg_entities[clientNum].currentState.weapon, cg_entities[clientNum].ghoul2);
 				cg_entities[clientNum].ghoul2weapon = CG_G2WeaponInstance(&cg_entities[clientNum], cg_entities[clientNum].currentState.weapon);
+				//[DualPistols]
+				if ((cg_entities[clientNum].currentState.eFlags & EF_DUAL_WEAPONS) &&
+					(cg_entities[clientNum].currentState.weapon == WP_BRYAR_PISTOL))
+				{
+					//CG_CopyG2WeaponInstance(&cg_entities[clientNum], cg_entities[clientNum].currentState.weapon, cg_entities[clientNum].ghoul2);
+					cg_entities[clientNum].ghoul2weapon2 = CG_G2WeaponInstance2(&cg_entities[clientNum], cg_entities[clientNum].currentState.weapon);
+				}
+				else
+				{
+					cg_entities[clientNum].ghoul2weapon2 = NULL;
+				}
+				//[/DualPistols]
 			}
 			if (!cg_entities[clientNum].currentState.saberHolstered)
 			{ //if not holstered set length and desired length for both blades to full right now.
@@ -4546,11 +4559,7 @@ static void CG_PlayerAnimation( centity_t *cent, int *legsOld, int *legs, float 
 
 	CG_RunLerpFrame( cent, ci, &cent->pe.legs, cent->currentState.legsFlip, cent->currentState.legsAnim, speedScale, qfalse);
 
-	if (!(cent->currentState.forcePowersActive & (1 << FP_RAGE)))
-	{ //don't affect torso anim speed unless raged
-		speedScale = 1.0f;
-	}
-	else
+	if(cg.predictedVehicleState.fd.forcePowersActive & (1 << FP_GRIP))
 	{
 		speedScale = 1.7f;
 	}
@@ -5463,6 +5472,9 @@ static void CG_G2PlayerAngles( centity_t *cent, vec3_t legs[3], vec3_t legsAngle
 		ci = &cgs.clientinfo[cent->currentState.number];
 	}
 
+	if(!ci)
+		return;
+
 	//rww - Quite possibly the most arguments for a function ever.
 	if (cent->localAnimIndex <= 1)
 	{ //don't do these things on non-humanoids
@@ -6181,7 +6193,10 @@ static void CG_ForcePushBlur( vec3_t org, centity_t *cent )
 		VectorScale(ent.axis[1], scale, ent.axis[1]);
 		VectorScale(ent.axis[2], scale, ent.axis[2]);
 
-		ent.hModel = cgs.media.halfShieldModel;
+		
+		
+		VectorScale(ent.modelScale,100,ent.modelScale);
+		ent.hModel = cgs.media.explosionModel;
 		ent.customShader = cgs.media.refractionShader; //cgs.media.cloakedShader;
 		ent.nonNormalizedAxes = qtrue;
 
@@ -6957,7 +6972,6 @@ void CG_DoPrequelSaber( vec3_t blade_muz, vec3_t blade_tip, vec3_t trail_tip, ve
 	int i;
 	//[/RGBSabers]
 
-	vec3_t	  igniteRGB;
 	float     ignite_len, ignite_radius;	
 	
 	qhandle_t	glow = 0, ignite = 0, blade = 0;
@@ -14214,6 +14228,8 @@ void CG_HolsteredWeaponRender( centity_t *cent, clientInfo_t *ci, int holsterTyp
 
 	//attach the ghoul2 weapon instance to the render entity.
 	ent.ghoul2 = CG_G2HolsterWeaponInstance(cent, weaponType, secondWeap);
+	if(cent->currentState.powerups & (1 << PW_CLOAKED))
+		ent.customShader = cgs.media.cloakedShader;
 
 	trap_R_AddRefEntityToScene( &ent );
 }
@@ -15495,11 +15511,16 @@ void CG_Player( centity_t *cent ) {
 	*/
 	//[/SaberThrowSys]
 
+	//[DualPistols]
 	if (cent->ghoul2 && 
 		(cent->currentState.eType != ET_NPC || (cent->currentState.NPC_class != CLASS_VEHICLE&&cent->currentState.NPC_class != CLASS_REMOTE&&cent->currentState.NPC_class != CLASS_SEEKER)) && //don't add weapon models to NPCs that have no bolt for them!
-		cent->ghoul2weapon != CG_G2WeaponInstance(cent, cent->currentState.weapon) &&
+		((cent->ghoul2weapon != CG_G2WeaponInstance(cent, cent->currentState.weapon)) ||
+		//WeaponMod FIXME?
+		(cent->ghoul2weapon2 != CG_G2WeaponInstance2(cent, cent->currentState.weapon) && ((cent->currentState.eFlags & EF_DUAL_WEAPONS)/* && (cent->currentState.weapon != WP_SABER)*/)) ||
+		(cent->ghoul2weapon2 != NULL && ((!(cent->currentState.eFlags & EF_DUAL_WEAPONS) )/*|| (cent->currentState.weapon == WP_SABER)*/))) &&
 		!(cent->currentState.eFlags & EF_DEAD) && !cent->torsoBolt &&
 		cg.snap && (cent->currentState.number != cg.snap->ps.clientNum || (cg.snap->ps.pm_flags & PMF_FOLLOW)))
+	//[/DualPistols]
 	{
 		if (ci->team == TEAM_SPECTATOR)
 		{
@@ -15553,6 +15574,13 @@ void CG_Player( centity_t *cent ) {
 
 			cent->weapon = cent->currentState.weapon;
 			cent->ghoul2weapon = CG_G2WeaponInstance(cent, cent->currentState.weapon);
+			//[DualPistols]
+			if ((cent->currentState.eFlags & EF_DUAL_WEAPONS) &&
+				(cent->currentState.weapon == WP_BRYAR_PISTOL))
+				cent->ghoul2weapon2 = CG_G2WeaponInstance2(cent, cent->currentState.weapon);
+			else
+				cent->ghoul2weapon2 = NULL;
+			//[/DualPistols]
 		}
 	}
 	else if ((cent->currentState.eFlags & EF_DEAD) || cent->torsoBolt)
@@ -16930,7 +16958,6 @@ stillDoSaber:
 				{
 					cent->bolt2 = cg.time;
 				}
-
 				if (cent->bolt3 != 90)
 				{
 					if (cent->bolt3 < 90)
@@ -17730,7 +17757,10 @@ stillDoSaber:
 	//
 	if (cent->currentState.weapon != WP_EMPLACED_GUN)
 	{
-		CG_AddPlayerWeapon( &legs, NULL, cent, ci->team, rootAngles, qtrue );
+		CG_AddPlayerWeapon( &legs, NULL, cent, ci->team, rootAngles, qtrue,qfalse );
+		if((cent->currentState.eFlags & EF_DUAL_WEAPONS) 
+			&& cent->currentState.weapon == WP_BRYAR_PISTOL)
+			CG_AddPlayerWeapon(&legs,NULL,cent,ci->team,rootAngles,qtrue,qtrue);
 	}
 	// add powerups floating behind the player
 	CG_PlayerPowerups( cent, &legs );

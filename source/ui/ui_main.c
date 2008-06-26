@@ -1139,7 +1139,11 @@ void _UI_Refresh( int realtime )
 	// draw cursor
 	UI_SetColor( NULL );
 	if (Menu_Count() > 0) {
-		UI_DrawHandlePic( uiInfo.uiDC.cursorx, uiInfo.uiDC.cursory, 48, 48, uiInfo.uiDC.Assets.cursor);
+		uiClientState_t	cstate;
+		trap_GetClientState( &cstate );
+		if(cstate.connState <= CA_DISCONNECTED || cstate.connState >= CA_ACTIVE) {
+			UI_DrawHandlePic( uiInfo.uiDC.cursorx, uiInfo.uiDC.cursory, 48, 48, uiInfo.uiDC.Assets.cursor);
+		}
 	}
 
 #ifndef NDEBUG
@@ -10425,11 +10429,7 @@ static void UI_BuildQ3Model_List( void )
 			}
 
 			/*
-#ifdef _XBOX
-			Com_sprintf(fpath, 2048, "models/players/%s/icon%s.dds", dirptr, skinname);
-#else
 			Com_sprintf(fpath, 2048, "models/players/%s/icon%s.jpg", dirptr, skinname);
-#endif
 
 			trap_FS_FOpenFile(fpath, &f, FS_READ);
 

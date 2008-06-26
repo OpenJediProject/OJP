@@ -401,7 +401,7 @@ The main player will have this called for BOTH cases, so effects like light and
 sound should only be done on the world model case.
 =============
 */
-void CG_AddPlayerWeapon( refEntity_t *parent, playerState_t *ps, centity_t *cent, int team, vec3_t newAngles, qboolean thirdPerson ) {
+void CG_AddPlayerWeapon( refEntity_t *parent, playerState_t *ps, centity_t *cent, int team, vec3_t newAngles, qboolean thirdPerson,qboolean leftweap ) {
 	refEntity_t	gun;
 	refEntity_t	barrel;
 	vec3_t		angles;
@@ -463,7 +463,12 @@ Ghoul2 Insert Start
 				trap_S_AddLoopingSound( cent->currentState.number, cent->lerpOrigin, vec3_origin, weapon->readySound );
 			}
 		}
-	
+
+		//gun.angles[1]=20;
+		//gun.origin[1]=20;
+		//gun.axis[1][1]=20;
+		//gun.axis[0][1]=20;
+		//gun.axis[2][1]=20;
 		CG_PositionEntityOnTag( &gun, parent, parent->hModel, "tag_weapon");
 
 		if (!CG_IsMindTricked(cent->currentState.trickedentindex,
@@ -513,7 +518,7 @@ Ghoul2 Insert Start
 				angles[ROLL] = 0;
 
 				AnglesToAxis( angles, barrel.axis );
-
+				
 				if (i == 0)
 				{
 					CG_PositionRotatedEntityOnTag( &barrel, parent/*&gun*/, /*weapon->weaponModel*/weapon->handsModel, "tag_barrel" );
@@ -580,6 +585,13 @@ Ghoul2 Insert End
 		addspriteArgStruct_t fxSArgs;
 		vec3_t flashorigin, flashdir;
 
+		//[DualPistols]
+		int	wpmdlidx = 2;
+
+		if (leftweap == qfalse)
+			wpmdlidx = 1;
+		//[/DualPistols]
+
 		if (!thirdPerson)
 		{
 			VectorCopy(flash.origin, flashorigin);
@@ -589,13 +601,13 @@ Ghoul2 Insert End
 		{
 			mdxaBone_t 		boltMatrix;
 
-			if (!trap_G2API_HasGhoul2ModelOnIndex(&(cent->ghoul2), 1))
+			if (!trap_G2API_HasGhoul2ModelOnIndex(&(cent->ghoul2), wpmdlidx))
 			{ //it's quite possible that we may have have no weapon model and be in a valid state, so return here if this is the case
 				return;
 			}
 
 			// go away and get me the bolt position for this frame please
- 			if (!(trap_G2API_GetBoltMatrix(cent->ghoul2, 1, 0, &boltMatrix, newAngles, cent->lerpOrigin, cg.time, cgs.gameModels, cent->modelScale)))
+ 			if (!(trap_G2API_GetBoltMatrix(cent->ghoul2, wpmdlidx, 0, &boltMatrix, newAngles, cent->lerpOrigin, cg.time, cgs.gameModels, cent->modelScale)))
 			{	// Couldn't find bolt point.
 				return;
 			}
@@ -695,6 +707,13 @@ Ghoul2 Insert End
 		vec3_t flashorigin, flashdir;
 		refEntity_t	flash;
 
+		//[DualPistols]
+		int	wpmdlidx = 2;
+
+		if (leftweap == qfalse)
+			wpmdlidx = 1;
+		//[/DualPistols]
+
 		memset (&flash, 0, sizeof(flash));
 
 		if (!thirdPerson)
@@ -707,13 +726,13 @@ Ghoul2 Insert End
 		{
 			mdxaBone_t 		boltMatrix;
 
-			if (!trap_G2API_HasGhoul2ModelOnIndex(&(cent->ghoul2), 1))
+			if (!trap_G2API_HasGhoul2ModelOnIndex(&(cent->ghoul2), wpmdlidx))
 			{ //it's quite possible that we may have have no weapon model and be in a valid state, so return here if this is the case
 				return;
 			}
 
 			// go away and get me the bolt position for this frame please
- 			if (!(trap_G2API_GetBoltMatrix(cent->ghoul2, 1, 0, &boltMatrix, newAngles, cent->lerpOrigin, cg.time, cgs.gameModels, cent->modelScale)))
+ 			if (!(trap_G2API_GetBoltMatrix(cent->ghoul2, wpmdlidx, 0, &boltMatrix, newAngles, cent->lerpOrigin, cg.time, cgs.gameModels, cent->modelScale)))
 			{	// Couldn't find bolt point.
 				return;
 			}
@@ -722,7 +741,8 @@ Ghoul2 Insert End
 			BG_GiveMeVectorFromMatrix(&boltMatrix, POSITIVE_X, flashdir);
 		}
 
-		if ( cg.time - cent->muzzleFlashTime <= MUZZLE_FLASH_TIME + 10 )
+		if ( (cent->currentState.eFlags & EF_ALT_FIRING && cg.predictedPlayerState.weapon != WP_BOWCASTER) &&
+			cg.time - cent->muzzleFlashTime <= MUZZLE_FLASH_TIME + 10 )
 		{	// Handle muzzle flashes
 			if ( cent->currentState.eFlags & EF_ALT_FIRING )
 			{	// Check the alt firing first.
@@ -738,9 +758,9 @@ Ghoul2 Insert End
 					}
 				}
 			}
-			else
+			else	
 			{	// Regular firing
-				if (weapon->muzzleEffect)
+				if (weapon->muzzleEffect && (cg.predictedPlayerState.weapon != WP_FLECHETTE || cg.predictedPlayerState.weapon == WP_FLECHETTE && cg.predictedPlayerState.weaponTime == 100000))
 				{
 					if (!thirdPerson)
 					{
@@ -915,7 +935,68 @@ void CG_AddViewWeapon( playerState_t *ps ) {
 	hand.renderfx = RF_DEPTHHACK | RF_FIRST_PERSON;// | RF_MINLIGHT;
 
 	// add everything onto the hand
-	CG_AddPlayerWeapon( &hand, ps, &cg_entities[cg.predictedPlayerState.clientNum], ps->persistant[PERS_TEAM], angles, qfalse );
+	//[DualPistols]
+	//CG_AddPlayerWeapon( &hand, ps, &cg_entities[cg.predictedPlayerState.clientNum], ps->persistant[PERS_TEAM], angles, qfalse );
+	CG_AddPlayerWeapon( &hand, ps, &cg_entities[cg.predictedPlayerState.clientNum], ps->persistant[PERS_TEAM], angles, qfalse,qfalse );
+	if((ps->eFlags & EF_DUAL_WEAPONS) && ps->weapon == WP_BRYAR_PISTOL)
+	{
+		memset (&hand, 0, sizeof(hand));
+        
+        // set up gun position
+        CG_CalculateWeaponPosition( hand.origin, angles );
+        
+        VectorMA( hand.origin, cg_gun_x.value, cg.refdef.viewaxis[0], hand.origin );
+        VectorMA( hand.origin, cg_gun_y.value + 10, cg.refdef.viewaxis[1], hand.origin );
+        VectorMA( hand.origin, (cg_gun_z.value+fovOffset), cg.refdef.viewaxis[2], hand.origin );
+        	angles[1]=20;
+        AnglesToAxis( angles, hand.axis );
+
+		// map torso animations to weapon animations
+        	if ( cg_gun_frame.integer ) {
+        		// development tool
+        		hand.frame = hand.oldframe = cg_gun_frame.integer;
+        		hand.backlerp = 0;
+        	} else {
+        		// get clientinfo for animation map
+        		if (cent->currentState.eType == ET_NPC)
+        		{
+        			if (!cent->npcClient)
+        			{
+        				return;
+        			}
+        
+        			ci = cent->npcClient;
+        		}
+        		else
+        		{
+        			ci = &cgs.clientinfo[ cent->currentState.clientNum ];
+        		}
+        		hand.frame = CG_MapTorsoToWeaponFrame( ci, cent->pe.torso.frame, cent->currentState.torsoAnim );
+        		hand.oldframe = CG_MapTorsoToWeaponFrame( ci, cent->pe.torso.oldFrame, cent->currentState.torsoAnim );
+        		hand.backlerp = cent->pe.torso.backlerp;
+        
+        		// Handle the fringe situation where oldframe is invalid
+        		if ( hand.frame == -1 )
+        		{
+        			hand.frame = 0;
+        			hand.oldframe = 0;
+        			hand.backlerp = 0;
+        		}
+        		else if ( hand.oldframe == -1 )
+        		{
+        			hand.oldframe = hand.frame;
+        			hand.backlerp = 0;
+        		}
+        	}
+			////adasadas
+        	hand.hModel = weapon->handsModel;
+        	hand.renderfx = RF_DEPTHHACK | RF_FIRST_PERSON;// | RF_MINLIGHT;
+			angles[2]+=20;
+        	// add everything onto the hand
+        	CG_AddPlayerWeapon( &hand, ps, &cg_entities[cg.predictedPlayerState.clientNum], ps->persistant[PERS_TEAM], angles, qfalse, qtrue );
+
+	}
+	//[/DualPistols]
 }
 
 /*
@@ -939,10 +1020,6 @@ void CG_DrawIconBackground(void)
 	float			fpTime = cg.forceSelectTime+WEAPON_SELECT_TIME;
 //	int				drawType = cgs.media.weaponIconBackground;
 //	int				yOffset = 0;
-
-#ifdef _XBOX
-	//yOffset = -50;
-#endif
 
 	// don't display if dead
 	if ( cg.snap->ps.stats[STAT_HEALTH] <= 0 ) 
@@ -1136,9 +1213,6 @@ static qboolean CG_WeaponSelectable( int i ) {
 CG_DrawWeaponSelect
 ===================
 */
-#ifdef _XBOX
-extern bool CL_ExtendSelectTime(void);
-#endif
 void CG_DrawWeaponSelect( void ) {
 	int				i;
 	int				bits;
@@ -1166,14 +1240,6 @@ void CG_DrawWeaponSelect( void ) {
 	{
 		return;
 	}
-
-#ifdef _XBOX
-	if(CL_ExtendSelectTime()) {
-		cg.weaponSelectTime = cg.time;
-	}
-
-	yOffset = -50;
-#endif
 
 	// showing weapon select clears pickup item display, but not the blend blob
 	cg.itemPickupTime = 0;
@@ -1850,6 +1916,7 @@ void CG_OutOfAmmoChange( int oldWeapon )
 
 	int		i;
 
+	return;
 	cg.weaponSelectTime = cg.time;
 
 	for ( i = LAST_USEABLE_WEAPON ; i > 0 ; i-- )	//We don't want the emplaced or turret
@@ -1885,11 +1952,14 @@ WEAPON EVENTS
 
 ===================================================================================================
 */
-
-void CG_GetClientWeaponMuzzleBoltPoint(int clIndex, vec3_t to)
+void CG_GetClientWeaponMuzzleBoltPoint(int clIndex, vec3_t to, qboolean leftweap)//[DualPistols]
+//void CG_GetClientWeaponMuzzleBoltPoint(int clIndex, vec3_t to)
 {
 	centity_t *cent;
 	mdxaBone_t	boltMatrix;
+
+	//[DualPistols]
+	int	midx = (leftweap ? 2 : 1);
 
 	if (clIndex < 0 || clIndex >= MAX_CLIENTS)
 	{
@@ -1899,12 +1969,12 @@ void CG_GetClientWeaponMuzzleBoltPoint(int clIndex, vec3_t to)
 	cent = &cg_entities[clIndex];
 
 	if (!cent || !cent->ghoul2 || !trap_G2_HaveWeGhoul2Models(cent->ghoul2) ||
-		!trap_G2API_HasGhoul2ModelOnIndex(&(cent->ghoul2), 1))
+		!trap_G2API_HasGhoul2ModelOnIndex(&(cent->ghoul2), midx))
 	{
 		return;
 	}
 
-	trap_G2API_GetBoltMatrix(cent->ghoul2, 1, 0, &boltMatrix, cent->turAngles, cent->lerpOrigin, cg.time, cgs.gameModels, cent->modelScale);
+	trap_G2API_GetBoltMatrix(cent->ghoul2, midx, 0, &boltMatrix, cent->turAngles, cent->lerpOrigin, cg.time, cgs.gameModels, cent->modelScale);
 	BG_GiveMeVectorFromMatrix(&boltMatrix, ORIGIN, to);
 }
 
@@ -1924,6 +1994,10 @@ void CG_FireWeapon( centity_t *cent, qboolean altFire ) {
 	if ( ent->weapon == WP_NONE ) {
 		return;
 	}
+
+	if(!altFire && ent->weapon == WP_FLECHETTE && cg.predictedPlayerState.weaponTime != 100000)
+		return;
+
 	if ( ent->weapon >= WP_NUM_WEAPONS ) {
 		CG_Error( "CG_FireWeapon: ent->weapon >= WP_NUM_WEAPONS" );
 		return;
@@ -1987,17 +2061,6 @@ void CG_FireWeapon( centity_t *cent, qboolean altFire ) {
 			{
 				CGCam_Shake(flrand(2, 3), 350);
 			}
-			else if (ent->weapon == WP_FLECHETTE)
-			{
-				if (altFire)
-				{
-					CGCam_Shake(flrand(2, 3), 350);
-				}
-				else
-				{
-					CGCam_Shake(1.5, 250);
-				}
-			}
 		}
 	}
 	// lightning gun only does this this on initial press
@@ -2012,6 +2075,8 @@ void CG_FireWeapon( centity_t *cent, qboolean altFire ) {
 		//trap_S_StartSound (NULL, cent->currentState.number, CHAN_ITEM, cgs.media.quadSound );
 	}
 
+	if(altFire && ent->weapon == WP_BOWCASTER)
+		return;
 
 	// play a sound
 	if (altFire)
@@ -2424,6 +2489,7 @@ Ghoul2 Insert Start
 
 // create one instance of all the weapons we are going to use so we can just copy this info into each clients gun ghoul2 object in fast way
 static void *g2WeaponInstances[MAX_WEAPONS];
+static void *g2WeaponInstances2[MAX_WEAPONS];//[DualPistols]
 //[VisualWeapons]
 void *g2HolsterWeaponInstances[MAX_WEAPONS];
 //[/VisualWeapons]
@@ -2432,6 +2498,7 @@ void CG_InitG2Weapons(void)
 	int i = 0;
 	gitem_t		*item;
 	memset(g2WeaponInstances, 0, sizeof(g2WeaponInstances));
+	memset(g2WeaponInstances2, 0, sizeof(g2WeaponInstances2));//[DualPistols]
 	for ( item = bg_itemlist + 1 ; item->classname ; item++ ) 
 	{
 		if ( item->giType == IT_WEAPON )
@@ -2460,6 +2527,29 @@ void CG_InitG2Weapons(void)
 				}
 				i++;
 			}
+			
+			//[DualPistols]
+			trap_G2API_InitGhoul2Model(&g2WeaponInstances2[/*i*/item->giTag], item->world_model[0], 0, 0, 0, 0, 0);
+//			trap_G2API_InitGhoul2Model(&g2WeaponInstances2[i], item->world_model[0],G_ModelIndex( item->world_model[0] ) , 0, 0, 0, 0);
+			if (g2WeaponInstances2[/*i*/item->giTag])
+			{
+				// indicate we will be bolted to model 0 (ie the player) on bolt 0 (always the right hand) when we get copied
+				//WeaponMod FIXME ? : c bien 1?
+				trap_G2API_SetBoltInfo(g2WeaponInstances2[/*i*/item->giTag], 0, 1);
+				// now set up the gun bolt on it
+				if (item->giTag == WP_SABER)
+				{
+					trap_G2API_AddBolt(g2WeaponInstances2[/*i*/item->giTag], 0, "*blade1");
+				}
+				else
+				{
+					trap_G2API_AddBolt(g2WeaponInstances2[/*i*/item->giTag], 0, "*flash");
+				}
+			}
+			//[/DualPistols]
+
+			i++;
+
 			if (i == MAX_WEAPONS)
 			{
 				assert(0);	
@@ -2480,6 +2570,7 @@ void CG_ShutDownG2Weapons(void)
 		//[VisualWeapons]
 		trap_G2API_CleanGhoul2Models(&g2HolsterWeaponInstances[i]);
 		//[/VisualWeapons]
+		trap_G2API_CleanGhoul2Models(&g2WeaponInstances2[i]);//[DualPistols]
 	}
 }
 
@@ -2513,7 +2604,7 @@ void *CG_G2WeaponInstance(centity_t *cent, int weapon)
 	}
 
 	//Try to return the custom saber instance if we can.
-	if (ci->saber[0].model[0] &&
+	if (ci->saber[0].model && ci->saber[0].model[0] && ci->ghoul2Weapons &&
 		ci->ghoul2Weapons[0])
 	{
 		return ci->ghoul2Weapons[0];
@@ -2523,6 +2614,47 @@ void *CG_G2WeaponInstance(centity_t *cent, int weapon)
 	return g2WeaponInstances[weapon];
 }
 
+//[DualPistols]
+void *CG_G2WeaponInstance2(centity_t *cent, int weapon)
+{
+	clientInfo_t *ci = NULL;
+
+	if (weapon != WP_SABER)
+	{
+		return g2WeaponInstances2[weapon];
+	}
+
+	if (cent->currentState.eType != ET_PLAYER &&
+		cent->currentState.eType != ET_NPC)
+	{
+		return g2WeaponInstances2[weapon];
+	}
+
+	if (cent->currentState.eType == ET_NPC)
+	{
+		ci = cent->npcClient;
+	}
+	else
+	{
+		ci = &cgs.clientinfo[cent->currentState.number];
+	}
+
+	if (!ci)
+	{
+		return g2WeaponInstances2[weapon];
+	}
+
+	//Try to return the custom saber instance if we can.
+	if (ci->saber[0].model[0] &&
+		ci->ghoul2Weapons[0])
+	{
+		return ci->ghoul2Weapons[0];
+	}
+
+	//If no custom then just use the default.
+	return g2WeaponInstances2[weapon];
+}
+//[/DualPistols]
 
 //[VisualWeapons]
 void *CG_G2HolsterWeaponInstance(centity_t *cent, int weapon, qboolean secondSaber)
@@ -2654,6 +2786,13 @@ void CG_CopyG2WeaponInstance(centity_t *cent, int weaponNum, void *toGhoul2)
 			else
 			{
 				trap_G2API_CopySpecificGhoul2Model(CG_G2WeaponInstance(cent, weaponNum/*-1*/), 0, toGhoul2, 1); 
+				//[DualPistols]
+				if ( (cent->currentState.eFlags & EF_DUAL_WEAPONS) &&
+					(cent->currentState.weapon == WP_BRYAR_PISTOL) )
+				{
+					trap_G2API_CopySpecificGhoul2Model(CG_G2WeaponInstance2(cent, weaponNum/*-1*/), 0, toGhoul2, 2);
+				}
+				//[/DualPistols]
 			}
 		}
 	}
@@ -2720,11 +2859,27 @@ void CG_CheckPlayerG2Weapons(playerState_t *ps, centity_t *cent)
 		return;
 	}
 
-	if (cent->ghoul2 && cent->ghoul2weapon != CG_G2WeaponInstance(cent, ps->weapon) &&
+	//[DualPistols]
+	if (cent->ghoul2 && (cent->ghoul2weapon != CG_G2WeaponInstance(cent, ps->weapon) || 
+			((cent->ghoul2weapon2 != CG_G2WeaponInstance2(cent, cent->currentState.weapon) &&
+			//WeaponMod FIXME?
+			(cent->currentState.eFlags & EF_DUAL_WEAPONS) && (cent->currentState.weapon != WP_SABER))) ||
+		(cent->ghoul2weapon2 != NULL && ((!(cent->currentState.eFlags & EF_DUAL_WEAPONS)) || (cent->currentState.weapon == WP_SABER)))) &&
 		ps->clientNum == cent->currentState.number) //don't want spectator mode forcing one client's weapon instance over another's
+	//[/DualPistols]
 	{
 		CG_CopyG2WeaponInstance(cent, ps->weapon, cent->ghoul2);
 		cent->ghoul2weapon = CG_G2WeaponInstance(cent, ps->weapon);
+		if ((cent->currentState.eFlags & EF_DUAL_WEAPONS) &&
+			(ps->weapon == WP_BRYAR_PISTOL))
+		{
+			cent->ghoul2weapon2 = CG_G2WeaponInstance2(cent, ps->weapon);
+		}
+		else
+		{
+			cent->ghoul2weapon2 = NULL;
+		}
+		
 		if (cent->weapon == WP_SABER && cent->weapon != ps->weapon && !ps->saberHolstered)
 		{ //switching away from the saber
 			//trap_S_StartSound(cent->lerpOrigin, cent->currentState.number, CHAN_AUTO, trap_S_RegisterSound( "sound/weapons/saber/saberoffquick.wav" ));

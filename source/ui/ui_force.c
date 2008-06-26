@@ -269,11 +269,12 @@ void UI_SaveForceTemplate()
 	}
 }
 
+uiRank_t prevRank[42];
 // 
 extern qboolean UI_TrueJediEnabled( void );
 void UpdateForceUsed()
 {//racc - updates the current force powers setup based on current powers selected.
-	int curpower, currank;
+	int curpower, currank,spentInForce=0,i;
 	menuDef_t *menu;
 
 	// Currently we don't make a distinction between those that wish to play Jedi of lower than maximum skill.
@@ -460,12 +461,25 @@ void UpdateForceUsed()
 			if (menu)
 			{
 				Menu_ShowItemByName(menu, "setfp_saberdefend", qtrue);
-				Menu_ShowItemByName(menu, "setfp_bluestyle", qtrue);
-				Menu_ShowItemByName(menu, "setfp_redstyle", qtrue);
-				Menu_ShowItemByName(menu, "setfp_greenstyle", qtrue);
-				Menu_ShowItemByName(menu, "setfp_purplestyle", qtrue);
-				Menu_ShowItemByName(menu, "setfp_dualstyle", qtrue);
-				Menu_ShowItemByName(menu, "setfp_staffstyle", qtrue);
+				if(uiForceRank >= 10)
+					Menu_ShowItemByName(menu, "setfp_bluestyle", qtrue); // soresu
+
+				if(uiForceRank >= 30)
+					Menu_ShowItemByName(menu, "setfp_redstyle", qtrue);//djem so
+
+				if(uiForceRank >= 20)
+					Menu_ShowItemByName(menu, "setfp_greenstyle", qtrue);//makashi
+
+				if(uiForceRank >= 60)
+					Menu_ShowItemByName(menu, "setfp_purplestyle", qtrue);//juyo
+				
+				if(uiForceRank >= 40)
+					Menu_ShowItemByName(menu, "setfp_dualstyle", qtrue);//Dual
+
+				if(uiForceRank >= 50)
+					Menu_ShowItemByName(menu, "setfp_staffstyle", qtrue);//Staff
+
+
 				Menu_ShowItemByName(menu, "setfp_saberthrow", qtrue);
 				Menu_ShowItemByName(menu, "effectentry", qtrue);
 				Menu_ShowItemByName(menu, "effectfield", qtrue);
@@ -473,6 +487,68 @@ void UpdateForceUsed()
 			}
 		}
 	}
+
+	for(i=0;i<NUM_FORCE_POWERS;i++)
+	{
+		
+		if(uiRank[i].uiForcePowersRank == FORCE_LEVEL_3)
+		{
+			spentInForce += bgForcePowerCost[i][1];
+			spentInForce += bgForcePowerCost[i][2];
+			spentInForce += bgForcePowerCost[i][3];
+		}
+		else if(uiRank[i].uiForcePowersRank == FORCE_LEVEL_2)
+		{
+			spentInForce += bgForcePowerCost[i][1];
+			spentInForce += bgForcePowerCost[i][2];
+		}
+		else
+			spentInForce += bgForcePowerCost[i][uiRank[i].uiForcePowersRank];
+	}
+
+	if(spentInForce >= 25)
+	{
+		for(i=NUM_FORCE_POWERS;i<NUM_FORCE_POWERS+SK_DISRUPTOR+1;i++)
+		{
+			if(uiRank[i].uiForcePowersRank > FORCE_LEVEL_1)
+				uiRank[i].uiForcePowersRank = FORCE_LEVEL_1;
+		}
+		if(uiRank[NUM_FORCE_POWERS+SK_FLECHETTE].uiForcePowersRank > FORCE_LEVEL_1)
+			uiRank[NUM_FORCE_POWERS+SK_FLECHETTE].uiForcePowersRank = 1;
+	}
+	else if(spentInForce)
+	{
+		for(i=NUM_FORCE_POWERS;i<NUM_FORCE_POWERS+SK_DISRUPTOR+1;i++)
+		{
+			if(uiRank[i].uiForcePowersRank > FORCE_LEVEL_2)
+				uiRank[i].uiForcePowersRank = FORCE_LEVEL_2;
+		}
+		if(uiRank[NUM_FORCE_POWERS+SK_FLECHETTE].uiForcePowersRank > FORCE_LEVEL_2)
+			uiRank[NUM_FORCE_POWERS+SK_FLECHETTE].uiForcePowersRank = 2;
+	}
+
+	if(uiRank[FP_LEVITATION].uiForcePowersRank >= FORCE_LEVEL_1)
+	{
+		if(uiRank[NUM_FORCE_POWERS+SK_JETPACK].uiForcePowersRank >= FORCE_LEVEL_1)
+		{//We have both jump and JP
+			if(prevRank && prevRank[NUM_FORCE_POWERS+SK_JETPACK].uiForcePowersRank == 0)
+			{//Just bought JP
+				uiRank[NUM_FORCE_POWERS+SK_JETPACK].uiForcePowersRank = 0;
+			}
+			else if(prevRank && prevRank[FP_LEVITATION].uiForcePowersRank == 0)
+			{//Just bought jump
+				uiRank[FP_LEVITATION].uiForcePowersRank = 0;
+			}
+		}
+		
+	}
+
+	/*
+	if(uiRank[NUM_FORCE_POWERS+SK_JETPACK].uiForcePowersRank >= FORCE_LEVEL_1)
+	{
+		uiRank[FP_LEVITATION].uiForcePowersRank=0;
+	}
+	*/
 
 	//[Repeater]
 	if(uiRank[NUM_FORCE_POWERS+SK_REPEATER].uiForcePowersRank < FORCE_LEVEL_3)
@@ -646,6 +722,10 @@ void UpdateForceUsed()
 				}
 			}
 		}
+	}
+	for(i=0;i<42;i++)
+	{
+		prevRank[i]=uiRank[i];
 	}
 }
 

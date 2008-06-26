@@ -70,7 +70,7 @@ extern sfxHandle_t	trap_S_RegisterSound( const char *sample);		// returns buzz i
 extern stringID_table_t animTable [MAX_ANIMATIONS+1];
 
 // These buffers are filled in with the same contents and then just read from in
-// a few places. We only need one copy on Xbox.
+// a few places.
 
 //[DynamicMemory_Vehicles]
 //TODO: dynamicize g_vehicleInfo as well
@@ -85,8 +85,6 @@ extern stringID_table_t animTable [MAX_ANIMATIONS+1];
 	//yep, we can.  
 
 #ifndef WE_ARE_IN_THE_UI
-
-#if !defined(_XBOX) || defined(QAGAME)
 
 #ifndef DYNAMICMEMORY_VEHICLES
 //[MOREVEHICLES]
@@ -133,12 +131,6 @@ void BG_ClearVehicleParseParms(void)
 //[/DynamicMemory_Vehicles]
 
 }
-
-#else //!defined(_XBOX) || defined(QAGAME)
-	//Comment[DynamicMemory_Vehicles]: are these ever used?  nope, !defined(_XBOX) is always true.  Just going to ignore them then
-	extern char VehWeaponParms[MAX_VEH_WEAPON_DATA_SIZE];
-	extern char VehicleParms[MAX_VEHICLE_DATA_SIZE];
-#endif
 
 #ifdef _JK2MP
 #include "../namespace_begin.h"

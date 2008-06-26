@@ -75,11 +75,6 @@ int numDeclaredVariables = 0;
 //unless we're using cpp. But we need it for the interpreter stuff.
 //In any case, DO NOT modify this enum.
 
-// Hack++
-// This code is compiled as C++ on Xbox. We could try and rig something above
-// so that we only get the C version of the includes (no full Icarus) in that
-// scenario, but I think we'll just try to leave this out instead.
-#ifndef _XBOX
 //[Linux]
 //#ifndef __linux__
 //[/Linux]
@@ -100,7 +95,6 @@ enum
 //[Linux]
 //#endif
 //[/Linux]
-#endif
 
 #include "../icarus/interpreter.h"
 

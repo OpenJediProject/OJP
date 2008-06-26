@@ -106,10 +106,6 @@ typedef struct camera_s
 	int		roff_frame;		// current frame in the roff data
 	int		next_roff_time;	// time when it's ok to apply the next roff frame 
 
-#ifdef _XBOX
-	qboolean	widescreen;
-#endif
-
 } camera_t;
 
 extern	qboolean		in_camera;
@@ -120,16 +116,9 @@ void GCam_Init( void );
 void GCam_Enable( void );
 void GCam_Disable( void );
 
-#ifdef _XBOX
-void GCam_SetWidescreen( qboolean widescreen );
-#endif
-
 void GCam_SetPosition( vec3_t org );
 void GCam_SetAngles( vec3_t ang );
 void GCam_SetFOV( float FOV );
-#ifdef _XBOX
-void GCam_SetFOV2( float FOV2 );
-#endif
 
 void GCam_Zoom( float FOV, float duration );
 //void CGCam_Pan( vec3_t	dest, float duration );

@@ -3715,11 +3715,7 @@ Ghoul2 Insert End
 	return qtrue;
 }
 
-#ifdef _XBOX
-char *npcParseBuffer = NULL;
-#else
 char npcParseBuffer[MAX_NPC_DATA_SIZE];
-#endif
 
 void NPC_LoadParms( void ) 
 {
@@ -3737,10 +3733,6 @@ void NPC_LoadParms( void )
 
 	//now load in the extra .npc extensions
 	fileCnt = trap_FS_GetFileList("ext_data/NPCs", ".npc", npcExtensionListBuf, sizeof(npcExtensionListBuf) );
-
-#ifdef _XBOX
-	npcParseBuffer = (char *) Z_Malloc(MAX_NPC_DATA_SIZE, TAG_TEMP_WORKSPACE, qfalse, 4);
-#endif
 
 	holdChar = npcExtensionListBuf;
 	for ( i = 0; i < fileCnt; i++, holdChar += npcExtFNLen + 1 ) 
@@ -3776,11 +3768,6 @@ void NPC_LoadParms( void )
 			//rww  12/19/02-actually the probelm was npcParseBuffer not being nul-term'd, which could cause issues in the strcat too
 		}
 	}
-
-#ifdef _XBOX
-	Z_Free(npcParseBuffer);
-	npcParseBuffer = NULL;
-#endif
 
 }
 

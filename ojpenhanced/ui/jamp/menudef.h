@@ -113,13 +113,6 @@
 #define FEEDER_SABER_SINGLE_INFO			0x2b			// saber single
 #define FEEDER_SABER_STAFF_INFO				0x2c			// saber staff
 
-
-// Xbox specific, hope no one minds
-#define FEEDER_XBL_ACCOUNTS					0xA0			// list of available XBL accounts
-#define FEEDER_XBL_PLAYERS					0xA1			// players (current and recent)
-#define FEEDER_XBL_FRIENDS					0xA2			// friends
-#define FEEDER_XBL_SERVERS					0xA3			// results of an optimatch query
-
 // display flags
 #define CG_SHOW_BLUE_TEAM_HAS_REDFLAG     0x00000001
 #define CG_SHOW_RED_TEAM_HAS_BLUEFLAG     0x00000002
@@ -343,9 +336,6 @@
 
 //extra, for patch
 #define UI_JEDI_NONJEDI 289
-
-// Xbox-only, for complicated passcode entry screen. Sorry.
-#define UI_XBOX_PASSCODE 290
 
 #define UI_CHAT_MAIN		291
 #define UI_CHAT_ATTACK		292

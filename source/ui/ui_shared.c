@@ -3498,7 +3498,7 @@ qboolean Item_Multi_HandleKey(itemDef_t *item, int key)
 				int current = Item_Multi_FindCvarByValue(item);
 				int max = Item_Multi_CountSettings(item);
 
-				if (key == A_MOUSE2 || key == A_CURSOR_LEFT)	// Xbox uses CURSOR_LEFT
+				if (key == A_MOUSE2 || key == A_CURSOR_LEFT)
 				{
 					current--;
 					if ( current < 0 ) 

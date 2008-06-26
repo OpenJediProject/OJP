@@ -15,10 +15,8 @@ int gWPNum = 0;
 
 int gLastPrintedIndex = -1;
 
-#ifndef _XBOX
 nodeobject_t nodetable[MAX_NODETABLE_SIZE];
 int nodenum; //so we can connect broken trails
-#endif
 
 int gLevelFlags = 0;
 
@@ -855,7 +853,6 @@ static int NotWithinRange(int base, int extent)
 	return 1;
 }
 
-#ifndef _XBOX
 int NodeHere(vec3_t spot)
 {
 	int i;
@@ -879,7 +876,6 @@ int NodeHere(vec3_t spot)
 
 	return 0;
 }
-#endif
 
 int CanGetToVector(vec3_t org1, vec3_t org2, vec3_t mins, vec3_t maxs)
 {
@@ -1068,7 +1064,6 @@ int CanGetToVectorTravel(vec3_t org1, vec3_t moveTo, vec3_t mins, vec3_t maxs)
 }
 #endif
 
-#ifndef _XBOX
 int ConnectTrail(int startindex, int endindex, qboolean behindTheScenes)
 {
 	int foundit;
@@ -1469,7 +1464,6 @@ int ConnectTrail(int startindex, int endindex, qboolean behindTheScenes)
 
 	return 1;
 }
-#endif
 
 int OpposingEnds(int start, int end)
 {
@@ -1534,7 +1528,6 @@ int DoorBlockingSection(int start, int end)
 	return 0;
 }
 
-#ifndef _XBOX
 int RepairPaths(qboolean behindTheScenes)
 {
 	int i;
@@ -1593,7 +1586,6 @@ int RepairPaths(qboolean behindTheScenes)
 
 	return 1;
 }
-#endif
 
 int OrgVisibleCurve(vec3_t org1, vec3_t mins, vec3_t maxs, vec3_t org2, int ignore)
 {
@@ -2517,7 +2509,6 @@ void FlagObjects(void)
 	}
 }
 
-#ifndef _XBOX
 int SavePathData(const char *filename)
 {
 	fileHandle_t f;
@@ -2690,7 +2681,6 @@ int SavePathData(const char *filename)
 
 	return 1;
 }
-#endif
 
 //#define PAINFULLY_DEBUGGING_THROUGH_VM
 
@@ -2698,7 +2688,6 @@ int SavePathData(const char *filename)
 int gSpawnPointNum = 0;
 gentity_t *gSpawnPoints[MAX_SPAWNPOINT_ARRAY];
 
-#ifndef _XBOX
 int G_NearestNodeToPoint(vec3_t point)
 { //gets the node on the entire grid which is nearest to the specified coordinates.
 	vec3_t vSub;
@@ -2731,9 +2720,7 @@ int G_NearestNodeToPoint(vec3_t point)
 
 	return bestIndex;
 }
-#endif
 
-#ifndef _XBOX
 void G_NodeClearForNext(void)
 { //reset nodes for the next trail connection.
 	int i = 0;
@@ -2918,7 +2905,6 @@ void G_DebugNodeFile()
 }
 #endif
 
-#endif
 //#define ASCII_ART_DEBUG
 //#define ASCII_ART_NODE_DEBUG
 
@@ -3175,7 +3161,6 @@ void CreateAsciiNodeTableRepresentation(int start, int end)
 }
 #endif
 
-#ifndef _XBOX
 qboolean G_BackwardAttachment(int start, int finalDestination, int insertAfter)
 { //After creating a node path between 2 points, this function links the 2 points with actual waypoint data.
 	int indexDirections[4]; //0 == down, 1 == up, 2 == left, 3 == right
@@ -3446,9 +3431,6 @@ void G_RMGPathing(void)
 	CreateAsciiTableRepresentation();
 #endif
 }
-#endif
-
-#ifndef _XBOX
 void BeginAutoPathRoutine(void)
 { //Called for RMG levels.
 	int i = 0;
@@ -3539,7 +3521,6 @@ void BeginAutoPathRoutine(void)
 #endif
 }
 
-#endif
 extern vmCvar_t bot_normgpath;
 
 void LoadPath_ThisLevel(void)
@@ -3556,9 +3537,6 @@ void LoadPath_ThisLevel(void)
 
 	if (g_RMG.integer)
 	{ //If RMG, generate the path on-the-fly
-#ifdef _XBOX
-		assert(0);
-#else
 		trap_Cvar_Register(&bot_normgpath, "bot_normgpath", "1", CVAR_CHEAT);
 		//note: This is disabled for now as I'm using standard bot nav
 		//on premade terrain levels.
@@ -3576,7 +3554,6 @@ void LoadPath_ThisLevel(void)
 		}
 
 		gLevelFlags |= LEVELFLAG_NOPOINTPREDICTION;
-#endif
 	}
 	else
 	{
@@ -3728,11 +3705,6 @@ int AcceptBotCommand(char *cmd, gentity_t *pl)
 	int OptionalArgument, i;
 	int FlagsFromArgument;
 	char *OptionalSArgument, *RequiredSArgument;
-//[RawMapName]
-/*#ifndef _XBOX
-	vmCvar_t mapname;
-#endif*/
-//[/RawMapName]
 
 	if (!gBotEdit)
 	{
@@ -4103,7 +4075,6 @@ int AcceptBotCommand(char *cmd, gentity_t *pl)
 		return 1;
 	}
 
-#ifndef _XBOX
 	if (Q_stricmp (cmd, "bot_wp_save") == 0)
 	{
 		gDeactivated = 0;
@@ -4113,7 +4084,6 @@ int AcceptBotCommand(char *cmd, gentity_t *pl)
 		SavePathData(level.rawmapname);
 		return 1;
 	}
-#endif
 
 	return 0;
 }

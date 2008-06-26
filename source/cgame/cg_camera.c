@@ -50,14 +50,6 @@ void CGCam_Init( void )
 	*/
 }
 
-#ifdef _XBOX
-void CGCam_SetWidescreen( qboolean widescreen )
-{
-	client_camera.widescreen = widescreen;
-	cg.widescreen = widescreen;
-}
-#endif
-
 /*
 -------------------------
 CGCam_Enable
@@ -1451,9 +1443,6 @@ void CGCam_Shake( float intensity, int duration )
 	// FIX ME: This is far too weak... but I don't want it to interfere with other effects.
 	cgi_FF_Shake( int(intensity * 625), duration );	// 625 = (10000 / MAX_SHAKE_INTENSITY)
 #endif // _IMMERSION
-#ifdef _XBOX
-	cgi_FF_Xbox_Shake(intensity,duration);
-#endif
 }
 
 /*

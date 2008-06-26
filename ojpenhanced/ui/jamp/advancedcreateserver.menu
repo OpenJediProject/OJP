@@ -429,53 +429,53 @@
 // FORCE MASTERY LEVEL
 //--------------------------------
 
-		itemDef 
-		{
-			name				settingsButton4
-			style				WINDOW_STYLE_SHADER
-			rect 				5 115 280 20 
-			background			"gfx/menus/menu_blendbox"			
-			forecolor			1 1 1 1
-			visible			0
-			decoration
-		}
+		//itemDef 
+		//{
+		//	name				settingsButton4
+		//	style				WINDOW_STYLE_SHADER
+		//	rect 				5 115 280 20 
+		//	background			"gfx/menus/menu_blendbox"		//	
+		//	forecolor			1 1 1 1
+		//	visible			0
+		//	decoration
+		//}
 
-		itemDef 
-		{
-			name				normal
-			group				grpsettings
-			text				@MENUS_FORCE_MASTERY
-			descText			@MENUS_FORCE_MASTERY_INFO
-			ownerdraw			UI_FORCE_MASTERY_SET
-			cvarTest			"ui_netGameType"
-			hideCvar
-			{ 
+//		itemDef 
+//		{
+//			name				normal
+//			group				grpsettings
+//			text				@MENUS_FORCE_MASTERY
+//			descText			@MENUS_FORCE_MASTERY_INFO
+//			ownerdraw			UI_FORCE_MASTERY_SET
+//			cvarTest			"ui_netGameType"
+//			hideCvar
+//			{ 
 		//[OLDGAMETYPES]
-				"6"
+//				"6"
 		//		"4"
 		//[/OLDGAMETYPES]
-			}     
-			rect				5 115 280 20 
-			textalign			ITEM_ALIGN_RIGHT
-			textalignx			165
-			textaligny			0
-			font				4
-			textscale			1
-			forecolor			1 1 1 1
-			visible				1  
-			action 
-			{ 
-				play 			"sound/interface/button1.wav" 
-			}
-			mouseEnter 
-			{ 
-				show 			settingsButton4
-			}
-			mouseExit 
-			{ 
-				hide 			settingsButton4 
-			}
-		}
+//			}     
+//			rect				5 115 280 20 
+//			textalign			ITEM_ALIGN_RIGHT
+//			textalignx			165
+//			textaligny			0
+//			font				4
+//			textscale			1
+//			forecolor			1 1 1 1
+//			visible				1  
+//			action 
+//			{ 
+//				play 		//	"sound/interface/button1.wav" 
+//			}
+//			mouseEnter 
+//			{ 
+//				show 			settingsButton4
+//			}
+//			mouseExit 
+//			{ 
+//				hide 			settingsButton4 
+//			}
+//		}
 
 //--------------------------------
 // FORCE POWER DISABLE
@@ -484,7 +484,7 @@
 		{
 			name				settingsButton5
 			style				WINDOW_STYLE_SHADER
-			rect 				5 135 280 20 
+			rect 				5 115 280 20 
 			background			"gfx/menus/menu_blendbox"			
 			forecolor			1 1 1 1
 			visible				0
@@ -508,7 +508,7 @@
 				@OJP_MENUS_DISABLEFORCEPOWERS_NEUTRALSONLY	16353
 				
 			}
-			rect				5 135 280 20 
+			rect				5 115 280 20 
 			textalign			ITEM_ALIGN_RIGHT
 			textalignx			165
 			textaligny			0
@@ -546,7 +546,7 @@
 				"2" ;
 				"4"
 			}     
-			rect				5 135 280 20 
+			rect				5 115 280 20 
 			textalign			ITEM_ALIGN_RIGHT
 			textalignx			165
 			textaligny			0
@@ -592,7 +592,7 @@
 				@MENUS_NO	1 
 				@MENUS_LIMITED	2 
 			}
-			rect				5 135 280 20 
+			rect				5 115 280 20 
 			textalign			ITEM_ALIGN_RIGHT
 			textalignx			165
 			textaligny			0
@@ -624,7 +624,7 @@
 		{
 			name				settingsButton7
 			style				WINDOW_STYLE_SHADER
-			rect 				5 175 280 20 
+			rect 				5 135 280 20 
 			background			"gfx/menus/menu_blendbox"			
 			forecolor			1 1 1 1
 			visible				0
@@ -639,7 +639,7 @@
 			text				@MENUS_SABERLOCKING
 			descText			@MENUS_SABERLOCKING_DESC
 			cvar				"g_saberLocking"
-			rect				5 175 280 20
+			rect				5 135 280 20
 			textalign			ITEM_ALIGN_RIGHT
 			textalignx			165
 			textaligny			2
@@ -823,6 +823,94 @@
 		}
 //[/FIXWARMUP]	
 
+//--------------------------------
+// MIN/MAX XP LEVEL
+//--------------------------------
+
+		itemDef 
+		{
+			name				normal
+			group				grpsettings
+			type				ITEM_TYPE_NUMERICFIELD
+			text				@MENUS2_MINXP
+			cvar				"g_minexplevel" 
+			cvarTest			"ui_netGameType"
+			rect				5 285 280 20 
+			textalign			ITEM_ALIGN_RIGHT
+			textalignx			165
+			textaligny			0
+			font				4
+			textscale			1
+			maxchars			6
+			forecolor			1 1 1 1
+			visible				1
+			descText			@MENUS2_DESC_MINXP
+		}
+
+		itemDef 
+		{
+			name				normal
+			group				grpsettings
+			type				ITEM_TYPE_NUMERICFIELD
+			text				@MENUS2_MAXXP
+			cvar				"g_maxexplevel" 
+			cvarTest			"ui_netGameType"
+			rect				5 305 280 20 
+			textalign			ITEM_ALIGN_RIGHT
+			textalignx			165
+			textaligny			0
+			font				4
+			textscale			1
+			maxchars			6
+			forecolor			1 1 1 1
+			visible				1
+			descText			@MENUS2_DESC_MAXXP
+		}
+
+//--------------------------------
+// RESPAWN/LIVES
+//--------------------------------
+
+//		itemDef 
+//		{
+//			name				normal
+//			group				grpsettings
+//			type				ITEM_TYPE_NUMERICFIELD
+//			text				@MENUS2_LIVES
+//			cvar				"ojp_lmslives" 
+//			cvarTest			"ui_netGameType"
+//			rect				5 305 280 20 
+//			textalign			ITEM_ALIGN_RIGHT
+//			textalignx			165
+//			textaligny			0
+//			font				4
+//			textscale			1
+//			maxchars			6
+//			forecolor			1 1 1 1
+//			visible				1
+//			descText			@MENUS2_DESC_LIVES
+//		}
+
+		itemDef 
+		{
+			name				normal
+			group				grpsettings
+			type				ITEM_TYPE_NUMERICFIELD
+			text				@MENUS2_RESPAWNTIMER
+			cvar				"ojp_ffarespawntimer" 
+			cvarTest			"ui_netGameType"
+			rect				5 325 280 20 
+			textalign			ITEM_ALIGN_RIGHT
+			textalignx			165
+			textaligny			0
+			font				4
+			textscale			1
+			maxchars			6
+			forecolor			1 1 1 1
+			visible				1
+			descText			@MENUS2_DESC_RESPAWNTIMER
+		}
+
 
 //--------------------------------
 // FORCE BASED TEAMS
@@ -832,7 +920,7 @@
 		{
 			name				settingsButton11
 			style				WINDOW_STYLE_SHADER
-			rect 				5 285 280 20 
+			rect 				5 345 280 20 
 			background			"gfx/menus/menu_blendbox"			
 			forecolor			1 1 1 1
 			decoration
@@ -858,7 +946,7 @@
 			//	"5"
 			//[/OLDGAMETYPES]
 			}     
-			rect				5 285 280 20 
+			rect				5 345 280 20 
 			textalign			ITEM_ALIGN_RIGHT
 			textalignx			165
 			textaligny			0

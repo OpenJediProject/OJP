@@ -315,7 +315,7 @@ Sentry_Idle
 void Sentry_Idle( void )
 {
 	Sentry_MaintainHeight();
-G_Printf("idle");
+
 	// Is he waking up?
 	if (NPCInfo->localState == LSTATE_WAKEUP)
 	{

@@ -1801,7 +1801,6 @@ typedef enum //# animNumber_e
 	BOTH_P1_S1_B_,		//[backblock]
 	BOTH_P6_S1_B_,		//[backblock]
 	BOTH_P7_S1_B_,		//[backblock]
-
 	//# #eol
 	MAX_ANIMATIONS,
 	MAX_TOTALANIMATIONS,

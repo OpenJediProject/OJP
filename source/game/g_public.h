@@ -710,7 +710,7 @@ typedef struct
 #define MAX_FAILED_NODES 8
 
 //[Linux]//[Mac]
-#if _WIN32
+#if _WIN32 && !defined(__GNUC__)
 typedef struct Vehicle_s Vehicle_t;
 #endif
 //[/Linux]//[/Mac]

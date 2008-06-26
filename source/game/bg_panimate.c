@@ -3663,7 +3663,14 @@ setAnimLegs:
 			{
 				if (ps->fd.forcePowersActive & (1 << FP_RAGE))
 				{
-					ps->legsTimer /= 1.3;
+					//[Rage]
+					if(ps->fd.forcePowerLevel[FP_RAGE] == FORCE_LEVEL_3)
+						ps->legsTimer /= 1.3;
+					else if(ps->fd.forcePowerLevel[FP_RAGE] == FORCE_LEVEL_2)
+						ps->legsTimer /= 1.2;
+					else
+						ps->legsTimer /= 1.1;
+					//[/Rage]
 				}
 				else if (ps->fd.forcePowersActive & (1 << FP_SPEED))
 				{

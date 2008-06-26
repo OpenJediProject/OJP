@@ -638,6 +638,8 @@ void WP_SaberSetDefaults( saberInfo_t *saber )
 		saber->blade[i].lengthMax = 32;
 	}
 
+	saber->saberFlags |= SFL_NOT_ACTIVE_BLOCKING;
+
 	strcpy(saber->name, "default");
 	strcpy(saber->fullName, "lightsaber");
 	strcpy(saber->model, "models/weapons2/saber_reborn/saber_w.glm");

@@ -23,7 +23,7 @@
 //This is the current keyword used to denote the current OJP Basic and Enhanced client plugins.  
 //These values should be changed whenever something is changed that would make the new clients 
 //incompatiable with previous versions of OJP Basic or Enhanced (on individual basis).
-#define CURRENT_OJPENHANCED_CLIENTVERSION		"OJP Enhanced v0.1.1"
+#define CURRENT_OJPENHANCED_CLIENTVERSION		"OJP Enhanced v1.2"
 //[/ClientPlugInDetect]
 
 #define	STEPSIZE		18
@@ -87,7 +87,7 @@
 //#define FATIGUE_WALLFLIP		-FATIGUE_JUMP + 3 something that isnt working right
 
 //Fatigue for jumps (This is the basic cost of a jump, force jumps cost points in addition to this)
-#define FATIGUE_JUMP			10
+#define FATIGUE_JUMP			2
 
 //Fatigue for standard melee moves
 #define FATIGUE_MELEE			1
@@ -318,6 +318,7 @@ typedef int gametype_t;
 typedef enum { GENDER_MALE, GENDER_FEMALE, GENDER_NEUTER } gender_t;
 
 extern vec3_t WP_MuzzlePoint[WP_NUM_WEAPONS];
+extern vec3_t WP_MuzzlePoint2[WP_NUM_WEAPONS];//[DualPistols]
 
 #include "../namespace_begin.h"
 extern int forcePowerSorted[NUM_FORCE_POWERS];
@@ -555,7 +556,7 @@ extern int forceMasteryPoints[NUM_FORCE_MASTERY_LEVELS];
 //Made defines for saber offense/defense level 1 since UpdateForceUsed() manually changes this values based on if sabers are given for free or not.
 //[ExpSys]
 #define SABER_OFFENSE_L1	1  
-#define SABER_DEFENSE_L1	1
+#define SABER_DEFENSE_L1	5
 //#define SABER_OFFENSE_L1	4  
 //#define SABER_DEFENSE_L1	4
 //[ExpSys]
@@ -782,8 +783,8 @@ typedef enum {
 
 #define	EF_TALK					(1<<13)		// draw a talk balloon
 #define	EF_CONNECTION			(1<<14)		// draw a connection trouble sprite
-#define	EF_NOT_USED_6			(1<<15)		// not used
-
+//#define	EF_NOT_USED_6			(1<<15)		// not used
+#define EF_WALK					(1<<15)
 //[CoOp]
 #define EF_ANIM_ONCE			(1<<16)		// cycle through all frames just once then stop
 //#define	EF_NOT_USED_2			(1<<16)		// not used
@@ -815,6 +816,8 @@ typedef enum {
 //#define EF_NOT_USED_5			(1<<31)		// not used
 //[/CoOp]
 
+#define	EF_DUAL_WEAPONS			(1<<31) //[DualPistols]
+
 //These new EF2_??? flags were added for NPCs, they really should not be used often.
 //NOTE: we only allow 10 of these!
 #define	EF2_HELD_BY_MONSTER		(1<<0)		// Being held by something, like a Rancor or a Wampa
@@ -826,6 +829,7 @@ typedef enum {
 #define	EF2_BRACKET_ENTITY		(1<<6)		// Draw as bracketed
 #define	EF2_SHIP_DEATH			(1<<7)		// "died in ship" mode
 #define	EF2_NOT_USED_1			(1<<8)		// not used
+#define EF2_BOWCASTERSCOPE		(1<<9)//[BowcasterScope]
 
 typedef enum {
 	EFFECT_NONE = 0,
@@ -1954,6 +1958,11 @@ extern void BG_AttachToSandCreature( void *ghoul2, float rancYaw, vec3_t rancOri
 
 extern int WeaponReadyAnim[WP_NUM_WEAPONS];
 extern int WeaponAttackAnim[WP_NUM_WEAPONS];
+
+//[DualPistols]
+extern int WeaponReadyAnim2[WP_NUM_WEAPONS];
+extern int WeaponAttackAnim2[WP_NUM_WEAPONS];
+//[/DualPistols]
 
 extern int forcePowerDarkLight[NUM_FORCE_POWERS];
 

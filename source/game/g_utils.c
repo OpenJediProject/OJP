@@ -340,12 +340,21 @@ void G_Throw( gentity_t *targ, vec3_t newDir, float push )
 		VectorScale( newDir, g_knockback.value * (float)push / mass, kvel );
 	}
 
+	kvel[2]*=2;
+
 	if ( targ->client )
 	{
 		VectorAdd( targ->client->ps.velocity, kvel, targ->client->ps.velocity );
 	}
 	else if ( targ->s.pos.trType != TR_STATIONARY && targ->s.pos.trType != TR_LINEAR_STOP && targ->s.pos.trType != TR_NONLINEAR_STOP )
 	{
+		VectorAdd( targ->s.pos.trDelta, kvel, targ->s.pos.trDelta );
+		VectorCopy( targ->r.currentOrigin, targ->s.pos.trBase );
+		targ->s.pos.trTime = level.time;
+	}
+	else
+	{
+		targ->s.pos.trType = TR_GRAVITY;
 		VectorAdd( targ->s.pos.trDelta, kvel, targ->s.pos.trDelta );
 		VectorCopy( targ->r.currentOrigin, targ->s.pos.trBase );
 		targ->s.pos.trTime = level.time;
@@ -439,15 +448,6 @@ void G_CreateFakeClient(int entNum, gclient_t **cl)
 	}
 	*cl = gClPtrs[entNum];
 }
-
-#ifdef _XBOX
-void G_ClPtrClear(void)
-{
-	for(int i=0; i<MAX_GENTITIES; i++) {
-		gClPtrs[i] = NULL;
-	}
-}
-#endif
 
 //call this on game shutdown to run through and get rid of all the lingering client pointers.
 void G_CleanAllFakeClients(void)
@@ -802,6 +802,17 @@ gentity_t *FindRemoveAbleGent(void)
 	//and then start searching for things that aren't mission critical to remove.
 	int i;
 	gentity_t *e = NULL;
+
+	e = &g_entities[MAX_CLIENTS];
+	for( i=MAX_CLIENTS; i <level.num_entities;i++)
+	{
+		if(!stricmp(e->classname,"item_shield") || !stricmp(e->classname,"item_seeker") 
+			|| !stricmp(e->classname,"item_binoculars"))
+		{
+			G_Printf("Warning, removing instant medpack to prevent entity overflow.\n");
+			return e;
+		}
+	}
 
 	//we can easily dump player corpses
 	e = &g_entities[MAX_CLIENTS];
@@ -1535,37 +1546,6 @@ void G_SoundIndexOnEnt( gentity_t *ent, int channel, int soundIndex )
 
 }
 //[/CloakingVehicles]
-
-#ifdef _XBOX
-//-----------------------------
-void G_EntityPosition( int i, vec3_t ret )
-{
-	if ( /*g_entities &&*/ i >= 0 && i < MAX_GENTITIES && g_entities[i].inuse)
-	{
-#if 0	// VVFIXME - Do we really care about doing this? It's slow and unnecessary
-		gentity_t *ent = g_entities + i;
-
-		if (ent->bmodel)
-		{
-			vec3_t mins, maxs;
-			clipHandle_t h = CM_InlineModel( ent->s.modelindex );
-			CM_ModelBounds( cmg, h, mins, maxs );
-			ret[0] = (mins[0] + maxs[0]) / 2 + ent->currentOrigin[0];
-			ret[1] = (mins[1] + maxs[1]) / 2 + ent->currentOrigin[1];
-			ret[2] = (mins[2] + maxs[2]) / 2 + ent->currentOrigin[2];
-		}
-		else
-#endif
-		{
-			VectorCopy(g_entities[i].r.currentOrigin, ret);
-		}
-	}
-	else
-	{
-		ret[0] = ret[1] = ret[2] = 0;
-	}
-}
-#endif
 
 //==============================================================================
 

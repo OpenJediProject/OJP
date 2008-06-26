@@ -24,10 +24,12 @@ qboolean SabBeh_RollBalance(gentity_t *self, sabmech_t *mechSelf, qboolean force
 	int randNum; 
 	if( self->client->ps.saberAttackChainCount >= MISHAPLEVEL_FULL )
 	{//hard mishap.
-		mechSelf->doKnockdown = qtrue;	
+		//mechSelf->doKnockdown = qtrue;
+		mechSelf->doButterFingers= qtrue;
 		self->client->ps.saberAttackChainCount = MISHAPLEVEL_HEAVY;
 		return qtrue;
 	}
+	
 	else if( self->client->ps.stats[STAT_DODGE] < DODGE_CRITICALLEVEL )//added by JRHockney to do more heavybounces like old times
 	{//heavy slow bounce
 		randNum = Q_irand(0, 99);
@@ -251,6 +253,7 @@ extern qboolean G_InAttackParry(gentity_t *self);
 extern int OJP_SaberBlockCost(gentity_t *defender, gentity_t *attacker, vec3_t hitLoc);
 extern void WP_SaberBlockNonRandom( gentity_t *self, vec3_t hitloc, qboolean missileBlock );
 extern qboolean G_BlockIsParry( gentity_t *self, gentity_t *attacker, vec3_t hitLoc );
+extern qboolean G_BlockIsQuickParry( gentity_t *self, gentity_t *attacker, vec3_t hitLoc );
 extern void BG_AddFatigue( playerState_t * ps, int Fatigue);
 void SabBeh_AttackVsBlock( gentity_t *attacker, sabmech_t *mechAttacker, 
 								gentity_t *blocker, sabmech_t *mechBlocker, vec3_t hitLoc, qboolean hitSaberBlade,
@@ -258,6 +261,7 @@ void SabBeh_AttackVsBlock( gentity_t *attacker, sabmech_t *mechAttacker,
 {//set the saber behavior for an attacking vs blocking/parrying blade impact
 	qboolean startSaberLock = qfalse;
 	qboolean parried = G_BlockIsParry(blocker, attacker, hitLoc);
+	qboolean quickParried = G_BlockIsQuickParry(blocker,attacker,hitLoc);
 	qboolean atkparry = G_InAttackParry(blocker);
 	qboolean atkfake = (attacker->client->ps.userInt3 & (1 << FLAG_ATTACKFAKE)) 
 		? qtrue : qfalse;
@@ -315,6 +319,10 @@ void SabBeh_AttackVsBlock( gentity_t *attacker, sabmech_t *mechAttacker,
 		else
 		{//otherwise, the defender stands a good chance of having his defensives broken.	
 			SabBeh_AddBalance(attacker, mechAttacker, -1, qtrue);
+
+			if(attacker->client->ps.fd.saberAnimLevel == SS_DESANN)
+				SabBeh_AddBalance(blocker, mechBlocker, 2, qfalse);
+
 #ifdef _DEBUG
 			mechAttacker->behaveMode = SABBEHAVE_ATTACK;
 #endif
@@ -325,7 +333,7 @@ void SabBeh_AttackVsBlock( gentity_t *attacker, sabmech_t *mechAttacker,
 				blocker->client->ps.saberBlocked = BLOCKED_NONE;
 				startSaberLock = qtrue;
 			}
-			SabBeh_AddBalance(blocker, mechBlocker, 2, qfalse);
+			
 #ifdef _DEBUG
 			mechBlocker->behaveMode = SABBEHAVE_BLOCKFAKED;
 #endif
@@ -333,7 +341,8 @@ void SabBeh_AttackVsBlock( gentity_t *attacker, sabmech_t *mechAttacker,
 
 	}
 	else if(hitSaberBlade && BG_InSlowBounce(&blocker->client->ps) 
-		&& blocker->client->ps.userInt3 & (1 << FLAG_OLDSLOWBOUNCE))
+		&& blocker->client->ps.userInt3 & (1 << FLAG_OLDSLOWBOUNCE)
+		&& attacker->client->ps.fd.saberAnimLevel == SS_TAVION)
 	{//blocker's saber was directly hit while in a slow bounce, disarm the blocker!
 		mechBlocker->doButterFingers = qtrue;
 		blocker->client->ps.saberAttackChainCount = 0;
@@ -356,7 +365,8 @@ void SabBeh_AttackVsBlock( gentity_t *attacker, sabmech_t *mechAttacker,
 
 		//set attacker
 		if(parried)
-		{//parry values
+		{
+		//parry values
 			if(attacker->client->ps.saberMove == LS_A_LUNGE
 			|| attacker->client->ps.saberMove == LS_SPINATTACK
 			|| attacker->client->ps.saberMove == LS_SPINATTACK_DUAL)
@@ -392,6 +402,10 @@ void SabBeh_AttackVsBlock( gentity_t *attacker, sabmech_t *mechAttacker,
 			{//aqua styles deals MP to players that don't parry it.
 				SabBeh_AddBalance(blocker, mechBlocker, 2, qfalse);
 			}
+			else if(attacker->client->ps.fd.saberAnimLevel == SS_STRONG)
+			{
+				blocker->client->ps.fd.forcePower -= 2;
+			}
 			
 #ifdef _DEBUG
 			mechAttacker->behaveMode = SABBEHAVE_ATTACKBLOCKED;
@@ -425,7 +439,7 @@ void SabBeh_AttackVsBlock( gentity_t *attacker, sabmech_t *mechAttacker,
 		GetStringForID( animTable, blocker->client->ps.torsoAnim ), GetStringForID( SaberMoveTable, blocker->client->ps.saberMove ) );
 	*/
 
-	//[ExpSys]
+	//[ExpSys] -- [DUALRAWR]
 	G_DodgeDrain(blocker, attacker, OJP_SaberBlockCost(blocker, attacker, hitLoc));
 	//[/ExpSys]
 
@@ -451,14 +465,17 @@ void SabBeh_RunSaberBehavior( gentity_t *self, sabmech_t *mechSelf,
 		return;
 	}
 
+	//G_Printf("BG_SaberInNonIdleDamageMove\n");
 	if(BG_SaberInNonIdleDamageMove(&self->client->ps, self->localAnimIndex) )
 	{//self is attacking
+		//G_Printf("(y)\n");
 		if(BG_SaberInNonIdleDamageMove(&otherOwner->client->ps, otherOwner->localAnimIndex)) 
 		{//and otherOwner is attacking
 			SabBeh_AttackVsAttack(self, mechSelf, otherOwner, mechOther, &selfMishap, &otherMishap);
 		}
 		else if(OJP_SaberCanBlock(otherOwner, self, qfalse, hitLoc, -1, -1))
 		{//and otherOwner is blocking or parrying
+			//this is called with dual with both sabers[DUALRAWR]
 			SabBeh_AttackVsBlock(self, mechSelf, otherOwner, mechOther, hitLoc, otherHitSaberBlade,
 				&selfMishap, &otherMishap);
 			*didHit = qfalse;

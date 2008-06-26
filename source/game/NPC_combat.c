@@ -139,6 +139,7 @@ qboolean G_CheckSaberAllyAttackDelay( gentity_t *self, gentity_t *enemy )
 	}
 	if ( self->NPC 
 		&& self->client->leader
+		&& self->client->leader->client
 		&& self->client->leader->client->ps.clientNum < MAX_CLIENTS
 		&& self->enemy
 		&& self->enemy->s.weapon != WP_SABER
@@ -445,12 +446,7 @@ void G_SetEnemy( gentity_t *self, gentity_t *enemy )
 		return;
 	}
 
-  //[CoOp]
-	if (Q_stricmp("item_shield", enemy->classname) == 0 || Q_stricmp("func_door", enemy->classname) == 0)
-	{//can't set a shield or a door as an enemy
-		return;
-	}
-
+	//[CoOp]
 	//check to see if this enemy is actually a turret, if so.  We want to set enemy
 	//to the turret's user.
 	enemy = G_CheckControlledTurretEnemy(self, enemy, qtrue);

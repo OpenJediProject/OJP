@@ -13,6 +13,11 @@
 #include "g_roff.h"
 //[/ROFF]
 
+//[Experimental]
+#define SUN 0
+#define DEADBODYSPHYSICS 0
+//[/Experimental]
+
 level_locals_t	level;
 
 int		eventClearTime = 0;
@@ -576,7 +581,7 @@ static cvarTable_t		gameCvarTable[] = {
 	{ &tier_storyinfo, "tier_storyinfo", "0", CVAR_ARCHIVE, 0, qfalse  },
 	{ &tiers_complete, "tiers_complete", "", CVAR_ARCHIVE, 0, qfalse  },
 	//[/CoOp]
-	{ &g_knockback, "g_knockback", "1000", 0, 0, qtrue  },
+	{ &g_knockback, "g_knockback", "175", 0, 0, qtrue  },
 	{ &g_quadfactor, "g_quadfactor", "3", 0, 0, qtrue  },
 	{ &g_weaponRespawn, "g_weaponrespawn", "5", 0, 0, qtrue  },
 	{ &g_weaponTeamRespawn, "g_weaponTeamRespawn", "5", 0, 0, qtrue },
@@ -798,7 +803,7 @@ static cvarTable_t		gameCvarTable[] = {
 	//[DodgeSys]
 	//toggles the use of Body Dodges, which are matrix-like moves that make the players 
 	//evade damage in exchange for DP.
-	{ &ojp_allowBodyDodge, "ojp_allowBodyDodge", "0", CVAR_SERVERINFO|CVAR_ARCHIVE, 0, qtrue },
+	{ &ojp_allowBodyDodge, "ojp_allowBodyDodge", "1", CVAR_SERVERINFO|CVAR_ARCHIVE, 0, qtrue },
 	//[/DodgeSys]
 	//[FFARespawnTimer]
 	{ &ojp_ffaRespawnTimer, "ojp_ffaRespawnTimer","1",CVAR_ARCHIVE,0,qtrue},
@@ -1173,25 +1178,6 @@ void G_RegisterCvars( void ) {
 		G_Printf( "g_gametype %i is out of range, defaulting to 0\n", g_gametype.integer );
 		trap_Cvar_Set( "g_gametype", "0" );
 	}
-	//[OLDGAMETYPES]
-	/*
-	else if (g_gametype.integer == GT_HOLOCRON)
-	{
-		G_Printf( "This gametype is not supported.\n" );
-		trap_Cvar_Set( "g_gametype", "0" );
-	}
-	else if (g_gametype.integer == GT_JEDIMASTER)
-	{
-		G_Printf( "This gametype is not supported.\n" );
-		trap_Cvar_Set( "g_gametype", "0" );
-	}
-	else if (g_gametype.integer == GT_CTY)
-	{
-		G_Printf( "This gametype is not supported.\n" );
-		trap_Cvar_Set( "g_gametype", "0" );
-	}
-	*/
-	//[/OLDGAMETYPES]
 
 	level.warmupModificationCount = g_warmup.modificationCount;
 }
@@ -1267,6 +1253,8 @@ extern void Load_Autosaves(void);
 extern void G_LoadArenas(void);
 //[/BugFix44]
 
+void SP_light( gentity_t *self );//[Experimental]
+
 void G_InitGame( int levelTime, int randomSeed, int restart ) {
 	int					i;
 	vmCvar_t	mapname;
@@ -1274,43 +1262,7 @@ void G_InitGame( int levelTime, int randomSeed, int restart ) {
 	//[RawMapName]
 	char		cs[MAX_INFO_STRING];
 	//[/RawMapName]
-
-#ifdef _XBOX
-	if(restart) {
-		BG_ClearVehicleParseParms();
-		RemoveAllWP();
-	}
-#endif
-
-	//[ReloadGametypeAndMap]
-	/*
-	if(!restart)
-	{
-		fileHandle_t serversettings;
-		char buffer[100];
-		char map[100];
-		int i,j;
-		trap_FS_FOpenFile("serversettings.cfg",&serversettings,FS_READ);
-		if(serversettings)
-		{
-			trap_FS_Read(buffer,strlen(buffer),serversettings);
-			for(i=0;i<strlen(buffer);i++)
-			{
-				if(buffer[i] == "." && buffer[i+1] == "b" && buffer[i+2] == "s")
-				{
-					for(j=0;j<i+3;j++)
-					{
-						map[j] = buffer[j];
-					}
-					break;
-				}
-			}
-			//trap_Cvar_Set
-		}
-		trap_FS_FCloseFile(serversettings);
-	}
-	*/
-	//[/ReloadGametypeAndMap]
+	gentity_t*light=NULL;//[Experimental]
 
 	//Init RMG to 0, it will be autoset to 1 if there is terrain on the level.
 	trap_Cvar_Set("RMG", "0");
@@ -1361,7 +1313,6 @@ void G_InitGame( int levelTime, int randomSeed, int restart ) {
 	Q_strncpyz( level.rawmapname, Info_ValueForKey( cs, "mapname" ), sizeof(level.rawmapname) );
 	//[/RawMapName]
 
-#ifndef _XBOX
 	if ( g_log.string[0] ) {
 		if ( g_logSync.integer ) {
 			trap_FS_FOpenFile( g_log.string, &level.logFile, FS_APPEND_SYNC );
@@ -1381,7 +1332,6 @@ void G_InitGame( int levelTime, int randomSeed, int restart ) {
 	} else {
 		G_Printf( "Not logging to disk.\n" );
 	}
-#endif
 
 	G_LogWeaponInit();
 
@@ -1595,6 +1545,33 @@ void G_InitGame( int levelTime, int randomSeed, int restart ) {
 	}
 	//[/OLDGAMETYPES]
 
+	//[Experimental]
+#ifdef SUN
+	{
+		gentity_t*sun;
+		int i=0;
+		for(i=0;i<level.num_entities;i++)
+		{
+			light=&g_entities[i];
+			
+			if(light)
+			{
+				if(Q_stricmp(light->classname,"light")==0)
+				{
+					sun=&g_entities[i];
+					sun=light;
+					G_FreeEntity(light);
+				}
+			}
+		}
+		sun=G_Spawn();
+		//Q_strncpyz(sun->classname,"light",sizeof(sun->classname));
+		sun->classname="light";
+		sun->targetname="SUN";
+		SP_light(sun);
+	}
+#endif
+	//[/Experimental]
 }
 
 
@@ -4316,7 +4293,6 @@ void NAV_CheckCalcPaths( void )
 		}
 		else 
 #endif
-#ifndef _XBOX
 		//[RawMapName]
 		if ( trap_Nav_Save( level.rawmapname, ckSum.integer ) == qfalse )
 		//if ( trap_Nav_Save( mapname.string, ckSum.integer ) == qfalse )
@@ -4327,7 +4303,6 @@ void NAV_CheckCalcPaths( void )
 			//Com_Printf("Unable to save navigations data for map \"%s\" (checksum:%d)\n", mapname.string, ckSum.integer );
 			//[/RawMapName]
 		}
-#endif
 		navCalcPathTime = 0;
 	}
 }
@@ -4732,7 +4707,46 @@ void G_RunFrame( int levelTime ) {
 				}
 			}
 
-			if (ent->client->isHacking)
+			//[SentryHack]
+			if(ent->client->isHacking == -100)
+			{//Sentry hack time, pretty much a copy and paste of the below
+				//gentity_t *hacked = &g_entities[ent->client->isHacking];
+				vec3_t angDif;
+
+				VectorSubtract(ent->client->ps.viewangles, ent->client->hackingAngles, angDif);
+
+				//keep him in the "use" anim
+				if (ent->client->ps.torsoAnim != BOTH_CONSOLE1)
+				{
+					G_SetAnim( ent, NULL, SETANIM_TORSO, BOTH_CONSOLE1, SETANIM_FLAG_OVERRIDE|SETANIM_FLAG_HOLD, 0 );
+				}
+				else
+				{
+					ent->client->ps.torsoTimer = 500;
+				}
+				ent->client->ps.weaponTime = ent->client->ps.torsoTimer;
+
+				if (!(ent->client->pers.cmd.buttons & BUTTON_USE_HOLDABLE))
+				{ //have to keep holding use
+					ent->client->isHacking = 0;
+					ent->client->ps.hackingTime = 0;
+					ent->client->ps.stats[STAT_HOLDABLE_ITEMS] |= (1 << HI_SENTRY_GUN);
+				}
+				/*
+				else if (!G_PointInBounds( ent->client->ps.origin, hacked->r.absmin, hacked->r.absmax ))
+				{ //they stepped outside the thing they're hacking, so reset hacking time
+					ent->client->isHacking = 0;
+					ent->client->ps.hackingTime = 0;
+				}
+				else if (VectorLength(angDif) > 10.0f)
+				{ //must remain facing generally the same angle as when we start
+					ent->client->isHacking = 0;
+					ent->client->ps.hackingTime = 0;
+				}
+				*/
+			}
+			//[/SentryHack]
+			else if (ent->client->isHacking)
 			{ //hacking checks
 				gentity_t *hacked = &g_entities[ent->client->isHacking];
 				vec3_t angDif;
@@ -4773,7 +4787,7 @@ void G_RunFrame( int levelTime ) {
 			}
 
 //[ExpSys]
-#define JETPACK_DEFUEL_RATE		150 //approx. 20 seconds of idle use from a fully charged fuel amt
+#define JETPACK_DEFUEL_RATE		300 //approx. 20 seconds of idle use from a fully charged fuel amt
 #define JETPACK_REFUEL_RATE		300 //seems fair
 //#define JETPACK_DEFUEL_RATE		200 //approx. 20 seconds of idle use from a fully charged fuel amt
 //#define JETPACK_REFUEL_RATE		150 //seems fair

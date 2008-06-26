@@ -89,11 +89,26 @@ void G_RunObject( gentity_t *ent )
 
 	ent->nextthink = level.time + FRAMETIME;
 
+	if((ent->r.contents & CONTENTS_LIGHTSABER))
+	{
+		gentity_t	*saberOwn = &g_entities[ent->r.ownerNum];
+		if(saberOwn && saberOwn->client
+			&& saberOwn->client->ps.fd.forcePowerLevel[FP_SABERTHROW] == FORCE_LEVEL_2)
+		{
+			ent->nextthink = level.time + 70;
+		}
+	}
+
 	VectorCopy( ent->r.currentOrigin, oldOrg );
 	// get current position
 	BG_EvaluateTrajectory( &ent->s.pos, level.time, origin );
 	//Get current angles?
 	BG_EvaluateTrajectory( &ent->s.apos, level.time, ent->r.currentAngles );
+
+	if((ent->r.contents & CONTENTS_LIGHTSABER))
+	{
+		ent->r.currentAngles[1]+=10;
+	}
 
 	if ( VectorCompare( ent->r.currentOrigin, origin ) )
 	{//error - didn't move at all!

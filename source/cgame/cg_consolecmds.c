@@ -212,6 +212,7 @@ static void CG_SiegeBriefing_f(void)
 	CG_SiegeBriefingDisplay(team, 0);
 }
 
+
 static void CG_SiegeCvarUpdate_f(void)
 {
 	int team;

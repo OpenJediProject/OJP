@@ -27,8 +27,6 @@ USER INTERFACE SABER LOADING & DISPLAY CODE
 #endif
 //[/DynamicMemory_Sabers]
 
-
-// On Xbox, static linking lets us steal the buffer from wp_saberLoad
 // Just make sure that the saber data size is the same
 // Damn. OK. Gotta fix this again. Later.
 

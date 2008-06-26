@@ -1174,11 +1174,6 @@ qboolean CG_CalcFOVFromX( float fov_x )
 	cg.refdef.fov_x = fov_x;
 	cg.refdef.fov_y = fov_y;
 
-#ifdef _XBOX
-	if(cg.widescreen)
-		cg.refdef.fov_x *= 1.125f;
-#endif
-
 	return (inwater);
 }
 
@@ -1270,7 +1265,7 @@ static int CG_CalcFov( void ) {
 
 			fov_x = zoomFov;
 		}
-		else if (cg.predictedPlayerState.zoomMode)
+		else if (cg.predictedPlayerState.zoomMode == 1)
 		{
 			if (!cg.predictedPlayerState.zoomLocked)
 			{
@@ -1322,6 +1317,11 @@ static int CG_CalcFov( void ) {
 		}
 	}
 
+	if(cg.predictedPlayerState.zoomMode &&cg.predictedPlayerState.weapon == WP_BOWCASTER)
+	{
+		fov_x=30;
+	}
+
 	x = cg.refdef.width / tan( fov_x / 360 * M_PI );
 	fov_y = atan2( cg.refdef.height, x );
 	fov_y = fov_y * 360 / M_PI;
@@ -1338,11 +1338,6 @@ static int CG_CalcFov( void ) {
 	else {
 		inwater = qfalse;
 	}
-
-#ifdef _XBOX
-	if(cg.widescreen)
-		fov_x = fov_y * 1.77777f;
-#endif
 
 
 	// set it
@@ -2211,13 +2206,6 @@ void CGCam_Shake( float intensity, int duration )
 	
 
 	cgScreenEffects.shake_start = cg.time;
-//JLFRUMBLE
-#ifdef _XBOX
-extern void FF_XboxShake(float intensity, int duration);
-
-FF_XboxShake(intensity, duration);
-
-#endif
 }
 */
 //[/CoOp]

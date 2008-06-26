@@ -1477,7 +1477,7 @@ int Q_irand(int value1, int value2)
 }
 //[Linux]
 //[VS2005]
-#if defined(_WIN32) && !defined(VS2005)
+#if defined(_WIN32) && !defined(VS2005) && !defined(__GNUC__)
 //[/VS2005]
 //[/Linux]
 float powf ( float x, int y )

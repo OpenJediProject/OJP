@@ -1302,6 +1302,62 @@
 			}
 		}
 		
+		// Force Protect title
+		itemDef 
+		{
+			name					setfp_protect
+			group					lightpowers
+			style					0	
+			text					@MENUS_FORCE_PROTECT
+			rect					270 120 110 15
+			textalign				ITEM_ALIGN_LEFT
+			textalignx				0
+			textaligny				0
+			font					4
+			textscale				1
+			forecolor				0.5 0.5 1 1
+			outlinecolor			1 .5 .5 .5
+			backcolor				0 0 0 0
+			border					0
+			bordercolor				0 0 0 0
+			visible					1 
+			decoration
+		}
+	
+		// Force Mind Trick assign
+		itemDef 
+		{
+			name					setfp_protect
+			group					lightpowers
+			style					0	
+			ownerdraw				UI_FORCE_RANK_PROTECT
+			rect					270 120 175 15
+			textalign				ITEM_ALIGN_LEFT		
+			textalignx				115
+			textaligny				-5
+			textscale				.9
+			outlinecolor			1 .5 .5 .5
+			backcolor				0 0 0 0
+			forecolor				0.5 0.5 1 1
+			border					0
+			bordercolor				0 0 0 0
+			descText				@MENUS_CREATE_AN_AURA_THAT_PROTECTS
+			visible					1 
+			action 
+			{ 
+				play			"sound/interface/button1.wav" ;
+			}
+
+			mouseenter 
+			{ 
+				setitemcolor	setfp_protect forecolor 0.75 0.75 1 1
+			}
+			mouseexit 
+			{ 
+				setitemcolor	setfp_protect forecolor  0.5 0.5 1 1
+			}
+		}
+		
 	////////////////////////////////////////////////////////////////////////////////
 	// The Dark Side Force Powers
 	////////////////////////////////////////////////////////////////////////////////
@@ -1474,6 +1530,70 @@
 				setitemcolor	setfp_lightning forecolor 1 0.2 0.2 1
 			}
 		}
+		
+		// Force Rage title
+		itemDef 
+		{
+			name					setfp_rage
+			group					darkpowers
+			style					0	
+			text					@MENUS_DARK_RAGE
+			//descText				@MENUS_DESCRIPTION_OF_A_FORCE
+			//[ForceSys]			270 255 175 15
+			rect					270 270 110 15
+			//rect					230 257 110 15
+			//[/ForceSys]
+			textalign				ITEM_ALIGN_LEFT												
+			textalignx				0
+			textaligny				0
+			font					4
+			textscale				1
+			forecolor				1 0.2 0.2 1
+			outlinecolor			1 .5 .5 .5
+			backcolor				0 0 0 0
+			border					0
+			bordercolor				0 0 0 0
+			visible					1 
+			decoration
+		}
+
+		// Force Rage assign
+		itemDef 
+		{
+			name					setfp_rage
+			group					darkpowers
+			style					0	
+			ownerdraw				UI_FORCE_RANK_RAGE
+			//[ForceSys]
+			rect					270 270 175 15
+			//rect					230 257 175 15
+			//[/ForceSys]
+			textalign				ITEM_ALIGN_LEFT										
+			textalignx				115
+			textaligny				-5
+			textscale				.25        
+			outlinecolor			1 .5 .5 .5
+			backcolor				0 0 0 0
+			forecolor				1 0.2 0.2 1
+			border					0
+			bordercolor				0 0 0 0
+			descText				@MENUS_UNLEASH_DEADLY_RAGE
+			visible					1 
+			action 
+			{ 
+				play			"sound/interface/button1.wav" ;
+			}
+
+			mouseenter 
+			{ 
+				setitemcolor	setfp_rage forecolor 1 0.7 0.7 1
+			}
+			mouseexit 
+			{ 
+				setitemcolor	setfp_rage forecolor 1 0.2 0.2 1
+			}
+		}
+		
 	}
 }
 //[/NewMenus]

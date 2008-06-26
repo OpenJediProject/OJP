@@ -1,7 +1,7 @@
 //[CrashLog]
 #include "g_local.h"
 
-#if defined __linux__ && !defined GNUC
+#if defined __linux__ && !defined GNUC && !defined(_WIN32)
 
 	#include <string.h>
 	#include <signal.h>
@@ -199,6 +199,8 @@
 	#include <process.h>
 	#include <imagehlp.h>
 
+#pragma warning(disable:4090)
+#pragma warning(disable:4028)
 	HMODULE	imagehlp = NULL;
 
 	typedef BOOL (WINAPI *PFNSYMINITIALIZE)(HANDLE, LPSTR, BOOL);
@@ -431,9 +433,9 @@ void DisableCoreDump() {
 }
 
 void EnableStackTrace() {
-	#if defined __linux__ && !defined GNUC
+	#if defined __linux__ && !defined GNUC && !defined(__GNUC__)
 		installcrashhandler();
-	#elif defined WIN32		
+	#elif defined WIN32	
 		win32_initialize_handler();
 	#else
 
@@ -441,9 +443,9 @@ void EnableStackTrace() {
 }
 
 void DisableStackTrace() {
-	#if defined __linux__ && !defined GNUC
+	#if defined __linux__ && !defined GNUC && !defined(__GNUC__)
 		restorecrashhandler();
-	#elif defined WIN32
+	#elif defined WIN32 && !defined(__GNUC__)
 		win32_deinitialize_handler();
 	#else
 

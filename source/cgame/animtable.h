@@ -3,9 +3,6 @@
 // moved it from the original header file for PCH reasons...
 //
 
-#if defined(_XBOX) && !defined(_JK2EXE) && !defined(_UI)	// Linker only wants one copy
-extern stringID_table_t animTable[MAX_ANIMATIONS+1];
-#else
 stringID_table_t animTable [MAX_ANIMATIONS+1] =
 {
 	//=================================================
@@ -1802,8 +1799,7 @@ stringID_table_t animTable [MAX_ANIMATIONS+1] =
 	ENUM2STRING(BOTH_CIN_50),		//# Level specific cinematic
 	ENUM2STRING(BOTH_P1_S1_B_),		//[backblock]
 	ENUM2STRING(BOTH_P6_S1_B_),		//[backblock]
-	ENUM2STRING(BOTH_P7_S1_B_),		//[backblock]										
+	ENUM2STRING(BOTH_P7_S1_B_),		//[backblock]	
 	//must be terminated
 	NULL,-1
 };
-#endif	// _XBOX / _UI

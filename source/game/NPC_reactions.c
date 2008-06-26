@@ -565,6 +565,54 @@ void NPC_Pain(gentity_t *self, gentity_t *attacker, int damage)
 	RestoreNPCGlobals();
 }
 
+extern void G_Knockdown( gentity_t *self, gentity_t *attacker, const vec3_t pushDir, float strength, qboolean breakSaberLock );
+void npc_push(gentity_t *self, gentity_t *other, trace_t *trace )
+{
+	if(!other)
+		return;
+
+	if(!other->client)
+		return;
+
+	
+	if(other->client->pushEffectTime > level.time
+		|| other->client->ps.fd.forceGripBeingGripped > level.time)
+	{//Other player was pushed!
+		float speed = (vec_t)sqrt (other->client->ps.velocity[0]*
+			other->client->ps.velocity[0] + other->client->ps.velocity[1]*
+			other->client->ps.velocity[1])/2;
+		G_Printf("Speed %f\n",speed);
+		if(speed > 50)
+		{
+			int damage = (speed >= 100 ? 35 : 10);
+			gentity_t *gripper = NULL;
+			int i=0;
+
+			G_Knockdown(self,other,other->client->ps.velocity,100,qfalse);
+			self->client->ps.velocity[1] = other->client->ps.velocity[1]*5.5f;
+			self->client->ps.velocity[0] = other->client->ps.velocity[0]*5.5f;
+
+			for(i=0;i<1024;i++)
+			{
+				gripper = &g_entities[i];
+				if(gripper && gripper->client)
+				{
+					if(gripper->client->ps.fd.forceGripEntityNum == other->client->ps.clientNum)
+						break;
+				}
+			}
+
+			if(gripper == NULL)
+				return;
+
+			G_Printf("Damage: %i\n",damage);
+			//G_Damage(gripEnt, self, self, NULL, NULL, 2, DAMAGE_NO_ARMOR, MOD_FORCE_DARK);
+			G_Damage(other,gripper,gripper,NULL,NULL,damage,DAMAGE_NO_ARMOR,MOD_FORCE_DARK);
+			G_Damage(self,other,other,NULL,NULL,damage,DAMAGE_NO_ARMOR,0);
+		}
+	}
+}
+
 /*
 -------------------------
 NPC_Touch
@@ -704,6 +752,7 @@ void NPC_Touch(gentity_t *self, gentity_t *other, trace_t *trace)
 	}
 
 	RestoreNPCGlobals();
+	npc_push(self,other,trace);
 }
 
 /*

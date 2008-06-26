@@ -563,7 +563,8 @@ void SentryTouch(gentity_t *ent, gentity_t *other, trace_t *trace)
 {
 	return;
 }
-
+qboolean BG_CrouchAnim( int anim );
+qboolean PM_InKnockDown( playerState_t *ps );
 //----------------------------------------------------------------
 void pas_fire( gentity_t *ent )
 //----------------------------------------------------------------
@@ -1103,7 +1104,15 @@ void SP_PAS( gentity_t *base )
 }
 
 //------------------------------------------------------------------------
-void ItemUse_Sentry( gentity_t *ent )
+
+void ItemUse_Sentry(gentity_t *ent)
+{
+	ent->client->isHacking = -100;
+	ent->client->ps.hackingTime = level.time + 5000;
+	ent->client->ps.hackingBaseTime = level.time + 5000;
+}
+
+void ItemUse_Sentry2( gentity_t *ent )
 //------------------------------------------------------------------------
 {
 	vec3_t fwd, fwdorg;
@@ -1393,12 +1402,31 @@ void ItemUse_MedPack(gentity_t *ent)
 void Jetpack_Off(gentity_t *ent)
 { //create effects?
 	assert(ent && ent->client);
+	
+	if(!ent || !ent->client)
+		return;
 
 	if (!ent->client->jetPackOn)
 	{ //aready off
 		return;
 	}
 
+	//[DualPistols]
+	if(!PM_InKnockDown(&ent->client->ps))
+	{
+		if(ent->client->ps.eFlags & EF_DUAL_WEAPONS)
+		{
+			ent->client->ps.torsoAnim=WeaponReadyAnim2[ent->client->ps.weapon];
+			ent->client->ps.legsAnim=WeaponReadyAnim2[ent->client->ps.weapon];
+		}
+		else
+		{
+			ent->client->ps.torsoAnim=WeaponReadyAnim[ent->client->ps.weapon];
+			ent->client->ps.legsAnim=WeaponReadyAnim[ent->client->ps.weapon];
+		}
+	}
+	//[/DualPistols]
+	
 	ent->client->jetPackOn = qfalse;
 }
 
@@ -1437,7 +1465,7 @@ void Flamethrower_Fire( gentity_t *self )
 	vec3_t	center, mins, maxs, dir, ent_org, size, v;
 
 	float	radius = FLAMETHROWER_RADIUS, dot, dist;
-	int damage = 2;
+	int damage = 1;
 	gentity_t	*entityList[MAX_GENTITIES];
 	int			iEntityList[MAX_GENTITIES];
 	int		e, numListedEntities, i;
@@ -1523,6 +1551,15 @@ void Flamethrower_Fire( gentity_t *self )
 			continue;
 		}
 
+		if(traceEnt->client)
+		{
+			vec3_t pushDir;
+			VectorSubtract( traceEnt->client->ps.origin, self->client->ps.origin, pushDir );
+			VectorNormalize(pushDir);
+			VectorScale( pushDir, 150, traceEnt->client->ps.velocity );
+			//VectorCopy(pushDir,traceEnt->client->ps.velocity);
+		}
+
 		G_Damage( traceEnt, self, self, dir, tr.endpos, damage, DAMAGE_NO_ARMOR|DAMAGE_NO_KNOCKBACK|/*DAMAGE_NO_HIT_LOC|*/DAMAGE_IGNORE_TEAM, MOD_LAVA );
 
 	}
@@ -1531,6 +1568,10 @@ void Flamethrower_Fire( gentity_t *self )
 
 void ItemUse_FlameThrower(gentity_t *ent)
 {
+
+	if (ent->client->ps.jetpackFuel < FLAMETHROWER_FUELCOST)
+		return;
+
 	if(BG_InLedgeMove(ent->client->ps.legsAnim))
 	{//can't use flamethrower while in ledgegrab
 		return;
@@ -1540,6 +1581,8 @@ void ItemUse_FlameThrower(gentity_t *ent)
 	{//can't use flamethrower with saber
 		return;
 	}
+	
+	//VectorCopy(ang,ent->client->ps.velocity);
 	ent->client->flameTime = level.time + 300;
 }
 //[/Flamethrower]
@@ -1845,13 +1888,8 @@ void EWebPain(gentity_t *self, gentity_t *attacker, int damage)
 //special routine for tracking angles between client and server
 void EWeb_SetBoneAngles(gentity_t *ent, char *bone, vec3_t angles)
 {
-#ifdef _XBOX
-	byte *thebone = &ent->s.boneIndex1;
-	byte *firstFree = NULL;
-#else
 	int *thebone = &ent->s.boneIndex1;
 	int *firstFree = NULL;
-#endif
 	int i = 0;
 	int boneIndex = G_BoneIndex(bone);
 	int flags, up, right, forward;
@@ -2571,8 +2609,9 @@ int Pickup_Ammo (gentity_t *ent, gentity_t *other)
 qboolean OJP_AllPlayersHaveClientPlugin(void);
 //[/VisualWeapons]
 int Pickup_Weapon (gentity_t *ent, gentity_t *other) {
-	int		quantity;
+	int		quantity=10;
 
+	/*
 	if ( ent->count < 0 ) {
 		quantity = 0; // None for you, sir!
 	} else {
@@ -2604,8 +2643,8 @@ int Pickup_Weapon (gentity_t *ent, gentity_t *other) {
 				quantity = 1;		// only add a single shot
 			}
 			*/
-		}
-	}
+		//}	
+	//}
 
 	// add the weapon
 	other->client->ps.stats[STAT_WEAPONS] |= ( 1 << ent->item->giTag );

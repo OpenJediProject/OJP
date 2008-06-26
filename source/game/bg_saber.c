@@ -3883,6 +3883,7 @@ void PM_WeaponLightsaber(void)
 
 	qboolean checkOnlyWeap = qfalse;
 
+
 	//[CoOp]
 	if ( pm_entSelf->s.NPC_class == CLASS_SABER_DROID )
 	{//Saber droid does it's own attack logic
@@ -4156,7 +4157,7 @@ void PM_WeaponLightsaber(void)
 		//[SaberThrowSys]
 		else if ( pm->ps->saberInFlight && pm->ps->saberEntityNum )
 		{//saber is already in flight continue moving it with the force.
-			PM_SetAnim(SETANIM_TORSO, BOTH_SABERPULL, SETANIM_FLAG_OVERRIDE|SETANIM_FLAG_HOLD, 100);
+			PM_SetAnim(SETANIM_TORSO, BOTH_SABERTHROW1START, SETANIM_FLAG_OVERRIDE|SETANIM_FLAG_HOLD, 100);
 			pm->ps->torsoTimer = 1;
 			return;
 		}
@@ -4179,6 +4180,13 @@ void PM_WeaponLightsaber(void)
 			VectorMA( pm->ps->origin, SABER_MIN_THROW_DIST, fwd, minFwd );
 
 			pm->trace(&sabTr, pm->ps->origin, sabMins, sabMaxs, minFwd, pm->ps->clientNum, MASK_PLAYERSOLID);
+
+			/*
+#ifdef QAGAME
+			if(pm->ps->fd.forcePowersActive & (1<<FP_GRIP))
+				WP_ForcePowerStop(&g_entities[pm->ps->clientNum],FP_GRIP);
+#endif
+				*/
 
 			if ( sabTr.allsolid || sabTr.startsolid || sabTr.fraction < 1.0f )
 			{//not enough room to throw

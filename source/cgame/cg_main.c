@@ -134,11 +134,7 @@ static int	CG_RagCallback(int callType);
 static void C_GetBoltPos(void);
 static void C_ImpactMark(void);
 
-#ifdef _XBOX
-#define MAX_MISC_ENTS	500
-#else
 #define MAX_MISC_ENTS	4000
-#endif
 
 //static refEntity_t	*MiscEnts = 0;
 //static float		*Radius = 0;
@@ -773,10 +769,7 @@ vmCvar_t	cg_autoMapY;
 vmCvar_t	cg_autoMapW;
 vmCvar_t	cg_autoMapH;
 
-#ifndef _XBOX	// Hmmm. This is also in game. I think this is safe.
 vmCvar_t	bg_fighterAltControl;
-#endif
-
 vmCvar_t	cg_chatBox;
 vmCvar_t	cg_chatBoxHeight;
 
@@ -1025,7 +1018,7 @@ static cvarTable_t cvarTable[] = { // bk001129
 	{ &cg_g2TraceLod, "cg_g2TraceLod", "2", 0 },
 
 	//[TrueView]
-	{ &cg_trueguns, "cg_trueguns", "0", CVAR_ARCHIVE },
+	{ &cg_trueguns, "cg_trueguns", "1", CVAR_ARCHIVE },
 	{ &cg_fpls, "cg_fpls", "0", 0 },
 	//[/TrueView]
 
@@ -1313,12 +1306,20 @@ void CG_UpdateCvars( void ) {
 	int			i;
 	cvarTable_t	*cv;
 	static int drawTeamOverlayModificationCount = -1;
-
 	for ( i = 0, cv = cvarTable ; i < cvarTableSize ; i++, cv++ ) {
 		trap_Cvar_Update( cv->vmCvar );
 	}
 
 	// check for modications here
+
+	if(!cg.predictedPlayerState.zoomMode)
+	{
+		if(cg_fov.integer > 95)
+			trap_Cvar_Set( "cg_fov", "95" );
+		else if(cg_fov.integer < 65)
+			trap_Cvar_Set( "cg_fov", "65" );
+	}
+
 
 	// If team overlay is on, ask for updates from the server.  If its off,
 	// let the server know so we don't receive it
@@ -2204,9 +2205,7 @@ static void CG_RegisterGraphics( void ) {
 
 	CG_LoadingString( cgs.mapname );        
 
-//#ifndef _XBOX
 	trap_R_LoadWorldMap( cgs.mapname );
-//#endif
 
 	// precache status bar pics
 //	CG_LoadingString( "game media" );
@@ -2293,7 +2292,7 @@ static void CG_RegisterGraphics( void ) {
 	cgs.effects.forceLightningWide	= trap_FX_RegisterEffect( "effects/force/lightningwide.efx" );
 	
 	//[Flamethrower]
-	cgs.effects.flamethrower = trap_FX_RegisterEffect( "effects/flamethrower/flamethrower.efx" );
+	cgs.effects.flamethrower = trap_FX_RegisterEffect( "effects/boba/fthrw.efx" );
 	//[/Flamethrower]
 
 	cgs.effects.forceDrain		= trap_FX_RegisterEffect( "effects/mp/drain.efx" );
@@ -2842,7 +2841,6 @@ void CG_StartMusic( qboolean bForceStart ) {
 	//[/dynamicMusic]
 }
 
-#ifndef _XBOX
 char *CG_GetMenuBuffer(const char *filename) {
 	int	len;
 	fileHandle_t	f;
@@ -2865,7 +2863,6 @@ char *CG_GetMenuBuffer(const char *filename) {
 
 	return buf;
 }
-#endif
 
 //
 // ==============================
@@ -3536,21 +3533,8 @@ Ghoul2 Insert Start
 // initialise the cg_entities structure - take into account the ghoul2 stl stuff in the active snap shots
 void CG_Init_CG(void)
 {
-#ifdef _XBOX
-	qboolean widescreen = cg.widescreen;
-#endif
 	memset( &cg, 0, sizeof(cg));
-#ifdef _XBOX
-	cg.widescreen = widescreen;
-#endif
 }
-
-#ifdef _XBOX
-void CG_SetWidescreen(qboolean widescreen)
-{
-	cg.widescreen = widescreen;
-}
-#endif
 
 
 // initialise the cg_entities structure - take into account the ghoul2 stl stuff
@@ -4245,9 +4229,7 @@ Ghoul2 Insert End
 
 //	CG_LoadingString( "Creating automap data" );
 	//init automap
-#ifndef _XBOX
 	trap_R_InitWireframeAutomap();
-#endif
 
 	CG_LoadingString( "" );
 

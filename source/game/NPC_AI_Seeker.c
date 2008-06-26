@@ -370,6 +370,8 @@ qboolean Seeker_Fire( void )
 	CalcEntitySpot(NPC->enemy,SPOT_LEGS,enemy_org);
 	}
 
+	enemy_org[0]+=irand(2,15);
+	enemy_org[1]+=irand(2,15);
 	
 	//calculate everything based on our model offset
 	VectorCopy(NPC->r.currentOrigin, muzzle);
@@ -591,7 +593,7 @@ void Seeker_FindEnemy( void )
 	//[SeekerItemNpc]
 	float closestDist = SEEKER_SEEK_RADIUS * SEEKER_SEEK_RADIUS + 1;
 	//[/SeekerItemNpc]
-
+	
 	if(NPC->activator && NPC->activator->client->ps.weapon == WP_SABER && !NPC->activator->client->ps.saberHolstered)
 	{
 		NPC->enemy=NULL;

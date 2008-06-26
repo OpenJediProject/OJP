@@ -1186,7 +1186,7 @@ void NPC_Begin (gentity_t *ent)
 			}
 			else
 			{
-				G_DebugPrint( WL_DEBUG, "NPC %s could not spawn, waiting %4.2 secs to try again\n", ent->targetname, ent->wait/1000.0f );
+				//G_DebugPrint( WL_DEBUG, "NPC %s could not spawn, waiting %4.2 secs to try again\n", ent->targetname, ent->wait/1000.0f );
 				ent->think = NPC_Begin;
 				ent->nextthink = level.time + ent->wait;//try again in half a second
 			}
@@ -1638,15 +1638,6 @@ gNPC_t *New_NPC_t(int entNum)
 
 	return ptr;
 }
-
-#ifdef _XBOX
-void NPC_NPCPtrsClear(void)
-{
-	for(int i=0; i<MAX_GENTITIES; i++) {
-		gNPCPtrs[i] = NULL;
-	}
-}
-#endif
 
 /*
 -------------------------

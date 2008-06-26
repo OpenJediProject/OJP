@@ -7,11 +7,7 @@
 
 //#define FORCEJUMP_INSTANTMETHOD 1
 
-#ifdef _XBOX	// No bot has more than 150 bytes of chat right now
-#define MAX_CHAT_BUFFER_SIZE 256
-#else
 #define MAX_CHAT_BUFFER_SIZE 8192
-#endif
 #define MAX_CHAT_LINE_SIZE 128
 
 #define TABLE_BRANCH_DISTANCE 32
@@ -162,13 +158,8 @@ typedef struct nodeobject_s
 //	int index;
 	float weight;
 	int flags;
-#ifdef _XBOX
-	short	neighbornum;
-	short	inuse;
-#else
 	int neighbornum;
 	int inuse;
-#endif
 } nodeobject_t;
 
 typedef struct boteventtracker_s
@@ -612,9 +603,7 @@ extern int gWPNum;
 #include "../namespace_end.h"
 
 extern int gLastPrintedIndex;
-#ifndef _XBOX
 extern nodeobject_t nodetable[MAX_NODETABLE_SIZE];
-#endif
 extern int nodenum;
 
 extern int gLevelFlags;

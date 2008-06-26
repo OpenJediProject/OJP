@@ -18,7 +18,10 @@ ECHO ===========
 ECHO Making Pk3s
 ECHO ===========
 
-..\Utilities\zip\7za.exe a -tzip %PK3ASSETS%.pk3 .\%ASSETSFOLDER%\* -xr!.svn\ -x!*.dll -x!*.so -x!.\%ASSETSFOLDER%\*.* -xr!*.nav -mx9
+ECHO Y | DEL ojp_enhancedstuff.pk3
+ECHO Y | DEL ojp_enhanceddlls.pk3
+
+rem..\Utilities\zip\7za.exe a -tzip %PK3ASSETS%.pk3 .\%ASSETSFOLDER%\* -xr!.screenshots\ -xr!.svn\ -x!*.dll -x!*.so -x!.\%ASSETSFOLDER%\*.* -xr!*.nav -mx9
 IF ERRORLEVEL 1 GOTO ERROR
 ..\Utilities\zip\7za.exe a -tzip %PK3DLL%.pk3 .\%ASSETSFOLDER%\*.dll -mx9
 

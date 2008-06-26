@@ -719,6 +719,9 @@ struct gclient_s {
 	qboolean	legsLastFlip;
 	qboolean	torsoLastFlip;
 
+	qboolean	justFired;//[T-21]
+	int			cloneFired;//[CloneRifle]
+
 	qboolean	readyToExit;		// wishes to leave the intermission
 
 	qboolean	noclip;
@@ -748,6 +751,8 @@ struct gclient_s {
 
 	int			accuracy_shots;		// total number of shots
 	int			accuracy_hits;		// total number of hits
+
+	int			forceSpeedStartTime;
 
 	//
 	int			lastkilled_client;	// last client that this client killed
@@ -838,7 +843,6 @@ struct gclient_s {
 	int			throwingIndex;
 	int			beingThrown;
 	int			doingThrow;
-
 	float		hiddenDist;//How close ents have to be to pick you up as an enemy
 	vec3_t		hiddenDir;//Normalized direction in which NPCs can't see you (you are hidden)
 
@@ -963,6 +967,8 @@ struct gclient_s {
 
 	//[Flamethrower]
 	int			flameTime;
+	qboolean	flamed;//When a jedi gets flamethrowed
+	qboolean	flameThrowed;
 	//[/Flamethrower]
 
 	//[SeekerItemNpc]
@@ -970,6 +976,7 @@ struct gclient_s {
 	//[/SeekerItemNpc]
 	int         blockTime;
 
+	qboolean leftPistol;//[DualPistols]
 };
 
 //Interest points
@@ -1204,6 +1211,7 @@ gentity_t *G_GetDuelWinner(gclient_t *client);
 void ItemUse_Binoculars(gentity_t *ent);
 void ItemUse_Shield(gentity_t *ent);
 void ItemUse_Sentry(gentity_t *ent);
+void ItemUse_Sentry2(gentity_t *ent);
 
 void Jetpack_Off(gentity_t *ent);
 void Jetpack_On(gentity_t *ent);
@@ -1638,6 +1646,7 @@ void G_CheckClientTimeouts	( gentity_t *ent );
 void ClientThink			( int clientNum, usercmd_t *ucmd );
 void ClientEndFrame			( gentity_t *ent );
 void G_RunClient			( gentity_t *ent );
+int SkillLevelForWeap(gentity_t *ent,int weap);
 
 //
 // g_team.c
