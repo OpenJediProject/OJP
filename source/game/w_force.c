@@ -5025,6 +5025,7 @@ void DoGripAction(gentity_t *self, forcePowers_t forcePower)
 			gripLevel < FORCE_LEVEL_3)
 		{
 			WP_ForcePowerStop(self, forcePower);
+			return;
 		}
 	}
 	else
@@ -5033,6 +5034,7 @@ void DoGripAction(gentity_t *self, forcePowers_t forcePower)
 			gripLevel < FORCE_LEVEL_3)
 		{
 			WP_ForcePowerStop(self, forcePower);
+			return;
 		}
 	}
 
