@@ -2,6 +2,25 @@
 rem This file makes the linux distro but IT DOESN'T MAKE THE jampgamei386.so!
 rem Just place a compiled .so in the \Enhanced file. 
 
+
+rem ****************
+rem VARIABLE DEFINES
+rem ****************
+
+set BRANCHNAME=enhanced
+
+set ASSETSFOLDER=ojp%BRANCHNAME%
+set PK3ASSETS=ojp_%BRANCHNAME%stuff
+set OUTPUTFILENAME=OJP%BRANCHNAME%_Linux.zip
+
+IF EXIST jampgamei386.so GOTO MAKEPK3
+ECHO.
+ECHO ===============================================================
+ECHO Error! jampgamei386.so Not Found! Did you forget to compile it?
+ECHO ===============================================================
+GOTO END
+
+:MAKEPK3
 rem *********
 rem Make Pk3s 
 rem *********
@@ -13,14 +32,16 @@ ECHO ========================
 ECHO Move files into position
 ECHO ========================
 
-mkdir temp\ojpenhanced\docs
+mkdir temp\%ASSETSFOLDER%\docs
 
-copy ..\Basic\docs\* .\temp\ojpenhanced\docs
-copy .\docs\* .\temp\ojpenhanced\docs
+rem If not OJP Basic, copy the OJP Basic docs into position.
+IF NOT %BRANCHNAME%==basic copy ..\Basic\docs\* .\temp\%ASSETSFOLDER%\docs
 
-copy jampgamei386.so .\temp\ojpenhanced
+copy .\docs\* .\temp\%ASSETSFOLDER%\docs
 
-copy ojp_enhancedstuff.pk3 .\temp\ojpenhanced
+copy jampgamei386.so .\temp\%ASSETSFOLDER%
+
+copy ojp_%BRANCHNAME%stuff.pk3 .\temp\%ASSETSFOLDER%
 
 ECHO.
 ECHO ==================
@@ -29,9 +50,9 @@ ECHO ==================
 
 cd temp
 
-..\..\Utilities\zip\7za.exe a -tzip OJPLinux.zip .\ojpenhanced -xr!.svn\ -mx9
+..\..\Utilities\zip\7za.exe a -tzip %OUTPUTFILENAME% .\%ASSETSFOLDER% -xr!.svn\ -mx9
 
-move OJPLinux.zip ..
+move %OUTPUTFILENAME% ..
 
 cd ..
 
@@ -47,3 +68,5 @@ ECHO.
 ECHO =========
 ECHO FINISHED!
 ECHO =========
+
+:END

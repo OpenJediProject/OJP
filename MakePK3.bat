@@ -4,10 +4,19 @@ rem ****************
 rem VARIABLE DEFINES
 rem ****************
 
-set PK3DLL=ojp_enhanceddlls
-set PK3ASSETS=ojp_enhancedstuff
-set ASSETSFOLDER=ojpenhanced
+if NOT %BRANCHNAME% == "" GOTO BRANCHNAMESET
+set BRANCHNAME=enhanced
+:BRANCHNAMESET 
 
+if NOT %PK3ASSETS% == "" GOTO PK3ASSETSSET
+set PK3ASSETS=ojp_%BRANCHNAME%stuff
+:PK3ASSETSSET 
+
+if NOT %ASSETSFOLDER% == "" GOTO ASSETSFOLDERSET
+set ASSETSFOLDER=ojp%BRANCHNAME%
+:ASSETSFOLDERSET 
+
+set PK3DLL=ojp_%BRANCHNAME%dlls
 
 rem ***************
 rem START OF SCRIPT 
