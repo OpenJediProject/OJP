@@ -24,7 +24,7 @@ rem *********
 rem Make Pk3s 
 rem *********
 
-rem call MakePK3.bat
+call MakePK3.bat
 IF ERRORLEVEL 1 GOTO END
 
 
