@@ -28,7 +28,6 @@ Source: "ojp_enhancedstuff.pk3"; DestDir: "{app}\GameData\ojpenhanced"; Flags: i
 Source: "ojpenhanced\trueview.cfg"; DestDir: "{app}\GameData\ojpenhanced"; Flags: ignoreversion
 Source: "docs\*"; DestDir: "{app}\GameData\ojpenhanced\docs"; Flags: ignoreversion
 Source: "..\Basic\docs\*"; DestDir: "{app}\GameData\ojpenhanced\docs"; Flags: ignoreversion
-Source: "OJP_readme.txt"; DestDir: "{app}\GameData"; Flags: ignoreversion
 Source: "..\Basic\docs\OJP_Editing_Screenshots\*"; DestDir: "{app}\GameData\ojpenhanced\docs\OJP_Editing_Screenshots"; Flags: ignoreversion
 Source: "..\Basic\docs\OJP_Editing_AccessSVN\*"; DestDir: "{app}\GameData\ojpenhanced\docs\OJP_Editing_AccessSVN"; Flags: ignoreversion
 Source: "ojpenhanced\StartOJPEnhancedServer.bat"; DestDir: "{app}\GameData\ojpenhanced"; Flags: ignoreversion
