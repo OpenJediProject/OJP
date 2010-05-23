@@ -4,6 +4,9 @@ rem ****************
 rem VARIABLE DEFINES
 rem ****************
 
+rem Setting common env vars
+call SetBatchEnvVars.bat
+
 rem Installer Script Variables
 set INSTALLSCRIPT=ojp_enhanced_installscript.iss
 set OUTPUTFILENAME=InstallOJPEnhanced
