@@ -2,7 +2,6 @@
 rem This file makes the linux distro but IT DOESN'T MAKE THE jampgamei386.so!
 rem Just place a compiled .so in the \Enhanced file. 
 
-
 rem ****************
 rem VARIABLE DEFINES
 rem ****************
@@ -13,11 +12,24 @@ set ASSETSFOLDER=ojp%BRANCHNAME%
 set PK3ASSETS=ojp_%BRANCHNAME%stuff
 set OUTPUTFILENAME=OJP%BRANCHNAME%_Linux.zip
 
+rem ***********************
+rem Compile jampgamei386.so
+rem ***********************
+
+call CompileOJPLinux.bat
+IF %ERRORLEVEL% NEQ 0 GOTO END
+
+rem ********************
+rem Copy jampgamei386.so
+rem ********************
+
+copy .\source\game\jampgamei386.so .
 IF EXIST jampgamei386.so GOTO MAKEPK3
+
 ECHO.
-ECHO ===============================================================
-ECHO Error! jampgamei386.so Not Found! Did you forget to compile it?
-ECHO ===============================================================
+ECHO ===========================================================
+ECHO Error! jampgamei386.so Not Found! Compile must have failed.
+ECHO ===========================================================
 GOTO END
 
 :MAKEPK3
@@ -70,3 +82,4 @@ ECHO FINISHED!
 ECHO =========
 
 :END
+
