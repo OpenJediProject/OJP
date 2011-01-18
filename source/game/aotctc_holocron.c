@@ -167,7 +167,7 @@ void AOTCTC_Holocron_Loadpositions( void )
 				}
 			}
 
-			(float)stats[statnum] = (float)atof(t);
+			stats[statnum] = (float)atof(t);
 			statnum++;
 		}
 

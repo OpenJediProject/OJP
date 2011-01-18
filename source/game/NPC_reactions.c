@@ -255,7 +255,7 @@ void NPC_ChoosePainAnimation( gentity_t *self, gentity_t *other, vec3_t point, i
 	}
 	else 
 	{
-		if ( other && other->s.weapon == WP_SABER || /*mod == MOD_ELECTROCUTE ||*/ mod == MOD_CRUSH/*FIXME:MOD_FORCE_GRIP*/ )
+		if ( (other && other->s.weapon == WP_SABER) || /*mod == MOD_ELECTROCUTE ||*/ mod == MOD_CRUSH/*FIXME:MOD_FORCE_GRIP*/ )
 		{
 			pain_chance = 1.0f;//always take pain from saber
 		}
@@ -369,7 +369,7 @@ gentity_t *G_CheckControlledTurretEnemy(gentity_t *self, gentity_t *enemy, qbool
 {
 	/* RAFIXME - impliment this somehow.
 	if ( enemy->use == emplaced_gun_use )
-		/*RAFIXME - impliment this?
+		*//*RAFIXME - impliment this?
 		|| enemy->use == eweb_use )
 		*//*
 	{
@@ -850,6 +850,7 @@ void NPC_Respond( gentity_t *self, int userNum )
 				event = Q_irand( EV_CHASE1, EV_CHASE3 );
 			}
 			else if ( Q_irand( 0, 1 ) )
+
 			{
 				event = Q_irand( EV_OUTFLANK1, EV_OUTFLANK2 );
 			}
@@ -1032,6 +1033,8 @@ void NPC_Respond( gentity_t *self, int userNum )
 	case CLASS_GONK:				// droid
 		G_Sound(self, CHAN_AUTO, G_SoundIndex(va("sound/chars/gonk/misc/gonktalk%d.wav",Q_irand(1, 2))));
 		break;
+	default:
+		break;
 	}
 	
 	if ( event != -1 )
@@ -1206,7 +1209,7 @@ void NPC_Use( gentity_t *self, gentity_t *other, gentity_t *activator )
 void NPC_CheckPlayerAim( void )
 {//racc - have NPCs complain if the player is looking at them for too long
 	//FIXME: need appropriate dialogue
-	/*
+	*//*
 	gentity_t *player = &g_entities[0];
 
 	if ( player && player->client && player->client->ps.weapon > (int)(WP_NONE) && player->client->ps.weapon < (int)(WP_TRICORDER) )
@@ -1227,7 +1230,7 @@ void NPC_CheckPlayerAim( void )
 void NPC_CheckAllClear( void )
 {//racc - all clear signal for NPCs in teams?  Not used.
 	//FIXME: need to make this happen only once after losing enemies, not over and over again
-	/*
+	*//*
 	if ( NPC->client && !NPC->enemy && level.time - teamLastEnemyTime[NPC->client->playerTeam] > 10000 )
 	{//Team hasn't seen an enemy in 10 seconds
 		if ( !Q_irand( 0, 2 ) )

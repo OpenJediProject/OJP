@@ -357,6 +357,7 @@ void G_Throw( gentity_t *targ, vec3_t newDir, float push )
 		targ->s.pos.trType = TR_GRAVITY;
 		VectorAdd( targ->s.pos.trDelta, kvel, targ->s.pos.trDelta );
 		VectorCopy( targ->r.currentOrigin, targ->s.pos.trBase );
+
 		targ->s.pos.trTime = level.time;
 	}
 
@@ -713,6 +714,7 @@ void G_SpewEntList(void)
 {
 	int i = 0;
 	int numNPC = 0;
+
 	int numProjectile = 0;
 	int numTempEnt = 0;
 	int numTempEntST = 0;
@@ -1698,6 +1700,7 @@ qboolean TryHeal(gentity_t *ent, gentity_t *target)
 			else
 			{
 				G_SetAnim( ent, NULL, SETANIM_TORSO, BOTH_BUTTON_HOLD, SETANIM_FLAG_OVERRIDE|SETANIM_FLAG_HOLD, 0 );
+
 			}
 
 			return qtrue;
@@ -2350,12 +2353,12 @@ float ShortestLineSegBewteen2LineSegs( vec3_t start1, vec3_t end1, vec3_t start2
 	}
 	else
 	{
-		//******start here for paralell lines with current_dist = infinity****
+		// ******start here for paralell lines with current_dist = infinity****
 		current_dist = Q3_INFINITE;
 	}
 
 	//test 2 close_pnts first
-	/*
+	*//*
 	G_FindClosestPointOnLineSegment( start1, end1, close_pnt2, new_pnt );
 	new_dist = Distance( close_pnt2, new_pnt );
 	if ( new_dist < current_dist )

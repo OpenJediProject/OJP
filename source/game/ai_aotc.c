@@ -503,7 +503,7 @@ int AOTC_BotFallbackNavigation(bot_state_t *bs)
 	trace_t tr;
 	vec3_t a, ang;
 
-	if (gWPArray && gWPArray[0])
+	if (/*gWPArray &&*/ gWPArray[0])
 		return 2;
 
 	if (bs->currentEnemy && bs->frame_Enemy_Vis)
@@ -1525,7 +1525,7 @@ void FastBotAI(bot_state_t *bs, float thinktime)
 	{// Dont move while capturing a flag...
 
 	}
-	else if (bs->wpCurrent && gWPArray /*&& !(bs->currentEnemy && bs->frame_Enemy_Vis)*/)
+	else if (bs->wpCurrent && gWPArray[0] /*&& !(bs->currentEnemy && bs->frame_Enemy_Vis)*/)
 	{
 		int wpTouchDist = BOT_WPTOUCH_DISTANCE;
 		WPConstantRoutine(bs);
@@ -1712,7 +1712,7 @@ void FastBotAI(bot_state_t *bs, float thinktime)
 	
 			AngleVectors(b_angle, fwd, NULL, NULL);
 
-			if (!gWPArray && bs->BOTjumpState <= JS_WAITING) // Not in a jump.
+			if (!gWPArray[0] && bs->BOTjumpState <= JS_WAITING) // Not in a jump.
 			{
 				VectorCopy(bs->currentEnemy->r.currentOrigin, trto);
 			}
@@ -1789,7 +1789,7 @@ void FastBotAI(bot_state_t *bs, float thinktime)
 				AIMod_Jump ( bs );
 			}
 		
-			if (trto)
+			if (trto[0] && trto[1] && trto[2])
 			{// We have a possibility.. Check it and maybe use it.
 				VectorSubtract(trto, bs->origin, a);
 				vectoangles(a, ang);
@@ -4135,7 +4135,7 @@ void AOTC_StandardBotAI(bot_state_t *bs, float thinktime)
 	{// Dont move while capturing a flag...
 
 	}
-	else if (bs->wpCurrent && gWPArray /*&& !(bs->currentEnemy && bs->frame_Enemy_Vis)*/)
+	else if (bs->wpCurrent && gWPArray[0] /*&& !(bs->currentEnemy && bs->frame_Enemy_Vis)*/)
 	{
 		int wpTouchDist = BOT_WPTOUCH_DISTANCE;
 		WPConstantRoutine(bs);
@@ -4289,6 +4289,7 @@ void AOTC_StandardBotAI(bot_state_t *bs, float thinktime)
 			}
 			*/
 			/*bs->jumpTime = level.time + 1500;
+
 			bs->jumpHoldTime = level.time + 1500;
 			bs->jDelay = 0;*/
 		}
@@ -4337,7 +4338,7 @@ void AOTC_StandardBotAI(bot_state_t *bs, float thinktime)
 					bs->beStill = level.time + 1000;
 				}
 			}
-			else */if (!gWPArray && bs->BOTjumpState <= JS_WAITING) // Not in a jump.
+			else */if (!gWPArray[0] && bs->BOTjumpState <= JS_WAITING) // Not in a jump.
 			{
 				VectorCopy(bs->currentEnemy->r.currentOrigin, trto);
 			}
@@ -4404,7 +4405,7 @@ void AOTC_StandardBotAI(bot_state_t *bs, float thinktime)
 				AIMod_Jump ( bs );
 			}
 		
-			if (trto)
+			if (trto[0] && trto[1] && trto[2])
 			{// We have a possibility.. Check it and maybe use it.
 				VectorSubtract(trto, bs->origin, a);
 				vectoangles(a, ang);
@@ -5438,7 +5439,7 @@ void ScenarioBotAI(bot_state_t *bs, float thinktime)
 #endif
 
 
-/*	{// Bots should use vehicles in scenario... So...
+*//*	{// Bots should use vehicles in scenario... So...
 		int i = 0;
 		gentity_t *vehicle = NULL;
 		//find the nearest, manned vehicle
@@ -5745,7 +5746,7 @@ void ScenarioBotAI(bot_state_t *bs, float thinktime)
 			return;
 		}
 	}
-	/*if (BotSelectMelee(bs))
+	*//*if (BotSelectMelee(bs))
 	{
 		return;
 	}*/
@@ -5847,7 +5848,7 @@ void ScenarioBotAI(bot_state_t *bs, float thinktime)
 	}
 
 	if (bs->enemySeenTime < level.time || !bs->frame_Enemy_Vis || !bs->currentEnemy ||
-		(bs->currentEnemy /*&& bs->cur_ps.weapon == WP_SABER))
+		(bs->currentEnemy *//*&& bs->cur_ps.weapon == WP_SABER))
 	{
 		enemy = ScanForEnemies(bs);
 
@@ -6188,7 +6189,7 @@ void ScenarioBotAI(bot_state_t *bs, float thinktime)
 	
 			AngleVectors(b_angle, fwd, NULL, NULL);
 
-			/*if (bs->BOTjumpState <= JS_WAITING // Not in a jump right now.
+			*//*if (bs->BOTjumpState <= JS_WAITING // Not in a jump right now.
 				&& CheckFall_By_Vectors(bs->cur_ps.origin, fwd, &g_entities[bs->entitynum]) == qtrue) // We're gonna fall!!!
 			{
 				if (bs->wpCurrent)
@@ -6569,7 +6570,7 @@ void ScenarioBotAI(bot_state_t *bs, float thinktime)
 		}
 	}
 
-/*	if (doingFallback && bs->currentEnemy
+*//*	if (doingFallback && bs->currentEnemy
 		&& g_entities[bs->entitynum].client->ps.weapon != WP_SABER) //just stand and fire if we have no idea where we are
 	{
 		VectorCopy(bs->origin, bs->goalPosition);
@@ -6928,7 +6929,7 @@ void ScenarioBotAI(bot_state_t *bs, float thinktime)
 		trap_EA_Crouch(bs->client);
 	}
 
-	/*if ( bs->dangerousObject && bs->dangerousObject->inuse && bs->dangerousObject->health > 0 &&
+	*//*if ( bs->dangerousObject && bs->dangerousObject->inuse && bs->dangerousObject->health > 0 &&
 		bs->dangerousObject->takedamage && (!bs->frame_Enemy_Vis || !bs->currentEnemy) &&
 		(BotGetWeaponRange(bs) == BWEAPONRANGE_MID || BotGetWeaponRange(bs) == BWEAPONRANGE_LONG) &&
 		bs->cur_ps.weapon != WP_DET_PACK && bs->cur_ps.weapon != WP_TRIP_MINE && bs->cur_ps.weapon != WP_TRIP_MINE_2 &&

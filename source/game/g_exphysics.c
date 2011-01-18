@@ -5,7 +5,6 @@
  *
  * desc:		Custom physics system (Expensive Physics)
  *****************************************************************************/
-#pragma warning(disable : 4701) //local variable may be used without having been initialized
 
 #include "g_local.h"
 

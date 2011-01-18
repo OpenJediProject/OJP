@@ -2,12 +2,12 @@
 #include "g_local.h"
 
 #if defined __linux__ && !defined GNUC && !defined(_WIN32)
-
+	#define __USE_GNU
 	#include <string.h>
 	#include <signal.h>
 	#include <unistd.h>
 	#include <execinfo.h>
-	#define __USE_GNU
+
 	#include <link.h>
 	#include <sys/ucontext.h>
 	#include <features.h>
@@ -73,9 +73,18 @@
 
 		phdr = (ElfW(Phdr) *)((char *)ehdr + ehdr->e_phoff);
 
-		while (phdr++<(ElfW(Phdr) *)((char *)phdr + (ehdr->e_phnum * sizeof(ElfW(Phdr)))))
+		//Raz: This was warning me "operation on ‘phdr’ may be undefined"
+		//		May need to change the order of increment
+		/*
+		while ( phdr++ < (ElfW(Phdr) *)((char *)phdr + (ehdr->e_phnum * sizeof(ElfW(Phdr)))))
 			if (phdr->p_type == PT_DYNAMIC)
 				break;
+		*/
+		while ( phdr < (ElfW(Phdr) *)((char *)phdr + (ehdr->e_phnum * sizeof(ElfW(Phdr))))) {
+			if (phdr->p_type == PT_DYNAMIC)
+				break;
+			phdr++;
+		}
 
 		for (dyn = (ElfW(Dyn) *)phdr->p_vaddr; dyn->d_tag != DT_NULL; dyn++)
 			if (dyn->d_tag == DT_DEBUG) {

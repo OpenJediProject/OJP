@@ -198,7 +198,7 @@ void BeamOut (gentity_t *self)
 {
 //	gentity_t *tent = G_Spawn();
 	
-/*
+*//*
 	tent->owner = self;
 	tent->think = MakeOwnerInvis;
 	tent->nextthink = level.time + 1800;
@@ -271,7 +271,7 @@ void NPC_BSWait( void )
 /* Not Used By Anything
 void NPC_BSInvestigate (void)
 {
-/*
+*//*
 	//FIXME: maybe allow this to be set as a tempBState in a script?  Just specify the
 	//investigateGoal, investigateDebounceTime and investigateCount? (Needs a macro)
 	vec3_t		invDir, invAngles, spot;
@@ -323,7 +323,7 @@ void NPC_BSInvestigate (void)
 	if(	level.time < NPCInfo->walkDebounceTime )
 	{//walk toward investigateGoal
 		
-		/*
+		*//*
 		NPCInfo->goalEntity = NPCInfo->tempGoal;
 //		NAV_ClearLastRoute(NPC);
 		VectorCopy(NPCInfo->investigateGoal, NPCInfo->tempGoal->r.currentOrigin);
@@ -489,7 +489,7 @@ qboolean NPC_CheckInvestigate( int alertEventNum )
 		//run awakescript
 		G_ActivateBehavior(NPC, BSET_AWAKE);
 
-		/*
+		*//*
 		if ( Q_irand(0, 10) > 7 )
 		{
 			NPC_AngerSound();
@@ -879,7 +879,7 @@ void NPC_BSFollowLeader (void)
 				&& NPC->client->leader->enemy 
 				&& NPC->client->leader->enemy != NPC
 				&& ( (NPC->client->leader->enemy->client&&NPC->client->leader->enemy->client->playerTeam==NPC->client->enemyTeam)
-					||(/*NPC->client->leader->enemy->r.svFlags&SVF_NONNPC_ENEMY*//*0&&NPC->client->leader->enemy->alliedTeam==NPC->client->enemyTeam) )
+					||(*//*NPC->client->leader->enemy->r.svFlags&SVF_NONNPC_ENEMY*//*0&&NPC->client->leader->enemy->alliedTeam==NPC->client->enemyTeam) )
 				&& NPC->client->leader->enemy->health > 0 )
 			{ //rwwFIXMEFIXME: use SVF_NONNPC_ENEMY?
 				G_SetEnemy( NPC, NPC->client->leader->enemy );
@@ -1348,7 +1348,7 @@ void NPC_BSSearch (void)
 		/*
 		if ( NPCInfo->tempGoal->waypoint != WAYPOINT_NONE )
 		{
-			/*
+			*//*
 			//FIXME: can't get the radius...
 			float	wpRadSq = waypoints[NPCInfo->tempGoal->waypoint].radius * waypoints[NPCInfo->tempGoal->waypoint].radius;
 			if ( minGoalReachedDistSquared > wpRadSq )
@@ -1927,6 +1927,8 @@ qboolean NPC_CanSurrender( void )
 		case CLASS_PLAYER:
 		case CLASS_VEHICLE:
 			return qfalse;
+			break;
+		default:
 			break;
 		}
 		if ( !G_StandardHumanoid( NPC ) )

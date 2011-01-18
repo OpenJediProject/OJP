@@ -1083,6 +1083,7 @@ void WP_DisruptorAltFire( gentity_t *ent )
 				int preLegs = 0;
 				int preTorso = 0;
 
+
 				if (traceEnt->client)
 				{
 					preLegs = traceEnt->client->ps.legsAnim;
@@ -1162,7 +1163,7 @@ BOWCASTER
 
 ======================================================================
 */
-
+#if 0
 static void WP_BowcasterAltFire( gentity_t *ent )
 {
 	int	damage	= BOWCASTER_DAMAGE;
@@ -1185,6 +1186,7 @@ static void WP_BowcasterAltFire( gentity_t *ent )
 	//missile->flags |= FL_BOUNCE; taken out because it was causing problems for sabers
 	//missile->bounceCount = 3;
 }
+#endif
 
 //[Bowcaster]
 //---------------------------------------------------------
@@ -1374,7 +1376,9 @@ static void WP_DEMP2_MainFire( gentity_t *ent )
 	missile->bounceCount = 0;
 }
 
+#if 0
 static gentity_t *ent_list[MAX_GENTITIES];
+#endif
 
 void DEMP2_AltRadiusDamage( gentity_t *ent )
 {
@@ -1686,6 +1690,7 @@ void prox_mine_think( gentity_t *ent )
 	// if it isn't time to auto-explode, do a small proximity check
 	if ( ent->delay > level.time )
 	{
+
 		count = G_RadiusList( ent->r.currentOrigin, FLECHETTE_MINE_RADIUS_CHECK, ent, qtrue, ent_list );
 
 		for ( i = 0; i < count; i++ )
@@ -1820,6 +1825,7 @@ void WP_flechette_alt_blow( gentity_t *ent )
 	laserTrapExplode(ent);
 }
 
+#if 0
 //------------------------------------------------------------------------------
 static void WP_CreateFlechetteBouncyThing( vec3_t start, vec3_t fwd, gentity_t *self )
 //------------------------------------------------------------------------------
@@ -1903,6 +1909,7 @@ static void WP_FlechetteAltFire( gentity_t *self )
 		
 	}
 }
+#endif
 
 //---------------------------------------------------------
 static void WP_FireFlechette( gentity_t *ent, qboolean altFire )
@@ -2832,9 +2839,9 @@ void CreateLaserTrap( gentity_t *laserTrap, vec3_t start, gentity_t *owner )
 void WP_PlaceLaserTrap( gentity_t *ent, qboolean alt_fire )
 {
 	gentity_t	*laserTrap;
-	gentity_t	*found = NULL;
+//	gentity_t	*found = NULL;
 	vec3_t		dir, start;
-	int			trapcount = 0;
+//	int			trapcount = 0;
 	int			foundLaserTraps[MAX_GENTITIES];
 
 	foundLaserTraps[0] = ENTITYNUM_NONE;
@@ -3275,7 +3282,7 @@ void WP_DropDetPack( gentity_t *ent, qboolean alt_fire )
 	}
 }
 
-#pragma warning(disable : 4701) //local variable may be used without having been initialized
+//#pragma warning(disable : 4701) //local variable may be used without having been initialized
 static void WP_FireConcussionAlt( gentity_t *ent )
 {//a rail-gun-like beam
 	int			damage = CONC_ALT_DAMAGE, skip, traces = DISRUPTOR_ALT_TRACES;
@@ -3547,7 +3554,7 @@ static void WP_FireConcussionAlt( gentity_t *ent )
 	G_PlayEffectID( G_EffectIndex( "concussion/altmuzzle_flash" ), muzzle, forward );
 #endif
 }
-#pragma warning(default : 4701) //local variable may be used without having been initialized
+//#pragma warning(default : 4701) //local variable may be used without having been initialized
 
 static void WP_FireConcussion( gentity_t *ent )
 {//a fast rocket-like projectile

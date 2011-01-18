@@ -2767,6 +2767,8 @@ void player_die( gentity_t *self, gentity_t *inflictor, gentity_t *attacker, int
 				G_PlayEffectID( G_EffectIndex("chunks/r5d2head_veh"), self->r.currentOrigin, up );
 			}
 			break;
+		default:
+			break;
 		}
 	}
 
@@ -4109,7 +4111,7 @@ void G_Dismember( gentity_t *ent, gentity_t *enemy, vec3_t point, int limbType, 
 		Com_sprintf( stubCapName, sizeof( stubCapName), "%s_cap_r_leg", stubName );
 	}
 
-	if (ent->ghoul2 && limbName && trap_G2API_GetSurfaceRenderStatus(ent->ghoul2, 0, limbName))
+	if (ent->ghoul2 && limbName[0] && trap_G2API_GetSurfaceRenderStatus(ent->ghoul2, 0, limbName))
 	{ //is it already off? If so there's no reason to be doing it again, so get out of here.
 		return;
 	}
@@ -4226,7 +4228,7 @@ void G_Dismember( gentity_t *ent, gentity_t *enemy, vec3_t point, int limbType, 
 		}
 	}
 
-	if (ent->s.eType == ET_NPC && ent->ghoul2 && limbName && stubCapName)
+	if (ent->s.eType == ET_NPC && ent->ghoul2 && limbName[0] && stubCapName[0] )
 	{ //if it's an npc remove these surfs on the server too. For players we don't even care cause there's no further dismemberment after death.
 		trap_G2API_SetSurfaceOnOff(ent->ghoul2, limbName, 0x00000100);
 		trap_G2API_SetSurfaceOnOff(ent->ghoul2, stubCapName, 0);

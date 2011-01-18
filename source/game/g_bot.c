@@ -1423,7 +1423,7 @@ static void G_AddBot( const char *name, float skill, const char *team, int delay
 	int				preTeam = 0;
 	//[DuelGuns][EnhancedImpliment]
 	/*
-	char			*firearm; //** change gun model	
+	char			*firearm; // ** change gun model	
 	qboolean		bot_dualguns = qfalse;
 	int				gunoption=0;
 	*/

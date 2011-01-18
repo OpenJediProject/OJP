@@ -67,7 +67,7 @@ struct DeclaredVariable_s
 
 typedef struct DeclaredVariable_s DeclaredVariable_t;
 
-DeclaredVariable_t DeclaredVariables[MAX_DECLAREDVARIABLES] = { 0 };
+DeclaredVariable_t DeclaredVariables[MAX_DECLAREDVARIABLES] = {{{0}}};
 int numDeclaredVariables = 0;
 //[/CoOp]
 
@@ -348,20 +348,20 @@ stringID_table_t setTable[] =
 	//[/CoOp]
 
 //FIXME: add BOTH_ attributes here too
-	"",	SET_,
+	{"",	SET_},
 };
 
 //[dynamicMusic]
 stringID_table_t DMSTable[] =
 {
-	"NULL",-1,
+	{"NULL",-1},
 	ENUM2STRING(DM_AUTO),	//# let the game determine the dynamic music as normal
 	ENUM2STRING(DM_SILENCE),	//# stop the music
 	ENUM2STRING(DM_EXPLORE),	//# force the exploration music to play
 	ENUM2STRING(DM_ACTION),	//# force the action music to play
 	ENUM2STRING(DM_BOSS),	//# force the boss battle music to play (if there is any)
 	ENUM2STRING(DM_DEATH),	//# force the "player dead" music to play
-	"", -1
+	{"", -1}
 };
 //[/dynamicMusic]
 
@@ -1320,7 +1320,7 @@ void Q3_RemoveEnt( gentity_t *victim )
 			victim->think = G_FreeEntity;
 			victim->nextthink = level.time + 100;
 		}
-		/*
+		*//*
 		//ClientDisconnect(ent);
 		victim->s.eFlags |= EF_NODRAW;
 		victim->s.eType = ET_INVISIBLE;
@@ -8213,7 +8213,7 @@ qboolean Q3_Set( int taskID, int entID, const char *type_name, const char *data 
 		break;
 
 	case FOLLOW:
-		sscanf(data, "%s %f %*s %f", &char_data, &float_data, &float2_data);
+		sscanf(data, "%s %f %*s %f", &char_data[0], &float_data, &float2_data);
 		RemoveComma(char_data);
 		ICam_Follow(char_data, float_data, float2_data);
 		break;
@@ -8544,7 +8544,7 @@ Q3_SetRenderCullRadius
   Argument		: float float_data (the new radius for render culling)
 ============
 */
-static void Q3_SetRenderCullRadius(int entID, float float_data)
+void Q3_SetRenderCullRadius(int entID, float float_data)
 {
 	gentity_t	*self  = &g_entities[entID];
 

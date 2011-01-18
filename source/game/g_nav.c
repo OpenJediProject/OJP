@@ -1722,7 +1722,7 @@ int NAV_GetStoredWaypoint( char *targetname )
 {
 	int i;
 
-	if ( !tempWaypointList || !targetname || !targetname[0] )
+	if ( /*!tempWaypointList ||*/ !targetname || !targetname[0] )
 	{
 		return -1;
 	}
@@ -1744,10 +1744,14 @@ void NAV_CalculatePaths( const char *filename, int checksum )
 	int target = -1;
 	int i;
 
+	//Raz: This was a bad check, and I see no clear alternatives..
+#if 0
 	if ( !tempWaypointList )
 	{
 		return;
 	}
+#endif
+
 #ifndef FINAL_BUILD
 	fatalErrors = 0;
 	memset( fatalErrorString, 0, sizeof( fatalErrorString ) );

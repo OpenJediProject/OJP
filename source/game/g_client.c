@@ -3546,7 +3546,7 @@ void ClientSpawn(gentity_t *ent) {
 			{
 				ent->client->sess.saberLevel = SS_TAVION;
 			}
-			/*
+			*//*
 			else if (ent->client->sess.saberLevel > SS_STRONG)
 			{
 				ent->client->sess.saberLevel = SS_STRONG;
@@ -3557,7 +3557,7 @@ void ClientSpawn(gentity_t *ent) {
 
 			//[SaberSys]
 			//don't want this anymore since we have more styles than saber offense powers at the moment with the hidden styles.
-			/*
+			*//*
 			if (g_gametype.integer != GT_SIEGE &&
 				ent->client->ps.fd.saberAnimLevel > ent->client->ps.fd.forcePowerLevel[FP_SABER_OFFENSE])
 			{
@@ -3643,7 +3643,7 @@ void ClientSpawn(gentity_t *ent) {
 		{
 			ent->client->sess.saberLevel = SS_TAVION;
 		}
-		/*
+		*//*
 		else if (ent->client->sess.saberLevel > SS_STRONG)
 		{
 			ent->client->sess.saberLevel = SS_STRONG;
@@ -3654,7 +3654,7 @@ void ClientSpawn(gentity_t *ent) {
 
 		//[SaberSys]
 		//don't want this anymore since we have more styles than saber offense powers at the moment with the hidden styles.
-		/*
+		*//*
 		if (g_gametype.integer != GT_SIEGE &&
 			ent->client->ps.fd.saberAnimLevel > ent->client->ps.fd.forcePowerLevel[FP_SABER_OFFENSE])
 		{
@@ -5197,7 +5197,7 @@ void CheckTeamBalance(void)
 //[CoOp]
 qboolean G_StandardHumanoid( gentity_t *self )
 {
-	char		GLAName[MAX_QPATH];
+	char GLAName[MAX_QPATH];
 
 	if ( !self || !self->ghoul2 )
 	{
@@ -5205,8 +5205,8 @@ qboolean G_StandardHumanoid( gentity_t *self )
 	}
 
 	trap_G2API_GetGLAName( &self->ghoul2, 0, GLAName );
-	assert(GLAName);
-	if (GLAName) 
+	assert(GLAName[0]);
+	if ( GLAName[0] ) 
 	{
 		if ( !Q_stricmpn( "models/players/_humanoid", GLAName, 24 ) )///_humanoid", GLAName, 36) )
 		{//only _humanoid skeleton is expected to have these

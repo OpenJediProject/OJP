@@ -3386,12 +3386,13 @@ int OJP_SaberBlockCost(gentity_t *defender, gentity_t *attacker, vec3_t hitLoc)
 	{//standard bolt block!
 			//[BlasterDP]
 
-		if (attacker->activator && attacker->activator->s.weapon == WP_BRYAR_PISTOL
-			|| attacker->activator && attacker->activator->s.weapon == WP_REPEATER
-			|| attacker->activator && attacker->activator->s.weapon == WP_BOWCASTER
-			|| attacker->activator && attacker->activator->s.weapon == WP_DISRUPTOR
-			|| attacker->activator && attacker->activator->s.weapon == WP_EMPLACED_GUN
-			|| attacker->activator && attacker->activator->s.weapon == WP_FLECHETTE)
+		if ( attacker->activator &&
+			(attacker->activator->s.weapon == WP_BRYAR_PISTOL ||
+			 attacker->activator->s.weapon == WP_REPEATER ||
+			 attacker->activator->s.weapon == WP_BOWCASTER ||
+			 attacker->activator->s.weapon == WP_DISRUPTOR ||
+			 attacker->activator->s.weapon == WP_EMPLACED_GUN ||
+			 attacker->activator->s.weapon == WP_FLECHETTE) )
 		{
 			if(attacker->activator->s.weapon == WP_FLECHETTE)
 			{
@@ -3411,7 +3412,8 @@ int OJP_SaberBlockCost(gentity_t *defender, gentity_t *attacker, vec3_t hitLoc)
 
 				saberBlockCost+=2;
 			}
-			else if(attacker->activator->s.weapon != WP_BOWCASTER || attacker->activator->s.weapon != WP_BOWCASTER && attacker->activator->client->skillLevel[SK_BOWCASTER] < FORCE_LEVEL_3 )
+			//Raz: I have no idea wtf is going on here. Where's DD when you need him =[
+			else if(attacker->activator->s.weapon != WP_BOWCASTER || (attacker->activator->s.weapon != WP_BOWCASTER && attacker->activator->client->skillLevel[SK_BOWCASTER] < FORCE_LEVEL_3) )
 			{
 				float distance = VectorDistance(attacker->activator->r.currentOrigin,defender->r.currentOrigin);
 				if(distance <= 125.0f)
@@ -3592,7 +3594,7 @@ int OJP_SaberBlockCost(gentity_t *defender, gentity_t *attacker, vec3_t hitLoc)
 			{// Having both staff and defense 3 allow no extra back hit damage
 				saberBlockCost *= 1;
 			}
-			else if(defender->client->ps.fd.saberAnimLevel == SS_STAFF &&!(defender->client->saber[0].numBlades == 1)
+			else if((defender->client->ps.fd.saberAnimLevel == SS_STAFF && !(defender->client->saber[0].numBlades == 1))
 				//level 3 saber defenders and staff users  have much lessback damage. Staff sabers perk
 			|| defender->client->ps.fd.forcePowerLevel[FP_SABER_DEFENSE] == FORCE_LEVEL_3) 
 			{
@@ -3667,7 +3669,7 @@ extern qboolean BG_SaberInNonIdleDamageMove(playerState_t *ps, int AnimIndex);
 int OJP_SaberCanBlock(gentity_t *self, gentity_t *atk, qboolean checkBBoxBlock, vec3_t point, int rSaberNum, int rBladeNum)
 {//similar to WP_SaberCanBlock but without the same sorts of restrictions.
 	vec3_t bodyMin, bodyMax, closestBodyPoint, dirToBody, saberMoveDir;
-	float distance = VectorDistance(atk->r.currentOrigin,self->r.currentOrigin);
+//	float distance = VectorDistance(atk->r.currentOrigin,self->r.currentOrigin);
 
 	if (!self || !self->client || !atk)
 	{
@@ -3780,6 +3782,7 @@ int OJP_SaberCanBlock(gentity_t *self, gentity_t *atk, qboolean checkBBoxBlock, 
 		}
 
 		if(BG_SuperBreakWinAnim(atk->client->ps.torsoAnim) && self->client->ps.stats[STAT_DODGE] < DODGE_CRITICALLEVEL)
+
 		{//can't block super breaks when in critical DP.
 			return 0;
 		}
@@ -4026,6 +4029,7 @@ int G_RealTrace(gentity_t *attacker, trace_t *tr, vec3_t start, vec3_t mins,
 			{//didn't do trace with original start point.  Recalculate the real fraction before we do our comparision.
 				tr->fraction = CalcTraceFraction(start, end, tr->endpos);
 			}
+
 
 			if(tr->fraction < closestFraction)
 			{//this is the closest hit, make it so.
@@ -5674,6 +5678,7 @@ qboolean DodgeRollCheck(gentity_t *self, int dodgeAnim, vec3_t forward, vec3_t r
 
 	VectorCopy(traceto_mod, tracefrom_mod);
 
+
 	//check for 20+ feet drops
 	traceto_mod[2] -= 200;
 
@@ -6301,10 +6306,10 @@ static GAME_INLINE qboolean CheckSaberDamage(gentity_t *self, int rSaberNum, int
 	static trace_t tr;
 	static vec3_t dir;
 	static vec3_t saberTrMins, saberTrMaxs;
-	static vec3_t lastValidStart;
-	static vec3_t lastValidEnd;
+//	static vec3_t lastValidStart;
+//	static vec3_t lastValidEnd;
 	static int selfSaberLevel;
-	static int otherSaberLevel;
+//	static int otherSaberLevel;
 	int dmg = 0;
 	float saberBoxSize = d_saberBoxTraceSize.value;
 	qboolean idleDamage = qfalse;
@@ -6626,7 +6631,7 @@ static GAME_INLINE qboolean CheckSaberDamage(gentity_t *self, int rSaberNum, int
 	if(didHit && (!OnSameTeam(self, &g_entities[tr.entityNum]) || g_friendlySaber.integer))
 	{//deal damage
 		//damage the thing we hit
-		int dflags;
+		int dflags=0;
 		gentity_t *victim = &g_entities[tr.entityNum];
 
 		if(G_DoDodge( victim, self, tr.endpos, -1, & dmg, MOD_SABER ))
@@ -7018,7 +7023,7 @@ void G_SPSaberDamageTraceLerped( gentity_t *self, int saberNum, int bladeNum, ve
 				VectorMA( baseOld, curDirFrac, baseDiff, curBase2 );
 			}
 			// Move up the blade in intervals of stepsize
-			for ( step = stepsize; step <= self->client->saber[saberNum].blade[bladeNum].lengthMax /*&& step < self->client->saber[saberNum].blade[bladeNum].lengthOld*//*; step += stepsize )
+			for ( step = stepsize; step <= self->client->saber[saberNum].blade[bladeNum].lengthMax *//*&& step < self->client->saber[saberNum].blade[bladeNum].lengthOld*//*; step += stepsize )
 			{
 				VectorMA( curBase1, step, curMD1, bladePointOld );
 				VectorMA( curBase2, step, curMD2, bladePointNew );
@@ -7029,7 +7034,7 @@ void G_SPSaberDamageTraceLerped( gentity_t *self, int saberNum, int bladeNum, ve
 				}
 				//do the damage trace
 				CheckSaberDamage( self, saberNum, bladeNum, bladePointOld, bladePointNew, qfalse, clipmask, extrapolate );
-				/*
+				*//*
 				if ( WP_SaberDamageForTrace( ent->s.number, bladePointOld, bladePointNew, baseDamage, curMD2, 
 					qfalse, entPowerLevel, ent->client->ps.saber[saberNum].type, qtrue,
 					saberNum, bladeNum ) )
@@ -7081,7 +7086,7 @@ void G_SPSaberDamageTraceLerped( gentity_t *self, int saberNum, int bladeNum, ve
 
 		//do the trace at the end last
 		//Special check- adjust for length of blade not being a multiple of 12
-		/*
+		*//*
 		aveLength = (ent->client->ps.saber[saberNum].blade[bladeNum].lengthOld + ent->client->ps.saber[saberNum].blade[bladeNum].length)/2;
 		if ( step > aveLength )
 		{//less dmg if the last interval was not stepsize
@@ -7443,7 +7448,7 @@ void WP_SaberStartMissileBlockCheck( gentity_t *self, usercmd_t *ucmd  )
 		else if ( ent->splashDamage && ent->splashRadius )
 		{//exploding missile
 			//[DodgeSys]
-			/*
+			*//*
 			//FIXME: handle tripmines and detpacks somehow... 
 			//			maybe do a force-gesture that makes them explode?  
 			//			But what if we're within it's splashradius?
@@ -8763,7 +8768,7 @@ qboolean saberCheckKnockdown_DuelLoss(gentity_t *saberent, gentity_t *saberOwner
 			&& other->client->saber[1].model[0]
 			&& !other->client->ps.saberHolstered )
 		{
-			other->client->saber[1].disarmBonus;
+			disarmChance += other->client->saber[1].disarmBonus;
 		}
 	}
 	if ( Q_irand( 0, disarmChance ) )
@@ -8919,7 +8924,7 @@ qboolean saberCheckKnockdown_BrokenParry(gentity_t *saberent, gentity_t *saberOw
 				&& other->client->saber[1].model[0]
 				&& !other->client->ps.saberHolstered )
 			{
-				other->client->saber[1].disarmBonus;
+				disarmChance += other->client->saber[1].disarmBonus;
 			}
 		}
 		if ( Q_irand( 0, disarmChance ) )
@@ -9563,6 +9568,7 @@ void UpdateClientRenderBolts(gentity_t *self, vec3_t renderOrigin, vec3_t render
 		ri->handLPoint[1] = boltMatrix.matrix[1][3];
 		ri->handLPoint[2] = boltMatrix.matrix[2][3];
 
+
 		//chest
 		trap_G2API_GetBoltMatrix(self->ghoul2, 0, ri->torsoBolt, &boltMatrix, renderAngles, renderOrigin, level.time, NULL, self->modelScale);
 		ri->torsoPoint[0] = boltMatrix.matrix[0][3];
@@ -9743,6 +9749,7 @@ void UpdateClientRenderinfo(gentity_t *self, vec3_t renderOrigin, vec3_t renderA
 extern void G_GetBoltPosition( gentity_t *self, int boltIndex, vec3_t pos, int modelIndex ); //NPC_utils.c
 
 extern qboolean BG_InKnockDown( int anim );
+#if 0
 static qboolean G_KickDownable(gentity_t *ent)
 {
 	if (!d_saberKickTweak.integer)
@@ -9770,6 +9777,7 @@ static qboolean G_KickDownable(gentity_t *ent)
 
 	return qtrue;
 }
+#endif
 
 //[KnockdownSys]
 /* racc - replaced with SP style knockdowns.
@@ -10781,6 +10789,7 @@ void WP_SaberPositionUpdate( gentity_t *self, usercmd_t *ucmd )
 
 	//I'm leaving these tests in so someone might find more open buttons eventually.
 	/*
+
 	if (ucmd->buttons & BUTTON_15)
 	{
 		G_Printf("Button Flag 15 Pressed.\n");
@@ -12499,6 +12508,7 @@ saberMoveName_t G_PickAutoKick( gentity_t *self, gentity_t *enemy, qboolean stor
 	{//have a valid one to do
 		if ( self->client->ps.groundEntityNum == ENTITYNUM_NONE )
 		{//if in air, convert kick to an in-air kick
+
 			float gDist = G_GroundDistance( self );
 			//let's only allow air kicks if a certain distance from the ground
 			//it's silly to be able to do them right as you land.

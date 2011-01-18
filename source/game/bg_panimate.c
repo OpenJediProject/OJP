@@ -1441,6 +1441,7 @@ qboolean PM_KnockawayAnim( int anim )
 }
 //[/SaberSys]
 
+
 qboolean PM_SaberInReflect( int move )
 {
 	if ( move >= LS_REFLECT_UP && move <= LS_REFLECT_LL )
@@ -2599,7 +2600,7 @@ void ParseAnimationEvtBlock(const char *aeb_filename, animevent_t *animEvents, a
 	}	
 }
 
-/*
+*//*
 ======================
 BG_ParseAnimationEvtFile
 

@@ -1429,6 +1429,7 @@ stringID_table_t animTable [MAX_ANIMATIONS+1] =
 	ENUM2STRING(BOTH_GETUP_FROLL_R),	//#
 	ENUM2STRING(BOTH_WALL_FLIP_BACK1),	//#
 	ENUM2STRING(BOTH_WALL_FLIP_BACK2),	//#
+
 	ENUM2STRING(BOTH_SPIN1),				//#
 	ENUM2STRING(BOTH_CEILING_CLING),		//# clinging to ceiling
 	ENUM2STRING(BOTH_CEILING_DROP),		//# dropping from ceiling cling
@@ -1801,5 +1802,5 @@ stringID_table_t animTable [MAX_ANIMATIONS+1] =
 	ENUM2STRING(BOTH_P6_S1_B_),		//[backblock]
 	ENUM2STRING(BOTH_P7_S1_B_),		//[backblock]	
 	//must be terminated
-	NULL,-1
+	{NULL,-1}
 };

@@ -959,7 +959,7 @@ extern qboolean BG_InKnockDownOnGround( playerState_t *ps );
 //[/ForceSys]
 int ForcePowerUsableOn(gentity_t *attacker, gentity_t *other, forcePowers_t forcePower)
 {
-	if(other->client && other->client->ps.inAirAnim || other->client && other->client->ps.groundEntityNum == ENTITYNUM_NONE)
+	if(other->client && (other->client->ps.inAirAnim || other->client->ps.groundEntityNum == ENTITYNUM_NONE) )
 		return 1;
 
 	if (other && other->client && BG_HasYsalamiri(g_gametype.integer, &other->client->ps))
@@ -2182,7 +2182,7 @@ void ForceLightning( gentity_t *self )
 		return;
 	}
 
-	if (self->client->ps.forceHandExtend != HANDEXTEND_NONE && (!self->client->ps.fd.forcePowersActive & (1 << FP_GRIP)))
+	if ( self->client->ps.forceHandExtend != HANDEXTEND_NONE && ( !(self->client->ps.fd.forcePowersActive & (1 << FP_GRIP)) ) )
 	{
 		return;
 	}
@@ -2193,7 +2193,7 @@ void ForceLightning( gentity_t *self )
 
 	//[ForceSys]
 	//allow during preblocks
-	if (self->client->ps.weaponTime > 0 && (!PM_SaberInParry(self->client->ps.saberMove) || !self->client->ps.userInt3 & (1 << FLAG_PREBLOCK)))
+	if (self->client->ps.weaponTime > 0 && (!PM_SaberInParry(self->client->ps.saberMove) || !(self->client->ps.userInt3 & (1 << FLAG_PREBLOCK)) ))
 	//if (self->client->ps.weaponTime > 0)
 	//[/ForceSys]
 	{
@@ -2767,7 +2767,7 @@ void ForceDrainDamage( gentity_t *self, gentity_t *traceEnt, vec3_t dir, vec3_t 
 
 				//Drain the standard amount since we just drained someone else
 
-				/*
+				*//*
 				if (self->client->ps.fd.forcePowerLevel[FP_DRAIN] == FORCE_LEVEL_1)
 				{
 					BG_ForcePowerDrain( &self->client->ps, FP_DRAIN, 0 );
@@ -3777,7 +3777,7 @@ void ForceThrow( gentity_t *self, qboolean pull )
 	}
 
 	//allow push/pull during preblocks
-	if (self->client->ps.weaponTime > 0 && (!PM_SaberInParry(self->client->ps.saberMove) || (!self->client->ps.userInt3 & (1 << FLAG_PREBLOCK))))
+	if (self->client->ps.weaponTime > 0 && (!PM_SaberInParry(self->client->ps.saberMove) || (!(self->client->ps.userInt3 & (1 << FLAG_PREBLOCK)))))
 	//if (self->client->ps.weaponTime > 0)
 	//[ForceSys]
 	{
@@ -4597,8 +4597,8 @@ void ForceThrow( gentity_t *self, qboolean pull )
 					   && !BG_IsUsingHeavyWeap(&push_list[x]->client->ps)
 					   && !PM_SaberInBrokenParry(push_list[x]->client->ps.saberMove)
 					   && push_list[x]->client->ps.stats[STAT_DODGE] > DODGE_CRITICALLEVEL)
-						|| BG_InRoll(&push_list[x]->client->ps,push_list[x]->client->ps.legsAnim)
-						&& !pull)
+						|| (BG_InRoll(&push_list[x]->client->ps,push_list[x]->client->ps.legsAnim )
+						&& !pull))
 					{
 						if(push_list[x]->client->ps.fd.forcePowerLevel[FP_ABSORB] == FORCE_LEVEL_0
 							|| push_list[x]->client->ps.fd.forcePowerLevel[FP_PUSH] < self->client->ps.fd.forcePowerLevel[FP_PUSH])
@@ -5040,7 +5040,7 @@ void DoGripAction(gentity_t *self, forcePowers_t forcePower)
 
 	/*
 	if (tr.fraction != 1.0f &&
-		tr.entityNum != gripEnt->s.number /*&&
+		tr.entityNum != gripEnt->s.number *//*&&
 		gripLevel < FORCE_LEVEL_3*//*)
 	{
 		WP_ForcePowerStop(self, forcePower);
@@ -7014,7 +7014,7 @@ void WP_ForcePowersUpdate( gentity_t *self, usercmd_t *ucmd )
 				//[FatigueSys]
 				//removing the siege regen restriction for players carrying an objective since FP is now used for more 
 				//than just Force Powers.
-				/*
+				*//*
 				if (self->client->holdingObjectiveItem &&
 					g_entities[self->client->holdingObjectiveItem].inuse &&
 					g_entities[self->client->holdingObjectiveItem].genericValue15)

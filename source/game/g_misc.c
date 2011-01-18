@@ -812,6 +812,7 @@ void SP_misc_bsp(gentity_t *ent)
 		ent->s.angles[1] = newAngle;
 	}
 	// don't support rotation any other way
+
 	ent->s.angles[0] = 0.0;
 	ent->s.angles[2] = 0.0;
 	
@@ -884,10 +885,10 @@ numPatches - integer number of patches to split the terrain brush into (default 
 terxels - integer number of terxels on a patch side (default 4) (2 <= count <= 8)
 seed - integer seed for random terrain generation (default 0)
 textureScale - float scale of texture (default 0.005)
-heightmap - name of heightmap data image to use, located in heightmaps/*.png. (must be PNG format)
-terrainDef - defines how the game textures the terrain (file is base/ext_data/rmg/*.terrain - default is grassyhills)
+heightmap - name of heightmap data image to use, located in heightmaps/<***>.png. (must be PNG format)
+terrainDef - defines how the game textures the terrain (file is base/ext_data/rmg/<***>.terrain - default is grassyhills)
 instanceDef - defines which bsp instances appear
-miscentDef - defines which client models spawn on the terrain (file is base/ext_data/rmg/*.miscents)
+miscentDef - defines which client models spawn on the terrain (file is base/ext_data/rmg/<***>.miscents)
 densityMap - how dense the client models are packed
 
 */
@@ -5372,6 +5373,7 @@ void SP_misc_model_beacon( gentity_t *ent )
 	{
 		ent->count = 1;
 		beacon_deploy( ent );
+
 	}
 
 	G_SpawnInt( "forcevisible", "0", &forceVisible );

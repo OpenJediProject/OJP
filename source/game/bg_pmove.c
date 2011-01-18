@@ -2512,8 +2512,11 @@ static qboolean PM_CheckJump( void )
 				BG_ForcePowerDrain( pm->ps, FP_LEVITATION, 5 );
 			}
 			*/
+			//Raz: May have to wrap the following if/else inside this if block.
 			if(!BG_InLedgeMove( pm->ps->legsAnim ))
-			//pm->ps->velocity[2]+=100;//[JumpIncrease]
+			{
+			//	pm->ps->velocity[2]+=100;//[JumpIncrease]
+			}
 			//[/FatigueSys]
 			if (pm->ps->fd.forcePowerLevel[FP_LEVITATION] >= FORCE_LEVEL_2)
 			{
@@ -5380,7 +5383,7 @@ static void PM_GroundTrace( void ) {
 
 //[JetpackSys]
 #ifdef QAGAME
-	if(pm->ps->pm_type == PM_JETPACK && g_entities[pm->ps->clientNum].client || (pm->cmd.buttons & BUTTON_USE) )
+	if(pm->ps->pm_type == PM_JETPACK && (g_entities[pm->ps->clientNum].client || (pm->cmd.buttons & BUTTON_USE)) )
 	{//turn off jetpack if we touch the ground.
 		Jetpack_Off(&g_entities[pm->ps->clientNum]);
 	}
@@ -8322,6 +8325,7 @@ backAgain:
 				Anim = BOTH_VT_ATL_G;
 				break;
 			case BOTH_VS_ATF_G:
+
 				Anim = BOTH_VT_ATF_G;
 				break;
 			case BOTH_VS_IDLE_SL:
@@ -8447,12 +8451,9 @@ static void PM_Weapon( void )
 		}
 	}
 
-	if (pm_entSelf->s.NPC_class!=CLASS_VEHICLE
-		&&pm->ps->m_iVehicleNum)
+	if ( pm_entSelf->s.NPC_class != CLASS_VEHICLE && pm->ps->m_iVehicleNum )
 	{ //riding a vehicle
-		veh = pm_entVeh;
-		if ( veh &&
-			(veh->m_pVehicle && veh->m_pVehicle->m_pVehicleInfo->type == VH_WALKER || veh->m_pVehicle && veh->m_pVehicle->m_pVehicleInfo->type == VH_FIGHTER) )
+		if ( (veh = pm_entVeh) && veh->m_pVehicle && (veh->m_pVehicle->m_pVehicleInfo->type == VH_WALKER || veh->m_pVehicle->m_pVehicleInfo->type == VH_FIGHTER) )
 		{//riding a walker/fighter
 			//keep saber off, do no weapon stuff at all!
 			pm->ps->saberHolstered = 2;
@@ -9620,7 +9621,7 @@ static void PM_Weapon( void )
 
 	// take an ammo away if not infinite
 	if ( pm->ps->clientNum < MAX_CLIENTS && pm->ps->ammo[ weaponData[pm->ps->weapon].ammoIndex ] != -1 &&
-		(pm->ps->weapon != WP_BOWCASTER || pm->ps->weapon == WP_BOWCASTER &&!(pm->ps->eFlags2 & EF2_BOWCASTERSCOPE)))
+		(pm->ps->weapon != WP_BOWCASTER || (pm->ps->weapon == WP_BOWCASTER &&!(pm->ps->eFlags2 & EF2_BOWCASTERSCOPE))))
 	{
 		// enough energy to fire this weapon?
 		if ((pm->ps->ammo[weaponData[pm->ps->weapon].ammoIndex] - amount) >= 0) 
@@ -10140,8 +10141,7 @@ void PM_AdjustAttackStates( pmove_t *pm )
 		&&pm->ps->m_iVehicleNum)
 	{ //riding a vehicle
 		bgEntity_t *veh = pm_entVeh;
-		if ( veh &&
-			(veh->m_pVehicle && (veh->m_pVehicle->m_pVehicleInfo->type == VH_WALKER || veh->m_pVehicle && veh->m_pVehicle->m_pVehicleInfo->type == VH_FIGHTER)) )
+		if ( veh && veh->m_pVehicle && (veh->m_pVehicle->m_pVehicleInfo->type == VH_WALKER || veh->m_pVehicle->m_pVehicleInfo->type == VH_FIGHTER) )
 		{//riding a walker/fighter
 			//not firing, ever
 			pm->ps->eFlags &= ~(EF_FIRING|EF_ALT_FIRING);
@@ -11620,7 +11620,7 @@ void BG_G2PlayerAngles(void *ghoul2, int motionBolt, entityState_t *cent, int ti
 	int					adddir = 0;
 	static int			dir;
 	static int			i;
-	static int			movementOffsets[8] = { 0, 22, 45, -22, 0, 22, -45, -22 };
+//	static int			movementOffsets[8] = { 0, 22, 45, -22, 0, 22, -45, -22 };
 	float				degrees_negative = 0;
 	float				degrees_positive = 0;
 	static float		dif;

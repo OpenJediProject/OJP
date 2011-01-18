@@ -972,7 +972,7 @@ char *Q_StrReplace(char *haystack, char *needle, char *newp)
 			*destp = *haystack;
 			*++destp = '\0';
 		}
-		*haystack++;
+		haystack++;
 	}
 	// tjw: don't work with final return value in case haystack 
 	//      was pointing at it.
@@ -1290,6 +1290,7 @@ Info_ValueForKey
 Searches the string for the given
 key and returns the associated value, or an empty string.
 FIXME: overflow check?
+
 ===============
 */
 char *Info_ValueForKey( const char *s, const char *key ) {

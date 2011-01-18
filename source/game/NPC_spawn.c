@@ -273,6 +273,8 @@ void G_ClassSetDontFlee( gentity_t *self )
 	case CLASS_VEHICLE:
 		self->NPC->scriptFlags |= SCF_DONT_FLEE;
 		break;
+	default:
+		break;
 	}
 
 	if ( (self->NPC->aiFlags&NPCAI_BOSS_CHARACTER) )
@@ -3387,7 +3389,7 @@ void SP_NPC_Jedi( gentity_t *self)
 }
 
 /* replaced with SP version of same code
-/*QUAKED NPC_Jedi(1 0 0) (-16 -16 -24) (16 16 40) TRAINER x x x CEILING CINEMATIC NOTSOLID STARTINSOLID SHY
+*//*QUAKED NPC_Jedi(1 0 0) (-16 -16 -24) (16 16 40) TRAINER x x x CEILING CINEMATIC NOTSOLID STARTINSOLID SHY
 TRAINER - Special Jedi- instructor
 CEILING - Sticks to the ceiling until he sees an enemy or takes pain
 CINEMATIC - Will spawn with no default AI (BS_CINEMATIC)
@@ -3408,7 +3410,7 @@ void SP_NPC_Jedi( gentity_t *self)
 		}
 		else 
 		{
-			/*
+			*//*
 			if ( !Q_irand( 0, 2 ) )
 			{
 				self->NPC_type = "JediF";

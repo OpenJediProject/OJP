@@ -301,7 +301,7 @@ inline static int BigLong(int l) { return LongSwap(l); }
 #define LittleLong
 inline static float BigFloat(const float *l) { return FloatSwap(l); }
 #define LittleFloat
-#elif
+#else
 #define BigShort
 inline static short LittleShort(short l) { return ShortSwap(l); }
 #define BigLong
@@ -3084,7 +3084,7 @@ String ID Tables
 
 ========================================================================
 */
-#define ENUM2STRING(arg)   #arg,arg
+#define ENUM2STRING(arg)   { #arg,arg }
 typedef struct stringID_table_s
 {
 	char	*name;

@@ -1108,6 +1108,7 @@ typedef struct {
 	int			voteNo;
 	int			numVotingClients;		// set by CalculateRanks
 
+
 	qboolean	votingGametype;
 	int			votingGametypeTo;
 
@@ -2444,6 +2445,7 @@ void EnableCoreDumps(void);
 void DisableCoreDumps(void);
 void EnableStackTrace(void);
 void DisableStackTrace(void);
+void G_ShutdownGame( int restart );
 //[/CrashLog]
 
 

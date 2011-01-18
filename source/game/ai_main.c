@@ -5121,7 +5121,7 @@ void SaberCombatHandling(bot_state_t *bs)
 				bs->beStill = level.time + Q_irand(500, 1000);
 				bs->saberSTime = level.time + Q_irand(1200, 1800);
 			}
-			else if (bs->currentEnemy->client->ps.weapon == WP_SABER && bs->frame_Enemy_Len < 80 && (Q_irand(1, 10) < 8 && bs->saberBFTime < level.time) || bs->saberBTime > level.time || BG_SaberInKata(bs->currentEnemy->client->ps.saberMove) || bs->currentEnemy->client->ps.saberMove == LS_SPINATTACK || bs->currentEnemy->client->ps.saberMove == LS_SPINATTACK_DUAL)
+			else if (bs->currentEnemy->client->ps.weapon == WP_SABER && bs->frame_Enemy_Len < 80 && ((Q_irand(1, 10) < 8 && bs->saberBFTime < level.time) || bs->saberBTime > level.time || BG_SaberInKata(bs->currentEnemy->client->ps.saberMove) || bs->currentEnemy->client->ps.saberMove == LS_SPINATTACK || bs->currentEnemy->client->ps.saberMove == LS_SPINATTACK_DUAL))
 			{
 				vec3_t vs;
 				vec3_t groundcheck;
@@ -8189,6 +8189,7 @@ void StandardBotAI(bot_state_t *bs, float thinktime)
 	}
 
 	if (bs->jumpHoldTime > level.time)
+
 	{
 		bs->jumpTime = bs->jumpHoldTime;
 	}

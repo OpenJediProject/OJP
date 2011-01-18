@@ -166,7 +166,7 @@ qboolean ReachedGoal( gentity_t *goal )
 
 		VectorSubtract ( NPCInfo->tempGoal->currentOrigin, NPC->currentOrigin, vec);
 		//Who cares if it's in our FOV?!
-		/*
+		*//*
 		// is it in our FOV
 		vectoangles ( vec, angles );
 		delta = AngleDelta ( NPC->client->ps.viewangles[YAW], angles[YAW] );

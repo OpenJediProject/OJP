@@ -1577,7 +1577,7 @@ static void ST_CheckMoveState( void )
 			faceEnemy = qfalse;
 		}
 
-		/*
+		*//*
 		if ( TIMER_Done( NPC, "scoutTime" ) )
 		{//we can't scout to him, someone else give it a try
 			AI_GroupUpdateSquadstates( NPCInfo->group, NPC, SQUAD_STAND_AND_SHOOT );
@@ -2732,7 +2732,7 @@ void ST_Commander( void )
 					if ( !cpFlags )
 					{//still not moving
 						//see if we should say something?
-						/*
+						*//*
 						if ( NPC->attackDebounceTime < level.time - 2000 )
 						{//we, personally, haven't shot for 2 seconds
 							//maybe yell at the enemy?
@@ -2800,7 +2800,7 @@ void ST_Commander( void )
 
 			//[CoOp]
 			/*
-			if ( group->enemy->client->ps.weapon == WP_SABER && /*group->enemy->client->ps.SaberLength() > 0*//*!group->enemy->client->ps.saberHolstered )
+			if ( group->enemy->client->ps.weapon == WP_SABER && *//*group->enemy->client->ps.SaberLength() > 0*//*!group->enemy->client->ps.saberHolstered )
 			{//we obviously want to avoid the enemy if he has a saber
 				cpFlags |= CP_AVOID_ENEMY;
 				avoidDist = 256;
@@ -2963,7 +2963,7 @@ void ST_Commander( void )
 						//ucmd.buttons |= BUTTON_CAREFUL;
 					}
 
-					/*
+					*//*
 					if ( scouting )
 					{//successfully chasing enemy
 						ST_Speech( NPC, SPEECH_CHASE, 0.0f );
@@ -3006,7 +3006,7 @@ void ST_Commander( void )
 							}
 						}
 					}
-					/*
+					*//*
 					else if ( cpFlags & CP_CLOSEST || cpFlags & CP_APPROACH_ENEMY )
 					{
 						if ( group->numGroup > 1 )

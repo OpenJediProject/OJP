@@ -269,7 +269,7 @@ void ImperialProbe_FireBlaster(void)
 {
 	vec3_t	muzzle1,enemy_org1,delta1,angleToEnemy1;
 	static	vec3_t	forward, vright, up;
-	static	vec3_t	muzzle;
+//	static	vec3_t	muzzle;
 	int genBolt1;
 	gentity_t	*missile;
 	mdxaBone_t	boltMatrix;

@@ -819,7 +819,8 @@ static int gameCvarTableSize = sizeof( gameCvarTable ) / sizeof( gameCvarTable[0
 
 void G_InitGame					( int levelTime, int randomSeed, int restart );
 void G_RunFrame					( int levelTime );
-void G_ShutdownGame				( int restart );
+//Raz: Moved prototype to g_local.h for use by the crash handler
+//void G_ShutdownGame				( int restart );
 void CheckExitRules				( void );
 void G_ROFF_NotetrackCallback	( gentity_t *cent, const char *notetrack);
 
@@ -1002,6 +1003,7 @@ int vmMain( int command, int arg0, int arg1, int arg2, int arg3, int arg4, int a
 			{ //success!
 				strcpy(sharedMem->value, crap);
 			}
+
 
 			return r;
 		}
@@ -2629,6 +2631,7 @@ void DuelResetWinsLosses(void)
 /*
 =============
 ExitLevel
+
 
 When the intermission has been exited, the server is either killed
 or moved to a new level based on the "nextmap" cvar 

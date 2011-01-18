@@ -558,7 +558,7 @@ void RemoveFirstOpenList( void )
 	{
 	}
 
-	i = i--;
+	i--;
 	if(OpenList[i].wpNum == -1)
 	{
 		G_Printf("Crap!  The last entry scanner in RemoveFirstOpenList() totally failed.\n");
@@ -722,7 +722,7 @@ int FindOnRoute( int wpNum, int Route[MAX_WPARRAY_SIZE] )
 	//Special find end route command stuff
 	if(wpNum == -1)
 	{
-		i = i--;
+		i--;
 		if(Route[i] != -1)
 		{//found it
 			return i;
@@ -2486,6 +2486,7 @@ void TAB_BotMoveto(bot_state_t *bs, qboolean strafe)
 		//recheck everything
 		findwp = qtrue;
 		badwp = bs->wpCurrent->index;
+
 		bs->wpDestination = NULL;
 		recalcroute = qtrue;
 	}
@@ -2574,9 +2575,8 @@ void TAB_BotMoveto(bot_state_t *bs, qboolean strafe)
 	//if you're closer to your bs->DestPosition than you are to your next waypoint, just 
 	//move to your bs->DestPosition.  This is to prevent the bots from backstepping when 
 	//very close to their target
-	if(!bs->wpSpecial  //not doing something special
-		&& (Distance(bs->origin, bs->wpCurrent->origin) > Distance(bs->origin, bs->DestPosition)) //closer to our destination than the next waypoint
-		|| (bs->wpCurrent->index == bs->wpDestination->index && bs->wpTouchedDest) ) //We've touched our final waypoint and should head towards the destination
+	if( !bs->wpSpecial && ((Distance(bs->origin, bs->wpCurrent->origin) > Distance(bs->origin, bs->DestPosition)) //closer to our destination than the next waypoint
+		|| (bs->wpCurrent->index == bs->wpDestination->index && bs->wpTouchedDest)) ) //We've touched our final waypoint and should head towards the destination
 	{//move to DestPosition
 		TAB_BotMove(bs, bs->DestPosition, qfalse, strafe);
 	}
@@ -2779,9 +2779,9 @@ float TargetDistance(bot_state_t *bs, gentity_t* target, vec3_t targetorigin)
 {
 	vec3_t enemyOrigin;
 
-	if(strcmp(target->classname, "misc_siege_item") == 0
-		|| strcmp(target->classname, "func_breakable") == 0 
-		|| target->client && target->client->NPC_class == CLASS_RANCOR) 
+	if( !strcmp( target->classname, "misc_siege_item" )
+		|| !strcmp(target->classname, "func_breakable")
+		|| (target->client && target->client->NPC_class == CLASS_RANCOR))
 	{//flatten origin heights and measure
 		VectorCopy(targetorigin, enemyOrigin);
 		if(fabs(enemyOrigin[2] - bs->eye[2]) < 150)
@@ -4683,9 +4683,9 @@ gentity_t * DetermineObjectiveType(int team, int objective, int *type, gentity_t
 			{//success!
 				return triggerer;
 			}
-			else if((strcmp(test->classname, "func_usable") == 0) && (test->spawnflags & 64) //useable by player
-				|| ((strcmp(test->classname, "trigger_multiple") == 0) && (test->spawnflags & 4)) //need to press the use button to work
-				|| (strcmp(test->classname, "trigger_once") == 0) )
+			else if (( !strcmp( test->classname, "func_usable" ) && (test->spawnflags & 64)) || //useable by player
+					 ( !strcmp( test->classname, "trigger_multiple" ) && (test->spawnflags & 4)) || //need to press the use button to work
+					 ( !strcmp( test->classname, "trigger_once" ) ) )
 			{//ok, so they aren't linked to anything, try using them directly then
 				if(test->NPC_targetname)
 				{//vehicle objective
@@ -4937,10 +4937,10 @@ void objectiveType_Attack(bot_state_t *bs, gentity_t *target)
 		VectorSet(temp, -369, 858, -231);
 		if(Distance(bs->origin, temp) < DEFEND_MAXDISTANCE)
 		{//automatically see target.
-			if(!bs->cur_ps.stats[STAT_WEAPONS] & ( 1 << WP_DEMP2)
-				&& !bs->cur_ps.stats[STAT_WEAPONS] & ( 1 << WP_ROCKET_LAUNCHER )
-				&& !bs->cur_ps.stats[STAT_WEAPONS] & ( 1 << WP_CONCUSSION )
-				&& !bs->cur_ps.stats[STAT_WEAPONS] & ( 1 << WP_REPEATER ))
+			if(!(bs->cur_ps.stats[STAT_WEAPONS] & ( 1 << WP_DEMP2))
+				&& !(bs->cur_ps.stats[STAT_WEAPONS] & ( 1 << WP_ROCKET_LAUNCHER ))
+				&& !(bs->cur_ps.stats[STAT_WEAPONS] & ( 1 << WP_CONCUSSION ))
+				&& !(bs->cur_ps.stats[STAT_WEAPONS] & ( 1 << WP_REPEATER )))
 			{//we currently don't have a heavy weap that can reach this target
 				TAB_BotDefend(bs, target);
 			}

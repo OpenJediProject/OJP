@@ -1757,6 +1757,8 @@ void G_CheckMovingLoopingSounds( gentity_t *ent, usercmd_t *ucmd )
 				break;
 			case CLASS_PROBE:
 				ent->s.loopSound = G_SoundIndex( "sound/chars/probe/misc/probedroidloop" );
+			default:
+				break;
 			}
 		}
 		else
@@ -2647,7 +2649,7 @@ void ClientThink_real( gentity_t *ent ) {
 		else if (client->saber[0].model[0] && client->saber[1].model[0])
 		{ //with two sabs always use akimbo style
 			//[SaberThrowSys]
-			/* //racc - Removed to add ability for dual saber users to continue to use their second sabers if they throw or drop their first one.
+			*//* //racc - Removed to add ability for dual saber users to continue to use their second sabers if they throw or drop their first one.
 			if ( client->ps.saberHolstered == 1 )
 			{//one saber should be off, adjust saberAnimLevel accordinly
 				client->ps.fd.saberAnimLevelBase = SS_DUAL;

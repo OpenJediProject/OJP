@@ -477,7 +477,7 @@ int G_LoadRoff( const char *fileName )
 	}
 	else
 	{
-		G_InitRoff( file, data );
+		G_InitRoff( file, (unsigned char *)data );
 
 		// Done loading this roff, so save off an id to it..increment first to avoid zero index
 		roff_id = ++num_roffs;

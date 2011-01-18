@@ -298,7 +298,7 @@ void CreateShield(gentity_t *ent)
 	int			height, posWidth, negWidth, halfWidth = 0;
 	qboolean	xaxis;
 	int			paramData = 0;
-	static int	shieldID;
+//	static int	shieldID;
 
 	// trace upward to find height of shield
 	VectorCopy(ent->r.currentOrigin, end);
@@ -2635,7 +2635,7 @@ int Pickup_Weapon (gentity_t *ent, gentity_t *other) {
 			}
 
 			// Old method:  If the player has less than the minimum, give them the minimum, else just add 1.
-/*
+*//*
 			// drop the quantity if the already have over the minimum
 			if ( other->client->ps.ammo[ ent->item->giTag ] < quantity ) {
 				quantity = quantity - other->client->ps.ammo[ ent->item->giTag ];

@@ -97,10 +97,10 @@ void G_DeflectMissile( gentity_t *ent, gentity_t *missile, vec3_t forward )
 	int		isowner = 0;
 	vec3_t missile_dir;
 	//[MoreRandom]
-	float   slopFactor=0.0f;
-	int		defLevel=0;
-	float distance =0;
-	gentity_t *prevOwner = &g_entities[missile->r.ownerNum];
+//	float   slopFactor=0.0f;
+//	int		defLevel=0;
+//	float distance =0;
+//	gentity_t *prevOwner = &g_entities[missile->r.ownerNum];
 	//[/MoreRandom]
 	if (missile->r.ownerNum == ent->s.number)
 	{ //the original owner is bouncing the missile, so don't try to bounce it back at him
@@ -591,7 +591,7 @@ qboolean G_MissileImpact( gentity_t *ent, trace_t *trace ) {
 		te->s.weapon = 0;//saberNum
 		te->s.legsAnim = 0;//bladeNum
 
-		/*if (other->client->ps.velocity[2] > 0 ||
+		*//*if (other->client->ps.velocity[2] > 0 ||
 			other->client->pers.cmd.forwardmove ||
 			other->client->pers.cmd.rightmove)
 			*//*
@@ -688,7 +688,7 @@ qboolean G_MissileImpact( gentity_t *ent, trace_t *trace ) {
 			te->s.weapon = 0;//saberNum
 			te->s.legsAnim = 0;//bladeNum
 
-			/*if (otherOwner->client->ps.velocity[2] > 0 ||
+			*//*if (otherOwner->client->ps.velocity[2] > 0 ||
 				otherOwner->client->pers.cmd.forwardmove ||
 				otherOwner->client->pers.cmd.rightmove)*//*
 			if (otherOwner->client->ps.velocity[2] > 0 ||
@@ -1255,7 +1255,7 @@ void OJP_HandleBoltBlock(gentity_t *bolt, gentity_t *player, trace_t *trace)
 	gentity_t *te;
 	int otherDefLevel;
 	gentity_t *prevOwner = &g_entities[bolt->r.ownerNum]; //previous owner of the bolt.  Used for awarding experience to attacker.
-	float distance = VectorDistance(prevOwner->r.currentOrigin,player->r.currentOrigin);
+//	float distance = VectorDistance(prevOwner->r.currentOrigin,player->r.currentOrigin);
 	//create the bolt saber block effect
 	te = G_TempEntity( bolt->r.currentOrigin, EV_SABER_BLOCK );
 	VectorCopy(bolt->r.currentOrigin, te->s.origin);
@@ -1326,7 +1326,7 @@ void OJP_HandleBoltBlock(gentity_t *bolt, gentity_t *player, trace_t *trace)
 		{
 			float slopFactor = (MISHAP_MAXINACCURACY-6) * (FORCE_LEVEL_3 - player->client->ps.fd.forcePowerLevel[FP_SABER_DEFENSE])/FORCE_LEVEL_3;
 			//[MoreRandom]
-			float distance = VectorDistance(player->r.currentOrigin,prevOwner->r.currentOrigin);
+		//	float distance = VectorDistance(player->r.currentOrigin,prevOwner->r.currentOrigin);
 				slopFactor += Q_irand(1,5);
 			vectoangles( fwd, angs );
 			angs[PITCH] += flrand(-slopFactor, slopFactor);

@@ -1500,6 +1500,7 @@ Don't place this
 	},
 
 /*QUAKED weapon_melee (.3 .3 1) (-16 -16 -16) (16 16 16) suspended
+
 Don't place this
 */
 	{
@@ -2351,7 +2352,7 @@ void BG_CycleForce(playerState_t *ps, int direction)
 	int presel = i;
 	int foundnext = -1;
 
-	if (!ps->fd.forcePowersKnown & (1 << x) ||
+	if (!(ps->fd.forcePowersKnown & (1 << x)) ||
 		x >= NUM_FORCE_POWERS ||
 		x == -1)
 	{ //apparently we have no valid force powers

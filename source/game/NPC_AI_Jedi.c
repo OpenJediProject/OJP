@@ -2868,10 +2868,7 @@ static void Jedi_CombatDistance( int enemy_dist )
 							}
 						}
 						//let lightning cultists spam the lightning.
-						else if ( WP_ForcePowerUsable( NPC, FP_LIGHTNING, 0 ) 
-								&& ((NPCInfo->scriptFlags&SCF_DONT_FIRE)
-								&&Q_stricmp("cultist_lightning",NPC->NPC_type) 
-								|| Q_irand( 0, 1 )) )
+						else if ( WP_ForcePowerUsable( NPC, FP_LIGHTNING, 0 ) && (( (NPCInfo->scriptFlags & SCF_DONT_FIRE) && Q_stricmp( "cultist_lightning", NPC->NPC_type )) || Q_irand( 0, 1 ) ) )
 						//else if ( WP_ForcePowerAvailable( NPC, FP_LIGHTNING, 0 ) && Q_irand( 0, 1 ) )
 						{
 							ForceLightning( NPC );
@@ -4968,7 +4965,7 @@ static qboolean Jedi_SaberBlock( void )
 		{
 			Com_Printf( S_COLOR_RED"enemy saber dist: %4.2f\n", dist );
 		}
-		/*
+		*//*
 		if ( dist < 300 //close
 			&& !Jedi_QuickReactions( NPC )//quick reaction people can interrupt themselves
 			&& (PM_SaberInStart( NPC->enemy->client->ps.saberMove ) || BG_SaberInAttack( NPC->enemy->client->ps.saberMove )) )//enemy is swinging at me
@@ -6968,7 +6965,7 @@ static qboolean Jedi_Jumping( gentity_t *goal )
 			NPC_FaceEntity( goal, qtrue );
 			//FIXME: push me torward where I was heading
 			//FIXME: if hit a ledge as soon as we jumped, we need to push toward our goal... must remember original jump dir and/or original jump dest
-			/*
+			*//*
 			vec3_t	viewangles_xy={0,0,0}, goal_dir, goal_xy_dir, forward, right;
 			float	goal_dist;
 			

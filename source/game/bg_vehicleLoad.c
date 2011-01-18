@@ -747,7 +747,7 @@ stringID_table_t VehicleTable[VH_NUM_VEHICLES+1] =
 	ENUM2STRING(VH_SPEEDER),	//something you ride on that hovers, like a speeder or swoop
 	ENUM2STRING(VH_ANIMAL),		//animal you ride on top of that walks, like a tauntaun
 	ENUM2STRING(VH_FLIER),		//animal you ride on top of that flies, like a giant mynoc?
-	0,	-1
+	{0,	-1}
 };
 
 // Setup the shared functions (one's that all vehicles would generally use).
@@ -772,6 +772,10 @@ void BG_SetSharedVehicleFunctions( vehicleInfo_t *pVehInfo )
 			break;
 		case VH_WALKER:
 			G_SetWalkerVehicleFunctions( pVehInfo );
+			break;
+		//Raz: Warn if we try to set shared funcs for invalid(?) vehicles
+		default:
+			Com_Printf( "Can't set vehicle shared functions for type %d\n", pVehInfo->type );
 			break;
 	}
 #endif

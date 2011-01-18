@@ -261,7 +261,7 @@ void SabBeh_AttackVsBlock( gentity_t *attacker, sabmech_t *mechAttacker,
 {//set the saber behavior for an attacking vs blocking/parrying blade impact
 	qboolean startSaberLock = qfalse;
 	qboolean parried = G_BlockIsParry(blocker, attacker, hitLoc);
-	qboolean quickParried = G_BlockIsQuickParry(blocker,attacker,hitLoc);
+//	qboolean quickParried = G_BlockIsQuickParry(blocker,attacker,hitLoc);
 	qboolean atkparry = G_InAttackParry(blocker);
 	qboolean atkfake = (attacker->client->ps.userInt3 & (1 << FLAG_ATTACKFAKE)) 
 		? qtrue : qfalse;

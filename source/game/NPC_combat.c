@@ -208,6 +208,7 @@ void G_AttackDelay( gentity_t *self, gentity_t *enemy )
 		case CLASS_IMPERIAL://they give orders and hang back
 			attDelay += Q_irand( 500, 1500 );
 			break;
+		default:
 		case CLASS_STORMTROOPER://stormtroopers shoot sooner
 			if ( self->NPC->rank >= RANK_LT )
 			{//officers shoot even sooner

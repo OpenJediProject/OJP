@@ -399,7 +399,7 @@ void NPC_RemoveBody( gentity_t *self )
 		{
 			self->nextthink = level.time + FRAMETIME; // try back in a second
 
-			/*
+			*//*
 			if ( DistanceSquared( g_entities[0].r.currentOrigin, self->r.currentOrigin ) <= REMOVE_DISTANCE_SQR )
 			{
 				return;
@@ -567,7 +567,7 @@ static void NPC_RemoveBodyEffect(void)
 
 	if ( !NPC || !NPC->client || (NPC->s.eFlags & EF_NODRAW) )
 		return;
-/*
+*//*
 	switch(NPC->client->playerTeam)
 	{
 	case NPCTEAM_STARFLEET:
@@ -1672,6 +1672,9 @@ qboolean G_JediInNormalAI( gentity_t *ent )
 	case BS_FOLLOW_LEADER:
 		return qtrue;
 		break;
+	default:
+		return qfalse;
+		break;
 	}
 	return qfalse;
 }
@@ -2156,7 +2159,8 @@ void NPC_RunBehavior( int team, int bState )
 			case CLASS_GALAKMECH:
 				NPC_BSGM_Default();
 				return;
-
+			default:
+				break;
 			}
 
 			//[CoOp]
@@ -2279,6 +2283,7 @@ void NPC_RunBehavior( int team, int bState )
 				{
 					NPC_BehaviorSet_Default( bState );
 				}
+
 				//[CoOp] SP Code
 				G_CheckCharmed( NPC );
 				//NPC_CheckCharmed();
@@ -2349,7 +2354,7 @@ void NPC_ExecuteBState ( gentity_t *self)//, int msec )
 		abs(NPC->client->ps.velocity[2]) > abs(NPC->client->ps.velocity[0]) &&
 		!(NPC->client->ps.fallingToDeath) && 
 		(!self->client->ps.fd.forceJumpZStart || (NPC->client->ps.origin[2] < self->client->ps.fd.forceJumpZStart)) && 
-		(NPC->client->NPC_class != CLASS_BOBAFETT /*&& NPC->client->NPC_class != CLASS_ROCKETTROOPER*//*))
+		(NPC->client->NPC_class != CLASS_BOBAFETT *//*&& NPC->client->NPC_class != CLASS_ROCKETTROOPER*//*))
 	{
 #ifdef _DEBUG
 		//Com_Printf("Stupid...\n");
@@ -2962,7 +2967,7 @@ void NPC_Think ( gentity_t *self)//, int msec )
 /*
 void NPC_InitAI ( void ) 
 {
-	/*
+	*//*
 	trap_Cvar_Register(&g_saberRealisticCombat, "g_saberRealisticCombat", "0", CVAR_CHEAT);
 
 	trap_Cvar_Register(&debugNoRoam, "d_noroam", "0", CVAR_CHEAT);

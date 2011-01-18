@@ -270,6 +270,7 @@ void NPC_GM_Pain(gentity_t *self, gentity_t *attacker, int damage)
 		}
 		*/
 	}
+#if 0 //Raz: Why was this..what..
 	else
 	{//store the point for shield impact
 		if ( point )
@@ -279,6 +280,7 @@ void NPC_GM_Pain(gentity_t *self, gentity_t *attacker, int damage)
 			//rwwFIXMEFIXME: ..do this is as well.
 		}
 	}
+#endif
 
 	if ( !self->lockCount && self->client->ps.torsoTimer <= 0 )
 	{//don't interrupt laser sweep attack or other special attacks/moves

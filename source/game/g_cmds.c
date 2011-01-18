@@ -1681,7 +1681,7 @@ argCheck:
 		char	userinfo[MAX_INFO_STRING];
 
 		trap_Argv( 2, arg, sizeof( arg ) );
-		if (arg && arg[0] && ent->client)
+		if (arg[0] && ent->client)
 		{//new force power string, update the forcepower string.
 			trap_GetUserinfo( ent->s.number, userinfo, sizeof( userinfo ) );
 			Info_SetValueForKey( userinfo, "forcepowers", arg );
@@ -1701,7 +1701,7 @@ argCheck:
 		}
 
 		trap_Argv( 1, arg, sizeof( arg ) );
-		if (arg && arg[0] && arg[0] != 'x' && g_gametype.integer != GT_DUEL && g_gametype.integer != GT_POWERDUEL)
+		if (arg[0] && arg[0] != 'x' && g_gametype.integer != GT_DUEL && g_gametype.integer != GT_POWERDUEL)
 		{ //if there's an arg, assume it's a combo team command from the UI.
 			Cmd_Team_f(ent);
 		}
@@ -4134,7 +4134,7 @@ void ClientCommand( int clientNum ) {
 	char	cmd2[MAX_TOKEN_CHARS];
 	//char	cmd3[MAX_TOKEN_CHARS];
 //	float		bounty;
-	int clientid = 0;
+//	int clientid = 0;
 
 	ent = g_entities + clientNum;
 	if ( !ent->client ) {
@@ -4176,6 +4176,7 @@ void ClientCommand( int clientNum ) {
 		Cmd_Say_f (ent, SAY_ALL, qfalse);
 		return;
 	}
+
 	if (Q_stricmp (cmd, "say_team") == 0) {
 		if (g_gametype.integer < GT_TEAM)
 		{ //not a team game, just refer to regular say.

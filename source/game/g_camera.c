@@ -6,7 +6,7 @@
 void EnablePlayerCameraPos(gentity_t *player);
 
 qboolean	in_camera = qfalse;
-camera_t	client_camera={0};
+camera_t	client_camera={{0}};
 
 extern int g_TimeSinceLastFrame;
 
@@ -231,7 +231,7 @@ void GCam_Update( void )
 		VectorCopy( client_camera.origin, cg.refdef.vieworg );
 	}
 
-	/* no fading needed
+	*//* no fading needed
 	//Bar fading
 	if ( client_camera.info_state & CAMERA_BAR_FADING )
 	{
@@ -349,7 +349,7 @@ void GCam_FollowUpdate ( void )
 		//Stay centered in my cameraGroup, if I have one
 		while( NULL != (from = G_Find(from, FOFS(cameraGroup), client_camera.cameraGroup)))
 		{
-			/*
+			*//*
 			if ( from->s.number == client_camera.aimEntNum )
 			{//This is the misc_camera_focus, we'll be removing this ent altogether eventually
 				continue;

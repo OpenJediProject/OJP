@@ -252,7 +252,7 @@ void HYBRID_StandardBotAI(bot_state_t *bs, float thinktime)
 	
 			AngleVectors(b_angle, fwd, NULL, NULL);
 
-			if (!gWPArray && bs->BOTjumpState <= JS_WAITING) // Not in a jump.
+			if (!gWPArray[0] && bs->BOTjumpState <= JS_WAITING) // Not in a jump.
 			{
 				VectorCopy(bs->currentEnemy->r.currentOrigin, trto);
 			}
@@ -329,7 +329,7 @@ void HYBRID_StandardBotAI(bot_state_t *bs, float thinktime)
 				AIMod_Jump ( bs );
 			}
 		
-			if (trto)
+			if (trto[0] && trto[1] && trto[2])
 			{// We have a possibility.. Check it and maybe use it.
 				VectorSubtract(trto, bs->origin, a);
 				vectoangles(a, ang);

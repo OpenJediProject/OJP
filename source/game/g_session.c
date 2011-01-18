@@ -137,10 +137,10 @@ void G_ReadSessionData( gclient_t *client ) {
 		&client->sess.selectedFP,
 		&client->sess.duelTeam,
 		&client->sess.siegeDesiredTeam,
-		&client->sess.siegeClass,
-		&client->sess.saberType,
+		&client->sess.siegeClass[0],
+		&client->sess.saberType[0],
 		//[ExpSys]
-		&client->sess.saber2Type,
+		&client->sess.saber2Type[0],
 		&client->sess.skillPoints
 		//&client->sess.saber2Type
 		//[ExpSys]
@@ -341,9 +341,9 @@ void G_InitSessionData( gclient_t *client, char *userinfo, qboolean isBot, qbool
 			&tempInt,
 			&tempInt,
 			&tempInt,
-			&tempChar,
-			&tempChar,
-			&tempChar,
+			&tempChar[0],
+			&tempChar[0],
+			&tempChar[0],
 			&client->sess.skillPoints
 			);
 	}
