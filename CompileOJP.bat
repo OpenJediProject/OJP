@@ -1,21 +1,33 @@
 @ECHO OFF
 ECHO.
 
-rem NOTE:  This file requires that your VS80COMNTOOLS env variable is set to the tools dir of your VS install.
+rem NOTE:  This file requires that Visual Studios 2010 or 2008 to be installed.
 
 rem ****************
 rem VARIABLE DEFINES
 rem ****************
 
 set OLDDIR=%CD%
+
+rem Determine which version of Visual Studios we have installed.
+IF "%VS100COMNTOOLS%" == "" GOTO VS2008SETTINGS
+
+:VS2010SETTINGS
+set OJPSLN=source\OJP Enhanced_VS2010.sln
+set TOOLDIR=%VS100COMNTOOLS%
+GOTO COMPILE
+
+:VS2008SETTINGS
 set OJPSLN=source\OJP Enhanced.sln
+set TOOLDIR=%VS80COMNTOOLS%
+GOTO COMPILE
 
 
 ECHO ================
 ECHO Starting Compile
 ECHO ================
-
-chdir /d "%VS80COMNTOOLS%"
+:COMPILE
+chdir /d "%TOOLDIR%"
 cd ../IDE
 IF EXIST VCExpress.exe GOTO VSEXPRESS
 
