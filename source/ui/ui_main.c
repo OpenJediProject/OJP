@@ -10713,7 +10713,9 @@ UI_Init
 void _UI_Init( qboolean inGameLoad ) {
 	const char *menuSet;
 	int start;
-	int i=0;
+	//[CompileFix]
+	//int i=0;
+	//[/CompileFix]
 
 	//register this freakin thing now
 	vmCvar_t siegeTeamSwitch;
