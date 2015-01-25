@@ -10,23 +10,27 @@ rem ****************
 set OLDDIR=%CD%
 
 rem Determine which version of Visual Studios we have installed.
-IF "%VS100COMNTOOLS%" == "" GOTO VS2008SETTINGS
+IF "%VS110COMNTOOLS%" NEQ "" (
+	rem Visual Studios 2012
+	set OJPSLN=source\OJP Enhanced_VS2012.sln
+ 	set TOOLDIR="%VS110COMNTOOLS%"
+) ELSE (
+IF "%VS100COMNTOOLS%" NEQ "" (
+	rem Visual Studios 2010
+ 	set OJPSLN=source\OJP Enhanced_VS2010.sln
+ 	set TOOLDIR="%VS100COMNTOOLS%"
+) ELSE (
+IF "%VS80COMNTOOLS%" NEQ "" (
+	rem Visual Studios 2008
+ 	set OJPSLN=source\OJP Enhanced.sln
+ 	set TOOLDIR="%VS80COMNTOOLS%"
+) ) )
 
-:VS2010SETTINGS
-set OJPSLN=source\OJP Enhanced_VS2010.sln
-set TOOLDIR=%VS100COMNTOOLS%
-GOTO COMPILE
 
-:VS2008SETTINGS
-set OJPSLN=source\OJP Enhanced.sln
-set TOOLDIR=%VS80COMNTOOLS%
-GOTO COMPILE
-
-
+:COMPILE
 ECHO ================
 ECHO Starting Compile
 ECHO ================
-:COMPILE
 chdir /d "%TOOLDIR%"
 cd ../IDE
 IF EXIST VCExpress.exe GOTO VSEXPRESS
