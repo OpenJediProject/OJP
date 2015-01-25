@@ -438,7 +438,7 @@ void UI_SaberLoadParms( void )
 	//what do we do if totallen is zero?  will never happen, but COULD happen in theory...
 	//trap_TrueMalloc(&SaberParms, totallen+1); //+1 for null char, needed?
 	maxLen++; //for ending null char
-	UI_AllocMem((void**)&SaberParms, maxLen);
+	UI_AllocMem(&SaberParms, maxLen);
 	if(!SaberParms)
 		//ERR_FATAL or any level isnt used with Com_Error
 		Com_Error(ERR_FATAL, "Saber parsing: Out of memory!");
@@ -1556,7 +1556,7 @@ void UI_SaberGetHiltInfo(void){
 				Com_Printf( "WARNING: too many two-handed sabers, ignoring saber '%s'\n", saberName );
 			}
 #else
-			UI_ReaAllocMem((void **)saberStaffHiltInfo, sizeof(char *), numStaffHilts+1);
+			UI_ReaAllocMem((void *)&saberStaffHiltInfo, sizeof(char *), numStaffHilts+1);
 			saberStaffHiltInfo[numStaffHilts++] = (char *) saberName;
 #endif
 		}
@@ -1572,7 +1572,7 @@ void UI_SaberGetHiltInfo(void){
 				Com_Printf( "WARNING: too many one-handed sabers, ignoring saber '%s'\n", saberName );
 			}
 #else
-			UI_ReaAllocMem((void **)saberSingleHiltInfo, sizeof(char *), numSingleHilts+1);
+			UI_ReaAllocMem((void *)&saberSingleHiltInfo, sizeof(char *), numSingleHilts+1);
 			saberSingleHiltInfo[numSingleHilts++] = (char *) saberName;
 #endif
 		}

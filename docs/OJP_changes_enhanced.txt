@@ -8,9 +8,8 @@ Version 1.5
 	Improvements/Fixes:
 		Compile Fixes (CompileFix):
 			- Various compile warning fixes.
-		Dynamic Memory Sabers (DynamicMemory_Sabers):
-			- Fixed casting compile errors while compiling with Visual Studios 2012.
-
+			
+			
 Version 0.1.2
 	Improvements/Fixes:
 		Cooperative Play:
