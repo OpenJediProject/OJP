@@ -1126,7 +1126,9 @@ static void CG_DrawSaberStyle( centity_t *cent, menuDef_t *menuHUD)
 //[SaberSys]
 static void CG_DrawBalance( centity_t *cent, menuDef_t *menuHUD)
 {//render the balance/mishap meter.
+	return;
 
+	/*
 	itemDef_t		*focusItem;
 	int				i;
 
@@ -1152,7 +1154,7 @@ static void CG_DrawBalance( centity_t *cent, menuDef_t *menuHUD)
 		}
 
 
-	}
+	}*/
 
 
 	/* bar based system, not used in new hud

@@ -1989,7 +1989,7 @@ void CG_FireWeapon( centity_t *cent, qboolean altFire ) {
 	entityState_t *ent;
 	int				c;
 	weaponInfo_t	*weap;
-	int mishap = cg.predictedPlayerState.saberAttackChainCount;
+	int mishap = cg.predictedPlayerState.MISHAP_VARIABLE;
 	ent = &cent->currentState;
 	if ( ent->weapon == WP_NONE ) {
 		return;

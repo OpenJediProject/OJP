@@ -991,7 +991,7 @@ int ForcePowerUsableOn(gentity_t *attacker, gentity_t *other, forcePowers_t forc
 	//	return 1;
 
 	if(other->client && other->client->ps.fd.saberAnimLevel == SS_DESANN
-		&& other->client->ps.saberAttackChainCount >= MISHAPLEVEL_HEAVY)
+		&& other->client->ps.MISHAP_VARIABLE <= MISHAPLEVEL_HEAVY)
 		return 0;
 
 	if(forcePower == FP_TELEPATHY && other->client)
@@ -2312,11 +2312,11 @@ qboolean OJP_CounterForce(gentity_t *attacker, gentity_t *defender, int attackPo
 		return qfalse;
 	}
 
-	if( defender->client->ps.saberAttackChainCount >= MISHAPLEVEL_HEAVY )
+	if( defender->client->ps.MISHAP_VARIABLE <= MISHAPLEVEL_HEAVY )
 	{//can't block if we're too off balance.
 		return qfalse;
 	}
-	if( defender->client->ps.saberAttackChainCount >= MISHAPLEVEL_LIGHT
+	if( defender->client->ps.MISHAP_VARIABLE <= MISHAPLEVEL_LIGHT
 		&& attacker->client->ps.fd.saberAnimLevel == SS_DESANN)
 	{//can't block if we're too off balance and they are using Juyo's perk
 		return qfalse;
@@ -2490,7 +2490,7 @@ void ForceLightningDamage( gentity_t *self, gentity_t *traceEnt, vec3_t dir, vec
 					//lightning also blasts the target back.
 					G_Throw(traceEnt, dir, 100);
 					if(!WalkCheck(traceEnt) 
-					|| (WalkCheck(traceEnt) && traceEnt->client->ps.saberAttackChainCount >= MISHAPLEVEL_HEAVY) 
+					|| (WalkCheck(traceEnt) && traceEnt->client->ps.MISHAP_VARIABLE <= MISHAPLEVEL_HEAVY) 
 					|| BG_IsUsingHeavyWeap(&traceEnt->client->ps)
 					|| PM_SaberInBrokenParry(traceEnt->client->ps.saberMove)
 					|| traceEnt->client->ps.stats[STAT_DODGE] < DODGE_CRITICALLEVEL)
@@ -4338,7 +4338,7 @@ void ForceThrow( gentity_t *self, qboolean pull )
 
 				//switched to more logical wasWallGrabbing toggle.
 				if (!wasWallGrabbing && CanCounterThrow(push_list[x], self, pull)
-					&& push_list[x]->client->ps.saberAttackChainCount < MISHAPLEVEL_HEAVY)
+					&& push_list[x]->client->ps.MISHAP_VARIABLE < MISHAPLEVEL_HEAVY)
 				//if (otherPushPower && CanCounterThrow(push_list[x], self, pull))
 				//[/ForceSys]
 				{//racc - player blocked the throw.
@@ -4435,7 +4435,7 @@ void ForceThrow( gentity_t *self, qboolean pull )
 							randfact = 10;
 						}
 						*/
-						if(!OnSameTeam(self, push_list[x]) && push_list[x]->client->ps.saberAttackChainCount < MISHAPLEVEL_HEAVY)
+						if(!OnSameTeam(self, push_list[x]) && push_list[x]->client->ps.MISHAP_VARIABLE < MISHAPLEVEL_HEAVY)
 						{
 							canPullWeapon = qfalse;
 						}
@@ -4577,7 +4577,7 @@ void ForceThrow( gentity_t *self, qboolean pull )
 							}
 						}
 /*
-                       if((push_list[x]->client->ps.saberAttackChainCount >= MISHAPLEVEL_HEAVY)
+                       if((push_list[x]->client->ps.MISHAP_VARIABLE <= MISHAPLEVEL_HEAVY)
 					   || BG_IsUsingHeavyWeap(&push_list[x]->client->ps)
 					   || PM_SaberInBrokenParry(push_list[x]->client->ps.saberMove)
 					   || push_list[x]->client->ps.stats[STAT_DODGE] < DODGE_CRITICALLEVEL)
@@ -4593,7 +4593,7 @@ void ForceThrow( gentity_t *self, qboolean pull )
 					if(!pull)
 					{
 					if((WalkCheck(push_list[x])
-						&& (push_list[x]->client->ps.saberAttackChainCount <= MISHAPLEVEL_HEAVY)
+						&& (push_list[x]->client->ps.MISHAP_VARIABLE <= MISHAPLEVEL_HEAVY)
 					   && !BG_IsUsingHeavyWeap(&push_list[x]->client->ps)
 					   && !PM_SaberInBrokenParry(push_list[x]->client->ps.saberMove)
 					   && push_list[x]->client->ps.stats[STAT_DODGE] > DODGE_CRITICALLEVEL)
@@ -4605,7 +4605,7 @@ void ForceThrow( gentity_t *self, qboolean pull )
 						pushPowerMod /= 2;
 					}
 					else if((WalkCheck(push_list[x])
-						&& (push_list[x]->client->ps.saberAttackChainCount <= MISHAPLEVEL_HEAVY)
+						&& (push_list[x]->client->ps.MISHAP_VARIABLE <= MISHAPLEVEL_HEAVY)
 					   && (BG_IsUsingHeavyWeap(&push_list[x]->client->ps) && WalkCheck(push_list[x]))
 					   && !PM_SaberInBrokenParry(push_list[x]->client->ps.saberMove)
 					   && (push_list[x]->client->ps.stats[STAT_DODGE] > DODGE_CRITICALLEVEL
@@ -4634,7 +4634,7 @@ void ForceThrow( gentity_t *self, qboolean pull )
 					else if(pull)
 					{
 						if((WalkCheck(push_list[x])
-						&& (push_list[x]->client->ps.saberAttackChainCount <= MISHAPLEVEL_HEAVY)
+						&& (push_list[x]->client->ps.MISHAP_VARIABLE <= MISHAPLEVEL_HEAVY)
 					   && !BG_IsUsingHeavyWeap(&push_list[x]->client->ps)
 					   && !PM_SaberInBrokenParry(push_list[x]->client->ps.saberMove)
 					   && push_list[x]->client->ps.stats[STAT_DODGE] > DODGE_CRITICALLEVEL)
@@ -4646,7 +4646,7 @@ void ForceThrow( gentity_t *self, qboolean pull )
 					}
 					else if(((WalkCheck(push_list[x]) && BG_IsUsingHeavyWeap(&push_list[x]->client->ps)
 						|| (!WalkCheck(push_list[x]) && !BG_IsUsingHeavyWeap(&push_list[x]->client->ps))))
-						&& (push_list[x]->client->ps.saberAttackChainCount <= MISHAPLEVEL_HEAVY)
+						&& (push_list[x]->client->ps.MISHAP_VARIABLE <= MISHAPLEVEL_HEAVY)
 					   && !PM_SaberInBrokenParry(push_list[x]->client->ps.saberMove)
 					   && (push_list[x]->client->ps.stats[STAT_DODGE] > DODGE_CRITICALLEVEL
 					   && InFront(push_list[x]->client->ps.origin, self->client->ps.origin, self->client->ps.viewangles, -.7f)))
@@ -7145,6 +7145,7 @@ void WP_ForcePowersUpdate( gentity_t *self, usercmd_t *ucmd )
 	//[/DodgeSys]
 
 	//[SaberSys]
+	/* MP was merged with FP.
 	if(self->client->MishapDebounce < level.time  
 		&& !BG_InSlowBounce(&self->client->ps) && !PM_SaberInBrokenParry(self->client->ps.saberMove)
 		&& !PM_InKnockDown(&self->client->ps) && self->client->ps.forceHandExtend != HANDEXTEND_DODGE
@@ -7174,6 +7175,7 @@ void WP_ForcePowersUpdate( gentity_t *self, usercmd_t *ucmd )
 				self->client->MishapDebounce = level.time + g_mishapRegenTime.integer/5;
 		}
 	}
+	*/
 	//[/SaberSys]
 	
 powersetcheck:

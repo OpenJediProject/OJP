@@ -93,13 +93,13 @@
 #define FATIGUE_MELEE			1
 
 //Fatigue for standard saber attacks
-#define FATIGUE_SABERATTACK		1
+#define FATIGUE_SABERATTACK		10
 
 //Fatigue Cost for saber transition moves (spins)
 #define FATIGUE_SABERTRANS		1
 
 //percentage of max fatigue at which point your player starts acting fatigued.
-#define FATIGUEDTHRESHHOLD		.1
+#define FATIGUEDTHRESHHOLD		.25
 
 //the fatigue caused by getting hit by a kick.
 #define FATIGUE_KICKHIT			5
@@ -117,10 +117,10 @@
 //[/FatigueSys]
 
 //[SaberSys]
-#define MISHAPLEVEL_MAX			15  //the max possible amount of MP.  This is currently dictated by network variable size limits.
-#define MISHAPLEVEL_FULL		14  //the point at which full mishaps occur on the balance bar.
-#define MISHAPLEVEL_HEAVY		8
-#define MISHAPLEVEL_LIGHT		5
+#define MISHAP_VARIABLE			fd.forcePower	//The variable used for tracking a player's mishap level. MUST be a variable inside of the playerstate.
+#define MISHAPLEVEL_FULL		5  //the point at which full mishaps occur on the balance bar.
+#define MISHAPLEVEL_HEAVY		10
+#define MISHAPLEVEL_LIGHT		25
 #define MISHAPLEVEL_NONE		0
 //[/SaberSys]
 

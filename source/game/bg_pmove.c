@@ -13213,7 +13213,7 @@ void PmoveSingle (pmove_t *pmove) {
 	}
 
 	if (pm->ps->fd.forceGripCripple
-		&& pm->ps->saberAttackChainCount >= MISHAPLEVEL_HEAVY
+		&& pm->ps->MISHAP_VARIABLE <= MISHAPLEVEL_HEAVY
 		&& (pm->ps->weapon != WP_SABER 
 		&& pm->ps->weapon != WP_MELEE))
 	{ //don't let attack or alt attack if being gripped I guess

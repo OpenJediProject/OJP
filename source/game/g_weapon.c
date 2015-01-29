@@ -4946,7 +4946,8 @@ void FireWeapon( gentity_t *ent, qboolean altFire )
 		if(ent && ent->client)
 		{
 			vec3_t angs; //used for adding in mishap inaccuracy.
-			float slopFactor = MISHAP_MAXINACCURACY * ent->client->ps.saberAttackChainCount/MISHAPLEVEL_MAX;
+			float slopFactor = MISHAP_MAXINACCURACY * (1 - (ent->client->ps.MISHAP_VARIABLE/(float)MISHAPLEVEL_LIGHT));
+			slopFactor = Com_Clamp(0, MISHAP_MAXINACCURACY, slopFactor);
 
 			vectoangles( forward, angs );
 			angs[PITCH] += flrand(-slopFactor, slopFactor);

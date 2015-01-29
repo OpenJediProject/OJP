@@ -9828,17 +9828,17 @@ qboolean OJP_DodgeKick( gentity_t *self, gentity_t *pusher, const vec3_t pushDir
 		return qfalse;
 	}
     
-	if (self->client->ps.saberAttackChainCount >= MISHAPLEVEL_HEAVY)
+	if (self->client->ps.MISHAP_VARIABLE <= MISHAPLEVEL_HEAVY)
 	{
 		return qfalse;
 	}
-	if (self->client->ps.saberAttackChainCount >= MISHAPLEVEL_LIGHT
+	if (self->client->ps.MISHAP_VARIABLE <= MISHAPLEVEL_LIGHT
 		&& pusher->client->ps.fd.saberAnimLevel == SS_DESANN)//can't block if we're too off balance and their using juyo. Juyo's perk
 	{
 		return qfalse;
 	}
 
-	if(self->client->ps.saberAttackChainCount >= MISHAPLEVEL_LIGHT
+	if(self->client->ps.MISHAP_VARIABLE <= MISHAPLEVEL_LIGHT
 		|| self->client->ps.stats[STAT_DODGE] <= DODGE_CRITICALLEVEL )
 	{//above the light mishap level or at low DP, you don't automatically do dodge kicks.
 		if(self->r.svFlags & SVF_BOT)
@@ -10066,7 +10066,7 @@ static gentity_t *G_KickTrace( gentity_t *ent, vec3_t kickDir, float kickDist, v
 
 					//[SaberSys]
 					//made the knockdown behavior of kicks be based on the player's mishap level or low DP and not hold alt attack.
-					if ((hitEnt->client->ps.saberAttackChainCount >= MISHAPLEVEL_HEAVY
+					if ((hitEnt->client->ps.MISHAP_VARIABLE <= MISHAPLEVEL_HEAVY
 						|| hitEnt->client->ps.stats[STAT_DODGE] <= DODGE_CRITICALLEVEL)
 						&& !(hitEnt->client->buttons & BUTTON_ALT_ATTACK))
 					{//knockdown
@@ -10087,7 +10087,7 @@ static gentity_t *G_KickTrace( gentity_t *ent, vec3_t kickDir, float kickDist, v
 						}
 					}
 					else if (ent->client->ps.fd.saberAnimLevel == SS_DESANN
-						&& (hitEnt->client->ps.saberAttackChainCount >= MISHAPLEVEL_LIGHT
+						&& (hitEnt->client->ps.MISHAP_VARIABLE <= MISHAPLEVEL_LIGHT
 						|| hitEnt->client->ps.stats[STAT_DODGE] <= DODGE_CRITICALLEVEL)
 						&& !(hitEnt->client->buttons & BUTTON_ALT_ATTACK))
 					{//knockdown
@@ -12748,7 +12748,7 @@ qboolean G_BlockIsQuickParry( gentity_t *self, gentity_t *attacker, vec3_t hitLo
 	{//player didn't parry in the correct direction, do the minimal parry bonus.
 		//SABERSYSRAFIXME - this is a hack, please try to fix this since it's not really
 		//fair to players.
-		self->client->ps.saberAttackChainCount += 3;
+		//self->client->ps.MISHAP_VARIABLE += 3;
 		if(self->r.svFlags & SVF_BOT)
 		{//bots just randomly parry to make up for them not intelligently parrying.
 			if(BOT_PARRYRATE * botstates[self->s.number]->settings.skill > Q_irand(0,999))

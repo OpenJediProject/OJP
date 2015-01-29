@@ -6,6 +6,8 @@ This file stores all the information about what has changed from release version
 
 Version 1.5
 	Improvements/Fixes:
+		Saber Combat:
+			- Removed mishap points.  All mishap related behavior is tied to a player's fatigue point level.
 		Compile Fixes (CompileFix):
 			- Various compile warning fixes.
 			

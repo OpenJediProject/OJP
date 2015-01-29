@@ -22,11 +22,11 @@ extern qboolean BG_SaberInNonIdleDamageMove(playerState_t *ps, int AnimIndex);
 qboolean SabBeh_RollBalance(gentity_t *self, sabmech_t *mechSelf, qboolean forceMishap)
 {
 	int randNum; 
-	if( self->client->ps.saberAttackChainCount >= MISHAPLEVEL_FULL )
+	if( self->client->ps.MISHAP_VARIABLE <= MISHAPLEVEL_FULL )
 	{//hard mishap.
 		//mechSelf->doKnockdown = qtrue;
 		mechSelf->doButterFingers= qtrue;
-		self->client->ps.saberAttackChainCount = MISHAPLEVEL_HEAVY;
+		//self->client->ps.MISHAP_VARIABLE = MISHAPLEVEL_HEAVY;
 		return qtrue;
 	}
 	
@@ -39,30 +39,30 @@ qboolean SabBeh_RollBalance(gentity_t *self, sabmech_t *mechSelf, qboolean force
 			return qtrue;
 		}
 	}
-	else if( self->client->ps.saberAttackChainCount >= MISHAPLEVEL_HEAVY )
+	else if( self->client->ps.MISHAP_VARIABLE <= MISHAPLEVEL_HEAVY )
 	{//heavy slow bounce
 		randNum = Q_irand(0, 99);
 		if(randNum < 0 || forceMishap)
 		{
 			mechSelf->doHeavySlowBounce = qtrue;
-			self->client->ps.saberAttackChainCount = MISHAPLEVEL_LIGHT;
+			//self->client->ps.MISHAP_VARIABLE = MISHAPLEVEL_LIGHT;
 			return qtrue;
 		}
 	}
-	else if( self->client->ps.saberAttackChainCount >= MISHAPLEVEL_LIGHT )
+	else if( self->client->ps.MISHAP_VARIABLE <= MISHAPLEVEL_LIGHT )
 	{//slow bounce
 		randNum = Q_irand(0, 99);
 		if(randNum < 0 || forceMishap)
 		{
 			mechSelf->doSlowBounce = qtrue;
-			self->client->ps.saberAttackChainCount = MISHAPLEVEL_NONE;
+			//self->client->ps.MISHAP_VARIABLE = MISHAPLEVEL_NONE;
 			return qtrue;
 		}
 	}
 	else if( forceMishap )
 	{//perform a slow bounce even if we don't have enough mishap for it.
 		mechSelf->doSlowBounce = qtrue;
-		self->client->ps.saberAttackChainCount = MISHAPLEVEL_NONE;
+		//self->client->ps.MISHAP_VARIABLE = MISHAPLEVEL_NONE;
 		return qtrue;
 	}
 
@@ -74,6 +74,7 @@ qboolean SabBeh_RollBalance(gentity_t *self, sabmech_t *mechSelf, qboolean force
 extern qboolean GAME_INLINE WalkCheck( gentity_t * self );
 void G_AddMercBalance(gentity_t *self, int amount)
 {//mercs don't suffer mishaps, but they do lose/gain MP
+	/*
 	if(!WalkCheck(self))
 	{//running or moving very fast, can't balance as well
 		if(amount > 0)
@@ -88,16 +89,17 @@ void G_AddMercBalance(gentity_t *self, int amount)
 
 	//G_Printf("%i: %i: %i Mishap Points\n", level.time, self->s.number, amount);
 
-	self->client->ps.saberAttackChainCount += amount;
+	self->client->ps.MISHAP_VARIABLE -= amount;
 
-	if(self->client->ps.saberAttackChainCount < 0)
+	if(self->client->ps.MISHAP_VARIABLE < 0)
 	{
-		self->client->ps.saberAttackChainCount = MISHAPLEVEL_NONE;
+		self->client->ps.MISHAP_VARIABLE = MISHAPLEVEL_NONE;
 	}
-	else if(self->client->ps.saberAttackChainCount > MISHAPLEVEL_MAX)
+	else if(self->client->ps.MISHAP_VARIABLE > MISHAPLEVEL_MAX)
 	{
-		self->client->ps.saberAttackChainCount = MISHAPLEVEL_MAX;
+		self->client->ps.MISHAP_VARIABLE = MISHAPLEVEL_MAX;
 	}
+	*/
 }
 //[/WeapAccuracy]
 
@@ -142,6 +144,7 @@ void G_RollBalance(gentity_t *self, gentity_t *inflictor, qboolean forceMishap)
 
 void SabBeh_AddBalance(gentity_t *self, sabmech_t *mechSelf, int amount, qboolean attack)
 {
+	/*
 	if(!WalkCheck(self))
 	{//running or moving very fast, can't balance as well
 		if(amount > 0)
@@ -156,13 +159,13 @@ void SabBeh_AddBalance(gentity_t *self, sabmech_t *mechSelf, int amount, qboolea
 
 	//G_Printf("%i: %i: %i Mishap Points\n", level.time, self->s.number, amount);
 
-	self->client->ps.saberAttackChainCount += amount;
+	self->client->ps.MISHAP_VARIABLE -= amount;
 
-	if(self->client->ps.saberAttackChainCount < 0)
+	if(self->client->ps.MISHAP_VARIABLE < 0)
 	{
-		self->client->ps.saberAttackChainCount = MISHAPLEVEL_NONE;
+		self->client->ps.MISHAP_VARIABLE = MISHAPLEVEL_NONE;
 	}
-	else if(self->client->ps.saberAttackChainCount > MISHAPLEVEL_MAX)
+	else if(self->client->ps.MISHAP_VARIABLE > MISHAPLEVEL_MAX)
 	{//overflowing causes a full mishap.
 		int randNum = Q_irand(0, 2);
 		switch (randNum)
@@ -174,8 +177,9 @@ void SabBeh_AddBalance(gentity_t *self, sabmech_t *mechSelf, int amount, qboolea
 			mechSelf->doKnockdown = qtrue;
 			break;
 		};
-		self->client->ps.saberAttackChainCount = MISHAPLEVEL_HEAVY;
+		self->client->ps.MISHAP_VARIABLE = MISHAPLEVEL_HEAVY;
 	}
+	*/
 }
 
 
@@ -345,7 +349,7 @@ void SabBeh_AttackVsBlock( gentity_t *attacker, sabmech_t *mechAttacker,
 		&& attacker->client->ps.fd.saberAnimLevel == SS_TAVION)
 	{//blocker's saber was directly hit while in a slow bounce, disarm the blocker!
 		mechBlocker->doButterFingers = qtrue;
-		blocker->client->ps.saberAttackChainCount = 0;
+		blocker->client->ps.MISHAP_VARIABLE = 0;
 #ifdef _DEBUG
 		mechBlocker->behaveMode = SABBEHAVE_BLOCKFAKED;
 #endif
@@ -597,22 +601,24 @@ qboolean SabBeh_ButtonforSaberLock(gentity_t* self)
 //[SaberSys]
 void BG_ReduceMishapLevel(playerState_t *ps)
 {//reduces a player's mishap meter by one level
-	if(ps->saberAttackChainCount >= MISHAPLEVEL_FULL)
+	/*
+	if(ps->MISHAP_VARIABLE <= MISHAPLEVEL_FULL)
 	{
-		ps->saberAttackChainCount = MISHAPLEVEL_HEAVY;
+		ps->MISHAP_VARIABLE = MISHAPLEVEL_HEAVY;
 	}
-	else if(ps->saberAttackChainCount >= MISHAPLEVEL_HEAVY)
+	else if(ps->MISHAP_VARIABLE <= MISHAPLEVEL_HEAVY)
 	{
-		ps->saberAttackChainCount = MISHAPLEVEL_LIGHT;
+		ps->MISHAP_VARIABLE = MISHAPLEVEL_LIGHT;
 	}
-	else if(ps->saberAttackChainCount >= MISHAPLEVEL_LIGHT)
+	else if(ps->MISHAP_VARIABLE <= MISHAPLEVEL_LIGHT)
 	{
-		ps->saberAttackChainCount = MISHAPLEVEL_NONE;
+		ps->MISHAP_VARIABLE = MISHAPLEVEL_NONE;
 	}
 	else
 	{
-		ps->saberAttackChainCount = MISHAPLEVEL_NONE;
+		ps->MISHAP_VARIABLE = MISHAPLEVEL_NONE;
 	}
+	*/
 
 }
 //[/SaberSys]
