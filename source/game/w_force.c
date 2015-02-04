@@ -7137,6 +7137,12 @@ void WP_ForcePowersUpdate( gentity_t *self, usercmd_t *ucmd )
 			{
 				self->client->ps.stats[STAT_DODGE] += DODGE_FATIGUE;
 			}
+
+			if(self->client->ps.stats[STAT_DODGE] > DODGE_CRITICALLEVEL)
+			{
+				self->client->ps.userInt3 &= ~( 1 << FLAG_DODGE_CRITICAL );
+			}
+
 			self->client->ps.fd.forcePower--;
 		}
 		

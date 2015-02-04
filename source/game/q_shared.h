@@ -2505,7 +2505,7 @@ typedef struct siegePers_s
 //use "(1 << flag)"
 
 //Fatigued Flag.
-#define	FLAG_FATIGUED		1
+#define	FLAG_FATIGUED			1
 
 //Dodge low flag
 #define FLAG_DODGEROLL		2
@@ -2543,6 +2543,8 @@ typedef struct siegePers_s
 #define FLAG_QUICKPARRY		10
 //[/QuickParry]
 #define FLAG_BLOCKING       11
+
+#define FLAG_DODGE_CRITICAL 12	//flag set when dodge is under the critical level (DODGE_CRITICALLEVEL)
 
 //[SaberDefines]
 //scaler to the walkspeed

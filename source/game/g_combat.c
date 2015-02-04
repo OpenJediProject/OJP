@@ -7112,9 +7112,9 @@ void G_DodgeDrain(gentity_t *victim, gentity_t *attacker, int amount)
 
 	victim->client->ps.stats[STAT_DODGE] -= amount;
 
-	if(attacker->client && attacker->client->ps.torsoAnim == saberMoveData[16].animToUse)
-	{//In DFA?
-		victim->client->ps.MISHAP_VARIABLE+=16;
+	if(victim->client->ps.stats[STAT_DODGE] <= DODGE_CRITICALLEVEL)
+	{
+		victim->client->ps.userInt3 |= ( 1 << FLAG_DODGE_CRITICAL );
 	}
 
 	if(victim->client->ps.stats[STAT_DODGE] < 0)
