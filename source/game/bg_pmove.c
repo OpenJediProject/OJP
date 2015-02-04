@@ -10535,30 +10535,34 @@ void BG_AdjustClientSpeed(playerState_t *ps, usercmd_t *cmd, int svTime)
 		ps->speed = 0;
 	}
 
-
-	if ( cmd->forwardmove < 0 && !(cmd->buttons&BUTTON_WALKING) && pm->ps->groundEntityNum != ENTITYNUM_NONE )
-	{//running backwards is slower than running forwards (like SP)
-		//[MoveSys]
-		ps->speed *= 0.6;
-		//ps->speed *= 0.75;
-		//[/MoveSys]
-	}
-
 	//[MoveSys]
-	if ( cmd->forwardmove < 0 && (cmd->buttons&BUTTON_WALKING) && pm->ps->groundEntityNum != ENTITYNUM_NONE )
-	{//walking backwards also makes a player move a little slower
-		ps->speed *= 0.75+0.2;//bugfix for the superslow backwalk
+	if ( cmd->forwardmove < 0 && pm->ps->groundEntityNum != ENTITYNUM_NONE )
+	{//moving backwards moves slower than moving forwards.
+		if(cmd->buttons&BUTTON_WALKING)
+		{
+			ps->speed *= 1.0;
+		}
+		else
+		{
+			ps->speed *= 0.6;
+		}
 	}
-
-	if ( !cmd->forwardmove 
+	else if ( !cmd->forwardmove 
 		&& cmd->rightmove
 		&& !(cmd->buttons&BUTTON_WALKING) 
 		&& pm->ps->groundEntityNum != ENTITYNUM_NONE )
 	{//pure strafe running is slower.
-		ps->speed *= 0.6;
+		ps->speed *= 1.0;
 	}
-	//[/MoveSys]
 
+	/* basejka
+	if ( cmd->forwardmove < 0 && !(cmd->buttons&BUTTON_WALKING) && pm->ps->groundEntityNum != ENTITYNUM_NONE )
+	{//running backwards is slower than running forwards (like SP)
+		
+		ps->speed *= 0.75;
+	}
+	*/
+	//[/MoveSys]
 
 	if (ps->fd.forcePowersActive & (1 << FP_GRIP))
 	{
