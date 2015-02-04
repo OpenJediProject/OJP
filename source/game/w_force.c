@@ -4338,7 +4338,7 @@ void ForceThrow( gentity_t *self, qboolean pull )
 
 				//switched to more logical wasWallGrabbing toggle.
 				if (!wasWallGrabbing && CanCounterThrow(push_list[x], self, pull)
-					&& push_list[x]->client->ps.MISHAP_VARIABLE < MISHAPLEVEL_HEAVY)
+					&& push_list[x]->client->ps.MISHAP_VARIABLE > MISHAPLEVEL_HEAVY)
 				//if (otherPushPower && CanCounterThrow(push_list[x], self, pull))
 				//[/ForceSys]
 				{//racc - player blocked the throw.
@@ -4435,7 +4435,7 @@ void ForceThrow( gentity_t *self, qboolean pull )
 							randfact = 10;
 						}
 						*/
-						if(!OnSameTeam(self, push_list[x]) && push_list[x]->client->ps.MISHAP_VARIABLE < MISHAPLEVEL_HEAVY)
+						if(!OnSameTeam(self, push_list[x]) && push_list[x]->client->ps.MISHAP_VARIABLE > MISHAPLEVEL_HEAVY)
 						{
 							canPullWeapon = qfalse;
 						}
@@ -4593,7 +4593,7 @@ void ForceThrow( gentity_t *self, qboolean pull )
 					if(!pull)
 					{
 					if((WalkCheck(push_list[x])
-						&& (push_list[x]->client->ps.MISHAP_VARIABLE <= MISHAPLEVEL_HEAVY)
+						&& (push_list[x]->client->ps.MISHAP_VARIABLE > MISHAPLEVEL_HEAVY)
 					   && !BG_IsUsingHeavyWeap(&push_list[x]->client->ps)
 					   && !PM_SaberInBrokenParry(push_list[x]->client->ps.saberMove)
 					   && push_list[x]->client->ps.stats[STAT_DODGE] > DODGE_CRITICALLEVEL)
@@ -4605,7 +4605,7 @@ void ForceThrow( gentity_t *self, qboolean pull )
 						pushPowerMod /= 2;
 					}
 					else if((WalkCheck(push_list[x])
-						&& (push_list[x]->client->ps.MISHAP_VARIABLE <= MISHAPLEVEL_HEAVY)
+						&& (push_list[x]->client->ps.MISHAP_VARIABLE > MISHAPLEVEL_HEAVY)
 					   && (BG_IsUsingHeavyWeap(&push_list[x]->client->ps) && WalkCheck(push_list[x]))
 					   && !PM_SaberInBrokenParry(push_list[x]->client->ps.saberMove)
 					   && (push_list[x]->client->ps.stats[STAT_DODGE] > DODGE_CRITICALLEVEL
@@ -4634,7 +4634,7 @@ void ForceThrow( gentity_t *self, qboolean pull )
 					else if(pull)
 					{
 						if((WalkCheck(push_list[x])
-						&& (push_list[x]->client->ps.MISHAP_VARIABLE <= MISHAPLEVEL_HEAVY)
+						&& (push_list[x]->client->ps.MISHAP_VARIABLE > MISHAPLEVEL_HEAVY)
 					   && !BG_IsUsingHeavyWeap(&push_list[x]->client->ps)
 					   && !PM_SaberInBrokenParry(push_list[x]->client->ps.saberMove)
 					   && push_list[x]->client->ps.stats[STAT_DODGE] > DODGE_CRITICALLEVEL)
@@ -4646,7 +4646,7 @@ void ForceThrow( gentity_t *self, qboolean pull )
 					}
 					else if(((WalkCheck(push_list[x]) && BG_IsUsingHeavyWeap(&push_list[x]->client->ps)
 						|| (!WalkCheck(push_list[x]) && !BG_IsUsingHeavyWeap(&push_list[x]->client->ps))))
-						&& (push_list[x]->client->ps.MISHAP_VARIABLE <= MISHAPLEVEL_HEAVY)
+						&& (push_list[x]->client->ps.MISHAP_VARIABLE > MISHAPLEVEL_HEAVY)
 					   && !PM_SaberInBrokenParry(push_list[x]->client->ps.saberMove)
 					   && (push_list[x]->client->ps.stats[STAT_DODGE] > DODGE_CRITICALLEVEL
 					   && InFront(push_list[x]->client->ps.origin, self->client->ps.origin, self->client->ps.viewangles, -.7f)))
