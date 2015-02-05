@@ -10,6 +10,9 @@ Version r1126
 			- Added yellow sparks effect to highlight players who have been parried.
 		Fatigue System:
 			- There are now two levels of low fatigue: light and heavy.  Most saber moves are progressively slower when at low fatigue.  Low fatigue <= 50 FP  Heavy <= 25 FP
+	Improvements/Fixes:
+		Experience System:
+			- Changed g_minExpLevel default to 15 to fix issues with bots not being able to purchase a starting weapon.
 
 
 Version r1125
