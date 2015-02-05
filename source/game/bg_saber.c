@@ -3,6 +3,7 @@
 #include "bg_local.h"
 #include "w_saber.h"
 
+
 //[SaberLockSys]
 //moved this up here to allow more debug messages earlier in the file.
 #ifdef QAGAME
@@ -33,6 +34,28 @@ int PM_irand_timesync(int val1, int val2)
 	return i;
 }
 
+//[FatigueSys]
+void UpdateFatigueFlags( playerState_t *ps )
+{//Update fatigue flags
+	if(ps->fd.forcePower < FATIGUELEVEL_HEAVY)
+	{
+		ps->userInt3 |= ( 1 << FLAG_FATIGUED_HEAVY );
+		ps->userInt3 &= ~(1 << FLAG_FATIGUED_LIGHT);
+	}
+	else if(ps->fd.forcePower < FATIGUELEVEL_LIGHT)
+	{
+		ps->userInt3 &= ~( 1 << FLAG_FATIGUED_HEAVY );
+		ps->userInt3 |= (1 << FLAG_FATIGUED_LIGHT);
+	}
+	else
+	{
+		ps->userInt3 &= ~( 1 << FLAG_FATIGUED_HEAVY );
+		ps->userInt3 &= ~(1 << FLAG_FATIGUED_LIGHT);
+	}
+
+	//[/FatigueSys]
+}
+
 void BG_ForcePowerDrain( playerState_t *ps, forcePowers_t forcePower, int overrideAmt )
 {
 	//take away the power
@@ -61,7 +84,8 @@ void BG_ForcePowerDrain( playerState_t *ps, forcePowers_t forcePower, int overri
 	{//don't drain FP after the top of the arc since the player is just dropping anyway.
 		return;
 	}
-	/*
+
+	/* basejka
 	if (forcePower == FP_LEVITATION)
 	{ //special case
 		int jumpDrain = 0;
@@ -105,15 +129,6 @@ void BG_ForcePowerDrain( playerState_t *ps, forcePowers_t forcePower, int overri
 			ps->fd.forcePower = 0;
 		}
 
-		//[FatigueSys]
-		//check for fatigued state.  I'm putting this here in addition to BG_AddFatigue
-		//because a lot of the code uses this function for draining instead.
-		if(ps->fd.forcePower <= (ps->fd.forcePowerMax * FATIGUEDTHRESHHOLD))
-		{//Pop the Fatigued flag
-			ps->userInt3 |= ( 1 << FLAG_FATIGUED );
-		}
-		//[/FatigueSys]
-
 		return;
 	}
 	*/
@@ -125,14 +140,7 @@ void BG_ForcePowerDrain( playerState_t *ps, forcePowers_t forcePower, int overri
 		ps->fd.forcePower = 0;
 	}
 
-	//[FatigueSys]
-	//check for fatigued state.  I'm putting this here in addition to BG_AddFatigue
-	//because a lot of the code uses this function for draining instead.
-	if(ps->fd.forcePower <= (ps->fd.forcePowerMax * FATIGUEDTHRESHHOLD))
-	{//Pop the Fatigued flag
-		ps->userInt3 |= ( 1 << FLAG_FATIGUED );
-	}
-	//[/FatigueSys]
+	UpdateFatigueFlags(ps);
 }
 
 qboolean BG_EnoughForcePowerForMove( int cost )
@@ -5131,10 +5139,7 @@ void BG_AddFatigue( playerState_t * ps, int Fatigue)
 		ps->fd.forcePower = 0;
 	}
 	
-	if(ps->fd.forcePower <= (ps->fd.forcePowerMax * FATIGUEDTHRESHHOLD))
-	{//Pop the Fatigued flag
-		ps->userInt3 |= ( 1 << FLAG_FATIGUED );
-	}
+	UpdateFatigueFlags(ps);
 }
 
 

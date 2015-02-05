@@ -10953,7 +10953,7 @@ CheckTrail:
 			saberTrail->duration *= 2;
 		}
 
-		if( cent->currentState.userInt3 & (1 << FLAG_FATIGUED) )
+		if( cent->currentState.userInt3 & (1 << FLAG_FATIGUED_HEAVY) )
 		{//fatigued players have slightly shorter saber trails since they're moving slower.
 			saberTrail->duration *= .5;
 		}

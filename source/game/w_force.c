@@ -6374,6 +6374,7 @@ static GAME_INLINE qboolean MeditateCheck( gentity_t * self )
 //[FatigueSys]
 extern qboolean PM_SaberInBrokenParry( int move );
 extern qboolean PM_InKnockDown( playerState_t *ps );
+extern void UpdateFatigueFlags( playerState_t *ps );
 //[/FatigueSys]
 //[Flamethrower]
 void Flamethrower_Fire( gentity_t *self );
@@ -6447,12 +6448,7 @@ void WP_ForcePowersUpdate( gentity_t *self, usercmd_t *ucmd )
 		self->client->ps.fd.forcePowerSelected = 0;
 	}
 
-	//Fatigued state check.  This is used because not all current deduction sources of FP check to 
-	//see if popping the flag is nessicary or not.
-	if(self->client->ps.fd.forcePower <= (self->client->ps.fd.forcePowerMax * FATIGUEDTHRESHHOLD))
-	{//Pop the Fatigued flag
-		self->client->ps.userInt3 |= ( 1 << FLAG_FATIGUED );
-	}
+	UpdateFatigueFlags(&self->client->ps);
 	//[/FatigueSys]
 
 
@@ -7109,10 +7105,7 @@ void WP_ForcePowersUpdate( gentity_t *self, usercmd_t *ucmd )
 			}
 
 			//[FatigueSys]
-			if( self->client->ps.fd.forcePower > (self->client->ps.fd.forcePowerMax * FATIGUEDTHRESHHOLD) )
-			{//You gained some FP back.  Cancel the Fatigue status.
-				self->client->ps.userInt3 &= ~( 1 << FLAG_FATIGUED );
-			}
+			UpdateFatigueFlags(&self->client->ps);
 			//[/FatigueSys]
 		}
 	}
@@ -7126,7 +7119,7 @@ void WP_ForcePowersUpdate( gentity_t *self, usercmd_t *ucmd )
 		&& WalkCheck(self)
 		)
 	{
-		if((self->client->ps.fd.forcePower > (self->client->ps.fd.forcePowerMax * FATIGUEDTHRESHHOLD)+1)
+		if((self->client->ps.fd.forcePower > FATIGUELEVEL_HEAVY)
 			&& self->client->ps.stats[STAT_DODGE] < self->client->ps.stats[STAT_MAX_DODGE])
 		{//you have enough fatigue to transfer to Dodge
 			if(self->client->ps.stats[STAT_MAX_DODGE] - self->client->ps.stats[STAT_DODGE] < DODGE_FATIGUE)

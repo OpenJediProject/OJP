@@ -3412,7 +3412,8 @@ void BG_SaberStartTransAnim( int clientNum, int saberAnimLevel, int weapon, int 
 	//[/SaberSys]
 
 	//[FatigueSys]
-	if( (fatigued & (1 << FLAG_FATIGUED)) && anim >= BOTH_A1_T__B_ && anim <= BOTH_ROLL_STAB
+	//being fatigued slows down most saber animations.
+	if(anim >= BOTH_A1_T__B_ && anim <= BOTH_ROLL_STAB
 		//not a wall run move
 		&& anim != BOTH_FORCEWALLRELEASE_FORWARD && anim != BOTH_FORCEWALLRUNFLIP_START 
 		&& anim != BOTH_FORCEWALLRUNFLIP_END
@@ -3420,10 +3421,16 @@ void BG_SaberStartTransAnim( int clientNum, int saberAnimLevel, int weapon, int 
 		&& anim != BOTH_JUMPFLIPSTABDOWN  
 		&& anim != BOTH_JUMPFLIPSLASHDOWN1
 		//don't slow down the lunge attack because it has movement associated with it
-		&& anim != BOTH_LUNGE2_B__T_
-		)
-	{//You're pooped.  Move slower
-		*animSpeed *= .5f;
+		&& anim != BOTH_LUNGE2_B__T_)
+	{//animation which can be slowed by fatigue.
+		if(fatigued & (1 << FLAG_FATIGUED_HEAVY))
+		{
+			*animSpeed *= .5f;
+		}
+		else if(fatigued & (1 << FLAG_FATIGUED_LIGHT))
+		{
+			*animSpeed *= .75f;
+		}
 	}
 	//[/FatigueSys]
 

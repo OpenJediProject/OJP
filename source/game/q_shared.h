@@ -2504,7 +2504,8 @@ typedef struct siegePers_s
 //use "(1 << flag)"
 typedef enum {
 	//[/FatigueSys]
-	FLAG_FATIGUED = 1		//Fatigued Flag
+	FLAG_FATIGUED_LIGHT = 1	
+	, FLAG_FATIGUED_HEAVY		//Badly Fatigued Flag
 	, FLAG_DODGEROLL		//Dodge low flag
 	//indicates that the current attack/transition is
 	//part of a fake.  This makes the attack much stronger

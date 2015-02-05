@@ -8,6 +8,8 @@ Version r1126
 	New Features:
 		Saber Combat:
 			- Added yellow sparks effect to highlight players who have been parried.
+		Fatigue System:
+			- There are now two levels of low fatigue: light and heavy.  Most saber moves are progressively slower when at low fatigue.  Low fatigue <= 50 FP  Heavy <= 25 FP
 
 
 Version r1125

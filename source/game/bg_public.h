@@ -81,6 +81,9 @@
 
 //[FatigueSys]
 //[FatigueDefines]
+#define FATIGUELEVEL_LIGHT	50	//FP point level at which the player is beginning to tire.
+#define FATIGUELEVEL_HEAVY  25	//FP point level at which the player is completely exhausted
+
 //Fatigue for backflips
 #define FATIGUE_BACKFLIP		-FATIGUE_JUMP + 3
 #define FATIGUE_BACKFLIP_ATARU		-FATIGUE_JUMP + 1
@@ -97,9 +100,6 @@
 
 //Fatigue Cost for saber transition moves (spins)
 #define FATIGUE_SABERTRANS		1
-
-//percentage of max fatigue at which point your player starts acting fatigued.
-#define FATIGUEDTHRESHHOLD		.25
 
 //the fatigue caused by getting hit by a kick.
 #define FATIGUE_KICKHIT			5

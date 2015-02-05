@@ -3776,7 +3776,7 @@ int OJP_SaberCanBlock(gentity_t *self, gentity_t *atk, qboolean checkBBoxBlock, 
 		if((atk->client->ps.saberMove == LS_A_LUNGE 
 			|| atk->client->ps.saberMove == LS_SPINATTACK
 			|| atk->client->ps.saberMove == LS_SPINATTACK_DUAL)
-			&& self->client->ps.userInt3 & (1 << FLAG_FATIGUED) ) 
+			&& self->client->ps.userInt3 & (1 << FLAG_FATIGUED_HEAVY) ) 
 		{//saber attacker, we can't block lunge attacks while fatigued. 
 			return 0;
 		}
@@ -5845,7 +5845,7 @@ if( !ojp_allowBodyDodge.integer )
 				|| shooter->client->ps.saberMove == LS_SPINATTACK
 				|| shooter->client->ps.saberMove == LS_SPINATTACK_DUAL)
 		{//attacker is doing lunge special
-			if(self->client->ps.userInt3 & (1 << FLAG_FATIGUED))
+			if(self->client->ps.userInt3 & (1 << FLAG_FATIGUED_HEAVY))
 			{//can't dodge a lunge special while fatigued
 				return qfalse;
 			}

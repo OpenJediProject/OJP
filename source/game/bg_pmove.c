@@ -10728,7 +10728,7 @@ void BG_AdjustClientSpeed(playerState_t *ps, usercmd_t *cmd, int svTime)
 	}
 
 	//[MoveSys]
-	if( ((ps->userInt3 & FLAG_FATIGUED) || (ps->stats[STAT_DODGE] < DODGE_CRITICALLEVEL)) 
+	if( ((ps->userInt3 & FLAG_FATIGUED_HEAVY) || (ps->stats[STAT_DODGE] < DODGE_CRITICALLEVEL)) 
 		&& !(cmd->buttons&BUTTON_WALKING) && pm->ps->groundEntityNum != ENTITYNUM_NONE)
 	{//run slower when tired
 		ps->speed *= .8;
@@ -14223,7 +14223,7 @@ qboolean PM_CheckRollGetup( void )
 	{//lying on back or front
 		
 		if ( (pm->ps->clientNum < MAX_CLIENTS //player
-				&& !(pm->ps->userInt3 & (1 << FLAG_FATIGUED)) //can't do roll getups while fatigued.
+				&& !(pm->ps->userInt3 & (1 << FLAG_FATIGUED_HEAVY)) //can't do roll getups while fatigued.
 				&& ( pm->cmd.rightmove //pressing left or right
 					|| (pm->cmd.forwardmove &&pm->ps->fd.forcePowerLevel[FP_LEVITATION] > FORCE_LEVEL_0) ) ) //or pressing fwd/back and have force jump.
 #ifdef QAGAME
@@ -14468,7 +14468,7 @@ qboolean PM_GettingUpFromKnockDown( float standheight, float crouchheight )
 					case BOTH_KNOCKDOWN1:
 						//RAFIXME - Impliment PM_ControlledByPlayer?
 						if ( pm->ps->fd.forcePowerLevel[FP_LEVITATION] > FORCE_LEVEL_0 //has force jump
-							&& !(pm->ps->userInt3 & (1 << FLAG_FATIGUED))  //player isn't fatigued.
+							&& !(pm->ps->userInt3 & (1 << FLAG_FATIGUED_HEAVY))  //player isn't fatigued.
 							&& ( (pm->ps->clientNum < MAX_CLIENTS && pm->cmd.upmove > 0) //is a player trying to jump
 								|| pm->ps->clientNum >= MAX_CLIENTS) ) //an NPC doesn't have to give a command to do this.
 						//if ( (pm->ps->clientNum&&pm->ps->fd.forcePowerLevel[FP_LEVITATION] > FORCE_LEVEL_0) || ((pm->ps->clientNum < MAX_CLIENTS||PM_ControlledByPlayer())&&pm->cmd.upmove>0&&pm->ps->fd.forcePowerLevel[FP_LEVITATION] > FORCE_LEVEL_0) )//FORCE_LEVEL_1) )FORCE_LEVEL_1) )
@@ -14485,7 +14485,7 @@ qboolean PM_GettingUpFromKnockDown( float standheight, float crouchheight )
 					case BOTH_PLAYER_PA_3_FLY:
 						//RAFIXME - impliment PM_ControlledByPlayer?
 						if ( pm->ps->fd.forcePowerLevel[FP_LEVITATION] > FORCE_LEVEL_0 //has force jump
-							&& !(pm->ps->userInt3 & (1 << FLAG_FATIGUED))  //player isn't fatigued.
+							&& !(pm->ps->userInt3 & (1 << FLAG_FATIGUED_HEAVY))  //player isn't fatigued.
 							&& ( (pm->ps->clientNum < MAX_CLIENTS && pm->cmd.upmove > 0) //is a player trying to jump
 								|| pm->ps->clientNum >= MAX_CLIENTS) ) //an NPC doesn't have to give a command to do this.
 						//if ( (pm->ps->clientNum&&pm->ps->fd.forcePowerLevel[FP_LEVITATION] > FORCE_LEVEL_0) || ((pm->ps->clientNum < MAX_CLIENTS||PM_ControlledByPlayer())&&pm->cmd.upmove>0&&pm->ps->fd.forcePowerLevel[FP_LEVITATION] > FORCE_LEVEL_0) )//FORCE_LEVEL_1) )FORCE_LEVEL_1) )
@@ -14501,7 +14501,7 @@ qboolean PM_GettingUpFromKnockDown( float standheight, float crouchheight )
 					case BOTH_KNOCKDOWN3:
 						//RAFIXME - impliment PM_ControlledByPlayer?
 						if ( pm->ps->fd.forcePowerLevel[FP_LEVITATION] > FORCE_LEVEL_0 //has force jump
-							&& !(pm->ps->userInt3 & (1 << FLAG_FATIGUED))  //player isn't fatigued.
+							&& !(pm->ps->userInt3 & (1 << FLAG_FATIGUED_HEAVY))  //player isn't fatigued.
 							&& ( (pm->ps->clientNum < MAX_CLIENTS && pm->cmd.upmove > 0) //is a player trying to jump
 								|| pm->ps->clientNum >= MAX_CLIENTS) ) //an NPC doesn't have to give a command to do this.
 						//if ( (pm->ps->clientNum&&pm->ps->fd.forcePowerLevel[FP_LEVITATION] > FORCE_LEVEL_0) || ((pm->ps->clientNum < MAX_CLIENTS||PM_ControlledByPlayer())&&pm->cmd.upmove>0&&pm->ps->fd.forcePowerLevel[FP_LEVITATION] > FORCE_LEVEL_0) )//FORCE_LEVEL_1) )
@@ -14518,7 +14518,7 @@ qboolean PM_GettingUpFromKnockDown( float standheight, float crouchheight )
 					case BOTH_RELEASED:
 						//RAFIXME - impliment PM_ControlledByPlayer?
 						if ( pm->ps->fd.forcePowerLevel[FP_LEVITATION] > FORCE_LEVEL_0 //has force jump
-							&& !(pm->ps->userInt3 & (1 << FLAG_FATIGUED))  //player isn't fatigued.
+							&& !(pm->ps->userInt3 & (1 << FLAG_FATIGUED_HEAVY))  //player isn't fatigued.
 							&& ( (pm->ps->clientNum < MAX_CLIENTS && pm->cmd.upmove > 0) //is a player trying to jump
 								|| pm->ps->clientNum >= MAX_CLIENTS) ) //an NPC doesn't have to give a command to do this.
 						//if ( (pm->ps->clientNum&&pm->ps->fd.forcePowerLevel[FP_LEVITATION] > FORCE_LEVEL_0) || ((pm->ps->clientNum < MAX_CLIENTS||PM_ControlledByPlayer())&&pm->cmd.upmove>0&&pm->ps->fd.forcePowerLevel[FP_LEVITATION] > FORCE_LEVEL_0) )//FORCE_LEVEL_1) )FORCE_LEVEL_1) )
@@ -14535,7 +14535,7 @@ qboolean PM_GettingUpFromKnockDown( float standheight, float crouchheight )
 					case BOTH_LK_DL_ST_T_SB_1_L:
 						//RAFIXME - impliment PM_ControlledByPlayer?
 						if ( pm->ps->fd.forcePowerLevel[FP_LEVITATION] > FORCE_LEVEL_0 //has force jump
-							&& !(pm->ps->userInt3 & (1 << FLAG_FATIGUED))  //player isn't fatigued.
+							&& !(pm->ps->userInt3 & (1 << FLAG_FATIGUED_HEAVY))  //player isn't fatigued.
 							&& ( (pm->ps->clientNum < MAX_CLIENTS && pm->cmd.upmove > 0) //is a player trying to jump
 								|| pm->ps->clientNum >= MAX_CLIENTS) ) //an NPC doesn't have to give a command to do this.
 						//if ( (pm->ps->clientNum&&pm->ps->fd.forcePowerLevel[FP_LEVITATION] > FORCE_LEVEL_0) || ((pm->ps->clientNum < MAX_CLIENTS||PM_ControlledByPlayer())&&pm->cmd.upmove>0&&pm->ps->fd.forcePowerLevel[FP_LEVITATION] > FORCE_LEVEL_0) )//FORCE_LEVEL_1) )FORCE_LEVEL_1) )
