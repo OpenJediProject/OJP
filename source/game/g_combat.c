@@ -7092,6 +7092,24 @@ void AddSkill(gentity_t *self, float amount)
 	}
 }
 
+void UpdateDodgeFlags( playerState_t *ps)
+{
+	if(ps->stats[STAT_DODGE] <= DODGE_CRITICALLEVEL)
+	{
+		ps->userInt3 &= ~( 1 << FLAG_DODGE_LIGHT );
+		ps->userInt3 |= ( 1 << FLAG_DODGE_CRITICAL );
+	}
+	else if(ps->stats[STAT_DODGE] <= DODGE_LIGHTLEVEL)
+	{
+		ps->userInt3 |= ( 1 << FLAG_DODGE_LIGHT );
+		ps->userInt3 &= ~( 1 << FLAG_DODGE_CRITICAL );
+	}
+	else
+	{
+		ps->userInt3 &= ~( 1 << FLAG_DODGE_LIGHT );
+		ps->userInt3 &= ~( 1 << FLAG_DODGE_CRITICAL );
+	}
+}
 
 void G_DodgeDrain(gentity_t *victim, gentity_t *attacker, int amount)
 {//drains DP from victim.  Also awards experience points to the attacker.
@@ -7112,10 +7130,7 @@ void G_DodgeDrain(gentity_t *victim, gentity_t *attacker, int amount)
 
 	victim->client->ps.stats[STAT_DODGE] -= amount;
 
-	if(victim->client->ps.stats[STAT_DODGE] <= DODGE_CRITICALLEVEL)
-	{
-		victim->client->ps.userInt3 |= ( 1 << FLAG_DODGE_CRITICAL );
-	}
+	UpdateDodgeFlags(&victim->client->ps);
 
 	if(victim->client->ps.stats[STAT_DODGE] < 0)
 	{

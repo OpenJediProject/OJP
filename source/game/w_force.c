@@ -6379,6 +6379,9 @@ extern void UpdateFatigueFlags( playerState_t *ps );
 //[Flamethrower]
 void Flamethrower_Fire( gentity_t *self );
 //[/Flamethrower]
+//[DodgeSys]
+extern void UpdateDodgeFlags( playerState_t *ps);
+//[/DodgeSys]
 void WP_ForcePowersUpdate( gentity_t *self, usercmd_t *ucmd )
 {
 	qboolean	usingForce = qfalse;
@@ -7131,10 +7134,7 @@ void WP_ForcePowersUpdate( gentity_t *self, usercmd_t *ucmd )
 				self->client->ps.stats[STAT_DODGE] += DODGE_FATIGUE;
 			}
 
-			if(self->client->ps.stats[STAT_DODGE] > DODGE_CRITICALLEVEL)
-			{
-				self->client->ps.userInt3 &= ~( 1 << FLAG_DODGE_CRITICAL );
-			}
+			UpdateDodgeFlags(&self->client->ps);
 
 			self->client->ps.fd.forcePower--;
 		}

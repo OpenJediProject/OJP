@@ -10837,12 +10837,20 @@ void CG_AddSaberBlade( centity_t *cent, centity_t *scent, refEntity_t *saber, in
 				CG_Trace( &trace, org_, NULL, NULL, end, ENTITYNUM_NONE, MASK_SOLID );
 			}
 
-			if(cent->currentState.userInt3 & (1 << FLAG_DODGE_CRITICAL))
-			{//player's dodge is low, spark their saber hilt.
+			
+			if(cent->currentState.userInt3 & (1 << FLAG_DODGE_LIGHT))
+			{//player's dodge is getting low, spark their saber hilt a bit as a warning.
+					vec3_t efxDir;
+					VectorSubtract(end, org_, efxDir);
+					VectorNormalize(efxDir);
+					trap_FX_PlayEffectID( cgs.effects.mSparks, org_, efxDir, -1, -1 );
+			}
+			else if(cent->currentState.userInt3 & (1 << FLAG_DODGE_CRITICAL))
+			{//player's dodge is critical, heavily spark their saber hilt.
 				vec3_t efxDir;
 				VectorSubtract(end, org_, efxDir);
 				VectorNormalize(efxDir);
-				trap_FX_PlayEffectID( cgs.effects.mSparks, org_, efxDir, -1, -1 );
+				trap_FX_PlayEffectID( cgs.effects.mSaberBloodSparksSmall, org_, efxDir, -1, -1 );
 			}
 			
 			if ( trace.fraction < 1.0f )

@@ -130,8 +130,10 @@
 
 //[DodgeSys]
 //[DodgeDefines]
-//the level below which DP is critical (for the DP meterand desperation regen, etc)
+#define DODGE_LIGHTLEVEL			 50
+//the level below which DP is critical (for the DP meter and desperation regen, etc)
 #define	DODGE_CRITICALLEVEL	   35
+
 //[/DodgeDefines]
 //[/DodgeSys]
 

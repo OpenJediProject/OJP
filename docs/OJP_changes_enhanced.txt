@@ -8,6 +8,8 @@ Version r1126
 	New Features:
 		Saber Combat:
 			- Added yellow sparks effect to highlight players who have been parried.
+		Dodge System: 
+			- A player's lightsaber now sparks when their DP level is low or critical.
 		Fatigue System:
 			- There are now two levels of low fatigue: light and heavy.  Most saber moves are progressively slower when at low fatigue.  Low fatigue <= 50 FP  Heavy <= 25 FP
 	Improvements/Fixes:

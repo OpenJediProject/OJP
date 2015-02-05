@@ -2543,6 +2543,7 @@ typedef enum {
 	//[/Flamethrower]
 
 	//[DodgeSys]
+	, FLAG_DODGE_LIGHT
 	, FLAG_DODGE_CRITICAL
 	//[/DodgeSys]
 } userInt3Flags_t;
