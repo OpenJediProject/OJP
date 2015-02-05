@@ -2498,53 +2498,56 @@ typedef struct siegePers_s
 #define LOCK_MOVEDOWN		512
 //[/SaberSys]
 
-//[FatigueSys]
 //entitystate/playerstate userint3
 
 //Flag bits in bit number form
 //use "(1 << flag)"
+typedef enum {
+	//[/FatigueSys]
+	FLAG_FATIGUED = 1		//Fatigued Flag
+	, FLAG_DODGEROLL		//Dodge low flag
+	//indicates that the current attack/transition is
+	//part of a fake.  This makes the attack much stronger
+	//forbreaking thru other attacks and blocks.
+	, FLAG_ATTACKFAKE
+	//[/FatigueSys]
 
-//Fatigued Flag.
-#define	FLAG_FATIGUED			1
+	//[SaberSys]
+	//This flag indicates that the player should have a slower than usual bounce since they just avoided a mishap by
+	//having enough FP/DP.
+	, FLAG_SLOWBOUNCE
+	//This flag indicates at the player is going into a older, more vulnerable slow bounce animations
+	//this must be used in conjunction with the FLAG_SLOWBOUNCE to work right.
+	, FLAG_OLDSLOWBOUNCE
 
-//Dodge low flag
-#define FLAG_DODGEROLL		2
+	//this flag indicates that this player is supposed to win the current saberlock.
+	, FLAG_LOCKWINNER
 
-//indicates that the current attack/transition is
-//part of a fake.  This makes the attack much stronger
-//forbreaking thru other attacks and blocks.
-#define FLAG_ATTACKFAKE		3
-//[/FatigueSys]
+	//flag indicates that the player was parried.  
+	//They won't be able to launch into a combo from the bounce.
+	, FLAG_PARRIED
 
-//[SaberSys]
-//This flag indicates that the player should have a slower than usual bounce since they just avoided a mishap by
-//having enough FP/DP.
-#define FLAG_SLOWBOUNCE		4
-//This flag indicates at the player is going into a older, more vulnerable slow bounce animations
-//this must be used in conjunction with the FLAG_SLOWBOUNCE to work right.
-#define FLAG_OLDSLOWBOUNCE	5
+	//flag indicates that this block is a pre-block and interruptable
+	, FLAG_PREBLOCK
 
-//this flag indicates that this player is supposed to win the current saberlock.
-#define FLAG_LOCKWINNER		6
+	//[QuickParry]
+	, FLAG_QUICKPARRY
+	//[/QuickParry]
+	, FLAG_BLOCKING
+	//[/SaberSys]
 
-//[Flamethrower]
-//flag indicating that the player's flamethrower is active.
-#define FLAG_FLAMETHROWER	7
-//[/Flamethrower]
+	//[Flamethrower]
+	//flag indicating that the player's flamethrower is active.
+	, FLAG_FLAMETHROWER
+	//[/Flamethrower]
 
-//flag indicates that the player was parried.  
-//They won't be able to launch into a combo from the bounce.
-#define FLAG_PARRIED		8
+	//[DodgeSys]
+	, FLAG_DODGE_CRITICAL
+	//[/DodgeSys]
+} userInt3Flags_t;
 
-//flag indicates that this block is a pre-block and interruptable
-#define FLAG_PREBLOCK		9
 
-//[QuickParry]
-#define FLAG_QUICKPARRY		10
-//[/QuickParry]
-#define FLAG_BLOCKING       11
 
-#define FLAG_DODGE_CRITICAL 12	//flag set when dodge is under the critical level (DODGE_CRITICALLEVEL)
 
 //[SaberDefines]
 //scaler to the walkspeed
