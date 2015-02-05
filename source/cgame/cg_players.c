@@ -17803,6 +17803,29 @@ stillDoSaber:
 		trap_R_AddRefEntityToScene(&legs);
 	}
 
+	if(cent->currentState.userInt3 & (1 << FLAG_PARRIED))
+	{//while recovering from a parry, show a visual aid effect.
+		legs.renderfx &= ~RF_FORCE_ENT_ALPHA;
+		legs.renderfx &= ~RF_MINLIGHT;
+
+		legs.renderfx |= RF_RGB_TINT;
+		legs.shaderRGBA[0] = 255;
+		legs.shaderRGBA[1] = 255;
+		legs.shaderRGBA[2] = 70;
+		legs.shaderRGBA[3] = 255;
+
+		if ( rand() & 1 )
+		{
+			legs.customShader = cgs.media.electricBodyShader;	
+		}
+		else
+		{
+			legs.customShader = cgs.media.electricBody2Shader;
+		}
+
+		trap_R_AddRefEntityToScene(&legs);
+	}
+
 	if (!cg.snap->ps.duelInProgress && cent->currentState.bolt1 && !(cent->currentState.eFlags & EF_DEAD) && cent->currentState.number != cg.snap->ps.clientNum && (!cg.snap->ps.duelInProgress || cg.snap->ps.duelIndex != cent->currentState.number))
 	{
 		legs.shaderRGBA[0] = 50;

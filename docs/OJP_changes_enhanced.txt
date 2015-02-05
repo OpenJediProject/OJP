@@ -4,24 +4,25 @@ Open Jedi Project Change Log (Enhanced Distribution)
 
 This file stores all the information about what has changed from release version to release version for OJP Enhanced.  OJP Enhanced contains all the changes of OJP Basic plus a library of gameplay alterations made by OJP's contributors.
 
-Version 1.5 WIP
+Version r1126
+	New Features:
+		Saber Combat:
+			- Added yellow sparks effect to highlight players who have been parried.
+
+
+Version r1125
 	New Features:
 		Saber Combat:
 			- Removed mishap points.  All mishap related behavior is tied to a player's fatigue point level.
 				- Removed MP increase for getting hit by a DFA (Death From Above) attack.
 		Dodge System: 
-			- A player's lightsaber no sparks when their DP level is critical.		
+			- A player's lightsaber now sparks when their DP level is critical.		
 	Improvements/Fixes:
 		Movement System:
 			- Player now walks at the same speed in any direction.
 			- Speed scalers for moving backwards/strafing no longer stack.  
 		Compile Fixes (CompileFix):
 			- Various compile warning fixes.
-
-Version r1124
-	Improvements/Fixes:
-		Force System:
-			- Various force blocking code had reversed mishap check logic from before MP was removed from the game.
 			
 			
 Version 0.1.2
