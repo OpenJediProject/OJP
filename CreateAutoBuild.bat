@@ -61,7 +61,7 @@ ECHO ==================================================
 rem Remove old temp folder.
 mkdir temp\%ASSETSFOLDER%\docs
 rem Copy new assets into temp folder
-copy ..\docs\* .\temp\%ASSETSFOLDER%\docs
+copy .\docs\* .\temp\%ASSETSFOLDER%\docs
 copy %PK3DLL%.pk3 .\temp\%ASSETSFOLDER%
 copy %PK3ASSETS%.pk3 .\temp\%ASSETSFOLDER%
 
