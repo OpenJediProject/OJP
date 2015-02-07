@@ -503,7 +503,7 @@ static cvarTable_t		gameCvarTable[] = {
 	//[/PrivatePasswordFix]
 
 	//[FatigueSys]
-	{ &g_forceRegenTime, "g_forceRegenTime", "500", CVAR_SERVERINFO | CVAR_ARCHIVE, 0, qtrue  },
+	{ &g_forceRegenTime, "g_forceRegenTime", "50", CVAR_SERVERINFO | CVAR_ARCHIVE, 0, qtrue  },
 	//{ &g_forceRegenTime, "g_forceRegenTime", "200", CVAR_SERVERINFO | CVAR_ARCHIVE, 0, qtrue  },
 	//[/FatigueSys]
 

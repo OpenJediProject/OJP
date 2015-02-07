@@ -4,6 +4,12 @@ Open Jedi Project Change Log (Enhanced Distribution)
 
 This file stores all the information about what has changed from release version to release version for OJP Enhanced.  OJP Enhanced contains all the changes of OJP Basic plus a library of gameplay alterations made by OJP's contributors.
 
+Version r1130
+	Improvements/Fixes:
+		Fatigue System:
+			- Setting g_forceRegenTime to 50 as part of the new combat flow design.
+
+
 Version r1126
 	New Features:
 		Saber Combat:
@@ -12,6 +18,7 @@ Version r1126
 			- A player's lightsaber now sparks when their DP level is low or critical.
 		Fatigue System:
 			- There are now two levels of low fatigue: light and heavy.  Most saber moves are progressively slower when at low fatigue.  Low fatigue <= 50 FP  Heavy <= 25 FP
+			
 	Improvements/Fixes:
 		Experience System:
 			- Changed g_minExpLevel default to 15 to fix issues with bots not being able to purchase a starting weapon.
