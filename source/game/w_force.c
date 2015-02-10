@@ -7077,21 +7077,7 @@ void WP_ForcePowersUpdate( gentity_t *self, usercmd_t *ucmd )
 						trap_SendServerCommand( d_test.integer, va("print \"%i: Meditation FP Regen. Next RegenTime: %i\n\"", d_test.integer, FatigueTime/4 ) );
 					}
 					//[/Test]
-				}	
-				
-				else if(self->client->saber[0].numBlades == 1 && self->client->ps.fd.saberAnimLevel == SS_STAFF)
-				{//faster regen rate for singleblade staff/niman's perk
-					self->client->ps.fd.forcePowerRegenDebounceTime = level.time + FatigueTime - 100;
-
-					//[Test]
-					//simple debugging messages for determining if the meditation regen is working.
-					if(d_test.integer != -1 && self->client->ps.clientNum == d_test.integer)
-					{
-						trap_SendServerCommand( d_test.integer, va("print \"%i: Niman FP Regen. Next RegenTime: %i\n\"", d_test.integer, FatigueTime-100 ) );
-					}
-					//[/Test]
-				}
-				
+				}		
 				else	
 				{//standard regen
 					self->client->ps.fd.forcePowerRegenDebounceTime = level.time + FatigueTime;
