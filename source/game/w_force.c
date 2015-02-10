@@ -6947,22 +6947,23 @@ void WP_ForcePowersUpdate( gentity_t *self, usercmd_t *ucmd )
 			}
 		}
 	}
+	//[FatigueSys]
+	/* basejka
 	if ( !self->client->ps.fd.forcePowersActive || self->client->ps.fd.forcePowersActive == (1 << FP_DRAIN) )
 	{//when not using the force, regenerate at 1 point per half second
-		//[SaberThrowSys]
-		//Saber is going to be gone alot more, better be able to regen without it.
-		if (self->client->ps.fd.forcePowerRegenDebounceTime < level.time &&
-		//if ( !self->client->ps.saberInFlight && self->client->ps.fd.forcePowerRegenDebounceTime < level.time &&
-		//[/SaberThrowSys]
-			//[FatigueSys]
+			if ( !self->client->ps.saberInFlight && self->client->ps.fd.forcePowerRegenDebounceTime < level.time &&
+					(self->client->ps.weapon != WP_SABER || !BG_SaberInSpecial(self->client->ps.saberMove)) )
+	*/
+	if (self->client->ps.fd.forcePowerRegenDebounceTime < level.time)
+	{
+		if ( !self->client->ps.fd.forcePowersActive && //can't regen while using force powers.
 			//Don't regen force while attacking with the saber.
 			(self->client->ps.weapon != WP_SABER || !BG_SaberInSpecial(self->client->ps.saberMove)) &&
 			!BG_SaberAttacking(&self->client->ps) && !BG_SaberInTransitionAny(self->client->ps.saberMove)
 			//Don't regen while running
 			&& WalkCheck(self)
 			&& self->client->ps.groundEntityNum != ENTITYNUM_NONE)  //can't regen while in the air.
-			//(self->client->ps.weapon != WP_SABER || !BG_SaberInSpecial(self->client->ps.saberMove)) )
-			//[/FatigueSys]
+	//[/FatigueSys]
 		{
 			if (g_gametype.integer != GT_HOLOCRON || g_MaxHolocronCarry.value)
 			{
@@ -7097,6 +7098,12 @@ void WP_ForcePowersUpdate( gentity_t *self, usercmd_t *ucmd )
 			UpdateFatigueFlags(&self->client->ps);
 			//[/FatigueSys]
 		}
+		//[FatigueSys]
+		else
+		{//add a debounce to force regen if you're doing something that blocks FP regen.
+			self->client->ps.fd.forcePowerRegenDebounceTime = level.time + FATIGUE_REGEN_DEBOUNCE;
+		}
+		//[/FatigueSys]
 	}
 
 	//[DodgeSys]

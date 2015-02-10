@@ -113,6 +113,8 @@
 	
 //FP cost of saber jump attacks
 #define FATIGUE_JUMPATTACK		-FATIGUE_JUMP + 3
+
+#define FATIGUE_REGEN_DEBOUNCE	1000	//delay to fatigue regen after doing something you can't regen FP during.
 //[/FatigueDefines]
 //[/FatigueSys]
 
