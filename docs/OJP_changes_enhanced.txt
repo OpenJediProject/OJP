@@ -4,7 +4,11 @@ Open Jedi Project Change Log (Enhanced Distribution)
 
 This file stores all the information about what has changed from release version to release version for OJP Enhanced.  OJP Enhanced contains all the changes of OJP Basic plus a library of gameplay alterations made by OJP's contributors.
 
-Version $revision$
+Version $Revision$
+	New Features:
+		Fatigue System:
+			- Added 1 second delay to FP regeneration after performing an action that blocks FP regeneration.
+			- Added 4 second delay to FP regeneration when meditating or taunting.
 	Improvements/Fixes:
 		Saber Combat:
 			- Reverted most animations to basejka version to combat jerkiness.	

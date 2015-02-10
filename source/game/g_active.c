@@ -2136,6 +2136,10 @@ void G_SetTauntAnim( gentity_t *ent, int taunt )
 				ent->client->ps.forceHandExtend = HANDEXTEND_TAUNT;
 				ent->client->ps.forceDodgeAnim = anim;
 				ent->client->ps.forceHandExtendTime = level.time + BG_AnimLength(ent->localAnimIndex, (animNumber_t)anim);
+				if(ent->client->ps.fd.forcePowerRegenDebounceTime < level.time + FATIGUE_MEDITATE_DELAY)
+				{
+					ent->client->ps.fd.forcePowerRegenDebounceTime = level.time + FATIGUE_MEDITATE_DELAY;
+				}
 			}
 			if ( taunt != TAUNT_MEDITATE 
 				&& taunt != TAUNT_BOW )
