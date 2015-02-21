@@ -5,9 +5,11 @@ Open Jedi Project Change Log (Enhanced Distribution)
 This file stores all the information about what has changed from release version to release version for OJP Enhanced.  OJP Enhanced contains all the changes of OJP Basic plus a library of gameplay alterations made by OJP's contributors.
 
 Version $Revision$
+
 	Improvements/Fixes:
 		Fatigue System:
 			- FP cost for standard saber attacks reduced to 8.
+			- Removed 1 second delay to FP regeneration after performing an action that blocks FP regeneration.
 
 Version r1140
 	New Features:
