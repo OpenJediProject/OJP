@@ -12,6 +12,7 @@
 #define MPCOST_PARRIED_ATTACKFAKE	6		//base MP cost of an attack fake getting parried.
 #define MPCOST_PARRYING				-3		//MP you deplete by parrying in general
 #define MPCOST_PARRYING_ATTACKFAKE	-4		//MP you deplete by parrying an attackfake
+#define FPCOST_PARRYING_PURE				-10		//FP cost (negative to be a bonus) for parrying while not attacking
 //[SaberSys]
 //This struct holds all the relivent saber mechanics data
 struct sabmech_s {

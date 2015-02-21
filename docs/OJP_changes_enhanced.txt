@@ -5,6 +5,9 @@ Open Jedi Project Change Log (Enhanced Distribution)
 This file stores all the information about what has changed from release version to release version for OJP Enhanced.  OJP Enhanced contains all the changes of OJP Basic plus a library of gameplay alterations made by OJP's contributors.
 
 Version $Revision$
+	New Features:
+		Saber Combat:
+			- Parrying while not attacking now grants the parrying player 10 FP.
 
 	Improvements/Fixes:
 		Fatigue System:
@@ -14,6 +17,7 @@ Version $Revision$
 			- Reverted kick animations to OJP 1.2 versions.
 		Saber Combat:
 			- Reverted parry animations to OJP 1.2 versions. 
+			
 
 Version r1140
 	New Features:

@@ -316,6 +316,7 @@ void SabBeh_AttackVsBlock( gentity_t *attacker, sabmech_t *mechAttacker,
 			}
 
 			SabBeh_AddBalance(blocker, mechBlocker, MPCOST_PARRYING_ATTACKFAKE, qfalse);
+			BG_AddFatigue(&blocker->client->ps, FPCOST_PARRYING_PURE);
 #ifdef _DEBUG
 			mechBlocker->behaveMode = SABBEHAVE_BLOCK;
 #endif
@@ -397,6 +398,7 @@ void SabBeh_AttackVsBlock( gentity_t *attacker, sabmech_t *mechAttacker,
 			//[/QuickParry]
 
 			SabBeh_AddBalance(blocker, mechBlocker, MPCOST_PARRYING, qfalse);
+			BG_AddFatigue(&blocker->client->ps, FPCOST_PARRYING_PURE);
 			
 		}
 		else
