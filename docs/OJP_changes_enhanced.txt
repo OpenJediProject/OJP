@@ -12,6 +12,8 @@ Version $Revision$
 			- Removed 1 second delay to FP regeneration after performing an action that blocks FP regeneration.
 		Melee Combat:  
 			- Reverted kick animations to OJP 1.2 versions.
+		Saber Combat:
+			- Reverted parry animations to OJP 1.2 versions. 
 
 Version r1140
 	New Features:
