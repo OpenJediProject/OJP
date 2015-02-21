@@ -96,7 +96,7 @@
 #define FATIGUE_MELEE			1
 
 //Fatigue for standard saber attacks
-#define FATIGUE_SABERATTACK		10
+#define FATIGUE_SABERATTACK		8
 
 //Fatigue Cost for saber transition moves (spins)
 #define FATIGUE_SABERTRANS		1
@@ -115,7 +115,7 @@
 #define FATIGUE_JUMPATTACK		-FATIGUE_JUMP + 3
 
 #define FATIGUE_REGEN_DEBOUNCE	1000	//delay to fatigue regen after doing something you can't regen FP during.
-#define FATIGUE_MEDITATE_DELAY	4000	//delay to accelerated fatigue regen for meditation.
+#define FATIGUE_MEDITATE_DELAY	4000											//delay to accelerated fatigue regen for meditation.
 //[/FatigueDefines]
 //[/FatigueSys]
 
