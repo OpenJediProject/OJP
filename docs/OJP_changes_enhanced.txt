@@ -9,7 +9,7 @@ Version $Revision$
 	Improvements/Fixes:
 		Fatigue System:
 			- FP cost for standard saber attacks reduced to 8.
-			- Removed 1 second delay to FP regeneration after performing an action that blocks FP regeneration.
+			- Removed 1 second delay to FP regeneration after performing an action that blocks FP regeneration. 
 
 Version r1140
 	New Features:
