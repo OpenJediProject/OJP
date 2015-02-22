@@ -155,8 +155,11 @@ const int mindTrickTime[NUM_FORCE_POWER_LEVELS] =
 #define SK_DP_FORFORCE		.5f	//determines the number of DP points players get for each skill point dedicated to Force Powers.
 #define SK_DP_FORMERC		1/6.0f	//determines the number of DP points get for each skill point dedicated to gunner/merc skills.
 void DetermineDodgeMax(gentity_t *ent)
-{//sets the maximum number of dodge points this player should have.  This is based on their skill point allociation.
-	int i;
+{
+	ent->client->ps.stats[STAT_MAX_DODGE] = 100;
+
+	/* Sets the maximum number of dodge points this player should have.  This is based on their skill point allocation.
+	/*int i;
 	int skillCount;
 	float dodgeMax = 0;
 
@@ -208,6 +211,7 @@ void DetermineDodgeMax(gentity_t *ent)
 	}
 
 	ent->client->ps.stats[STAT_MAX_DODGE] = (int) dodgeMax;
+	*/
 }
 //[/DodgeSys]
 
