@@ -2466,6 +2466,57 @@ void CancelReload(gentity_t *ent)
 }
 //[/Reload]
 
+//[SaberLockSys]
+int GetSaberLockDirFlag(gentity_t *self)
+{//Get the current saber lock direction for the given player.
+	if(self->client->ps.userInt3 & (1 << FLAG_SABERLOCK_UP))
+	{
+		return FLAG_SABERLOCK_UP;
+	}
+	else if(self->client->ps.userInt3 & (1 << FLAG_SABERLOCK_DOWN))
+	{
+		return FLAG_SABERLOCK_DOWN;
+	}
+	else if(self->client->ps.userInt3 & (1 << FLAG_SABERLOCK_LEFT))
+	{
+		return FLAG_SABERLOCK_LEFT;
+	}
+	else if(self->client->ps.userInt3 & (1 << FLAG_SABERLOCK_RIGHT))
+	{
+		return FLAG_SABERLOCK_RIGHT;
+	}
+	return 0;
+}
+
+int SaberLockDirForMovement(gentity_t *self)
+{//return the saberlock direction for the current movement command on self.
+	//only pure movement counts.
+	if(self->client->pers.cmd.rightmove == 0)
+	{
+		if(self->client->pers.cmd.forwardmove > 0)
+		{
+			return FLAG_SABERLOCK_UP;
+		}
+		else if(self->client->pers.cmd.forwardmove < 0)
+		{
+			return FLAG_SABERLOCK_DOWN;
+		}
+	}
+	else if(self->client->pers.cmd.forwardmove == 0)
+	{
+		if(self->client->pers.cmd.rightmove > 0)
+		{
+			return FLAG_SABERLOCK_RIGHT;
+		}
+		else if(self->client->pers.cmd.rightmove < 0)
+		{
+			return FLAG_SABERLOCK_LEFT;
+		}
+	}
+	return 0;
+}
+//[/SaberLockSys]
+
 /*
 ==============
 ClientThink
@@ -2486,6 +2537,7 @@ extern vmCvar_t g_logDuelStats;
 //[SaberLockSys]
 extern qboolean SabBeh_ButtonforSaberLock(gentity_t* self);
 extern void G_RollBalance(gentity_t *self, gentity_t *inflictor, qboolean forceMishap);
+extern void BG_AddFatigue( playerState_t * ps, int Fatigue);
 //[/SaberLockSys]
 //[StanceSelection]
 extern qboolean G_ValidSaberStyle(gentity_t *ent, int saberStyle);
@@ -3863,22 +3915,74 @@ void ClientThink_real( gentity_t *ent ) {
 
 		//[SaberLockSys]
 		if(ent->client->pers.cmd.buttons & BUTTON_ALT_ATTACK && ent->client->pers.cmd.forwardmove < 0
+			&& ent->client->ps.fd.forcePower >= FATIGUE_SABERLOCK_BREAK
 			&& !( ent->client->ps.stats[STAT_DODGE] < DODGE_CRITICALLEVEL 
 			|| ent->client->ps.MISHAP_VARIABLE <= MISHAPLEVEL_HEAVY))
 		{//breaking out of the saberlock!
 			ent->client->ps.saberLockFrame = 0;
+			BG_AddFatigue(&ent->client->ps, FATIGUE_SABERLOCK_BREAK);
+			G_DodgeDrain(ent, blockOpp, DODGE_SABERLOCK_BREAK);
 		}
 		else if ( ent->client->ps.saberLockHitCheckTime < level.time )
 		//if ( ent->client->ps.saberLockHitCheckTime < level.time )
 		//[/SaberLockSys]
 		{//have moved to next frame since last lock push
-			//[SaberLockSys]
-			//racc - tweaked this to slow down the speed at which the saber locks advance.  I'm not sure I like this or not yet.
-			ent->client->ps.saberLockHitCheckTime = level.time + 25;
-			//ent->client->ps.saberLockHitCheckTime = level.time;//so we don't push more than once per server frame
+			ent->client->ps.saberLockHitCheckTime = level.time;//so we don't push more than once per server frame
 			
-			//saber locks now use direction and button presses instead of just tapping the attack button.
-			if( ent->client->ps.userInt3 & (1 << FLAG_LOCKWINNER) )
+			//[SaberLockSys]
+			if(!(ent->client->ps.userInt3 & (1 << FLAG_SABERLOCK_ATTACKER)))
+			{//if we're not on the attack, check to see if we pressed the correct movement direction and can switch to offense.
+				int defenseSaberLockDir = SaberLockDirForMovement(ent);
+				int attackSaberLockDir = GetSaberLockDirFlag(ent);
+
+				if(ent->r.svFlags & SVF_BOT)
+				{//bots cheat and fake pressing the movement buttons.
+					if(Q_irand(0, 100) <= 25)
+					{//successfully switched to offense.
+						defenseSaberLockDir = attackSaberLockDir;
+					}
+					ent->client->ps.saberLockHitCheckTime = level.time + 1000; //check for AI pushes much slower.
+				}
+
+				if(attackSaberLockDir && defenseSaberLockDir == attackSaberLockDir)
+				{
+					if(ent->client->ps.userInt3 & (1 << defenseSaberLockDir))
+					{//we matched the attacker's direction.
+						ent->client->ps.userInt3 |= (1 << FLAG_SABERLOCK_ATTACKER);
+						ent->client->ps.userInt3 |= (1 << FLAG_SABERLOCK_OLD_DIR);
+						blockOpp->client->ps.userInt3 &= ~( 1 << FLAG_SABERLOCK_ATTACKER );
+						blockOpp->client->ps.userInt3 &= ~(SABERLOCK_DIR_FLAG_MASK);
+					}
+				}
+			}
+
+			if( ent->client->ps.userInt3 & (1 << FLAG_SABERLOCK_ATTACKER) 
+				&& (ent->client->ps.userInt3 & (1 << FLAG_SABERLOCK_OLD_DIR) 
+					|| !(ent->client->ps.userInt3 & SABERLOCK_DIR_FLAG_MASK)) )
+			{//we're the attacker and we haven't selected a movement direction yet.
+				int newSaberLockDir = SaberLockDirForMovement(ent);
+				int oldSaberLockDir = GetSaberLockDirFlag(ent);
+				if(ent->r.svFlags & SVF_BOT)
+				{//bots cheat and randomly try directions
+					while(!newSaberLockDir || oldSaberLockDir == newSaberLockDir)
+					{
+						newSaberLockDir = Q_irand(FLAG_SABERLOCK_UP, FLAG_SABERLOCK_RIGHT);
+					}
+				}
+
+				if(newSaberLockDir 
+					&& (!oldSaberLockDir || newSaberLockDir != oldSaberLockDir))
+				{//direction selected.
+					ent->client->ps.userInt3 |= (1 << newSaberLockDir);
+					blockOpp->client->ps.userInt3 |= (1 << newSaberLockDir);
+					ent->client->ps.userInt3  &= ~(1 << FLAG_SABERLOCK_OLD_DIR);
+				}
+			}
+
+			//Saberlock advancement requires the player to be on the offense and have selected a fresh direction.
+			if( ent->client->ps.userInt3 & (1 << FLAG_SABERLOCK_ATTACKER) 
+				&& !(ent->client->ps.userInt3 & (1 << FLAG_SABERLOCK_OLD_DIR))
+				&& ent->client->ps.userInt3 & SABERLOCK_DIR_FLAG_MASK )
 			//if(SabBeh_ButtonforSaberLock(ent))
 			//if ( ( ent->client->buttons & BUTTON_ATTACK ) && ! ( ent->client->oldbuttons & BUTTON_ATTACK ) )
 			//[/SaberLockSys]
@@ -3886,7 +3990,7 @@ void ClientThink_real( gentity_t *ent ) {
 				if ( ent->client->ps.saberLockHitIncrementTime < level.time )
 				{//have moved to next frame since last saberlock attack button press
 					int lockHits = 0;
-					ent->client->ps.saberLockHitIncrementTime = level.time;//so we don't register an attack key press more than once per server frame
+					ent->client->ps.saberLockHitIncrementTime = level.time + 500;//so we don't register an attack key press more than once per server frame
 					//NOTE: FP_SABER_OFFENSE level already taken into account in PM_SaberLocked
 					//[SaberLockSys]
 					//making the saber locks fair with all styles.

@@ -2521,8 +2521,17 @@ typedef enum {
 	//this must be used in conjunction with the FLAG_SLOWBOUNCE to work right.
 	, FLAG_OLDSLOWBOUNCE
 
-	//this flag indicates that this player is supposed to win the current saberlock.
-	, FLAG_LOCKWINNER
+	//this flag indicates that this player is current on offense in the current saberlock.
+	, FLAG_SABERLOCK_ATTACKER
+
+	//This flag indicates that the current saber lock direction was the last one selected and can't be used again.
+	, FLAG_SABERLOCK_OLD_DIR
+
+	//Saber lock directions, valid on both saber lockees
+	, FLAG_SABERLOCK_UP
+	, FLAG_SABERLOCK_DOWN
+	, FLAG_SABERLOCK_LEFT
+	, FLAG_SABERLOCK_RIGHT
 
 	//flag indicates that the player was parried.  
 	//They won't be able to launch into a combo from the bounce.
@@ -2548,6 +2557,9 @@ typedef enum {
 	//[/DodgeSys]
 } userInt3Flags_t;
 
+//[SaberLockSys]
+#define SABERLOCK_DIR_FLAG_MASK	((1 << FLAG_SABERLOCK_UP) | (1 << FLAG_SABERLOCK_DOWN) | (1 << FLAG_SABERLOCK_LEFT) | (1 << FLAG_SABERLOCK_RIGHT))
+//[/SaberLockSys]
 
 
 

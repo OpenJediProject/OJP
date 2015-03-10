@@ -1645,7 +1645,7 @@ static GAME_INLINE qboolean WP_SabersCheckLock2( gentity_t *attacker, gentity_t 
 
 	VectorClear( attacker->client->ps.velocity );
 	VectorClear( defender->client->ps.velocity );
-	attacker->client->ps.saberLockTime = defender->client->ps.saberLockTime = level.time + 10000;
+	attacker->client->ps.saberLockTime = defender->client->ps.saberLockTime = level.time + 9999999;
 	attacker->client->ps.saberLockEnemy = defender->s.number;
 	defender->client->ps.saberLockEnemy = attacker->s.number;
 	attacker->client->ps.weaponTime = defender->client->ps.weaponTime = Q_irand( 1000, 3000 );//delay 1 to 3 seconds before pushing
@@ -3781,9 +3781,8 @@ int OJP_SaberCanBlock(gentity_t *self, gentity_t *atk, qboolean checkBBoxBlock, 
 			return 0;
 		}
 
-		if(BG_SuperBreakWinAnim(atk->client->ps.torsoAnim) && self->client->ps.stats[STAT_DODGE] < DODGE_CRITICALLEVEL)
-
-		{//can't block super breaks when in critical DP.
+		if(BG_SuperBreakWinAnim(atk->client->ps.torsoAnim) && BG_SuperBreakLoseAnim(self->client->ps.torsoAnim))
+		{//can't block super breaks when we lost a saber lock.
 			return 0;
 		}
 		if(!WalkCheck(self) 
@@ -6775,7 +6774,7 @@ static GAME_INLINE qboolean CheckSaberDamage(gentity_t *self, int rSaberNum, int
 				{
 					if (WP_SabersCheckLock(self, otherOwner))
 					{	
-						self->client->ps.userInt3 |= ( 1 << FLAG_LOCKWINNER );
+						self->client->ps.userInt3 |= ( 1 << FLAG_SABERLOCK_ATTACKER );
 						self->client->ps.saberBlocked = BLOCKED_NONE;
 						otherOwner->client->ps.saberBlocked = BLOCKED_NONE;
 						//add saber impact debounce

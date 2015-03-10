@@ -5462,8 +5462,28 @@ static void CG_DrawCrosshair( vec3_t worldPoint, int chEntValid ) {
 	}
 	else
 	{
+		//[SaberLockSys]
+		if(cg.snap->ps.saberLockTime > cg.time)
+		{//while in a saberlock, show color based on attack/defend state
+			if(cg.snap->ps.userInt3 & (1 << FLAG_SABERLOCK_ATTACKER))
+			{//green while on offense
+				ecolor[0] = 0.0;//R
+				ecolor[1] = 1.0;//G
+				ecolor[2] = 0.0;//B
+			}
+			else
+			{
+				ecolor[0] = 1.0;//R
+				ecolor[1] = 0.0;//G
+				ecolor[2] = 0.0;//B
+			}
+			ecolor[3] = 1.0;
+			trap_R_SetColor( ecolor );
+		}
 		//set color based on what kind of ent is under crosshair
-		if ( cg.crosshairClientNum >= ENTITYNUM_WORLD )
+		else if ( cg.crosshairClientNum >= ENTITYNUM_WORLD )
+		//if ( cg.crosshairClientNum >= ENTITYNUM_WORLD )
+		//[//SaberLockSys]
 		{
 			trap_R_SetColor( NULL );
 		}
@@ -5755,6 +5775,49 @@ static void CG_DrawCrosshair( vec3_t worldPoint, int chEntValid ) {
 	chX = x + cg.refdef.x + 0.5 * (640 - w);
 	chY = y + cg.refdef.y + 0.5 * (480 - h);
 	trap_R_DrawStretchPic( chX, chY, w, h, 0, 0, 1, 1, hShader );
+
+	//[SaberLockSys]
+	if(cg.snap->ps.saberLockTime > cg.time)
+	{//draw saberlock direction
+		float dirW = 5.0f;
+		float dirH = 5.0f;
+		float dirX = chX + w * 0.5f - dirW * 0.5f;
+		float dirY = chY + h * 0.5f - dirH * 0.5f;
+		int color = CT_GREEN;
+		qboolean drawDir = qfalse;
+
+		if(cg.snap->ps.userInt3 & (1 << FLAG_SABERLOCK_OLD_DIR))
+		{//invalid dir color tic
+			color = CT_RED;
+		}
+
+		if(cg.snap->ps.userInt3 & (1 << FLAG_SABERLOCK_UP))
+		{
+			dirY -= h * 0.5f;
+			drawDir = qtrue;
+		}
+		else if(cg.snap->ps.userInt3 & (1 << FLAG_SABERLOCK_DOWN))
+		{
+			dirY += h * 0.5f;
+			drawDir = qtrue;
+		}
+		else if(cg.snap->ps.userInt3 & (1 << FLAG_SABERLOCK_LEFT))
+		{
+			dirX -= w * 0.5f;
+			drawDir = qtrue;
+		}
+		else if(cg.snap->ps.userInt3 & (1 << FLAG_SABERLOCK_RIGHT))
+		{
+			dirX += w * 0.5f;
+			drawDir = qtrue;
+		}
+
+		if(drawDir)
+		{
+			CG_DrawRect(dirX, dirY, dirW, dirH, 1.0f, colorTable[color]);
+		}
+	}
+	//[/SaberLockSys]
 
 	//draw a health bar directly under the crosshair if we're looking at something
 	//that takes damage

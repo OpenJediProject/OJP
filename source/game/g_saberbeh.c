@@ -203,7 +203,7 @@ void SabBeh_AttackVsAttack( gentity_t *self, sabmech_t *mechSelf,
 		//set otherOwner
 		if (WP_SabersCheckLock(self, otherOwner))
 		{	
-			self->client->ps.userInt3 |= ( 1 << FLAG_LOCKWINNER );
+			self->client->ps.userInt3 |= ( 1 << FLAG_SABERLOCK_ATTACKER );
 			self->client->ps.saberBlocked = BLOCKED_NONE;
 			otherOwner->client->ps.saberBlocked = BLOCKED_NONE;
 		}
@@ -218,7 +218,7 @@ void SabBeh_AttackVsAttack( gentity_t *self, sabmech_t *mechSelf,
 		if (WP_SabersCheckLock(otherOwner, self))
 		{	
 			self->client->ps.saberBlocked = BLOCKED_NONE;
-			otherOwner->client->ps.userInt3 |= ( 1 << FLAG_LOCKWINNER );
+			otherOwner->client->ps.userInt3 |= ( 1 << FLAG_SABERLOCK_ATTACKER );
 			otherOwner->client->ps.saberBlocked = BLOCKED_NONE;
 		}
 		SabBeh_AddBalance(self, mechSelf, -1, qtrue);
@@ -333,7 +333,7 @@ void SabBeh_AttackVsBlock( gentity_t *attacker, sabmech_t *mechAttacker,
 #endif
 			if (WP_SabersCheckLock(attacker, blocker))
 			{	
-				attacker->client->ps.userInt3 |= ( 1 << FLAG_LOCKWINNER );
+				attacker->client->ps.userInt3 |= ( 1 << FLAG_SABERLOCK_ATTACKER );
 				attacker->client->ps.saberBlocked = BLOCKED_NONE;
 				blocker->client->ps.saberBlocked = BLOCKED_NONE;
 				startSaberLock = qtrue;

@@ -1309,12 +1309,18 @@ void PM_SaberLockBreak( playerState_t *genemy, qboolean victory, int strength )
 	//[/SaberLockSys]
 	qboolean singleVsSingle = qtrue;
 	//[SaberLockSys]
-	qboolean superBreak = (pm->cmd.buttons & BUTTON_ATTACK);
+	qboolean superBreak = victory;
 	//qboolean superBreak = (strength+pm->ps->saberLockHits > Q_irand(2,4));
 
 	//remove the saber lock winner flag.
-	pm->ps->userInt3 &= ~( 1 << FLAG_LOCKWINNER );
-	genemy->userInt3 &= ~( 1 << FLAG_LOCKWINNER );
+	pm->ps->userInt3 &= ~( 1 << FLAG_SABERLOCK_ATTACKER );
+	genemy->userInt3 &= ~( 1 << FLAG_SABERLOCK_ATTACKER );
+
+	pm->ps->userInt3 &= ~( 1 << FLAG_SABERLOCK_OLD_DIR );
+	genemy->userInt3 &= ~( 1 << FLAG_SABERLOCK_OLD_DIR );
+
+	pm->ps->userInt3 &= ~( SABERLOCK_DIR_FLAG_MASK );
+	genemy->userInt3 &= ~( SABERLOCK_DIR_FLAG_MASK );
 	//[/SaberLockSys]
 
 	winAnim = PM_SaberLockWinAnim( victory, superBreak );
@@ -1609,12 +1615,8 @@ void PM_SaberLocked( void )
 			//advance/decrement my frame number
 			if ( BG_InSaberLockOld( pm->ps->torsoAnim ) )
 			{ //old locks
-				//[SaberLockSys]
-				//racc - CCW locks now actually move counter clockwise!
-				if( (pm->ps->torsoAnim) == BOTH_BF2LOCK )
-				//if ( (pm->ps->torsoAnim) == BOTH_CCWCIRCLELOCK ||
-				//	(pm->ps->torsoAnim) == BOTH_BF2LOCK )
-				//[/SaberLockSys]
+				if ( (pm->ps->torsoAnim) == BOTH_CCWCIRCLELOCK ||
+					(pm->ps->torsoAnim) == BOTH_BF2LOCK )
 				{
 					curFrame = floor( currentFrame )-strength;
 					//drop my frame one
@@ -1687,12 +1689,8 @@ void PM_SaberLocked( void )
 
 			if ( BG_InSaberLockOld( genemy->torsoAnim ) )
 			{
-				//[SaberLockSys]
-				//racc - CCW locks now actually move counter clockwise!
-				if( (genemy->torsoAnim) == BOTH_BF1LOCK )	
-				//if ( (genemy->torsoAnim) == BOTH_CWCIRCLELOCK ||
-				//	(genemy->torsoAnim) == BOTH_BF1LOCK )
-				//[/SaberLockSys]
+				if ( (genemy->torsoAnim) == BOTH_CWCIRCLELOCK ||
+					(genemy->torsoAnim) == BOTH_BF1LOCK )
 				{
 					if ( !PM_irand_timesync( 0, 2 ) )
 					{//racc - throw in some grunts of pain!
@@ -3906,8 +3904,6 @@ void PM_WeaponLightsaber(void)
 		pm->ps->weaponTime = 0;
 	}
 
-	//[SaberLockSys]
-	/* racc - we now want to be able to interrupt these animations.
 	if ( BG_SuperBreakLoseAnim( pm->ps->torsoAnim )
 		|| BG_SuperBreakWinAnim( pm->ps->torsoAnim ) )
 	{
@@ -3916,8 +3912,6 @@ void PM_WeaponLightsaber(void)
 			return;
 		}
 	}
-	*/
-	//[/SaberLockSys]
 
 	if (BG_SabersOff( pm->ps ))
 	{
