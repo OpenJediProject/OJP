@@ -10,6 +10,8 @@ Version $Revision$
 			- Saber locks are now a movement-based struggle between the attacker and defender.  The attacking player, indicated by a green crosshair, presses a movement direction.  Once this occurs, the defender must press in that movement direction to switch to offense and so on.  The saber lock will move in the attacker's direction until the lock succeeds or is broken.  The winner of a saber lock gets a free hit on the defender and will execute players at critical DP.
 			- Saber locks can be broken by pressing back+alt attack.  However, breaking a saber lock costs 10 DP and 50 FP.
 	Improvements/Fixes:
+		Dodge System:
+			- Fixed bug where players could saber block in the middle of a body dodge.
 
 
 Version r1147

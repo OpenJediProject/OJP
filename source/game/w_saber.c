@@ -3746,6 +3746,10 @@ int OJP_SaberCanBlock(gentity_t *self, gentity_t *atk, qboolean checkBBoxBlock, 
 	
 	if (self->client->ps.forceHandExtend != HANDEXTEND_NONE)
 	{
+		if(self->client->ps.forceHandExtend == HANDEXTEND_DODGE)
+		{//can't saber block in the middle of a body dodge.
+			return 0;
+		}
 		if(atk && atk->client && atk->client->ps.weapon == WP_SABER)
 		{//can't block while using forceHandExtend except if their using a saber
 			return 1;
