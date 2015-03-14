@@ -12,7 +12,8 @@ Version $Revision$
 	Improvements/Fixes:
 		Dodge System:
 			- Fixed bug where players could saber block in the middle of a body dodge.
-
+		Force System:
+			- A player can't block force powers under a certain DP level based on their Force Absorb skill level.  No Absorb = can't block force powers; Absorb 1 <= DP light; Absorb 2 <= DP critical; Absorb 3 = DP no longer restricts blocking force powers.
 
 Version r1147
 	New Features:

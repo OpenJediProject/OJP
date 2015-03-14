@@ -152,6 +152,14 @@ const int mindTrickTime[NUM_FORCE_POWER_LEVELS] =
 };
 
 //[DodgeSys]
+const int DodgeAbsorbBlockLevels[NUM_FORCE_POWER_LEVELS] = 
+{
+	9999,	//can't block force powers without absorb.
+	DODGE_LIGHTLEVEL,
+	DODGE_CRITICALLEVEL,
+	0
+};
+
 #define SK_DP_FORFORCE		.5f	//determines the number of DP points players get for each skill point dedicated to Force Powers.
 #define SK_DP_FORMERC		1/6.0f	//determines the number of DP points get for each skill point dedicated to gunner/merc skills.
 void DetermineDodgeMax(gentity_t *ent)
@@ -2265,6 +2273,7 @@ qboolean IsHybrid(gentity_t *ent)
 return qfalse;
 }
 
+
 qboolean OJP_CounterForce(gentity_t *attacker, gentity_t *defender, int attackPower)
 {//generically checks to see if the defender is able to block an attack from this attacker 
 	int abilityDef;		//the difference in skill between the defender's defend power and the attacker's attack power.
@@ -2325,6 +2334,13 @@ qboolean OJP_CounterForce(gentity_t *attacker, gentity_t *defender, int attackPo
 	{//can't block if we're too off balance and they are using Juyo's perk
 		return qfalse;
 	}
+
+	//Don't allow force blocking at below certain DP levels based on your absorb force power level.
+	if(defender->client->ps.stats[STAT_DODGE] <= DodgeAbsorbBlockLevels[defender->client->ps.fd.forcePowerLevel[FP_ABSORB]])
+	{
+		return qfalse;
+	}
+
 	if (defender->client->ps.forceHandExtend != HANDEXTEND_NONE)
 	{//can block force while using forceHandExtend. This may be a temporary bug fix.
 
